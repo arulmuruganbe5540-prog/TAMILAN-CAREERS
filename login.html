@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#101d3a,#1765a5);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:white;width:100%;max-width:440px;padding:30px;border-radius:18px;box-shadow:0 15px 45px #0004}
+.logo{text-align:center;font-size:25px;font-weight:bold;color:#147bd1;margin-bottom:8px}
+.subtitle{text-align:center;color:#778397;font-size:14px;margin-bottom:25px}
+h2{text-align:center;color:#172b4d;font-size:23px;margin-bottom:20px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.role{padding:13px;border:1px solid #dce4ee;border-radius:9px;text-align:center;cursor:pointer;font-weight:bold;color:#40516a}
+.role.active{background:#eaf4ff;border:2px solid #1688ed;color:#126cc1}
+label{display:block;font-size:14px;font-weight:bold;margin:13px 0 7px;color:#34445b}
+input{width:100%;padding:13px;border:1px solid #d7deea;border-radius:8px;font-size:15px;outline:none}
+input:focus{border-color:#1688ed}
+.mainbtn{width:100%;padding:14px;border:0;border-radius:8px;background:#1688ed;color:white;font-size:16px;font-weight:bold;margin-top:20px;cursor:pointer}
+.mainbtn:disabled{opacity:.6}
+.switch{text-align:center;margin-top:20px;color:#66758b;font-size:14px}
+.switch a{color:#147bd1;font-weight:bold;cursor:pointer}
+.message{margin-top:15px;padding:12px;border-radius:8px;font-size:14px;display:none;line-height:1.6}
+.back{text-align:center;margin-top:22px}
+.back a{color:#147bd1;text-decoration:none;font-size:14px}
+.note{font-size:12px;color:#778397;text-align:center;margin-top:18px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">TAMILAN CAREERS</div>
+  <p class="subtitle">உங்கள் எதிர்காலத்தை இன்றே தொடங்குங்கள்</p>
+
+  <h2 id="heading">Login செய்யுங்கள்</h2>
+
+  <div class="roles">
+    <div class="role active" id="seeker" onclick="chooseRole('job_seeker')">👤 Job Seeker</div>
+    <div class="role" id="company" onclick="chooseRole('company')">🏢 Company</div>
+  </div>
+
+  <form id="authForm">
+    <div id="nameField" style="display:none">
+      <label>முழு பெயர் / Full Name</label>
+      <input id="fullName" type="text" placeholder="உங்கள் பெயர்">
+    </div>
+
+    <label>Email Address</label>
+    <input id="email" type="email" placeholder="example@gmail.com" required>
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="குறைந்தது 8 எழுத்துகள்" minlength="8" required>
+
+    <button class="mainbtn" id="submitBtn" type="submit">Login</button>
+  </form>
+
+  <div class="switch">
+    <span id="switchText">கணக்கு இல்லையா?</span>
+    <a id="switchLink" onclick="toggleMode()">Register செய்யுங்கள்</a>
+  </div>
+
+  <div class="message" id="message"></div>
+
+  <div class="back">
+    <a href="index.html">← முகப்புப் பக்கத்திற்குச் செல்லுங்கள்</a>
+  </div>
+
+  <p class="note">TAMILAN CAREERS – வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.</p>
+</div>
+
+<script>
+const SUPABASE_URL = "https://qkmljuuusfjowexvybvy.supabase.co";
+
+// Supabase Dashboard-ல் கிடைக்கும் Publishable Key-ஐ இங்கே சேர்க்க வேண்டும்.
+const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+let selectedRole = "job_seeker";
+let isRegister = false;
+let supabaseClient = null;
+
+if (window.supabase &&
+    SUPABASE_PUBLISHABLE_KEY !== "YOUR_SUPABASE_PUBLISHABLE_KEY") {
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+}
+
+function chooseRole(role) {
+  selectedRole = role;
+  document.getElementById("seeker").classList.toggle("active",role==="job_seeker");
+  document.getElementById("company").classList.toggle("active",role==="company");
+}
+
+function toggleMode() {
+  isRegister = !isRegister;
+  document.getElementById("heading").textContent =
+    isRegister ? "புதிய கணக்கு உருவாக்குங்கள்" : "Login செய்யுங்கள்";
+  document.getElementById("nameField").style.display =
+    isRegister ? "block" : "none";
+  document.getElementById("fullName").required = isRegister;
+  document.getElementById("submitBtn").textContent =
+    isRegister ? "Register" : "Login";
+  document.getElementById("switchText").textContent =
+    isRegister ? "ஏற்கனவே கணக்கு உள்ளதா?" : "கணக்கு இல்லையா?";
+  document.getElementById("switchLink").textContent =
+    isRegister ? "Login செய்யுங்கள்" : "Register செய்யுங்கள்";
+  showMessage("");
+}
+
+function showMessage(message, success=false) {
+  const box = document.getElementById("message");
+  box.textContent = message;
+  box.style.display = message ? "block" : "none";
+  box.style.background = success ? "#e7f8ed" : "#fff0f0";
+  box.style.color = success ? "#16743b" : "#b42318";
+}
+
+document.getElementById("authForm").addEventListener("submit",async function(e) {
+  e.preventDefault();
+
+  if (!supabaseClient) {
+    showMessage("Supabase Publishable Key இன்னும் சேர்க்கப்படவில்லை. அடுத்த படியில் இணைப்போம்.");
+    return;
+  }
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const fullName = document.getElementById("fullName").value.trim();
+  const button = document.getElementById("submitBtn");
+
+  button.disabled = true;
+  button.textContent = "தயவுசெய்து காத்திருக்கவும்...";
+  showMessage("");
+
+  try {
+    if (isRegister) {
+      const {data,error} = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            requested_account_type: selectedRole
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.session) {
+        showMessage("கணக்கு உருவாக்கப்பட்டது. உங்கள் கணக்கு விவரங்கள் சரிபார்க்கப்பட வேண்டும்.",true);
+      } else {
+        showMessage("பதிவு வெற்றிகரமாக அனுப்பப்பட்டது. உங்கள் Email-ஐ திறந்து உறுதிப்படுத்துங்கள்.",true);
+      }
+    } else {
+      const {data,error} = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      showMessage("Login வெற்றிகரமாக முடிந்தது. அடுத்த கட்டத்தில் Dashboard இணைக்கப்படும்.",true);
+    }
+  } catch(error) {
+    showMessage(error.message || "ஏதோ தவறு ஏற்பட்டுள்ளது.");
+  } finally {
+    button.disabled = false;
+    button.textContent = isRegister ? "Register" : "Login";
+  }
+});
+</script>
+</body>
+  </html>
+  
