@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMILAN CAREERS | வேலைவாய்ப்பு இணையதளம்</title>
+<meta name="description" content="தமிழ்நாட்டில் வேலை தேடவும், நிறுவனங்கள் வேலைவாய்ப்பு அறிவிப்புகளை வெளியிடவும் TAMILAN CAREERS.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f5f7fb;color:#172033}
+header{background:#101d3a;color:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{font-size:23px;font-weight:800;color:#54c8ff}
+.logo span{color:white}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:14px}
+nav a:hover{color:#54c8ff}
+.actions{display:flex;gap:10px}
+button{border:0;border-radius:8px;padding:11px 17px;font-weight:bold;cursor:pointer}
+.login{background:transparent;border:1px solid #54c8ff;color:white}
+.register{background:#1688ed;color:white}
+.hero{background:linear-gradient(120deg,#101d3a,#174d83);color:white;text-align:center;padding:65px 18px 75px}
+.hero h1{font-size:clamp(27px,5vw,43px);margin-bottom:15px}
+.hero p{font-size:16px;color:#d9e9ff;line-height:1.8}
+.searchbox{background:white;color:#172033;max-width:950px;margin:30px auto 0;padding:15px;border-radius:13px;display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:10px;box-shadow:0 8px 30px #07152b55}
+input,select{width:100%;padding:14px;border:1px solid #dce2ec;border-radius:8px;font-size:14px;background:white;min-width:0}
+.searchbtn{background:#1688ed;color:white;padding:14px 24px}
+.container{max-width:1150px;margin:auto;padding:38px 18px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.sectionhead h2{font-size:24px}
+.sectionhead p{color:#69758a;font-size:14px;margin-top:7px}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.category{background:white;padding:22px;border-radius:12px;border:1px solid #e7ebf2;text-align:center;cursor:pointer}
+.category:hover{border-color:#1688ed;transform:translateY(-2px)}
+.category .emoji{font-size:30px;margin-bottom:10px}
+.category h3{font-size:15px}
+.category p{font-size:12px;color:#788398;margin-top:6px}
+.jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.job{background:white;border:1px solid #e5eaf2;border-radius:12px;padding:20px}
+.job h3{font-size:17px;margin:12px 0 8px}
+.company{color:#66748a;font-size:14px}
+.tag{display:inline-block;background:#eaf4ff;color:#1769b0;padding:6px 10px;border-radius:6px;font-size:12px;margin:12px 5px 0 0}
+.jobbottom{display:flex;justify-content:space-between;align-items:center;margin-top:17px;gap:10px}
+.apply{background:#1688ed;color:white}
+.empty{grid-column:1/-1;background:white;border-radius:12px;padding:28px;text-align:center;color:#66748a;line-height:1.8}
+.ai{background:#eaf4ff;border-radius:16px;padding:30px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.ai h2{font-size:23px;margin-bottom:10px;color:#123d70}
+.ai p{color:#52657d;line-height:1.7}
+.ai button{background:#126fd0;color:white}
+.employer{background:#101d3a;color:white;text-align:center;padding:45px 20px}
+.employer h2{font-size:26px;margin-bottom:12px}
+.employer p{color:#d3e0f2;line-height:1.8}
+.employer button{background:#54c8ff;color:#10203b;margin-top:18px}
+footer{background:#09152c;color:#d3deef;padding:30px 6%;text-align:center;line-height:2;font-size:13px}
+footer strong{color:#54c8ff}
+@media(max-width:750px){
+.searchbox{grid-template-columns:1fr}
+.categories{grid-template-columns:repeat(2,1fr)}
+.jobs{grid-template-columns:1fr}
+header{justify-content:center;text-align:center}
+nav{justify-content:center}
+.actions{justify-content:center}
+.hero{padding-top:45px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">TAMILAN <span>CAREERS</span></div>
+  <nav>
+    <a href="#home">முகப்பு</a>
+    <a href="#jobs">வேலைவாய்ப்புகள்</a>
+    <a href="#categories">துறைகள்</a>
+    <a href="#employer">நிறுவனங்கள்</a>
+  </nav>
+  <div class="actions">
+    <button class="login" onclick="showMessage('Login வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.')">Login</button>
+    <button class="register" onclick="showMessage('Registration வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.')">Register</button>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <h1>உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!</h1>
+  <p>தமிழ்நாட்டின் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள்.<br>உங்கள் எதிர்காலத்தை இன்றே தொடங்குங்கள்.</p>
+
+  <div class="searchbox">
+    <input id="keyword" type="text" placeholder="வேலை / திறமை தேடுங்கள்">
+    <input id="location" type="text" placeholder="இடம் (எ.கா. சேலம்)">
+    <select id="category">
+      <option value="">அனைத்து துறைகளும்</option>
+      <option>IT & Software</option>
+      <option>Sales & Marketing</option>
+      <option>Accounting</option>
+      <option>Manufacturing</option>
+      <option>Education</option>
+      <option>Healthcare</option>
+    </select>
+    <button class="searchbtn" onclick="searchJobs()">தேடுக</button>
+  </div>
+</section>
+
+<main class="container" id="categories">
+  <div class="sectionhead">
+    <div>
+      <h2>வேலைவாய்ப்பு துறைகள்</h2>
+      <p>உங்களுக்குப் பிடித்த துறையைத் தேர்வு செய்யுங்கள்.</p>
+    </div>
+  </div>
+
+  <div class="categories">
+    <div class="category" onclick="chooseCategory('IT & Software')"><div class="emoji">💻</div><h3>IT & Software</h3><p>தொழில்நுட்ப வேலைகள்</p></div>
+    <div class="category" onclick="chooseCategory('Sales & Marketing')"><div class="emoji">📈</div><h3>Sales & Marketing</h3><p>விற்பனை மற்றும் சந்தைப்படுத்தல்</p></div>
+    <div class="category" onclick="chooseCategory('Accounting')"><div class="emoji">💰</div><h3>Accounting</h3><p>கணக்கியல் வேலைகள்</p></div>
+    <div class="category" onclick="chooseCategory('Manufacturing')"><div class="emoji">🏭</div><h3>Manufacturing</h3><p>தொழிற்சாலை வேலைகள்</p></div>
+    <div class="category" onclick="chooseCategory('Education')"><div class="emoji">📚</div><h3>Education</h3><p>கல்வித்துறை வேலைகள்</p></div>
+    <div class="category" onclick="chooseCategory('Healthcare')"><div class="emoji">🏥</div><h3>Healthcare</h3><p>மருத்துவத்துறை வேலைகள்</p></div>
+    <div class="category" onclick="chooseCategory('')"><div class="emoji">🚚</div><h3>Logistics</h3><p>போக்குவரத்து மற்றும் கிடங்கு</p></div>
+    <div class="category" onclick="chooseCategory('')"><div class="emoji">🔧</div><h3>Other Jobs</h3><p>மற்ற வேலைவாய்ப்புகள்</p></div>
+  </div>
+</main>
+
+<section class="container" id="jobs">
+  <div class="sectionhead">
+    <div>
+      <h2>வேலைவாய்ப்புகள்</h2>
+      <p id="jobInfo">புதிய வேலைவாய்ப்புகள் இங்கே இடம்பெறும்.</p>
+    </div>
+  </div>
+  <div class="jobs" id="jobList">
+    <div class="empty">இப்போது வேலைவாய்ப்புகள் எதுவும் இணைக்கப்படவில்லை.<br>நிறுவனங்கள் வேலைகளைப் பதிவு செய்யும் வசதி விரைவில் இணைக்கப்படும்.</div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="ai">
+    <div>
+      <h2>🤖 AI Resume Job Matching</h2>
+      <p>உங்கள் Resume-ஐ பதிவேற்றுங்கள்.<br>உங்கள் திறமைக்கும் அனுபவத்திற்கும் பொருத்தமான வேலைகளைக் கண்டறிய உதவும் AI வசதி விரைவில் வருகிறது.</p>
+    </div>
+    <button onclick="showMessage('AI Resume Matching வசதி அடுத்த கட்டத்தில் உருவாக்கப்படும்.')">மேலும் அறிய</button>
+  </div>
+</section>
+
+<section class="employer" id="employer">
+  <h2>உங்கள் நிறுவனத்திற்கு பணியாளர்கள் தேவையா?</h2>
+  <p>உங்கள் நிறுவனத்தில் உள்ள காலிப்பணியிடங்களை TAMILAN CAREERS மூலம் வெளியிடுங்கள்.<br>தகுதியான நபர்களை எளிதாகச் சென்றடையுங்கள்.</p>
+  <button onclick="showMessage('Company Registration மற்றும் Job Posting வசதிகள் அடுத்த கட்டத்தில் இணைக்கப்படும்.')">நிறுவனமாக பதிவு செய்யுங்கள்</button>
+</section>
+
+<footer>
+  <strong>TAMILAN CAREERS</strong><br>
+  வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.<br>
+  © 2026 TAMILAN CAREERS. All Rights Reserved.
+</footer>
+
+<script>
+function showMessage(message){
+  alert(message);
+}
+
+function chooseCategory(value){
+  document.getElementById('category').value=value;
+  document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
+}
+
+function searchJobs(){
+  const keyword=document.getElementById('keyword').value.trim();
+  const location=document.getElementById('location').value.trim();
+  const category=document.getElementById('category').value;
+  document.getElementById('jobInfo').textContent =
+    'தேடல்: '+(keyword||'அனைத்து வேலைகள்')+
+    ' | இடம்: '+(location||'அனைத்து இடங்கள்')+
+    ' | துறை: '+(category||'அனைத்து துறைகள்');
+  document.getElementById('jobList').innerHTML =
+    '<div class="empty">இந்தத் தேடலுக்கான வேலைகள் இன்னும் இணைக்கப்படவில்லை.<br>Database இணைத்த பிறகு உண்மையான வேலைவாய்ப்புகள் இங்கே காட்டப்படும்.</div>';
+  document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
+}
+</script>
+
+</body>
+  </html>
+  
