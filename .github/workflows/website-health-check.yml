@@ -27,6 +27,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+      - name: Set up Node.js for JavaScript syntax checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Validate audit script
         run: python -m py_compile scripts/website-health-check.py
       - name: Check internal website structure
