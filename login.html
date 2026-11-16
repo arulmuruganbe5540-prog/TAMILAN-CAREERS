@@ -20,6 +20,14 @@ h2{text-align:center;color:#172b4d;font-size:23px;margin-bottom:20px}
 label{display:block;font-size:14px;font-weight:bold;margin:13px 0 7px;color:#34445b}
 input{width:100%;padding:13px;border:1px solid #d7deea;border-radius:8px;font-size:15px;outline:none}
 input:focus{border-color:#1688ed}
+.form-help{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:9px;font-size:13px;flex-wrap:wrap}
+.form-help a,.text-link{color:#126cc1;font-weight:bold;text-decoration:none;cursor:pointer}
+.confirm-wrap{display:none;margin-top:14px}
+.strength{height:6px;background:#e7edf5;border-radius:9px;overflow:hidden;margin-top:8px}
+.strength span{display:block;height:100%;width:0;background:#d94848;transition:width .2s,background .2s}
+.strength-label{font-size:12px;color:#66758b;margin-top:5px}
+.terms{display:none;align-items:flex-start;gap:9px;margin-top:15px;font-size:13px;line-height:1.5;color:#526176}
+.terms input{width:auto;margin-top:3px}
 .password-wrap{position:relative}
 .password-wrap input{padding-right:82px}
 .password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#eef5fc;color:#126cc1;border-radius:6px;padding:8px 10px;font-size:13px;font-weight:bold;cursor:pointer}
@@ -64,6 +72,14 @@ input:focus{border-color:#1688ed}
       <button class="password-toggle" id="passwordToggle" type="button" onclick="togglePassword()" aria-label="கடவுச்சொல்லைக் காட்டு" aria-pressed="false">காட்டு</button>
     </div>
 
+    <div class="form-help"><span id="passwordHint">குறைந்தது 8 எழுத்துகள்</span><a href="#" id="forgotLink">Password மறந்துவிட்டதா?</a></div>
+    <div class="confirm-wrap" id="confirmWrap">
+      <label for="confirmPassword">Password உறுதிப்படுத்தவும் / Confirm Password</label>
+      <div class="password-wrap"><input id="confirmPassword" type="password" placeholder="Password-ஐ மீண்டும் உள்ளிடவும்" autocomplete="new-password"><button class="password-toggle" type="button" onclick="toggleFieldPassword('confirmPassword',this)">காட்டு</button></div>
+      <div class="strength"><span id="strengthBar"></span></div><div class="strength-label" id="strengthLabel">Password வலிமை</div>
+    </div>
+    <label class="terms" id="termsRow"><input id="termsAgree" type="checkbox"><span>விதிமுறைகள் மற்றும் <a class="text-link" href="terms.html" target="_blank" rel="noopener">பயன்பாட்டு விதிகள்</a>, <a class="text-link" href="privacy.html" target="_blank" rel="noopener">தனியுரிமைக் கொள்கை</a> ஆகியவற்றை ஏற்கிறேன்.</span></label>
+
     <button class="mainbtn" id="submitBtn" type="submit">Login</button>
 
   </form>
@@ -101,15 +117,47 @@ if (window.supabase &&
   );
 }
 
-function togglePassword() {
-  const field = document.getElementById("password");
-  const button = document.getElementById("passwordToggle");
+function togglePassword() { toggleFieldPassword("password", document.getElementById("passwordToggle")); }
+function toggleFieldPassword(id, button) {
+  const field = document.getElementById(id);
   const show = field.type === "password";
   field.type = show ? "text" : "password";
   button.textContent = show ? "மறை" : "காட்டு";
-  button.setAttribute("aria-label", show ? "கடவுச்சொல்லை மறை" : "கடவுச்சொல்லைக் காட்டு");
   button.setAttribute("aria-pressed", String(show));
 }
+function passwordStrength(value) {
+  let score = 0;
+  if (value.length >= 8) score++;
+  if (/[a-z]/.test(value) && /[A-Z]/.test(value)) score++;
+  if (/\d/.test(value)) score++;
+  if (/[^A-Za-z0-9]/.test(value)) score++;
+  document.getElementById("strengthBar").style.width = (score * 25) + "%";
+  document.getElementById("strengthBar").style.background = score <= 1 ? "#d94848" : score <= 2 ? "#d98b22" : "#16834a";
+  document.getElementById("strengthLabel").textContent = value ? ["மிகவும் பலவீனம்","பலவீனம்","சராசரி","நல்லது","மிகவும் வலிமையானது"][score] : "Password வலிமை";
+}
+document.getElementById("password").addEventListener("input", e => passwordStrength(e.target.value));
+document.getElementById("confirmPassword").addEventListener("input", e => {
+  e.target.setCustomValidity(e.target.value && e.target.value !== document.getElementById("password").value ? "Password பொருந்தவில்லை" : "");
+});
+document.getElementById("password").addEventListener("input", () => {
+  const confirm = document.getElementById("confirmPassword");
+  confirm.setCustomValidity(confirm.value && confirm.value !== document.getElementById("password").value ? "Password பொருந்தவில்லை" : "");
+});
+document.getElementById("forgotLink").addEventListener("click", async e => {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  if (!email) { showMessage("Password reset செய்ய முதலில் Email Address உள்ளிடுங்கள்."); document.getElementById("email").focus(); return; }
+  if (!supabaseClient) { showMessage("Supabase இணைப்பு கிடைக்கவில்லை."); return; }
+  const link = document.getElementById("forgotLink");
+  link.style.pointerEvents = "none"; link.textContent = "அனுப்பப்படுகிறது...";
+  try {
+    const redirectTo = window.location.origin + window.location.pathname.replace(/login\.html$/, "reset-password.html");
+    const {error} = await supabaseClient.auth.resetPasswordForEmail(email, {redirectTo});
+    if (error) throw error;
+    showMessage("Password மாற்றுவதற்கான பாதுகாப்பான இணைப்பு உங்கள் Email-க்கு அனுப்பப்பட்டது. Inbox மற்றும் Spam folder பார்க்கவும்.", true);
+  } catch(error) { showMessage(error.message || "Reset email அனுப்ப முடியவில்லை."); }
+  finally { link.style.pointerEvents = ""; link.textContent = "Password மறந்துவிட்டதா?"; }
+});
 
 function chooseRole(role) {
   selectedRole = role;
@@ -128,6 +176,12 @@ function toggleMode() {
     isRegister ? "block" : "none";
 
   document.getElementById("fullName").required = isRegister;
+  document.getElementById("confirmWrap").style.display = isRegister ? "block" : "none";
+  document.getElementById("confirmPassword").required = isRegister;
+  document.getElementById("termsRow").style.display = isRegister ? "flex" : "none";
+  document.getElementById("termsAgree").required = isRegister;
+  document.getElementById("forgotLink").style.display = isRegister ? "none" : "inline";
+  document.getElementById("passwordHint").textContent = isRegister ? "குறைந்தது 8 எழுத்துகள்; பெரிய/சிறிய எழுத்து மற்றும் எண் பயன்படுத்தவும்" : "குறைந்தது 8 எழுத்துகள்";
 
   document.getElementById("submitBtn").textContent =
     isRegister ? "Register" : "Login";
@@ -159,9 +213,13 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
     return;
   }
 
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value.trim().toLowerCase();
   const password = document.getElementById("password").value;
   const fullName = document.getElementById("fullName").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value;
+  if (isRegister && password !== confirmPassword) { showMessage("இரண்டு Password-களும் ஒன்றாக இருக்க வேண்டும்."); return; }
+  if (isRegister && (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password))) { showMessage("Password-ல் குறைந்தது ஒரு பெரிய எழுத்து, ஒரு சிறிய எழுத்து, ஒரு எண் இருக்க வேண்டும்."); return; }
+  if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("தொடர்வதற்கு விதிமுறைகள் மற்றும் தனியுரிமைக் கொள்கையை ஏற்கவும்."); return; }
 
   const button = document.getElementById("submitBtn");
 
