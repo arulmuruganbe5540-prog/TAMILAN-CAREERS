@@ -1,15 +1,17 @@
 <!DOCTYPE html><html lang="ta"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>வேலை தேடுங்கள் | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:21px;font-weight:800;color:#54c8ff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:1100px;margin:25px auto;padding:0 15px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff;padding:25px;border-radius:16px}.hero h1{margin:0 0 8px;font-size:25px}.hero p{margin:0;color:#dfedff;line-height:1.6}.filters,.job{background:#fff;border:1px solid #e3eaf3;border-radius:13px;padding:17px;margin-top:16px}.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}.filters input,.filters select{width:100%;padding:12px;border:1px solid #d7e0eb;border-radius:8px;font-size:14px;background:#fff}.meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tag{background:#eef5fc;color:#24527e;padding:6px 9px;border-radius:20px;font-size:12px}.job h2{font-size:18px;color:#173e70;margin:0 0 8px}.job p{line-height:1.6;color:#596a82;margin:8px 0}.jobfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.apply{display:inline-block;padding:10px 14px;background:#1688ed;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-size:13px}.save{padding:10px 14px;background:#eef5fc;color:#175b99;border:1px solid #cbdced;border-radius:8px;font-weight:bold;font-size:13px;cursor:pointer}.empty,.notice{background:#fff;border-radius:12px;padding:20px;margin-top:16px;line-height:1.7;color:#526176}.muted{font-size:12px;color:#7a8798}.count{font-weight:bold;color:#244f7c;margin:17px 2px}.hidden{display:none}@media(max-width:680px){.filters{grid-template-columns:1fr}.hero h1{font-size:21px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:21px;font-weight:800;color:#54c8ff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:1100px;margin:25px auto;padding:0 15px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff;padding:25px;border-radius:16px}.hero h1{margin:0 0 8px;font-size:25px}.hero p{margin:0;color:#dfedff;line-height:1.6}.filters,.job{background:#fff;border:1px solid #e3eaf3;border-radius:13px;padding:17px;margin-top:16px}.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}.filters input,.filters select{width:100%;padding:12px;border:1px solid #d7e0eb;border-radius:8px;font-size:14px;background:#fff}.ai-search{grid-column:1/-1;border:0;border-radius:9px;padding:13px 16px;background:#0878d1;color:#fff;font-weight:800;font-size:14px;cursor:pointer}.ai-search:disabled{opacity:.6;cursor:wait}.bilingual-en{display:block;color:#42617f;font-size:14px;font-weight:600;margin-top:5px}.match-reason{background:#eef7ff;border-left:3px solid #1688ed;padding:9px 12px;border-radius:7px;margin:10px 0;color:#244f7c;font-size:13px;line-height:1.5}.meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tag{background:#eef5fc;color:#24527e;padding:6px 9px;border-radius:20px;font-size:12px}.job h2{font-size:18px;color:#173e70;margin:0 0 8px}.job p{line-height:1.6;color:#596a82;margin:8px 0}.jobfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.apply{display:inline-block;padding:10px 14px;background:#1688ed;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-size:13px}.save{padding:10px 14px;background:#eef5fc;color:#175b99;border:1px solid #cbdced;border-radius:8px;font-weight:bold;font-size:13px;cursor:pointer}.empty,.notice{background:#fff;border-radius:12px;padding:20px;margin-top:16px;line-height:1.7;color:#526176}.muted{font-size:12px;color:#7a8798}.count{font-weight:bold;color:#244f7c;margin:17px 2px}.hidden{display:none}@media(max-width:680px){.filters{grid-template-columns:1fr}.hero h1{font-size:21px}}
 </style></head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="index.html">முகப்பு</a><a href="dashboard.html">Dashboard</a><a href="job-seeker-profile.html">என் சுயவிவரம்</a><a href="saved-jobs.html">சேமித்த வேலைகள்</a></nav></header>
 <main><section class="hero"><h1>உங்களுக்கு ஏற்ற வேலையைத் தேடுங்கள்</h1><p>பதவி, திறன், நிறுவனம் அல்லது இடம் மூலம் தேடுங்கள். வேலை விவரங்களை விண்ணப்பிக்கும் முன் கவனமாகப் படியுங்கள்.</p></section>
-<section class="filters"><input id="q" type="search" placeholder="வேலை / திறன் / நிறுவனம் தேடுங்கள்"><select id="type"><option value="">அனைத்து வேலை வகைகள்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select><input id="place" type="search" placeholder="ஊர் / மாவட்டம்"></section>
+<section class="filters"><input id="q" type="search" placeholder="எந்த மொழியிலும் வேலை / திறன் / நிறுவனம் தேடுங்கள்"><select id="type"><option value="">அனைத்து வேலை வகைகள்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select><input id="place" type="search" placeholder="ஊர் / மாவட்டம்"><button id="aiSearch" class="ai-search" type="button">🌐 எந்த மொழியிலும் தேடு · தமிழ் + English முடிவுகள்</button></section>
 <div class="count" id="count">வேலைகள் ஏற்றப்படுகின்றன...</div><section id="results" aria-live="polite"></section><div class="muted">குறிப்பு: வேலை அறிவிப்பின் துல்லியம் மற்றும் காலக்கெடுவை நிறுவனத்திடம் உறுதிப்படுத்திக் கொள்ளுங்கள்.</div></main>
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 let allJobs=[];
 let companyNames={};
+let aiMatches=null;
+let aiQueryInfo=null;
 const $=id=>document.getElementById(id);
 const SAVED_KEY="tc_saved_jobs_v1";
 function getSavedJobs(){try{const v=JSON.parse(localStorage.getItem(SAVED_KEY)||"[]");return Array.isArray(v)?v:[]}catch(e){return []}}
@@ -21,19 +23,25 @@ const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"
 function pick(j,keys){for(const k of keys)if(j[k]!==undefined&&j[k]!==null&&j[k]!=="")return j[k];return "";}
 function render(){
  const q=$("q").value.trim().toLowerCase(),type=$("type").value.toLowerCase(),place=$("place").value.trim().toLowerCase();
- const list=allJobs.filter(j=>{
-  const title=pick(j,["job_title","title"]),desc=pick(j,["description","job_description"]),company=pick(j,["company_name"]),loc=pick(j,["location","job_location","work_location"]),jt=pick(j,["employment_type","job_type"]);
-  const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
-  const status=String(pick(j,["status"])).toLowerCase();
-  const visible=status==="published";
-  return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase()===type)&&(!place||String(loc).toLowerCase().includes(place));
- });
+ const list=aiMatches
+  ? aiMatches.map(match=>{const job=allJobs.find(j=>String(pick(j,["id","job_id"]))===String(match.job_id));return job?{...job,_bilingual:match}:null;}).filter(Boolean)
+  : allJobs.filter(j=>{
+   const title=pick(j,["job_title","title"]),desc=pick(j,["description","job_description"]),company=pick(j,["company_name"]),loc=pick(j,["location","job_location","work_location"]),jt=pick(j,["employment_type","job_type"]);
+   const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
+   const status=String(pick(j,["status"])).toLowerCase();
+   const visible=status==="published";
+   return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase()===type)&&(!place||String(loc).toLowerCase().includes(place));
+  });
  $("count").textContent=list.length+" வேலைகள் கிடைத்துள்ளன";
  if(!list.length){$("results").innerHTML='<div class="empty">இந்தத் தேடலுக்கு தற்போது வேலைகள் இல்லை. வேறு சொல் அல்லது இடத்தை முயற்சிக்கவும்.</div>';return;}
  $("results").innerHTML=list.map(j=>{
-  const title=pick(j,["job_title","title"])||"வேலை விவரம்";
-  const desc=pick(j,["description","job_description"]);
-  const loc=pick(j,["location","job_location","work_location"]);
+  const bi=j._bilingual||null;
+  const title=bi?(bi.title_ta||bi.title_en||"வேலை விவரம்"):(pick(j,["job_title","title"])||"வேலை விவரம்");
+  const titleEn=bi?(bi.title_en||""):"";
+  const desc=bi?(bi.description_ta||bi.description_en||""):(pick(j,["description","job_description"]));
+  const descEn=bi?(bi.description_en||""):"";
+  const loc=bi?(bi.location_ta||bi.location_en||""):(pick(j,["location","job_location","work_location"]));
+  const locEn=bi?(bi.location_en||""):"";
   const type=pick(j,["employment_type","job_type"]);
   const workplace=pick(j,["workplace_type"]);
   const min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
@@ -41,7 +49,11 @@ function render(){
   const deadline=pick(j,["application_deadline","deadline"]);
   const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["company_name"]);
   const id=pick(j,["id","job_id"]);
-  return '<article class="job"><h2><a style="color:inherit;text-decoration:none" href="job-details.html?id='+encodeURIComponent(id)+'">'+safe(title)+'</a></h2>'+(company?'<b>'+safe(company)+'</b>':'')+'<div class="meta">'+(loc?'<span class="tag">📍 '+safe(loc)+'</span>':'')+(type?'<span class="tag">'+safe(type)+'</span>':'')+(workplace?'<span class="tag">'+safe(workplace)+'</span>':'')+'</div><p>'+safe(String(desc).slice(0,300))+(String(desc).length>300?"…":"")+'</p><div class="jobfoot"><div><b>'+safe(salary)+'</b>'+(deadline?'<div class="muted">கடைசி நாள்: '+safe(deadline)+'</div>':'')+'</div><a class="apply" href="login.html?next='+encodeURIComponent("apply.html?job="+id)+'">விண்ணப்பிக்க Login செய்யவும்</a></div></article>';
+  const reason=bi?(bi.match_reason_ta||""):"";
+  const reasonEn=bi?(bi.match_reason_en||""):"";
+  const skills=bi?(bi.skills_ta||""):"";
+  const skillsEn=bi?(bi.skills_en||""):"";
+  return '<article class="job"><h2><a style="color:inherit;text-decoration:none" href="job-details.html?id='+encodeURIComponent(id)+'">'+safe(title)+'</a>'+(titleEn?'<span class="bilingual-en">'+safe(titleEn)+'</span>':'')+'</h2>'+(company?'<b>'+safe(company)+'</b>':'')+'<div class="meta">'+(loc?'<span class="tag">📍 '+safe(loc)+(locEn&&locEn!==loc?' / '+safe(locEn):'')+'</span>':'')+(type?'<span class="tag">'+safe(type)+'</span>':'')+(workplace?'<span class="tag">'+safe(workplace)+'</span>':'')+'</div><p>'+safe(String(desc).slice(0,300))+(String(desc).length>300?"…":"")+'</p>'+(descEn?'<p class="bilingual-en">'+safe(String(descEn).slice(0,300))+(String(descEn).length>300?"…":"")+'</p>':'')+(skills?'<p><b>திறன்கள்:</b> '+safe(skills)+(skillsEn?'<span class="bilingual-en">'+safe(skillsEn)+'</span>':'')+'</p>':'')+(reason?'<div class="match-reason">'+safe(reason)+(reasonEn?'<span class="bilingual-en">'+safe(reasonEn)+'</span>':'')+'</div>':'')+'<div class="jobfoot"><div><b>'+safe(salary)+'</b>'+(deadline?'<div class="muted">கடைசி நாள்: '+safe(deadline)+'</div>':'')+'</div><a class="apply" href="login.html?next='+encodeURIComponent("apply.html?job="+id)+'">விண்ணப்பிக்க Login செய்யவும்</a></div></article>';
  }).join("");
  list.forEach((job,index)=>{
   const id=pick(job,["id","job_id"]);
@@ -75,6 +87,28 @@ async function load(){
  }
  render();
 }
-["q","type","place"].forEach(id=>$(id).addEventListener(id==="type"?"change":"input",render));
+["q","type","place"].forEach(id=>$(id).addEventListener(id==="type"?"change":"input",()=>{aiMatches=null;aiQueryInfo=null;render();}));
+$("aiSearch").addEventListener("click",async()=>{
+ const query=$("q").value.trim(),location=$("place").value.trim(),employment_type=$("type").value;
+ if(!query&&!location&&!employment_type){$("count").textContent="வேலை, திறன் அல்லது இடத்தை உள்ளிடுங்கள்";return;}
+ $("aiSearch").disabled=true;$("aiSearch").textContent="AI தேடல் நடைபெறுகிறது...";
+ $("count").textContent="உங்கள் தேடல் பொருள் புரிந்துகொள்ளப்படுகிறது; தமிழ் + English முடிவுகள் தயாராகின்றன...";
+ $("results").innerHTML='<div class="empty">வேலைகள் பொருத்தம் மற்றும் மொழிபெயர்ப்பு சரிபார்க்கப்படுகிறது...</div>';
+ try{
+  const {data:sessionData}=await client.auth.getSession();
+  if(!sessionData.session)throw new Error("எந்த மொழியிலும் AI தேட, முதலில் Login செய்யுங்கள். சாதாரண தேடல் தொடர்ந்து கிடைக்கும்.");
+  const {data,error}=await client.functions.invoke("bilingual-job-search",{body:{query,location,employment_type}});
+  if(error)throw error;
+  if(data?.error)throw new Error(data.error);
+  aiMatches=Array.isArray(data.matches)?data.matches:[];
+  aiQueryInfo={ta:data.query_ta||"",en:data.query_en||""};
+  render();
+  if(aiQueryInfo.ta||aiQueryInfo.en)$("count").textContent="தேடல்: "+aiQueryInfo.ta+(aiQueryInfo.en?" / "+aiQueryInfo.en:"")+" — "+aiMatches.length+" பொருத்தமான வேலைகள்";
+ }catch(error){
+  aiMatches=null;
+  $("count").textContent="AI தேடல் இயங்கவில்லை";
+  $("results").innerHTML='<div class="empty">'+safe(error.message||"AI தேடலில் சிக்கல். பின்னர் முயற்சிக்கவும்.")+'</div>';
+ }finally{$("aiSearch").disabled=false;$("aiSearch").textContent="🌐 எந்த மொழியிலும் தேடு · தமிழ் + English முடிவுகள்";}
+});
 load();
 </script></body></html>
