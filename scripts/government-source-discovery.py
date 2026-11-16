@@ -143,7 +143,7 @@ with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
                 }),
                 "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry.",
             })
-            candidates[item_id] = item
+            candidates[item_id] = item\n            new_seen += 1
 
 # Retain prior decisions and review history, including candidates not seen in this scan.
 for item_id, item in old.items():
@@ -154,7 +154,7 @@ OUTPUT.write_text(json.dumps({
     "schema_version": 1,
     "generated_at_utc": datetime.now(timezone.utc).isoformat(),
     "trusted_sources_scanned": len(sources),
-    "new_source_candidates_seen_this_run": sum(1 for x in items if x.get("last_seen_utc") == x.get("first_discovered_utc")),
+    "new_source_candidates_seen_this_run": new_seen,
     "total_source_candidates": len(items),
     "policy": "No candidate is added to the trusted source registry automatically. Admin verification is required.",
     "items": items,
