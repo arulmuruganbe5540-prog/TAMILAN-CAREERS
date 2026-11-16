@@ -27,7 +27,7 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
 function fact(label,value){return value?'<div class="fact"><small>'+esc(label)+'</small><b>'+esc(value)+'</b></div>':""}
 async function show(){
- if(!jobId){root.textContent="வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திற்குச் செல்லுங்கள்.";return}
+ if(!jobId){root.innerHTML='<section class="panel"><h2 class="section-title">வேலை விவரத்தைத் திறக்கவும்</h2><p>இந்தப் பக்கம் குறிப்பிட்ட வேலை அறிவிப்பின் ID மூலம் திறக்கப்பட வேண்டும். முதலில் வேலை தேடல் பக்கத்திற்குச் சென்று, உங்களுக்குப் பிடித்த வேலைத் தலைப்பைத் தேர்ந்தெடுக்கவும்.</p><div class="actions"><a class="btn primary" href="jobs.html">வேலை தேடல் பக்கத்திற்குச் செல்லுங்கள்</a></div></section>';return}
  const {data,error}=await db.from("jobs").select("*").eq("id",jobId).maybeSingle();
  if(error){root.textContent="வேலை விவரத்தைப் பெற முடியவில்லை: "+error.message;return}
  if(!data){root.textContent="இந்த வேலை அறிவிப்பு கிடைக்கவில்லை அல்லது நீக்கப்பட்டுள்ளது.";return}
