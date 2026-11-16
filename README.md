@@ -20,6 +20,7 @@
 - Consolidated pending Supabase setup: `supabase-setup-pending.sql` (resume storage + private job drafts + employer applicant-profile read policies + owner-only candidate resume metadata and Job Seeker profile, education and experience self-management policies)
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
+- Government Exam Preparation: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/exam-preparation.html
 
 ## Main features currently in the repository
 - Resume-to-job matching page: reads PDF/DOCX text locally in the browser and ranks currently published internal jobs against profile/resume keywords, skills and preferred location (transparent rule-based first version; not generative AI).
@@ -30,6 +31,7 @@
 - Job application form frontend with Job Seeker role check and private application submission.
 - Applicant application-tracking page linked from the Job Seeker dashboard.
 - Government job information portals for India and Tamil Nadu.
+- Government Exam Preparation starter: exam categories for TNPSC/TNUSRB/TRB, UPSC/SSC, Railway and Banking; five original general practice questions, explanations, a 10-minute timed test, result review and browser-local progress. These are sample practice questions, not official or previous-year papers; full exam-specific syllabus/question banks and account-synced progress are future phases.
 - Terms, privacy, about and Tamil help pages.
 - Resume and document management frontend with private Storage upload/download/delete and `candidate_resumes` metadata synchronization (consolidated Supabase SQL required).
 
