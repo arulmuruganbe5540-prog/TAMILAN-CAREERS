@@ -45,7 +45,7 @@ footer{text-align:center;color:#778397;font-size:13px;padding:28px}
     <div class="grid">
       <article class="card"><h2>🔎 வேலை தேடுங்கள்</h2><p>பதவி, திறன், வேலை வகை மற்றும் ஊர் மூலம் வேலைவாய்ப்புகளைத் தேடுங்கள்.</p><a href="jobs.html">வேலைகளைத் தேடுங்கள் →</a></article>
       <article class="card"><h2>👤 எனது சுயவிவரம்</h2><p>பெயர், தொடர்பு விவரம், கல்வி, திறன்கள் மற்றும் வேலை விருப்பங்களை நிரப்பி புதுப்பிக்கவும்.</p><a href="job-seeker-profile.html">சுயவிவரத்தை நிர்வகிக்கவும் →</a></article>
-      <article class="card"><h2>📄 Resume</h2><p>Resume பதிவேற்றம் மற்றும் ஆவண மேலாண்மை வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.</p></article>
+      <article class="card"><h2>📄 Resume & ஆவணங்கள்</h2><p>உங்கள் Resume மற்றும் கல்வி / அனுபவச் சான்றிதழ்களை தனிப்பட்ட Storage-ல் நிர்வகிக்கவும்.</p><a href="resume-documents.html">ஆவணங்களை நிர்வகிக்கவும் →</a></article>
       <article class="card"><h2>📨 விண்ணப்பங்கள்</h2><p>நீங்கள் விண்ணப்பித்த வேலைகளின் நிலையை இங்கே பார்க்கலாம்.</p></article>
       <article class="card"><h2>🤖 AI Job Matching</h2><p>Resume அடிப்படையில் பொருத்தமான வேலைகளைப் பரிந்துரைக்கும் வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.</p></article>
     </div>
@@ -152,8 +152,7 @@ async function loadDashboard() {
     statusLines.push("Company membership lookup: " + membershipResult.error.message);
   }
 
-  accountStatus.textContent = statusLines.join("
-");
+  accountStatus.textContent = statusLines.join("\n");
 
   if (!isSeeker && !isCompanyMember) {
     showNotice("இந்தக் கணக்கிற்கு Dashboard அனுமதி இன்னும் ஒதுக்கப்படவில்லை. நிர்வாகி அனுமதி வழங்கிய பிறகு இங்கே வசதிகள் தோன்றும்.");
