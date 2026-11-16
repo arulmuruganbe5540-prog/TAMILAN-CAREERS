@@ -74,6 +74,15 @@ await check("Government exam practice starts and checks an answer", async () => 
   if (!(await page.locator("#result").isVisible())) throw new Error("Quiz result did not appear");
 });
 
+await check("Bilingual AI job search control is available", async () => {
+  await open("jobs.html");
+  const button = page.locator("#aiSearch");
+  if (!(await button.isVisible())) throw new Error("Bilingual AI search button is missing");
+  const label = await button.innerText();
+  if (!label.includes("தமிழ்") || !label.includes("English")) throw new Error("Search button does not promise Tamil and English results");
+  if (!(await page.locator("#q").getAttribute("placeholder")).includes("எந்த மொழியிலும்")) throw new Error("Any-language search hint is missing");
+});
+
 await check("Tamil Nadu government jobs page loads and filters", async () => {
   await open("tamil-nadu-government-jobs.html");
   if (await page.locator("#departments .card").count() < 5) throw new Error("Department cards are missing");
