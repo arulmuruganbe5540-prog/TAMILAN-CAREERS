@@ -8,6 +8,7 @@
 - Job details: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-details.html
 - Apply for a job: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/apply.html
 - My applications: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/my-applications.html
+- Company applicant dashboard: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/company-applicants.html
 - Job applications database SQL: `supabase-job-applications.sql`
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
@@ -74,3 +75,8 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 - Do not announce applications as live until the SQL is applied and a real test application is confirmed.
 
 - `my-applications.html` lists the signed-in Job Seeker's own applications and their status, using the applicant-only SELECT policy.
+
+
+### Company applicant dashboard
+- `company-applicants.html` provides a company-member-gated workspace and lists jobs associated with the selected company when the `jobs.company_id` field and corresponding read policy permit it.
+- Applicant records remain hidden until a reviewed employer SELECT RLS policy is added to `job_applications`. The existing applicant-only policy is intentionally not weakened. Application status changes are not enabled until a secure server-side workflow and authorization checks are implemented.
