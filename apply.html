@@ -36,8 +36,20 @@ $("application").addEventListener("submit",async e=>{
  const btn=$("submit");btn.disabled=true;btn.textContent="சமர்ப்பிக்கப்படுகிறது...";
  const payload={job_id:job.id,applicant_user_id:user.id,applicant_name:name,applicant_email:email||null,applicant_phone:phone||null,cover_letter:cover||null};
  const {error}=await db.from("job_applications").insert(payload);
- if(error){msg("விண்ணப்பத்தைச் சேமிக்க முடியவில்லை. Database SQL அமைப்பு இன்னும் இயக்கப்படாமல் இருக்கலாம் அல்லது வேலை/அனுமதி சரிபார்க்கப்பட வேண்டும். விவரம்: "+error.message,"error");btn.disabled=false;btn.textContent="விண்ணப்பத்தைச் சமர்ப்பிக்கவும்";return}
- msg("உங்கள் விண்ணப்பம் வெற்றிகரமாகப் பெறப்பட்டது. Dashboard-ல் பின்னர் நிலையைப் பார்க்கலாம்.","success");$("application").reset();$("application").hidden=true;
+ if(error){
+  if(error.code==="23505"){
+   msg("இந்த வேலைக்கு நீங்கள் ஏற்கனவே விண்ணப்பித்துள்ளீர்கள். உங்கள் விண்ணப்ப நிலையைப் பார்க்கலாம்.","error");
+   const link=document.createElement("a");link.href="my-applications.html";link.textContent="எனது விண்ணப்பங்களைப் பார்க்க →";link.style.cssText="display:inline-block;margin-left:8px;color:#126cc1;font-weight:bold";
+   $("message").appendChild(link);
+  }else{
+   msg("விண்ணப்பத்தைச் சேமிக்க முடியவில்லை. Database SQL அமைப்பு இன்னும் இயக்கப்படாமல் இருக்கலாம் அல்லது வேலை/அனுமதி சரிபார்க்கப்பட வேண்டும். விவரம்: "+error.message,"error");
+  }
+  btn.disabled=false;btn.textContent="விண்ணப்பத்தைச் சமர்ப்பிக்கவும்";return;
+ }
+ msg("உங்கள் விண்ணப்பம் வெற்றிகரமாகப் பெறப்பட்டது.","success");
+ const track=document.createElement("a");track.href="my-applications.html";track.textContent="எனது விண்ணப்பங்களைக் காண்க →";track.style.cssText="display:inline-block;margin-left:8px;color:#126cc1;font-weight:bold";
+ $("message").appendChild(track);
+ $("application").reset();$("application").hidden=true;
 });
 init();
 </script></body></html>
