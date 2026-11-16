@@ -32,8 +32,9 @@ async function show(){
  if(error){root.textContent="வேலை விவரத்தைப் பெற முடியவில்லை: "+error.message;return}
  if(!data){root.textContent="இந்த வேலை அறிவிப்பு கிடைக்கவில்லை அல்லது நீக்கப்பட்டுள்ளது.";return}
  const j=data,status=String(pick(j,["status"])).toLowerCase();
- if(status&&!["active","published","open","approved"].includes(status)){root.textContent="இந்த வேலை அறிவிப்பு தற்போது விண்ணப்பத்திற்கு திறந்திருக்கவில்லை.";return}
- const title=pick(j,["job_title","title"])||"வேலை விவரம்",company=pick(j,["company_name"]),loc=pick(j,["location","job_location","work_location"]),type=pick(j,["employment_type","job_type"]),deadline=pick(j,["application_deadline","deadline"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
+ if(status!=="published"){root.textContent="இந்த வேலை அறிவிப்பு தற்போது விண்ணப்பத்திற்கு திறந்திருக்கவில்லை.";return}
+ let company=pick(j,["company_name"]);if(j.company_id){const {data:companyRow}=await db.from("companies").select("company_name").eq("id",j.company_id).maybeSingle();if(companyRow?.company_name)company=companyRow.company_name;}
+ const title=pick(j,["job_title","title"])||"வேலை விவரம்",loc=pick(j,["location","job_location","work_location"]),type=pick(j,["employment_type","job_type"]),deadline=pick(j,["application_deadline","deadline"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
  const salary=min||max?currency+" "+(min||"")+(min&&max?" – ":"")+(max||""):"சம்பளம் அறிவிக்கப்படவில்லை";
  const id=pick(j,["id","job_id"]),description=pick(j,["description","job_description"]);
  const details=[fact("வேலை இடம்",loc),fact("வேலை வகை",type),fact("பணிமுறை",pick(j,["workplace_type"])),fact("துறை",pick(j,["category","job_category"])),fact("காலியிடங்கள்",pick(j,["openings","vacancies"])),fact("அனுபவம்",pick(j,["experience","experience_required"])),fact("கல்வித் தகுதி",pick(j,["education","education_level"])),fact("சம்பளம்",salary),fact("விண்ணப்பிக்க கடைசி நாள்",deadline),fact("தொடர்பு மின்னஞ்சல்",pick(j,["contact_email","application_email"]))].filter(Boolean).join("");
