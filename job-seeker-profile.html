@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Job Seeker Profile | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#172033;font-family:Arial,"Noto Sans Tamil",sans-serif}
+header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.logo{font-weight:800;font-size:21px;color:#54c8ff}.logo span{color:white}.headlinks{display:flex;gap:9px;flex-wrap:wrap}.headlinks a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}
+main{max-width:920px;margin:26px auto;padding:0 15px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff;padding:25px;border-radius:16px}.hero h1{margin:0 0 9px;font-size:24px}.hero p{margin:0;line-height:1.65;color:#dfedff}
+.panel{background:#fff;border:1px solid #e2e9f2;border-radius:14px;padding:22px;margin-top:18px}.panel h2{font-size:18px;color:#173e70;margin:0 0 16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field label{display:block;font-weight:bold;font-size:13px;margin:0 0 7px;color:#34445d}.field input,.field select,.field textarea{width:100%;border:1px solid #d6dfeb;border-radius:8px;padding:12px;font-size:15px;background:#fff;color:#172033}.field textarea{min-height:100px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid #a9d7ff;border-color:#1688ed}.full{grid-column:1/-1}.hint{font-size:12px;color:#748197;margin-top:5px;line-height:1.5}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px}.primary,.secondary{border:0;border-radius:9px;padding:13px 18px;font-weight:bold;cursor:pointer}.primary{background:#1688ed;color:white}.secondary{background:#eef4fb;color:#24527e}.primary:disabled{opacity:.6;cursor:wait}
+.notice{display:none;margin-top:15px;padding:13px;border-radius:9px;line-height:1.6}.good{display:block;background:#e7f8ed;color:#16743b}.bad{display:block;background:#fff0f0;color:#b42318}
+.progress{height:9px;background:#e8edf5;border-radius:10px;overflow:hidden;margin-top:10px}.progress span{display:block;width:0;height:100%;background:#1688ed;transition:width .2s}.progressline{font-size:13px;color:#61718a;margin-top:8px}
+footer{text-align:center;color:#778397;padding:28px;font-size:13px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.panel{padding:17px}.hero{padding:21px}.hero h1{font-size:21px}}
+</style></head>
+<body>
+<header><div class="logo">TAMILAN <span>CAREERS</span></div><nav class="headlinks"><a href="dashboard.html">Dashboard</a><a href="index.html">முகப்பு</a></nav></header>
+<main>
+<section class="hero"><h1>உங்கள் வேலைவாய்ப்பு சுயவிவரம்</h1><p>உங்கள் திறமைகள் மற்றும் கல்வி விவரங்களை நிரப்புங்கள். முழுமையான சுயவிவரம் வேலை தேடுவதற்கும் நிறுவனங்கள் உங்களைப் புரிந்துகொள்வதற்கும் உதவும்.</p></section>
+<div class="panel"><h2>சுயவிவர நிறைவு</h2><div class="progress"><span id="progressBar"></span></div><div class="progressline" id="progressText">உங்கள் விவரங்கள் ஏற்றப்படுகின்றன...</div></div>
+<form id="profileForm">
+<section class="panel"><h2>👤 அடிப்படை விவரங்கள்</h2><div class="grid">
+<div class="field"><label for="fullName">முழுப் பெயர் *</label><input id="fullName" maxlength="100" autocomplete="name" required placeholder="உங்கள் பெயர்"></div>
+<div class="field"><label for="phone">மொபைல் எண்</label><input id="phone" type="tel" maxlength="16" autocomplete="tel" placeholder="10 இலக்க மொபைல் எண்"></div>
+<div class="field"><label for="location">வசிக்கும் ஊர் / மாவட்டம்</label><input id="location" maxlength="100" autocomplete="address-level2" placeholder="உதா: ஓமலூர், சேலம்"></div>
+<div class="field"><label for="headline">வேலைத் தலைப்பு</label><input id="headline" maxlength="120" placeholder="உதா: Junior Accountant"></div>
+<div class="field full"><label for="about">உங்களைப் பற்றி</label><textarea id="about" maxlength="1200" placeholder="உங்கள் அனுபவம், இலக்கு, சிறப்பம்சங்கள்..."></textarea></div>
+</div></section>
+<section class="panel"><h2>🎓 கல்வி மற்றும் அனுபவம்</h2><div class="grid">
+<div class="field"><label for="education">கல்வித்தகுதி</label><select id="education"><option value="">தேர்வு செய்யவும்</option><option>No Formal Education</option><option>Read & Write</option><option>5th Pass</option><option>8th Pass</option><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Professional Courses</option><option>PhD / Research</option></select></div>
+<div class="field"><label for="experience">பணி அனுபவம்</label><select id="experience"><option value="">தேர்வு செய்யவும்</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>6–10 years</option><option>10+ years</option></select></div>
+<div class="field full"><label for="skills">திறன்கள் (கமா வைத்து பிரிக்கவும்)</label><textarea id="skills" maxlength="1000" placeholder="உதா: MS Excel, Tally, Customer Service, Driving"></textarea><div class="hint">பல திறன்களை கமா (,) வைத்து எழுதலாம்.</div></div>
+<div class="field"><label for="languages">தெரிந்த மொழிகள்</label><input id="languages" maxlength="200" placeholder="Tamil, English"></div>
+<div class="field"><label for="jobType">விரும்பும் வேலை வகை</label><select id="jobType"><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field full"><label for="preferredLocation">வேலை தேடும் இடம்</label><input id="preferredLocation" maxlength="150" placeholder="உதா: Omalur, Salem, Edappadi"></div>
+</div><div class="hint">* குறியிட்டவை கட்டாயம். உங்கள் சுயவிவரம் உங்கள் கணக்கில் சேமிக்கப்படும்.</div>
+<div class="actions"><button class="primary" id="saveBtn" type="submit">சுயவிவரத்தைச் சேமிக்கவும்</button><button class="secondary" type="button" id="reloadBtn">மீண்டும் ஏற்றவும்</button></div><div class="notice" id="notice" role="status" aria-live="polite"></div>
+</section></form>
+</main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
+<script>
+const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const ids=["fullName","phone","location","headline","about","education","experience","skills","languages","jobType","preferredLocation"];
+const notice=document.getElementById("notice");
+function say(message,ok){notice.textContent=message;notice.className="notice "+(ok?"good":"bad");}
+function val(id){return document.getElementById(id).value.trim();}
+function updateProgress(){const count=ids.filter(id=>val(id)).length;const percent=Math.round(count/ids.length*100);document.getElementById("progressBar").style.width=percent+"%";document.getElementById("progressText").textContent=percent+"% நிறைவு – "+count+"/"+ids.length+" விவரங்கள் நிரப்பப்பட்டுள்ளன";}
+async function loadProfile(){
+ const {data,error}=await client.auth.getSession();
+ if(error||!data.session){location.replace("login.html");return;}
+ const user=data.session.user;
+ const {data:roleData,error:roleError}=await client.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
+ if(roleError){say("கணக்கு அனுமதியைச் சரிபார்க்க முடியவில்லை: "+roleError.message,false);return;}
+ if(roleData?.role!=="job_seeker"){say("இந்தப் பக்கம் Job Seeker கணக்குகளுக்காக மட்டுமே. உங்கள் கணக்கு வகையைச் சரிபார்க்கவும்.",false);return;}
+ const m=user.user_metadata||{};
+ const values={fullName:m.full_name||"",phone:m.phone||"",location:m.location||"",headline:m.headline||"",about:m.about||"",education:m.education||"",experience:m.experience||"",skills:Array.isArray(m.skills)?m.skills.join(", "):(m.skills||""),languages:m.languages||"",jobType:m.preferred_job_type||"",preferredLocation:m.preferred_location||""};
+ for(const id of ids)document.getElementById(id).value=values[id]||"";
+ updateProgress();
+}
+for(const id of ids)document.getElementById(id).addEventListener("input",updateProgress);
+document.getElementById("reloadBtn").addEventListener("click",()=>loadProfile().catch(e=>say(e.message,false)));
+document.getElementById("profileForm").addEventListener("submit",async e=>{
+ e.preventDefault();const button=document.getElementById("saveBtn");button.disabled=true;button.textContent="சேமிக்கப்படுகிறது...";
+ try{
+  const skills=val("skills").split(",").map(x=>x.trim()).filter(Boolean);
+  const payload={full_name:val("fullName"),phone:val("phone"),location:val("location"),headline:val("headline"),about:val("about"),education:val("education"),experience:val("experience"),skills,languages:val("languages"),preferred_job_type:val("jobType"),preferred_location:val("preferredLocation"),profile_updated_at:new Date().toISOString()};
+  const {data,error}=await client.auth.updateUser({data:payload});
+  if(error)throw error;
+  say("உங்கள் சுயவிவரம் வெற்றிகரமாகச் சேமிக்கப்பட்டது.",true);updateProgress();
+ }catch(error){say("சேமிக்க முடியவில்லை: "+(error.message||error),false);}
+ finally{button.disabled=false;button.textContent="சுயவிவரத்தைச் சேமிக்கவும்";}
+});
+loadProfile().catch(e=>say("சுயவிவரத்தை ஏற்ற முடியவில்லை: "+(e.message||e),false));
+</script></body></html>
