@@ -8,6 +8,7 @@
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
+- Company job posting draft: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-posting.html
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
 
@@ -45,3 +46,9 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 - `company-profile.html` lets an authenticated user save a company profile draft in their own Supabase Auth user metadata.
 - The dashboard links to the page for company users.
 - This is a draft only: it does not verify a company, create a trusted company record, grant employer permissions, or enable job posting. Those require a reviewed database schema, secure server-side validation, and RLS policies.
+
+
+### Company job posting draft
+- `job-posting.html` provides a structured job-detail form for users with an active `company_members` membership.
+- The page checks the signed-in user's active company memberships and lets them save one job-posting draft in their own Supabase Auth user metadata.
+- This is not a published job: it does not insert into the `jobs` table, accept applications, verify job content, or grant posting permission. A secure server-side workflow, reviewed schema, RLS and moderation process are still required before public posting.
