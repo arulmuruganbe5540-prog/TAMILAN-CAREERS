@@ -35,6 +35,16 @@ jobs:
         run: python -m py_compile scripts/website-health-check.py
       - name: Check internal website structure
         run: python scripts/website-health-check.py
+      - name: Install browser test dependency
+        run: npm install --no-save --no-package-lock playwright@1.56.1
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Start local website server
+        run: |
+          python -m http.server 4173 --bind 127.0.0.1 >/tmp/tc-http.log 2>&1 &
+          echo $! >/tmp/tc-http.pid
+      - name: Run key-page browser smoke tests
+        run: node scripts/browser-smoke-test.mjs
       - name: Save health report
         if: always()
         run: |
