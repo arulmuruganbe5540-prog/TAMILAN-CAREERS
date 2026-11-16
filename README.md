@@ -9,6 +9,7 @@
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
 - Company job posting draft: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-posting.html
+- Private job-draft database SQL: `supabase-job-posting-drafts.sql`
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
 
@@ -52,3 +53,9 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 - `job-posting.html` provides a structured job-detail form for users with an active `company_members` membership.
 - The page checks the signed-in user's active company memberships and lets them save one job-posting draft in their own Supabase Auth user metadata.
 - This is not a published job: it does not insert into the `jobs` table, accept applications, verify job content, or grant posting permission. A secure server-side workflow, reviewed schema, RLS and moderation process are still required before public posting.
+
+### Private job-posting draft database
+- Run `supabase-job-posting-drafts.sql` in the Supabase SQL Editor to create the private `job_posting_drafts` table and owner/active-company-member RLS policies.
+- After the SQL is applied, `job-posting.html` reads and saves drafts in that table per company and signed-in member.
+- This table is for private drafts only. It deliberately does not insert into `jobs`, publish vacancies, accept applications, or grant public posting permissions.
+- The SQL has not been executed against the live Supabase project from this repository workflow; verify the table and policies in Supabase before testing the form.
