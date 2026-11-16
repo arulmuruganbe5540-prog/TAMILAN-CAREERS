@@ -1,2 +1,5 @@
 [functions.ingest-government-notices]
 verify_jwt = false
+
+[functions.bilingual-job-search]
+verify_jwt = true
