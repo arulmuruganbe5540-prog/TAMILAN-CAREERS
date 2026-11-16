@@ -17,6 +17,8 @@ async function init(){
  if(!jobId){$("jobbox").textContent="வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திற்குச் செல்லுங்கள்.";return}
  const {data:sessionData}=await db.auth.getSession();user=sessionData.session?.user;
  if(!user){location.href="login.html?next="+encodeURIComponent("apply.html?job="+jobId);return}
+ const {data:roleData,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
+ if(roleError||roleData?.role!=="job_seeker"){$("jobbox").textContent="இந்த வசதி Job Seeker கணக்கிற்கு மட்டுமே. Job Seeker கணக்கில் உள்நுழைந்து தொடருங்கள்.";return}
  const {data,error}=await db.from("jobs").select("*").eq("id",jobId).maybeSingle();
  if(error||!data){$("jobbox").textContent="வேலை விவரத்தைப் பெற முடியவில்லை. "+(error?.message||"வேலை கிடைக்கவில்லை");return}
  job=data;const status=String(pick(job,["status"])).toLowerCase();
