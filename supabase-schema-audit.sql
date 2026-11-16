@@ -38,7 +38,7 @@ left join information_schema.constraint_column_usage ccu
   on ccu.constraint_schema = tc.constraint_schema
  and ccu.constraint_name = tc.constraint_name
 where tc.constraint_schema = 'public'
-  and tc.table_name in ('jobs','companies','company_members','job_applications')
+  and tc.table_name in ('jobs','companies','company_members','job_applications','government_notice_sources','government_notice_reviews','government_notices')
 order by tc.table_name, tc.constraint_type, tc.constraint_name;
 
 select
@@ -52,7 +52,7 @@ select
   with_check
 from pg_policies
 where schemaname = 'public'
-  and tablename in ('jobs','companies','company_members','job_applications')
+  and tablename in ('jobs','companies','company_members','job_applications','user_roles','government_notice_sources','government_notice_reviews','government_notices')
 order by tablename, policyname;
 
 
