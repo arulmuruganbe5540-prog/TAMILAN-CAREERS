@@ -39,3 +39,9 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 - Static responsive HTML/CSS/JavaScript frontend
 - Supabase Auth, Database and Storage
 - GitHub Pages hosting
+
+
+### Company profile draft
+- `company-profile.html` lets an authenticated user save a company profile draft in their own Supabase Auth user metadata.
+- The dashboard links to the page for company users.
+- This is a draft only: it does not verify a company, create a trusted company record, grant employer permissions, or enable job posting. Those require a reviewed database schema, secure server-side validation, and RLS policies.
