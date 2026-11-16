@@ -5,6 +5,7 @@ This is a discovery tool, not an AI fact checker and never publishes vacancies.
 Every candidate requires an administrator to open the official notice and verify it.
 """
 import hashlib, html, json, re, time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
@@ -27,8 +28,9 @@ CATEGORY = [
     ("recruitment", re.compile(r"recruit|vacanc|advertisement|notification|apply|application", re.I)),
 ]
 MAX_BYTES = 2_000_000
-TIMEOUT = 20
-SLEEP_SECONDS = 0.45
+TIMEOUT = 12
+MAX_WORKERS = 5
+SLEEP_SECONDS = 0.35
 
 class Links(HTMLParser):
     def __init__(self):
@@ -118,22 +120,32 @@ config = load_json(CONFIG, {"sources":[]})
 previous_queue = load_json(QUEUE, {"items":[]})
 previous_by_id = {x.get("id"):x for x in previous_queue.get("items",[]) if x.get("id")}
 all_candidates, source_results, errors = {}, [], []
-for source in config.get("sources", []):
+
+def scan_one(source):
+    time.sleep(SLEEP_SECONDS)
     try:
         result, found = fetch_source(source)
+        return source, result, found, None
+    except (HTTPError, URLError, TimeoutError, OSError, ValueError) as exc:
+        return source, None, [], str(exc)[:250]
+
+# A small worker pool prevents slow official sites from being scanned serially.
+with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+    futures = [pool.submit(scan_one, source) for source in config.get("sources", [])]
+    for future in as_completed(futures):
+        source, result, found, error = future.result()
+        if error:
+            errors.append({"source_id":source["id"], "url":source["url"], "error":error})
+            print(source["id"] + ": ERROR " + error[:160])
+            continue
         source_results.append(result)
         for item in found:
-            # Preserve an administrator's existing status/checklist when the same link is rediscovered.
             old = previous_by_id.get(item["id"])
             if old:
                 item.update(old)
                 item["last_seen_utc"] = datetime.now(timezone.utc).isoformat()
             all_candidates[item["id"]] = item
         print(source["id"] + ": HTTP " + str(result["http_status"]) + ", candidates=" + str(len(found)))
-    except (HTTPError, URLError, TimeoutError, OSError, ValueError) as exc:
-        errors.append({"source_id":source["id"], "url":source["url"], "error":str(exc)[:250]})
-        print(source["id"] + ": ERROR " + str(exc)[:160])
-    time.sleep(SLEEP_SECONDS)
 
 # Keep previously queued items so that admin review history is not silently discarded.
 for item_id, old in previous_by_id.items():
@@ -149,13 +161,14 @@ queue = {
     "items":items
 }
 report = {
-    "monitor_version":1, "checked_at_utc":datetime.now(timezone.utc).isoformat(),
+    "monitor_version":2, "checked_at_utc":datetime.now(timezone.utc).isoformat(),
     "check_interval_hours":config.get("check_interval_hours",6),
     "registered_sources":len(config.get("sources",[])),
     "successful_sources":len(source_results), "failed_sources":errors,
     "candidate_links_discovered_this_run":sum(x["links_found"] for x in source_results),
     "pending_admin_review":queue["pending_review"],
-    "note":"Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes."
+    "note":"Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
+    "scan_workers":MAX_WORKERS, "request_timeout_seconds":TIMEOUT
 }
 QUEUE.write_text(json.dumps(queue,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
