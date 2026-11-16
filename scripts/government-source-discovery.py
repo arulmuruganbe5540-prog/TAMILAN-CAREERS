@@ -143,7 +143,8 @@ with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
                 }),
                 "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry.",
             })
-            candidates[item_id] = item\n            new_seen += 1
+            candidates[item_id] = item
+            new_seen += 1
 
 # Retain prior decisions and review history, including candidates not seen in this scan.
 for item_id, item in old.items():
