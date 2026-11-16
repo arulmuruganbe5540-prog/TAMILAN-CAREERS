@@ -57,8 +57,24 @@ async function init(){
  document.getElementById("companyInfo").textContent="செயலில் உள்ள நிறுவன உறுப்பினர் இணைப்புகள்: "+memberships.length+". நீங்கள் அங்கீகரிக்கப்பட்ட உறுப்பினராக உள்ள நிறுவனத்திற்கான வரைவைத் தேர்ந்தெடுக்கலாம்.";
  const saved=currentUser.user_metadata?.job_posting_draft||{};
  if(saved.company_id&&memberships.some(m=>m.company_id===saved.company_id))select.value=saved.company_id;
- fill(saved);
  document.getElementById("loading").classList.add("hidden");document.getElementById("editor").classList.remove("hidden");
+ await loadDraftForCompany();
+}
+async function loadDraftForCompany(){
+ const companyId=document.getElementById("companyChoice").value;
+ if(!companyId)return;
+ const {data,error}=await client.from("job_posting_drafts").select("draft").eq("company_id",companyId).eq("user_id",currentUser.id).maybeSingle();
+ if(error){
+  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது அணுகல் மறுக்கப்பட்டது. முதலில் supabase-job-posting-drafts.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
+  const old=currentUser.user_metadata?.job_posting_draft||{};
+  if(old.company_id===companyId)fill(old);
+  return;
+ }
+ if(data?.draft){fill(data.draft);message("இந்த நிறுவனத்திற்கான சேமித்த வரைவு ஏற்றப்பட்டது.",true)}
+ else{
+  const old=currentUser.user_metadata?.job_posting_draft||{};
+  fill(old.company_id===companyId?old:{});
+ }
 }
 async function save(){
  const form=document.getElementById("jobForm");if(!form.reportValidity())return;
@@ -68,12 +84,16 @@ async function save(){
  const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return}
  const draft={...d,company_id:d.companyChoice,company_name:(Array.isArray(company.companies)?company.companies[0]:company.companies)?.company_name||"",saved_at:new Date().toISOString(),draft_status:"draft"};
  const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="சேமிக்கப்படுகிறது...";
- try{const {data,error}=await client.auth.updateUser({data:{job_posting_draft:draft}});if(error)throw error;currentUser=data.user;message("வேலை விவர வரைவு உங்கள் கணக்கில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true)}
- catch(e){message("சேமிக்க முடியவில்லை: "+(e.message||e),false)}
+ try{
+  const {error}=await client.from("job_posting_drafts").upsert({company_id:d.companyChoice,user_id:currentUser.id,draft},{onConflict:"company_id,user_id"});
+  if(error)throw error;
+  message("வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
+ }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-job-posting-drafts.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false)}
  finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
 }
 document.getElementById("saveBtn").addEventListener("click",save);
-document.getElementById("reloadBtn").addEventListener("click",()=>{fill(currentUser?.user_metadata?.job_posting_draft||{});message("சேமித்த வரைவு மீண்டும் ஏற்றப்பட்டது.",true)});
+document.getElementById("reloadBtn").addEventListener("click",loadDraftForCompany);
+document.getElementById("companyChoice").addEventListener("change",loadDraftForCompany);
 document.getElementById("clearBtn").addEventListener("click",()=>{fill();message("படிவம் காலி செய்யப்பட்டது. முன்பு சேமித்த வரைவு மாற்றப்படவில்லை; மீண்டும் Save செய்தால் மட்டுமே புதுப்பிக்கப்படும்.",true)});
 init().catch(e=>showBlocked("பக்கத்தைத் திறக்கும்போது பிழை: "+(e.message||e)));
 </script></body></html>
