@@ -55,8 +55,21 @@ async function loadProfile(){
  const {data:roleData,error:roleError}=await client.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  if(roleError){say("கணக்கு அனுமதியைச் சரிபார்க்க முடியவில்லை: "+roleError.message,false);return;}
  if(roleData?.role!=="job_seeker"){say("இந்தப் பக்கம் Job Seeker கணக்குகளுக்காக மட்டுமே. உங்கள் கணக்கு வகையைச் சரிபார்க்கவும்.",false);return;}
- const m=user.user_metadata||{};
- const values={fullName:m.full_name||"",phone:m.phone||"",location:m.location||"",headline:m.headline||"",about:m.about||"",education:m.education||"",experience:m.experience||"",skills:Array.isArray(m.skills)?m.skills.join(", "):(m.skills||""),languages:m.languages||"",jobType:m.preferred_job_type||"",preferredLocation:m.preferred_location||""};
+ const [profileResult,seekerResult,skillResult,languageResult,prefResult]=await Promise.all([
+  client.from("profiles").select("full_name,email,phone").eq("id",user.id).maybeSingle(),
+  client.from("job_seeker_profiles").select("headline,bio,current_city,total_experience_months").eq("user_id",user.id).maybeSingle(),
+  client.from("candidate_skills").select("skill_name").eq("user_id",user.id),
+  client.from("candidate_languages").select("language_code").eq("user_id",user.id),
+  client.from("candidate_preferences").select("preferred_city,preferred_employment_type").eq("user_id",user.id).maybeSingle()
+ ]);
+ const errors=[profileResult.error,seekerResult.error,skillResult.error,languageResult.error,prefResult.error].filter(Boolean);
+ if(errors.length){say("சுயவிவர அட்டவணைகளைப் படிக்க முடியவில்லை. Supabase அட்டவணை / RLS அமைப்பைச் சரிபார்க்கவும்: "+errors[0].message,false);return;}
+ const m=user.user_metadata||{},p=profileResult.data||{},s=seekerResult.data||{},pref=prefResult.data||{};
+ const months=s.total_experience_months;
+ const experience=months===0?"Fresher":months==null?(m.experience||""):months<12?"Less than 1 year":months<24?"1–2 years":months<60?"3–5 years":months<120?"6–10 years":"10+ years";
+ const languageNames={ta:"Tamil",en:"English",hi:"Hindi",te:"Telugu",kn:"Kannada",ml:"Malayalam",bn:"Bengali",fr:"French",ar:"Arabic",es:"Spanish"};
+ const savedLanguages=(languageResult.data||[]).map(x=>languageNames[x.language_code]||x.language_code).join(", ");
+ const values={fullName:p.full_name||m.full_name||"",phone:p.phone||m.phone||"",location:s.current_city||m.location||"",headline:s.headline||m.headline||"",about:s.bio||m.about||"",education:m.education||"",experience,skills:(skillResult.data||[]).map(x=>x.skill_name).join(", ")||(Array.isArray(m.skills)?m.skills.join(", "):(m.skills||"")),languages:savedLanguages||m.languages||"",jobType:pref.preferred_employment_type||m.preferred_job_type||"",preferredLocation:pref.preferred_city||m.preferred_location||""};
  for(const id of ids)document.getElementById(id).value=values[id]||"";
  updateProgress();
 }
@@ -65,11 +78,47 @@ document.getElementById("reloadBtn").addEventListener("click",()=>loadProfile().
 document.getElementById("profileForm").addEventListener("submit",async e=>{
  e.preventDefault();const button=document.getElementById("saveBtn");button.disabled=true;button.textContent="சேமிக்கப்படுகிறது...";
  try{
-  const skills=val("skills").split(",").map(x=>x.trim()).filter(Boolean);
-  const payload={full_name:val("fullName"),phone:val("phone"),location:val("location"),headline:val("headline"),about:val("about"),education:val("education"),experience:val("experience"),skills,languages:val("languages"),preferred_job_type:val("jobType"),preferred_location:val("preferredLocation"),profile_updated_at:new Date().toISOString()};
-  const {data,error}=await client.auth.updateUser({data:payload});
-  if(error)throw error;
-  say("உங்கள் சுயவிவரம் வெற்றிகரமாகச் சேமிக்கப்பட்டது.",true);updateProgress();
+  const {data:sessionData,error:sessionError}=await client.auth.getSession();
+  if(sessionError||!sessionData.session)throw new Error("மீண்டும் Login செய்யவும்.");
+  const user=sessionData.session.user;
+  const skills=[...new Set(val("skills").split(",").map(x=>x.trim()).filter(Boolean))];
+  const langMap={"tamil":"ta","english":"en","hindi":"hi","telugu":"te","kannada":"kn","malayalam":"ml","bengali":"bn","french":"fr","arabic":"ar","spanish":"es"};
+  const languages=[...new Set(val("languages").split(",").map(x=>x.trim()).filter(Boolean).map(x=>langMap[x.toLowerCase()]||x.toLowerCase().replace(/\\s+/g,"-")))];
+  const experienceMonths={"Fresher":0,"Less than 1 year":6,"1–2 years":12,"3–5 years":36,"6–10 years":72,"10+ years":120};
+  const months=Object.prototype.hasOwnProperty.call(experienceMonths,val("experience"))?experienceMonths[val("experience")]:null;
+  const {error:profileError}=await client.from("profiles").upsert({
+   id:user.id,full_name:val("fullName"),email:user.email||null,phone:val("phone")||null,updated_at:new Date().toISOString()
+  },{onConflict:"id"});
+  if(profileError)throw new Error("அடிப்படை விவரம்: "+profileError.message);
+  const {error:seekerError}=await client.from("job_seeker_profiles").upsert({
+   user_id:user.id,headline:val("headline")||null,bio:val("about")||null,current_city:val("location")||null,
+   ...(months===null?{}:{total_experience_months:months}),updated_at:new Date().toISOString()
+  },{onConflict:"user_id"});
+  if(seekerError)throw new Error("வேலை தேடுபவர் விவரம்: "+seekerError.message);
+  const {error:skillDeleteError}=await client.from("candidate_skills").delete().eq("user_id",user.id);
+  if(skillDeleteError)throw new Error("திறன்களைப் புதுப்பிக்க முடியவில்லை: "+skillDeleteError.message);
+  if(skills.length){
+   const {error}=await client.from("candidate_skills").insert(skills.map(skill_name=>({user_id:user.id,skill_name})));
+   if(error)throw new Error("திறன்களைச் சேமிக்க முடியவில்லை: "+error.message);
+  }
+  const {error:langDeleteError}=await client.from("candidate_languages").delete().eq("user_id",user.id);
+  if(langDeleteError)throw new Error("மொழிகளைப் புதுப்பிக்க முடியவில்லை: "+langDeleteError.message);
+  if(languages.length){
+   const {error}=await client.from("candidate_languages").insert(languages.map(language_code=>({user_id:user.id,language_code})));
+   if(error)throw new Error("மொழிகளைச் சேமிக்க முடியவில்லை: "+error.message);
+  }
+  const {error:prefError}=await client.from("candidate_preferences").upsert({
+   user_id:user.id,preferred_city:val("preferredLocation")||null,
+   preferred_employment_type:val("jobType")||null,updated_at:new Date().toISOString()
+  },{onConflict:"user_id"});
+  if(prefError)throw new Error("வேலை விருப்பங்களைச் சேமிக்க முடியவில்லை: "+prefError.message);
+  const {error:metaError}=await client.auth.updateUser({data:{
+   full_name:val("fullName"),phone:val("phone"),location:val("location"),headline:val("headline"),
+   about:val("about"),education:val("education"),experience:val("experience"),skills,
+   languages:val("languages"),preferred_job_type:val("jobType"),preferred_location:val("preferredLocation")
+  }});
+  if(metaError)throw new Error("Database-ல் சேமிக்கப்பட்டது; ஆனால் பழைய metadata ஒத்திசைவு தோல்வி: "+metaError.message);
+  say("உங்கள் சுயவிவரம் Database-ல் சேமிக்கப்பட்டது.",true);updateProgress();
  }catch(error){say("சேமிக்க முடியவில்லை: "+(error.message||error),false);}
  finally{button.disabled=false;button.textContent="சுயவிவரத்தைச் சேமிக்கவும்";}
 });
