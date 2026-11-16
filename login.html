@@ -37,6 +37,7 @@ input:focus{border-color:#1688ed}
 .switch{text-align:center;margin-top:20px;color:#66758b;font-size:14px}
 .switch a{color:#147bd1;font-weight:bold;cursor:pointer}
 .message{margin-top:15px;padding:12px;border-radius:8px;font-size:14px;display:none;line-height:1.6}
+.resend-btn{display:none;width:100%;padding:11px;border:1px solid #c9d8e9;border-radius:8px;background:#f4f8fd;color:#126cc1;font-weight:bold;margin-top:9px;cursor:pointer}
 .back{text-align:center;margin-top:22px}
 .back a{color:#147bd1;text-decoration:none;font-size:14px}
 .note{font-size:12px;color:#778397;text-align:center;margin-top:18px;line-height:1.6}
@@ -90,6 +91,7 @@ input:focus{border-color:#1688ed}
   </div>
 
   <div class="message" id="message"></div>
+  <button class="resend-btn" id="resendBtn" type="button">Email உறுதிப்படுத்தலை மீண்டும் அனுப்பு</button>
 
   <div class="back">
     <a href="index.html">← முகப்புப் பக்கத்திற்குச் செல்லுங்கள்</a>
@@ -204,6 +206,20 @@ function showMessage(message, success=false) {
   box.style.color = success ? "#16743b" : "#b42318";
 }
 
+
+document.getElementById("resendBtn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  if (!email) { showMessage("முதலில் பதிவு செய்த Email Address உள்ளிடுங்கள்."); return; }
+  const button = document.getElementById("resendBtn");
+  button.disabled = true; button.textContent = "அனுப்பப்படுகிறது...";
+  try {
+    const {error} = await supabaseClient.auth.resend({type:"signup", email});
+    if (error) throw error;
+    showMessage("உறுதிப்படுத்தல் Email மீண்டும் அனுப்பப்பட்டது. Inbox மற்றும் Spam folder பார்க்கவும்.", true);
+  } catch(error) { showMessage(error.message || "Email அனுப்ப முடியவில்லை."); }
+  finally { button.disabled = false; button.textContent = "Email உறுதிப்படுத்தலை மீண்டும் அனுப்பு"; }
+});
+
 document.getElementById("authForm").addEventListener("submit",async function(e) {
 
   e.preventDefault();
@@ -249,6 +265,7 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
       if (error) throw error;
 
       if (data.session) {
+        document.getElementById("resendBtn").style.display = "none";
 
         showMessage(
           "கணக்கு உருவாக்கப்பட்டது. உங்கள் கணக்கு விவரங்கள் சரிபார்க்கப்பட வேண்டும்.",
@@ -258,9 +275,10 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
       } else {
 
         showMessage(
-          "பதிவு வெற்றிகரமாக அனுப்பப்பட்டது. உங்கள் Email-ஐ திறந்து உறுதிப்படுத்துங்கள்.",
+          "பதிவு வெற்றிகரமாக அனுப்பப்பட்டது. உங்கள் Email-ஐ திறந்து உறுதிப்படுத்துங்கள். Email வரவில்லை என்றால் கீழே உள்ள பொத்தானை அழுத்தவும்.",
           true
         );
+        document.getElementById("resendBtn").style.display = "block";
 
       }
 
