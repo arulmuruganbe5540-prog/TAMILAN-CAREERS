@@ -10,6 +10,10 @@
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 let allJobs=[];
 const $=id=>document.getElementById(id);
+const params=new URLSearchParams(window.location.search);
+$("q").value=params.get("q")||"";
+$("place").value=params.get("location")||"";
+if(params.get("category"))$("q").value=[$("q").value,params.get("category")].filter(Boolean).join(" ");
 const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function pick(j,keys){for(const k of keys)if(j[k]!==undefined&&j[k]!==null&&j[k]!=="")return j[k];return "";}
 function render(){
