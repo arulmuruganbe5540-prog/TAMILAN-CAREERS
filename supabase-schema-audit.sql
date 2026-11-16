@@ -15,7 +15,10 @@ where table_schema = 'public'
     'companies',
     'company_members',
     'job_applications',
-    'user_roles'
+    'user_roles',
+    'government_notice_sources',
+    'government_notice_reviews',
+    'government_notices'
   )
 order by table_name, ordinal_position;
 
@@ -51,3 +54,45 @@ from pg_policies
 where schemaname = 'public'
   and tablename in ('jobs','companies','company_members','job_applications')
 order by tablename, policyname;
+
+
+-- 4. Existing admin-related role values (metadata only; no user records exposed).
+select
+  column_name,
+  data_type,
+  udt_name
+from information_schema.columns
+where table_schema = 'public'
+  and table_name = 'user_roles'
+order by ordinal_position;
+
+-- 5. Existing table grants for the job and government-notice tables.
+select
+  table_name,
+  grantee,
+  privilege_type
+from information_schema.role_table_grants
+where table_schema = 'public'
+  and table_name in (
+    'jobs','companies','company_members','job_applications','user_roles',
+    'government_notice_sources','government_notice_reviews','government_notices'
+  )
+order by table_name, grantee, privilege_type;
+
+-- 6. Existing security-definer functions that might be relevant to role/admin checks.
+select
+  n.nspname as schema_name,
+  p.proname as function_name,
+  pg_get_function_identity_arguments(p.oid) as arguments,
+  p.prosecdef as security_definer,
+  p.proconfig as function_settings
+from pg_proc p
+join pg_namespace n on n.oid = p.pronamespace
+where n.nspname = 'public'
+  and (
+    p.proname ilike '%admin%'
+    or p.proname ilike '%role%'
+    or p.proname ilike '%publish%'
+    or p.proname ilike '%government%'
+  )
+order by p.proname;
