@@ -139,7 +139,7 @@ for source in config.get("sources", []):
 for item_id, old in previous_by_id.items():
     all_candidates.setdefault(item_id, old)
 
-items = sorted(all_candidates.values(), key=lambda x:(x.get("status") != "pending_admin_verification", x.get("discovered_at_utc","")), reverse=True)
+items = sorted(all_candidates.values(), key=lambda x:(x.get("status") != "pending_admin_verification", x.get("discovered_at_utc","")), reverse=False)
 queue = {
     "schema_version":1,
     "generated_at_utc":datetime.now(timezone.utc).isoformat(),
