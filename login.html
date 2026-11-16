@@ -65,7 +65,7 @@ input:focus{border-color:#1688ed}
     </div>
 
     <label>Email Address</label>
-    <input id="email" type="email" placeholder="example@gmail.com" required>
+    <input id="email" type="email" placeholder="example@gmail.com" autocomplete="email" required>
 
     <label>Password</label>
     <div class="password-wrap">
@@ -183,6 +183,7 @@ function toggleMode() {
   document.getElementById("termsRow").style.display = isRegister ? "flex" : "none";
   document.getElementById("termsAgree").required = isRegister;
   document.getElementById("forgotLink").style.display = isRegister ? "none" : "inline";
+  if (!isRegister) document.getElementById("resendBtn").style.display = "none";
   document.getElementById("passwordHint").textContent = isRegister ? "குறைந்தது 8 எழுத்துகள்; பெரிய/சிறிய எழுத்து மற்றும் எண் பயன்படுத்தவும்" : "குறைந்தது 8 எழுத்துகள்";
 
   document.getElementById("submitBtn").textContent =
