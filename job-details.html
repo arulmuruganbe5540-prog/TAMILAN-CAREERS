@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101d3a">
+<title>வேலை விவரம் | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#18243a;font-family:Arial,"Noto Sans Tamil",sans-serif;line-height:1.65}
+header{background:#101d3a;color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:800;font-size:21px;color:#55caff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:white;text-decoration:none;background:#ffffff18;padding:8px 11px;border-radius:8px;font-size:13px}
+main{max-width:900px;margin:25px auto;padding:0 15px}.crumb{font-size:13px;margin:0 0 14px}.crumb a{color:#176eb4;text-decoration:none}
+.panel{background:#fff;border:1px solid #e1e9f2;border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 8px 25px #19385b0a}
+h1{font-size:26px;line-height:1.35;margin:0 0 8px;color:#15345b}.company{font-weight:700;color:#52647b}.tags{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tag{background:#edf5fc;color:#245781;border-radius:30px;padding:6px 11px;font-size:13px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:9px;padding:12px 17px;font-weight:700;text-decoration:none;cursor:pointer;font-size:14px}.primary{background:#1688ed;color:#fff}.secondary{background:#edf4fb;color:#175b99}.section-title{font-size:18px;color:#163e6c;margin:0 0 10px}.bodycopy{white-space:pre-wrap;color:#46566c;overflow-wrap:anywhere}.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fact{background:#f6f9fd;padding:12px;border-radius:10px}.fact small{display:block;color:#718096}.fact b{overflow-wrap:anywhere}.state{padding:20px;background:#fff;border-radius:12px;color:#526176}.warning{font-size:13px;color:#795b24;background:#fff8e8;border:1px solid #f2dfb5;padding:13px;border-radius:10px;margin-top:15px}
+@media(max-width:600px){main{margin:16px auto}.panel{padding:17px}h1{font-size:22px}.facts{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="index.html">முகப்பு</a><a href="jobs.html">வேலை தேடல்</a><a href="saved-jobs.html">சேமித்த வேலைகள்</a><a href="dashboard.html">Dashboard</a></nav></header>
+<main>
+<p class="crumb"><a href="jobs.html">வேலை தேடல்</a> / வேலை விவரம்</p>
+<div id="content" class="state" aria-live="polite">வேலை விவரம் ஏற்றப்படுகிறது...</div>
+</main>
+<script>
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gMtM_xFm1m4Dlgq727Q_83Rn58y2");
+const root=document.getElementById("content"),params=new URLSearchParams(location.search),jobId=params.get("id");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
+function fact(label,value){return value?'<div class="fact"><small>'+esc(label)+'</small><b>'+esc(value)+'</b></div>':""}
+async function show(){
+ if(!jobId){root.textContent="வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திற்குச் செல்லுங்கள்.";return}
+ const {data,error}=await db.from("jobs").select("*").eq("id",jobId).maybeSingle();
+ if(error){root.textContent="வேலை விவரத்தைப் பெற முடியவில்லை: "+error.message;return}
+ if(!data){root.textContent="இந்த வேலை அறிவிப்பு கிடைக்கவில்லை அல்லது நீக்கப்பட்டுள்ளது.";return}
+ const j=data,status=String(pick(j,["status"])).toLowerCase();
+ if(status&&!["active","published","open","approved"].includes(status)){root.textContent="இந்த வேலை அறிவிப்பு தற்போது விண்ணப்பத்திற்கு திறந்திருக்கவில்லை.";return}
+ const title=pick(j,["job_title","title"])||"வேலை விவரம்",company=pick(j,["company_name"]),loc=pick(j,["location","job_location","work_location"]),type=pick(j,["employment_type","job_type"]),deadline=pick(j,["application_deadline","deadline"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
+ const salary=min||max?currency+" "+(min||"")+(min&&max?" – ":"")+(max||""):"சம்பளம் அறிவிக்கப்படவில்லை";
+ const id=pick(j,["id","job_id"]),description=pick(j,["description","job_description"]);
+ const details=[fact("வேலை இடம்",loc),fact("வேலை வகை",type),fact("பணிமுறை",pick(j,["workplace_type"])),fact("துறை",pick(j,["category","job_category"])),fact("காலியிடங்கள்",pick(j,["openings","vacancies"])),fact("அனுபவம்",pick(j,["experience","experience_required"])),fact("கல்வித் தகுதி",pick(j,["education","education_level"])),fact("சம்பளம்",salary),fact("விண்ணப்பிக்க கடைசி நாள்",deadline),fact("தொடர்பு மின்னஞ்சல்",pick(j,["contact_email","application_email"]))].filter(Boolean).join("");
+ root.innerHTML='<section class="panel"><h1>'+esc(title)+'</h1>'+(company?'<div class="company">'+esc(company)+'</div>':"")+'<div class="tags">'+(loc?'<span class="tag">📍 '+esc(loc)+'</span>':"")+(type?'<span class="tag">'+esc(type)+'</span>':"")+'</div><div class="actions"><a class="btn primary" href="login.html?next='+encodeURIComponent("apply.html?job="+id)+'">விண்ணப்பிக்க Login செய்யவும்</a><button class="btn secondary" id="share" type="button">🔗 பகிரவும்</button><button class="btn secondary" id="save" type="button">☆ சேமிக்க</button></div><div class="warning">விண்ணப்பிக்கும் முன் நிறுவனத்தின் நம்பகத்தன்மை, சம்பளம், வேலை இடம் மற்றும் கடைசி தேதியை உறுதிப்படுத்துங்கள். வேலைக்காக பணம் செலுத்த வேண்டாம்.</div></section><section class="panel"><h2 class="section-title">வேலை விவரங்கள்</h2><div class="facts">'+details+'</div></section><section class="panel"><h2 class="section-title">வேலை விளக்கம்</h2><div class="bodycopy">'+esc(description||"விவரம் வழங்கப்படவில்லை.")+'</div></section>';
+ document.getElementById("share").addEventListener("click",async()=>{const url=location.href;if(navigator.share){try{await navigator.share({title, text:"TAMILAN CAREERS வேலை அறிவிப்பு: "+title,url})}catch(e){}}else{try{await navigator.clipboard.writeText(url);alert("வேலை இணைப்பு Copy செய்யப்பட்டது")}catch(e){alert(url)}}});
+ const save=document.getElementById("save"),key="tc_saved_jobs_v1";let saved=[];try{saved=JSON.parse(localStorage.getItem(key)||"[]");if(!Array.isArray(saved))saved=[]}catch(e){}
+ const exists=()=>saved.some(x=>String(x.id)===String(id));if(exists()){save.textContent="✓ சேமிக்கப்பட்டது";save.disabled=true}
+ save.addEventListener("click",()=>{if(exists())return;saved.push({id,title,company,location:loc,type,savedAt:new Date().toISOString()});localStorage.setItem(key,JSON.stringify(saved));save.textContent="✓ சேமிக்கப்பட்டது";save.disabled=true});
+}
+show();
+</script></body></html>
