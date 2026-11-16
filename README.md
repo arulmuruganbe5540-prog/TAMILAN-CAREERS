@@ -90,3 +90,11 @@
 ### Read-only schema and RLS audit
 - `supabase-schema-audit.sql` reports relevant public table columns/types, foreign-key/unique/check constraints and RLS policies for jobs, companies, company_members and job_applications. It performs no DDL or data changes.
 - Use its results to verify actual `jobs.id` type and company/job ownership relationship before creating employer applicant-read or status-update policies.
+
+### AI resume matching backend (deployment required)
+- `ai-job-matches.html` now offers an optional AI matching action in addition to the local rule-based matcher. It requires the user to explicitly tick a consent checkbox before any resume text is sent to the AI service.
+- Secure Edge Function source: `supabase/functions/ai-resume-match/index.ts`. It validates the signed-in Supabase user, reads candidate profile data and published jobs under that user's Supabase permissions/RLS, sends only job-related candidate context and resume text to the OpenAI Responses API, and returns structured match explanations. It does not use the service-role key.
+- The Edge Function requires the Supabase function secrets `OPENAI_API_KEY` (user-provided OpenAI API key), `SUPABASE_URL`, and `SUPABASE_ANON_KEY`. Supabase normally provides the latter two as Edge Function default environment variables; verify they are available in the deployed function environment.
+- Deploy the function from the Supabase project using the Supabase CLI: `supabase functions deploy ai-resume-match`. Then add `OPENAI_API_KEY` under Supabase Project Settings → Edge Functions → Secrets (or the equivalent Secrets page in the current dashboard). Do not put this key in HTML, GitHub, or browser code.
+- The AI request is optional and may incur OpenAI API charges on the account that owns the key. Keep the key private and monitor usage. Resume text is sent to OpenAI only after explicit consent; users should remove unnecessary personal identifiers from the resume first.
+- The AI backend source and frontend JavaScript have been committed, but the Edge Function has not been deployed or live-tested from this repository workflow. AI matching will show a setup message until deployment and secret configuration are complete. The existing local rule-based matcher remains available.
