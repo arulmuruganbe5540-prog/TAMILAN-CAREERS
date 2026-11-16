@@ -1,12 +1,179 @@
 {
-  "monitor_version": 1,
-  "checked_at_utc": null,
+  "monitor_version": 2,
+  "checked_at_utc": "2026-11-16T18:42:44.961232+00:00",
   "check_interval_hours": 6,
   "registered_sources": 48,
-  "successful_sources": 0,
-  "failed_sources": [],
-  "candidate_links_discovered_this_run": 0,
-  "pending_admin_review": 0,
-  "monitor_status": "First scheduled run pending",
-  "note": "No scan has run yet. Official-source link discovery only; it does not validate vacancy facts, does not use AI to certify truth, and never publishes."
+  "successful_sources": 15,
+  "failed_sources": [
+    {
+      "source_id": "rrb",
+      "url": "https://www.rrbapply.gov.in/",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "source_id": "sbi-careers",
+      "url": "https://sbi.co.in/web/careers",
+      "error": "Redirected outside the registered official host"
+    },
+    {
+      "source_id": "upsc",
+      "url": "https://upsc.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "indian-railways",
+      "url": "https://indianrailways.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "ncs",
+      "url": "https://www.ncs.gov.in/",
+      "error": "Redirected outside the registered official host"
+    },
+    {
+      "source_id": "apprenticeship",
+      "url": "https://www.apprenticeshipindia.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "join-indian-army",
+      "url": "https://joinindianarmy.nic.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "nabard",
+      "url": "https://www.nabard.org/careers-notices1.aspx",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "join-indian-navy",
+      "url": "https://www.joinindiannavy.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "agniveervayu",
+      "url": "https://agnipathvayu.cdac.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
+      "source_id": "tnusrb",
+      "url": "https://www.tnusrb.tn.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "mrb-tamilnadu",
+      "url": "https://www.mrb.tn.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "trb-tamilnadu",
+      "url": "https://www.trb.tn.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "gpsc-goa",
+      "url": "https://gpsc.goa.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "appsc-arunachal",
+      "url": "https://appsc.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "apsc-assam",
+      "url": "https://apsc.nic.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "psc-cg",
+      "url": "https://psc.cg.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "gpsc-gujarat",
+      "url": "https://gpsc.gujarat.gov.in/",
+      "error": "<urlopen error [Errno 101] Network is unreachable>"
+    },
+    {
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "hppsc",
+      "url": "https://hppsc.hp.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
+      "source_id": "mpsc-mizoram",
+      "url": "https://mpsc.mizoram.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "kpsc",
+      "url": "https://kpsc.kar.nic.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "mppsc",
+      "url": "https://mppsc.mp.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tgpsc",
+      "url": "https://www.tgpsc.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
+      "source_id": "rpsc",
+      "url": "https://rpsc.rajasthan.gov.in/",
+      "error": "<urlopen error [Errno 101] Network is unreachable>"
+    },
+    {
+      "source_id": "spsc",
+      "url": "https://spsc.sikkim.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tpsc",
+      "url": "https://tpsc.tripura.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "psc-uk",
+      "url": "https://psc.uk.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "ppsc",
+      "url": "https://www.ppsc.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "psc-wb",
+      "url": "https://psc.wb.gov.in/",
+      "error": "<urlopen error timed out>"
+    }
+  ],
+  "candidate_links_discovered_this_run": 409,
+  "pending_admin_review": 409,
+  "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
+  "scan_workers": 5,
+  "request_timeout_seconds": 12
 }
