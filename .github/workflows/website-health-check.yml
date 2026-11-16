@@ -8,6 +8,8 @@ on:
     paths:
       - "*.html"
       - "scripts/**"
+      - "supabase/functions/**"
+      - ".github/dependabot.yml"
       - ".github/workflows/website-health-check.yml"
 
 permissions:
