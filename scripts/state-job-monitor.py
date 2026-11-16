@@ -63,7 +63,7 @@ class TextExtractor(HTMLParser):
             self.skip -= 1
     def handle_data(self, data):
         if not self.skip:
-            value = re.sub(r"\\s+", " ", html.unescape(data)).strip()
+            value = re.sub(r"\s+", " ", html.unescape(data)).strip()
             if value:
                 self.parts.append(value)
 
@@ -78,10 +78,10 @@ def fetch(state, url, previous):
             charset = response.headers.get_content_charset() or "utf-8"
         parser = TextExtractor()
         parser.feed(raw.decode(charset, errors="replace"))
-        text = re.sub(r"\\s+", " ", " ".join(parser.parts)).strip()
+        text = re.sub(r"\s+", " ", " ".join(parser.parts)).strip()
         digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
         snippets = []
-        for sentence in re.split(r"(?<=[.!?])\\s+|\\s{2,}", text):
+        for sentence in re.split(r"(?<=[.!?])\s+|\\s{2,}", text):
             sentence = sentence.strip()
             if sentence and KEYWORDS.search(sentence):
                 snippets.append(sentence[:260])
@@ -127,7 +127,7 @@ summary = {
     "manual_review_required": True,
     "sources": results,
 }
-new_content = json.dumps(summary, ensure_ascii=False, indent=2) + "\\n"
+new_content = json.dumps(summary, ensure_ascii=False, indent=2) + "\n"
 old_content = REPORT.read_text(encoding="utf-8") if REPORT.exists() else ""
 if new_content != old_content:
     REPORT.write_text(new_content, encoding="utf-8")
