@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}
+header{background:#101d3a;color:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:22px;color:#54c8ff}.logo span{color:white}
+button{border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}
+.logout{background:#fff;color:#17365f}
+main{max-width:1050px;margin:28px auto;padding:0 16px}
+.welcome{background:linear-gradient(120deg,#101d3a,#1765a5);color:white;padding:28px;border-radius:16px}
+.welcome h1{margin:0 0 10px;font-size:25px}.welcome p{margin:0;color:#e0edff;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px;margin-top:20px}
+.card{background:white;border:1px solid #e4eaf2;border-radius:13px;padding:20px;min-height:125px}
+.card h2{font-size:18px;margin:0 0 10px;color:#173e70}.card p{color:#66758b;line-height:1.6;font-size:14px;margin:0}
+.status{margin-top:18px;background:white;border-radius:12px;padding:16px;line-height:1.7;color:#526176;white-space:pre-wrap;overflow-wrap:anywhere}
+.message{background:#fff2e5;color:#8a4b08;padding:14px;border-radius:10px;margin-top:16px;line-height:1.6}
+.hidden{display:none}
+footer{text-align:center;color:#778397;font-size:13px;padding:28px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">TAMILAN <span>CAREERS</span></div>
+  <button class="logout" id="logoutBtn">Logout</button>
+</header>
+
+<main>
+  <section class="welcome">
+    <h1 id="welcomeTitle">உங்கள் Dashboard-க்கு வரவேற்கிறோம்</h1>
+    <p id="welcomeText">உங்கள் கணக்கு விவரங்கள் சரிபார்க்கப்படுகின்றன...</p>
+  </section>
+
+  <div id="notice" class="message hidden"></div>
+
+  <section id="seekerArea" class="hidden">
+    <div class="grid">
+      <article class="card"><h2>🔎 வேலை தேடுங்கள்</h2><p>உங்கள் திறமைக்கும் விருப்பத்திற்கும் ஏற்ற வேலைவாய்ப்புகளைத் தேடுங்கள்.</p></article>
+      <article class="card"><h2>📄 எனது Resume</h2><p>உங்கள் Resume-ஐ பதிவேற்றி பின்னர் வேலைகளுக்கு விண்ணப்பிக்கலாம்.</p></article>
+      <article class="card"><h2>📨 விண்ணப்பங்கள்</h2><p>நீங்கள் விண்ணப்பித்த வேலைகளின் நிலையை இங்கே பார்க்கலாம்.</p></article>
+      <article class="card"><h2>🤖 AI Job Matching</h2><p>Resume அடிப்படையில் பொருத்தமான வேலைகளைப் பரிந்துரைக்கும் வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.</p></article>
+    </div>
+  </section>
+
+  <section id="companyArea" class="hidden">
+    <div class="grid">
+      <article class="card"><h2>🏢 நிறுவன விவரங்கள்</h2><p id="companyNames">உங்கள் நிறுவன விவரங்கள் ஏற்றப்படுகின்றன...</p></article>
+      <article class="card"><h2>📢 வேலை வெளியிடுங்கள்</h2><p>நிறுவனத்தின் காலிப்பணியிடங்களைப் பதிவு செய்யும் வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.</p></article>
+      <article class="card"><h2>👥 குழு உறுப்பினர்கள்</h2><p>அனுமதிக்கப்பட்ட நிறுவன உறுப்பினர்களை நிர்வகிக்கும் வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.</p></article>
+      <article class="card"><h2>📨 விண்ணப்பதாரர்கள்</h2><p>வேலைக்கு விண்ணப்பித்தவர்களின் விவரங்களைப் பார்க்கும் வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.</p></article>
+    </div>
+  </section>
+
+  <div id="accountStatus" class="status">கணக்கு சரிபார்க்கப்படுகிறது...</div>
+</main>
+
+<footer>TAMILAN CAREERS – வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.</footer>
+
+<script>
+const SUPABASE_URL = "https://qkmljuuusfjowexvybvy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+const notice = document.getElementById("notice");
+const accountStatus = document.getElementById("accountStatus");
+
+function showNotice(message) {
+  notice.textContent = message;
+  notice.classList.remove("hidden");
+}
+
+async function loadDashboard() {
+  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+
+  if (sessionError || !sessionData.session) {
+    window.location.replace("login.html");
+    return;
+  }
+
+  const user = sessionData.session.user;
+
+  document.getElementById("welcomeTitle").textContent =
+    "வணக்கம், " + (user.user_metadata?.full_name || user.email || "பயனரே");
+
+  document.getElementById("welcomeText").textContent =
+    "உங்கள் கணக்கு அனுமதிகள் சரிபார்க்கப்பட்டுள்ளன. கீழே கிடைக்கும் வசதிகளைப் பார்க்கலாம்.";
+
+  const [roleResult, membershipResult] = await Promise.all([
+    supabaseClient.from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle(),
+
+    supabaseClient.from("company_members")
+      .select("company_id, member_role, member_status, companies(name)")
+      .eq("user_id", user.id)
+      .eq("member_status", "active")
+  ]);
+
+  const role = roleResult.data?.role || null;
+  const memberships = membershipResult.data || [];
+
+  const isSeeker = role === "job_seeker";
+  const isCompanyMember = memberships.length > 0;
+
+  document.getElementById("seekerArea").classList.toggle("hidden", !isSeeker);
+  document.getElementById("companyArea").classList.toggle("hidden", !isCompanyMember);
+
+  if (isSeeker || isCompanyMember) {
+    const types = [];
+    if (isSeeker) types.push("Job Seeker");
+    if (isCompanyMember) types.push("Company");
+
+    document.getElementById("welcomeText").textContent =
+      "கணக்கு வகை: " + types.join(" / ") +
+      " — உங்கள் அனுமதிக்கு ஏற்ற பகுதி காட்டப்படுகிறது.";
+  }
+
+  if (isCompanyMember) {
+    const names = memberships.map(item => {
+      const company = Array.isArray(item.companies)
+        ? item.companies[0]
+        : item.companies;
+
+      return (company?.name || "நிறுவனம்") +
+        " (" + item.member_role + ")";
+    });
+
+    document.getElementById("companyNames").textContent = names.join(" • ");
+  }
+
+  const statusLines = [
+    "Email: " + (user.email || "கிடைக்கவில்லை"),
+    "User ID: " + user.id,
+    "Account role: " + (role || "user_roles அட்டவணையில் role இல்லை"),
+    "Active company memberships: " + memberships.length
+  ];
+
+  if (roleResult.error) {
+    statusLines.push("Role lookup: " + roleResult.error.message);
+  }
+
+  if (membershipResult.error) {
+    statusLines.push("Company membership lookup: " + membershipResult.error.message);
+  }
+
+  accountStatus.textContent = statusLines.join("\n");
+
+  if (!isSeeker && !isCompanyMember) {
+    showNotice("இந்தக் கணக்கிற்கு Dashboard அனுமதி இன்னும் ஒதுக்கப்படவில்லை. நிர்வாகி அனுமதி வழங்கிய பிறகு இங்கே வசதிகள் தோன்றும்.");
+  }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    showNotice("Logout செய்ய முடியவில்லை: " + error.message);
+    return;
+  }
+
+  window.location.replace("login.html");
+});
+
+loadDashboard().catch(error => {
+  showNotice("Dashboard ஏற்றும்போது பிழை: " + (error.message || error));
+});
+</script>
+</body>
+  </html>
+  
