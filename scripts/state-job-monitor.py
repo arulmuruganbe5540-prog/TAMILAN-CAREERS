@@ -81,7 +81,7 @@ def fetch(state, url, previous):
         text = re.sub(r"\s+", " ", " ".join(parser.parts)).strip()
         digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
         snippets = []
-        for sentence in re.split(r"(?<=[.!?])\s+|\\s{2,}", text):
+        for sentence in re.split(r"(?<=[.!?])\s+|\s{2,}", text):
             sentence = sentence.strip()
             if sentence and KEYWORDS.search(sentence):
                 snippets.append(sentence[:260])
