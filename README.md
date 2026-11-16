@@ -31,7 +31,7 @@
 - Job application form frontend with Job Seeker role check and private application submission.
 - Applicant application-tracking page linked from the Job Seeker dashboard.
 - Government job information portals for India and Tamil Nadu.
-- Government Exam Preparation starter: exam categories for TNPSC/TNUSRB/TRB, UPSC/SSC, Railway and Banking; five original general practice questions, explanations, a 10-minute timed test, result review and browser-local progress. These are sample practice questions, not official or previous-year papers; full exam-specific syllabus/question banks and account-synced progress are future phases.
+- Government Exam Preparation starter: exam categories for TNPSC/TNUSRB/TRB, UPSC/SSC, Railway and Banking; 15 original TNPSC Group IV practice questions across Tamil, General Knowledge and Aptitude, topic filters, selectable 5/10/15-question timed practice and answer explanations, result review and browser-local progress. These are sample practice questions, not official or previous-year papers; full exam-specific syllabus/question banks and account-synced progress are future phases.
 - Terms, privacy, about and Tamil help pages.
 - Resume and document management frontend with private Storage upload/download/delete and `candidate_resumes` metadata synchronization (consolidated Supabase SQL required).
 
