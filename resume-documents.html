@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Resume & Documents | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.logo{font-weight:800;font-size:21px;color:#54c8ff}.logo span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:900px;margin:26px auto;padding:0 15px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff;padding:25px;border-radius:15px}.hero h1{margin:0 0 8px}.hero p{margin:0;color:#e0edff;line-height:1.7}.panel,.file{background:#fff;border:1px solid #e2e9f2;border-radius:13px;padding:20px;margin-top:16px}.panel h2{margin:0 0 10px;color:#173e70;font-size:18px}.muted{color:#68778c;font-size:13px;line-height:1.65}.drop{border:2px dashed #b9cce2;border-radius:12px;padding:24px;text-align:center;margin-top:14px;background:#f8fbff}.drop input{max-width:100%;margin:12px auto}.btn{border:0;border-radius:8px;padding:11px 15px;background:#1688ed;color:white;font-weight:bold;cursor:pointer}.btn:disabled{opacity:.55}.secondary{background:#eef4fb;color:#24527e}.notice{display:none;margin-top:14px;padding:13px;border-radius:9px;line-height:1.6}.ok{display:block;background:#e7f8ed;color:#16743b}.err{display:block;background:#fff0f0;color:#b42318}.file{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.file strong{display:block;overflow-wrap:anywhere}.file small{color:#718096}.actions{display:flex;gap:8px;flex-wrap:wrap}.empty{padding:20px;text-align:center;color:#6c7b90;background:#fff;border-radius:10px;margin-top:12px}.warning{background:#fff8e8;border-left:4px solid #e2a12b;padding:14px;border-radius:8px;margin-top:15px;font-size:13px;line-height:1.7}
+</style></head><body><header><div class="logo">TAMILAN <span>CAREERS</span></div><nav><a href="dashboard.html">Dashboard</a><a href="job-seeker-profile.html">சுயவிவரம்</a><a href="jobs.html">வேலை தேடல்</a></nav></header>
+<main><section class="hero"><h1>📄 Resume & ஆவணங்கள்</h1><p>உங்கள் Resume மற்றும் சான்றிதழ்களைப் பாதுகாப்பாகச் சேமிக்கலாம். இவை உங்கள் கணக்குக்குச் சொந்தமான தனிப்பட்ட Storage-ல் வைக்கப்படும்.</p></section>
+<section class="panel"><h2>ஆவணத்தைப் பதிவேற்றுங்கள்</h2><p class="muted">PDF, DOC அல்லது DOCX மட்டும். ஒவ்வொரு கோப்பும் அதிகபட்சம் 5 MB. அதிகபட்சம் 5 ஆவணங்கள். ஆதார், வங்கி விவரம், OTP அல்லது தேவையற்ற ரகசியத் தகவல்களைப் பதிவேற்ற வேண்டாம்.</p>
+<div class="drop"><label for="document">Resume / கல்விச் சான்றிதழ் / அனுபவச் சான்றிதழ்</label><br><input id="document" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><br><button class="btn" id="uploadBtn">பாதுகாப்பாகப் பதிவேற்றவும்</button></div><div id="notice" class="notice" role="status" aria-live="polite"></div></section>
+<section class="panel"><h2>எனது ஆவணங்கள்</h2><p class="muted">பதிவேற்றிய கோப்புகளை மட்டும் நீங்கள் பார்க்க, பதிவிறக்க அல்லது நீக்க முடியும்.</p><div id="fileList"><div class="empty">ஆவணங்கள் ஏற்றப்படுகின்றன...</div></div><div style="margin-top:14px"><button class="btn secondary" id="refreshBtn">மீண்டும் ஏற்றவும்</button></div></section>
+<div class="warning"><strong>தனியுரிமை:</strong> இந்தப் பக்கம் Public URL உருவாக்காது. ஒவ்வொரு கோப்பும் உங்களுடைய User ID கோப்புறைக்குள் சேமிக்கப்படும். Supabase-ல் தனிப்பட்ட <code>resumes</code> bucket மற்றும் உரிமையாளர் அடிப்படையிலான Storage Policies அமைக்கப்பட வேண்டும். அவை அமைக்கப்படாவிட்டால் பதிவேற்றம் தோல்வியடையும்; பாதுகாப்பைத் தளர்த்தி பதிவேற்றம் செய்யாது.</div></main>
+<script>
+const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const BUCKET="resumes",MAX=5*1024*1024,ALLOWED=["application/pdf","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+let currentUser=null;
+const $=id=>document.getElementById(id);
+function message(s,good){$("notice").textContent=s;$("notice").className="notice "+(good?"ok":"err")}
+function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function prettySize(n){return n<1024*1024?(n/1024).toFixed(0)+" KB":(n/1024/1024).toFixed(2)+" MB"}
+async function initialise(){
+ const {data,error}=await client.auth.getSession();if(error||!data.session){location.replace("login.html");return}
+ currentUser=data.session.user;
+ const {data:role,error:roleErr}=await client.from("user_roles").select("role").eq("user_id",currentUser.id).maybeSingle();
+ if(roleErr)throw roleErr;if(role?.role!=="job_seeker"){document.querySelector("main").innerHTML='<div class="panel">இந்தப் பக்கம் Job Seeker கணக்குகளுக்காக மட்டுமே.</div>';return}
+ await loadFiles();
+}
+async function loadFiles(){
+ $("fileList").innerHTML='<div class="empty">ஏற்றப்படுகிறது...</div>';
+ const {data,error}=await client.storage.from(BUCKET).list(currentUser.id,{limit:100,sortBy:{column:"created_at",order:"desc"}});
+ if(error)throw error;
+ const files=(data||[]).filter(x=>x.name&&!x.name.startsWith("."));
+ if(!files.length){$("fileList").innerHTML='<div class="empty">இன்னும் ஆவணங்கள் பதிவேற்றப்படவில்லை.</div>';return}
+ $("fileList").innerHTML=files.map(f=>{
+ const meta=f.metadata||{};const label=f.name.replace(/^\d+_[a-f0-9-]+_/i,"");
+ return '<article class="file"><div><strong>📎 '+safe(label)+'</strong><small>'+safe(prettySize(meta.size||0))+' · '+safe(meta.mimetype||"ஆவணம்")+'</small></div><div class="actions"><button class="btn secondary" data-download="'+safe(f.name)+'">பதிவிறக்கம்</button><button class="btn" style="background:#b42318" data-delete="'+safe(f.name)+'">நீக்கு</button></div></article>'
+ }).join("");
+ document.querySelectorAll("[data-download]").forEach(b=>b.addEventListener("click",()=>downloadFile(b.dataset.download)));
+ document.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>deleteFile(b.dataset.delete)));
+}
+async function uploadFile(){
+ const file=$("document").files[0];if(!file){message("முதலில் ஒரு கோப்பைத் தேர்ந்தெடுக்கவும்.",false);return}
+ const ext=(file.name.split(".").pop()||"").toLowerCase();
+ if(!["pdf","doc","docx"].includes(ext)||!ALLOWED.includes(file.type)){message("PDF, DOC அல்லது DOCX கோப்புகள் மட்டுமே அனுமதி.",false);return}
+ if(file.size>MAX){message("கோப்பு 5 MB-ஐ விட அதிகமாக உள்ளது.",false);return}
+ const {data:existing,error:listErr}=await client.storage.from(BUCKET).list(currentUser.id,{limit:100});
+ if(listErr)throw listErr;if((existing||[]).filter(x=>x.name&&!x.name.startsWith(".")).length>=5){message("அதிகபட்சம் 5 ஆவணங்கள் மட்டுமே பதிவேற்றலாம். புதிய கோப்புக்கு முன் ஒன்றை நீக்கவும்.",false);return}
+ const clean=file.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g,"_").slice(-90)||("document."+ext);
+ const path=currentUser.id+"/"+Date.now()+"_"+crypto.randomUUID()+"_"+clean;
+ $("uploadBtn").disabled=true;$("uploadBtn").textContent="பதிவேற்றப்படுகிறது...";
+ try{const {error}=await client.storage.from(BUCKET).upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});if(error)throw error;$("document").value="";message("ஆவணம் பாதுகாப்பாகப் பதிவேற்றப்பட்டது.",true);await loadFiles()}
+ finally{$("uploadBtn").disabled=false;$("uploadBtn").textContent="பாதுகாப்பாகப் பதிவேற்றவும்"}
+}
+async function downloadFile(name){
+ const {data,error}=await client.storage.from(BUCKET).createSignedUrl(currentUser.id+"/"+name,60,{download:true});
+ if(error)throw error;window.location.href=data.signedUrl;
+}
+async function deleteFile(name){
+ if(!confirm("இந்த ஆவணத்தை நிரந்தரமாக நீக்கவா?"))return;
+ const {error}=await client.storage.from(BUCKET).remove([currentUser.id+"/"+name]);if(error)throw error;message("ஆவணம் நீக்கப்பட்டது.",true);await loadFiles();
+}
+$("uploadBtn").addEventListener("click",()=>uploadFile().catch(e=>message("பதிவேற்ற முடியவில்லை: "+(e.message||e)+" — Storage bucket / Policies அமைப்பைச் சரிபார்க்கவும்.",false)));
+$("refreshBtn").addEventListener("click",()=>loadFiles().catch(e=>message(e.message||String(e),false)));
+initialise().catch(e=>message("பக்கத்தைத் தொடங்க முடியவில்லை: "+(e.message||e),false));
+</script></body></html>
