@@ -1,0 +1,30 @@
+name: Daily State PSC source monitor
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Check official State PSC pages
+        run: python scripts/state-job-monitor.py
+      - name: Commit source-change report when updated
+        run: |
+          if ! git diff --quiet -- state-job-monitor-report.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add state-job-monitor-report.json
+            git commit -m "Update daily State PSC source monitor report"
+            git push
+          else
+            echo "No source-monitor report changes to commit."
+          fi
