@@ -5,7 +5,7 @@
 </style></head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="index.html">முகப்பு</a><a href="jobs.html">வேலை தேடல்</a><a href="dashboard.html">Dashboard</a></nav></header>
 <main><section class="card"><h1>வேலைக்கு விண்ணப்பிக்க</h1><p class="muted">உங்கள் விண்ணப்பத்தை அனுப்புவதற்கு முன் வேலை விவரங்களைச் சரிபார்க்கவும்.</p><div id="jobbox" class="jobbox">வேலை விவரம் ஏற்றப்படுகிறது...</div><div id="message" class="state" hidden></div>
-<form id="application" hidden><div class="field"><label for="name">முழுப் பெயர் *</label><input id="name" maxlength="120" required autocomplete="name"></div><div class="field"><label for="phone">தொலைபேசி எண்</label><input id="phone" type="tel" maxlength="20" autocomplete="tel" placeholder="உங்கள் தொடர்பு எண்"></div><div class="field"><label for="email">மின்னஞ்சல்</label><input id="email" type="email" maxlength="254" autocomplete="email"></div><div class="field"><label for="cover">Cover Letter / விண்ணப்பக் குறிப்பு</label><textarea id="cover" maxlength="5000" placeholder="இந்த வேலைக்கு நீங்கள் ஏன் பொருத்தமானவர் என்பதைச் சுருக்கமாக எழுதுங்கள்"></textarea></div><p class="notice">உங்கள் சுயவிவரத் தகவல்களும் இங்கு அளிக்கும் விவரங்களும் வேலைவாய்ப்பு விண்ணப்பத்திற்காகப் பயன்படுத்தப்படும். OTP, வங்கி PIN அல்லது பணம் எதையும் பகிர வேண்டாம்.</p><button class="btn" id="submit" type="submit">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button></form></section></main>
+<form id="application" hidden><div class="field"><label for="cover">Cover Letter / விண்ணப்பக் குறிப்பு</label><textarea id="cover" maxlength="5000" placeholder="இந்த வேலைக்கு நீங்கள் ஏன் பொருத்தமானவர் என்பதைச் சுருக்கமாக எழுதுங்கள்"></textarea></div><p class="notice">உங்கள் உள்நுழைந்த கணக்குடன் இந்த விண்ணப்பம் இணைக்கப்படும். விருப்பமிருந்தால் Cover Letter எழுதலாம். விண்ணப்பத்தில் Resume-ஐ இணைக்கும் வசதி அடுத்த கட்டத்தில் சேர்க்கப்படும். OTP, வங்கி PIN அல்லது பணம் எதையும் பகிர வேண்டாம்.</p><button class="btn" id="submit" type="submit">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button></form></section></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),jobId=params.get("job");
@@ -22,19 +22,15 @@ async function init(){
  const {data,error}=await db.from("jobs").select("*").eq("id",jobId).maybeSingle();
  if(error||!data){$("jobbox").textContent="வேலை விவரத்தைப் பெற முடியவில்லை. "+(error?.message||"வேலை கிடைக்கவில்லை");return}
  job=data;const status=String(pick(job,["status"])).toLowerCase();
- if(status&&!["active","published","open","approved"].includes(status)){$("jobbox").textContent="இந்த வேலைக்கு தற்போது விண்ணப்பிக்க முடியாது.";return}
- $("jobbox").innerHTML="<b>"+esc(pick(job,["job_title","title"])||"வேலை")+"</b><br>"+esc(pick(job,["company_name"]))+"<br>"+esc(pick(job,["location","job_location","work_location"]))+"<br><a href='job-details.html?id="+encodeURIComponent(jobId)+"'>முழு வேலை விவரம்</a>";
- const meta=user.user_metadata||{};$("name").value=pick(meta,["full_name","name"]);$("phone").value=pick(meta,["phone"]);$("email").value=user.email||"";
+ if(status!=="published"){$("jobbox").textContent="இந்த வேலை தற்போது வெளியிடப்பட்ட நிலையில் இல்லை; விண்ணப்பிக்க முடியாது.";return}
+ $("jobbox").innerHTML="<b>"+esc(pick(job,["job_title","title"])||"வேலை")+"</b><br><a href='job-details.html?id="+encodeURIComponent(jobId)+"'>முழு வேலை விவரம்</a>";
  $("application").hidden=false;
 }
 $("application").addEventListener("submit",async e=>{
  e.preventDefault();if(!user||!job)return;
- const name=$("name").value.trim(),phone=$("phone").value.trim(),email=$("email").value.trim(),cover=$("cover").value.trim();
- if(name.length<2){msg("சரியான முழுப் பெயரை உள்ளிடுங்கள்.","error");return}
- if(phone&&!/^[+0-9() -]{7,20}$/.test(phone)){msg("தொலைபேசி எண்ணைச் சரிபார்க்கவும்.","error");return}
- if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg("மின்னஞ்சல் முகவரியைச் சரிபார்க்கவும்.","error");return}
+ const cover=$("cover").value.trim();
  const btn=$("submit");btn.disabled=true;btn.textContent="சமர்ப்பிக்கப்படுகிறது...";
- const payload={job_id:job.id,applicant_user_id:user.id,applicant_name:name,applicant_email:email||null,applicant_phone:phone||null,cover_letter:cover||null};
+ const payload={job_id:job.id,candidate_id:user.id,status:"applied",resume_id:null,cover_letter:cover||null};
  const {error}=await db.from("job_applications").insert(payload);
  if(error){
   if(error.code==="23505"){
