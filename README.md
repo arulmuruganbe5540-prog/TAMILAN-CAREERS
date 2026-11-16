@@ -10,6 +10,7 @@
 - My applications: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/my-applications.html
 - Company applicant dashboard: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/company-applicants.html
 - Job applications database SQL: `supabase-job-applications.sql`
+- Read-only schema and RLS audit SQL: `supabase-schema-audit.sql`
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
@@ -80,3 +81,8 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 ### Company applicant dashboard
 - `company-applicants.html` provides a company-member-gated workspace and lists jobs associated with the selected company when the `jobs.company_id` field and corresponding read policy permit it.
 - Applicant records remain hidden until a reviewed employer SELECT RLS policy is added to `job_applications`. The existing applicant-only policy is intentionally not weakened. Application status changes are not enabled until a secure server-side workflow and authorization checks are implemented.
+
+
+### Read-only schema and RLS audit
+- `supabase-schema-audit.sql` reports relevant public table columns/types, foreign-key/unique/check constraints and RLS policies for jobs, companies, company_members and job_applications. It performs no DDL or data changes.
+- Use its results to verify actual `jobs.id` type and company/job ownership relationship before creating employer applicant-read or status-update policies.
