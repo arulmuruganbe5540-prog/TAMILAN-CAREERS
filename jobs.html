@@ -40,7 +40,7 @@ function render(){
   const deadline=pick(j,["application_deadline","deadline"]);
   const company=pick(j,["company_name"]);
   const id=pick(j,["id","job_id"]);
-  return '<article class="job"><h2>'+safe(title)+'</h2>'+(company?'<b>'+safe(company)+'</b>':'')+'<div class="meta">'+(loc?'<span class="tag">📍 '+safe(loc)+'</span>':'')+(type?'<span class="tag">'+safe(type)+'</span>':'')+(workplace?'<span class="tag">'+safe(workplace)+'</span>':'')+'</div><p>'+safe(String(desc).slice(0,300))+(String(desc).length>300?"…":"")+'</p><div class="jobfoot"><div><b>'+safe(salary)+'</b>'+(deadline?'<div class="muted">கடைசி நாள்: '+safe(deadline)+'</div>':'')+'</div><a class="apply" href="login.html?next='+encodeURIComponent("apply.html?job="+id)+'">விண்ணப்பிக்க Login செய்யவும்</a></div></article>';
+  return '<article class="job"><h2><a style="color:inherit;text-decoration:none" href="job-details.html?id='+encodeURIComponent(id)+'">'+safe(title)+'</a></h2>'+(company?'<b>'+safe(company)+'</b>':'')+'<div class="meta">'+(loc?'<span class="tag">📍 '+safe(loc)+'</span>':'')+(type?'<span class="tag">'+safe(type)+'</span>':'')+(workplace?'<span class="tag">'+safe(workplace)+'</span>':'')+'</div><p>'+safe(String(desc).slice(0,300))+(String(desc).length>300?"…":"")+'</p><div class="jobfoot"><div><b>'+safe(salary)+'</b>'+(deadline?'<div class="muted">கடைசி நாள்: '+safe(deadline)+'</div>':'')+'</div><a class="apply" href="login.html?next='+encodeURIComponent("apply.html?job="+id)+'">விண்ணப்பிக்க Login செய்யவும்</a></div></article>';
  }).join("");
  list.forEach((job,index)=>{
   const id=pick(job,["id","job_id"]);
