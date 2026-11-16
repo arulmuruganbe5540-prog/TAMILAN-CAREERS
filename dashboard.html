@@ -98,7 +98,7 @@ async function loadDashboard() {
       .maybeSingle(),
 
     supabaseClient.from("company_members")
-      .select("company_id, member_role, member_status, companies(name)")
+      .select("company_id, member_role, member_status, companies(company_name)")
       .eq("user_id", user.id)
       .eq("member_status", "active")
   ]);
@@ -128,7 +128,7 @@ async function loadDashboard() {
         ? item.companies[0]
         : item.companies;
 
-      return (company?.name || "நிறுவனம்") +
+      return (company?.company_name || "நிறுவனம்") +
         " (" + item.member_role + ")";
     });
 
@@ -137,7 +137,6 @@ async function loadDashboard() {
 
   const statusLines = [
     "Email: " + (user.email || "கிடைக்கவில்லை"),
-    "User ID: " + user.id,
     "Account role: " + (role || "user_roles அட்டவணையில் role இல்லை"),
     "Active company memberships: " + memberships.length
   ];
