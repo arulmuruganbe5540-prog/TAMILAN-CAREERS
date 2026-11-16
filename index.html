@@ -65,7 +65,6 @@ nav{justify-content:center}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">TAMILAN <span>CAREERS</span></div>
   <nav>
@@ -75,15 +74,13 @@ nav{justify-content:center}
     <a href="#employer">நிறுவனங்கள்</a>
   </nav>
   <div class="actions">
-    <button class="login" onclick="showMessage('Login வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.')">Login</button>
-    <button class="register" onclick="showMessage('Registration வசதி அடுத்த கட்டத்தில் இணைக்கப்படும்.')">Register</button>
+    <button class="login" onclick="window.location.href='login.html'">Login</button>
+    <button class="register" onclick="window.location.href='login.html'">Register</button>
   </div>
 </header>
-
 <section class="hero" id="home">
   <h1>உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!</h1>
   <p>தமிழ்நாட்டின் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள்.<br>உங்கள் எதிர்காலத்தை இன்றே தொடங்குங்கள்.</p>
-
   <div class="searchbox">
     <input id="keyword" type="text" placeholder="வேலை / திறமை தேடுங்கள்">
     <input id="location" type="text" placeholder="இடம் (எ.கா. சேலம்)">
@@ -99,7 +96,6 @@ nav{justify-content:center}
     <button class="searchbtn" onclick="searchJobs()">தேடுக</button>
   </div>
 </section>
-
 <main class="container" id="categories">
   <div class="sectionhead">
     <div>
@@ -107,7 +103,6 @@ nav{justify-content:center}
       <p>உங்களுக்குப் பிடித்த துறையைத் தேர்வு செய்யுங்கள்.</p>
     </div>
   </div>
-
   <div class="categories">
     <div class="category" onclick="chooseCategory('IT & Software')"><div class="emoji">💻</div><h3>IT & Software</h3><p>தொழில்நுட்ப வேலைகள்</p></div>
     <div class="category" onclick="chooseCategory('Sales & Marketing')"><div class="emoji">📈</div><h3>Sales & Marketing</h3><p>விற்பனை மற்றும் சந்தைப்படுத்தல்</p></div>
@@ -119,7 +114,6 @@ nav{justify-content:center}
     <div class="category" onclick="chooseCategory('')"><div class="emoji">🔧</div><h3>Other Jobs</h3><p>மற்ற வேலைவாய்ப்புகள்</p></div>
   </div>
 </main>
-
 <section class="container" id="jobs">
   <div class="sectionhead">
     <div>
@@ -131,7 +125,6 @@ nav{justify-content:center}
     <div class="empty">இப்போது வேலைவாய்ப்புகள் எதுவும் இணைக்கப்படவில்லை.<br>நிறுவனங்கள் வேலைகளைப் பதிவு செய்யும் வசதி விரைவில் இணைக்கப்படும்.</div>
   </div>
 </section>
-
 <section class="container">
   <div class="ai">
     <div>
@@ -141,29 +134,24 @@ nav{justify-content:center}
     <button onclick="showMessage('AI Resume Matching வசதி அடுத்த கட்டத்தில் உருவாக்கப்படும்.')">மேலும் அறிய</button>
   </div>
 </section>
-
 <section class="employer" id="employer">
   <h2>உங்கள் நிறுவனத்திற்கு பணியாளர்கள் தேவையா?</h2>
   <p>உங்கள் நிறுவனத்தில் உள்ள காலிப்பணியிடங்களை TAMILAN CAREERS மூலம் வெளியிடுங்கள்.<br>தகுதியான நபர்களை எளிதாகச் சென்றடையுங்கள்.</p>
   <button onclick="showMessage('Company Registration மற்றும் Job Posting வசதிகள் அடுத்த கட்டத்தில் இணைக்கப்படும்.')">நிறுவனமாக பதிவு செய்யுங்கள்</button>
 </section>
-
 <footer>
   <strong>TAMILAN CAREERS</strong><br>
   வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.<br>
   © 2026 TAMILAN CAREERS. All Rights Reserved.
 </footer>
-
 <script>
 function showMessage(message){
   alert(message);
 }
-
 function chooseCategory(value){
   document.getElementById('category').value=value;
   document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
 }
-
 function searchJobs(){
   const keyword=document.getElementById('keyword').value.trim();
   const location=document.getElementById('location').value.trim();
@@ -177,7 +165,5 @@ function searchJobs(){
   document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
 }
 </script>
-
 </body>
-  </html>
-  
+</html>
