@@ -6,7 +6,7 @@ basic page metadata. It reports problems; it never edits website pages.
 """
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 from datetime import datetime, timezone
 import json
 import re
@@ -50,7 +50,7 @@ class AuditParser(HTMLParser):
 
 def local_target(page, raw):
     raw = raw.strip()
-    if not raw or raw.startswith(("#", "data:", "javascript:", "mailto:", "tel:")):
+    if not raw or raw.startswith(("data:", "javascript:", "mailto:", "tel:")):
         return None
     parsed = urlparse(raw)
     if parsed.scheme or parsed.netloc:
@@ -95,8 +95,28 @@ for page in HTML_FILES:
         checked_links += 1
         if isinstance(target, tuple):
             warnings.append({"file": str(page.relative_to(ROOT)), "type": "path_outside_site", "detail": raw})
-        elif not target.exists():
+            continue
+        if not target.exists():
             issues.append({"file": str(page.relative_to(ROOT)), "type": "broken_internal_link_or_asset", "detail": raw})
+            continue
+        fragment = unquote(urlparse(raw).fragment)
+        if fragment:
+            if target == page:
+                target_ids = set(parser.ids)
+            else:
+                target_parser = AuditParser()
+                try:
+                    target_parser.feed(target.read_text(encoding="utf-8", errors="replace"))
+                    target_ids = set(target_parser.ids)
+                except OSError:
+                    target_ids = set()
+            if fragment not in target_ids:
+                issues.append({
+                    "file": str(page.relative_to(ROOT)),
+                    "type": "broken_internal_fragment",
+                    "detail": raw,
+                    "target_file": str(target.relative_to(ROOT))
+                })
 
 result = {
     "checked_at_utc": datetime.now(timezone.utc).isoformat(),
