@@ -16,8 +16,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: website-health-check
-  cancel-in-progress: true
+  group: repository-maintenance-commits
+  cancel-in-progress: false
 
 jobs:
   audit:
