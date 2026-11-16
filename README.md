@@ -13,6 +13,7 @@
 - Read-only schema and RLS audit SQL: `supabase-schema-audit.sql`
 - Government notices database setup SQL: `supabase-government-notices-setup.sql` (creates isolated source, private review and public published-notice tables; does not auto-publish or alter existing job/application tables).
 - Government notice discovery Edge Function: `supabase/functions/ingest-government-notices/index.ts` (server-side scan of enabled registered sources; writes candidates only to the private review table; never publishes).
+- New government portal discovery: `scripts/government-source-discovery.py` scans links from already trusted government sources and creates `government-source-discovery-candidates.json`. Newly found domains are suggestions only and require verification before joining the trusted list; this runs every six hours with the official-source monitor.
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
 - Resume job matching: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/ai-job-matches.html
