@@ -16,6 +16,7 @@
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
 - Company job posting draft: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-posting.html
 - Private job-draft database SQL: `supabase-job-posting-drafts.sql`
+- Consolidated pending Supabase setup: `supabase-setup-pending.sql` (resume storage + private job drafts + employer applicant-profile read policies)
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
 
@@ -30,18 +31,17 @@
 - Terms, privacy, about and Tamil help pages.
 - Resume and document management frontend (private Storage setup required).
 
-## Supabase setup required for private resume storage
-1. Open the Supabase project SQL Editor.
-2. Open `supabase-resume-storage.sql` in this repository.
-3. Review the SQL and run it in the SQL Editor while signed in as the project owner.
-4. Confirm that a private Storage bucket named `resumes` exists and that the four `TC resumes owner ...` policies are present.
-5. Test upload, list, signed download and delete using a Job Seeker test account.
-
-The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME restrictions. Storage object policies restrict access to the authenticated user's own first-level folder. Do not make this bucket public and do not expose service-role keys in browser code.
+## Supabase setup required
+- `supabase-setup-pending.sql` is the consolidated setup script for private resume storage, private company job-posting drafts, and employer read access to profiles of candidates who actually applied to that employer's company.
+- It replaces the three separate setup steps for those features. Run only after reviewing the SQL and confirming the project schema matches the documented tables/columns.
+- The resumes bucket must remain PRIVATE. The script does not make resumes available to employers; employer resume access requires a separate server-verified, short-lived signed URL workflow.
+- After running, verify the `resumes` bucket is private, the `job_posting_drafts` table exists, and the employer read policies are present. Then test with separate Job Seeker and Company test accounts.
+- Never expose service-role keys in browser code.
 
 ## Important implementation status
 - Job search reads the Supabase `jobs` table; real listing visibility depends on the table schema, RLS and published job records.
-- Job application frontend is committed. Run `supabase-job-applications.sql` only after confirming `public.jobs.id` is UUID; then test with a Job Seeker account. Employer review access and end-to-end application processing are not yet implemented or verified.
+- Job application frontend is committed. Run `supabase-job-applications.sql` only after confirming `public.jobs.id` is UUID; then test with a Job Seeker account.
+- Employer applicant-profile read policies have been prepared in `supabase-setup-pending.sql`, but they are not live until that script is run and verified in Supabase. Application status changes and employer resume downloads are not implemented.
 - Government job pages provide information and official links; verify every vacancy and deadline at the relevant official source.
 - Never pay an individual or share OTPs, passwords, bank PINs or account credentials to obtain a job.
 
@@ -63,7 +63,7 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 - This is not a published job: it does not insert into the `jobs` table, accept applications, verify job content, or grant posting permission. A secure server-side workflow, reviewed schema, RLS and moderation process are still required before public posting.
 
 ### Private job-posting draft database
-- Run `supabase-job-posting-drafts.sql` in the Supabase SQL Editor to create the private `job_posting_drafts` table and owner/active-company-member RLS policies.
+- The private `job_posting_drafts` table and its RLS policies are included in `supabase-setup-pending.sql` (or can be run separately using `supabase-job-posting-drafts.sql`).
 - After the SQL is applied, `job-posting.html` reads and saves drafts in that table per company and signed-in member.
 - This table is for private drafts only. It deliberately does not insert into `jobs`, publish vacancies, accept applications, or grant public posting permissions.
 - The SQL has not been executed against the live Supabase project from this repository workflow; verify the table and policies in Supabase before testing the form.
@@ -80,7 +80,7 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 
 ### Company applicant dashboard
 - `company-applicants.html` provides a company-member-gated workspace and lists jobs associated with the selected company when the `jobs.company_id` field and corresponding read policy permit it.
-- Applicant records remain hidden until a reviewed employer SELECT RLS policy is added to `job_applications`. The existing applicant-only policy is intentionally not weakened. Application status changes are not enabled until a secure server-side workflow and authorization checks are implemented.
+- `supabase-setup-pending.sql` prepares restricted SELECT access to applicant profile details for the employer whose job received the application. This SQL has not yet been run against the live Supabase project. The existing applicant-only application policy is not weakened. Application status changes are not enabled until a secure server-side workflow and authorization checks are implemented.
 
 
 ### Read-only schema and RLS audit
