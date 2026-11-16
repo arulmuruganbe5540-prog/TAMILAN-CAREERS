@@ -74,6 +74,8 @@ nav{justify-content:center}
     <a href="#employer">நிறுவனங்கள்</a>
     <a href="indian-government-jobs.html">இந்திய அரசு வேலைகள்</a>
     <a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு வேலைகள்</a>
+    <a href="about.html">எங்களைப் பற்றி</a>
+    <a href="help.html">உதவி</a>
   </nav>
   <div class="actions">
     <button class="login" onclick="window.location.href='login.html'">Login</button>
@@ -144,7 +146,7 @@ nav{justify-content:center}
 <footer>
   <strong>TAMILAN CAREERS</strong><br>
   வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.<br>
-  © 2026 TAMILAN CAREERS. All Rights Reserved.
+  <br><a href="about.html">எங்களைப் பற்றி</a> · <a href="help.html">உதவி மையம்</a> · <a href="terms.html">விதிமுறைகள்</a> · <a href="privacy.html">தனியுரிமை</a><br>© 2026 TAMILAN CAREERS. All Rights Reserved.
 </footer>
 <script>
 function showMessage(message){
@@ -158,13 +160,11 @@ function searchJobs(){
   const keyword=document.getElementById('keyword').value.trim();
   const location=document.getElementById('location').value.trim();
   const category=document.getElementById('category').value;
-  document.getElementById('jobInfo').textContent =
-    'தேடல்: '+(keyword||'அனைத்து வேலைகள்')+
-    ' | இடம்: '+(location||'அனைத்து இடங்கள்')+
-    ' | துறை: '+(category||'அனைத்து துறைகள்');
-  document.getElementById('jobList').innerHTML =
-    '<div class="empty">இந்தத் தேடலுக்கான வேலைகள் இன்னும் இணைக்கப்படவில்லை.<br>Database இணைத்த பிறகு உண்மையான வேலைவாய்ப்புகள் இங்கே காட்டப்படும்.</div>';
-  document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
+  const params = new URLSearchParams();
+  if (keyword) params.set('q', keyword);
+  if (location) params.set('location', location);
+  if (category) params.set('category', category);
+  window.location.href = 'jobs.html' + (params.toString() ? '?' + params.toString() : '');
 }
 </script>
 </body>
