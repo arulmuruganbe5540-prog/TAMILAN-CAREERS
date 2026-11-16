@@ -103,3 +103,13 @@
 - Deploy the function from the Supabase project using the Supabase CLI: `supabase functions deploy ai-resume-match`. Then add `OPENAI_API_KEY` under Supabase Project Settings → Edge Functions → Secrets (or the equivalent Secrets page in the current dashboard). Do not put this key in HTML, GitHub, or browser code.
 - The AI request is optional and may incur OpenAI API charges on the account that owns the key. Keep the key private and monitor usage. Resume text is sent to OpenAI only after explicit consent; users should remove unnecessary personal identifiers from the resume first.
 - The AI backend source and frontend JavaScript have been committed, but the Edge Function has not been deployed or live-tested from this repository workflow. AI matching will show a setup message until deployment and secret configuration are complete. The existing local rule-based matcher remains available.
+
+
+## Advanced government recruitment discovery (initial implementation)
+- Source registry: `data/government-official-sources.json`. It lists central recruiting bodies and State PSC / Tamil Nadu recruitment boards, with an explicit authority name and official entry URL.
+- Monitor: `scripts/government-job-monitor.py`. The scheduled workflow checks registered source pages every six hours, follows only links on the same registered official host (HTTPS), detects recruitment / result / answer-key / admit-card / exam-update link candidates, deduplicates them, and writes `government-job-review-queue.json` plus `government-job-monitor-report.json`.
+- Workflow: `.github/workflows/government-job-monitor.yml`; scheduled at minute 17 every six hours and can also be manually started from GitHub Actions.
+- **Safety boundary:** discovery is not verification. A matching link does not prove that a vacancy is open, dates are current, eligibility is correct, or a PDF is genuine. Every candidate remains `pending_admin_verification`; `publish_allowed` is always false. No government job is automatically published by this first phase.
+- The repository is public, so the JSON review queue is also publicly readable. It contains discovered official-site links only, not applicant data or credentials. It is not yet a private Admin Dashboard. A private Supabase review table with strict admin-only RLS, verified notice/PDF checks, audit history and an explicit publish action is the next backend phase.
+- The monitor does not scrape CAPTCHA/login-protected portals, bypass access controls, or treat third-party job sites as authoritative. Some sites may block automated requests or change layout; failures are reported, not interpreted as "no jobs".
+- No Supabase SQL has been executed and no public vacancy auto-publishing has been enabled by this change.
