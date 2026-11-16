@@ -20,6 +20,10 @@ h2{text-align:center;color:#172b4d;font-size:23px;margin-bottom:20px}
 label{display:block;font-size:14px;font-weight:bold;margin:13px 0 7px;color:#34445b}
 input{width:100%;padding:13px;border:1px solid #d7deea;border-radius:8px;font-size:15px;outline:none}
 input:focus{border-color:#1688ed}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:82px}
+.password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#eef5fc;color:#126cc1;border-radius:6px;padding:8px 10px;font-size:13px;font-weight:bold;cursor:pointer}
+.password-toggle:focus-visible{outline:2px solid #1688ed;outline-offset:2px}
 .mainbtn{width:100%;padding:14px;border:0;border-radius:8px;background:#1688ed;color:white;font-size:16px;font-weight:bold;margin-top:20px;cursor:pointer}
 .mainbtn:disabled{opacity:.6}
 .switch{text-align:center;margin-top:20px;color:#66758b;font-size:14px}
@@ -55,7 +59,10 @@ input:focus{border-color:#1688ed}
     <input id="email" type="email" placeholder="example@gmail.com" required>
 
     <label>Password</label>
-    <input id="password" type="password" placeholder="குறைந்தது 8 எழுத்துகள்" minlength="8" required>
+    <div class="password-wrap">
+      <input id="password" type="password" placeholder="குறைந்தது 8 எழுத்துகள்" minlength="8" autocomplete="current-password" required>
+      <button class="password-toggle" id="passwordToggle" type="button" onclick="togglePassword()" aria-label="கடவுச்சொல்லைக் காட்டு" aria-pressed="false">காட்டு</button>
+    </div>
 
     <button class="mainbtn" id="submitBtn" type="submit">Login</button>
 
@@ -92,6 +99,16 @@ if (window.supabase &&
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
+}
+
+function togglePassword() {
+  const field = document.getElementById("password");
+  const button = document.getElementById("passwordToggle");
+  const show = field.type === "password";
+  field.type = show ? "text" : "password";
+  button.textContent = show ? "மறை" : "காட்டு";
+  button.setAttribute("aria-label", show ? "கடவுச்சொல்லை மறை" : "கடவுச்சொல்லைக் காட்டு");
+  button.setAttribute("aria-pressed", String(show));
 }
 
 function chooseRole(role) {
