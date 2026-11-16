@@ -38,7 +38,28 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 </div><div class="hint">* குறியிட்டவை கட்டாயம். உங்கள் சுயவிவரம் உங்கள் கணக்கில் சேமிக்கப்படும்.</div>
 <div class="actions"><button class="primary" id="saveBtn" type="submit">சுயவிவரத்தைச் சேமிக்கவும்</button><button class="secondary" type="button" id="reloadBtn">மீண்டும் ஏற்றவும்</button></div><div class="notice" id="notice" role="status" aria-live="polite"></div>
 </section></form>
-</main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
+<section class="panel" id="educationPanel"><h2>🎓 கல்வி விவரங்கள்</h2><p class="hint">ஒவ்வொரு படிப்பையும் தனித்தனியாகச் சேர்க்கலாம்.</p>
+<form id="educationForm"><input type="hidden" id="educationId"><div class="grid">
+<div class="field"><label for="eduInstitution">கல்வி நிறுவனம் *</label><input id="eduInstitution" maxlength="180" required placeholder="பள்ளி / கல்லூரி பெயர்"></div>
+<div class="field"><label for="eduQualification">கல்வித்தகுதி *</label><input id="eduQualification" maxlength="120" required placeholder="உதா: B.Com, Diploma, 12th"></div>
+<div class="field"><label for="eduField">படித்த பிரிவு</label><input id="eduField" maxlength="120" placeholder="உதா: Computer Science"></div>
+<div class="field"><label for="eduGrade">மதிப்பெண் / Grade</label><input id="eduGrade" maxlength="60" placeholder="உதா: 78% / First Class"></div>
+<div class="field"><label for="eduStart">தொடங்கிய தேதி</label><input id="eduStart" type="date"></div>
+<div class="field"><label for="eduEnd">முடித்த தேதி</label><input id="eduEnd" type="date"></div>
+<div class="field full"><label><input id="eduCurrent" type="checkbox" style="width:auto"> தற்போது படித்துக்கொண்டிருக்கிறேன்</label></div>
+<div class="field full"><label for="eduDescription">கூடுதல் விவரம்</label><textarea id="eduDescription" maxlength="800"></textarea></div></div>
+<div class="actions"><button class="primary" type="submit" id="eduSave">கல்வியைச் சேமிக்கவும்</button><button class="secondary" type="button" id="eduCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="educationList" class="hint">கல்வி விவரங்கள் ஏற்றப்படுகின்றன...</div></section>
+<section class="panel" id="experiencePanel"><h2>💼 பணி அனுபவம்</h2><p class="hint">முன்பு செய்த வேலைகளையும் தற்போதைய வேலையையும் சேர்க்கலாம்.</p>
+<form id="experienceForm"><input type="hidden" id="experienceId"><div class="grid">
+<div class="field"><label for="expCompany">நிறுவனம் *</label><input id="expCompany" maxlength="180" required placeholder="நிறுவனத்தின் பெயர்"></div>
+<div class="field"><label for="expTitle">பணி பெயர் *</label><input id="expTitle" maxlength="140" required placeholder="உதா: Sales Executive"></div>
+<div class="field"><label for="expType">வேலை வகை</label><select id="expType"><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="expCity">வேலை செய்த ஊர்</label><input id="expCity" maxlength="100"></div>
+<div class="field"><label for="expStart">தொடங்கிய தேதி</label><input id="expStart" type="date"></div>
+<div class="field"><label for="expEnd">முடித்த தேதி</label><input id="expEnd" type="date"></div>
+<div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> தற்போது இங்கு வேலை செய்கிறேன்</label></div>
+<div class="field full"><label for="expDescription">பொறுப்புகள் / செய்த வேலைகள்</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
+<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் சேமிக்கவும்</button><button class="secondary" type="button" id="expCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="experienceList" class="hint">பணி அனுபவம் ஏற்றப்படுகிறது...</div></section></main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
 <script>
 const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
@@ -51,7 +72,7 @@ function updateProgress(){const count=ids.filter(id=>val(id)).length;const perce
 async function loadProfile(){
  const {data,error}=await client.auth.getSession();
  if(error||!data.session){location.replace("login.html");return;}
- const user=data.session.user;
+ const user=data.session.user;currentUserId=user.id;
  const {data:roleData,error:roleError}=await client.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  if(roleError){say("கணக்கு அனுமதியைச் சரிபார்க்க முடியவில்லை: "+roleError.message,false);return;}
  if(roleData?.role!=="job_seeker"){say("இந்தப் பக்கம் Job Seeker கணக்குகளுக்காக மட்டுமே. உங்கள் கணக்கு வகையைச் சரிபார்க்கவும்.",false);return;}
@@ -73,6 +94,54 @@ async function loadProfile(){
  for(const id of ids)document.getElementById(id).value=values[id]||"";
  updateProgress();
 }
+
+let currentUserId=null;
+const educationFields=["eduInstitution","eduQualification","eduField","eduGrade","eduStart","eduEnd","eduDescription"];
+const experienceFields=["expCompany","expTitle","expType","expCity","expStart","expEnd","expDescription"];
+function esc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+function resetRecordForm(kind){
+ const isEdu=kind==="edu",form=document.getElementById(isEdu?"educationForm":"experienceForm");
+ form.reset();document.getElementById(isEdu?"educationId":"experienceId").value="";
+ document.getElementById(isEdu?"eduCancel":"expCancel").hidden=true;
+ document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"கல்வியைச் சேமிக்கவும்":"அனுபவத்தைச் சேமிக்கவும்";
+}
+async function loadRecords(){
+ const [ed,ex]=await Promise.all([
+  client.from("candidate_education").select("id,institution_name,qualification,field_of_study,grade,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false}),
+  client.from("candidate_experience").select("id,company_name,job_title,employment_type,city,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false})
+ ]);
+ if(ed.error)document.getElementById("educationList").textContent="கல்வி விவரங்களைப் படிக்க முடியவில்லை: "+ed.error.message;
+ else document.getElementById("educationList").innerHTML=ed.data.length?ed.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.qualification)+'</strong><div>'+esc(x.institution_name)+'</div><div>'+esc(x.field_of_study||"")+' · '+esc(x.grade||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><div class="actions"><button class="secondary" type="button" data-edit-edu="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-edu="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் கல்வி விவரங்கள் சேர்க்கப்படவில்லை.";
+ if(ex.error)document.getElementById("experienceList").textContent="பணி அனுபவத்தைப் படிக்க முடியவில்லை: "+ex.error.message;
+ else document.getElementById("experienceList").innerHTML=ex.data.length?ex.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.job_title)+'</strong><div>'+esc(x.company_name)+' · '+esc(x.city||"")+'</div><div>'+esc(x.employment_type||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><p>'+esc(x.description||"")+'</p><div class="actions"><button class="secondary" type="button" data-edit-exp="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-exp="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் பணி அனுபவம் சேர்க்கப்படவில்லை.";
+}
+document.getElementById("educationForm").addEventListener("submit",async e=>{
+ e.preventDefault();const id=val("educationId"),payload={user_id:currentUserId,institution_name:val("eduInstitution"),qualification:val("eduQualification"),field_of_study:val("eduField")||null,grade:val("eduGrade")||null,start_date:val("eduStart")||null,end_date:document.getElementById("eduCurrent").checked?null:(val("eduEnd")||null),is_current:document.getElementById("eduCurrent").checked,description:val("eduDescription")||null};
+ if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("கல்வி முடித்த தேதி, தொடங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ const q=id?client.from("candidate_education").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_education").insert(payload);
+ const {error}=await q;if(error){say("கல்வியைச் சேமிக்க முடியவில்லை: "+error.message,false);return;}resetRecordForm("edu");await loadRecords();say("கல்வி விவரம் சேமிக்கப்பட்டது.",true);
+});
+document.getElementById("experienceForm").addEventListener("submit",async e=>{
+ e.preventDefault();const id=val("experienceId"),payload={user_id:currentUserId,company_name:val("expCompany"),job_title:val("expTitle"),employment_type:val("expType")||null,city:val("expCity")||null,start_date:val("expStart")||null,end_date:document.getElementById("expCurrent").checked?null:(val("expEnd")||null),is_current:document.getElementById("expCurrent").checked,description:val("expDescription")||null};
+ if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("வேலை முடித்த தேதி, தொடங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ const q=id?client.from("candidate_experience").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_experience").insert(payload);
+ const {error}=await q;if(error){say("பணி அனுபவத்தைச் சேமிக்க முடியவில்லை: "+error.message,false);return;}resetRecordForm("exp");await loadRecords();say("பணி அனுபவம் சேமிக்கப்பட்டது.",true);
+});
+document.getElementById("eduCancel").addEventListener("click",()=>resetRecordForm("edu"));
+document.getElementById("expCancel").addEventListener("click",()=>resetRecordForm("exp"));
+document.getElementById("educationList").addEventListener("click",async e=>{
+ const edit=e.target.closest("[data-edit-edu]"),del=e.target.closest("[data-delete-edu]");
+ if(edit){const {data,error}=await client.from("candidate_education").select("*").eq("id",edit.dataset.editEdu).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
+ const map={educationId:"id",eduInstitution:"institution_name",eduQualification:"qualification",eduField:"field_of_study",eduGrade:"grade",eduStart:"start_date",eduEnd:"end_date",eduDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("eduCurrent").checked=!!data.is_current;document.getElementById("eduCancel").hidden=false;document.getElementById("eduSave").textContent="மாற்றத்தைச் சேமிக்கவும்";document.getElementById("educationPanel").scrollIntoView({behavior:"smooth"});}
+ if(del&&confirm("இந்தக் கல்வி விவரத்தை நீக்கவா?")){const {error}=await client.from("candidate_education").delete().eq("id",del.dataset.deleteEdu).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("கல்வி விவரம் நீக்கப்பட்டது.",true);}}
+});
+document.getElementById("experienceList").addEventListener("click",async e=>{
+ const edit=e.target.closest("[data-edit-exp]"),del=e.target.closest("[data-delete-exp]");
+ if(edit){const {data,error}=await client.from("candidate_experience").select("*").eq("id",edit.dataset.editExp).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
+ const map={experienceId:"id",expCompany:"company_name",expTitle:"job_title",expType:"employment_type",expCity:"city",expStart:"start_date",expEnd:"end_date",expDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("expCurrent").checked=!!data.is_current;document.getElementById("expCancel").hidden=false;document.getElementById("expSave").textContent="மாற்றத்தைச் சேமிக்கவும்";document.getElementById("experiencePanel").scrollIntoView({behavior:"smooth"});}
+ if(del&&confirm("இந்தப் பணி அனுபவத்தை நீக்கவா?")){const {error}=await client.from("candidate_experience").delete().eq("id",del.dataset.deleteExp).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("பணி அனுபவம் நீக்கப்பட்டது.",true);}}
+});
+
 for(const id of ids)document.getElementById(id).addEventListener("input",updateProgress);
 document.getElementById("reloadBtn").addEventListener("click",()=>loadProfile().catch(e=>say(e.message,false)));
 document.getElementById("profileForm").addEventListener("submit",async e=>{
