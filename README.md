@@ -16,14 +16,14 @@
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
 - Company job posting draft: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-posting.html
 - Private job-draft database SQL: `supabase-job-posting-drafts.sql`
-- Consolidated pending Supabase setup: `supabase-setup-pending.sql` (resume storage + private job drafts + employer applicant-profile read policies + owner-only candidate resume metadata and Job Seeker profile self-management policies + Job Seeker profile self-management RLS)
+- Consolidated pending Supabase setup: `supabase-setup-pending.sql` (resume storage + private job drafts + employer applicant-profile read policies + owner-only candidate resume metadata and Job Seeker profile, education and experience self-management policies)
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
 
 ## Main features currently in the repository
 - Tamil / English responsive public homepage, job search and individual job details pages.
 - Supabase email registration, login, password reset flow and account dashboard.
-- Job seeker profile editor connected to `profiles`, `job_seeker_profiles`, `candidate_skills`, `candidate_languages` and `candidate_preferences` (requires matching RLS policies).
+- Job seeker profile editor connected to `profiles`, `job_seeker_profiles`, `candidate_skills`, `candidate_languages`, `candidate_preferences`, `candidate_education` and `candidate_experience`; supports multiple education and work-history records with add/edit/delete controls (requires matching RLS policies).
 - Saved jobs page with browser-local save/remove controls (not account-synced).
 - Job application form frontend with Job Seeker role check and private application submission.
 - Applicant application-tracking page linked from the Job Seeker dashboard.
@@ -32,6 +32,7 @@
 - Resume and document management frontend with private Storage upload/download/delete and `candidate_resumes` metadata synchronization (consolidated Supabase SQL required).
 
 ## Supabase setup required
+- The consolidated SQL also adds owner-only self-management RLS for `candidate_education` and `candidate_experience`.
 - `supabase-setup-pending.sql` is the consolidated setup script for private resume storage, private company job-posting drafts, and employer read access to profiles of candidates who actually applied to that employer's company.
 - It replaces the three separate setup steps for those features. Run only after reviewing the SQL and confirming the project schema matches the documented tables/columns.
 - Candidate resume metadata (`candidate_resumes`) is owner-only under the consolidated SQL; employers are not granted direct resume metadata or file access.
