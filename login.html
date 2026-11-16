@@ -300,7 +300,17 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
       );
 
       // LOGIN SUCCESS: OPEN DASHBOARD
-      window.location.href = "dashboard.html";
+      const nextPage = new URLSearchParams(window.location.search).get('next');
+      let target = 'dashboard.html';
+      if (nextPage) {
+        try {
+          const candidate = new URL(nextPage, window.location.href);
+          if (candidate.origin === window.location.origin && !candidate.pathname.endsWith('/login.html')) {
+            target = candidate.pathname.replace(/^\\//, '') + candidate.search + candidate.hash;
+          }
+        } catch (e) {}
+      }
+      window.location.replace(target);
 
       return;
     }
