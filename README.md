@@ -7,6 +7,7 @@
 - Job search: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/jobs.html
 - Job details: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-details.html
 - Apply for a job: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/apply.html
+- My applications: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/my-applications.html
 - Job applications database SQL: `supabase-job-applications.sql`
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
@@ -22,6 +23,7 @@
 - Job seeker profile editor.
 - Saved jobs page with browser-local save/remove controls (not account-synced).
 - Job application form frontend with Job Seeker role check and private application submission.
+- Applicant application-tracking page linked from the Job Seeker dashboard.
 - Government job information portals for India and Tamil Nadu.
 - Terms, privacy, about and Tamil help pages.
 - Resume and document management frontend (private Storage setup required).
@@ -70,3 +72,5 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 - Before enabling submission, inspect `public.jobs.id` and confirm its type is UUID. Then review and run `supabase-job-applications.sql` in the Supabase SQL Editor.
 - The SQL lets an applicant submit one application per job and read only their own application records. It does not yet grant employer access to applicant records; that must be implemented after verifying the actual company/job ownership schema.
 - Do not announce applications as live until the SQL is applied and a real test application is confirmed.
+
+- `my-applications.html` lists the signed-in Job Seeker's own applications and their status, using the applicant-only SELECT policy.
