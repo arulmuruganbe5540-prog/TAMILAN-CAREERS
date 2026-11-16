@@ -1,0 +1,12 @@
+{
+  "monitor_version": 1,
+  "checked_at_utc": null,
+  "check_interval_hours": 6,
+  "registered_sources": 48,
+  "successful_sources": 0,
+  "failed_sources": [],
+  "candidate_links_discovered_this_run": 0,
+  "pending_admin_review": 0,
+  "monitor_status": "First scheduled run pending",
+  "note": "No scan has run yet. Official-source link discovery only; it does not validate vacancy facts, does not use AI to certify truth, and never publishes."
+}
