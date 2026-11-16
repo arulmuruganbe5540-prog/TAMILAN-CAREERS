@@ -177,7 +177,7 @@ result = {
     "status": "needs_attention" if issues else ("warnings" if warnings else "healthy"),
     "errors_detail": issues[:500],
     "warnings_detail": warnings[:500],
-    "scope_note": "Read-only structural and JavaScript syntax check. It does not prove browser runtime behavior, authenticated Supabase flows, live external government sites, email delivery, payment, or real user journeys. Previous scope: It does not test authenticated Supabase flows, live external government sites, email delivery, payment, or real user journeys.",
+    "scope_note": "Read-only structural and JavaScript syntax check. It does not prove browser runtime behavior, authenticated Supabase flows, live external government sites, email delivery, payment, or complete real-user journeys.",
 }
 REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(json.dumps({k: result[k] for k in ("status", "html_pages_checked", "internal_links_and_assets_checked", "errors", "warnings")}))
