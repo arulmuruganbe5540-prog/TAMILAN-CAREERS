@@ -33,6 +33,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Set up Deno for Supabase Edge Function checks
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check AI Edge Functions
+        run: |
+          deno check supabase/functions/bilingual-job-search/index.ts
+          deno check supabase/functions/ai-resume-match/index.ts
       - name: Validate audit script
         run: python -m py_compile scripts/website-health-check.py
       - name: Check internal website structure
