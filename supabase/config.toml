@@ -1,0 +1,2 @@
+[functions.ingest-government-notices]
+verify_jwt = false
