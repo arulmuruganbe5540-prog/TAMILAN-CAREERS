@@ -7,17 +7,17 @@
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const statusText={submitted:"பெறப்பட்டது",under_review:"பரிசீலனையில்",shortlisted:"Shortlist செய்யப்பட்டது",rejected:"தேர்வு செய்யப்படவில்லை",withdrawn:"திரும்பப் பெறப்பட்டது"};
+const statusText={applied:"விண்ணப்பம் பெறப்பட்டது",under_review:"பரிசீலனையில்",shortlisted:"Shortlist செய்யப்பட்டது",rejected:"தேர்வு செய்யப்படவில்லை",withdrawn:"திரும்பப் பெறப்பட்டது"};
 async function init(){
  const {data,error}=await db.auth.getSession();const user=data.session?.user;
  if(error||!user){location.replace("login.html?next="+encodeURIComponent("my-applications.html"));return}
  const {data:role,error:roleErr}=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  if(roleErr||role?.role!=="job_seeker"){$("summary").textContent="Job Seeker கணக்கில் உள்நுழைந்தால் மட்டுமே உங்கள் விண்ணப்பங்களைப் பார்க்க முடியும்.";return}
- const {data:rows,error:appErr}=await db.from("job_applications").select("id,job_id,applicant_name,application_status,created_at,jobs(job_title,company_name,location)").eq("applicant_user_id",user.id).order("created_at",{ascending:false});
+ const {data:rows,error:appErr}=await db.from("job_applications").select("id,job_id,status,applied_at,jobs(job_title)").eq("candidate_id",user.id).order("applied_at",{ascending:false});
  if(appErr){$("summary").className="error";$("summary").textContent="விண்ணப்பங்களை ஏற்ற முடியவில்லை. Database அட்டவணை / RLS இன்னும் அமைக்கப்படாமல் இருக்கலாம். "+appErr.message;return}
  const items=rows||[];$("summary").textContent="மொத்த விண்ணப்பங்கள்: "+items.length;
  if(!items.length){$("list").innerHTML='<div class="empty">இன்னும் எந்த வேலைக்கும் விண்ணப்பிக்கவில்லை. <br><a class="link" href="jobs.html">வேலைகளைத் தேடுங்கள் →</a></div>';return}
- $("list").innerHTML=items.map(a=>{const j=Array.isArray(a.jobs)?a.jobs[0]:a.jobs;return '<article class="card item"><h2>'+esc(j?.job_title||"வேலை அறிவிப்பு")+'</h2><div>'+esc(j?.company_name||"நிறுவனம் குறிப்பிடப்படவில்லை")+'</div><div class="muted">'+esc(j?.location||"")+'</div><div class="row"><span class="pill">'+esc(statusText[a.application_status]||a.application_status||"நிலை தெரியவில்லை")+'</span><span class="muted">விண்ணப்பித்த தேதி: '+esc(new Date(a.created_at).toLocaleDateString("ta-IN"))+'</span><a class="link" href="job-details.html?id='+encodeURIComponent(a.job_id)+'">வேலை விவரம் →</a></div></article>'}).join("");
+ $("list").innerHTML=items.map(a=>{const j=Array.isArray(a.jobs)?a.jobs[0]:a.jobs;return '<article class="card item"><h2>'+esc(j?.job_title||"வேலை அறிவிப்பு")+'</h2><div class="row"><span class="pill">'+esc(statusText[a.status]||a.status||"நிலை தெரியவில்லை")+'</span><span class="muted">விண்ணப்பித்த தேதி: '+esc(a.applied_at?new Date(a.applied_at).toLocaleDateString("ta-IN"):"—")+'</span><a class="link" href="job-details.html?id='+encodeURIComponent(a.job_id)+'">வேலை விவரம் →</a></div></article>'}).join("");
 }
 init();
 </script></body></html>
