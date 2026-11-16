@@ -9,6 +9,7 @@
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 let allJobs=[];
+let companyNames={};
 const $=id=>document.getElementById(id);
 const SAVED_KEY="tc_saved_jobs_v1";
 function getSavedJobs(){try{const v=JSON.parse(localStorage.getItem(SAVED_KEY)||"[]");return Array.isArray(v)?v:[]}catch(e){return []}}
@@ -24,7 +25,7 @@ function render(){
   const title=pick(j,["job_title","title"]),desc=pick(j,["description","job_description"]),company=pick(j,["company_name"]),loc=pick(j,["location","job_location","work_location"]),jt=pick(j,["employment_type","job_type"]);
   const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
   const status=String(pick(j,["status"])).toLowerCase();
-  const visible=!status||["active","published","open","approved"].includes(status);
+  const visible=status==="published";
   return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase()===type)&&(!place||String(loc).toLowerCase().includes(place));
  });
  $("count").textContent=list.length+" வேலைகள் கிடைத்துள்ளன";
@@ -38,7 +39,7 @@ function render(){
   const min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
   const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் அறிவிக்கப்படவில்லை";
   const deadline=pick(j,["application_deadline","deadline"]);
-  const company=pick(j,["company_name"]);
+  const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["company_name"]);
   const id=pick(j,["id","job_id"]);
   return '<article class="job"><h2><a style="color:inherit;text-decoration:none" href="job-details.html?id='+encodeURIComponent(id)+'">'+safe(title)+'</a></h2>'+(company?'<b>'+safe(company)+'</b>':'')+'<div class="meta">'+(loc?'<span class="tag">📍 '+safe(loc)+'</span>':'')+(type?'<span class="tag">'+safe(type)+'</span>':'')+(workplace?'<span class="tag">'+safe(workplace)+'</span>':'')+'</div><p>'+safe(String(desc).slice(0,300))+(String(desc).length>300?"…":"")+'</p><div class="jobfoot"><div><b>'+safe(salary)+'</b>'+(deadline?'<div class="muted">கடைசி நாள்: '+safe(deadline)+'</div>':'')+'</div><a class="apply" href="login.html?next='+encodeURIComponent("apply.html?job="+id)+'">விண்ணப்பிக்க Login செய்யவும்</a></div></article>';
  }).join("");
@@ -54,7 +55,7 @@ function render(){
   button.addEventListener("click",()=>{
    const items=getSavedJobs();
    if(items.some(item=>String(item.id)===String(id)))return;
-   items.push({id,title:pick(job,["job_title","title"])||"வேலை விவரம்",company:pick(job,["company_name"]),location:pick(job,["location","job_location","work_location"]),type:pick(job,["employment_type","job_type"]),savedAt:new Date().toISOString()});
+   items.push({id,title:pick(job,["job_title","title"])||"வேலை விவரம்",company:companyNames[String(pick(job,["company_id"]))]||pick(job,["company_name"]),location:pick(job,["location","job_location","work_location"]),type:pick(job,["employment_type","job_type"]),savedAt:new Date().toISOString()});
    localStorage.setItem(SAVED_KEY,JSON.stringify(items));
    button.textContent="✓ சேமிக்கப்பட்டது";button.disabled=true;
   });
@@ -65,7 +66,14 @@ async function load(){
  $("results").innerHTML='<div class="empty">வேலை விவரங்கள் ஏற்றப்படுகின்றன...</div>';
  const {data,error}=await client.from("jobs").select("*");
  if(error){$("count").textContent="வேலை விவரங்களை ஏற்ற முடியவில்லை";$("results").innerHTML='<div class="empty">Database அனுமதி அல்லது இணைப்பில் சிக்கல் உள்ளது. '+safe(error.message)+'<br>நிர்வாகி jobs அட்டவணை மற்றும் அதன் வாசிப்பு அனுமதியைச் சரிபார்க்க வேண்டும்.</div>';return;}
- allJobs=data||[];render();
+ allJobs=data||[];
+ const companyIds=[...new Set(allJobs.map(j=>j.company_id).filter(Boolean))];
+ companyNames={};
+ if(companyIds.length){
+  const {data:companies,error:companyError}=await client.from("companies").select("id,company_name").in("id",companyIds);
+  if(!companyError)(companies||[]).forEach(company=>{companyNames[String(company.id)]=company.company_name||""});
+ }
+ render();
 }
 ["q","type","place"].forEach(id=>$(id).addEventListener(id==="type"?"change":"input",render));
 load();
