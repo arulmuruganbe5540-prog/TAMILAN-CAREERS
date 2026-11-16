@@ -2,7 +2,8 @@ name: Frequent official government recruitment monitor
 on:
   push:
     paths:
-      - 'scripts/government-job-monitor.py'\n      - 'scripts/government-source-discovery.py'
+      - 'scripts/government-job-monitor.py'
+      - 'scripts/government-source-discovery.py'
       - 'data/government-official-sources.json'
       - '.github/workflows/government-job-monitor.yml'
   schedule:
@@ -25,10 +26,12 @@ jobs:
         with:
           python-version: "3.x"
       - name: Validate Python syntax
-        run: python -m py_compile scripts/government-job-monitor.py
+        run: python -m py_compile scripts/government-job-monitor.py scripts/government-source-discovery.py
       - name: Scan registered official recruiting authorities
         run: python scripts/government-job-monitor.py
-      - name: Discover possible new official recruiting portals\n        run: python scripts/government-source-discovery.py\n      - name: Commit review queues and monitor reports
+      - name: Discover possible new official recruiting portals
+        run: python scripts/government-source-discovery.py
+      - name: Commit review queues and monitor reports
         run: |
           git add government-job-review-queue.json government-job-monitor-report.json government-source-discovery-candidates.json
           if ! git diff --cached --quiet; then
