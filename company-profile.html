@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>நிறுவன விவரங்கள் | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:800;color:#54c8ff;font-size:21px}.brand span{color:white}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:850px;margin:25px auto;padding:0 15px}.hero,.panel{background:#fff;border:1px solid #e2eaf3;border-radius:15px;padding:22px;margin-bottom:16px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 8px}.hero p{margin:0;line-height:1.7;color:#e1efff}.notice{background:#fff7e8;border:1px solid #f3d49b;color:#7c4a08;padding:13px;border-radius:10px;line-height:1.7;margin-top:14px}form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.wide{grid-column:1/-1}label{font-weight:bold;font-size:14px;color:#34445b}input,select,textarea{width:100%;padding:12px;border:1px solid #d5dfeb;border-radius:8px;font:inherit;background:white}textarea{min-height:100px;resize:vertical}.hint{font-size:12px;color:#738197;line-height:1.5}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:8px;padding:12px 17px;background:#1688ed;color:white;font-weight:bold;cursor:pointer}.btn.secondary{background:#eaf2fb;color:#175b99}.status{margin-top:14px;padding:12px;border-radius:9px;display:none;line-height:1.6}.status.ok{display:block;background:#e7f8ed;color:#16743b}.status.err{display:block;background:#fff0f0;color:#b42318}@media(max-width:620px){form{grid-template-columns:1fr}.wide{grid-column:auto}}
+</style></head><body>
+<header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="dashboard.html">Dashboard</a><a href="jobs.html">வேலைகள்</a></nav></header>
+<main>
+<section class="hero"><h1>🏢 நிறுவன விவரங்கள்</h1><p>உங்கள் நிறுவனத்தின் அடிப்படை விவரங்களை நிரப்பி வரைவு வடிவில் சேமிக்கலாம்.</p></section>
+<section class="panel">
+<div class="notice"><b>முக்கிய குறிப்பு:</b> இது தற்போது உங்கள் கணக்கில் சேமிக்கப்படும் வரைவு மட்டுமே. நிறுவனச் சரிபார்ப்பு, அதிகாரப்பூர்வ நிறுவனப் பதிவு, வேலை வெளியிடும் அனுமதி ஆகியவை backend நிர்வாகச் சரிபார்ப்பு இணைக்கப்பட்ட பிறகே செயல்படும். இங்கே உள்ளிடும் தகவல்கள் நிறுவன அனுமதியைத் தானாக வழங்காது.</div>
+<form id="companyForm">
+<div class="field wide"><label for="companyName">நிறுவனத்தின் பெயர் *</label><input id="companyName" required maxlength="160" placeholder="உதா: ABC Technologies"></div>
+<div class="field"><label for="industry">துறை *</label><select id="industry" required><option value="">தேர்வு செய்யவும்</option><option>IT / Software</option><option>Manufacturing</option><option>Healthcare</option><option>Education</option><option>Retail / Sales</option><option>Construction</option><option>Logistics / Transport</option><option>Finance / Banking</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
+<div class="field"><label for="size">நிறுவன அளவு</label><select id="size"><option value="">தேர்வு செய்யவும்</option><option>1–10</option><option>11–50</option><option>51–200</option><option>201–500</option><option>501–1000</option><option>1000+</option></select></div>
+<div class="field"><label for="email">அதிகாரப்பூர்வ Email</label><input id="email" type="email" maxlength="180" placeholder="hr@company.com"></div>
+<div class="field"><label for="phone">தொடர்பு தொலைபேசி</label><input id="phone" type="tel" inputmode="tel" maxlength="20" placeholder="தொடர்பு எண்"></div>
+<div class="field"><label for="website">Website</label><input id="website" type="url" maxlength="240" placeholder="https://example.com"></div>
+<div class="field"><label for="city">நகரம் / மாவட்டம் *</label><input id="city" required maxlength="100" placeholder="உதா: சென்னை"></div>
+<div class="field wide"><label for="address">முகவரி</label><textarea id="address" maxlength="800" placeholder="நிறுவனத்தின் முகவரி"></textarea></div>
+<div class="field wide"><label for="about">நிறுவனத்தைப் பற்றி</label><textarea id="about" maxlength="1500" placeholder="நிறுவனத்தின் செயல்பாடு, சேவைகள் போன்ற விவரங்கள்"></textarea></div>
+</form>
+<div class="actions"><button class="btn" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த விவரங்களை மீண்டும் ஏற்றவும்</button></div>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+</section>
+</main>
+<script>
+const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const ids=["companyName","industry","size","email","phone","website","city","address","about"];
+let currentUser=null;
+function message(text,ok){const el=document.getElementById("status");el.textContent=text;el.className="status "+(ok?"ok":"err")}
+function fill(data={}){ids.forEach(id=>document.getElementById(id).value=data[id]||"")}
+async function init(){
+ const {data,error}=await client.auth.getUser();
+ if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("company-profile.html"));return}
+ currentUser=data.user;
+ const saved=currentUser.user_metadata?.company_profile_draft||{};
+ fill(saved);
+}
+async function save(){
+ if(!currentUser){message("முதலில் Login செய்யவும்.",false);return}
+ const form=document.getElementById("companyForm");
+ if(!form.reportValidity())return;
+ const draft={};ids.forEach(id=>draft[id]=document.getElementById(id).value.trim());
+ if(draft.website){try{const u=new URL(draft.website);if(!["http:","https:"].includes(u.protocol))throw 0}catch(e){message("சரியான Website URL உள்ளிடவும்.",false);return}}
+ const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="சேமிக்கப்படுகிறது...";
+ try{
+  const {data,error}=await client.auth.updateUser({data:{company_profile_draft:draft}});
+  if(error)throw error;
+  currentUser=data.user;
+  message("நிறுவன விவர வரைவு உங்கள் கணக்கில் சேமிக்கப்பட்டது. இது இன்னும் சரிபார்க்கப்பட்ட நிறுவனப் பதிவு அல்ல.",true);
+ }catch(e){message("சேமிக்க முடியவில்லை: "+(e.message||e),false)}
+ finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
+}
+document.getElementById("saveBtn").addEventListener("click",save);
+document.getElementById("reloadBtn").addEventListener("click",()=>fill(currentUser?.user_metadata?.company_profile_draft||{}));
+init().catch(e=>message(e.message||String(e),false));
+</script></body></html>
