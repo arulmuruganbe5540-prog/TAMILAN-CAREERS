@@ -1,3 +1,4 @@
+// AI-assisted multilingual query understanding with Tamil + English-only result presentation.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
