@@ -109,6 +109,7 @@ old_doc = load(OUTPUT, {"items": []})
 old = {x.get("id"): x for x in old_doc.get("items", []) if x.get("id")}
 candidates = {}
 errors = []
+new_seen = 0
 sources = config.get("sources", [])
 
 def scan(source):
