@@ -57,6 +57,20 @@
 - Government job pages provide information and official links; verify every vacancy and deadline at the relevant official source.
 - Never pay an individual or share OTPs, passwords, bank PINs or account credentials to obtain a job.
 
+
+### Bilingual AI job search (deployment required)
+- `jobs.html` includes a separate AI search action that can understand a query written in any language and returns job titles, descriptions, locations, skills and match reasons in Tamil and English only. The existing whole-site language selector is unchanged.
+- Backend source: `supabase/functions/bilingual-job-search/index.ts`. It requires a signed-in user, reads only published jobs under that user's Supabase RLS permissions, ranks relevant jobs, and translates only supplied job facts. It does not use the service-role key.
+- Deployment: `supabase functions deploy bilingual-job-search`. Configure `OPENAI_API_KEY` in Supabase Edge Function Secrets. Supabase must provide `SUPABASE_URL` and `SUPABASE_ANON_KEY` to the function. Keep the OpenAI key out of browser code and GitHub.
+- AI search may incur API charges and currently evaluates at most 100 published job rows per request. Ordinary database search remains available without signing in; the any-language AI search requires login and a deployed function.
+- Source code is committed but the Edge Function has not yet been deployed or live-tested. Do not advertise the AI search as live until deployment, secret setup and an authenticated test succeed.
+
+### Automatic job-data and technology maintenance
+- Government source discovery and state PSC page-change monitoring run on schedules and report candidates/changes; source monitoring does not prove that a vacancy is open. New sources and vacancies require verification before publication.
+- Job listing freshness must be handled by scheduled trusted-source sync, expiry checks and duplicate detection. Do not invent vacancy counts or publish unverified scraped jobs.
+- `.github/dependabot.yml` asks GitHub to check GitHub Actions updates weekly and open update pull requests. These PRs are tested before merging; unreviewed dependency or application-code updates are not pushed straight to the live website.
+- New job-search and AI tools should be added through tested releases, not by allowing an AI agent to rewrite production code automatically. Security fixes, API/model changes and database migrations require validation and a rollback path.
+
 ## Technology
 - Static responsive HTML/CSS/JavaScript frontend
 - Supabase Auth, Database and Storage
