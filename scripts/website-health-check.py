@@ -10,6 +10,8 @@ from urllib.parse import urlparse, unquote
 from datetime import datetime, timezone
 import json
 import re
+import subprocess
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "website-health-report.json"
@@ -26,6 +28,9 @@ class AuditParser(HTMLParser):
         self.has_viewport = False
         self.title_open = False
         self.title_text = ""
+        self.inline_scripts = []
+        self.script_open = False
+        self.current_script = []
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         if tag in ("a", "link", "script", "img", "source"):
@@ -36,6 +41,9 @@ class AuditParser(HTMLParser):
             self.images_without_alt += 1
         if a.get("id"):
             self.ids.append(a["id"])
+        if tag == "script" and not a.get("src"):
+            self.script_open = True
+            self.current_script = []
         if tag == "title":
             self.title_open = True
         if tag == "meta" and a.get("name", "").lower() == "viewport":
@@ -44,9 +52,15 @@ class AuditParser(HTMLParser):
         if tag == "title":
             self.title_open = False
             self.has_title = bool(self.title_text.strip())
+        if tag == "script" and self.script_open:
+            self.inline_scripts.append("".join(self.current_script))
+            self.script_open = False
+            self.current_script = []
     def handle_data(self, data):
         if self.title_open:
             self.title_text += data
+        if self.script_open:
+            self.current_script.append(data)
 
 def local_target(page, raw):
     raw = raw.strip()
@@ -118,16 +132,52 @@ for page in HTML_FILES:
                     "target_file": str(target.relative_to(ROOT))
                 })
 
+# Check standalone JavaScript files and inline scripts with Node.js syntax validation.
+js_files = sorted(p for p in ROOT.rglob("*.js") if not any(x in IGNORE for x in p.parts))
+js_checked = 0
+for js_file in js_files:
+    js_checked += 1
+    check = subprocess.run(["node", "--check", str(js_file)], capture_output=True, text=True)
+    if check.returncode:
+        issues.append({
+            "file": str(js_file.relative_to(ROOT)),
+            "type": "javascript_syntax_error",
+            "detail": (check.stderr or check.stdout).strip()[:2000]
+        })
+
+for page in HTML_FILES:
+    try:
+        parser = AuditParser()
+        parser.feed(page.read_text(encoding="utf-8", errors="replace"))
+    except OSError:
+        continue
+    for index, script_text in enumerate(parser.inline_scripts, start=1):
+        if not script_text.strip():
+            continue
+        js_checked += 1
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".js", encoding="utf-8") as temp:
+            temp.write(script_text)
+            temp.flush()
+            check = subprocess.run(["node", "--check", temp.name], capture_output=True, text=True)
+        if check.returncode:
+            issues.append({
+                "file": str(page.relative_to(ROOT)),
+                "type": "inline_javascript_syntax_error",
+                "script_index": index,
+                "detail": (check.stderr or check.stdout).strip()[:2000]
+            })
+
 result = {
     "checked_at_utc": datetime.now(timezone.utc).isoformat(),
     "html_pages_checked": len(HTML_FILES),
     "internal_links_and_assets_checked": checked_links,
+    "javascript_blocks_checked": js_checked,
     "errors": len(issues),
     "warnings": len(warnings),
     "status": "needs_attention" if issues else ("warnings" if warnings else "healthy"),
     "errors_detail": issues[:500],
     "warnings_detail": warnings[:500],
-    "scope_note": "Read-only structural check. It does not test authenticated Supabase flows, live external government sites, email delivery, payment, or real user journeys.",
+    "scope_note": "Read-only structural and JavaScript syntax check. It does not prove browser runtime behavior, authenticated Supabase flows, live external government sites, email delivery, payment, or real user journeys. Previous scope: It does not test authenticated Supabase flows, live external government sites, email delivery, payment, or real user journeys.",
 }
 REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(json.dumps({k: result[k] for k in ("status", "html_pages_checked", "internal_links_and_assets_checked", "errors", "warnings")}))
