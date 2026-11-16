@@ -7,7 +7,7 @@
 <main><section class="card"><h1>வேலைக்கு விண்ணப்பிக்க</h1><p class="muted">உங்கள் விண்ணப்பத்தை அனுப்புவதற்கு முன் வேலை விவரங்களைச் சரிபார்க்கவும்.</p><div id="jobbox" class="jobbox">வேலை விவரம் ஏற்றப்படுகிறது...</div><div id="message" class="state" hidden></div>
 <form id="application" hidden><div class="field"><label for="name">முழுப் பெயர் *</label><input id="name" maxlength="120" required autocomplete="name"></div><div class="field"><label for="phone">தொலைபேசி எண்</label><input id="phone" type="tel" maxlength="20" autocomplete="tel" placeholder="உங்கள் தொடர்பு எண்"></div><div class="field"><label for="email">மின்னஞ்சல்</label><input id="email" type="email" maxlength="254" autocomplete="email"></div><div class="field"><label for="cover">Cover Letter / விண்ணப்பக் குறிப்பு</label><textarea id="cover" maxlength="5000" placeholder="இந்த வேலைக்கு நீங்கள் ஏன் பொருத்தமானவர் என்பதைச் சுருக்கமாக எழுதுங்கள்"></textarea></div><p class="notice">உங்கள் சுயவிவரத் தகவல்களும் இங்கு அளிக்கும் விவரங்களும் வேலைவாய்ப்பு விண்ணப்பத்திற்காகப் பயன்படுத்தப்படும். OTP, வங்கி PIN அல்லது பணம் எதையும் பகிர வேண்டாம்.</p><button class="btn" id="submit" type="submit">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button></form></section></main>
 <script>
-const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gMtM_xFm1m4Dlgq727Q_83Rn58y2");
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),jobId=params.get("job");
 let user=null,job=null;
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
