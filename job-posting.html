@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>வேலை வெளியீட்டு வரைவு | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:800;color:#54c8ff;font-size:21px}.brand span{color:white}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:920px;margin:25px auto;padding:0 15px}.hero,.panel{background:#fff;border:1px solid #e2eaf3;border-radius:15px;padding:22px;margin-bottom:16px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 8px}.hero p{margin:0;line-height:1.7;color:#e1efff}.notice{background:#fff7e8;border:1px solid #f3d49b;color:#7c4a08;padding:13px;border-radius:10px;line-height:1.7;margin:14px 0}.info{background:#edf6ff;border:1px solid #cfe5fa;color:#24527a;padding:12px;border-radius:9px;line-height:1.6;margin:12px 0}form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.wide{grid-column:1/-1}label{font-weight:bold;font-size:14px;color:#34445b}input,select,textarea{width:100%;padding:12px;border:1px solid #d5dfeb;border-radius:8px;font:inherit;background:white}textarea{min-height:110px;resize:vertical}.hint{font-size:12px;color:#738197;line-height:1.5}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:8px;padding:12px 17px;background:#1688ed;color:white;font-weight:bold;cursor:pointer}.btn.secondary{background:#eaf2fb;color:#175b99}.btn:disabled{opacity:.6;cursor:wait}.status{margin-top:14px;padding:12px;border-radius:9px;display:none;line-height:1.6}.status.ok{display:block;background:#e7f8ed;color:#16743b}.status.err{display:block;background:#fff0f0;color:#b42318}.hidden{display:none!important}.empty{background:#fff;border:1px solid #e2eaf3;padding:22px;border-radius:12px;line-height:1.8}@media(max-width:620px){form{grid-template-columns:1fr}.wide{grid-column:auto}}
+</style></head><body>
+<header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="dashboard.html">Dashboard</a><a href="company-profile.html">நிறுவன விவரம்</a></nav></header>
+<main>
+<section class="hero"><h1>📢 வேலை வெளியீட்டு வரைவு</h1><p>நிறுவனத்திற்கான காலிப்பணியிட விவரங்களை முன்கூட்டியே தயார் செய்து உங்கள் கணக்கில் சேமிக்கலாம்.</p></section>
+<div id="loading" class="info">உங்கள் Login மற்றும் நிறுவன அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section id="blocked" class="empty hidden"></section>
+<section id="editor" class="panel hidden">
+<div class="notice"><b>முக்கியம்:</b> இங்கு சேமிப்பது உங்கள் கணக்கில் உள்ள தனிப்பட்ட வரைவு மட்டுமே. இது பொதுவான வேலை அறிவிப்பாக வெளியிடப்படாது; விண்ணப்பங்கள் பெறப்படாது. நிறுவன அனுமதி, வேலைப் பதிவு அட்டவணை, பாதுகாப்பான backend மற்றும் நிர்வாகச் சரிபார்ப்பு இணைக்கப்பட்ட பிறகே உண்மையான Job Posting செயல்படும்.</div>
+<div class="info" id="companyInfo"></div>
+<form id="jobForm">
+<div class="field wide"><label for="companyChoice">நிறுவனம் *</label><select id="companyChoice" required></select></div>
+<div class="field wide"><label for="jobTitle">வேலைப் பதவி / Job Title *</label><input id="jobTitle" required maxlength="160" placeholder="உதா: Sales Executive"></div>
+<div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>IT / Software</option><option>Manufacturing</option><option>Sales / Marketing</option><option>Accounts / Finance</option><option>Healthcare</option><option>Education</option><option>Construction</option><option>Logistics / Transport</option><option>Customer Support</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
+<div class="field"><label for="employmentType">வேலை வகை *</label><select id="employmentType" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="workplaceType">பணியிடம் வகை</label><select id="workplaceType"><option value="">தேர்வு செய்யவும்</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
+<div class="field"><label for="openings">காலியிடங்கள் எண்ணிக்கை</label><input id="openings" type="number" min="1" max="10000" step="1" value="1"></div>
+<div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" required maxlength="160" placeholder="உதா: ஓமலூர், சேலம்"></div>
+<div class="field"><label for="experience">தேவையான அனுபவம்</label><input id="experience" maxlength="100" placeholder="உதா: Fresher / 2 years"></div>
+<div class="field"><label for="education">கல்வித் தகுதி</label><input id="education" maxlength="160" placeholder="உதா: 12th / Diploma / Degree"></div>
+<div class="field"><label for="salaryMin">குறைந்தபட்ச மாதச் சம்பளம் (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="உதா: 12000"></div>
+<div class="field"><label for="salaryMax">அதிகபட்ச மாதச் சம்பளம் (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" step="1" placeholder="உதா: 18000"></div>
+<div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="800" placeholder="உதா: Communication, MS Excel, Driving"></div>
+<div class="field wide"><label for="description">வேலை விவரம் மற்றும் பொறுப்புகள் *</label><textarea id="description" required maxlength="5000" placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், தேவையான திறன்கள் போன்றவற்றை எழுதவும்."></textarea></div>
+<div class="field"><label for="deadline">விண்ணப்பிக்க கடைசி தேதி</label><input id="deadline" type="date"></div>
+<div class="field"><label for="contactEmail">விண்ணப்பத் தொடர்பு Email</label><input id="contactEmail" type="email" maxlength="180" placeholder="hr@company.com"></div>
+</form>
+<div class="actions"><button class="btn" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த வரைவை மீண்டும் ஏற்றவும்</button><button class="btn secondary" id="clearBtn" type="button">படிவத்தை காலி செய்</button></div>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+</section>
+</main>
+<script>
+const client=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const ids=["companyChoice","jobTitle","category","employmentType","workplaceType","openings","location","experience","education","salaryMin","salaryMax","skills","description","deadline","contactEmail"];
+let currentUser=null, memberships=[];
+function message(t,ok){const e=document.getElementById("status");e.textContent=t;e.className="status "+(ok?"ok":"err")}
+function formData(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());return d}
+function fill(d={}){ids.forEach(id=>document.getElementById(id).value=d[id]??(id==="openings"?"1":""))}
+function showBlocked(t){document.getElementById("loading").classList.add("hidden");const b=document.getElementById("blocked");b.textContent=t;b.classList.remove("hidden")}
+async function init(){
+ const {data,error}=await client.auth.getUser();
+ if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("job-posting.html"));return}
+ currentUser=data.user;
+ const {data:rows,error:memberError}=await client.from("company_members").select("company_id,member_role,member_status,companies(company_name)").eq("user_id",currentUser.id).eq("member_status","active");
+ if(memberError){showBlocked("நிறுவன உறுப்பினர் அனுமதியைச் சரிபார்க்க முடியவில்லை. Dashboard-இல் உள்ள நிறுவன நிர்வாகியைத் தொடர்புகொள்ளவும். விவரம்: "+memberError.message);return}
+ memberships=rows||[];
+ if(!memberships.length){showBlocked("இந்தக் கணக்கில் செயலில் உள்ள நிறுவன உறுப்பினர் அனுமதி இல்லை. முதலில் நிறுவன நிர்வாகி உங்களை Company Member ஆகச் சேர்த்து அனுமதி வழங்க வேண்டும். வேலை வெளியிடும் உரிமை இங்கு தானாக வழங்கப்படாது.");return}
+ const select=document.getElementById("companyChoice");
+ memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"நிறுவனம்")+" — "+(m.member_role||"உறுப்பினர்");select.appendChild(o)});
+ document.getElementById("companyInfo").textContent="செயலில் உள்ள நிறுவன உறுப்பினர் இணைப்புகள்: "+memberships.length+". நீங்கள் அங்கீகரிக்கப்பட்ட உறுப்பினராக உள்ள நிறுவனத்திற்கான வரைவைத் தேர்ந்தெடுக்கலாம்.";
+ const saved=currentUser.user_metadata?.job_posting_draft||{};
+ if(saved.company_id&&memberships.some(m=>m.company_id===saved.company_id))select.value=saved.company_id;
+ fill(saved);
+ document.getElementById("loading").classList.add("hidden");document.getElementById("editor").classList.remove("hidden");
+}
+async function save(){
+ const form=document.getElementById("jobForm");if(!form.reportValidity())return;
+ const d=formData();
+ if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("அதிகபட்ச சம்பளம் குறைந்தபட்ச சம்பளத்தைவிட குறைவாக இருக்கக்கூடாது.",false);return}
+ if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return}}
+ const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return}
+ const draft={...d,company_id:d.companyChoice,company_name:(Array.isArray(company.companies)?company.companies[0]:company.companies)?.company_name||"",saved_at:new Date().toISOString(),draft_status:"draft"};
+ const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="சேமிக்கப்படுகிறது...";
+ try{const {data,error}=await client.auth.updateUser({data:{job_posting_draft:draft}});if(error)throw error;currentUser=data.user;message("வேலை விவர வரைவு உங்கள் கணக்கில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true)}
+ catch(e){message("சேமிக்க முடியவில்லை: "+(e.message||e),false)}
+ finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
+}
+document.getElementById("saveBtn").addEventListener("click",save);
+document.getElementById("reloadBtn").addEventListener("click",()=>{fill(currentUser?.user_metadata?.job_posting_draft||{});message("சேமித்த வரைவு மீண்டும் ஏற்றப்பட்டது.",true)});
+document.getElementById("clearBtn").addEventListener("click",()=>{fill();message("படிவம் காலி செய்யப்பட்டது. முன்பு சேமித்த வரைவு மாற்றப்படவில்லை; மீண்டும் Save செய்தால் மட்டுமே புதுப்பிக்கப்படும்.",true)});
+init().catch(e=>showBlocked("பக்கத்தைத் திறக்கும்போது பிழை: "+(e.message||e)));
+</script></body></html>
