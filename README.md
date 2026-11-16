@@ -19,7 +19,7 @@
 - Private job-draft database SQL: `supabase-job-posting-drafts.sql`
 - Consolidated pending Supabase setup: `supabase-setup-pending.sql` (resume storage + private job drafts + employer applicant-profile read policies + owner-only candidate resume metadata and Job Seeker profile, education and experience self-management policies)
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
-- All 28 State Government Jobs (official State PSC directory): https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/state-government-jobs.html
+- All 28 State Government Jobs (official State PSC directory + verified notification tracker): https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/state-government-jobs.html
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
 - Government Exam Preparation: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/exam-preparation.html
 
@@ -32,7 +32,7 @@
 - Job application form frontend with Job Seeker role check and private application submission.
 - Applicant application-tracking page linked from the Job Seeker dashboard.
 - Government job information portals for India and Tamil Nadu.
-- All-India State Government Jobs directory: searchable directory for all 28 states with official State Public Service Commission links, department-wise recruitment categories, application guidance and warnings about domicile / language eligibility. This is an official-source directory, not yet an automatically refreshed live vacancy feed; non-PSC department recruitments must also be checked at their official department / recruitment-board sites.
+- All-India State Government Jobs directory: searchable directory for all 28 states with official State Public Service Commission links, department-wise recruitment categories, application guidance and warnings about domicile / language eligibility. The page includes a manually curated, source-linked verified notification tracker. As of 16 Nov 2026, it lists APPSC Group-II Notification 37/2026 as a new notice (application dates must be checked in the official notification) and TGPSC 07/G/ES/2026 MPSO/ASO applications (30 Oct–27 Nov 2026). This is not an automatically refreshed feed; official status and deadlines must be rechecked before applying. Non-PSC department recruitments must also be checked at official department / recruitment-board sites.
 - Government Exam Preparation starter: exam categories for TNPSC/TNUSRB/TRB, UPSC/SSC, Railway and Banking; 45 original TNPSC practice questions: 15 each for Group IV, Group II/IIA and Group I. Each exam has a separate question pool and relevant topic filters; timed 5/10/15-question practice, answer explanations, result review and browser-local progress are included. Group II/IIA prelim questions cover Tamil, General Studies and Aptitude; Group I prelim questions cover General Studies and Aptitude. These are original sample questions, not official or previous-year papers; full syllabus coverage, mains practice and account-synced progress remain future phases.
 - Terms, privacy, about and Tamil help pages.
 - Resume and document management frontend with private Storage upload/download/delete and `candidate_resumes` metadata synchronization (consolidated Supabase SQL required).
