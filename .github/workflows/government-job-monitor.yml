@@ -1,5 +1,10 @@
 name: Frequent official government recruitment monitor
 on:
+  push:
+    paths:
+      - 'scripts/government-job-monitor.py'
+      - 'data/government-official-sources.json'
+      - '.github/workflows/government-job-monitor.yml'
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
