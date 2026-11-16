@@ -249,4 +249,17 @@ using (public.can_company_view_candidate(user_id));
 -- Deliberately no employer access to candidate_resumes or resume_extracted_data.
 -- Resume access needs a separate server-verified, short-lived signed URL workflow.
 
+
+-- =========================================================
+-- 4. CANDIDATE RESUME METADATA (owner-only; no employer access)
+-- =========================================================
+alter table public.candidate_resumes enable row level security;
+grant select, insert, update, delete on public.candidate_resumes to authenticated;
+drop policy if exists "TC candidates manage own resume metadata" on public.candidate_resumes;
+create policy "TC candidates manage own resume metadata"
+on public.candidate_resumes for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+-- Employers intentionally receive no SELECT policy on candidate_resumes.
+
 commit;
