@@ -5,6 +5,7 @@
 ## Live website
 - Homepage: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
 - Job search: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/jobs.html
+- Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
@@ -14,6 +15,7 @@
 - Tamil / English responsive public homepage and job search.
 - Supabase email registration, login, password reset flow and account dashboard.
 - Job seeker profile editor.
+- Saved jobs page with browser-local save/remove controls (not account-synced).
 - Government job information portals for India and Tamil Nadu.
 - Terms, privacy, about and Tamil help pages.
 - Resume and document management frontend (private Storage setup required).
