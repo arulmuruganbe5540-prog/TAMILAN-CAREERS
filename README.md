@@ -116,3 +116,10 @@
 - The repository is public, so the JSON review queue is also publicly readable. It contains discovered official-site links only, not applicant data or credentials. It is not yet a private Admin Dashboard. A private Supabase review table with strict admin-only RLS, verified notice/PDF checks, audit history and an explicit publish action is the next backend phase.
 - The monitor does not scrape CAPTCHA/login-protected portals, bypass access controls, or treat third-party job sites as authoritative. Some sites may block automated requests or change layout; failures are reported, not interpreted as "no jobs".
 - No Supabase SQL has been executed and no public vacancy auto-publishing has been enabled by this change.
+
+
+## Continuous website maintenance (starter)
+- Daily read-only structural audit: `scripts/website-health-check.py` checks local HTML pages, internal links/assets, duplicate IDs, image alt text and mobile viewport metadata.
+- Workflow: `.github/workflows/website-health-check.yml` runs daily and after relevant website/script changes, then stores `website-health-report.json`.
+- The audit reports issues; it does not silently rewrite production code. Authentication, Supabase permissions, resume uploads, email delivery, external job-source correctness, performance under real traffic and complete user journeys require separate integration tests and live monitoring.
+- Content freshness and software maintenance are separate systems: job feeds/source monitors update listings; controlled code releases update website features. Security-sensitive changes require review and backup before release.
