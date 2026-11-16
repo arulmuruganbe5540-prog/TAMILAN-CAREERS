@@ -5,6 +5,7 @@
 ## Live website
 - Homepage: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
 - Job search: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/jobs.html
+- Job details: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-details.html
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
@@ -14,7 +15,7 @@
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
 
 ## Main features currently in the repository
-- Tamil / English responsive public homepage and job search.
+- Tamil / English responsive public homepage, job search and individual job details pages.
 - Supabase email registration, login, password reset flow and account dashboard.
 - Job seeker profile editor.
 - Saved jobs page with browser-local save/remove controls (not account-synced).
@@ -51,7 +52,7 @@ The SQL creates a non-public bucket with a 5 MB file limit and PDF/DOC/DOCX MIME
 
 ### Company job posting draft
 - `job-posting.html` provides a structured job-detail form for users with an active `company_members` membership.
-- The page checks the signed-in user's active company memberships and lets them save one job-posting draft in their own Supabase Auth user metadata.
+- The page checks the signed-in user's active company memberships and saves a private job-posting draft in `job_posting_drafts`.
 - This is not a published job: it does not insert into the `jobs` table, accept applications, verify job content, or grant posting permission. A secure server-side workflow, reviewed schema, RLS and moderation process are still required before public posting.
 
 ### Private job-posting draft database
