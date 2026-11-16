@@ -5,7 +5,7 @@
 </style></head><body><header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="dashboard.html">Dashboard</a><a href="jobs.html">வேலை தேடல்</a></nav></header>
 <main><section class="hero"><h1>📨 எனது வேலை விண்ணப்பங்கள்</h1><p>நீங்கள் சமர்ப்பித்த விண்ணப்பங்களையும் அவற்றின் தற்போதைய நிலையையும் பார்க்கலாம்.</p></section><div id="summary" class="hint">விண்ணப்பங்கள் ஏற்றப்படுகின்றன...</div><section id="list" aria-live="polite"></section></main>
 <script>
-const db=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gMtM_xFm1m4Dlgq727Q_83Rn58y2");
+const db=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const statusText={submitted:"பெறப்பட்டது",under_review:"பரிசீலனையில்",shortlisted:"Shortlist செய்யப்பட்டது",rejected:"தேர்வு செய்யப்படவில்லை",withdrawn:"திரும்பப் பெறப்பட்டது"};
 async function init(){
