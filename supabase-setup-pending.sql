@@ -262,4 +262,50 @@ using (user_id = (select auth.uid()))
 with check (user_id = (select auth.uid()));
 -- Employers intentionally receive no SELECT policy on candidate_resumes.
 
+
+-- =========================================================
+-- 5. JOB SEEKER SELF-MANAGEMENT POLICIES FOR PROFILE TABLES
+-- =========================================================
+-- These policies let each authenticated Job Seeker manage only
+-- rows carrying their own auth.uid(). They do not grant employer access.
+alter table public.profiles enable row level security;
+grant select, insert, update on public.profiles to authenticated;
+drop policy if exists "TC users manage own profile row" on public.profiles;
+create policy "TC users manage own profile row"
+on public.profiles for all to authenticated
+using (id = (select auth.uid()))
+with check (id = (select auth.uid()));
+
+alter table public.job_seeker_profiles enable row level security;
+grant select, insert, update, delete on public.job_seeker_profiles to authenticated;
+drop policy if exists "TC seekers manage own seeker profile" on public.job_seeker_profiles;
+create policy "TC seekers manage own seeker profile"
+on public.job_seeker_profiles for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+
+alter table public.candidate_skills enable row level security;
+grant select, insert, update, delete on public.candidate_skills to authenticated;
+drop policy if exists "TC seekers manage own skills" on public.candidate_skills;
+create policy "TC seekers manage own skills"
+on public.candidate_skills for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+
+alter table public.candidate_languages enable row level security;
+grant select, insert, update, delete on public.candidate_languages to authenticated;
+drop policy if exists "TC seekers manage own languages" on public.candidate_languages;
+create policy "TC seekers manage own languages"
+on public.candidate_languages for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+
+alter table public.candidate_preferences enable row level security;
+grant select, insert, update, delete on public.candidate_preferences to authenticated;
+drop policy if exists "TC seekers manage own preferences" on public.candidate_preferences;
+create policy "TC seekers manage own preferences"
+on public.candidate_preferences for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+
 commit;
