@@ -23,7 +23,7 @@
 ## Main features currently in the repository
 - Tamil / English responsive public homepage, job search and individual job details pages.
 - Supabase email registration, login, password reset flow and account dashboard.
-- Job seeker profile editor.
+- Job seeker profile editor connected to `profiles`, `job_seeker_profiles`, `candidate_skills`, `candidate_languages` and `candidate_preferences` (requires matching RLS policies).
 - Saved jobs page with browser-local save/remove controls (not account-synced).
 - Job application form frontend with Job Seeker role check and private application submission.
 - Applicant application-tracking page linked from the Job Seeker dashboard.
