@@ -124,7 +124,7 @@ Deno.serve(async req => {
         skills_ta: text(m.skills_ta, 400), skills_en: text(m.skills_en, 400),
         match_reason_ta: text(m.match_reason_ta, 300), match_reason_en: text(m.match_reason_en, 300),
       }))
-      .sort((a, b) => b.score - a.score);
+      .sort((a: { score: number }, b: { score: number }) => b.score - a.score);
     return json({ matches, query_ta: text(parsed.query_ta, 200), query_en: text(parsed.query_en, 200),
       jobs_considered: jobs.length, mode: "bilingual-ai" });
   } catch (error) {
