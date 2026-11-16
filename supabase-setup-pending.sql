@@ -308,4 +308,23 @@ on public.candidate_preferences for all to authenticated
 using (user_id = (select auth.uid()))
 with check (user_id = (select auth.uid()));
 
+
+-- Candidate-owned education records
+alter table public.candidate_education enable row level security;
+grant select, insert, update, delete on public.candidate_education to authenticated;
+drop policy if exists "TC seekers manage own education" on public.candidate_education;
+create policy "TC seekers manage own education"
+on public.candidate_education for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+
+-- Candidate-owned work experience records
+alter table public.candidate_experience enable row level security;
+grant select, insert, update, delete on public.candidate_experience to authenticated;
+drop policy if exists "TC seekers manage own experience" on public.candidate_experience;
+create policy "TC seekers manage own experience"
+on public.candidate_experience for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+
 commit;
