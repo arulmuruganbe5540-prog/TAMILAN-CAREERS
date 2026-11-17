@@ -371,7 +371,7 @@ create or replace function public.tc_validate_application_resume_owner()
 returns trigger
 language plpgsql
 set search_path = ''
-as $
+as $tc_validate_resume$
 declare
   v_resume_owner uuid;
 begin
@@ -384,7 +384,7 @@ begin
   end if;
   return new;
 end;
-$;
+$tc_validate_resume$;
 revoke all on function public.tc_validate_application_resume_owner() from public;
 drop trigger if exists tc_validate_application_resume_owner on public.job_applications;
 create trigger tc_validate_application_resume_owner
