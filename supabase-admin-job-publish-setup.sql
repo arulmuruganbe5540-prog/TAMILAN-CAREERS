@@ -158,8 +158,8 @@ begin
   end;
 
   v_experience := coalesce(v_payload->>'experience','');
-  if v_experience ~ '[0-9]+([.][0-9]+)?' then
-    v_experience_min := substring(v_experience from '[0-9]+([.][0-9]+)?')::numeric;
+  if v_experience ~ '[0-9]+[.]?[0-9]*' then
+    v_experience_min := substring(v_experience from '[0-9]+[.]?[0-9]*')::numeric;
   end if;
 
   v_salary_min := nullif(v_payload->>'salaryMin','')::numeric;
