@@ -7,6 +7,8 @@ const json = (body: unknown, status = 200) =>
   });
 
 const MAX_REVIEW_RECORDS_PER_RUN = 15;
+const MAX_INPUT_CANDIDATES = 2000;
+const LOOKUP_BATCH_SIZE = 100;
 const ALLOWED_CATEGORIES = new Set([
   "recruitment", "result", "admit_card", "answer_key", "exam_update", "other",
 ]);
@@ -48,7 +50,9 @@ Deno.serve(async (req) => {
   }
 
   const input = (body as { candidates: unknown[] }).candidates;
-  if (input.length > 500) return json({ error: "Too many candidates in one request" }, 413);
+  if (input.length > MAX_INPUT_CANDIDATES) {
+    return json({ error: `Too many candidates; maximum is ${MAX_INPUT_CANDIDATES}` }, 413);
+  }
 
   const admin = createClient(url, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -121,7 +125,25 @@ Deno.serve(async (req) => {
     }
   }
 
-  const selectedRows = [...uniqueRows.values()].slice(0, MAX_REVIEW_RECORDS_PER_RUN);
+  const candidates = [...uniqueRows.values()];
+  const existingUrls = new Set<string>();
+  const urls = candidates.map((row) => String(row.official_url));
+  for (let offset = 0; offset < urls.length; offset += LOOKUP_BATCH_SIZE) {
+    const batch = urls.slice(offset, offset + LOOKUP_BATCH_SIZE);
+    const { data, error } = await admin
+      .from("government_notice_reviews")
+      .select("official_url")
+      .in("official_url", batch);
+    if (error) {
+      return json({ error: "Could not check duplicate review candidates", detail: error.message }, 500);
+    }
+    for (const row of data || []) existingUrls.add(row.official_url);
+  }
+
+  const selectedRows = candidates
+    .filter((row) => !existingUrls.has(String(row.official_url)))
+    .slice(0, MAX_REVIEW_RECORDS_PER_RUN);
+
   let inserted = 0;
   if (selectedRows.length) {
     const { data, error } = await admin
@@ -149,10 +171,10 @@ Deno.serve(async (req) => {
     ok: true,
     registered_sources: sources?.length || 0,
     received_candidates: input.length,
-    valid_unique_candidates: uniqueRows.size,
+    valid_unique_candidates: candidates.length,
+    already_in_review_queue: existingUrls.size,
     selected_for_review: selectedRows.length,
     new_review_records: inserted,
-    synced_official_urls: selectedRows.map((row) => String(row.official_url)),
     rejected_candidates: rejected.length,
     rejected_details: rejected.slice(0, 25),
     published: 0,
