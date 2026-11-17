@@ -257,6 +257,55 @@ $$;
 revoke all on function public.tc_mark_all_notifications_read() from public, anon;
 grant execute on function public.tc_mark_all_notifications_read() to authenticated;
 
+-- Scheduled reminder generator. Call from Supabase Cron / trusted server every 15 minutes.
+-- It is intentionally not executable by browser users; configure a scheduled call separately.
+create or replace function public.tc_generate_interview_reminders()
+returns integer
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare v_count integer := 0; v_rows integer := 0;
+begin
+  -- Candidate reminder approximately 24 hours before the interview.
+  insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id,related_interview_id)
+  select i.candidate_id,'interview_reminder','நாளை உங்கள் Interview',
+    'உங்கள் Interview 24 மணி நேரத்தில் உள்ளது. தேதி: '||
+    to_char(i.scheduled_at at time zone 'Asia/Kolkata','DD-MM-YYYY HH12:MI AM'),
+    i.application_id,i.id
+  from public.tc_interview_invitations i
+  where i.status='accepted'
+    and i.scheduled_at between now()+interval '23 hours' and now()+interval '25 hours'
+    and not exists (
+      select 1 from public.tc_notifications n
+      where n.user_id=i.candidate_id and n.related_interview_id=i.id
+        and n.notification_type='interview_reminder'
+        and n.body like 'உங்கள் Interview 24 மணி நேரத்தில் உள்ளது.%'
+    );
+  get diagnostics v_rows = row_count; v_count := v_count + v_rows;
+
+  -- Candidate reminder approximately 1 hour before the interview.
+  insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id,related_interview_id)
+  select i.candidate_id,'interview_reminder','ஒரு மணி நேரத்தில் Interview',
+    'உங்கள் Interview ஒரு மணி நேரத்தில் தொடங்கும். தேதி: '||
+    to_char(i.scheduled_at at time zone 'Asia/Kolkata','DD-MM-YYYY HH12:MI AM'),
+    i.application_id,i.id
+  from public.tc_interview_invitations i
+  where i.status='accepted'
+    and i.scheduled_at between now()+interval '50 minutes' and now()+interval '70 minutes'
+    and not exists (
+      select 1 from public.tc_notifications n
+      where n.user_id=i.candidate_id and n.related_interview_id=i.id
+        and n.notification_type='interview_reminder'
+        and n.body like 'உங்கள் Interview ஒரு மணி நேரத்தில் தொடங்கும்.%'
+    );
+  get diagnostics v_rows = row_count; v_count := v_count + v_rows;
+  return v_count;
+end;
+$;
+revoke all on function public.tc_generate_interview_reminders() from public, anon, authenticated;
+grant execute on function public.tc_generate_interview_reminders() to service_role;
+
 -- Extend the existing employer status RPC to notify the candidate on every actual status change.
 create or replace function public.tc_company_update_application_status(
   p_application_id uuid,
