@@ -166,9 +166,8 @@ select
   pg_get_functiondef(p.oid) as function_definition
 from pg_proc p
 join pg_namespace n on n.oid = p.pronamespace
-where n.nspname = 'public'
-  and p.proname = 'can_access_job_application'
-order by p.proname;
+where p.proname = 'can_access_job_application'
+order by n.nspname, p.proname;
 
 -- 7. Private Resume bucket configuration (no file names or contents are read).
 -- Check both the repository's current bucket name and the legacy name found in
