@@ -12,6 +12,17 @@ const $=id=>document.getElementById(id),params=new URLSearchParams(location.sear
 let user=null,job=null,resumes=[];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
+function deadlineDate(value){
+ if(!value)return null;
+ const raw=String(value).trim();
+ let m=raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+ if(m)return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]),23,59,59,999);
+ m=raw.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+ if(m)return new Date(Number(m[3]),Number(m[2])-1,Number(m[1]),23,59,59,999);
+ const parsed=new Date(raw);
+ return Number.isNaN(parsed.getTime())?null:parsed;
+}
+function isExpiredJob(job){const d=deadlineDate(pick(job,["application_deadline","deadline","last_date"]));return Boolean(d&&d.getTime()<Date.now());}
 function msg(t,kind){$("message").hidden=false;$("message").className="state "+(kind||"");$("message").textContent=t}
 async function init(){
  if(!jobId){$("jobbox").textContent="வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திற்குச் செல்லுங்கள்.";return}
@@ -23,6 +34,7 @@ async function init(){
  if(error||!data){$("jobbox").textContent="வேலை விவரத்தைப் பெற முடியவில்லை. "+(error?.message||"வேலை கிடைக்கவில்லை");return}
  job=data;const status=String(pick(job,["status"])).toLowerCase();
  if(status!=="published"){$("jobbox").textContent="இந்த வேலை தற்போது வெளியிடப்பட்ட நிலையில் இல்லை; விண்ணப்பிக்க முடியாது.";return}
+ if(isExpiredJob(job)){$("jobbox").textContent="இந்த வேலைக்கான விண்ணப்பக் காலம் முடிந்துவிட்டது. புதிய அறிவிப்புகளைப் பார்க்க வேலை தேடல் பக்கத்திற்குச் செல்லுங்கள்.";return}
  $("jobbox").innerHTML="<b>"+esc(pick(job,["job_title","title"])||"வேலை")+"</b><br><a href='job-details.html?id="+encodeURIComponent(jobId)+"'>முழு வேலை விவரம்</a>";
  await loadResumes();
  $("application").hidden=false;
