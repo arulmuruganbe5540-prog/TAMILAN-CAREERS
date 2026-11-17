@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Login | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;font-family:Arial,"Noto Sans Tamil",sans-serif;background:radial-gradient(circle at 15% 10%,#1c4d83 0,#101a35 48%,#080f21 100%);color:#17233d}
+.card{width:100%;max-width:440px;background:#fff;border:1px solid #ffffff40;border-radius:22px;padding:30px;box-shadow:0 24px 70px #0006}
+.logo{text-align:center;font-size:24px;font-weight:900;letter-spacing:.5px;color:#167bd1}.label{text-align:center;color:#6b7890;font-size:12px;letter-spacing:2px;font-weight:800;margin:9px 0 24px}
+.shield{width:66px;height:66px;border-radius:20px;margin:0 auto 15px;display:grid;place-items:center;font-size:30px;color:white;background:linear-gradient(135deg,#187de5,#7656e8);box-shadow:0 10px 25px #3676cf40}
+h1{text-align:center;font-size:23px;margin:0 0 8px;color:#142344}.intro{text-align:center;font-size:13px;line-height:1.7;color:#738099;margin:0 0 22px}
+label{display:block;font-size:13px;font-weight:800;color:#34445f;margin:14px 0 7px}
+input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-size:15px;outline:none}input:focus{border-color:#287ee6;box-shadow:0 0 0 3px #287ee61a}
+.pass{position:relative}.pass input{padding-right:76px}.toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;border-radius:7px;padding:8px 10px;background:#edf4fc;color:#176fc5;font-weight:800;cursor:pointer}
+.submit{width:100%;border:0;border-radius:11px;padding:15px;margin-top:21px;background:linear-gradient(110deg,#1979e5,#7259e5);color:#fff;font-size:15px;font-weight:900;cursor:pointer}.submit:disabled{opacity:.6;cursor:wait}
+.msg{display:none;margin-top:15px;padding:12px;border-radius:10px;font-size:13px;line-height:1.6}.safe{margin-top:18px;padding:12px;border-radius:10px;background:#f1f6ff;color:#526580;font-size:11px;line-height:1.7;text-align:center}
+.back{text-align:center;margin-top:20px}.back a{color:#176fc5;text-decoration:none;font-size:13px;font-weight:800}
+</style></head>
+<body>
+<main class="card">
+<div class="logo">TAMILAN CAREERS</div>
+<div class="label">SECURE ADMINISTRATOR ACCESS</div>
+<div class="shield">🔐</div>
+<h1>தனி Admin Login</h1>
+<p class="intro">இந்த Login, Super Admin அனுமதி உள்ள உங்களுடைய கணக்கிற்காக மட்டுமே. Company / Student கணக்குகள் இங்கு அனுமதிக்கப்படாது.</p>
+<form id="adminForm">
+<label for="email">Admin Email</label>
+<input id="email" type="email" autocomplete="username" placeholder="உங்கள் Admin Email" required>
+<label for="password">Password</label>
+<div class="pass"><input id="password" type="password" autocomplete="current-password" placeholder="உங்கள் Password" required><button class="toggle" id="toggle" type="button">காட்டு</button></div>
+<button class="submit" id="submit" type="submit">Admin Login</button>
+</form>
+<div class="msg" id="message" role="status" aria-live="polite"></div>
+<div class="safe">🛡️ Login வெற்றி மட்டும் போதாது. Database-ல் <b>super_admin</b> அனுமதி சரிபார்க்கப்பட்ட பிறகே Admin Control திறக்கும்.</div>
+<div class="back"><a href="index.html">← Website முகப்புக்குச் செல்ல</a></div>
+</main>
+<script>
+const client=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const form=document.getElementById("adminForm"),button=document.getElementById("submit"),box=document.getElementById("message");
+function message(text,ok=false){box.textContent=text;box.style.display=text?"block":"none";box.style.background=ok?"#e8f8ee":"#fff0f0";box.style.color=ok?"#176b3a":"#ad2525"}
+document.getElementById("toggle").addEventListener("click",()=>{const p=document.getElementById("password"),show=p.type==="password";p.type=show?"text":"password";document.getElementById("toggle").textContent=show?"மறை":"காட்டு"});
+async function hasAdminRole(user){const {data,error}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);if(error)throw error;return !!data?.length}
+form.addEventListener("submit",async e=>{e.preventDefault();button.disabled=true;button.textContent="சரிபார்க்கப்படுகிறது...";message("");
+try{
+ const email=document.getElementById("email").value.trim().toLowerCase(),password=document.getElementById("password").value;
+ const {data,error}=await client.auth.signInWithPassword({email,password});if(error)throw error;
+ if(!data.user)throw new Error("Login சரிபார்க்க முடியவில்லை.");
+ let allowed=false;try{allowed=await hasAdminRole(data.user)}catch(roleError){await client.auth.signOut();throw new Error("Admin அனுமதியை சரிபார்க்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.");}
+ if(!allowed){await client.auth.signOut();throw new Error("இந்த Email-க்கு Super Admin அனுமதி இல்லை. Company / Student Login இங்கு அனுமதிக்கப்படாது.");}
+ message("Admin Login வெற்றி. Control Center திறக்கப்படுகிறது...",true);
+ window.location.replace("admin-control.html");
+}catch(err){message(err.message||"Login செய்ய முடியவில்லை.");}
+finally{button.disabled=false;button.textContent="Admin Login";}
+});
+(async()=>{try{const {data}=await client.auth.getUser();if(data?.user&&await hasAdminRole(data.user)){window.location.replace("admin-control.html");}}catch(e){}})();
+</script>
+</body></html>
