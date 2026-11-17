@@ -17,3 +17,15 @@ on conflict (id) do update set
   base_url=excluded.base_url,
   enabled=true,
   updated_at=now();
+
+
+-- Historical archive and result pages for one-year backfill and ongoing monitoring.
+insert into public.government_notice_sources (id, authority, scope, state, base_url, enabled)
+values
+('upsc-exam-notification-archive','UPSC Examination Notification Archives','central',NULL,'https://www.upsc.gov.in/exams-related-info/exam-notification/archives',true),
+('upsc-recruitment-advertisements','UPSC Recruitment Advertisements Archive','central',NULL,'https://www.upsc.gov.in/recruitment/recruitment-advertisement',true),
+('upsc-recruitment-results','UPSC Recruitment Test Results','central',NULL,'https://cms.upsc.gov.in/recruitment-tests/results/',true),
+('ssc-notice-archives','Staff Selection Commission Notice Archives','central',NULL,'https://ssc.gov.in/home/archives',true),
+('tnpsc-exam-dashboard','TNPSC Exam Dashboard and Results','state','Tamil Nadu','https://tnpsc.gov.in/English/Examdashboard.aspx/English/DResultView.aspx',true),
+('mrb-results','Tamil Nadu Medical Services Recruitment Board Results','state','Tamil Nadu','https://www.mrb.tn.gov.in/content.php?dept_id=ODAw&lang=MQ%3D%3D&menu_id=MjI0',true)
+on conflict (id) do update set authority=excluded.authority, scope=excluded.scope, state=excluded.state, base_url=excluded.base_url, enabled=true, updated_at=now();
