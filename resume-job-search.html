@@ -34,7 +34,7 @@ function isExpiredDeadline(value){
  const parsed=new Date(raw);
  return !Number.isNaN(parsed.getTime())&&parsed.getTime()<Date.now();
 }
-async function init(){const {data,error}=await db.auth.getSession();if(error||!data.session){location.replace("login.html?next="+encodeURIComponent("ai-job-matches.html"));return}user=data.session.user;const {data:role,error:re}=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();if(re)throw re;if(role?.role!=="job_seeker"){note("இந்த வசதி Job Seeker கணக்குகளுக்காக மட்டுமே.",false);$("findJobs").disabled=true;return}
+async function init(){const {data,error}=await db.auth.getSession();if(error||!data.session){location.replace("login.html?next="+encodeURIComponent("resume-job-search.html"));return}user=data.session.user;const {data:role,error:re}=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();if(re)throw re;if(role?.role!=="job_seeker"){note("இந்த வசதி Job Seeker கணக்குகளுக்காக மட்டுமே.",false);$("findJobs").disabled=true;return}
  const results=await Promise.all([
  db.from("profiles").select("full_name").eq("id",user.id).maybeSingle(),
  db.from("job_seeker_profiles").select("headline,bio,current_city,total_experience_months").eq("user_id",user.id).maybeSingle(),
