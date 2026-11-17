@@ -33,6 +33,18 @@ if "git add government-job-monitor-report.json" not in workflow:
 if any(f"git add {filename}" in workflow for filename in FORBIDDEN):
     errors.append("Government monitor must never stage private candidate queues")
 
+state_report_path = ROOT / "state-job-monitor-report.json"
+if state_report_path.exists():
+    import json
+    try:
+        state_report = json.loads(state_report_path.read_text(encoding="utf-8"))
+        for item in state_report.get("sources", []):
+            if "recruitment_keyword_snippets" in item:
+                errors.append("Public state PSC report must not contain unverified recruitment text snippets")
+                break
+    except (OSError, ValueError):
+        errors.append("Public state PSC report must remain valid JSON")
+
 if errors:
     print("Private artifact guard failed:")
     for error in errors:
