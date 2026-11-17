@@ -144,7 +144,7 @@ begin
   limit 1;
 
   if v_review_id is not null then
-    raise exception 'This job draft is already under review or approved; wait for the Admin decision';
+    return v_review_id;
   end if;
 
   v_payload := jsonb_build_object(
