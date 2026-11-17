@@ -177,6 +177,14 @@ from storage.buckets
 where id in ('resumes', 'candidate-resumes')
 order by id;
 
+-- 7A. Count existing files in the two possible Resume buckets without
+-- exposing object names, paths, or file contents.
+select bucket_id, count(*) as stored_object_count
+from storage.objects
+where bucket_id in ('resumes', 'candidate-resumes')
+group by bucket_id
+order by bucket_id;
+
 -- 8. Storage object policies protecting the private Resume bucket.
 select schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
 from pg_policies
