@@ -36,7 +36,7 @@ def migration_bucket(source):
 
 setup_bucket = migration_bucket(setup)
 focused_bucket = migration_bucket(focused)
-doc_bucket = re.search(r"Storage bucket \`([^\`]+)\`", docs, re.IGNORECASE)
+doc_bucket = re.search(r"Storage bucket [`]([^`]+)[`]", docs, re.IGNORECASE)
 
 bucket_values = [
     page_bucket.group(1) if page_bucket else None,
