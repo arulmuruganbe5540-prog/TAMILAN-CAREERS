@@ -33,6 +33,13 @@ from (values
 ) as requested(table_name)
 order by requested.table_name;
 
+-- Supabase Storage relations required by the consolidated setup migration.
+select
+  requested.table_name,
+  (to_regclass('storage.' || requested.table_name) is not null) as exists_in_database
+from (values ('buckets'), ('objects')) as requested(table_name)
+order by requested.table_name;
+
 select
   table_name,
   column_name,
