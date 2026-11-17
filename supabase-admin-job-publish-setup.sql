@@ -27,6 +27,17 @@ begin
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='job_title')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='job_slug')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='employment_type')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='created_by')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='job_code')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='description')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='workplace_type')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='experience_min')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='salary_min')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='salary_max')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='salary_currency')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='salary_period')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='vacancies')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='published_at')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='application_deadline')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='status') then
     raise exception 'Company verification or job-category schema differs from this migration; inspect supabase-schema-audit.sql before proceeding.';
