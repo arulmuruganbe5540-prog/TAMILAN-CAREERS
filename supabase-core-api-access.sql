@@ -82,10 +82,9 @@ create policy "Employers read applicant languages"
 on public.candidate_languages for select to authenticated
 using (public.can_company_view_candidate(user_id));
 
+-- Candidate job-search preferences (especially salary expectations and relocation choices)
+-- remain private to the candidate; employers do not need direct access to this table.
 drop policy if exists "Employers read applicant preferences" on public.candidate_preferences;
-create policy "Employers read applicant preferences"
-on public.candidate_preferences for select to authenticated
-using (public.can_company_view_candidate(user_id));
 
 create or replace function public.can_access_company(p_company_id uuid)
 returns boolean
