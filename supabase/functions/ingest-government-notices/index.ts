@@ -32,7 +32,7 @@ function category(text: string) {
   return "other";
 }
 function extractLinks(html: string, pageUrl: string, baseUrl: string) {
-  const out = new Map<string, { title: string; url: string; category: string }>();
+  const out = new Map<string, { title: string; url: string; category: string; noticeDateHint: string | null; context: string }>();
   const anchor = /<a\b([^>]*?)>([\s\S]*?)<\/a\s*>/gi;
   for (const match of html.matchAll(anchor)) {
     const attrs = match[1];
@@ -50,9 +50,23 @@ function extractLinks(html: string, pageUrl: string, baseUrl: string) {
     const rawTitle = match[2].replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ");
     const title = decode(rawTitle).replace(/\s+/g, " ").trim();
-    const text = title + " " + url;
-    if (!KEYWORDS.test(text) || GENERIC.test(title) || title.length < 5) continue;
-    if (!out.has(url)) out.set(url, { title: title.slice(0, 240), url, category: category(text) });
+    const index = match.index ?? 0;
+    const rowStart = html.lastIndexOf("<tr", index);
+    const rowEnd = html.indexOf("</tr>", index);
+    const listStart = html.lastIndexOf("<li", index);
+    const listEnd = html.indexOf("</li>", index);
+    let contextHtml = "";
+    if (rowStart >= 0 && rowEnd >= index) contextHtml = html.slice(rowStart, rowEnd + 5);
+    else if (listStart >= 0 && listEnd >= index) contextHtml = html.slice(listStart, listEnd + 5);
+    const context = decode(contextHtml.replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " "))
+      .replace(/\s+/g, " ").trim().slice(0, 1200);
+    const displayTitle = title.length >= 5 && !GENERIC.test(title) ? title : context.slice(0, 240);
+    const text = displayTitle + " " + context + " " + url;
+    if (!KEYWORDS.test(text) || displayTitle.length < 5) continue;
+    const dateMatch = context.match(/\b(0?[1-9]|[12]\d|3[01])[/. -](0?[1-9]|1[0-2])[/. -](20\d{2})\b/);
+    const noticeDateHint = dateMatch ? dateMatch[3] + "-" + dateMatch[2].padStart(2,"0") + "-" + dateMatch[1].padStart(2,"0") : null;
+    if (!out.has(url)) out.set(url, { title: displayTitle.slice(0, 240), url, category: category(text), noticeDateHint, context });
   }
   return [...out.values()];
 }
@@ -121,10 +135,13 @@ Deno.serve(async (req) => {
           title: item.title,
           official_url: item.url,
           category: item.category,
+          notice_date: item.noticeDateHint,
           details: {
             authority: result.source.authority,
             state: result.source.state,
             scope: result.source.scope,
+            discovery_context: item.context,
+            notice_date_hint: item.noticeDateHint,
           },
           verification: {
             registered_source_host: true,
