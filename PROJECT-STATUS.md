@@ -61,7 +61,7 @@ The following must not be described as live until SQL/function deployment and re
 
 ## 6. Secrets and scheduled monitors
 
-- `OPENAI_API_KEY` is required only for the optional AI Functions; it must be stored in Supabase Function Secrets, never in frontend code or GitHub source.
+- `OPENAI_API_KEY` is required only for the optional AI Functions; its live Supabase Secret configuration is not confirmed. It must be stored in Supabase Function Secrets, never in frontend code or GitHub source.
 - `GOVERNMENT_MONITOR_SECRET` is still unconfigured. The user has asked to defer this setup; do not prompt them to configure it during routine project work.
 - The external-source monitor has previously found 23 of 60 registered sources reachable. Robots-blocked/error sources were not bypassed. The monitor's Supabase candidate sync was skipped because the secret was missing.
 - Government and external discoveries remain private until an administrator verifies the original official notice and explicitly publishes it.
@@ -78,4 +78,4 @@ The following must not be described as live until SQL/function deployment and re
 
 ## Release rule
 
-The website is **not launch-ready yet**. GitHub Pages deployment is working, but the remaining Supabase migrations, Function deployments, secrets (where needed), RLS verification, and real-account tests are launch blockers. Do not mark the project complete until those checks pass.
+The website is **not launch-ready yet**. The target launch date is 19 November 2026, but that date is conditional, not guaranteed. GitHub Pages deployment is working, but the remaining Supabase migrations, Function deployments, secrets (where needed), RLS verification, and real-account tests are launch blockers. Do not mark the project complete until those checks pass.
