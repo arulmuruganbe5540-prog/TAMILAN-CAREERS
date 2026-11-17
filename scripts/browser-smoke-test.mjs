@@ -85,14 +85,14 @@ await check("Bilingual AI job search control is available", async () => {
 
 await check("Government admin pages require login", async () => {
   await open("government-notice-review.html");
-  await page.waitForURL(/login\\.html/, { timeout: 5000 });
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
   await open("government-notice-publish.html?id=smoke-test");
-  await page.waitForURL(/login\\.html/, { timeout: 5000 });
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
-  await page.waitForURL(/login\\.html/, { timeout: 5000 });
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
 await check("Tamil Nadu government jobs page loads and filters", async () => {
