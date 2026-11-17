@@ -148,3 +148,12 @@
 - The function does not weaken the existing `jobs` RLS policies. The function is SECURITY DEFINER and executable only by authenticated users; it performs its own Super Admin check.
 - The category is linked when an active `job_categories.category_name` exactly matches the selected category. If no match exists, category_id remains NULL because that column is nullable.
 - Existing job rows are not deleted or rewritten. The migration is safe to re-run.
+
+
+## Official external job-source discovery (admin review only)
+- Admin candidate review: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/external-job-review.html
+- Setup guide: `EXTERNAL-JOB-SOURCES-SETUP.md`
+- Source registry SQL: `supabase-external-job-sources.sql`
+- Supabase scanner: `supabase/functions/scan-external-job-sources/index.ts`
+- GitHub scheduled workflow: `.github/workflows/external-job-source-monitor.yml`
+- Important: discovered links stay private and pending until an administrator verifies the original notice, eligibility, dates and application link. The scanner never publishes jobs automatically. Scheduled scanning remains inactive until `GOVERNMENT_MONITOR_SECRET` is configured in both Supabase Edge Function Secrets and GitHub Actions repository secrets.
