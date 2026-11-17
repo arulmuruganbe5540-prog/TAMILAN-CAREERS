@@ -24,7 +24,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 - `supabase-external-job-sources.sql` — user reported successful execution. External job source registry and private candidate-review tables are set up.
 - Edge Function `scan-external-job-sources` — user reported an earlier successful deployment. The newest repository safeguards have **not** yet been redeployed.
 - Edge Function `manage-hiring` — deployed, but the currently deployed version is only the login/token and role-status handler; the newer company-member actions are not confirmed deployed.
-- The user has shared Storage policy rows for `candidate-resumes` and `job-offers`. These rows prove that policies exist, but do not by themselves prove which buckets currently exist or whether either bucket contains files.
+- The user has shared Storage policy rows for `candidate-resumes` and `job-offers`. These rows prove that policies exist, but do not by themselves prove which buckets currently exist or whether either bucket contains files. The `job-offers` policy calls `public.can_access_job_application(uuid)`; that function is not defined in the repository SQL, so its live definition and security settings must be reviewed from Supabase before relying on the policy.
 
 ## 3. Implemented in GitHub, not yet confirmed live in Supabase
 
@@ -68,7 +68,7 @@ The following must not be described as live until SQL/function deployment and re
 ## 7. User actions required
 
 ### Immediate
-- Run the updated read-only `supabase-schema-audit.sql` in the Supabase SQL Editor and provide the result sets, especially the bucket inventory for `resumes` / `candidate-resumes` and the full column/constraint/policy/function results. This is needed to reconcile the bucket and safely verify schema-dependent migrations.
+- Run the updated read-only `supabase-schema-audit.sql` in the Supabase SQL Editor and provide the result sets, especially the bucket inventory for `resumes` / `candidate-resumes`, the full column/constraint/policy results, and the `can_access_job_application` function definition. This is needed to reconcile Storage and safely verify schema-dependent migrations.
 
 ### After the schema is reconciled
 - Run only the reviewed Supabase SQL migrations in the documented order, one at a time, and share success/error results.
