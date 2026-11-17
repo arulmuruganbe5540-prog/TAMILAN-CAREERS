@@ -44,6 +44,12 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Interview SQL cancels pending/accepted invitations when an application is withdrawn or rejected, rejects responses for closed applications, suppresses reminders for closed applications, and notifies the company when a candidate withdraws.
 - [x] Robots policy matching in both Supabase government/external scanners supports wildcard and end-anchored rules, prefers Allow on equal-length matches, and fails closed when robots policy cannot be checked.
 - [x] Read-only Supabase schema audit now includes candidate/resume/notification tables, Storage bucket configuration, and Storage object policies.
+- [x] Candidate certification records in the consolidated Supabase setup now have RLS enabled, owner-only write policies, and applicant-only employer read access.
+- [x] Candidate withdrawal now cancels pending/accepted interview invitations and notifies the company owner and active HR / Recruiter members; reminder generation skips closed applications.
+- [x] Private job search, job details, apply form, and AI matching exclude expired vacancies; the apply page independently blocks late submissions. ISO, DD-MM-YYYY, and DD/MM/YYYY date formats are handled.
+- [x] AI matching backend excludes expired jobs and checks `application_deadline`, `deadline`, and `last_date` fields; only Job Seeker accounts with explicit consent can call the AI workflow.
+- [x] Public Government Jobs pages now clearly state TAMILAN CAREERS is independent and not government-endorsed; government source links use HTTPS official portals, and the state-job page no longer describes manually curated listings as crawler-verified.
+- [x] Latest full health workflow and Pages deployment both passed on commit `f502d7e82b88a4de20b011e2978606ca0cf2d9d1`.
 - [x] Latest Pages deployment and full health workflow passed on commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` (runs `44054190080` and `44054190121`).
 - [x] Latest SQL migration lint, Edge Function type checks, privacy guard, browser smoke tests, website health workflow, and Pages deployment all passed on commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b`.
 - [x] Latest website health run `44052500315` and Pages deployment run `44052501042` both passed on commit `3c58359a079572588724226fd1bfeb6c55a2a930`.
