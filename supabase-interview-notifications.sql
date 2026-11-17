@@ -76,6 +76,28 @@ using (
   )
 );
 
+-- Close pending/accepted interviews when the underlying application is withdrawn or rejected.
+create or replace function public.tc_cancel_interviews_on_application_close()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+begin
+  if new.status in ('withdrawn','rejected') and old.status is distinct from new.status then
+    update public.tc_interview_invitations
+       set status='cancelled', updated_at=now()
+     where application_id=new.id and status in ('pending','accepted');
+  end if;
+  return new;
+end;
+$;
+revoke all on function public.tc_cancel_interviews_on_application_close() from public, anon, authenticated;
+drop trigger if exists tc_cancel_interviews_on_application_close on public.job_applications;
+create trigger tc_cancel_interviews_on_application_close
+after update of status on public.job_applications
+for each row execute function public.tc_cancel_interviews_on_application_close();
+
 create or replace function public.tc_send_interview_invitation(
   p_application_id uuid,
   p_scheduled_at timestamptz,
@@ -183,6 +205,7 @@ begin
   join public.jobs j on j.id=ja.job_id
   join public.companies c on c.id=i.company_id
   where i.id=p_interview_id
+    and ja.status in ('applied','under_review','shortlisted')
   for update of i;
 
   if not found or v_candidate_id <> auth.uid() then
@@ -326,7 +349,9 @@ begin
     to_char(i.scheduled_at at time zone 'Asia/Kolkata','DD-MM-YYYY HH12:MI AM'),
     i.application_id,i.id
   from public.tc_interview_invitations i
+  join public.job_applications ja on ja.id=i.application_id
   where i.status='accepted'
+    and ja.status in ('applied','under_review','shortlisted')
     and i.scheduled_at between now()+interval '23 hours' and now()+interval '25 hours'
     and not exists (
       select 1 from public.tc_notifications n
@@ -343,7 +368,9 @@ begin
     to_char(i.scheduled_at at time zone 'Asia/Kolkata','DD-MM-YYYY HH12:MI AM'),
     i.application_id,i.id
   from public.tc_interview_invitations i
+  join public.job_applications ja on ja.id=i.application_id
   where i.status='accepted'
+    and ja.status in ('applied','under_review','shortlisted')
     and i.scheduled_at between now()+interval '50 minutes' and now()+interval '70 minutes'
     and not exists (
       select 1 from public.tc_notifications n
