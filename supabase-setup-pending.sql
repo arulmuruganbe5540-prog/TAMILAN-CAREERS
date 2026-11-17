@@ -8,7 +8,7 @@
 -- or grant access to candidates who have not applied to that employer's company.
 --
 -- Safe rerun notes:
--- - The resumes bucket is always enforced as private with a 5 MB file limit.
+-- - The resumes bucket is always enforced as private with a 10 MB bucket limit.
 -- - Policies in this script are replaced by name.
 -- - The job_posting_drafts table is created only if absent.
 --
