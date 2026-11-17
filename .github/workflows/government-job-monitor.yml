@@ -96,9 +96,9 @@ jobs:
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
             -H "Content-Type: application/json" \
             --data '{}'
-      - name: Commit aggregate monitor report only
+      - name: Commit monitor report and Admin Review sync state
         run: |
-          git add government-job-monitor-report.json
+          git add government-job-monitor-report.json government-job-review-queue.json
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
