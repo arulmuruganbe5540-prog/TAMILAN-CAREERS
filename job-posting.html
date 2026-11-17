@@ -113,7 +113,7 @@ async function save(silent=false){
   const {data,error}=await client.from("job_posting_drafts").upsert({company_id:d.companyChoice,user_id:currentUser.id,draft},{onConflict:"company_id,user_id"}).select("id").single();
   if(error)throw error;
   currentDraft=draft;
-  if(!silent)message(preserveReview?"வரைவு சேமிக்கப்பட்டது. தற்போதைய Admin Review நிலை மாற்றப்படவில்லை.":"வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
+  if(!silent)message(preserveReview?"வரைவு சேமிக்கப்பட்டது. தற்போதைய Admin Review நிலை மாற்றப்படவில்லை.":preservePublished?"இந்த வேலை ஏற்கனவே பொதுவில் வெளியிடப்பட்டுள்ளது; புதிய மாற்றம் எதுவும் செய்யப்படவில்லை.":"வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
   return data.id;
  }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false);return null}
  finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
