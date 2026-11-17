@@ -7,8 +7,8 @@
 Gmail SMTP பயன்படுத்தலாம். இது சிறிய அளவிலான சோதனை/தொடக்கப் பயன்பாட்டுக்கு ஏற்றது; அதிக அளவு production email-க்கு தனி email provider சிறந்தது.
 
 1. Gmail கணக்கில் Google Account → Security → 2-Step Verification இயக்கவும்.
-2. App passwords பகுதியில் புதிய App Password உருவாக்கவும்.
-3. Supabase Dashboard → Authentication → SMTP Settings பகுதியில் Custom SMTP இயக்கவும்.
+2. Google App Password பக்கத்தில் புதிய App Password உருவாக்கவும்: https://myaccount.google.com/apppasswords
+3. Supabase Dashboard → Authentication → SMTP Settings பகுதியில் Custom SMTP இயக்கவும்: https://supabase.com/dashboard/project/qkmljuuusfjowexvybvy/auth/smtp
 4. கீழே உள்ள அமைப்புகளை நிரப்பவும்:
    - Host: `smtp.gmail.com`
    - Port: `465` (SSL) அல்லது `587` (STARTTLS)
@@ -16,7 +16,9 @@ Gmail SMTP பயன்படுத்தலாம். இது சிறிய
    - Password: Google உருவாக்கிய App Password
    - Sender email: அதே Gmail முகவரி
    - Sender name: `TAMILAN CAREERS`
-5. Save செய்து புதிய test account மூலம் signup email-ஐச் சோதிக்கவும். Email வரவில்லை என்றால் Spam/Promotions பார்க்கவும்.
+5. Save செய்து புதிய test account மூலம் signup email-ஐச் சோதிக்கவும். Email வரவில்லை என்றால் Spam/Promotions பார்க்கவும். Gmail SMTP-க்கு SSL 465 அல்லது STARTTLS 587 பயன்படுத்தலாம்.
+
+Supabase இயல்பான SMTP சேவை பொதுப் பயனர்களுக்கு ஏற்றதல்ல: அது Project Team-இல் உள்ள Email முகவரிகளுக்கு மட்டுமே அனுப்பும்; தற்போது மணிக்கு 2 Email வரம்பும் உள்ளது. Custom SMTP அமைத்த பிறகே எல்லா பயனர்களுக்கும் அனுப்ப முடியும்.
 
 **கவனம்:** Gmail சாதாரண Login Password-ஐ SMTP password ஆகப் பயன்படுத்த வேண்டாம். App Password-ஐ யாரிடமும் பகிர வேண்டாம்.
 
