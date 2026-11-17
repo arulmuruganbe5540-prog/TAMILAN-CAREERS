@@ -2,6 +2,37 @@
 -- SAFE: This script only reads PostgreSQL metadata. It creates, changes or deletes nothing.
 -- Run in Supabase SQL Editor and inspect the Results for the actual column types and policies.
 
+-- 0. Explicit presence check: an empty column result alone is ambiguous.
+select
+  requested.table_name,
+  (to_regclass('public.' || requested.table_name) is not null) as exists_in_database
+from (values
+  ('profiles'),
+  ('jobs'),
+  ('job_categories'),
+  ('companies'),
+  ('company_members'),
+  ('job_applications'),
+  ('user_roles'),
+  ('job_seeker_profiles'),
+  ('candidate_skills'),
+  ('candidate_languages'),
+  ('candidate_preferences'),
+  ('candidate_education'),
+  ('candidate_experience'),
+  ('candidate_certifications'),
+  ('candidate_resumes'),
+  ('job_posting_drafts'),
+  ('admin_job_post_reviews'),
+  ('company_profile_drafts'),
+  ('tc_notifications'),
+  ('tc_interview_invitations'),
+  ('government_notice_sources'),
+  ('government_notice_reviews'),
+  ('government_notices')
+) as requested(table_name)
+order by requested.table_name;
+
 select
   table_name,
   column_name,
@@ -11,6 +42,7 @@ select
 from information_schema.columns
 where table_schema = 'public'
   and table_name in (
+    'profiles',
     'jobs',
     'job_categories',
     'companies',
@@ -52,7 +84,7 @@ left join information_schema.constraint_column_usage ccu
   on ccu.constraint_schema = tc.constraint_schema
  and ccu.constraint_name = tc.constraint_name
 where tc.constraint_schema = 'public'
-  and tc.table_name in ('jobs','job_categories','companies','company_members','job_applications','admin_job_post_reviews','candidate_resumes','candidate_education','candidate_experience','candidate_certifications','tc_notifications','tc_interview_invitations','government_notice_sources','government_notice_reviews','government_notices')
+  and tc.table_name in ('profiles','jobs','job_categories','companies','company_members','job_applications','admin_job_post_reviews','candidate_resumes','candidate_education','candidate_experience','candidate_certifications','tc_notifications','tc_interview_invitations','government_notice_sources','government_notice_reviews','government_notices')
 order by tc.table_name, tc.constraint_type, tc.constraint_name;
 
 select
@@ -66,7 +98,7 @@ select
   with_check
 from pg_policies
 where schemaname = 'public'
-  and tablename in ('jobs','companies','company_members','job_applications','user_roles','job_seeker_profiles','candidate_skills','candidate_languages','candidate_preferences','candidate_education','candidate_experience','candidate_certifications','candidate_resumes','job_posting_drafts','admin_job_post_reviews','company_profile_drafts','tc_notifications','tc_interview_invitations','government_notice_sources','government_notice_reviews','government_notices')
+  and tablename in ('profiles','jobs','companies','company_members','job_applications','user_roles','job_seeker_profiles','candidate_skills','candidate_languages','candidate_preferences','candidate_education','candidate_experience','candidate_certifications','candidate_resumes','job_posting_drafts','admin_job_post_reviews','company_profile_drafts','tc_notifications','tc_interview_invitations','government_notice_sources','government_notice_reviews','government_notices')
 order by tablename, policyname;
 
 
@@ -88,7 +120,7 @@ select
 from information_schema.role_table_grants
 where table_schema = 'public'
   and table_name in (
-    'jobs','companies','company_members','job_applications','user_roles','candidate_resumes',
+    'profiles','jobs','companies','company_members','job_applications','user_roles','candidate_resumes',
     'candidate_education','candidate_experience','candidate_certifications','tc_notifications',
     'tc_interview_invitations','job_posting_drafts','admin_job_post_reviews','company_profile_drafts',
     'government_notice_sources','government_notice_reviews','government_notices'
