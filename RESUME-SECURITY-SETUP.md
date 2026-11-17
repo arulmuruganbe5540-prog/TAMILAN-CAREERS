@@ -2,7 +2,7 @@
 
 ## What the workflow does
 
-- Job Seekers upload PDF, DOC, or DOCX files to the private Supabase Storage bucket `resumes`.
+- Job Seekers upload PDF, DOC, or DOCX files to the private Supabase Storage bucket `candidate-resumes`.
 - The bucket is private. Each candidate can access only the folder named with their own Supabase Auth user ID.
 - The metadata table `public.candidate_resumes` is protected by owner-only RLS. A database trigger enforces a maximum of five metadata records per candidate, including concurrent submissions.
 - `job_applications.resume_id` links the optional selected Resume. A database trigger rejects forged IDs unless the Resume belongs to the applicant.
