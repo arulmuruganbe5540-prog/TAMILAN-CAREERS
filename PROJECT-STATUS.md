@@ -1,0 +1,80 @@
+# TAMILAN CAREERS — Project Status & Handover
+
+Last audited: 17 November 2026 (India time)  
+Repository: `arulmuruganbe5540-prog/TAMILAN-CAREERS`  
+Live Pages: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
+
+This file separates repository work from live Supabase setup. A committed HTML, SQL, or Edge Function file is **not** proof that the corresponding Supabase feature is live.
+
+## 1. Confirmed GitHub / website work
+
+- Public GitHub repository and `main` branch are present.
+- GitHub Pages deployment and the website health workflow both succeeded for commit `7b4ed7b4fa396bb2cb7eeaa0dd586940444db5c8` (runs `44065324676` and `44065323970`).
+- The health workflow checks Edge Function types, SQL migration delimiters and SECURITY DEFINER search paths, privacy guards, company publication flow, website structure, and browser smoke tests.
+- The current repository contains Tamil/English public pages for job search, job details, applications, candidate profile, saved jobs, company pages, notifications, Resume documents, Government Jobs, State PSC directory, and exam practice.
+- The current repository includes separate Private Jobs and Government Jobs areas; scraped/discovered links are not auto-published.
+- A read-only Supabase schema audit is available in `supabase-schema-audit.sql`. It reads schema metadata, RLS policies, grants, function signatures, Storage bucket settings, and Storage policies; it does not modify data or schema.
+- The audit was expanded to compare both `resumes` and `candidate-resumes` bucket IDs.
+- A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. Its newest workflow run is still pending at the time of this audit.
+
+## 2. Supabase work confirmed by the user
+
+- `supabase-company-workflow.sql` — user reported successful execution. Company profile drafts and private company job drafts are set up.
+- `supabase-candidate-withdraw-application.sql` — user reported successful execution. Candidate-owned application withdrawal is set up.
+- `supabase-external-job-sources.sql` — user reported successful execution. External job source registry and private candidate-review tables are set up.
+- Edge Function `scan-external-job-sources` — user reported an earlier successful deployment. The newest repository safeguards have **not** yet been redeployed.
+- Edge Function `manage-hiring` — deployed, but the currently deployed version is only the login/token and role-status handler; the newer company-member actions are not confirmed deployed.
+- The user has shared Storage policy rows for `candidate-resumes` and `job-offers`. These rows prove that policies exist, but do not by themselves prove which buckets currently exist or whether either bucket contains files.
+
+## 3. Implemented in GitHub, not yet confirmed live in Supabase
+
+- Private Resume upload/list/download/delete UI, owner-only metadata SQL, five-document limit, candidate-owned application Resume link, and 60-second employer signed-URL Function.
+- Candidate education, work experience, and certification UI and SQL.
+- Employer applicant profile read policies and application status update RPC.
+- Company job draft → Super Admin review → verified-company publish workflow.
+- Interview invitations, candidate accept/decline, notification centre, and reminder generator.
+- AI Resume-to-job matching. The local rule-based matcher is separate from the optional AI Function.
+- Government notice private review/publish archive and ingestion Function.
+- External source scanner latest safeguards and source monitor workflow.
+
+## 4. Live setup still needing confirmation
+
+The following must not be described as live until SQL/function deployment and real-account tests are completed:
+
+1. `supabase-setup-pending.sql` — private Resume Storage, candidate Resume metadata, education/experience/certifications, job drafts hardening, applicant-only employer profile visibility, and application integrity/deadline triggers.
+2. `supabase-company-application-status.sql` — secure employer application status changes.
+3. `supabase-admin-job-publish-setup.sql` — protected Company Draft → Admin Review → verified-company publish flow.
+4. `supabase-interview-notifications.sql` — notification and interview workflow.
+5. `supabase-government-archive-install.sql` — separate Government notice source registry, private review queue, and reviewed publication.
+6. Deploy/redeploy `company-resume-access`, `ai-resume-match`, `ingest-government-notices`, `bilingual-job-search`, and the latest `scan-external-job-sources` source as applicable.
+7. The currently deployed `manage-hiring` Function still needs a schema-reviewed member-management implementation.
+8. Real Candidate, Employer, Super Admin, and cross-company denial tests remain outstanding.
+
+## 5. Resume Storage mismatch — current blocker
+
+- Website page `resume-documents.html` currently uses bucket `resumes`.
+- Function `company-resume-access` currently signs files from bucket `resumes`.
+- Both Resume SQL migrations currently create/configure private bucket `resumes`.
+- The Storage policy rows supplied by the user reference bucket ID `candidate-resumes`.
+- Do not run the Resume migration, rename/delete a bucket, or move files until the actual bucket inventory is checked. The updated read-only schema audit now reports both bucket IDs.
+
+## 6. Secrets and scheduled monitors
+
+- `OPENAI_API_KEY` is required only for the optional AI Functions; it must be stored in Supabase Function Secrets, never in frontend code or GitHub source.
+- `GOVERNMENT_MONITOR_SECRET` is still unconfigured. The user has asked to defer this setup; do not prompt them to configure it during routine project work.
+- The external-source monitor has previously found 23 of 60 registered sources reachable. Robots-blocked/error sources were not bypassed. The monitor's Supabase candidate sync was skipped because the secret was missing.
+- Government and external discoveries remain private until an administrator verifies the original official notice and explicitly publishes it.
+
+## 7. User actions required
+
+### Immediate
+- Run the updated read-only `supabase-schema-audit.sql` in the Supabase SQL Editor and provide the result sets, especially the bucket inventory for `resumes` / `candidate-resumes` and the full column/constraint/policy/function results. This is needed to reconcile the bucket and safely verify schema-dependent migrations.
+
+### After the schema is reconciled
+- Run only the reviewed Supabase SQL migrations in the documented order, one at a time, and share success/error results.
+- Deploy the required Edge Functions from the reviewed source. Never share service-role keys, OpenAI keys, monitor secrets, passwords, or OTPs in chat.
+- Perform the Android Candidate/Employer/Admin end-to-end tests using separate test accounts and confirm the outcomes.
+
+## Release rule
+
+The website is **not launch-ready yet**. GitHub Pages deployment is working, but the remaining Supabase migrations, Function deployments, secrets (where needed), RLS verification, and real-account tests are launch blockers. Do not mark the project complete until those checks pass.
