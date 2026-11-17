@@ -299,18 +299,24 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
         true
       );
 
-      // LOGIN SUCCESS: OPEN DASHBOARD
-      const nextPage = new URLSearchParams(window.location.search).get('next');
-      let target = 'dashboard.html';
+      // LOGIN SUCCESS: return to the requested page without duplicating
+      // the GitHub Pages repository base path (for example /TAMILAN-CAREERS/).
+      const nextPage = new URLSearchParams(window.location.search).get("next");
+      let target = new URL("dashboard.html", window.location.href);
       if (nextPage) {
         try {
           const candidate = new URL(nextPage, window.location.href);
-          if (candidate.origin === window.location.origin && !candidate.pathname.endsWith('/login.html')) {
-            target = candidate.pathname.replace(/^\//, '') + candidate.search + candidate.hash;
+          const appBasePath = new URL(".", window.location.href).pathname;
+          if (
+            candidate.origin === window.location.origin &&
+            candidate.pathname.startsWith(appBasePath) &&
+            !candidate.pathname.endsWith("/login.html")
+          ) {
+            target = candidate;
           }
         } catch (e) {}
       }
-      window.location.replace(target);
+      window.location.replace(target.href);
 
       return;
     }
