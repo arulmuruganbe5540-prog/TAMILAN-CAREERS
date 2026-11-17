@@ -166,7 +166,7 @@ results.sort(key=lambda item: order.get(item["state"], len(order)))
 changed = [x["state"] for x in results if x.get("changed_since_previous_check")]
 errors = [x["state"] for x in results if x.get("http_status") is None or (x.get("http_status") and x["http_status"] >= 400)]
 summary = {
-    "monitor_version": 1,
+    "monitor_version": 2,
     "last_updated_utc": datetime.now(timezone.utc).isoformat(),
     "purpose": "Official PSC page change detection only; not a verified vacancy feed.",
     "states_monitored": len(results),
