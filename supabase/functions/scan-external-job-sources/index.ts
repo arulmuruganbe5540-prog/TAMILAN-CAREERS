@@ -25,11 +25,12 @@ Deno.serve(async(req)=>{
  const url=Deno.env.get("SUPABASE_URL"),key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
  if(!url||!key)return reply({error:"Server configuration missing"},500);
  const db=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
- const {data:sources,error}=await db.from("external_job_sources").select("id,source_name,source_type,country,region,base_url,monitor_mode").eq("enabled",true).eq("monitor_mode","public_page").limit(100);
+ const {data:sources,error}=await db.from("external_job_sources").select("id,source_name,source_type,country,region,base_url,monitor_mode").eq("enabled",true).limit(100);
  if(error)return reply({error:error.message},500);
- let scanned=0,failed=0,discovered=0;const failures:string[]=[];const candidates:Record<string,unknown>[]=[];
- for(let i=0;i<(sources||[]).length;i+=5){
-  const batch=(sources||[]).slice(i,i+5);
+ const eligible=(sources||[]).filter(s=>s.monitor_mode==="public_page");
+ let scanned=0,failed=0,discovered=0;const failures:string[]=[];const candidates:Record<string,unknown>[]=[];const sourceStatuses:{id:string;status:string}[]=[];
+ for(let i=0;i<eligible.length;i+=5){
+  const batch=eligible.slice(i,i+5);
   const results=await Promise.all(batch.map(async s=>{
    try{
     const r=await fetch(s.base_url,{headers:{"user-agent":"TAMILAN-CAREERS official job source monitor/1.0"},signal:AbortSignal.timeout(10000),redirect:"follow"});
@@ -47,12 +48,12 @@ Deno.serve(async(req)=>{
     return {s,rows,error:null as string|null};
    }catch(e){return {s,rows:[],error:String(e).slice(0,180)};}
   }));
-  for(const x of results){scanned++;if(x.error){failed++;failures.push(x.s.id+": "+x.error);continue;}discovered+=x.rows.length;candidates.push(...x.rows);}
+  for(const x of results){scanned++;sourceStatuses.push({id:x.s.id,status:x.error?"failed":"scanned"});if(x.error){failed++;failures.push(x.s.id+": "+x.error);continue;}discovered+=x.rows.length;candidates.push(...x.rows);}
  }
  const unique=new Map<string,Record<string,unknown>>();for(const c of candidates){const u=String(c.official_url);if(!unique.has(u))unique.set(u,c);}
  const selected=[...unique.values()].slice(0,100);
  let inserted=0;
  if(selected.length){const {data,error:e}=await db.from("external_job_candidates").upsert(selected,{onConflict:"official_url",ignoreDuplicates:true}).select("id");if(e)return reply({error:"Queue insert failed",detail:e.message},500);inserted=data?.length||0;}
- await Promise.all((sources||[]).map(s=>db.from("external_job_sources").update({last_checked_at:new Date().toISOString(),last_status:"scanned"}).eq("id",s.id)));
- return reply({ok:true,scanned_sources:scanned,failed_sources:failed,discovered_links:discovered,queued_new_candidates:inserted,manual_sources_skipped:(sources||[]).length-scanned,failures,published:0,note:"Discovery only; candidates are private and not published."});
+ await Promise.all(sourceStatuses.map(s=>db.from("external_job_sources").update({last_checked_at:new Date().toISOString(),last_status:s.status}).eq("id",s.id)));
+ return reply({ok:true,scanned_sources:scanned,failed_sources:failed,discovered_links:discovered,queued_new_candidates:inserted,manual_sources_skipped:(sources||[]).length-eligible.length,failures,published:0,note:"Discovery only; candidates are private and not published."});
 });
