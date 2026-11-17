@@ -64,9 +64,9 @@ function render(){
   const salarySuffix=salaryPeriod==="daily"?" / நாள்":salaryPeriod==="hourly"?" / மணி":salaryPeriod==="yearly"?" / ஆண்டு":" / மாதம்";
   const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")+salarySuffix):"சம்பளம் அறிவிக்கப்படவில்லை";
   const deadline=pick(j,["application_deadline","deadline","last_date"]);
-  const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["company_name"]);
+  const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["employer_name","company_name"]);
   const id=pick(j,["id","job_id"]);
-  const reason=bi?(bi.match_reason_ta||""):"";
+  const jobKind=pick(j,["job_kind"]); const kindLabel=jobKind==="government"?"அரசு வேலை":jobKind==="foreign"?"வெளிநாட்டு வேலை":jobKind==="private"?"தனியார் வேலை":""; const reason=bi?(bi.match_reason_ta||""):"";
   const reasonEn=bi?(bi.match_reason_en||""):"";
   const skills=bi?(bi.skills_ta||""):"";
   const skillsEn=bi?(bi.skills_en||""):"";
