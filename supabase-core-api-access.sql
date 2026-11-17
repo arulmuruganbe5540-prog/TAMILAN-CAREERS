@@ -87,6 +87,20 @@ create policy "Employers read applicant preferences"
 on public.candidate_preferences for select to authenticated
 using (public.can_company_view_candidate(user_id));
 
+drop policy if exists "companies_read_active_members" on public.companies;
+create policy "companies_read_active_members"
+on public.companies for select to authenticated
+using (
+  exists (
+    select 1
+    from public.company_members cm
+    where cm.company_id = companies.id
+      and cm.user_id = (select auth.uid())
+      and cm.member_status = 'active'
+      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
+  )
+);
+
 -- Active company HR / Recruiter members can load their own company's jobs.
 -- Company owners already have the separate jobs_read_own_company policy.
 drop policy if exists "jobs_read_active_company_members" on public.jobs;
