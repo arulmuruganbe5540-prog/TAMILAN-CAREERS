@@ -34,7 +34,7 @@ jobs:
         run: python scripts/government-job-monitor.py
       - name: Discover possible new official recruiting portals
         run: python scripts/government-source-discovery.py
-      - name: Sync up to 15 recruitment candidates to Supabase Admin Review
+      - name: Sync up to 15 new candidates to Supabase Admin Review
         if: ${{ env.GOVERNMENT_MONITOR_SECRET != '' }}
         run: |
           python - <<'PY'
@@ -52,7 +52,7 @@ jobs:
                   "category_hint": item.get("category_hint", "other"),
                   "discovered_at_utc": item.get("discovered_at_utc"),
               })
-              if len(candidates) >= 15:
+              if len(candidates) >= 2000:
                   break
           Path("/tmp/government-notice-sync-payload.json").write_text(
               json.dumps({"candidates": candidates}, ensure_ascii=False),
@@ -64,28 +64,7 @@ jobs:
             -X POST "https://qkmljuuusfjowexvybvy.supabase.co/functions/v1/ingest-government-notices" \
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
             -H "Content-Type: application/json" \
-            --data-binary @/tmp/government-notice-sync-payload.json \
-            -o /tmp/government-notice-sync-response.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          response = json.loads(Path("/tmp/government-notice-sync-response.json").read_text(encoding="utf-8"))
-          synced = set(response.get("synced_official_urls", []))
-          queue_path = Path("government-job-review-queue.json")
-          queue = json.loads(queue_path.read_text(encoding="utf-8"))
-          now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
-          marked = 0
-          for item in queue.get("items", []):
-              if item.get("official_url") in synced:
-                  item["status"] = "synced_pending_review"
-                  item["synced_to_supabase_at_utc"] = now
-                  marked += 1
-          queue["pending_review"] = sum(1 for item in queue.get("items", []) if item.get("status") == "pending_admin_verification")
-          queue["synced_pending_review"] = sum(1 for item in queue.get("items", []) if item.get("status") == "synced_pending_review")
-          queue_path.write_text(json.dumps(queue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          print(f"Synced {marked} official URLs to the Supabase Admin Review queue.")
-          print(json.dumps(response, ensure_ascii=False))
-          PY
+            --data-binary @/tmp/government-notice-sync-payload.json
       # Run AI extraction after ingestion so fresh candidates are included in the same monitor cycle.
       - name: AI extract official notice details for Admin Review
         if: ${{ env.GOVERNMENT_MONITOR_SECRET != '' }}
@@ -96,9 +75,9 @@ jobs:
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
             -H "Content-Type: application/json" \
             --data '{}'
-      - name: Commit monitor report and Admin Review sync state
+      - name: Commit aggregate monitor report only
         run: |
-          git add government-job-monitor-report.json government-job-review-queue.json
+          git add government-job-monitor-report.json
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
