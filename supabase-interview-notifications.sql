@@ -82,7 +82,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $tc_cancel_interviews$
 begin
   if new.status in ('withdrawn','rejected') and old.status is distinct from new.status then
     update public.tc_interview_invitations
@@ -91,7 +91,7 @@ begin
   end if;
   return new;
 end;
-$;
+$tc_cancel_interviews$;
 revoke all on function public.tc_cancel_interviews_on_application_close() from public, anon, authenticated;
 drop trigger if exists tc_cancel_interviews_on_application_close on public.job_applications;
 create trigger tc_cancel_interviews_on_application_close
