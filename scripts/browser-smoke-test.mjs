@@ -95,6 +95,13 @@ await check("Government admin pages require login", async () => {
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
+await check("Private admin controls require login", async () => {
+  await open("admin-control.html");
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  await open("admin-job-post.html");
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+});
+
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
