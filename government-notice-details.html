@@ -34,7 +34,7 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:25px 15px;text-a
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const nice=k=>labels[k]||k.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
  const date=v=>{if(!v)return "அறிவிப்பில் குறிப்பிடப்படவில்லை";const d=new Date(String(v).length===10?v+"T00:00:00":v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("ta-IN",{day:"numeric",month:"long",year:"numeric"})};
- const val=v=>Array.isArray(v)?v.map(x=>typeof x==="object"?JSON.stringify(x):String(x)).join(" • "):(typeof v==="object"&&v!==null?Object.entries(v).map(([k,x])=>nice(k)+": "+String(x)).join(" | "):String(v));
+ const val=v=>Array.isArray(v)?v.map(x=>typeof x==="object"&&x!==null?Object.entries(x).map(([k,y])=>nice(k)+": "+String(y??"—")).join(" · "):String(x)).join(" • "):(typeof v==="object"&&v!==null?Object.entries(v).map(([k,x])=>nice(k)+": "+String(x??"—")).join(" | "):String(v));
  const block=(k,v)=>'<div class="fact"><small>'+esc(nice(k))+'</small><b>'+esc(val(v))+'</b></div>';
  function section(title,items){if(!items.length)return "";return '<section class="panel"><div class="section-kicker">JOB INFORMATION</div><h2>'+esc(title)+'</h2><dl class="detail-list">'+items.map(([k,v])=>'<dt>'+esc(nice(k))+'</dt><dd>'+esc(val(v))+'</dd>').join("")+'</dl></section>'}
  async function load(){
