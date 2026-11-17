@@ -84,6 +84,17 @@ Still required before launch:
 6. Enable Supabase Auth leaked-password protection.
 7. Review remaining performance advisor notices and intended authenticated SECURITY DEFINER RPCs.
 
+## 17 November 2026 follow-up audit
+
+- Latest Pages deployment run `44085660477` completed successfully for commit `e3d9a78013254cb0c78b9bf1cd4dd7f76a9e5b58`; build, deploy, and report steps all passed.
+- Latest full Health Audit run `44085660992` completed successfully for the same commit. All 17 audit steps passed, including Deno type-check for all Edge Functions, SQL dollar-quote lint, privacy guards, JavaScript checks, and browser smoke tests.
+- The active database function scan found only `tc_admin_publish_job(uuid)` calling `private.is_super_admin()`; no other public application function still calls the revoked public helper. The public `is_super_admin()` function itself remains present but its public execute permissions were revoked.
+- Current live count rechecked: 1 Auth user, 1 company, 1 company membership, and 0 jobs. Separate Candidate, Employer/HR, and Super Admin journeys cannot be fully verified until separate real accounts and real test records exist.
+- Current security advisor: 7 authenticated SECURITY DEFINER application RPC warnings (intentionally used by signed-in app workflows and guarded in function bodies), 2 backend-only RLS/no-client-policy INFO notices (`company_invitations`, `job_sources`), and leaked-password protection WARN (still disabled).
+- Current performance advisor: 12 auth-RLS init-plan notices, 15 multiple-permissive-policy notices, and 72 unused-index INFO notices. Unused-index notices are not proof those indexes should be dropped; retain them until production query patterns justify removal. Health advisor returned no findings.
+- Added `CONNECTIONS-AND-LAUNCH-SETUP.md` with the exact external provider connections and dashboard steps: OpenAI `OPENAI_API_KEY`, Resend `RESEND_API_KEY` + `APP_BASE_URL` (+ optional `RESEND_FROM_EMAIL`), and the matching GitHub/Supabase `GOVERNMENT_MONITOR_SECRET`. Government monitoring remains deferred as previously requested.
+- No service-role or provider secret was added to public website code or GitHub source.
+
 ## Release rule
 
 The website is **not launch-ready yet**. The target launch date is 19 November 2026, but it is conditional, not guaranteed. GitHub Pages deployment is working and many backend components are installed, but required secrets, real-account end-to-end tests, Auth hardening, and the final CI run still remain. Do not mark the project complete until those checks pass.
