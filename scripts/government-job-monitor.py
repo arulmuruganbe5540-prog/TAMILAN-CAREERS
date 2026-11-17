@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlparse, urldefrag
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "data" / "government-official-sources.json"
@@ -64,14 +64,32 @@ def classify(text):
             return label
     return "review"
 
+class SameHostRedirectHandler(HTTPRedirectHandler):
+    def __init__(self, source_url):
+        super().__init__()
+        self.source_url = source_url
+        self.redirect_count = 0
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        self.redirect_count += 1
+        if self.redirect_count > 5:
+            raise ValueError("Too many redirects")
+        if not host_allowed(newurl, self.source_url):
+            raise ValueError("Redirect outside registered HTTPS domain")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
 def fetch_source(source):
     req = Request(source["url"], headers={"User-Agent":"TAMILAN-CAREERS-OfficialRecruitmentMonitor/1.0 (+official-source monitoring)"})
-    with urlopen(req, timeout=TIMEOUT) as response:
+    opener = build_opener(SameHostRedirectHandler(source["url"]))
+    with opener.open(req, timeout=TIMEOUT) as response:
+        content_type = response.headers.get_content_type().lower()
+        if content_type not in ("text/html", "application/xhtml+xml"):
+            raise ValueError("Source did not return an HTML content type")
         raw = response.read(MAX_BYTES)
         status, final_url = response.status, response.geturl()
         charset = response.headers.get_content_charset() or "utf-8"
     if not host_allowed(final_url, source["url"]):
-        raise ValueError("Redirected outside the registered official host")
+        raise ValueError("Redirected outside the registered HTTPS domain")
     parser = Links()
     parser.feed(raw.decode(charset, errors="replace"))
     plain = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw.decode(charset, errors="replace")))
