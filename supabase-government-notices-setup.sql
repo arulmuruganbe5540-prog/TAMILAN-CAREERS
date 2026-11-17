@@ -114,6 +114,10 @@ grant select, insert, update, delete on public.government_notice_reviews to auth
 grant select on public.government_notices to anon, authenticated;
 grant insert, update, delete on public.government_notices to authenticated;
 
+-- Backend monitor uses the Supabase service role; keep these grants server-only.
+grant select, update on public.government_notice_sources to service_role;
+grant select, insert, update on public.government_notice_reviews to service_role;
+
 insert into public.government_notice_sources (id, authority, scope, state, base_url, enabled)
 values
 ('upsc','Union Public Service Commission','central',NULL,'https://upsc.gov.in/',true),
