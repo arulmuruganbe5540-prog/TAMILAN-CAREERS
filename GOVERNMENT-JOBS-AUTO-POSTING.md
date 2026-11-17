@@ -4,7 +4,7 @@
 
 - Existing Indian, Tamil Nadu and other-state government job pages now read published recruitment notices from `public.government_notices`.
 - The feed defaults to the last 12 months and lets visitors switch to the last 6 months.
-- A maximum of 15 latest records are displayed on each existing page.
+- The public feed loads up to 500 records from Supabase and displays every matching record within the selected 6- or 12-month window (subject to the database query cap).
 - Application status is calculated from the official application end date. Expired notices remain clearly marked as expired; they are not presented as open applications.
 - Each card links to the original official notice. An application link is shown only when it is explicitly stored in the record's `details.application_url` or `details.apply_url`.
 - The public browser does not create, approve, or publish records. It can only read rows allowed by Supabase RLS.
