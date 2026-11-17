@@ -30,7 +30,7 @@ function render(){
    const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
    const status=String(pick(j,["status"])).toLowerCase();
    const visible=status==="published";
-   return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase()===type)&&(!place||String(loc).toLowerCase().includes(place));
+   return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase().replace(/_/g," ")===type)&&(!place||String(loc).toLowerCase().includes(place));
   });
  $("count").textContent=list.length+" வேலைகள் கிடைத்துள்ளன";
  if(!list.length){$("results").innerHTML='<div class="empty">இந்தத் தேடலுக்கு தற்போது வேலைகள் இல்லை. வேறு சொல் அல்லது இடத்தை முயற்சிக்கவும்.</div>';return;}
@@ -42,7 +42,8 @@ function render(){
   const descEn=bi?(bi.description_en||""):"";
   const loc=bi?(bi.location_ta||bi.location_en||""):(pick(j,["location","job_location","work_location"]));
   const locEn=bi?(bi.location_en||""):"";
-  const rawType=pick(j,["employment_type","job_type"]);\n  const type=String(rawType).replace(/_/g," ").replace(/\\b\\w/g,c=>c.toUpperCase());
+  const rawType=pick(j,["employment_type","job_type"]);
+  const type=String(rawType).replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
   const workplace=pick(j,["workplace_type"]);
   const min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
   const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் அறிவிக்கப்படவில்லை";
