@@ -76,40 +76,32 @@ async function readLimitedText(response: Response, limit: number) {
   }
   return output;
 }
-function robotsAllows(text: string, pageUrl: string, userAgent: string) {
-  const groups: Array<{ agents: string[]; rules: Array<{ allow: boolean; path: string }> }> = [];
-  let agents: string[] = [];
-  let rules: Array<{ allow: boolean; path: string }> = [];
-  for (const raw of text.split(/\r?\n/)) {
-    const line = raw.split("#", 1)[0].trim();
-    if (!line) continue;
-    const ua = line.match(/^user-agent\s*:\s*(.+)$/i);
-    if (ua) {
-      if (rules.length) { groups.push({ agents, rules }); agents = []; rules = []; }
-      agents.push(ua[1].trim().toLowerCase());
-      continue;
-    }
-    const rule = line.match(/^(allow|disallow)\s*:\s*(.*)$/i);
-    if (rule && agents.length) {
-      const path = rule[2].trim();
-      if (path) rules.push({ allow: rule[1].toLowerCase() === "allow", path });
-    }
+function robotsAllows(text:string,pageUrl:string,userAgent:string){
+ const groups:{agents:string[];rules:{allow:boolean;path:string}[]}[]=[];
+ let agents:string[]=[],rules:{allow:boolean;path:string}[]=[];
+ for(const raw of text.split("\n")){
+  const line=raw.split("#",1)[0].trim();if(!line)continue;
+  const lower=line.toLowerCase();
+  if(lower.startsWith("user-agent:")){
+   if(rules.length){groups.push({agents,rules});agents=[];rules=[];}
+   agents.push(line.slice(line.indexOf(":")+1).trim().toLowerCase());continue;
   }
-  if (agents.length) groups.push({ agents, rules });
-  const token = userAgent.split(/[ /]/, 1)[0].toLowerCase();
-  const specific = groups.filter((g) => g.agents.some((a) => a !== "*" && token.includes(a)));
-  const applicable = specific.length ? specific : groups.filter((g) => g.agents.includes("*"));
-  const allRules = applicable.flatMap((g) => g.rules);
-  const parsed = new URL(pageUrl);
-  const requestPath = parsed.pathname + parsed.search;
-  const matches = allRules.filter((r) => {
-    const pattern = r.path.split("*").map((part) => part.replace(/[.+?^{}()|[\]\\]/g, "\\  return output;
-}
-function category(text: string) {
-")).join(".*");
-    try { return new RegExp("^" + pattern).test(requestPath); } catch { return false; }
-  }).sort((a, b) => b.path.length - a.path.length);
-  return !matches.length || matches[0].allow;
+  const colon=line.indexOf(":");if(colon<0||!agents.length)continue;
+  const directive=line.slice(0,colon).trim().toLowerCase();
+  if(directive!=="allow"&&directive!=="disallow")continue;
+  const path=line.slice(colon+1).trim();if(path)rules.push({allow:directive==="allow",path});
+ }
+ if(agents.length)groups.push({agents,rules});
+ const token=userAgent.split(" ")[0].toLowerCase();
+ const specific=groups.filter(g=>g.agents.some(a=>a!=="*"&&token.includes(a)));
+ const applicable=specific.length?specific:groups.filter(g=>g.agents.includes("*"));
+ const allRules=applicable.flatMap(g=>g.rules);
+ const parsed=new URL(pageUrl),requestPath=parsed.pathname+parsed.search;
+ const matches=allRules.filter(r=>{
+  const prefix=r.path.split("*")[0];
+  return prefix.length>0&&requestPath.startsWith(prefix);
+ }).sort((a,b)=>b.path.length-a.path.length);
+ return !matches.length||matches[0].allow;
 }
 async function robotsPermits(pageUrl: string, userAgent: string) {
   try {
