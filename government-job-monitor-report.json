@@ -1,14 +1,19 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T06:31:12.913418+00:00",
+  "checked_at_utc": "2026-11-17T06:35:08.672685+00:00",
   "check_interval_hours": 6,
-  "registered_sources": 55,
-  "successful_sources": 21,
+  "registered_sources": 60,
+  "successful_sources": 22,
   "failed_sources": [
     {
       "source_id": "rrb",
       "url": "https://www.rrbapply.gov.in/",
       "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "source_id": "ibps",
+      "url": "https://www.ibps.in/",
+      "error": "<urlopen error [SSL: UNEXPECTED_MESSAGE] unexpected message (_ssl.c:1147)>"
     },
     {
       "source_id": "sbi-careers",
@@ -36,13 +41,13 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "nabard",
-      "url": "https://www.nabard.org/careers-notices1.aspx",
+      "source_id": "join-indian-army",
+      "url": "https://joinindianarmy.nic.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "join-indian-army",
-      "url": "https://joinindianarmy.nic.in/",
+      "source_id": "nabard",
+      "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "<urlopen error timed out>"
     },
     {
@@ -101,19 +106,9 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
-    },
-    {
       "source_id": "gpsc-gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
       "error": "<urlopen error [Errno 101] Network is unreachable>"
-    },
-    {
-      "source_id": "hpsc",
-      "url": "https://hpsc.gov.in/",
-      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "jpsc",
@@ -121,14 +116,29 @@
       "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
       "source_id": "mpsc-mizoram",
       "url": "https://mpsc.mizoram.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
       "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "kpsc",
       "url": "https://kpsc.kar.nic.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tgpsc",
+      "url": "https://www.tgpsc.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "mppsc",
@@ -146,9 +156,9 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "ibps-other-recruitment",
-      "url": "https://www.ibps.in/index.php/recruitment/",
-      "error": "<urlopen error [SSL: UNEXPECTED_MESSAGE] unexpected message (_ssl.c:1147)>"
+      "source_id": "tpsc",
+      "url": "https://tpsc.tripura.gov.in/",
+      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "upsc-recruitment-tests",
@@ -156,14 +166,14 @@
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
     },
     {
-      "source_id": "tpsc",
-      "url": "https://tpsc.tripura.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
       "source_id": "psc-uk",
       "url": "https://psc.uk.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "upsc-recruitment-results",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/results/",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
     },
     {
       "source_id": "ppsc",
@@ -174,10 +184,20 @@
       "source_id": "psc-wb",
       "url": "https://psc.wb.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "upsc-exam-notification-archive",
+      "url": "https://www.upsc.gov.in/exams-related-info/exam-notification/archives",
+      "error": "The read operation timed out"
+    },
+    {
+      "source_id": "mrb-results",
+      "url": "https://www.mrb.tn.gov.in/content.php?dept_id=ODAw&lang=MQ%3D%3D&menu_id=MjI0",
+      "error": "<urlopen error timed out>"
     }
   ],
-  "candidate_links_discovered_this_run": 382,
-  "pending_admin_review": 427,
+  "candidate_links_discovered_this_run": 1121,
+  "pending_admin_review": 1170,
   "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 5,
   "request_timeout_seconds": 12
