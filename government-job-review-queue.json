@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-16T18:42:44.961191+00:00",
+  "generated_at_utc": "2026-11-17T01:24:14.884592+00:00",
   "policy": "No item is public or approved automatically. Admin must verify the official notice and explicitly approve publication.",
   "total_candidates": 409,
   "pending_review": 409,
@@ -26,7 +26,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:52.511931+00:00"
     },
     {
       "id": "3535f5c07cf50927bf7c",
@@ -49,7 +50,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:52.511949+00:00"
     },
     {
       "id": "b8fb91260eae93a731b2",
@@ -72,7 +74,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:52.511955+00:00"
     },
     {
       "id": "f6ee3e97385472dc5334",
@@ -95,7 +98,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:52.511958+00:00"
     },
     {
       "id": "4ce19110b4dd96159492",
@@ -118,7 +122,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:52.511961+00:00"
     },
     {
       "id": "83af5f9f967f07e11dea",
@@ -141,7 +146,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:52.511965+00:00"
     },
     {
       "id": "9de48daf97761815c647",
@@ -164,7 +170,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:52.511968+00:00"
     },
     {
       "id": "3a64c729ec8b6dd631f0",
@@ -187,7 +194,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453566+00:00"
     },
     {
       "id": "94d361b0d1a266c51c2b",
@@ -210,7 +218,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453573+00:00"
     },
     {
       "id": "51a144efc5a13278fbc1",
@@ -233,7 +242,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453576+00:00"
     },
     {
       "id": "5d8834f535db31e0effc",
@@ -256,7 +266,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453579+00:00"
     },
     {
       "id": "6a26f5124ee072d3375e",
@@ -279,7 +290,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453582+00:00"
     },
     {
       "id": "6188913a03e65c669b07",
@@ -302,7 +314,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453584+00:00"
     },
     {
       "id": "f1bdc3c828e093dcfd63",
@@ -325,7 +338,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453586+00:00"
     },
     {
       "id": "830d6ad9abef6a08bfb9",
@@ -348,7 +362,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453588+00:00"
     },
     {
       "id": "f4ceaba80b97b2ae30ac",
@@ -371,7 +386,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453591+00:00"
     },
     {
       "id": "b2d843acd26c38d3a9a0",
@@ -394,7 +410,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453593+00:00"
     },
     {
       "id": "dfcc6d3ae5acb23ed6d3",
@@ -417,7 +434,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453595+00:00"
     },
     {
       "id": "61a76c167bcbcb561085",
@@ -440,7 +458,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453597+00:00"
     },
     {
       "id": "eaa34dc775f8efa05fdc",
@@ -463,7 +482,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453599+00:00"
     },
     {
       "id": "7d0487d40c9a23065be3",
@@ -486,7 +506,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453601+00:00"
     },
     {
       "id": "6a9f182f45c4e2cd8d3c",
@@ -509,7 +530,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453603+00:00"
     },
     {
       "id": "1945d0261ac8bd0845d3",
@@ -532,7 +554,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453607+00:00"
     },
     {
       "id": "43122435694b2341906e",
@@ -555,7 +578,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453608+00:00"
     },
     {
       "id": "536cd1f98b30595862cd",
@@ -578,7 +602,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453610+00:00"
     },
     {
       "id": "348596a789157f4da450",
@@ -601,7 +626,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453612+00:00"
     },
     {
       "id": "21d85b3d5b38e4515d66",
@@ -624,7 +650,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453615+00:00"
     },
     {
       "id": "cfd9436e004d4b9c12db",
@@ -647,7 +674,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453616+00:00"
     },
     {
       "id": "cda87efae3288c46364e",
@@ -670,7 +698,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453618+00:00"
     },
     {
       "id": "1529eb6a789cd503993f",
@@ -693,7 +722,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453620+00:00"
     },
     {
       "id": "3df124a0e413fdf14ed6",
@@ -716,7 +746,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453622+00:00"
     },
     {
       "id": "0c71cdda745bcf40a536",
@@ -739,7 +770,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453624+00:00"
     },
     {
       "id": "168aef53f813ec288f24",
@@ -762,7 +794,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453626+00:00"
     },
     {
       "id": "1a7ee2abd52b2a19ec5d",
@@ -785,7 +818,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453628+00:00"
     },
     {
       "id": "e8a414dc5a58648f553d",
@@ -808,7 +842,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453630+00:00"
     },
     {
       "id": "e1f687c0e22498e2c414",
@@ -831,7 +866,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453632+00:00"
     },
     {
       "id": "840f37d07005f0842952",
@@ -854,7 +890,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453634+00:00"
     },
     {
       "id": "7622b1f690ef73dbb44e",
@@ -877,7 +914,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453636+00:00"
     },
     {
       "id": "acbd602b1ebba0004440",
@@ -900,7 +938,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453638+00:00"
     },
     {
       "id": "a662c78ddff132c81536",
@@ -923,7 +962,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453640+00:00"
     },
     {
       "id": "929d5bdc48734bfd2896",
@@ -946,7 +986,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453642+00:00"
     },
     {
       "id": "67c62f67ea7c35c1ca1e",
@@ -969,7 +1010,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453645+00:00"
     },
     {
       "id": "a6e8e1661faa54c42e38",
@@ -992,7 +1034,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453646+00:00"
     },
     {
       "id": "385817aa13c1f4cc3acc",
@@ -1015,7 +1058,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453656+00:00"
     },
     {
       "id": "9d95c46da676a5ee92a2",
@@ -1038,7 +1082,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453658+00:00"
     },
     {
       "id": "f2551d50d4f1974ab26c",
@@ -1061,7 +1106,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453661+00:00"
     },
     {
       "id": "9d0b8d4e3f38544bbca5",
@@ -1084,7 +1130,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453663+00:00"
     },
     {
       "id": "ffa06bf1f61c06704e76",
@@ -1107,7 +1154,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453666+00:00"
     },
     {
       "id": "57a94854f357720e669a",
@@ -1130,7 +1178,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453668+00:00"
     },
     {
       "id": "8241a2cc26682feeb290",
@@ -1153,7 +1202,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453670+00:00"
     },
     {
       "id": "5f4f667d792c1a00521c",
@@ -1176,7 +1226,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453673+00:00"
     },
     {
       "id": "967d544b5967588965c9",
@@ -1199,7 +1250,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453675+00:00"
     },
     {
       "id": "fff351b19b8a68f7209c",
@@ -1222,7 +1274,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453677+00:00"
     },
     {
       "id": "473494c63d5bc8efe777",
@@ -1245,7 +1298,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453680+00:00"
     },
     {
       "id": "79f3b0e848392f2c9683",
@@ -1268,7 +1322,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453682+00:00"
     },
     {
       "id": "8f629066705c2089958b",
@@ -1291,7 +1346,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453684+00:00"
     },
     {
       "id": "a72b1925694712d4816d",
@@ -1314,7 +1370,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453686+00:00"
     },
     {
       "id": "38ae0dcd74b10d7268f4",
@@ -1337,7 +1394,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453688+00:00"
     },
     {
       "id": "cb0ca6a1c8a810076e74",
@@ -1360,7 +1418,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453690+00:00"
     },
     {
       "id": "7e2717c88c275ad754d5",
@@ -1383,7 +1442,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453692+00:00"
     },
     {
       "id": "fc1106ff97df71f6b1a1",
@@ -1406,7 +1466,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453694+00:00"
     },
     {
       "id": "11c5288494092cb9d63b",
@@ -1429,7 +1490,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453696+00:00"
     },
     {
       "id": "e828ab5dc893da13160c",
@@ -1452,7 +1514,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453698+00:00"
     },
     {
       "id": "06d987850a57bd78b541",
@@ -1475,7 +1538,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453700+00:00"
     },
     {
       "id": "a12c9679fe14961e1540",
@@ -1498,7 +1562,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453702+00:00"
     },
     {
       "id": "286f7facbc94168542ac",
@@ -1521,7 +1586,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453704+00:00"
     },
     {
       "id": "7281ce26b70f7614da6f",
@@ -1544,7 +1610,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453706+00:00"
     },
     {
       "id": "7f41ec89e9ad35f08684",
@@ -1567,7 +1634,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453708+00:00"
     },
     {
       "id": "672eb027e454492eebc4",
@@ -1590,7 +1658,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453710+00:00"
     },
     {
       "id": "1aceaac926a68fd474bb",
@@ -1613,7 +1682,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453712+00:00"
     },
     {
       "id": "9223b9713c39c8743d18",
@@ -1636,7 +1706,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453714+00:00"
     },
     {
       "id": "f86840ab2bab9a4834e6",
@@ -1659,7 +1730,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453716+00:00"
     },
     {
       "id": "babcf560950de303419f",
@@ -1682,7 +1754,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453718+00:00"
     },
     {
       "id": "e50fd363ba317641d44b",
@@ -1705,7 +1778,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453720+00:00"
     },
     {
       "id": "31b1b1cfc8d89730d77e",
@@ -1728,7 +1802,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453722+00:00"
     },
     {
       "id": "120de0616fae4b3fd6bf",
@@ -1751,7 +1826,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453724+00:00"
     },
     {
       "id": "73bcd4154cefa5e75445",
@@ -1774,7 +1850,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453726+00:00"
     },
     {
       "id": "b52e8264668ee944b5f4",
@@ -1797,7 +1874,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453728+00:00"
     },
     {
       "id": "f2cedd422149d0a4b6ce",
@@ -1820,7 +1898,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453730+00:00"
     },
     {
       "id": "94136a105a43f176ddea",
@@ -1843,7 +1922,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453732+00:00"
     },
     {
       "id": "74e84edf12324d032a45",
@@ -1866,7 +1946,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453734+00:00"
     },
     {
       "id": "b7adbdbfbd5457680b41",
@@ -1889,7 +1970,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453736+00:00"
     },
     {
       "id": "30146fa11e98958d08c5",
@@ -1912,7 +1994,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453738+00:00"
     },
     {
       "id": "81ed1b3b19750bd79c3d",
@@ -1935,7 +2018,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453741+00:00"
     },
     {
       "id": "032e147412bd95cd91d0",
@@ -1958,7 +2042,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453743+00:00"
     },
     {
       "id": "d5c3a3a16397f3973443",
@@ -1981,7 +2066,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453745+00:00"
     },
     {
       "id": "e5e95b383feccc9316bf",
@@ -2004,7 +2090,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453748+00:00"
     },
     {
       "id": "6c8105a341aa799afdf5",
@@ -2027,7 +2114,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453751+00:00"
     },
     {
       "id": "92d9e02c4f2f75b45175",
@@ -2050,7 +2138,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453753+00:00"
     },
     {
       "id": "c9ea3f0bd5ea825f2d65",
@@ -2073,7 +2162,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453755+00:00"
     },
     {
       "id": "29d6351a413f7b2396b1",
@@ -2096,7 +2186,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453757+00:00"
     },
     {
       "id": "3dd797b7735993278474",
@@ -2119,7 +2210,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453759+00:00"
     },
     {
       "id": "8ddd6da9e1bc470aa5f5",
@@ -2142,7 +2234,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453761+00:00"
     },
     {
       "id": "71e8da3d3072f46e9799",
@@ -2165,7 +2258,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453763+00:00"
     },
     {
       "id": "542aff07fe42621d4bab",
@@ -2188,7 +2282,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453765+00:00"
     },
     {
       "id": "55e5f5fe54bb66458df7",
@@ -2211,7 +2306,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453766+00:00"
     },
     {
       "id": "a1180508b67f1749c8a6",
@@ -2234,7 +2330,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453768+00:00"
     },
     {
       "id": "a11a4e14922c819c47e5",
@@ -2257,7 +2354,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453771+00:00"
     },
     {
       "id": "5018a200661dcca54394",
@@ -2280,7 +2378,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453773+00:00"
     },
     {
       "id": "69d547274b1f39e82459",
@@ -2303,7 +2402,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453775+00:00"
     },
     {
       "id": "ddbabaccbfd4d0ec39f1",
@@ -2326,7 +2426,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453777+00:00"
     },
     {
       "id": "92dbb0031ebfc6c4d4e1",
@@ -2349,7 +2450,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453779+00:00"
     },
     {
       "id": "db5f4b1ece531fad7b57",
@@ -2372,7 +2474,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453781+00:00"
     },
     {
       "id": "1f439d9bea9444b9b318",
@@ -2395,7 +2498,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453783+00:00"
     },
     {
       "id": "98f381b20ab63ed8e109",
@@ -2418,7 +2522,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453785+00:00"
     },
     {
       "id": "0e2a2520493c3b687c8a",
@@ -2441,7 +2546,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453787+00:00"
     },
     {
       "id": "a84d74f24cc4dd62f597",
@@ -2464,7 +2570,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453789+00:00"
     },
     {
       "id": "9379b3f3fe49199374b8",
@@ -2487,7 +2594,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453791+00:00"
     },
     {
       "id": "e2d3eb31e3acd061403d",
@@ -2510,7 +2618,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453793+00:00"
     },
     {
       "id": "9f014b5cf623baed6de3",
@@ -2533,7 +2642,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453795+00:00"
     },
     {
       "id": "14caec22c63d5fe8ab90",
@@ -2556,7 +2666,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453797+00:00"
     },
     {
       "id": "c0632c1aec2f0bd32302",
@@ -2579,7 +2690,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453799+00:00"
     },
     {
       "id": "556a7bc65a28623ac8a5",
@@ -2602,7 +2714,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453801+00:00"
     },
     {
       "id": "683bf854f202438456f8",
@@ -2625,7 +2738,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453802+00:00"
     },
     {
       "id": "a1ede74ee71a4eb8faa8",
@@ -2648,7 +2762,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453804+00:00"
     },
     {
       "id": "c0168766992290d65b3f",
@@ -2671,7 +2786,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453806+00:00"
     },
     {
       "id": "1907d2d659017f58d04d",
@@ -2694,7 +2810,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453808+00:00"
     },
     {
       "id": "af83588cde831d08a386",
@@ -2717,7 +2834,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453810+00:00"
     },
     {
       "id": "2531c64e83699de4938d",
@@ -2740,7 +2858,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453812+00:00"
     },
     {
       "id": "7cf206763eac38c1ee68",
@@ -2763,7 +2882,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453814+00:00"
     },
     {
       "id": "abc3b002fcd46f335203",
@@ -2786,7 +2906,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453816+00:00"
     },
     {
       "id": "df4f741f28ac392d7690",
@@ -2809,7 +2930,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453817+00:00"
     },
     {
       "id": "8b134a5ecbc2bf62904f",
@@ -2832,7 +2954,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453819+00:00"
     },
     {
       "id": "a8029d602dacf24c8df1",
@@ -2855,7 +2978,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453821+00:00"
     },
     {
       "id": "7dd2a532e819932f3c3e",
@@ -2878,7 +3002,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453823+00:00"
     },
     {
       "id": "0c6140b24a1ad96ed391",
@@ -2901,7 +3026,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453825+00:00"
     },
     {
       "id": "99a85463b8c903a072e2",
@@ -2924,7 +3050,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453827+00:00"
     },
     {
       "id": "0799f2c9f6b8b4a88917",
@@ -2947,7 +3074,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453829+00:00"
     },
     {
       "id": "2907f8712d8a1c86727e",
@@ -2970,7 +3098,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453831+00:00"
     },
     {
       "id": "bdc63f491aa119a070a3",
@@ -2993,7 +3122,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453833+00:00"
     },
     {
       "id": "703db4dab53e8ec626c6",
@@ -3016,7 +3146,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453835+00:00"
     },
     {
       "id": "d60a91d3b5f95382c64c",
@@ -3039,7 +3170,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453837+00:00"
     },
     {
       "id": "9d0c7fee663abb7c4e63",
@@ -3062,7 +3194,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453839+00:00"
     },
     {
       "id": "1dd114ed65a0b9e7b918",
@@ -3085,7 +3218,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453841+00:00"
     },
     {
       "id": "464e40eb46344e69cf69",
@@ -3108,7 +3242,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453863+00:00"
     },
     {
       "id": "868031c48c4fa74775fb",
@@ -3131,7 +3266,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453881+00:00"
     },
     {
       "id": "6792de549b1ab1ca6e0a",
@@ -3154,7 +3290,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453884+00:00"
     },
     {
       "id": "6c611799d6753e2de1fc",
@@ -3177,7 +3314,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453887+00:00"
     },
     {
       "id": "fc4b462ad6045e682769",
@@ -3200,7 +3338,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453889+00:00"
     },
     {
       "id": "e2e68ed121450e2075c2",
@@ -3223,7 +3362,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453892+00:00"
     },
     {
       "id": "9bbe098a987a05e9dbb0",
@@ -3246,7 +3386,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453894+00:00"
     },
     {
       "id": "522bd3dddb8f806a8a05",
@@ -3269,7 +3410,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453896+00:00"
     },
     {
       "id": "b6d3ff7370b2cba505a4",
@@ -3292,7 +3434,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453898+00:00"
     },
     {
       "id": "c377e21b84a1648f7977",
@@ -3315,7 +3458,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453900+00:00"
     },
     {
       "id": "fa529468d4ae04939f43",
@@ -3338,7 +3482,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453903+00:00"
     },
     {
       "id": "9d9dc786c7ed596bd01a",
@@ -3361,7 +3506,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453904+00:00"
     },
     {
       "id": "42a58a0e48c0b4158e07",
@@ -3384,7 +3530,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453907+00:00"
     },
     {
       "id": "c81ad13e7da5a3ce0ab3",
@@ -3407,7 +3554,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453909+00:00"
     },
     {
       "id": "04ff4a94ffffa03b0e17",
@@ -3430,7 +3578,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:22:55.453911+00:00"
     },
     {
       "id": "d5f628bb43d92eba5f47",
@@ -3453,7 +3602,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846784+00:00"
     },
     {
       "id": "1ffe8357cc1b8c2ba348",
@@ -3476,7 +3626,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846804+00:00"
     },
     {
       "id": "1cd148511a8c66589bb8",
@@ -3499,7 +3650,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846810+00:00"
     },
     {
       "id": "31ee77f218eac45905f7",
@@ -3522,7 +3674,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846813+00:00"
     },
     {
       "id": "59924f904b305fea74ed",
@@ -3545,7 +3698,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846817+00:00"
     },
     {
       "id": "a988254bbb3c64f8efb8",
@@ -3568,7 +3722,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846821+00:00"
     },
     {
       "id": "67e66efc70f09d88b6c1",
@@ -3591,7 +3746,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846825+00:00"
     },
     {
       "id": "4856a87fd9c758e7264f",
@@ -3614,7 +3770,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846829+00:00"
     },
     {
       "id": "3d85c08a61c7b4c5cd7e",
@@ -3637,7 +3794,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846833+00:00"
     },
     {
       "id": "51b00518eb49146b5fcf",
@@ -3660,7 +3818,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846837+00:00"
     },
     {
       "id": "e3a3da7dac3fdba1a0cc",
@@ -3683,7 +3842,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846840+00:00"
     },
     {
       "id": "c05404aadc3f090a446a",
@@ -3706,7 +3866,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846861+00:00"
     },
     {
       "id": "664042d432e3b3279393",
@@ -3729,7 +3890,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846867+00:00"
     },
     {
       "id": "43f3e2e6a0e23242bf5f",
@@ -3752,7 +3914,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846881+00:00"
     },
     {
       "id": "12085db3d43f46e882ca",
@@ -3775,7 +3938,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:07.846887+00:00"
     },
     {
       "id": "1c817e8cece93bac02a2",
@@ -3798,7 +3962,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:22.733000+00:00"
     },
     {
       "id": "0df7d0b4b5cc3452e7e4",
@@ -3821,7 +3986,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:22.733019+00:00"
     },
     {
       "id": "4a0276f1a9313c80aee0",
@@ -3844,7 +4010,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:22.733024+00:00"
     },
     {
       "id": "f8b8dd9bafb1bb0e0913",
@@ -3867,7 +4034,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:22.733028+00:00"
     },
     {
       "id": "1efa12325ece69d9b0b1",
@@ -3890,7 +4058,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:22.733034+00:00"
     },
     {
       "id": "70c74461e089159f2a4f",
@@ -3913,7 +4082,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770560+00:00"
     },
     {
       "id": "8efb784c7613abc96f7e",
@@ -3936,7 +4106,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770579+00:00"
     },
     {
       "id": "6d31c81b01771073d733",
@@ -3959,7 +4130,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770599+00:00"
     },
     {
       "id": "d07c1bc5f4fd00b999ae",
@@ -3982,7 +4154,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770603+00:00"
     },
     {
       "id": "a4b3ac069597f1e1e5ae",
@@ -4005,7 +4178,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770607+00:00"
     },
     {
       "id": "443b2d9f55effd921fae",
@@ -4028,7 +4202,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770610+00:00"
     },
     {
       "id": "509a4445148025f14201",
@@ -4051,7 +4226,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770613+00:00"
     },
     {
       "id": "563ba6a2d0efdf5bd955",
@@ -4074,7 +4250,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770615+00:00"
     },
     {
       "id": "3a3ce4949517e99ff693",
@@ -4097,7 +4274,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770618+00:00"
     },
     {
       "id": "ee93d6153791a5cc99d6",
@@ -4120,7 +4298,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770621+00:00"
     },
     {
       "id": "4f15fe5a82f845a12ac7",
@@ -4143,7 +4322,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770623+00:00"
     },
     {
       "id": "cfc981cc963d389d2651",
@@ -4166,7 +4346,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770625+00:00"
     },
     {
       "id": "2876903fb9837f1bd768",
@@ -4189,7 +4370,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770627+00:00"
     },
     {
       "id": "0eca512536c576988381",
@@ -4212,7 +4394,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770630+00:00"
     },
     {
       "id": "80fa7af488bca638bce6",
@@ -4235,7 +4418,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770632+00:00"
     },
     {
       "id": "832d31d84bcd4fe80ac6",
@@ -4258,7 +4442,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770634+00:00"
     },
     {
       "id": "121de5bfed948be57ace",
@@ -4281,7 +4466,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770637+00:00"
     },
     {
       "id": "bd61980d8af7d41ec3fa",
@@ -4304,7 +4490,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770639+00:00"
     },
     {
       "id": "5d05f9873ca44d3abc7b",
@@ -4327,7 +4514,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770641+00:00"
     },
     {
       "id": "039a3c05325e3ca64c1a",
@@ -4350,7 +4538,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770644+00:00"
     },
     {
       "id": "3f656e09742a01e551b0",
@@ -4373,7 +4562,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770647+00:00"
     },
     {
       "id": "db10e73f1ea9a884c904",
@@ -4396,7 +4586,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770649+00:00"
     },
     {
       "id": "34c76a06adb387dacf70",
@@ -4419,7 +4610,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770651+00:00"
     },
     {
       "id": "98997d847462c6ba4706",
@@ -4442,7 +4634,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770653+00:00"
     },
     {
       "id": "baae49b075c872e06851",
@@ -4465,7 +4658,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:45.770656+00:00"
     },
     {
       "id": "5591719372b385a16ee7",
@@ -4488,7 +4682,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859162+00:00"
     },
     {
       "id": "57b9f2853f4fbd2b7e12",
@@ -4511,7 +4706,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859182+00:00"
     },
     {
       "id": "4bf20b86fd1aaad635b5",
@@ -4534,7 +4730,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859187+00:00"
     },
     {
       "id": "967a681182e130a54e8f",
@@ -4557,7 +4754,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859190+00:00"
     },
     {
       "id": "985ebc59bf2d8ebc57c9",
@@ -4580,7 +4778,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859194+00:00"
     },
     {
       "id": "f6482c396070188d4876",
@@ -4603,7 +4802,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859198+00:00"
     },
     {
       "id": "a6a071b8c666e03d8644",
@@ -4626,7 +4826,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859201+00:00"
     },
     {
       "id": "6cb261477f00452ab791",
@@ -4649,7 +4850,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859205+00:00"
     },
     {
       "id": "02c1f5713c38e98a1a56",
@@ -4672,7 +4874,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859208+00:00"
     },
     {
       "id": "17356bb64c26ff28c2e5",
@@ -4695,7 +4898,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859211+00:00"
     },
     {
       "id": "8d5703d264bce1779b89",
@@ -4718,7 +4922,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859214+00:00"
     },
     {
       "id": "b895cada16a0d216e8ff",
@@ -4741,7 +4946,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859218+00:00"
     },
     {
       "id": "e9362fa89d937abd06b7",
@@ -4764,7 +4970,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859221+00:00"
     },
     {
       "id": "422678f564a3189725b8",
@@ -4787,7 +4994,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859223+00:00"
     },
     {
       "id": "a3346f6e6c62db9c8ffd",
@@ -4810,7 +5018,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859225+00:00"
     },
     {
       "id": "c30420eb2185a70529ae",
@@ -4833,7 +5042,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859228+00:00"
     },
     {
       "id": "18fb99af205bd694e6c0",
@@ -4856,7 +5066,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859231+00:00"
     },
     {
       "id": "58ed636243009f3dcb51",
@@ -4879,7 +5090,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859234+00:00"
     },
     {
       "id": "339a5f724ec401f326b9",
@@ -4902,7 +5114,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859238+00:00"
     },
     {
       "id": "acb3e7306aaaeb063d80",
@@ -4925,7 +5138,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859241+00:00"
     },
     {
       "id": "18b3e873b7d1e4b22715",
@@ -4948,7 +5162,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859243+00:00"
     },
     {
       "id": "a20f7540d68a55d82d4f",
@@ -4971,7 +5186,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859245+00:00"
     },
     {
       "id": "b3a8ccc29a199175beab",
@@ -4994,7 +5210,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859247+00:00"
     },
     {
       "id": "266b0dea2d81b1f58a94",
@@ -5017,7 +5234,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859249+00:00"
     },
     {
       "id": "001176ceb9749b425484",
@@ -5040,7 +5258,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859251+00:00"
     },
     {
       "id": "4692d11af01b3cf86ad3",
@@ -5063,7 +5282,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859253+00:00"
     },
     {
       "id": "801e98fad86097a5ac66",
@@ -5086,7 +5306,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859255+00:00"
     },
     {
       "id": "9d343a37453f01a91411",
@@ -5109,7 +5330,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859257+00:00"
     },
     {
       "id": "8a98460a41d64bf8623d",
@@ -5132,7 +5354,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859259+00:00"
     },
     {
       "id": "b7ac1808db49e688efbe",
@@ -5155,7 +5378,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859262+00:00"
     },
     {
       "id": "56800864359309ea8d33",
@@ -5178,7 +5402,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859264+00:00"
     },
     {
       "id": "ee53cd6dd93625c21a19",
@@ -5201,7 +5426,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859266+00:00"
     },
     {
       "id": "2f3f506b0380d70981ee",
@@ -5224,7 +5450,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859268+00:00"
     },
     {
       "id": "a2f1eb7af3864864b8d8",
@@ -5247,7 +5474,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859270+00:00"
     },
     {
       "id": "97760ad450dfda2e9a2a",
@@ -5270,7 +5498,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859272+00:00"
     },
     {
       "id": "89eaccaa589ffb7de4b9",
@@ -5293,7 +5522,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859274+00:00"
     },
     {
       "id": "69e5cbf5f18ef7f5c42d",
@@ -5316,7 +5546,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859276+00:00"
     },
     {
       "id": "dead2ece699f529e788b",
@@ -5339,7 +5570,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859279+00:00"
     },
     {
       "id": "0c82e2ad9f51aa2d0595",
@@ -5362,7 +5594,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859281+00:00"
     },
     {
       "id": "1396021dd3d43f1e509b",
@@ -5385,7 +5618,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859283+00:00"
     },
     {
       "id": "c8458543a11f50b11ea5",
@@ -5408,7 +5642,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859285+00:00"
     },
     {
       "id": "7b3d9170e7ddfba99963",
@@ -5431,7 +5666,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859287+00:00"
     },
     {
       "id": "1d791f794f4d936abb66",
@@ -5454,7 +5690,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859289+00:00"
     },
     {
       "id": "f50fc7399448453f3949",
@@ -5477,7 +5714,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859291+00:00"
     },
     {
       "id": "45ba0d364bc445a3a791",
@@ -5500,7 +5738,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859292+00:00"
     },
     {
       "id": "0632ee004857e7c88132",
@@ -5523,7 +5762,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859295+00:00"
     },
     {
       "id": "1260b954a7a916cf3183",
@@ -5546,7 +5786,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859297+00:00"
     },
     {
       "id": "a3f12af5c7f18e892490",
@@ -5569,7 +5810,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859301+00:00"
     },
     {
       "id": "d3562967ab59eff73511",
@@ -5592,7 +5834,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859305+00:00"
     },
     {
       "id": "af6dde4cf8a0220162fc",
@@ -5615,7 +5858,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859308+00:00"
     },
     {
       "id": "e761d31bcbe262f8e86f",
@@ -5638,7 +5882,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859310+00:00"
     },
     {
       "id": "968c38082a0741d58445",
@@ -5661,7 +5906,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859312+00:00"
     },
     {
       "id": "f5aa34c2e672e62c6eac",
@@ -5684,7 +5930,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859314+00:00"
     },
     {
       "id": "88bbc55763491f5f06dc",
@@ -5707,7 +5954,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859316+00:00"
     },
     {
       "id": "73d206c4ff839806f04f",
@@ -5730,7 +5978,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859318+00:00"
     },
     {
       "id": "e196e09043b8c189d363",
@@ -5753,7 +6002,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859320+00:00"
     },
     {
       "id": "3053d883c68881d27ffe",
@@ -5776,7 +6026,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859322+00:00"
     },
     {
       "id": "49df119db54d8ce9f03d",
@@ -5799,7 +6050,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859324+00:00"
     },
     {
       "id": "de6698a5dca5f2a8d52a",
@@ -5822,7 +6074,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859327+00:00"
     },
     {
       "id": "339693b3b400f8f53dbd",
@@ -5845,7 +6098,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859329+00:00"
     },
     {
       "id": "7095d7ef8c714419051d",
@@ -5868,7 +6122,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859331+00:00"
     },
     {
       "id": "249fdd0cad2e65dd41b0",
@@ -5891,7 +6146,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859333+00:00"
     },
     {
       "id": "fa6ee251b1f7af868098",
@@ -5914,7 +6170,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859335+00:00"
     },
     {
       "id": "cf1c19f1e03da9fbe0b1",
@@ -5937,7 +6194,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859337+00:00"
     },
     {
       "id": "89416b942666d40d6ea7",
@@ -5960,7 +6218,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859339+00:00"
     },
     {
       "id": "20df58bc65c6bbb9fdbd",
@@ -5983,7 +6242,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859341+00:00"
     },
     {
       "id": "7c835ed2fce5703a743e",
@@ -6006,7 +6266,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859343+00:00"
     },
     {
       "id": "46dc758264fb9138a56e",
@@ -6029,7 +6290,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859345+00:00"
     },
     {
       "id": "016216c049f37ee5d8d5",
@@ -6052,7 +6314,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859348+00:00"
     },
     {
       "id": "269bc032d1984cb5de39",
@@ -6075,7 +6338,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859350+00:00"
     },
     {
       "id": "bd95fd6bb072d753b8ba",
@@ -6098,7 +6362,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859352+00:00"
     },
     {
       "id": "b509806ba7d8379d5626",
@@ -6121,7 +6386,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859354+00:00"
     },
     {
       "id": "0dda29387f5fccc6349a",
@@ -6144,7 +6410,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859356+00:00"
     },
     {
       "id": "841f644ce032ef906dc7",
@@ -6167,7 +6434,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859358+00:00"
     },
     {
       "id": "320a774eae182d4d096f",
@@ -6190,7 +6458,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859360+00:00"
     },
     {
       "id": "356c86d882e0cdd2435a",
@@ -6213,7 +6482,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859362+00:00"
     },
     {
       "id": "ff1badf4b8fe1b745d40",
@@ -6236,7 +6506,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859365+00:00"
     },
     {
       "id": "4723b3dffbf66cd2d6d2",
@@ -6259,7 +6530,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859367+00:00"
     },
     {
       "id": "9b72b91a588166669414",
@@ -6282,7 +6554,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859369+00:00"
     },
     {
       "id": "94c98581ca9710abb42a",
@@ -6305,7 +6578,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859371+00:00"
     },
     {
       "id": "b34a181ad398d5ecbe64",
@@ -6328,7 +6602,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859373+00:00"
     },
     {
       "id": "793170766d3bcd5885d5",
@@ -6351,7 +6626,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859375+00:00"
     },
     {
       "id": "50c37ab0356cb3abeef7",
@@ -6374,7 +6650,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859377+00:00"
     },
     {
       "id": "cb923c6dd3bf049a3594",
@@ -6397,7 +6674,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859379+00:00"
     },
     {
       "id": "5e9d4b47bdcc9ebe4754",
@@ -6420,7 +6698,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859381+00:00"
     },
     {
       "id": "9571d99a59fb995d1a5f",
@@ -6443,7 +6722,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859383+00:00"
     },
     {
       "id": "830f62d3b51e666c45dd",
@@ -6466,7 +6746,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859385+00:00"
     },
     {
       "id": "ed5391918237e3dce8b4",
@@ -6489,7 +6770,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859387+00:00"
     },
     {
       "id": "ff89b622747475b04287",
@@ -6512,7 +6794,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859389+00:00"
     },
     {
       "id": "8b5e8bc05b18b53d49ad",
@@ -6535,7 +6818,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859392+00:00"
     },
     {
       "id": "bd8eb80011ad58e3c170",
@@ -6558,7 +6842,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859393+00:00"
     },
     {
       "id": "44a086d1da8d2598ac7c",
@@ -6581,7 +6866,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859396+00:00"
     },
     {
       "id": "246119abc5ae5ada5f86",
@@ -6604,7 +6890,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859398+00:00"
     },
     {
       "id": "42ec3c44ef814a88a57e",
@@ -6627,7 +6914,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859400+00:00"
     },
     {
       "id": "821fdf4597016f86313c",
@@ -6650,7 +6938,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859402+00:00"
     },
     {
       "id": "5ef19a4b7314636d5b96",
@@ -6673,7 +6962,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859404+00:00"
     },
     {
       "id": "a9668d670fc1cb5b7edf",
@@ -6696,7 +6986,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859407+00:00"
     },
     {
       "id": "dd50292fa7ec8824a59a",
@@ -6719,7 +7010,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859409+00:00"
     },
     {
       "id": "c4cf9cc36b4b27541dad",
@@ -6742,7 +7034,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859411+00:00"
     },
     {
       "id": "e3278fea38b08e742be0",
@@ -6765,7 +7058,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859413+00:00"
     },
     {
       "id": "f40c1c89a4e6e6bb6fb0",
@@ -6788,7 +7082,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859415+00:00"
     },
     {
       "id": "80505826744e61f46f10",
@@ -6811,7 +7106,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859417+00:00"
     },
     {
       "id": "bdedb0519fb0733f2c3e",
@@ -6834,7 +7130,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859419+00:00"
     },
     {
       "id": "9779f3e75254d28f6189",
@@ -6857,7 +7154,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859421+00:00"
     },
     {
       "id": "5f9d34554202470ac45c",
@@ -6880,7 +7178,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859423+00:00"
     },
     {
       "id": "04d64d1ccaec35115d85",
@@ -6903,7 +7202,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859425+00:00"
     },
     {
       "id": "6edb61f75bd9fea635f5",
@@ -6926,7 +7226,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859427+00:00"
     },
     {
       "id": "55ea391f945bb487f553",
@@ -6949,7 +7250,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859429+00:00"
     },
     {
       "id": "81fad38f1191911307e2",
@@ -6972,7 +7274,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859431+00:00"
     },
     {
       "id": "2d065e3e7c2371117de6",
@@ -6995,7 +7298,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859433+00:00"
     },
     {
       "id": "b7b757c704c6f9c90cbd",
@@ -7018,7 +7322,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859435+00:00"
     },
     {
       "id": "33aa84c382069417dfcb",
@@ -7041,7 +7346,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859437+00:00"
     },
     {
       "id": "58c012d91c289d0d4527",
@@ -7064,7 +7370,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859439+00:00"
     },
     {
       "id": "5d32a5fa004cb76e8a25",
@@ -7087,7 +7394,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859441+00:00"
     },
     {
       "id": "70b8dbb15dc418163fd3",
@@ -7110,7 +7418,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859444+00:00"
     },
     {
       "id": "0cb89c4af6cc59063f16",
@@ -7133,7 +7442,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859447+00:00"
     },
     {
       "id": "009bd262aa79c0beb4ab",
@@ -7156,7 +7466,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859449+00:00"
     },
     {
       "id": "43b5c7d59871147b3d05",
@@ -7179,7 +7490,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859451+00:00"
     },
     {
       "id": "aefb0a805e1e49940f08",
@@ -7202,7 +7514,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859453+00:00"
     },
     {
       "id": "d08b980a1fe01184708e",
@@ -7225,7 +7538,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859455+00:00"
     },
     {
       "id": "b08e313c8e14978019a0",
@@ -7248,7 +7562,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859457+00:00"
     },
     {
       "id": "2826805cd5b936b1dbb7",
@@ -7271,7 +7586,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859459+00:00"
     },
     {
       "id": "1156c930023cfdb4f07a",
@@ -7294,7 +7610,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859461+00:00"
     },
     {
       "id": "2e2417e91f1cc552339a",
@@ -7317,7 +7634,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859463+00:00"
     },
     {
       "id": "75beaf68953f92ef6c9d",
@@ -7340,7 +7658,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859465+00:00"
     },
     {
       "id": "994e57c8aa24a375f7db",
@@ -7363,7 +7682,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859467+00:00"
     },
     {
       "id": "ebad35076e5391143585",
@@ -7386,7 +7706,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859469+00:00"
     },
     {
       "id": "a3fdafc4946a7e1d5f0f",
@@ -7409,7 +7730,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859471+00:00"
     },
     {
       "id": "a93664e43574065b5db1",
@@ -7432,7 +7754,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859474+00:00"
     },
     {
       "id": "c933186bb683e5b9bdfe",
@@ -7455,7 +7778,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859476+00:00"
     },
     {
       "id": "98386147dfdd026354f1",
@@ -7478,7 +7802,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859478+00:00"
     },
     {
       "id": "a5e14e1ac338679bd8a6",
@@ -7501,7 +7826,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859480+00:00"
     },
     {
       "id": "86f9482ecac5a8cba815",
@@ -7524,7 +7850,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859482+00:00"
     },
     {
       "id": "a2083deebfd2befe4e7d",
@@ -7547,7 +7874,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859484+00:00"
     },
     {
       "id": "f91c59a8af249c075060",
@@ -7570,7 +7898,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859486+00:00"
     },
     {
       "id": "2512b96b670dc17396a4",
@@ -7593,7 +7922,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859488+00:00"
     },
     {
       "id": "4eaf19ccd00a3cc9dacc",
@@ -7616,7 +7946,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859490+00:00"
     },
     {
       "id": "0d2b3e8adaf1d13b04cf",
@@ -7639,7 +7970,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859492+00:00"
     },
     {
       "id": "3d91afdebe31389abcdc",
@@ -7662,7 +7994,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859495+00:00"
     },
     {
       "id": "208cd51268bdb807019c",
@@ -7685,7 +8018,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859497+00:00"
     },
     {
       "id": "c2248995cb3682ddc39a",
@@ -7708,7 +8042,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859498+00:00"
     },
     {
       "id": "99321534ec5f123b703b",
@@ -7731,7 +8066,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859500+00:00"
     },
     {
       "id": "3428cca2354ef5b5f278",
@@ -7754,7 +8090,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859503+00:00"
     },
     {
       "id": "88446fb830caad6f34c7",
@@ -7777,7 +8114,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859505+00:00"
     },
     {
       "id": "453b394f470ab6eded4c",
@@ -7800,7 +8138,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859507+00:00"
     },
     {
       "id": "695644051de55afad47c",
@@ -7823,7 +8162,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859510+00:00"
     },
     {
       "id": "c3bb50b50677c40f9186",
@@ -7846,7 +8186,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859512+00:00"
     },
     {
       "id": "f65833108c8aae02142c",
@@ -7869,7 +8210,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859514+00:00"
     },
     {
       "id": "56fc670ea1345966f31c",
@@ -7892,7 +8234,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859534+00:00"
     },
     {
       "id": "9cb48430b6d2eb8cc8aa",
@@ -7915,7 +8258,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859537+00:00"
     },
     {
       "id": "3aee53c47401edd88074",
@@ -7938,7 +8282,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859538+00:00"
     },
     {
       "id": "884420b9a4b570897fb5",
@@ -7961,7 +8306,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859540+00:00"
     },
     {
       "id": "0fb9f63c3ee4e787801b",
@@ -7984,7 +8330,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859542+00:00"
     },
     {
       "id": "01b0fa2cd70135df3633",
@@ -8007,7 +8354,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859544+00:00"
     },
     {
       "id": "65a63c4ba5ec6212f423",
@@ -8030,7 +8378,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859546+00:00"
     },
     {
       "id": "b185ed50f1e553d758b3",
@@ -8053,7 +8402,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859548+00:00"
     },
     {
       "id": "ccff016d100aae7aeaee",
@@ -8076,7 +8426,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859550+00:00"
     },
     {
       "id": "ed3d30cf5ef89de486bf",
@@ -8099,7 +8450,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859552+00:00"
     },
     {
       "id": "f7b9de72c57fc583e32b",
@@ -8122,7 +8474,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859554+00:00"
     },
     {
       "id": "187c5a03e19777bc90fe",
@@ -8145,7 +8498,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859555+00:00"
     },
     {
       "id": "cf270d58e747e4a6f382",
@@ -8168,7 +8522,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859557+00:00"
     },
     {
       "id": "95b12976d6f4ee587c59",
@@ -8191,7 +8546,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859559+00:00"
     },
     {
       "id": "ee7ade94c5d358254b26",
@@ -8214,7 +8570,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859561+00:00"
     },
     {
       "id": "00d301e46a36148f551f",
@@ -8237,7 +8594,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859563+00:00"
     },
     {
       "id": "6723e619cc268f900854",
@@ -8260,7 +8618,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859566+00:00"
     },
     {
       "id": "75e80407c6a414cc0de9",
@@ -8283,7 +8642,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859568+00:00"
     },
     {
       "id": "b7ce0dbf378957257816",
@@ -8306,7 +8666,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859570+00:00"
     },
     {
       "id": "151f9159dc9a994c5e64",
@@ -8329,7 +8690,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859572+00:00"
     },
     {
       "id": "f6583b33a2e709fcb9e9",
@@ -8352,7 +8714,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859573+00:00"
     },
     {
       "id": "1de8c2070f68c3a67fe8",
@@ -8375,7 +8738,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859575+00:00"
     },
     {
       "id": "de7c7491a31c712fbd2b",
@@ -8398,7 +8762,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859577+00:00"
     },
     {
       "id": "83f07c2f1163dc3037ce",
@@ -8421,7 +8786,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859579+00:00"
     },
     {
       "id": "76baa01302109243f21f",
@@ -8444,7 +8810,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859581+00:00"
     },
     {
       "id": "04757e1a70ae5551bbb2",
@@ -8467,7 +8834,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859583+00:00"
     },
     {
       "id": "1a372680969c202e67bd",
@@ -8490,7 +8858,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:47.859585+00:00"
     },
     {
       "id": "0734249a23fd342afb38",
@@ -8513,7 +8882,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581207+00:00"
     },
     {
       "id": "9836fd9b719046409ae9",
@@ -8536,7 +8906,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581227+00:00"
     },
     {
       "id": "6f5c72e1fe03f0f7c4f9",
@@ -8559,7 +8930,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581230+00:00"
     },
     {
       "id": "5f8e2c8fa791917ae6b4",
@@ -8582,7 +8954,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581235+00:00"
     },
     {
       "id": "fe55149716e5a1bcac8f",
@@ -8605,7 +8978,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581241+00:00"
     },
     {
       "id": "f134e0dc21c93b491873",
@@ -8628,7 +9002,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581244+00:00"
     },
     {
       "id": "7d95454fccbb838d9e23",
@@ -8651,7 +9026,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581248+00:00"
     },
     {
       "id": "de544c51ab21ea868d69",
@@ -8674,7 +9050,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581251+00:00"
     },
     {
       "id": "138cc5e4d28f00a72109",
@@ -8697,7 +9074,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581254+00:00"
     },
     {
       "id": "48e82fae2ef4c36fc47a",
@@ -8720,7 +9098,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:49.581257+00:00"
     },
     {
       "id": "319eed0cc600dc9ed398",
@@ -8743,7 +9122,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:52.696284+00:00"
     },
     {
       "id": "dd48647041e4f25c730d",
@@ -8766,7 +9146,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:52.696304+00:00"
     },
     {
       "id": "abf277359dd4a4c44dff",
@@ -8789,7 +9170,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:52.696309+00:00"
     },
     {
       "id": "8033917b3c78b0c7323d",
@@ -8812,7 +9194,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:52.696312+00:00"
     },
     {
       "id": "c25e072a792565a8a388",
@@ -8835,7 +9218,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112744+00:00"
     },
     {
       "id": "42b708a20d9fbe960ea9",
@@ -8858,7 +9242,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112764+00:00"
     },
     {
       "id": "b54b2c806b2d10d64ebd",
@@ -8881,7 +9266,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112769+00:00"
     },
     {
       "id": "50675f84903f8b38ade0",
@@ -8904,7 +9290,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112773+00:00"
     },
     {
       "id": "4589e7c5ff0e107d81ea",
@@ -8927,7 +9314,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112776+00:00"
     },
     {
       "id": "8b393d852490266dcc92",
@@ -8950,7 +9338,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112782+00:00"
     },
     {
       "id": "e9709b26b4f223c6b4be",
@@ -8973,7 +9362,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112785+00:00"
     },
     {
       "id": "a58669632cb05b9db3d6",
@@ -8996,7 +9386,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112789+00:00"
     },
     {
       "id": "2c68589ad3bb85495d26",
@@ -9019,7 +9410,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112793+00:00"
     },
     {
       "id": "3403dcd22c1b472c0a1f",
@@ -9042,7 +9434,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112796+00:00"
     },
     {
       "id": "4a841902be168280dabe",
@@ -9065,7 +9458,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112799+00:00"
     },
     {
       "id": "14791bb54b83d9dbc0d3",
@@ -9088,7 +9482,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112803+00:00"
     },
     {
       "id": "70406977ce33f1af5cc6",
@@ -9111,7 +9506,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112807+00:00"
     },
     {
       "id": "66dab84cc145c1e988f5",
@@ -9134,7 +9530,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112811+00:00"
     },
     {
       "id": "604c52ded126e5b011d1",
@@ -9157,7 +9554,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112815+00:00"
     },
     {
       "id": "ef8e4b8e40f13cb53ca5",
@@ -9180,7 +9578,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112817+00:00"
     },
     {
       "id": "e579ca50b4b24e876883",
@@ -9203,7 +9602,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112819+00:00"
     },
     {
       "id": "2dc27eefa94a8918bee1",
@@ -9226,7 +9626,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112823+00:00"
     },
     {
       "id": "ceaaf1391c19787af5a0",
@@ -9249,7 +9650,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112825+00:00"
     },
     {
       "id": "b059f40a3dc73a087d3d",
@@ -9272,7 +9674,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112827+00:00"
     },
     {
       "id": "a79ef70507eba08b6a81",
@@ -9295,7 +9698,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112831+00:00"
     },
     {
       "id": "61e836b95e025f642938",
@@ -9318,7 +9722,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112835+00:00"
     },
     {
       "id": "526a2cf289bdae77d274",
@@ -9341,7 +9746,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112838+00:00"
     },
     {
       "id": "0c59be557e19ebb0e3c7",
@@ -9364,7 +9770,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112860+00:00"
     },
     {
       "id": "53d88973a91615d26350",
@@ -9387,7 +9794,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112867+00:00"
     },
     {
       "id": "99caaff6e15d3c1f974a",
@@ -9410,7 +9818,8 @@
         "duplicate_checked": false
       },
       "publish_allowed": false,
-      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified."
+      "warning": "Discovery candidate only. Do not publish until the official notice and all material details are manually verified.",
+      "last_seen_utc": "2026-11-17T01:23:57.112871+00:00"
     }
   ]
 }

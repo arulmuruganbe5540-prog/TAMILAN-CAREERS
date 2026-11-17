@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-16T18:42:44.961232+00:00",
+  "checked_at_utc": "2026-11-17T01:24:14.884630+00:00",
   "check_interval_hours": 6,
   "registered_sources": 48,
   "successful_sources": 15,
@@ -16,13 +16,13 @@
       "error": "Redirected outside the registered official host"
     },
     {
-      "source_id": "upsc",
-      "url": "https://upsc.gov.in/",
+      "source_id": "indian-railways",
+      "url": "https://indianrailways.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "indian-railways",
-      "url": "https://indianrailways.gov.in/",
+      "source_id": "upsc",
+      "url": "https://upsc.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -56,23 +56,18 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
-    },
-    {
       "source_id": "tnusrb",
       "url": "https://www.tnusrb.tn.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "mrb-tamilnadu",
-      "url": "https://www.mrb.tn.gov.in/",
+      "source_id": "trb-tamilnadu",
+      "url": "https://www.trb.tn.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "trb-tamilnadu",
-      "url": "https://www.trb.tn.gov.in/",
+      "source_id": "mrb-tamilnadu",
+      "url": "https://www.mrb.tn.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -96,19 +91,24 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
       "source_id": "gpsc-gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
       "error": "<urlopen error [Errno 101] Network is unreachable>"
     },
     {
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
       "source_id": "hpsc",
       "url": "https://hpsc.gov.in/",
       "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "hppsc",
-      "url": "https://hppsc.hp.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "jpsc",
@@ -121,13 +121,13 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "kpsc",
-      "url": "https://kpsc.kar.nic.in/",
+      "source_id": "hppsc",
+      "url": "https://hppsc.hp.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "mppsc",
-      "url": "https://mppsc.mp.gov.in/",
+      "source_id": "kpsc",
+      "url": "https://kpsc.kar.nic.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -136,9 +136,9 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+      "source_id": "mppsc",
+      "url": "https://mppsc.mp.gov.in/",
+      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "rpsc",

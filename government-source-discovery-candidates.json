@@ -1,10 +1,839 @@
 {
   "schema_version": 1,
-  "generated_at_utc": null,
-  "trusted_sources_scanned": 0,
-  "new_source_candidates_seen_this_run": 0,
-  "total_source_candidates": 0,
+  "generated_at_utc": "2026-11-17T01:25:24.166716+00:00",
+  "trusted_sources_scanned": 48,
+  "new_source_candidates_seen_this_run": 58,
+  "total_source_candidates": 37,
   "policy": "No candidate is added to the trusted source registry automatically. Admin verification is required.",
-  "items": [],
-  "scan_errors": []
+  "items": [
+    {
+      "candidate_url": "https://bpsconline.bihar.gov.in/candidate/login",
+      "candidate_domain": "bpsconline.bihar.gov.in",
+      "link_title": "Online Application",
+      "discovered_via_source_id": "bpsc",
+      "discovered_via_authority": "Bihar Public Service Commission",
+      "evidence_page": "https://bpsc.bihar.gov.in/",
+      "id": "503c54f7c35f2e5b2c4f",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:42.521689+00:00",
+      "last_seen_utc": "2026-11-17T01:24:42.521691+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://da.ncs.gov.in/",
+      "candidate_domain": "da.ncs.gov.in",
+      "link_title": "NCSC DA Dashboard",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "b83c0a0c3d57203f2e44",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919906+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919908+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://dget.ncs.gov.in/main.aspx",
+      "candidate_domain": "dget.ncs.gov.in",
+      "link_title": "Create Job Fairs and Events",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "e34eb307db3e62d6f4c2",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919901+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919902+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://eex.ncs.gov.in",
+      "candidate_domain": "eex.ncs.gov.in",
+      "link_title": "Employment Exchange Portal",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "a6886ce8d1dce8c9b1d4",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919912+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919914+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://emigrate.gov.in/",
+      "candidate_domain": "emigrate.gov.in",
+      "link_title": "Recruitment Agencies/International Employer",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "bf1b954e0f943672afda",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919886+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919889+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://empsconline.gov.in",
+      "candidate_domain": "empsconline.gov.in",
+      "link_title": "Apply Online",
+      "discovered_via_source_id": "mpsc-manipur",
+      "discovered_via_authority": "Manipur Public Service Commission",
+      "evidence_page": "https://mpscmanipur.gov.in/",
+      "id": "3b58e9067382afe9ab79",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:25:00.708354+00:00",
+      "last_seen_utc": "2026-11-17T01:25:00.708370+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://megrecruitment.nic.in/rpa/printadmitcard.htm",
+      "candidate_domain": "megrecruitment.nic.in",
+      "link_title": "Download Admit Card for Post prior to August 2025",
+      "discovered_via_source_id": "mpsc-meghalaya",
+      "discovered_via_authority": "Meghalaya Public Service Commission",
+      "evidence_page": "https://mpsc.meghalaya.gov.in/",
+      "id": "09e14bc8be7a521f74e2",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:25:03.884929+00:00",
+      "last_seen_utc": "2026-11-17T01:25:03.884947+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "For Jobseekers",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "74c2b29c95e6fd11a164",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920049+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920051+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/latest-update",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Classified Jobs",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "4107cab4cccc0b235806",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919762+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919764+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/assets/pdf/Jobseeker registration flowchart 1.pdf",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Registration Flowchart",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "407be27056e8059ae415",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919771+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919773+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/e-migrate",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "International Jobs",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "91fa08fa3c614743d7a5",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920092+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920094+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=Healthcare,Healthcare%20%26%20Medical",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Health",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "d91a2b3ca55227a41404",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920010+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920012+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?isGovernmentJob=true",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Government Jobs",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "cd2498ad811ecf3bb96d",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920086+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920088+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?pwdCandidateWelcome=true",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Jobs for Differently Abled",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "d50305b108cff93b4963",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920079+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920082+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?exServicemanPreferred=true",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Jobs for Ex-Servicemen",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "184a09926d715ef06817",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920043+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920045+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/career-counsellors",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "For Career Counsellor",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "87e79ef1af9e452cda97",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920066+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920068+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/career-center",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "For Career Center",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "027ff8dcd1f5527a2ffc",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920060+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920062+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/assets/pdf/Indian Staffing Federation (ISF Registration Flow).pdf",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Indian Staffing Federation (ISF Registration Flow)",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "9efe1605c038a9d5fb37",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919860+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919862+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/jobseeker-list",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "For Employers",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "a0a2a5f59d48ae1e0dbb",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920055+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920057+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/home/job-post",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Post New Jobs",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "aec186a15212b6c296b5",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919873+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919874+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/home/job-fair/jobFairs",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Participate in Job Fairs and Events",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "6976344a0938f4bf7743",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919879+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919881+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/login/employer",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Post New Jobs",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "8646c715a4d762e9f948",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919893+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919896+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/NCSReportDashboard",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "NCS Dashboard",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "fcd612cb5b6c923232e6",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919918+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919920+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/careerSchemes",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Career Information",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "12d02e58787d9d24e94f",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920073+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920075+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/Pmis-jobList",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Internships",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "98d8577437b01ca7baa3",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919930+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919932+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-fair-list",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Job Fairs",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "0dc204213c0b21538ab6",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919957+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919959+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=IT%20and%20ITES,Telecom,IT%20Support%20%26%20BPO",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "IT & Communication",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "113448d14db9e2920921",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919967+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919969+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=Logistics,Logistics%20%26%20Warehousing",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Transportation and Storage",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "c3dba80ca5af8e75b987",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919973+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919975+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=Education,Tutors%20and%20Teacher%20Aides",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Education",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "57ea43a9757bbde3fea0",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919980+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919984+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=Operations%20and%20Maintenance,Admin%20Back%20Office,Office%20%26%20Administration",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Operations & Support",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "4add191b76d6ffe46d87",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919989+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919991+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=Production%20and%20Manufacturing,Manufacturing%20General,Manufacturing%20%26%20Production,Capital%20Goods%20Manufacturing,Electronics%20Manufacturing,Electrical%20Manufacturing",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Manufacturing",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "766967dc120217039055",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.919996+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.919998+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=BFSI",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Finance and Insurance",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "b317dbe9c39707169790",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920003+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920005+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=Mining%20and%20Quarrying,Oil%20Gas%20%26%20Energy,Water%20Supply%20Waste%20Mgmt",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Power and Energy",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "988f9a9573c300d0a11d",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920018+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920020+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?functionalAreas=Tourism%20and%20Hospitality,Hospitality%20%26%20Food%20Service",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Hospitality",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "d4bd168abe31fdee2505",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920025+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920028+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://ncs.gov.in/job-listing?genderPreference=FEMALE",
+      "candidate_domain": "ncs.gov.in",
+      "link_title": "Jobs for Women",
+      "discovered_via_source_id": "ncs",
+      "discovered_via_authority": "National Career Service",
+      "evidence_page": "https://ncs.gov.in/",
+      "id": "9c493ca82b87d65a011a",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:27.920033+00:00",
+      "last_seen_utc": "2026-11-17T01:24:27.920035+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://rpa.meghalaya.gov.in/",
+      "candidate_domain": "rpa.meghalaya.gov.in",
+      "link_title": "Online Application",
+      "discovered_via_source_id": "mpsc-meghalaya",
+      "discovered_via_authority": "Meghalaya Public Service Commission",
+      "evidence_page": "https://mpsc.meghalaya.gov.in/",
+      "id": "c22d35c1ac3ed426b020",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:25:03.884956+00:00",
+      "last_seen_utc": "2026-11-17T01:25:03.884958+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://tnpsc.gov.in/examdashboard/web/index.aspx?key=ksojs2efre3WFDsw5",
+      "candidate_domain": "tnpsc.gov.in",
+      "link_title": "COMBINED TECHNICAL SERVICES EXAMINATION (INTERVIEW POSTS) (Notification)",
+      "discovered_via_source_id": "tnpsc",
+      "discovered_via_authority": "Tamil Nadu Public Service Commission",
+      "evidence_page": "https://www.tnpsc.gov.in/",
+      "id": "5ac90ef680d2c9902607",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T01:24:31.441484+00:00",
+      "last_seen_utc": "2026-11-17T01:24:31.441486+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    }
+  ],
+  "scan_errors": [
+    {
+      "source_id": "rrb",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "source_id": "upsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "indian-railways",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "apprenticeship",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "join-indian-army",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "nabard",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "join-indian-navy",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "agniveervayu",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tnusrb",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "trb-tamilnadu",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "mrb-tamilnadu",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "gpsc-goa",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "appsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "appsc-arunachal",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "apsc-assam",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "psc-cg",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "gpsc-gujarat",
+      "error": "<urlopen error [Errno 101] Network is unreachable>"
+    },
+    {
+      "source_id": "hpsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "kerala-psc",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "jpsc",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
+      "source_id": "mpsc-mizoram",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "kpsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "hppsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "mppsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tgpsc",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "rpsc",
+      "error": "<urlopen error [Errno 101] Network is unreachable>"
+    },
+    {
+      "source_id": "spsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tpsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "psc-uk",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "ppsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "psc-wb",
+      "error": "<urlopen error timed out>"
+    }
+  ]
 }
