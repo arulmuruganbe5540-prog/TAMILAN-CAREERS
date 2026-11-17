@@ -35,6 +35,49 @@ async function fetchRegisteredPage(baseUrl:string){
  }
  throw new Error("Too many redirects");
 }
+function robotsAllows(text:string,pageUrl:string,userAgent:string){
+ const groups:{agents:string[];rules:{allow:boolean;path:string}[]}[]=[];
+ let agents:string[]=[],rules:{allow:boolean;path:string}[]=[];
+ for(const raw of text.split(/\r?\n/)){
+  const line=raw.split("#",1)[0].trim();if(!line)continue;
+  const ua=line.match(/^user-agent\s*:\s*(.+)$/i);
+  if(ua){
+   if(rules.length){groups.push({agents,rules});agents=[];rules=[];}
+   agents.push(ua[1].trim().toLowerCase());continue;
+  }
+  const rule=line.match(/^(allow|disallow)\s*:\s*(.*)$/i);
+  if(rule&&agents.length){
+   const path=rule[2].trim();if(path)rules.push({allow:rule[1].toLowerCase()==="allow",path});
+  }
+ }
+ if(agents.length)groups.push({agents,rules});
+ const token=userAgent.split(/[ /]/,1)[0].toLowerCase();
+ const specific=groups.filter(g=>g.agents.some(a=>a!=="*"&&token.includes(a)));
+ const applicable=specific.length?specific:groups.filter(g=>g.agents.includes("*"));
+ const allRules=applicable.flatMap(g=>g.rules);
+ const parsed=new URL(pageUrl);
+ const requestPath=parsed.pathname+parsed.search;
+ const matches=allRules.filter(r=>{
+  const pattern=r.path.split("*").map(part=>part.replace(/[.+?^{}()|[\]\\]/g,"\\ throw new Error("Too many redirects");
+}
+Deno.serve(async(req)=>{
+")).join(".*");
+  try{return new RegExp("^"+pattern).test(requestPath);}catch{return false;}
+ }).sort((a,b)=>b.path.length-a.path.length);
+ return !matches.length||matches[0].allow;
+}
+async function robotsPermits(pageUrl:string,userAgent:string){
+ try{
+  const robotsUrl=new URL("/robots.txt",pageUrl).toString();
+  const response=await fetchRegisteredPage(robotsUrl);
+  if(response.status===404||response.status===410)return true;
+  if(!response.ok)return false;
+  const type=(response.headers.get("content-type")||"").toLowerCase();
+  if(type&&!/(text\/plain|application\/octet-stream)/i.test(type))return false;
+  const body=await readLimitedText(response,256_000);
+  return robotsAllows(body,pageUrl,userAgent);
+ }catch{return false;}
+}
 Deno.serve(async(req)=>{
  if(req.method!=="POST")return reply({error:"POST only"},405);
  const secret=Deno.env.get("GOVERNMENT_MONITOR_SECRET")||"";
@@ -50,6 +93,8 @@ Deno.serve(async(req)=>{
   const batch=eligible.slice(i,i+5);
   const results=await Promise.all(batch.map(async s=>{
    try{
+    const userAgent="TAMILAN-CAREERS official job source monitor/1.0";
+    if(!await robotsPermits(s.base_url,userAgent))throw new Error("robots.txt disallows this page or could not be checked safely");
     const r=await fetchRegisteredPage(s.base_url);
     if(!r.ok)throw new Error("HTTP "+r.status);
     const contentType=(r.headers.get("content-type")||"").toLowerCase();if(!/(text\/html|application\/xhtml\+xml)/i.test(contentType))throw new Error("Source did not return an HTML content type");
