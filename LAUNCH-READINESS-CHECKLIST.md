@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] GitHub Pages deployment was confirmed successful for commits `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, and checklist commit `590452ef30930e73d45f0e3b30a8b33398511fc3`.
-- [x] Website health workflow passed for commits `9b50c6c29bddfbcb2da92f10d57acf1296cadded` and `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, including Deno type checks, structural checks, and browser smoke tests.
+- [x] GitHub Pages deployment was confirmed successful for commits `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, `590452ef30930e73d45f0e3b30a8b33398511fc3`, `d97881f53e46377ca5a9ec4d4c0cad50817596d7`, and `490db747ab1542bff868507906e9cab0fdcd0c17`. Latest deployment for `31e6229b6ea37860fd1b20c919744af05c81d4e1` is still being checked.
+- [x] Website health workflow passed for commits `9b50c6c29bddfbcb2da92f10d57acf1296cadded`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, `490db747ab1542bff868507906e9cab0fdcd0c17`, and `31e6229b6ea37860fd1b20c919744af05c81d4e1`, including Deno type checks, SQL delimiter lint, structural checks, and browser smoke tests.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -15,7 +15,10 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] External-source discovery remains review-only; scanner code does not publish to the public jobs table.
 - [x] A browser smoke test now checks that the external-source review page redirects unauthenticated visitors to login.
 - [x] Scanner response parsing is capped at 1.2 MB while streaming, instead of reading an unbounded response before slicing.
-- [x] Scanner rejects non-HTML responses, requires an explicit HTML/XHTML content type, and records per-source scan failures accurately.
+- [x] Scanner rejects non-HTML responses, requires an explicit HTML/XHTML content type, validates each HTTPS redirect before fetching it, limits redirects, and records per-source scan failures accurately.
+- [x] GitHub Actions now checks dollar-quote pairing across all 18 SQL files to catch the malformed PL/pgSQL delimiter issue found during review.
+- [x] Candidate certification table, owner-only policies, employer applicant-only read policy, and candidate profile add/edit/delete UI are prepared in the repository; Supabase migration and real-account testing are still pending.
+- [x] Government source seed migrations now preserve an administrator's enabled/disabled choices when re-run.
 - [x] AI resume matcher Bearer header parsing was corrected in the repository source.
 
 ## Must finish before enabling external source scanning
@@ -30,10 +33,10 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Supabase setup and deployment still needing confirmation
 
-- [ ] Run `supabase-setup-pending.sql` for private resume storage, candidate resume metadata, private employer job drafts, and restricted applicant-profile access. Verify the Storage bucket remains private.
+- [ ] Run `supabase-setup-pending.sql` for private resume storage, candidate resume metadata, private employer job drafts, candidate education/experience/certifications, and restricted applicant-profile access. Verify the Storage bucket remains private.
 - [ ] Deploy `company-resume-access` Edge Function and test a legitimate employer access plus a denied cross-company access. Secure resume viewing is not live until this is tested.
 - [ ] Run `supabase-interview-notifications.sql`; test invitation, candidate response, and notifications for both parties. Automated reminders additionally need a secure scheduler/Cron.
-- [ ] Run `supabase-candidate-profile-education-experience.sql`; test saving and editing education and experience.
+- [ ] Run `supabase-candidate-profile-education-experience.sql`; test saving and editing education, experience, and certifications. (The consolidated `supabase-setup-pending.sql` also includes these records.)
 - [ ] Run `supabase-company-application-status.sql`; test permitted and denied employer status updates.
 - [ ] For Government Jobs archive, run `supabase-government-archive-install.sql`, deploy `ingest-government-notices`, configure its protected monitor secret, and test the private review queue. Do not auto-publish scraped links.
 - [ ] For AI resume matching, redeploy the latest `ai-resume-match` source (Bearer token parsing was corrected in GitHub), add `OPENAI_API_KEY` as a Supabase Function Secret, and test with explicit candidate consent. Rule-based matching and AI matching must be described separately.
