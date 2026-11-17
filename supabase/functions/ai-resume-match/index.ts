@@ -76,8 +76,7 @@ Deno.serve(async (req) => {
     const preferredLocation = safeText(body?.preferred_location, 120).trim();
     if (resumeText.length < 80) return json({ error: "Resume text is too short. Upload or read a text-based PDF/DOCX first." }, 400);
 
-    const [profile, seeker, skills, education, experience, certifications, preferences, jobs] = await Promise.all([
-      supabase.from("profiles").select("full_name").eq("id", userId).maybeSingle(),
+    const [seeker, skills, education, experience, certifications, preferences, jobs] = await Promise.all([
       supabase.from("job_seeker_profiles").select("headline,bio,current_city,total_experience_months").eq("user_id", userId).maybeSingle(),
       supabase.from("candidate_skills").select("skill_name").eq("user_id", userId),
       supabase.from("candidate_education").select("qualification,field_of_study,institution_name").eq("user_id", userId),
@@ -86,7 +85,7 @@ Deno.serve(async (req) => {
       supabase.from("candidate_preferences").select("preferred_city,preferred_job_title,preferred_employment_type").eq("user_id", userId).maybeSingle(),
       supabase.from("jobs").select("*").eq("status", "published").limit(100),
     ]);
-    for (const result of [profile, seeker, skills, education, experience, certifications, preferences, jobs]) {
+    for (const result of [seeker, skills, education, experience, certifications, preferences, jobs]) {
       if (result.error) return json({ error: "Could not load matching data. Check the user's table permissions and RLS policies.", detail: result.error.message }, 403);
     }
 
