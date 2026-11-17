@@ -376,619 +376,6 @@ alter table public.job_applications
 create index if not exists job_applications_resume_id_idx
   on public.job_applications(resume_id) where resume_id is not null;
 
--- Reject applications for unpublished or expired jobs at database level,
--- even if a caller bypasses the browser's deadline checks.
-create or replace function public.tc_validate_job_application_open()
-returns trigger
-language plpgsql
-set search_path = ''
-as $tc_job_deadline$
-declare
-  v_job jsonb;
-  v_status text;
-  v_deadline_text text;
-  v_deadline_date date;
-  v_deadline_time timestamptz;
-begin
-  select pg_catalog.to_jsonb(j) into v_job
-  from public.jobs j
-  where j.id = new.job_id;
-  if not found then
-    raise exception 'Job not found';
-  end if;
-
-  v_status := lower(coalesce(v_job->>'status', ''));
-  if v_status <> 'published' then
-    raise exception 'This job is not open for applications';
-  end if;
-
-  v_deadline_text := coalesce(
-    nullif(btrim(v_job->>'application_deadline'), ''),
-    nullif(btrim(v_job->>'deadline'), ''),
-    nullif(btrim(v_job->>'last_date'), '')
-  );
-  if v_deadline_text is null then return new; end if;
-
-  if v_deadline_text ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}create or replace function public.tc_validate_application_resume_owner()
-returns trigger
-language plpgsql
-set search_path = ''
-as $tc_validate_resume$
-declare
-  v_resume_owner uuid;
-begin
-  if new.resume_id is null then return new; end if;
-  select cr.user_id into v_resume_owner
-  from public.candidate_resumes cr
-  where cr.id = new.resume_id;
-  if not found or v_resume_owner is distinct from new.candidate_id then
-    raise exception 'The selected Resume does not belong to this candidate';
-  end if;
-  return new;
-end;
-$tc_validate_resume$;
-revoke all on function public.tc_validate_application_resume_owner() from public;
-drop trigger if exists tc_validate_application_resume_owner on public.job_applications;
-create trigger tc_validate_application_resume_owner
-before insert or update of resume_id, candidate_id on public.job_applications
-for each row execute function public.tc_validate_application_resume_owner();
-alter table public.candidate_resumes enable row level security;
-grant select, insert, update, delete on public.candidate_resumes to authenticated;
-drop policy if exists "TC candidates manage own resume metadata" on public.candidate_resumes;
-create policy "TC candidates manage own resume metadata"
-on public.candidate_resumes for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
--- Employers intentionally receive no SELECT policy on candidate_resumes.
-
-create or replace function public.tc_limit_candidate_resume_count()
-returns trigger
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  existing_count integer;
-begin
-  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(new.user_id::text, 0));
-  select count(*) into existing_count
-  from public.candidate_resumes
-  where user_id = new.user_id;
-  if existing_count >= 5 then
-    raise exception 'A maximum of 5 documents is allowed per candidate';
-  end if;
-  return new;
-end;
-$$;
-revoke all on function public.tc_limit_candidate_resume_count() from public;
-drop trigger if exists tc_limit_candidate_resume_count on public.candidate_resumes;
-create trigger tc_limit_candidate_resume_count
-before insert on public.candidate_resumes
-for each row execute function public.tc_limit_candidate_resume_count();
-
-
--- =========================================================
--- 4A. CANDIDATE EDUCATION AND WORK EXPERIENCE TABLES
--- =========================================================
-create table if not exists public.candidate_education (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  institution_name text not null check (length(btrim(institution_name)) between 1 and 180),
-  qualification text not null check (length(btrim(qualification)) between 1 and 120),
-  field_of_study text,
-  grade text,
-  start_date date,
-  end_date date,
-  is_current boolean not null default false,
-  description text,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint candidate_education_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
-  constraint candidate_education_current_has_no_end check (is_current = false or end_date is null)
-);
-
-create table if not exists public.candidate_experience (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  company_name text not null check (length(btrim(company_name)) between 1 and 180),
-  job_title text not null check (length(btrim(job_title)) between 1 and 140),
-  employment_type text,
-  city text,
-  start_date date,
-  end_date date,
-  is_current boolean not null default false,
-  description text,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint candidate_experience_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
-  constraint candidate_experience_current_has_no_end check (is_current = false or end_date is null)
-);
-
-create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
-create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
-
--- =========================================================
--- 5. JOB SEEKER SELF-MANAGEMENT POLICIES FOR PROFILE TABLES
--- =========================================================
--- These policies let each authenticated Job Seeker manage only
--- rows carrying their own auth.uid(). They do not grant employer access.
-alter table public.profiles enable row level security;
-grant select, insert, update on public.profiles to authenticated;
-drop policy if exists "TC users manage own profile row" on public.profiles;
-create policy "TC users manage own profile row"
-on public.profiles for all to authenticated
-using (id = (select auth.uid()))
-with check (id = (select auth.uid()));
-
-alter table public.job_seeker_profiles enable row level security;
-grant select, insert, update, delete on public.job_seeker_profiles to authenticated;
-drop policy if exists "TC seekers manage own seeker profile" on public.job_seeker_profiles;
-create policy "TC seekers manage own seeker profile"
-on public.job_seeker_profiles for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_skills enable row level security;
-grant select, insert, update, delete on public.candidate_skills to authenticated;
-drop policy if exists "TC seekers manage own skills" on public.candidate_skills;
-create policy "TC seekers manage own skills"
-on public.candidate_skills for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_languages enable row level security;
-grant select, insert, update, delete on public.candidate_languages to authenticated;
-drop policy if exists "TC seekers manage own languages" on public.candidate_languages;
-create policy "TC seekers manage own languages"
-on public.candidate_languages for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_preferences enable row level security;
-grant select, insert, update, delete on public.candidate_preferences to authenticated;
-drop policy if exists "TC seekers manage own preferences" on public.candidate_preferences;
-create policy "TC seekers manage own preferences"
-on public.candidate_preferences for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-
--- Candidate-owned certifications
-alter table public.candidate_certifications enable row level security;
-grant select, insert, update, delete on public.candidate_certifications to authenticated;
-drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
-create policy "TC seekers manage own certifications"
-on public.candidate_certifications for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned education records
-alter table public.candidate_education enable row level security;
-grant select, insert, update, delete on public.candidate_education to authenticated;
-drop policy if exists "TC seekers manage own education" on public.candidate_education;
-create policy "TC seekers manage own education"
-on public.candidate_education for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned work experience records
-alter table public.candidate_experience enable row level security;
-grant select, insert, update, delete on public.candidate_experience to authenticated;
-drop policy if exists "TC seekers manage own experience" on public.candidate_experience;
-create policy "TC seekers manage own experience"
-on public.candidate_experience for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned certifications; employers can read only through the
--- applicant-only policy created above, never edit candidate records.
-alter table public.candidate_certifications enable row level security;
-grant select, insert, update, delete on public.candidate_certifications to authenticated;
-drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
-create policy "TC seekers manage own certifications"
-on public.candidate_certifications for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-commit;
- then
-    v_deadline_date := v_deadline_text::date;
-    if v_deadline_date < (now() at time zone 'Asia/Kolkata')::date then
-      raise exception 'The application deadline has passed';
-    end if;
-  elsif v_deadline_text ~ '^[0-9]{2}-[0-9]{2}-[0-9]{4}create or replace function public.tc_validate_application_resume_owner()
-returns trigger
-language plpgsql
-set search_path = ''
-as $tc_validate_resume$
-declare
-  v_resume_owner uuid;
-begin
-  if new.resume_id is null then return new; end if;
-  select cr.user_id into v_resume_owner
-  from public.candidate_resumes cr
-  where cr.id = new.resume_id;
-  if not found or v_resume_owner is distinct from new.candidate_id then
-    raise exception 'The selected Resume does not belong to this candidate';
-  end if;
-  return new;
-end;
-$tc_validate_resume$;
-revoke all on function public.tc_validate_application_resume_owner() from public;
-drop trigger if exists tc_validate_application_resume_owner on public.job_applications;
-create trigger tc_validate_application_resume_owner
-before insert or update of resume_id, candidate_id on public.job_applications
-for each row execute function public.tc_validate_application_resume_owner();
-alter table public.candidate_resumes enable row level security;
-grant select, insert, update, delete on public.candidate_resumes to authenticated;
-drop policy if exists "TC candidates manage own resume metadata" on public.candidate_resumes;
-create policy "TC candidates manage own resume metadata"
-on public.candidate_resumes for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
--- Employers intentionally receive no SELECT policy on candidate_resumes.
-
-create or replace function public.tc_limit_candidate_resume_count()
-returns trigger
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  existing_count integer;
-begin
-  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(new.user_id::text, 0));
-  select count(*) into existing_count
-  from public.candidate_resumes
-  where user_id = new.user_id;
-  if existing_count >= 5 then
-    raise exception 'A maximum of 5 documents is allowed per candidate';
-  end if;
-  return new;
-end;
-$$;
-revoke all on function public.tc_limit_candidate_resume_count() from public;
-drop trigger if exists tc_limit_candidate_resume_count on public.candidate_resumes;
-create trigger tc_limit_candidate_resume_count
-before insert on public.candidate_resumes
-for each row execute function public.tc_limit_candidate_resume_count();
-
-
--- =========================================================
--- 4A. CANDIDATE EDUCATION AND WORK EXPERIENCE TABLES
--- =========================================================
-create table if not exists public.candidate_education (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  institution_name text not null check (length(btrim(institution_name)) between 1 and 180),
-  qualification text not null check (length(btrim(qualification)) between 1 and 120),
-  field_of_study text,
-  grade text,
-  start_date date,
-  end_date date,
-  is_current boolean not null default false,
-  description text,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint candidate_education_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
-  constraint candidate_education_current_has_no_end check (is_current = false or end_date is null)
-);
-
-create table if not exists public.candidate_experience (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  company_name text not null check (length(btrim(company_name)) between 1 and 180),
-  job_title text not null check (length(btrim(job_title)) between 1 and 140),
-  employment_type text,
-  city text,
-  start_date date,
-  end_date date,
-  is_current boolean not null default false,
-  description text,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint candidate_experience_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
-  constraint candidate_experience_current_has_no_end check (is_current = false or end_date is null)
-);
-
-create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
-create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
-
--- =========================================================
--- 5. JOB SEEKER SELF-MANAGEMENT POLICIES FOR PROFILE TABLES
--- =========================================================
--- These policies let each authenticated Job Seeker manage only
--- rows carrying their own auth.uid(). They do not grant employer access.
-alter table public.profiles enable row level security;
-grant select, insert, update on public.profiles to authenticated;
-drop policy if exists "TC users manage own profile row" on public.profiles;
-create policy "TC users manage own profile row"
-on public.profiles for all to authenticated
-using (id = (select auth.uid()))
-with check (id = (select auth.uid()));
-
-alter table public.job_seeker_profiles enable row level security;
-grant select, insert, update, delete on public.job_seeker_profiles to authenticated;
-drop policy if exists "TC seekers manage own seeker profile" on public.job_seeker_profiles;
-create policy "TC seekers manage own seeker profile"
-on public.job_seeker_profiles for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_skills enable row level security;
-grant select, insert, update, delete on public.candidate_skills to authenticated;
-drop policy if exists "TC seekers manage own skills" on public.candidate_skills;
-create policy "TC seekers manage own skills"
-on public.candidate_skills for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_languages enable row level security;
-grant select, insert, update, delete on public.candidate_languages to authenticated;
-drop policy if exists "TC seekers manage own languages" on public.candidate_languages;
-create policy "TC seekers manage own languages"
-on public.candidate_languages for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_preferences enable row level security;
-grant select, insert, update, delete on public.candidate_preferences to authenticated;
-drop policy if exists "TC seekers manage own preferences" on public.candidate_preferences;
-create policy "TC seekers manage own preferences"
-on public.candidate_preferences for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-
--- Candidate-owned certifications
-alter table public.candidate_certifications enable row level security;
-grant select, insert, update, delete on public.candidate_certifications to authenticated;
-drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
-create policy "TC seekers manage own certifications"
-on public.candidate_certifications for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned education records
-alter table public.candidate_education enable row level security;
-grant select, insert, update, delete on public.candidate_education to authenticated;
-drop policy if exists "TC seekers manage own education" on public.candidate_education;
-create policy "TC seekers manage own education"
-on public.candidate_education for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned work experience records
-alter table public.candidate_experience enable row level security;
-grant select, insert, update, delete on public.candidate_experience to authenticated;
-drop policy if exists "TC seekers manage own experience" on public.candidate_experience;
-create policy "TC seekers manage own experience"
-on public.candidate_experience for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned certifications; employers can read only through the
--- applicant-only policy created above, never edit candidate records.
-alter table public.candidate_certifications enable row level security;
-grant select, insert, update, delete on public.candidate_certifications to authenticated;
-drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
-create policy "TC seekers manage own certifications"
-on public.candidate_certifications for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-commit;
- then
-    v_deadline_date := pg_catalog.to_date(v_deadline_text, 'DD-MM-YYYY');
-    if v_deadline_date < (now() at time zone 'Asia/Kolkata')::date then
-      raise exception 'The application deadline has passed';
-    end if;
-  elsif v_deadline_text ~ '^[0-9]{2}/[0-9]{2}/[0-9]{4}create or replace function public.tc_validate_application_resume_owner()
-returns trigger
-language plpgsql
-set search_path = ''
-as $tc_validate_resume$
-declare
-  v_resume_owner uuid;
-begin
-  if new.resume_id is null then return new; end if;
-  select cr.user_id into v_resume_owner
-  from public.candidate_resumes cr
-  where cr.id = new.resume_id;
-  if not found or v_resume_owner is distinct from new.candidate_id then
-    raise exception 'The selected Resume does not belong to this candidate';
-  end if;
-  return new;
-end;
-$tc_validate_resume$;
-revoke all on function public.tc_validate_application_resume_owner() from public;
-drop trigger if exists tc_validate_application_resume_owner on public.job_applications;
-create trigger tc_validate_application_resume_owner
-before insert or update of resume_id, candidate_id on public.job_applications
-for each row execute function public.tc_validate_application_resume_owner();
-alter table public.candidate_resumes enable row level security;
-grant select, insert, update, delete on public.candidate_resumes to authenticated;
-drop policy if exists "TC candidates manage own resume metadata" on public.candidate_resumes;
-create policy "TC candidates manage own resume metadata"
-on public.candidate_resumes for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
--- Employers intentionally receive no SELECT policy on candidate_resumes.
-
-create or replace function public.tc_limit_candidate_resume_count()
-returns trigger
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  existing_count integer;
-begin
-  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(new.user_id::text, 0));
-  select count(*) into existing_count
-  from public.candidate_resumes
-  where user_id = new.user_id;
-  if existing_count >= 5 then
-    raise exception 'A maximum of 5 documents is allowed per candidate';
-  end if;
-  return new;
-end;
-$$;
-revoke all on function public.tc_limit_candidate_resume_count() from public;
-drop trigger if exists tc_limit_candidate_resume_count on public.candidate_resumes;
-create trigger tc_limit_candidate_resume_count
-before insert on public.candidate_resumes
-for each row execute function public.tc_limit_candidate_resume_count();
-
-
--- =========================================================
--- 4A. CANDIDATE EDUCATION AND WORK EXPERIENCE TABLES
--- =========================================================
-create table if not exists public.candidate_education (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  institution_name text not null check (length(btrim(institution_name)) between 1 and 180),
-  qualification text not null check (length(btrim(qualification)) between 1 and 120),
-  field_of_study text,
-  grade text,
-  start_date date,
-  end_date date,
-  is_current boolean not null default false,
-  description text,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint candidate_education_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
-  constraint candidate_education_current_has_no_end check (is_current = false or end_date is null)
-);
-
-create table if not exists public.candidate_experience (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  company_name text not null check (length(btrim(company_name)) between 1 and 180),
-  job_title text not null check (length(btrim(job_title)) between 1 and 140),
-  employment_type text,
-  city text,
-  start_date date,
-  end_date date,
-  is_current boolean not null default false,
-  description text,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint candidate_experience_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
-  constraint candidate_experience_current_has_no_end check (is_current = false or end_date is null)
-);
-
-create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
-create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
-
--- =========================================================
--- 5. JOB SEEKER SELF-MANAGEMENT POLICIES FOR PROFILE TABLES
--- =========================================================
--- These policies let each authenticated Job Seeker manage only
--- rows carrying their own auth.uid(). They do not grant employer access.
-alter table public.profiles enable row level security;
-grant select, insert, update on public.profiles to authenticated;
-drop policy if exists "TC users manage own profile row" on public.profiles;
-create policy "TC users manage own profile row"
-on public.profiles for all to authenticated
-using (id = (select auth.uid()))
-with check (id = (select auth.uid()));
-
-alter table public.job_seeker_profiles enable row level security;
-grant select, insert, update, delete on public.job_seeker_profiles to authenticated;
-drop policy if exists "TC seekers manage own seeker profile" on public.job_seeker_profiles;
-create policy "TC seekers manage own seeker profile"
-on public.job_seeker_profiles for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_skills enable row level security;
-grant select, insert, update, delete on public.candidate_skills to authenticated;
-drop policy if exists "TC seekers manage own skills" on public.candidate_skills;
-create policy "TC seekers manage own skills"
-on public.candidate_skills for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_languages enable row level security;
-grant select, insert, update, delete on public.candidate_languages to authenticated;
-drop policy if exists "TC seekers manage own languages" on public.candidate_languages;
-create policy "TC seekers manage own languages"
-on public.candidate_languages for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-alter table public.candidate_preferences enable row level security;
-grant select, insert, update, delete on public.candidate_preferences to authenticated;
-drop policy if exists "TC seekers manage own preferences" on public.candidate_preferences;
-create policy "TC seekers manage own preferences"
-on public.candidate_preferences for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-
--- Candidate-owned certifications
-alter table public.candidate_certifications enable row level security;
-grant select, insert, update, delete on public.candidate_certifications to authenticated;
-drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
-create policy "TC seekers manage own certifications"
-on public.candidate_certifications for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned education records
-alter table public.candidate_education enable row level security;
-grant select, insert, update, delete on public.candidate_education to authenticated;
-drop policy if exists "TC seekers manage own education" on public.candidate_education;
-create policy "TC seekers manage own education"
-on public.candidate_education for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned work experience records
-alter table public.candidate_experience enable row level security;
-grant select, insert, update, delete on public.candidate_experience to authenticated;
-drop policy if exists "TC seekers manage own experience" on public.candidate_experience;
-create policy "TC seekers manage own experience"
-on public.candidate_experience for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
--- Candidate-owned certifications; employers can read only through the
--- applicant-only policy created above, never edit candidate records.
-alter table public.candidate_certifications enable row level security;
-grant select, insert, update, delete on public.candidate_certifications to authenticated;
-drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
-create policy "TC seekers manage own certifications"
-on public.candidate_certifications for all to authenticated
-using (user_id = (select auth.uid()))
-with check (user_id = (select auth.uid()));
-
-commit;
- then
-    v_deadline_date := pg_catalog.to_date(v_deadline_text, 'DD/MM/YYYY');
-    if v_deadline_date < (now() at time zone 'Asia/Kolkata')::date then
-      raise exception 'The application deadline has passed';
-    end if;
-  else
-    begin
-      v_deadline_time := v_deadline_text::timestamptz;
-    exception when others then
-      raise exception 'The job application deadline is invalid';
-    end;
-    if v_deadline_time <= now() then
-      raise exception 'The application deadline has passed';
-    end if;
-  end if;
-  return new;
-end;
-$tc_job_deadline$;
-revoke all on function public.tc_validate_job_application_open() from public;
-drop trigger if exists tc_validate_job_application_open on public.job_applications;
-create trigger tc_validate_job_application_open
-before insert on public.job_applications
-for each row execute function public.tc_validate_job_application_open();
-
 -- Reject forged Resume IDs that do not belong to the applicant.
 create or replace function public.tc_validate_application_resume_owner()
 returns trigger
@@ -1170,5 +557,75 @@ create policy "TC seekers manage own certifications"
 on public.candidate_certifications for all to authenticated
 using (user_id = (select auth.uid()))
 with check (user_id = (select auth.uid()));
+
+-- Reject applications for unpublished or expired jobs at database level.
+-- This protects the application table even when a caller bypasses the browser UI.
+create or replace function public.tc_validate_job_application_open()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $tc_job_deadline$
+declare
+  v_job jsonb;
+  v_status text;
+  v_deadline_text text;
+  v_deadline_date date;
+  v_deadline_time timestamptz;
+begin
+  select pg_catalog.to_jsonb(j) into v_job
+  from public.jobs j
+  where j.id = new.job_id;
+  if not found then
+    raise exception 'Job not found';
+  end if;
+
+  v_status := lower(coalesce(v_job->>'status', ''));
+  if v_status <> 'published' then
+    raise exception 'This job is not open for applications';
+  end if;
+
+  v_deadline_text := coalesce(
+    nullif(btrim(v_job->>'application_deadline'), ''),
+    nullif(btrim(v_job->>'deadline'), ''),
+    nullif(btrim(v_job->>'last_date'), '')
+  );
+  if v_deadline_text is null then return new; end if;
+
+  -- Date-only values and old UTC-midnight timestamps mean the full India calendar day.
+  if v_deadline_text ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+     or v_deadline_text ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}T00:00:00(\.0+)?(\+00:00|Z)$' then
+    v_deadline_date := left(v_deadline_text, 10)::date;
+    if v_deadline_date < (pg_catalog.now() at time zone 'Asia/Kolkata')::date then
+      raise exception 'The application deadline has passed';
+    end if;
+  elsif v_deadline_text ~ '^[0-9]{2}-[0-9]{2}-[0-9]{4}$' then
+    v_deadline_date := pg_catalog.to_date(v_deadline_text, 'DD-MM-YYYY');
+    if v_deadline_date < (pg_catalog.now() at time zone 'Asia/Kolkata')::date then
+      raise exception 'The application deadline has passed';
+    end if;
+  elsif v_deadline_text ~ '^[0-9]{2}/[0-9]{2}/[0-9]{4}$' then
+    v_deadline_date := pg_catalog.to_date(v_deadline_text, 'DD/MM/YYYY');
+    if v_deadline_date < (pg_catalog.now() at time zone 'Asia/Kolkata')::date then
+      raise exception 'The application deadline has passed';
+    end if;
+  else
+    begin
+      v_deadline_time := v_deadline_text::timestamptz;
+    exception when others then
+      raise exception 'The job application deadline is invalid';
+    end;
+    if v_deadline_time <= pg_catalog.now() then
+      raise exception 'The application deadline has passed';
+    end if;
+  end if;
+  return new;
+end;
+$tc_job_deadline$;
+revoke all on function public.tc_validate_job_application_open() from public, anon, authenticated;
+drop trigger if exists tc_validate_job_application_open on public.job_applications;
+create trigger tc_validate_job_application_open
+before insert on public.job_applications
+for each row execute function public.tc_validate_job_application_open();
 
 commit;
