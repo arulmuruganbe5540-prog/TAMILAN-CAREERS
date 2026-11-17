@@ -275,6 +275,9 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
         password,
 
         options: {
+          // Send email confirmation back to the deployed TAMILAN CAREERS page,
+          // not Supabase's default localhost:3000 URL.
+          emailRedirectTo: window.location.origin + window.location.pathname,
           data: {
             full_name: fullName,
             requested_account_type: selectedRole
