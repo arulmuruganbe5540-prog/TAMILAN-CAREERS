@@ -8,6 +8,7 @@
 - Employer can send an interview invitation from each eligible applicant card.
 - Invitation includes date/time, mode, venue or meeting link, and letter text.
 - Candidate can accept or decline; authorized company members receive a response notification.
+- Pending or accepted interviews are automatically cancelled if the underlying application is withdrawn or rejected; reminder generation skips closed applications.
 - Candidate and company notification center at `notifications.html`.
 - Dashboard links for candidates and companies.
 - Database function to generate 24-hour and 1-hour reminders for accepted interviews.
