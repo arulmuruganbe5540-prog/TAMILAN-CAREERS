@@ -5,6 +5,7 @@
 - Job Seekers upload PDF, DOC, or DOCX files to the private Supabase Storage bucket `resumes`.
 - The bucket is private. Each candidate can access only the folder named with their own Supabase Auth user ID.
 - The metadata table `public.candidate_resumes` is protected by owner-only RLS. A database trigger enforces a maximum of five metadata records per candidate, including concurrent submissions.
+- `job_applications.resume_id` links the optional selected Resume. A database trigger rejects forged IDs unless the Resume belongs to the applicant.
 - A candidate may optionally attach one of their own uploaded Resume records when applying for a published job.
 - Employers do not receive direct table or Storage access to candidate resumes.
 - An authorized company owner, or active `owner`, `hr_manager`, or `recruiter` member, can request a 60-second signed URL only for the Resume attached to an application for a job belonging to that company.
