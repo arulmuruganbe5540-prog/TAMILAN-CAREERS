@@ -157,3 +157,5 @@
 - Supabase scanner: `supabase/functions/scan-external-job-sources/index.ts`
 - GitHub scheduled workflow: `.github/workflows/external-job-source-monitor.yml`
 - Important: discovered links stay private and pending until an administrator verifies the original notice, eligibility, dates and application link. The scanner never publishes jobs automatically. Scheduled scanning remains inactive until `GOVERNMENT_MONITOR_SECRET` is configured in both Supabase Edge Function Secrets and GitHub Actions repository secrets.
+
+- Launch readiness checklist: `LAUNCH-READINESS-CHECKLIST.md` (confirmed completed items, pending Supabase setup, security checks, and final launch tests).
