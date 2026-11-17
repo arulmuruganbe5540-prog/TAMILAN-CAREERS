@@ -62,7 +62,7 @@ begin
       select udt_name from information_schema.columns
       where table_schema='public' and table_name='jobs' and column_name='salary_period'
     )
-  ) and not exists (
+  ) and (not exists (
     select 1
     from pg_type t
     join pg_enum e on e.enumtypid = t.oid
@@ -71,7 +71,16 @@ begin
       where table_schema='public' and table_name='jobs' and column_name='salary_period'
     )
       and e.enumlabel = 'daily'
-  ) then
+  ) or not exists (
+    select 1
+    from pg_type t
+    join pg_enum e on e.enumtypid = t.oid
+    where t.typname = (
+      select udt_name from information_schema.columns
+      where table_schema='public' and table_name='jobs' and column_name='salary_period'
+    )
+      and e.enumlabel = 'monthly'
+  )) then
     raise exception 'jobs.salary_period enum does not support daily; inspect schema audit before enabling Daily Wage posts.';
   end if;
   if exists (
