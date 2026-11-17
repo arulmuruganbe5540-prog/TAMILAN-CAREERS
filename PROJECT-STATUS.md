@@ -99,7 +99,8 @@ Still required before launch:
 
 - Found that `admin-control.html` and `admin-job-post.html` still called the old `public.is_super_admin()` RPC after its EXECUTE permission had been revoked. Both pages now check only the signed-in user's own `public.user_roles` row using the existing RLS SELECT policy (`user_id = auth.uid()`). No SECURITY DEFINER RPC needs to be re-exposed.
 - Admin Control Center no longer displays a hard-coded personal name. It displays the signed-in account email after authorization succeeds.
-- GitHub Pages deployment run `44090939571` succeeded for commit `02997b8ce3045e7e865a428030dbd19d69538d5f`. The Health Audit for the intermediate commit was still in progress at the time of this note; the latest commit will trigger another audit.
+- GitHub Pages deployment run `44091403705` completed successfully for commit `2ac0f9cf236147c30047118351f14918f49786be` (includes the Admin UI and documentation changes).
+- Full Health Audit run `44091331004` completed successfully for code commit `6a1ac636aa6c4420a128ef3fcc643eb83f338013`. All steps passed, including Deno type-checks, SQL lint, privacy and workflow guards, website structure checks, Chromium installation, and all key-page browser smoke tests.
 - Live `user_roles` snapshot: one role assignment exists and it is `job_seeker`; there are currently zero `super_admin` role assignments. Therefore the Admin UI is now checking the right secure source, but it will correctly deny access until the project owner deliberately grants the first Super Admin role.
 - Added `supabase-first-super-admin-bootstrap.sql`, a guarded one-time SQL script requiring the project owner to replace an email placeholder and manually run it. It does not assign a role automatically and refuses to create a second initial Admin if one already exists.
 - Updated README to explain the new Admin authorization path and the first-admin bootstrap.
