@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T08:46:46.563247+00:00",
+  "checked_at_utc": "2026-11-17T08:50:04.566151+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 23,
@@ -13,7 +13,7 @@
     {
       "source_id": "sbi-careers",
       "url": "https://sbi.co.in/web/careers",
-      "error": "Redirected outside the registered official host"
+      "error": "Redirect outside registered HTTPS domain"
     },
     {
       "source_id": "upsc",
@@ -34,6 +34,11 @@
       "source_id": "join-indian-army",
       "url": "https://joinindianarmy.nic.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "ncs",
+      "url": "https://www.ncs.gov.in/",
+      "error": "Redirect outside registered HTTPS domain"
     },
     {
       "source_id": "apprenticeship",
@@ -71,8 +76,13 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
+      "source_id": "appsc-arunachal",
+      "url": "https://appsc.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "apsc-assam",
+      "url": "https://apsc.nic.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -81,13 +91,8 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "appsc-arunachal",
-      "url": "https://appsc.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "apsc-assam",
-      "url": "https://apsc.nic.in/",
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -99,6 +104,11 @@
       "source_id": "psc-cg",
       "url": "https://psc.cg.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "kpsc",
+      "url": "https://kpsc.kar.nic.in/",
+      "error": "Redirect outside registered HTTPS domain"
     },
     {
       "source_id": "jpsc",
@@ -116,6 +126,11 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
+      "source_id": "gpsc-gujarat",
+      "url": "https://gpsc.gujarat.gov.in/",
+      "error": "<urlopen error [Errno 101] Network is unreachable>"
+    },
+    {
       "source_id": "hpsc",
       "url": "https://hpsc.gov.in/",
       "error": "<urlopen error timed out>"
@@ -124,11 +139,6 @@
       "source_id": "mpsc-mizoram",
       "url": "https://mpsc.mizoram.gov.in/",
       "error": "HTTP Error 403: Forbidden"
-    },
-    {
-      "source_id": "kpsc",
-      "url": "https://kpsc.kar.nic.in/",
-      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "mppsc",
@@ -166,14 +176,14 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "upsc-recruitment-results",
-      "url": "https://cms.upsc.gov.in/recruitment-tests/results/",
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
-    },
-    {
       "source_id": "psc-uk",
       "url": "https://psc.uk.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "upsc-recruitment-results",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/results/",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
     },
     {
       "source_id": "psc-wb",
