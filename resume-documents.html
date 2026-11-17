@@ -7,12 +7,12 @@
 <section class="panel"><h2>ஆவணத்தைப் பதிவேற்றுங்கள்</h2><p class="muted">PDF, DOC அல்லது DOCX மட்டும். ஒவ்வொரு கோப்பும் அதிகபட்சம் 5 MB. அதிகபட்சம் 5 ஆவணங்கள். ஆதார், வங்கி விவரம், OTP அல்லது தேவையற்ற ரகசியத் தகவல்களைப் பதிவேற்ற வேண்டாம்.</p>
 <div class="drop"><label for="document">Resume / கல்விச் சான்றிதழ் / அனுபவச் சான்றிதழ்</label><br><input id="document" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><br><button class="btn" id="uploadBtn">பாதுகாப்பாகப் பதிவேற்றவும்</button></div><div id="notice" class="notice" role="status" aria-live="polite"></div></section>
 <section class="panel"><h2>எனது ஆவணங்கள்</h2><p class="muted">பதிவேற்றிய கோப்புகளை மட்டும் நீங்கள் பார்க்க, பதிவிறக்க அல்லது நீக்க முடியும்.</p><div id="fileList"><div class="empty">ஆவணங்கள் ஏற்றப்படுகின்றன...</div></div><div style="margin-top:14px"><button class="btn secondary" id="refreshBtn">மீண்டும் ஏற்றவும்</button></div></section>
-<div class="warning"><strong>தனியுரிமை:</strong> இந்தப் பக்கம் Public URL உருவாக்காது. ஒவ்வொரு கோப்பும் உங்களுடைய User ID கோப்புறைக்குள் சேமிக்கப்படும். Supabase-ல் தனிப்பட்ட <code>resumes</code> bucket மற்றும் உரிமையாளர் அடிப்படையிலான Storage Policies அமைக்கப்பட வேண்டும். அவை அமைக்கப்படாவிட்டால் பதிவேற்றம் தோல்வியடையும்; பாதுகாப்பைத் தளர்த்தி பதிவேற்றம் செய்யாது.</div></main>
+<div class="warning"><strong>தனியுரிமை:</strong> இந்தப் பக்கம் Public URL உருவாக்காது. ஒவ்வொரு கோப்பும் உங்களுடைய User ID கோப்புறைக்குள் சேமிக்கப்படும். Supabase-ல் தனிப்பட்ட <code>candidate-resumes</code> bucket மற்றும் உரிமையாளர் அடிப்படையிலான Storage Policies அமைக்கப்பட வேண்டும். அவை அமைக்கப்படாவிட்டால் பதிவேற்றம் தோல்வியடையும்; பாதுகாப்பைத் தளர்த்தி பதிவேற்றம் செய்யாது.</div></main>
 <script>
 const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
 const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const BUCKET="resumes",MAX=5*1024*1024,ALLOWED=["application/pdf","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+const BUCKET="candidate-resumes",MAX=5*1024*1024,ALLOWED=["application/pdf","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 let currentUser=null;
 const $=id=>document.getElementById(id);
 function message(s,good){$("notice").textContent=s;$("notice").className="notice "+(good?"ok":"err")}
