@@ -1,19 +1,14 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T09:16:01.469661+00:00",
+  "checked_at_utc": "2026-11-17T09:22:44.653034+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
-  "successful_sources": 20,
+  "successful_sources": 23,
   "failed_sources": [
     {
       "source_id": "rrb",
       "url": "https://www.rrbapply.gov.in/",
       "error": "HTTP Error 404: Not Found"
-    },
-    {
-      "source_id": "ibps",
-      "url": "https://www.ibps.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "sbi-careers",
@@ -111,11 +106,6 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "gpsc-gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
@@ -126,8 +116,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "hpsc",
-      "url": "https://hpsc.gov.in/",
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -136,13 +126,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "mppsc",
-      "url": "https://mppsc.mp.gov.in/",
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "tgpsc",
-      "url": "https://www.tgpsc.gov.in/",
+      "source_id": "mppsc",
+      "url": "https://mppsc.mp.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -158,11 +148,6 @@
     {
       "source_id": "tpsc",
       "url": "https://tpsc.tripura.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "ibps-other-recruitment",
-      "url": "https://www.ibps.in/index.php/recruitment/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -206,8 +191,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     }
   ],
-  "candidate_links_discovered_this_run": 1108,
-  "pending_admin_review": 1108,
+  "candidate_links_discovered_this_run": 1114,
+  "pending_admin_review": 1114,
   "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 4,
   "request_timeout_seconds": 20
