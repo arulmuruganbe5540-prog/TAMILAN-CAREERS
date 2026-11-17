@@ -58,7 +58,7 @@ function render(){
   const workplace=pick(j,["workplace_type"]);
   const min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
   const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் அறிவிக்கப்படவில்லை";
-  const deadline=pick(j,["application_deadline","deadline"]);
+  const deadline=pick(j,["application_deadline","deadline","last_date"]);
   const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["company_name"]);
   const id=pick(j,["id","job_id"]);
   const reason=bi?(bi.match_reason_ta||""):"";
