@@ -1,5 +1,7 @@
 # TAMILAN CAREERS
 
+> **Current project status:** [PROJECT-STATUS.md](PROJECT-STATUS.md) is the authoritative handover for what is confirmed in GitHub, what is confirmed in Supabase, and what still requires setup/testing. Do not treat committed code as a live Supabase feature.
+
 தமிழ்நாடு மற்றும் இந்தியா முழுவதும் வேலை தேடுவோரையும் வேலைவாய்ப்பு வழங்கும் நிறுவனங்களையும் இணைக்கும் தமிழ்-முன்னுரிமை வேலைவாய்ப்பு தளம்.
 
 ## Live website
