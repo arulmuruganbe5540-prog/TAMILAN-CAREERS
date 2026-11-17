@@ -80,7 +80,7 @@ function val(id){return document.getElementById(id).value.trim();}
 function updateProgress(){const count=ids.filter(id=>val(id)).length;const percent=Math.round(count/ids.length*100);document.getElementById("progressBar").style.width=percent+"%";document.getElementById("progressText").textContent=percent+"% நிறைவு – "+count+"/"+ids.length+" விவரங்கள் நிரப்பப்பட்டுள்ளன";}
 async function loadProfile(){
  const {data,error}=await client.auth.getSession();
- if(error||!data.session){location.replace("login.html");return;}
+ if(error||!data.session){location.replace("login.html?next="+encodeURIComponent("job-seeker-profile.html"));return;}
  const user=data.session.user;currentUserId=user.id;
  const {data:roleData,error:roleError}=await client.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  if(roleError){say("கணக்கு அனுமதியைச் சரிபார்க்க முடியவில்லை: "+roleError.message,false);return;}
