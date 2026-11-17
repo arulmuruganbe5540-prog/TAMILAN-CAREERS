@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: repository-maintenance-commits
+  group: website-health-check
   cancel-in-progress: false
 
 jobs:
