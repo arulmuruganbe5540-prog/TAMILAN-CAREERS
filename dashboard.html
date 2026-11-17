@@ -145,14 +145,13 @@ async function loadDashboard() {
     .eq("user_id", user.id)
     .eq("is_read", false);
 
-  const notificationSummary = document.getElementById("notificationSummary");
-  if (notificationSummary) {
+  document.querySelectorAll("#notificationSummary").forEach(notificationSummary => {
     if (notificationResult.error) {
       notificationSummary.textContent = "அறிவிப்புகள் அமைக்கப்பட்ட பிறகு புதிய விண்ணப்பங்கள் மற்றும் Interview தகவல்கள் இங்கே காட்டப்படும்.";
     } else {
       notificationSummary.textContent = "படிக்காத புதிய அறிவிப்புகள்: " + (notificationResult.count || 0) + " · புதிய விண்ணப்பம் / Interview தகவல்களைத் திறக்கவும்.";
     }
-  }
+  });
 
   const statusLines = [
     "Email: " + (user.email || "கிடைக்கவில்லை"),
