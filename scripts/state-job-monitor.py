@@ -13,14 +13,16 @@ from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from urllib.parse import urljoin, urlparse
+from urllib.request import HTTPRedirectHandler, Request, build_opener
+from urllib.robotparser import RobotFileParser
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "state-job-monitor-report.json"
 SOURCES = [
     ("Andhra Pradesh", "https://psc.ap.gov.in/"),
-    ("Arunachal Pradesh", "http://www.appsc.gov.in/"),
-    ("Assam", "http://apsc.nic.in/"),
+    ("Arunachal Pradesh", "https://www.appsc.gov.in/"),
+    ("Assam", "https://apsc.nic.in/"),
     ("Bihar", "https://bpsc.bihar.gov.in/"),
     ("Chhattisgarh", "https://psc.cg.gov.in/"),
     ("Goa", "https://gpsc.goa.gov.in/"),
@@ -67,33 +69,75 @@ class TextExtractor(HTMLParser):
             if value:
                 self.parts.append(value)
 
+def host_allowed(candidate_url, source_url):
+    a, b = urlparse(candidate_url), urlparse(source_url)
+    if a.scheme != "https" or not a.hostname or not b.hostname:
+        return False
+    ah, bh = a.hostname.lower(), b.hostname.lower()
+    return ah == bh or ah.endswith("." + bh)
+
+class SameHostRedirectHandler(HTTPRedirectHandler):
+    def __init__(self, source_url):
+        super().__init__()
+        self.source_url = source_url
+        self.redirect_count = 0
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        self.redirect_count += 1
+        if self.redirect_count > 5:
+            raise ValueError("Too many redirects")
+        if not host_allowed(newurl, self.source_url):
+            raise ValueError("Redirect outside registered HTTPS domain")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+def robots_allowed(source_url, user_agent):
+    robots_url = urljoin(source_url, "/robots.txt")
+    opener = build_opener(SameHostRedirectHandler(source_url))
+    req = Request(robots_url, headers={"User-Agent": user_agent})
+    try:
+        with opener.open(req, timeout=22) as response:
+            raw = response.read(256_000)
+        parser = RobotFileParser()
+        parser.set_url(robots_url)
+        parser.parse(raw.decode("utf-8", errors="replace").splitlines())
+        return parser.can_fetch(user_agent, source_url)
+    except HTTPError as exc:
+        return exc.code in (404, 410)
+    except (URLError, TimeoutError, OSError, ValueError):
+        return False
+
 def fetch(state, url, previous):
     result = {"state": state, "url": url, "checked_at": datetime.now(timezone.utc).isoformat()}
+    user_agent = "TAMILAN-CAREERS-StatePSC-Monitor/1.0"
     try:
-        req = Request(url, headers={"User-Agent": "TAMILAN-CAREERS-StatePSC-Monitor/1.0 (daily official link check)"})
-        with urlopen(req, timeout=22) as response:
+        if not host_allowed(url, url):
+            raise ValueError("Only HTTPS sources are allowed")
+        if not robots_allowed(url, user_agent):
+            raise ValueError("robots.txt disallows this page or could not be checked safely")
+        req = Request(url, headers={"User-Agent": user_agent})
+        opener = build_opener(SameHostRedirectHandler(url))
+        with opener.open(req, timeout=22) as response:
+            content_type = response.headers.get_content_type().lower()
+            if content_type not in ("text/html", "application/xhtml+xml"):
+                raise ValueError("Source did not return an HTML content type")
             raw = response.read(1_500_000)
             status = response.status
             final_url = response.geturl()
             charset = response.headers.get_content_charset() or "utf-8"
+        if not host_allowed(final_url, url):
+            raise ValueError("Redirected outside registered HTTPS domain")
+        if final_url != url and not robots_allowed(final_url, user_agent):
+            raise ValueError("robots.txt disallows the redirected page or could not be checked safely")
         parser = TextExtractor()
         parser.feed(raw.decode(charset, errors="replace"))
         text = re.sub(r"\s+", " ", " ".join(parser.parts)).strip()
         digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
-        snippets = []
-        for sentence in re.split(r"(?<=[.!?])\s+|\s{2,}", text):
-            sentence = sentence.strip()
-            if sentence and KEYWORDS.search(sentence):
-                snippets.append(sentence[:260])
-            if len(snippets) >= 12:
-                break
         old = previous.get(state, {})
         result.update({
             "http_status": status,
             "final_url": final_url,
             "content_sha256": digest,
             "changed_since_previous_check": bool(old.get("content_sha256") and old.get("content_sha256") != digest),
-            "recruitment_keyword_snippets": snippets,
             "review_required": True,
         })
     except (HTTPError, URLError, TimeoutError, OSError, ValueError) as exc:
