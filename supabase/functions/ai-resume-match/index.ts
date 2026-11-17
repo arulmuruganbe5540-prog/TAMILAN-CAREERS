@@ -66,16 +66,17 @@ Deno.serve(async (req) => {
     const preferredLocation = safeText(body?.preferred_location, 120).trim();
     if (resumeText.length < 80) return json({ error: "Resume text is too short. Upload or read a text-based PDF/DOCX first." }, 400);
 
-    const [profile, seeker, skills, education, experience, preferences, jobs] = await Promise.all([
+    const [profile, seeker, skills, education, experience, certifications, preferences, jobs] = await Promise.all([
       supabase.from("profiles").select("full_name").eq("id", userId).maybeSingle(),
       supabase.from("job_seeker_profiles").select("headline,bio,current_city,total_experience_months").eq("user_id", userId).maybeSingle(),
       supabase.from("candidate_skills").select("skill_name").eq("user_id", userId),
       supabase.from("candidate_education").select("qualification,field_of_study,institution_name").eq("user_id", userId),
       supabase.from("candidate_experience").select("company_name,job_title,description").eq("user_id", userId),
+      supabase.from("candidate_certifications").select("certificate_name,issuing_organization,issue_date,expiry_date").eq("user_id", userId),
       supabase.from("candidate_preferences").select("preferred_city,preferred_job_title,preferred_employment_type").eq("user_id", userId).maybeSingle(),
       supabase.from("jobs").select("*").eq("status", "published").limit(100),
     ]);
-    for (const result of [profile, seeker, skills, education, experience, preferences, jobs]) {
+    for (const result of [profile, seeker, skills, education, experience, certifications, preferences, jobs]) {
       if (result.error) return json({ error: "Could not load matching data. Check the user's table permissions and RLS policies.", detail: result.error.message }, 403);
     }
 
@@ -92,6 +93,10 @@ Deno.serve(async (req) => {
       experience: (experience.data || []).slice(0, 15).map((x) => ({
         title: safeText(x.job_title, 150),
         description: safeText(x.description, 700),
+      })),
+      certifications: (certifications.data || []).slice(0, 20).map((x) => ({
+        name: safeText(x.certificate_name, 180),
+        issuer: safeText(x.issuing_organization, 180),
       })),
       preferred_job_title: safeText(preferences.data?.preferred_job_title, 150),
       preferred_employment_type: safeText(preferences.data?.preferred_employment_type, 80),
