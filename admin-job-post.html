@@ -135,8 +135,10 @@ async function save(status){
  }
  if(p.jobKind==="government"){
  const prefix=p.governmentScope==="tamil-nadu"?"Tamil Nadu (TN) Government — ":"Central Government — ";
+ let agency=p.authority.replace(/^(?:Tamil Nadu(?: \\(TN\\))? Government|Central Government)\\s*[—-]\\s*/i,"");
+ if(/^Tamil Nadu(?: \\(TN\\))? Government$/i.test(agency)||/^Central Government$/i.test(agency))agency="";
  const department=p.governmentDepartment?p.governmentDepartment+" — ":"";
- if(!/^Tamil Nadu(?: \(TN\))? Government|^Central Government/i.test(p.authority))p.authority=prefix+department+p.authority;
+ p.authority=prefix+department+agency;
  const extra=[["தேர்வு / ஆட்சேர்ப்பு",p.examName],["விண்ணப்பம் தொடங்கும் தேதி",p.applicationStartDate],["தேர்வு தேதி",p.examDate],["பதவி வாரியான காலியிடங்கள்",p.vacancyBreakdown],["பாடத்திட்டம்",p.syllabus]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
  if(extra.length)p.description+="\\n\\n"+extra.join("\\n");
  if(p.description.length>8000){say("வேலை விவரம் மற்றும் கூடுதல் தகவல்கள் 8,000 எழுத்துகளை மீறக்கூடாது. சுருக்கவும்.",false);return}
