@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T16:59:54.722735+00:00",
+  "checked_at_utc": "2026-11-17T17:14:23.311960+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 21,
@@ -31,6 +31,11 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "join-indian-army",
+      "url": "https://joinindianarmy.nic.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "nabard",
       "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "robots.txt disallows this page or could not be checked safely"
@@ -46,11 +51,6 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "join-indian-army",
-      "url": "https://joinindianarmy.nic.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "join-indian-navy",
       "url": "https://www.joinindiannavy.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
@@ -58,11 +58,6 @@
     {
       "source_id": "agniveervayu",
       "url": "https://agnipathvayu.cdac.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "tnusrb",
-      "url": "https://www.tnusrb.tn.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -76,13 +71,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
+      "source_id": "tnusrb",
+      "url": "https://www.tnusrb.tn.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "gpsc-goa",
-      "url": "https://gpsc.goa.gov.in/",
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -96,38 +91,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "gpsc-goa",
+      "url": "https://gpsc.goa.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "psc-cg",
       "url": "https://psc.cg.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "gpsc-gujarat",
-      "url": "https://gpsc.gujarat.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "kpsc",
-      "url": "https://kpsc.kar.nic.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "hpsc",
-      "url": "https://hpsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "mpsc-mizoram",
-      "url": "https://mpsc.mizoram.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -136,14 +106,44 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "kpsc",
+      "url": "https://kpsc.kar.nic.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "gpsc-gujarat",
+      "url": "https://gpsc.gujarat.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "mpsc-mizoram",
+      "url": "https://mpsc.mizoram.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "mppsc",
       "url": "https://mppsc.mp.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "npsc",
-      "url": "https://npsc.nagaland.gov.in/",
-      "error": "<urlopen error _ssl.c:1129: The handshake operation timed out>"
+      "source_id": "tgpsc",
+      "url": "https://www.tgpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "rpsc",
@@ -201,7 +201,7 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     }
   ],
-  "candidate_links_discovered_this_run": 1100,
+  "candidate_links_discovered_this_run": 1108,
   "note": "Official-source link discovery only. This aggregate report contains no candidate URLs and does not assert that Supabase Admin Review sync succeeded. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 4,
   "request_timeout_seconds": 20
