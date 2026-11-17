@@ -15,7 +15,6 @@ on conflict (id) do update set
   scope=excluded.scope,
   state=excluded.state,
   base_url=excluded.base_url,
-  enabled=true,
   updated_at=now();
 
 
@@ -28,4 +27,4 @@ values
 ('ssc-notice-archives','Staff Selection Commission Notice Archives','central',NULL,'https://ssc.gov.in/home/archives',true),
 ('tnpsc-exam-dashboard','TNPSC Exam Dashboard and Results','state','Tamil Nadu','https://tnpsc.gov.in/English/Examdashboard.aspx/English/DResultView.aspx',true),
 ('mrb-results','Tamil Nadu Medical Services Recruitment Board Results','state','Tamil Nadu','https://www.mrb.tn.gov.in/content.php?dept_id=ODAw&lang=MQ%3D%3D&menu_id=MjI0',true)
-on conflict (id) do update set authority=excluded.authority, scope=excluded.scope, state=excluded.state, base_url=excluded.base_url, enabled=true, updated_at=now();
+on conflict (id) do update set authority=excluded.authority, scope=excluded.scope, state=excluded.state, base_url=excluded.base_url, updated_at=now();
