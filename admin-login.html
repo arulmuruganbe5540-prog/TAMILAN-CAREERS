@@ -36,7 +36,7 @@ input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-s
 <div class="back"><a href="index.html">← Website முகப்புக்குச் செல்ல</a></div>
 </main>
 <script>
-const client=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const form=document.getElementById("adminForm"),button=document.getElementById("submit"),box=document.getElementById("message");
 function message(text,ok=false){box.textContent=text;box.style.display=text?"block":"none";box.style.background=ok?"#e8f8ee":"#fff0f0";box.style.color=ok?"#176b3a":"#ad2525"}
 document.getElementById("toggle").addEventListener("click",()=>{const p=document.getElementById("password"),show=p.type==="password";p.type=show?"text":"password";document.getElementById("toggle").textContent=show?"மறை":"காட்டு"});
