@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for main commit `805a7450e04cb4250ef3b2a597ecc18ce5ddf6bc` on 17 November 2026 (run `44059315835`).
-- [x] Latest full website health workflow passed for main commit `805a7450e04cb4250ef3b2a597ecc18ce5ddf6bc` on 17 November 2026 (run `44059315569`): all configured CI checks completed successfully.
+- [x] Latest GitHub Pages deployment succeeded for main commit `be2408bdce0102649f4c0815e7acead4952a085c` on 17 November 2026 (run `44060018870`).
+- [x] Latest full website health workflow passed for main commit `be2408bdce0102649f4c0815e7acead4952a085c` on 17 November 2026 (run `44060017401`): the audit job completed successfully.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -33,7 +33,7 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Employer application status changes create a candidate notification when the notifications table is installed; repeating the same status does not send a duplicate alert.
 - [x] Job-posting draft RLS is restricted to active Owner, HR Manager, and Recruiter roles; unrelated active company members cannot read or edit drafts.
 - [x] AI resume matching Edge Function now verifies the caller has the `job_seeker` role in addition to requiring explicit AI consent.
-- [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
+- [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026 (commit `be2408bdce0102649f4c0815e7acead4952a085c`).
 - [x] State PSC monitor was hardened to use HTTPS-only source URLs, validate redirects, enforce bounded redirects, require HTML/XHTML, and check `robots.txt` before scanning and after redirects.
 - [x] Daily State PSC monitor completed successfully on `main` (run `44054341358`): 28 State PSC pages checked; 9 reachable, 19 unreachable/blocked, and 2 pages changed (Nagaland and Tamil Nadu) for manual review. The refreshed report uses HTTPS-only URLs and contains no unverified recruitment snippets; a changed page is not a verified vacancy.
 - [x] State PSC public report no longer includes unverified recruitment keyword snippets; CI now rejects such snippets if they reappear.
