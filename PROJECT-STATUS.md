@@ -1,6 +1,6 @@
 # TAMILAN CAREERS — Project Status & Handover
 
-Last audited: 17 November 2026 (India time) — live Supabase Storage and API access rechecked  
+Last audited: 17 November 2026 (India time) — live Storage, API grants, notifications, interview workflow, and Cron rechecked  
 Repository: `arulmuruganbe5540-prog/TAMILAN-CAREERS`  
 Live Pages: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
 
@@ -9,7 +9,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 ## 1. Confirmed GitHub / website work
 
 - Public GitHub repository and `main` branch are present.
-- Latest confirmed GitHub Pages deployment succeeded for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075721444`). Latest confirmed full website health workflow passed for commit `ac3c98b21263da7e2192151d413af4cc7f8f7a35` (run `44075880374`), including SQL lint, Edge Function type checks, private Resume security regression checks, and browser smoke tests.
+- Latest verified GitHub Pages build/deploy succeeded for commit `d04d6a45ff9dc1731708e562d0f64e3cfdaaf0c8` (run `44080577810`). Latest full website health audit passed for commit `05e2290ddd0cf0ff8ca40ad2054b822171ee7922` (run `44080537230`), including SQL lint, Edge Function type checks, privacy guards, and key-page browser smoke tests.
 - The health workflow checks Edge Function types, SQL migration delimiters and SECURITY DEFINER search paths, privacy guards, company publication flow, website structure, and browser smoke tests. The expanded workflow including the new Resume security regression guard passed on commit `5755707f840b6c0db2cb4296f1fd27133f7c36da` (run `44074830855`); the Resume guard, Deno checks, SQL lint, and browser smoke tests all passed.
 - The current repository contains Tamil/English public pages for job search, job details, applications, candidate profile, saved jobs, company pages, notifications, Resume documents, Government Jobs, State PSC directory, and exam practice.
 - The current repository includes separate Private Jobs and Government Jobs areas; scraped/discovered links are not auto-published.
@@ -23,7 +23,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 - A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. The guard passed in run `44075666298`.
 - Schema preflight checks were added to the consolidated setup, focused Resume Storage migration, and employer application-status migration so they stop before changes when required existing columns or types do not match.
 
-## 2. Supabase work confirmed by the user
+## 2. Supabase live work verified
 
 - `supabase-company-workflow.sql` — user reported successful execution. Company profile drafts and private company job drafts are set up.
 - `supabase-candidate-withdraw-application.sql` — user reported successful execution. Candidate-owned application withdrawal is set up.
