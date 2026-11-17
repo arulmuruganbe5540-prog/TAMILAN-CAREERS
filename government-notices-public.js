@@ -27,7 +27,7 @@
     age_limit:"வயது வரம்பு", salary:"சம்பளம்", pay_scale:"ஊதிய நிலை",
     application_fee:"விண்ணப்பக் கட்டணம்", selection_process:"தேர்வு முறை",
     location:"பணியிடம்", department:"துறை", vacancies_breakdown:"காலியிட விவரம்",
-    notification_pdf_url:"அறிவிப்பு PDF", application_url:"விண்ணப்ப இணைப்பு", syllabus:"பாடத்திட்டம்", exam_date:"தேர்வு தேதி"
+    notification_pdf_url:"அறிவிப்பு PDF", application_url:"விண்ணப்ப இணைப்பு", syllabus:"பாடத்திட்டம்", exam_date:"தேர்வு தேதி", exam_name:"தேர்வு / ஆட்சேர்ப்பு"
   };
   function card(row) {
     const d = row.details && typeof row.details === "object" ? row.details : {};
@@ -133,6 +133,8 @@
           qualification:j.education_level||"",
           syllabus:extra("பாடத்திட்டம்"),
           exam_date:extra("தேர்வு தேதி"),
+          exam_name:extra("தேர்வு / ஆட்சேர்ப்பு"),
+          vacancies_breakdown:extra("பதவி வாரியான காலியிடங்கள்"),
           age_limit:j.age_limit,
           salary,
           selection_process:j.selection_process,
