@@ -77,7 +77,7 @@ function robotsAllows(text:string,pageUrl:string,userAgent:string){
  const allRules=applicable.flatMap(g=>g.rules);
  const parsed=new URL(pageUrl),requestPath=parsed.pathname+parsed.search;
  const matches=allRules.filter(r=>robotsPatternMatches(r.path,requestPath))
-  .sort((a,b)=>b.path.length-a.path.length);
+  .sort((a,b)=>b.path.length-a.path.length||(a.allow===b.allow?0:a.allow?-1:1));
  return !matches.length||matches[0].allow;
 }
 async function robotsPermits(pageUrl:string,userAgent:string){
