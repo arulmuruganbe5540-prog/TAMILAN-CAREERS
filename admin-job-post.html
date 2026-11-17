@@ -85,7 +85,7 @@ async function save(status){
  if(!p.title||!p.company||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, நிறுவனப் பெயர், துறை, வேலை வகை, இடம், வேலை விவரம் ஆகிய அனைத்தையும் நிரப்பவும்.",false);return}
  if(p.openings&&(!Number.isInteger(Number(p.openings))||Number(p.openings)<1)){say("காலியிடங்கள் குறைந்தது 1 ஆக இருக்க வேண்டும்.",false);return}
  if(p.salaryMin!==""&&p.salaryMax!==""&&Number(p.salaryMin)>Number(p.salaryMax)){say("குறைந்தபட்ச சம்பளம் அதிகபட்ச சம்பளத்தை விட அதிகமாக இருக்கக்கூடாது.",false);return}
- const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");
+ const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
   if(p.deadline&&p.deadline<today){say("கடைசி தேதி கடந்த தேதியாக இருக்கக்கூடாது.",false);return}
  const id=$("recordId").value;
  const row={created_by:user.id,title:p.title,company_name:p.company||null,status,payload:p,review_note:null,reviewed_by:null,reviewed_at:null};
