@@ -22,6 +22,7 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] AI resume matcher Bearer header parsing was corrected in the repository source; candidate certifications are now included in the matcher context.
 - [x] Candidate profile form supports adding, editing, and deleting certifications in the repository; database setup and real-user test remain pending.
 - [x] Government-source fetcher validates HTTPS redirects before following them and caps redirects.
+- [x] Public-branch privacy fix: unverified government review/source-candidate JSON files were removed from the current branch, ignored locally, and the monitor workflow now commits only the aggregate scan report. Older Git commits still contain historical copies; removing those requires a separate Git-history rewrite and force-push review.
 - [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
 
 ## Must finish before enabling external source scanning
