@@ -110,6 +110,16 @@ await check("Company applicant page requires login", async () => {
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
+await check("Company profile draft page requires login", async () => {
+  await open("company-profile.html");
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+});
+
+await check("Company job draft page requires login", async () => {
+  await open("job-posting.html");
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+});
+
 await check("Notification center requires login", async () => {
   await open("notifications.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
