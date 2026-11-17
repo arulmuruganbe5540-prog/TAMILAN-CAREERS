@@ -263,7 +263,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   v_company_id uuid;
   v_job_title text;
@@ -302,7 +302,7 @@ begin
     );
   return new;
 end;
-$;
+$$;
 revoke all on function public.tc_notify_company_on_new_application() from public, anon, authenticated;
 drop trigger if exists tc_notify_company_on_new_application on public.job_applications;
 create trigger tc_notify_company_on_new_application
@@ -316,7 +316,7 @@ returns integer
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare v_count integer := 0; v_rows integer := 0;
 begin
   -- Candidate reminder approximately 24 hours before the interview.
@@ -354,7 +354,7 @@ begin
   get diagnostics v_rows = row_count; v_count := v_count + v_rows;
   return v_count;
 end;
-$;
+$$;
 revoke all on function public.tc_generate_interview_reminders() from public, anon, authenticated;
 grant execute on function public.tc_generate_interview_reminders() to service_role;
 
