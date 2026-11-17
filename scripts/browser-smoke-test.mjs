@@ -95,11 +95,17 @@ await check("Government admin pages require login", async () => {
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
-await check("Private admin controls require login", async () => {
+await check("Private admin controls require authentication", async () => {
   await open("admin-control.html");
-  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  await page.waitForSelector("#gate:not(.hidden)", { timeout: 8000 });
+  if (!(await page.locator('#gate a[href*="login.html"]').count())) {
+    throw new Error("Admin login link is missing");
+  }
   await open("admin-job-post.html");
-  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  await page.waitForSelector("#gate:not(.hidden)", { timeout: 8000 });
+  if (!(await page.locator('#gate a[href*="login.html"]').count())) {
+    throw new Error("Admin job-post login link is missing");
+  }
 });
 
 await check("Job Seeker profile requires login", async () => {
