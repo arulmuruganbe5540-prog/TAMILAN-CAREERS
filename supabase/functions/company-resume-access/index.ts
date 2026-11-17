@@ -100,7 +100,7 @@ Deno.serve(async (req) => {
     }
 
     const { data: signed, error: signedError } = await admin.storage
-      .from("resumes")
+      .from("candidate-resumes")
       .createSignedUrl(resume.file_path, 60, { download: false });
     if (signedError || !signed?.signedUrl) {
       return json({ error: "Could not create a secure resume link" }, 500);
