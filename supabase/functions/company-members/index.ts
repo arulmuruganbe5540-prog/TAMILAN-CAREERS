@@ -103,7 +103,24 @@ const cors = {
                                                                                                                                                                                                                                                                                                                                   return reply({ success: true, message: 'Invitation accepted' });
                                                                                                                                                                                                                                                                                                                                       }
 
-                                                                                                                                                                                                                                                                                                                                          // All other actions require a company
+                                                                                                                                                                                                                                                                                                                                          // List companies where the caller is an owner or active HR manager.
+if (action === 'list_companies') {
+const [{ data: owned, error: ownerError }, { data: memberships, error: memberError }] = await Promise.all([
+admin.from('companies').select('id, company_name, owner_user_id').eq('owner_user_id', user.id),
+admin.from('company_members').select('company_id, member_role, member_status, companies(id, company_name, owner_user_id)').eq('user_id', user.id).eq('member_status', 'active')
+]);
+if (ownerError || memberError) return reply({ error: 'Could not load company access' }, 500);
+const items = new Map();
+for (const c of owned || []) items.set(c.id, { id: c.id, company_name: c.company_name, member_role: 'owner' });
+for (const m of memberships || []) {
+if (!['owner', 'hr_manager'].includes(m.member_role)) continue;
+const c = Array.isArray(m.companies) ? m.companies[0] : m.companies;
+if (c) items.set(c.id, { id: c.id, company_name: c.company_name, member_role: m.member_role });
+}
+return reply({ success: true, companies: [...items.values()] });
+}
+
+// All other actions require a company
                                                                                                                                                                                                                                                                                                                                               const companyId = body.company_id;
 
                                                                                                                                                                                                                                                                                                                                                   if (typeof companyId !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(companyId)) {
