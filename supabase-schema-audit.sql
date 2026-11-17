@@ -155,9 +155,12 @@ where n.nspname = 'public'
 order by p.proname;
 
 -- 7. Private Resume bucket configuration (no file names or contents are read).
+-- Check both the repository's current bucket name and the legacy name found in
+-- earlier Storage policies. Do not delete or rename either bucket based on this report.
 select id, name, public, file_size_limit, allowed_mime_types
 from storage.buckets
-where id = 'resumes';
+where id in ('resumes', 'candidate-resumes')
+order by id;
 
 -- 8. Storage object policies protecting the private Resume bucket.
 select schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
