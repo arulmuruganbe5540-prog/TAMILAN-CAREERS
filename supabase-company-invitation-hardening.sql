@@ -1,4 +1,4 @@
--- Harden the invitation-acceptance SECURITY DEFINER function.
+-- Harden the privileged invitation-acceptance function.
 -- The Edge Function validates the caller's Supabase session and only service_role
 -- may execute this RPC. An empty search_path prevents object shadowing.
 begin;
