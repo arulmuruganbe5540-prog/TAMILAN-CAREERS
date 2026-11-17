@@ -29,8 +29,8 @@ checks = {
         "admin_job_post_reviews" in admin,
     "Admin UI invokes the protected publisher":
         "tc_admin_publish_job" in admin,
-    "Admin UI restricts access to Super Admin":
-        "is_super_admin" in admin,
+    "Admin UI restricts access using the signed-in user role row under RLS":
+        'from("user_roles")' in admin and '"super_admin"' in admin,
     "Admin UI captures salary period":
         'id="salaryPeriod"' in admin and '"salaryPeriod"' in admin,
     "public listing labels salary period":
