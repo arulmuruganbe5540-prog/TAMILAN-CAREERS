@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] GitHub Pages deployment succeeded for commit `91df81e173defbd7fea56a661edd9067a9677ca5` on 17 November 2026 (run `44049703648`). Earlier confirmed deployments include `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, `590452ef30930e73d45f0e3b30a8b33398511fc3`, `d97881f53e46377ca5a9ec4d4c0cad50817596d7`, `490db747ab1542bff868507906e9cab0fdcd0c17`, and `74c781bb264ffc6b3fc239430397066b286a7743`.
-- [x] Website health workflow passed for commit `9dcece84c65e7157299312303aee87674d0a211b` on 17 November 2026 (run `44049306589`), including Deno type checks, SQL delimiter lint, structural checks, and browser smoke tests.
+- [x] Latest GitHub Pages deployment succeeded for commit `7e1545da8763e4c55cfa32a44747cd4161ad43b1` on 17 November 2026 (run `44050852418`). Earlier confirmed deployments include `91df81e173defbd7fea56a661edd9067a9677ca5`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, and `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`.
+- [x] Latest full website health workflow passed for commit `d21cf5931f72f5f5a7813034ba2855cb34ee7c9b` on 17 November 2026 (run `44050748223`): all five Supabase Edge Functions type-checked; SQL migration lint, private candidate artifact guard, public feed JavaScript, site structure, and browser smoke tests passed.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -23,6 +23,10 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Candidate profile form supports adding, editing, and deleting certifications in the repository; database setup and real-user test remain pending.
 - [x] Government-source fetcher validates HTTPS redirects before following them and caps redirects.
 - [x] Public-branch privacy fix: unverified government review/source-candidate JSON files were removed from the current branch, ignored locally, and the monitor workflow now commits only the aggregate scan report. Older Git commits still contain historical copies; removing those requires a separate Git-history rewrite and force-push review.
+- [x] CI privacy guard passed: it verifies the two unverified government candidate JSON files are not tracked, remain ignored, and are not staged by the monitor workflow.
+- [x] Official-source monitor run completed successfully: 24 of 60 registered sources were reachable in the latest report; source discovery completed. Supabase candidate sync was skipped because the monitor secret remains unconfigured, and only the aggregate report was committed.
+- [x] Source-discovery crawler now validates HTTPS redirects, limits redirect count, and accepts only HTML/XHTML content types.
+- [x] Candidate profile migration's malformed experience/certification index statements were corrected; SQL lint now also checks CREATE INDEX ... ON clauses.
 - [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
 
 ## Must finish before enabling external source scanning
