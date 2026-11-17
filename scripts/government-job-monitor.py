@@ -22,6 +22,8 @@ KEYWORDS = re.compile(r"recruitment|vacanc|advertisement|notification|career.?no
                       r"result|merit.?list|answer.?key|admit.?card|hall.?ticket|exam.?date|"
                       r"selection.?list|provisional.?list|short.?list|appointment.?order|"
                       r"application.?form|online.?application", re.I)
+# Drop generic navigation labels even when their destination URL contains a keyword.
+GENERIC_TITLE = re.compile(r"^(home|more|more \.{2,}|view all|read more|click here|here|results?|notifications?|recruitment|careers?|apply|login|menu|latest news|what.s new|download|know more)$", re.I)
 CATEGORY = [
     ("admit_card", re.compile(r"admit.?card|hall.?ticket|call.?letter|e.?call.?letter", re.I)),
     ("result", re.compile(r"result|merit.?list|selection.?list|short.?list", re.I)),
@@ -83,7 +85,9 @@ def fetch_source(source):
             continue
         absolute = urldefrag(urljoin(final_url, href))[0]
         combined = title + " " + absolute
-        if not KEYWORDS.search(combined) or not host_allowed(absolute, source["url"]):
+        if len(title) < 5 or GENERIC_TITLE.fullmatch(title) or not KEYWORDS.search(combined):
+            continue
+        if not host_allowed(absolute, source["url"]):
             continue
         if absolute in seen:
             continue
