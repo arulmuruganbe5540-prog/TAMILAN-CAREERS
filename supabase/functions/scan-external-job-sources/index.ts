@@ -38,22 +38,14 @@ async function fetchRegisteredPage(baseUrl:string){
  function robotsPatternMatches(pattern:string,path:string){
   const endAnchored=pattern.endsWith("$");
   const raw=endAnchored?pattern.slice(0,-1):pattern;
-  const parts=raw.split("*");
-  if(parts.length===1)return path.startsWith(raw)&&(!endAnchored||path.length===raw.length);
-  let position=0;
-  for(let i=0;i<parts.length;i++){
-   const part=parts[i];
-   if(i===0){
-    if(part&&!path.startsWith(part))return false;
-    position=part.length;
-   }else{
-    const found=path.indexOf(part,position);
-    if(found<0)return false;
-    if(i===parts.length-1&&endAnchored&&part!==""&&found+part.length!==path.length)return false;
-    position=found+part.length;
-   }
+  let expression="^";
+  for(const char of raw){
+   if(char==="*")expression+=".*";
+   else if("\\^$+?.()|{}[]".includes(char))expression+="\\"+char;
+   else expression+=char;
   }
-  return !endAnchored||parts[parts.length-1]===""||position===path.length;
+  if(endAnchored)expression+="$";
+  try{return new RegExp(expression).test(path);}catch{return false;}
  }
 function robotsAllows(text:string,pageUrl:string,userAgent:string){
  const groups:{agents:string[];rules:{allow:boolean;path:string}[]}[]=[];
