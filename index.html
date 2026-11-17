@@ -4,7 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAMILAN CAREERS | வேலைவாய்ப்பு இணையதளம்</title>
+<title>TAMILAN CAREERS | இந்தியா முழுவதும் வேலைவாய்ப்பு</title>
+<meta name="description" content="இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளைத் தேடுங்கள். Resume பதிவேற்றம், வேலை விண்ணப்பம் மற்றும் நிறுவன சேவைகள்.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta name="description" content="தமிழ்நாட்டில் வேலை தேடவும், நிறுவனங்கள் வேலைவாய்ப்பு அறிவிப்புகளை வெளியிடவும் TAMILAN CAREERS.">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -87,7 +89,7 @@ nav{justify-content:center}
 </header>
 <section class="hero" id="home">
   <h1>உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!</h1>
-  <p>தமிழ்நாட்டின் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள்.<br>உங்கள் எதிர்காலத்தை இன்றே தொடங்குங்கள்.</p>
+  <p>இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள்.<br>தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</p>
   <div class="searchbox">
     <input id="keyword" type="text" placeholder="வேலை / திறமை தேடுங்கள்">
     <input id="location" type="text" placeholder="இடம் (எ.கா. சேலம்)">
@@ -129,22 +131,22 @@ nav{justify-content:center}
     </div>
   </div>
   <div class="jobs" id="jobList">
-    <div class="empty">இப்போது வேலைவாய்ப்புகள் எதுவும் இணைக்கப்படவில்லை.<br>நிறுவனங்கள் வேலைகளைப் பதிவு செய்யும் வசதி விரைவில் இணைக்கப்படும்.</div>
+    <div class="empty" id="tcLatestJobs">புதிய வேலைவாய்ப்புகள் ஏற்றப்படுகின்றன...</div>
   </div>
 </section>
 <section class="container">
   <div class="ai">
     <div>
       <h2>🤖 AI Resume Job Matching</h2>
-      <p>உங்கள் Resume-ஐ பதிவேற்றுங்கள்.<br>உங்கள் திறமைக்கும் அனுபவத்திற்கும் பொருத்தமான வேலைகளைக் கண்டறிய உதவும் AI வசதி விரைவில் வருகிறது.</p>
+      <p>உங்கள் Resume-ஐப் பயன்படுத்தி வெளியிடப்பட்ட வேலைகளில் பொருத்தமான வாய்ப்புகளைக் கண்டறியுங்கள்.<br>AI பொருத்த மதிப்பீடு மற்றும் காரணங்களைப் பார்க்கலாம்.</p>
     </div>
-    <button onclick="showMessage('AI Resume Matching வசதி அடுத்த கட்டத்தில் உருவாக்கப்படும்.')">மேலும் அறிய</button>
+    <button onclick="window.location.href='ai-job-matches.html'">AI வேலை பொருத்தம் பார்க்க</button>
   </div>
 </section>
 <section class="employer" id="employer">
   <h2>உங்கள் நிறுவனத்திற்கு பணியாளர்கள் தேவையா?</h2>
   <p>உங்கள் நிறுவனத்தில் உள்ள காலிப்பணியிடங்களை TAMILAN CAREERS மூலம் வெளியிடுங்கள்.<br>தகுதியான நபர்களை எளிதாகச் சென்றடையுங்கள்.</p>
-  <button onclick="showMessage('Company Registration மற்றும் Job Posting வசதிகள் அடுத்த கட்டத்தில் இணைக்கப்படும்.')">நிறுவனமாக பதிவு செய்யுங்கள்</button>
+  <button onclick="window.location.href='login.html'">நிறுவனமாக பதிவு / Login</button>
 </section>
 <footer>
   <strong>TAMILAN CAREERS</strong><br>
@@ -170,5 +172,37 @@ function searchJobs(){
   window.location.href = 'jobs.html' + (params.toString() ? '?' + params.toString() : '');
 }
 </script>
+
+<script>
+(function(){
+ const url="https://qkmljuuusfjowexvy.supabase.co";
+ const key="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+ const host=document.getElementById("jobList"),info=document.getElementById("jobInfo");
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
+ async function load(){
+  try{
+   const db=window.supabase.createClient(url,key);
+   const {data,error}=await db.from("jobs").select("*").eq("status","published").order("created_at",{ascending:false}).limit(4);
+   if(error)throw error;
+   const jobs=data||[];
+   info.textContent=jobs.length?"சமீபத்தில் வெளியிடப்பட்ட வேலைவாய்ப்புகள்":"புதிய வேலைகள் விரைவில் இங்கே தோன்றும்.";
+   if(!jobs.length){host.innerHTML='<div class="empty">தற்போது வெளியிடப்பட்ட வேலைகள் இல்லை. புதிய வேலைகளுக்காக மீண்டும் பார்க்கவும்.<br><a href="jobs.html">அனைத்து வேலைகளையும் தேடுங்கள்</a></div>';return}
+   host.innerHTML=jobs.map(j=>{
+    const id=pick(j,["id","job_id"]),title=pick(j,["job_title","title"])||"வேலைவாய்ப்பு";
+    const company=pick(j,["company_name"]),loc=pick(j,["location","job_location","work_location"]);
+    const type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]);
+    const salary=min||max?("₹ "+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் குறிப்பிடப்படவில்லை";
+    return '<article class="job"><span class="tag">வெளியிடப்பட்ட வேலை</span><h3>'+esc(title)+'</h3><p class="company">'+esc(company)+'</p><p>'+esc(loc)+' · '+esc(type)+'</p><div class="jobbott"><b>'+esc(salary)+'</b><a class="apply" href="job-details.html?id='+encodeURIComponent(id)+'">விவரம் / Apply</a></div></article>';
+   }).join("");
+  }catch(e){
+   info.textContent="வேலைவாய்ப்புகளை ஏற்ற முடியவில்லை";
+   host.innerHTML='<div class="empty">வேலை விவரங்களை இப்போது பெற முடியவில்லை. தயவுசெய்து <a href="jobs.html">வேலை தேடல் பக்கத்தை</a> முயற்சிக்கவும்.</div>';
+  }
+ }
+ load();
+})();
+</script>
+
 </body>
 </html>
