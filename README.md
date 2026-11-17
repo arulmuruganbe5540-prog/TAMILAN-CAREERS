@@ -22,7 +22,7 @@
 - New government portal discovery: `scripts/government-source-discovery.py` scans links from already trusted government sources and creates `government-source-discovery-candidates.json`. Newly found domains are suggestions only and require verification before joining the trusted list; this runs every six hours with the official-source monitor.
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
-- Resume job matching: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/ai-job-matches.html
+- Resume-based rule search: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-job-search.html
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
 - Company job posting draft: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-posting.html
 - Private job-draft database SQL: `supabase-job-posting-drafts.sql`
@@ -30,14 +30,14 @@
 - Candidate education / experience / certification migration: `supabase-candidate-profile-education-experience.sql`.
 - Supabase launch setup guide (Tamil, ordered SQL / Edge Function / Secret / testing steps): `SUPABASE-LAUNCH-SETUP-GUIDE.md`.
 - Launch readiness checklist: `LAUNCH-READINESS-CHECKLIST.md`.
-- Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
+- Central Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
 - All 28 State Government Jobs (official State PSC directory + verified notification tracker): https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/state-government-jobs.html
 - Daily 28-state PSC source-monitor report: `state-job-monitor-report.json` (first scheduled run pending; source changes require manual vacancy verification).
 - Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
 - Government Exam Preparation: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/exam-preparation.html
 
 ## Main features currently in the repository
-- Resume-to-job matching page: reads PDF/DOCX text locally in the browser and ranks currently published internal jobs against profile/resume keywords, skills and preferred location (transparent rule-based first version; not generative AI).
+- Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
 - Tamil / English responsive public homepage, job search and individual job details pages.
 - Supabase email registration, login, password reset flow and account dashboard.
 - Job seeker profile editor connected to `profiles`, `job_seeker_profiles`, `candidate_skills`, `candidate_languages`, `candidate_preferences`, `candidate_education` and `candidate_experience`; supports multiple education, work-history and certification records with add/edit/delete controls (requires matching RLS policies).
@@ -69,12 +69,8 @@
 - Never pay an individual or share OTPs, passwords, bank PINs or account credentials to obtain a job.
 
 
-### Bilingual AI job search (deployment required)
-- `jobs.html` includes a separate AI search action that can understand a query written in any language and returns job titles, descriptions, locations, skills and match reasons in Tamil and English only. The existing whole-site language selector is unchanged.
-- Backend source: `supabase/functions/bilingual-job-search/index.ts`. It requires a signed-in user, reads only published jobs under that user's Supabase RLS permissions, ranks relevant jobs, and translates only supplied job facts. It does not use the service-role key.
-- Deployment: `supabase functions deploy bilingual-job-search`. Configure `OPENAI_API_KEY` in Supabase Edge Function Secrets. Supabase must provide `SUPABASE_URL` and `SUPABASE_ANON_KEY` to the function. Keep the OpenAI key out of browser code and GitHub.
-- AI search may incur API charges and currently evaluates at most 100 published job rows per request. Ordinary database search remains available without signing in; the any-language AI search requires login and a deployed function.
-- Source code is committed but the Edge Function has not yet been deployed or live-tested. Do not advertise the AI search as live until deployment, secret setup and an authenticated test succeed.
+### AI policy
+- TAMILAN CAREERS does not use AI features or paid AI APIs. AI-powered resume matching, bilingual AI search, AI notice extraction and AI mock-exam generation are disabled or removed. The active Resume job search and mock exams use local deterministic rules and curated question banks only.
 
 ### Automatic job-data and technology maintenance
 - Government source discovery and state PSC page-change monitoring run on schedules and report candidates/changes; source monitoring does not prove that a vacancy is open. New sources and vacancies require verification before publication.
@@ -123,15 +119,6 @@
 ### Read-only schema and RLS audit
 - `supabase-schema-audit.sql` reports relevant public table columns/types, foreign-key/unique/check constraints and RLS policies for jobs, companies, company_members and job_applications. It performs no DDL or data changes.
 - Use its results to verify actual `jobs.id` type and company/job ownership relationship before creating employer applicant-read or status-update policies.
-
-### AI resume matching backend (deployment required)
-- `ai-job-matches.html` now offers an optional AI matching action in addition to the local rule-based matcher. It requires the user to explicitly tick a consent checkbox before any resume text is sent to the AI service.
-- Secure Edge Function source: `supabase/functions/ai-resume-match/index.ts`. It validates the signed-in Supabase user, reads candidate profile data and published jobs under that user's Supabase permissions/RLS, sends only job-related candidate context and resume text to the OpenAI Responses API, and returns structured match explanations. It does not use the service-role key.
-- The Edge Function requires the Supabase function secrets `OPENAI_API_KEY` (user-provided OpenAI API key), `SUPABASE_URL`, and `SUPABASE_ANON_KEY`. Supabase normally provides the latter two as Edge Function default environment variables; verify they are available in the deployed function environment.
-- Deploy the function from the Supabase project using the Supabase CLI: `supabase functions deploy ai-resume-match`. Then add `OPENAI_API_KEY` under Supabase Project Settings → Edge Functions → Secrets (or the equivalent Secrets page in the current dashboard). Do not put this key in HTML, GitHub, or browser code.
-- The AI request is optional and may incur OpenAI API charges on the account that owns the key. Keep the key private and monitor usage. Resume text is sent to OpenAI only after explicit consent; users should remove unnecessary personal identifiers from the resume first.
-- The AI backend source and frontend JavaScript have been committed, but the Edge Function has not been deployed or live-tested from this repository workflow. AI matching will show a setup message until deployment and secret configuration are complete. The existing local rule-based matcher remains available.
-
 
 ## Advanced government recruitment discovery (initial implementation)
 - Source registry: `data/government-official-sources.json`. It lists central recruiting bodies and State PSC / Tamil Nadu recruitment boards, with an explicit authority name and official entry URL.
