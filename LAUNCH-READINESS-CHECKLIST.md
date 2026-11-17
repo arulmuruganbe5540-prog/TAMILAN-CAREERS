@@ -102,3 +102,12 @@ This is an operational checklist based on the project changes and user-confirmed
 - Never expose Supabase service-role keys, OpenAI keys, monitor secrets, passwords, or OTPs in frontend code, GitHub commits, or chat.
 - Do not claim a feature is live until its database setup, function deployment, permissions, and real-user test have all passed.
 - Prioritize launch blockers over optional enhancements.
+
+
+## 17 November 2026 — Admin authorization follow-up
+
+- Admin Control Center and Admin Job Post no longer call the revoked public `is_super_admin()` SECURITY DEFINER RPC. Both check the signed-in user's own `user_roles` row under the existing owner-only SELECT RLS policy.
+- Admin Control Center now displays the authenticated account identity instead of a hard-coded name.
+- A guarded first-admin SQL bootstrap is available at `supabase-first-super-admin-bootstrap.sql`. It requires the project owner to insert their own exact login email into the placeholder and run the script manually.
+- Live role audit found one `job_seeker` role and zero `super_admin` assignments. Admin pages therefore remain correctly gated until the owner explicitly bootstraps the first Super Admin. This is an intentional privilege boundary, not a frontend error.
+- The Pages deployment succeeded for the Admin repair commit `02997b8ce3045e7e865a428030dbd19d69538d5f` (run `44090939571`). Subsequent documentation-only commits trigger fresh builds/audits; check the latest workflow run before calling the newest repository state verified.
