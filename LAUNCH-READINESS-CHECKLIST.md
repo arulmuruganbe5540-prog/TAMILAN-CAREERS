@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] GitHub Pages deployment was confirmed successful for commits `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, `590452ef30930e73d45f0e3b30a8b33398511fc3`, `d97881f53e46377ca5a9ec4d4c0cad50817596d7`, and `490db747ab1542bff868507906e9cab0fdcd0c17`. Latest deployment for `31e6229b6ea37860fd1b20c919744af05c81d4e1` is still being checked.
-- [x] Website health workflow passed for commits `9b50c6c29bddfbcb2da92f10d57acf1296cadded`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, `490db747ab1542bff868507906e9cab0fdcd0c17`, and `31e6229b6ea37860fd1b20c919744af05c81d4e1`, including Deno type checks, SQL delimiter lint, structural checks, and browser smoke tests.
+- [x] GitHub Pages deployment succeeded for commit `91df81e173defbd7fea56a661edd9067a9677ca5` on 17 November 2026 (run `44049703648`). Earlier confirmed deployments include `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, `590452ef30930e73d45f0e3b30a8b33398511fc3`, `d97881f53e46377ca5a9ec4d4c0cad50817596d7`, `490db747ab1542bff868507906e9cab0fdcd0c17`, and `74c781bb264ffc6b3fc239430397066b286a7743`.
+- [x] Website health workflow passed for commit `9dcece84c65e7157299312303aee87674d0a211b` on 17 November 2026 (run `44049306589`), including Deno type checks, SQL delimiter lint, structural checks, and browser smoke tests.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -16,10 +16,13 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] A browser smoke test now checks that the external-source review page redirects unauthenticated visitors to login.
 - [x] Scanner response parsing is capped at 1.2 MB while streaming, instead of reading an unbounded response before slicing.
 - [x] Scanner rejects non-HTML responses, requires an explicit HTML/XHTML content type, validates each HTTPS redirect before fetching it, limits redirects, and records per-source scan failures accurately.
-- [x] GitHub Actions now checks dollar-quote pairing across all 18 SQL files to catch the malformed PL/pgSQL delimiter issue found during review.
+- [x] GitHub Actions now checks dollar-quote pairing across all 18 SQL files to catch malformed PL/pgSQL delimiters; it also checks SECURITY DEFINER functions for a locked-down `search_path`.
 - [x] Candidate certification table, owner-only policies, employer applicant-only read policy, and candidate profile add/edit/delete UI are prepared in the repository; Supabase migration and real-account testing are still pending.
 - [x] Government source seed migrations now preserve an administrator's enabled/disabled choices when re-run.
-- [x] AI resume matcher Bearer header parsing was corrected in the repository source.
+- [x] AI resume matcher Bearer header parsing was corrected in the repository source; candidate certifications are now included in the matcher context.
+- [x] Candidate profile form supports adding, editing, and deleting certifications in the repository; database setup and real-user test remain pending.
+- [x] Government-source fetcher validates HTTPS redirects before following them and caps redirects.
+- [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
 
 ## Must finish before enabling external source scanning
 
