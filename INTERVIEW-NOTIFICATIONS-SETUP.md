@@ -3,6 +3,7 @@
 ## Included in this change
 
 - Private per-user notification inbox with read/unread state.
+- Immediate notification to authorized company users when a candidate submits a new application.
 - Candidate notification when an employer changes application status using the secure status RPC.
 - Employer can send an interview invitation from each eligible applicant card.
 - Invitation includes date/time, mode, venue or meeting link, and letter text.
