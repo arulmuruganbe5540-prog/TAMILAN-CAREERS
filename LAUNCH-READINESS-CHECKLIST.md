@@ -6,6 +6,9 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
+- [x] Latest GitHub Pages deployment succeeded for commit `b976341e83114902a7e8901b68925146066285fa` (run `44063879056`; completed successfully).
+- [x] Latest full website health workflow passed for commit `b976341e83114902a7e8901b68925146066285fa` (run `44063880263`; completed successfully).
+- [x] Candidate Resume deletion now removes the private Storage object before deleting its metadata row; if Storage deletion fails, the metadata remains available for retry. This repository change passed the health workflow and Pages deployment; live Supabase behavior still needs real-account testing.
 - [x] Latest GitHub Pages deployment succeeded for main commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` on 17 November 2026 (run `44061663205`; deployment completed successfully).
 - [x] Latest full website health workflow passed for the same commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` (run `44061664222`; Edge Function type checks, SQL lint, privacy guards, website structure checks, Chromium installation, key-page browser smoke tests, and health-report upload all succeeded).
 - [x] Interview/notification SQL now performs a schema preflight for the required application, job, company, and company-member tables/columns before making migration changes. This guard is committed, but the SQL still has not been run against the live Supabase project.
