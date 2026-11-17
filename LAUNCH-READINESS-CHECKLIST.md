@@ -7,7 +7,7 @@ This is an operational checklist based on the project changes and user-confirmed
 ## Confirmed complete
 
 - [x] Latest confirmed GitHub Pages deployment succeeded for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075721444`; build and deploy jobs succeeded).
-- [x] Latest confirmed full website health workflow passed for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075723027`; audit job succeeded, including SQL lint, Edge Function checks, Resume security guard, and browser smoke tests).
+- [x] Latest confirmed full website health workflow passed for commit `ac3c98b21263da7e2192151d413af4cc7f8f7a35` (run `44075880374`; audit job succeeded, including SQL lint, Edge Function checks, Resume security guard, and browser smoke tests).
 - [x] Read-only schema audit compares `resumes`, `candidate-resumes`, and `job-offers` bucket settings, counts stored objects without exposing paths, and retrieves the live `can_access_job_application` function definition for review.
 - [x] Consolidated setup, focused Resume Storage SQL, and employer application-status SQL now fail early when required existing tables/columns are missing or incompatible.
 - [x] Candidate Resume deletion now removes the private Storage object before deleting its metadata row; if Storage deletion fails, the metadata remains available for retry. This repository change passed the health workflow and Pages deployment; live Supabase behavior still needs real-account testing.
