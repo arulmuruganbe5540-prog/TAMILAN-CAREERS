@@ -39,7 +39,17 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <form id="jobForm" class="form">
 <input type="hidden" id="recordId">
 <input type="hidden" id="companyId"><input type="hidden" id="sourceDraftId">
-<div class="field wide"><label for="jobKind">வேலைவாய்ப்பு பிரிவு *</label><select id="jobKind" required><option value="government">அரசு வேலை</option><option value="private" selected>தனியார் வேலை</option><option value="foreign">வெளிநாட்டு வேலை</option></select><span class="hint">Super Admin மூன்று பிரிவுகளிலும் நேரடியாக வேலை சேர்க்கலாம்.</span></div><div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
+<div class="field wide"><label for="jobKind">வேலைவாய்ப்பு பிரிவு *</label><select id="jobKind" required><option value="government">அரசு வேலை</option><option value="private" selected>தனியார் வேலை</option><option value="foreign">வெளிநாட்டு வேலை</option></select><span class="hint">Super Admin மூன்று பிரிவுகளிலும் நேரடியாக வேலை சேர்க்கலாம்.</span></div>
+<div class="field wide gov-only"><label for="governmentScope">அரசு வேலை வகை *</label><select id="governmentScope"><option value="">தேர்வு செய்யவும்</option><option value="central">மத்திய அரசு வேலை</option><option value="tamil-nadu">தமிழ்நாடு அரசு வேலை</option></select><span class="hint">மத்திய அரசு அல்லது தமிழ்நாடு அரசு — இதில் ஒன்றைத் தேர்ந்தெடுக்கவும்.</span></div>
+<div class="field gov-only"><label for="examName">தேர்வு / ஆட்சேர்ப்பு பெயர்</label><input id="examName" maxlength="180" placeholder="உதா: TNPSC Group IV / SSC CGL"></div>
+<div class="field gov-only"><label for="applicationStartDate">விண்ணப்பம் தொடங்கும் தேதி</label><input id="applicationStartDate" type="date"></div>
+<div class="field gov-only"><label for="examDate">தேர்வு தேதி</label><input id="examDate" type="date"></div>
+<div class="field wide gov-only"><label for="vacancyBreakdown">பதவி வாரியான காலியிடங்கள்</label><textarea id="vacancyBreakdown" maxlength="3000" placeholder="பதவி பெயர், காலியிட எண்ணிக்கை, இடஒதுக்கீடு விவரம்..."></textarea></div>
+<div class="field wide gov-only"><label for="syllabus">தேர்வு பாடத்திட்டம் / Syllabus</label><textarea id="syllabus" maxlength="5000" placeholder="பாடங்கள், மதிப்பெண்கள், தேர்வு நிலைகள்..."></textarea></div>
+<div class="field foreign-only"><label for="visaType">விசா / Work Permit வகை</label><input id="visaType" maxlength="180" placeholder="Employment Visa / Work Permit"></div>
+<div class="field foreign-only"><label for="contractDuration">ஒப்பந்த காலம்</label><input id="contractDuration" maxlength="120" placeholder="2 ஆண்டுகள்"></div>
+<div class="field foreign-only"><label for="accommodation">தங்குமிடம் / உணவு</label><input id="accommodation" maxlength="300" placeholder="நிறுவனம் வழங்கும் விவரம்"></div>
+<div class="field foreign-only"><label for="flightSupport">விமான டிக்கெட் / பயண உதவி</label><input id="flightSupport" maxlength="300" placeholder="நிறுவனம் வழங்குமா?"></div><div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
 <div class="field"><label for="company">நிறுவனப் பெயர் *</label><input id="company" maxlength="180" placeholder="நிறுவனம் / அரசு துறை / நிறுவனம்"><span class="hint">Super Admin நேரடியாகச் சேர்க்கும்போது விருப்பத்தேர்வு. Company submission என்றால் Verified நிறுவனம் கட்டாயம்.</span></div>
 <div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>Accounting &amp; Finance</option><option>Construction</option><option>Customer Support</option><option>Driver &amp; Delivery</option><option>Education</option><option>Engineering</option><option>Government Jobs</option><option>Healthcare</option><option>Hotel &amp; Restaurant</option><option>IT &amp; Software</option><option>Manufacturing</option><option>Office &amp; Administration</option><option>Other Jobs</option><option>Sales &amp; Marketing</option></select></div>
 <div class="field"><label for="authority">அரசு ஆணையம் / துறை</label><input id="authority" maxlength="180" placeholder="TNPSC / UPSC / SSC / RRB..."></div><div class="field"><label for="countryName">நாடு (வெளிநாட்டு வேலை)</label><input id="countryName" maxlength="100" placeholder="UAE / Saudi Arabia / Singapore"></div><div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
@@ -68,7 +78,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id);
 let user=null;
-const fields=["jobKind","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
+const fields=["jobKind","governmentScope","examName","applicationStartDate","examDate","vacancyBreakdown","syllabus","visaType","contractDuration","accommodation","flightSupport","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
 function norm(v){return String(v??"").trim().toLowerCase().replace(/\s+/g," ").replace(/\/$/,"")}
@@ -98,7 +108,7 @@ async function checkGovernmentDuplicate(p,currentReviewId){
 }
 function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());p.job_kind=p.jobKind||"private";p.authority=p.authority||"";p.country_name=p.countryName||"";p.exam_year=p.examYear||"";p.notification_date=p.notificationDate||"";p.notification_number=p.notificationNumber||"";p.age_limit=p.ageLimit||"";p.application_fee=p.applicationFee||"";p.official_url=p.officialUrl||"";p.notification_pdf_url=p.notificationPdfUrl||"";p.application_url=p.applicationUrl||"";p.selection_process=p.selectionProcess||"";p.company_id=$("companyId").value||null;p.source_draft_id=$("sourceDraftId").value||null;return p}
 function fill(p={}){const aliases={jobKind:"job_kind",countryName:"country_name",examYear:"exam_year",notificationDate:"notification_date",notificationNumber:"notification_number",ageLimit:"age_limit",applicationFee:"application_fee",officialUrl:"official_url",notificationPdfUrl:"notification_pdf_url",applicationUrl:"application_url",selectionProcess:"selection_process",authority:"authority"};fields.forEach(k=>$(k).value=p[k]??p[aliases[k]]??(k==="openings"?"1":k==="jobKind"?"private":""));$("salaryPeriod").value=p.salaryPeriod||(p.type==="Daily Wage"?"daily":"monthly");$("recordId").value=p.id||"";$("companyId").value=p.company_id||"";$("sourceDraftId").value=p.source_draft_id||"";$("formTitle").textContent=p.id?"✏️ வேலை அறிவிப்பைத் திருத்தவும்":"✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
-function resetForm(){fill({});$("jobForm").reset();$("recordId").value="";$("openings").value="1";$("formTitle").textContent="✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
+function resetForm(){$("jobForm").reset();fill({});$("recordId").value="";$("openings").value="1";$("formTitle").textContent="✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்";updateKindFields()}
 function statusLabel(s){return ({draft:"Draft",pending_review:"Review காத்திருக்கிறது",approved:"Approved",rejected:"Rejected"})[s]||s}
 async function loadCategories(){
  const sel=$("category"),current=sel.value;
@@ -109,7 +119,7 @@ async function loadCategories(){
 }
 async function save(status){
  const p=payload();
- if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், வேலை விவரம் ஆகியவற்றை நிரப்பவும்.",false);return} if(p.jobKind==="government"&&!p.officialUrl){say("அரசு வேலைக்கு அதிகாரப்பூர்வ இணையதள இணைப்பு கட்டாயம்.",false);return} if(p.jobKind==="foreign"&&!p.countryName){say("வெளிநாட்டு வேலைக்கு நாடு குறிப்பிட வேண்டும்.",false);return}
+ if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், வேலை விவரம் ஆகியவற்றை நிரப்பவும்.",false);return} if(p.jobKind==="government"&&(!p.officialUrl||!p.authority||!p.governmentScope)){say("அரசு வேலைக்கு மத்திய / தமிழ்நாடு அரசு வகை, ஆட்சேர்ப்பு துறை மற்றும் அதிகாரப்பூர்வ இணையதள இணைப்பு கட்டாயம்.",false);return} if(p.jobKind==="foreign"&&!p.countryName){say("வெளிநாட்டு வேலைக்கு நாடு குறிப்பிட வேண்டும்.",false);return}
  if(p.openings&&(!Number.isInteger(Number(p.openings))||Number(p.openings)<1)){say("காலியிடங்கள் குறைந்தது 1 ஆக இருக்க வேண்டும்.",false);return}
  if(p.salaryMin!==""&&p.salaryMax!==""&&Number(p.salaryMin)>Number(p.salaryMax)){say("குறைந்தபட்ச சம்பளம் அதிகபட்ச சம்பளத்தை விட அதிகமாக இருக்கக்கூடாது.",false);return}
  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
@@ -122,7 +132,17 @@ async function save(status){
    if(duplicate){say("⚠️ இந்த அரசு வேலை ஏற்கெனவே உள்ளது! ("+duplicate.where+")\\nபதவி: "+duplicate.title+"\\nகாரணம்: "+duplicate.reason+"\\nபதிவை மீண்டும் வெளியிடாமல், ஏற்கெனவே உள்ள அறிவிப்பைத் திறந்து சரிபார்க்கவும்.",false);return}
   }catch(e){say(e.message||"Duplicate சரிபார்ப்பு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.",false);return}
  }
- const row={created_by:user.id,title:p.title,company_name:p.company||null,status,payload:p,review_note:null,reviewed_by:null,reviewed_at:null};
+ if(p.jobKind==="government"){
+ const prefix=p.governmentScope==="tamil-nadu"?"Tamil Nadu Government — ":"Central Government — ";
+ if(!/^Tamil Nadu Government|^Central Government/i.test(p.authority))p.authority=prefix+p.authority;
+ const extra=[["தேர்வு / ஆட்சேர்ப்பு",p.examName],["விண்ணப்பம் தொடங்கும் தேதி",p.applicationStartDate],["தேர்வு தேதி",p.examDate],["பதவி வாரியான காலியிடங்கள்",p.vacancyBreakdown],["பாடத்திட்டம்",p.syllabus]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
+ if(extra.length)p.description+="\\n\\n"+extra.join("\\n");
+}
+if(p.jobKind==="foreign"){
+ const extra=[["விசா / Work Permit",p.visaType],["ஒப்பந்த காலம்",p.contractDuration],["தங்குமிடம் / உணவு",p.accommodation],["விமான டிக்கெட் / பயண உதவி",p.flightSupport]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
+ if(extra.length)p.description+="\\n\\n"+extra.join("\\n");
+}
+const row={created_by:user.id,title:p.title,company_name:p.company||null,status,payload:p,review_note:null,reviewed_by:null,reviewed_at:null};
  let result;
  if(id)result=await db.from("admin_job_post_reviews").update({title:row.title,company_name:row.company_name,status:row.status,payload:row.payload,review_note:null,reviewed_by:null,reviewed_at:null}).eq("id",id).select("id").single();
  else result=await db.from("admin_job_post_reviews").insert(row).select("id").single();
@@ -159,6 +179,12 @@ async function act(action,id,rows){
  if(error){say("நிலை மாற்ற முடியவில்லை: "+error.message,false);return}
  say("நிலை மாற்றப்பட்டது: "+statusLabel(update.status));await loadQueue();
 }
+function updateKindFields(){
+ const kind=$("jobKind").value;
+ document.querySelectorAll(".gov-only").forEach(el=>el.classList.toggle("hidden",kind!=="government"));
+ document.querySelectorAll(".foreign-only").forEach(el=>el.classList.toggle("hidden",kind!=="foreign"));
+}
+$("jobKind").addEventListener("change",updateKindFields);
 async function init(){
  const {data,error}=await db.auth.getUser();
  if(error||!data.user){$("loading").classList.add("hidden");$("gateText").textContent="முதலில் Admin கணக்கில் Login செய்யவும்.";$("gate").classList.remove("hidden");return}
@@ -173,6 +199,7 @@ $("sendReview").addEventListener("click",()=>save("pending_review"));
 $("reset").addEventListener("click",resetForm);
 $("filter").addEventListener("change",loadQueue);
 $("type").addEventListener("change",()=>{const p=$("salaryPeriod");if($("type").value==="Daily Wage"&&p.value==="monthly")p.value="daily";else if($("type").value!=="Daily Wage"&&p.value==="daily")p.value="monthly"});
+updateKindFields();
 init();
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
