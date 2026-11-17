@@ -59,7 +59,16 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <div class="field"><label for="expEnd">முடித்த தேதி</label><input id="expEnd" type="date"></div>
 <div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> தற்போது இங்கு வேலை செய்கிறேன்</label></div>
 <div class="field full"><label for="expDescription">பொறுப்புகள் / செய்த வேலைகள்</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் சேமிக்கவும்</button><button class="secondary" type="button" id="expCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="experienceList" class="hint">பணி அனுபவம் ஏற்றப்படுகிறது...</div></section></main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
+<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் சேமிக்கவும்</button><button class="secondary" type="button" id="expCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="experienceList" class="hint">பணி அனுபவம் ஏற்றப்படுகிறது...</div></section>
+<section class="panel" id="certificationPanel"><h2>📜 சான்றிதழ்கள்</h2><p class="hint">உங்கள் தொழில்முறை / திறன் சான்றிதழ்களைச் சேர்க்கலாம்.</p>
+<form id="certificationForm"><input type="hidden" id="certificationId"><div class="grid">
+<div class="field"><label for="certName">சான்றிதழ் பெயர் *</label><input id="certName" maxlength="180" required placeholder="உதா: Tally Prime Certificate"></div>
+<div class="field"><label for="certIssuer">வழங்கிய நிறுவனம்</label><input id="certIssuer" maxlength="180"></div>
+<div class="field"><label for="certIssue">வழங்கிய தேதி</label><input id="certIssue" type="date"></div>
+<div class="field"><label for="certExpiry">காலாவதி தேதி</label><input id="certExpiry" type="date"></div>
+<div class="field full"><label for="certCredential">Credential ID (விருப்பம்)</label><input id="certCredential" maxlength="120"></div>
+</div><div class="actions"><button class="primary" type="submit" id="certSave">சான்றிதழைச் சேமிக்கவும்</button><button class="secondary" type="button" id="certCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form>
+<div id="certificationList" class="hint">சான்றிதழ்கள் ஏற்றப்படுகின்றன...</div></section></main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
 <script>
 const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
@@ -109,12 +118,16 @@ function resetRecordForm(kind){
 async function loadRecords(){
  const [ed,ex]=await Promise.all([
   client.from("candidate_education").select("id,institution_name,qualification,field_of_study,grade,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false}),
-  client.from("candidate_experience").select("id,company_name,job_title,employment_type,city,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false})
+  client.from("candidate_experience").select("id,company_name,job_title,employment_type,city,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false}),
+  client.from("candidate_certifications").select("id,certificate_name,issuing_organization,issue_date,expiry_date,credential_id").eq("user_id",currentUserId).order("issue_date",{ascending:false})
  ]);
  if(ed.error)document.getElementById("educationList").textContent="கல்வி விவரங்களைப் படிக்க முடியவில்லை: "+ed.error.message;
  else document.getElementById("educationList").innerHTML=ed.data.length?ed.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.qualification)+'</strong><div>'+esc(x.institution_name)+'</div><div>'+esc(x.field_of_study||"")+' · '+esc(x.grade||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><div class="actions"><button class="secondary" type="button" data-edit-edu="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-edu="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் கல்வி விவரங்கள் சேர்க்கப்படவில்லை.";
  if(ex.error)document.getElementById("experienceList").textContent="பணி அனுபவத்தைப் படிக்க முடியவில்லை: "+ex.error.message;
  else document.getElementById("experienceList").innerHTML=ex.data.length?ex.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.job_title)+'</strong><div>'+esc(x.company_name)+' · '+esc(x.city||"")+'</div><div>'+esc(x.employment_type||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><p>'+esc(x.description||"")+'</p><div class="actions"><button class="secondary" type="button" data-edit-exp="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-exp="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் பணி அனுபவம் சேர்க்கப்படவில்லை.";
+ if(certs.error)document.getElementById("certificationList").textContent="சான்றிதழ்களைப் படிக்க முடியவில்லை: "+certs.error.message;
+ else document.getElementById("certificationList").innerHTML=certs.data.length?certs.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.certificate_name)+'</strong><div>'+esc(x.issuing_organization||"")+'</div><small>'+esc(x.issue_date||"")+' – '+esc(x.expiry_date||"")+'</small>'+(x.credential_id?'<div>Credential ID: '+esc(x.credential_id)+'</div>':"")+'<div class="actions"><button class="secondary" type="button" data-edit-cert="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-cert="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் சான்றிதழ்கள் சேர்க்கப்படவில்லை.";
+
 }
 document.getElementById("educationForm").addEventListener("submit",async e=>{
  e.preventDefault();const id=val("educationId"),payload={user_id:currentUserId,institution_name:val("eduInstitution"),qualification:val("eduQualification"),field_of_study:val("eduField")||null,grade:val("eduGrade")||null,start_date:val("eduStart")||null,end_date:document.getElementById("eduCurrent").checked?null:(val("eduEnd")||null),is_current:document.getElementById("eduCurrent").checked,description:val("eduDescription")||null};
@@ -127,6 +140,23 @@ document.getElementById("experienceForm").addEventListener("submit",async e=>{
  if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("வேலை முடித்த தேதி, தொடங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
  const q=id?client.from("candidate_experience").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_experience").insert(payload);
  const {error}=await q;if(error){say("பணி அனுபவத்தைச் சேமிக்க முடியவில்லை: "+error.message,false);return;}resetRecordForm("exp");await loadRecords();say("பணி அனுபவம் சேமிக்கப்பட்டது.",true);
+});
+document.getElementById("certificationForm").addEventListener("submit",async e=>{
+ e.preventDefault();const id=val("certificationId"),payload={user_id:currentUserId,certificate_name:val("certName"),issuing_organization:val("certIssuer")||null,issue_date:val("certIssue")||null,expiry_date:val("certExpiry")||null,credential_id:val("certCredential")||null};
+ if(payload.issue_date&&payload.expiry_date&&payload.expiry_date<payload.issue_date){say("காலாவதி தேதி, வழங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ const q=id?client.from("candidate_certifications").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_certifications").insert(payload);
+ const {error}=await q;if(error){say("சான்றிதழைச் சேமிக்க முடியவில்லை: "+error.message,false);return;}
+ document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் சேமிக்கவும்";
+ await loadRecords();say("சான்றிதழ் சேமிக்கப்பட்டது.",true);
+});
+document.getElementById("certCancel").addEventListener("click",()=>{document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் சேமிக்கவும்";});
+document.getElementById("certificationList").addEventListener("click",async e=>{
+ const edit=e.target.closest("[data-edit-cert]"),del=e.target.closest("[data-delete-cert]");
+ if(edit){const {data,error}=await client.from("candidate_certifications").select("*").eq("id",edit.dataset.editCert).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
+  const map={certificationId:"id",certName:"certificate_name",certIssuer:"issuing_organization",certIssue:"issue_date",certExpiry:"expiry_date",certCredential:"credential_id"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";
+  document.getElementById("certCancel").hidden=false;document.getElementById("certSave").textContent="மாற்றத்தைச் சேமிக்கவும்";document.getElementById("certificationPanel").scrollIntoView({behavior:"smooth"});
+ }
+ if(del&&confirm("இந்தச் சான்றிதழை நீக்கவா?")){const {error}=await client.from("candidate_certifications").delete().eq("id",del.dataset.deleteCert).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("சான்றிதழ் நீக்கப்பட்டது.",true);}}
 });
 document.getElementById("eduCancel").addEventListener("click",()=>resetRecordForm("edu"));
 document.getElementById("expCancel").addEventListener("click",()=>resetRecordForm("exp"));
