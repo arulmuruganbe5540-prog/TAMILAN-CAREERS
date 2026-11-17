@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b` on 17 November 2026 (run `44053036994`).
-- [x] Latest full website health workflow passed for commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b` on 17 November 2026 (run `44053037291`): all five Supabase Edge Functions type-checked; SQL migration lint, private candidate artifact guard, public feed JavaScript, site structure, and browser smoke tests passed.
+- [x] Latest GitHub Pages deployment succeeded for main commit `d400056364a21b3763ef5d6888df12a7acddb996` on 17 November 2026 (run `44053619836`).
+- [x] Latest full website health workflow passed for main commit `d400056364a21b3763ef5d6888df12a7acddb996` on 17 November 2026 (run `44053620678`): all five Supabase Edge Functions type-checked; SQL delimiter lint, private candidate artifact guard, public feed JavaScript, site structure, and key-page browser smoke tests passed.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -27,8 +27,14 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Official-source monitor run completed successfully: 24 of 60 registered sources were reachable in the latest report; source discovery completed. Supabase candidate sync was skipped because the monitor secret remains unconfigured, and only the aggregate report was committed.
 - [x] Source-discovery crawler now validates HTTPS redirects, limits redirect count, and accepts only HTML/XHTML content types.
 - [x] Candidate profile migration's malformed experience/certification index statements were corrected; SQL lint now also checks CREATE INDEX ... ON clauses.
+- [x] Resume application attachment is linked through `job_applications.resume_id`; a database trigger rejects missing, forged, or other-candidate Resume IDs. The SQL files are updated, but Supabase has not yet run this migration.
+- [x] Candidate employer-profile visibility is revoked after an application is withdrawn; private Resume access remains limited to active application states and a verified company member/owner.
+- [x] Employer application status changes create a candidate notification when the notifications table is installed; repeating the same status does not send a duplicate alert.
+- [x] Job-posting draft RLS is restricted to active Owner, HR Manager, and Recruiter roles; unrelated active company members cannot read or edit drafts.
+- [x] AI resume matching Edge Function now verifies the caller has the `job_seeker` role in addition to requiring explicit AI consent.
 - [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
 - [x] State PSC monitor was hardened to use HTTPS-only source URLs, validate redirects, enforce bounded redirects, require HTML/XHTML, and check `robots.txt` before scanning and after redirects.
+- [x] State PSC monitor source code and Python syntax were checked successfully on a Dependabot branch; a successful scheduled scan on `main` is still pending. The previous public report is stale and still shows two old HTTP URLs until the main-branch scan refreshes it.
 - [x] State PSC public report no longer includes unverified recruitment keyword snippets; CI now rejects such snippets if they reappear.
 - [x] Resume application integrity guard added to `supabase-setup-pending.sql`: the database rejects a `resume_id` unless the referenced Resume belongs to the applicant, including null/mismatched candidate IDs.
 - [x] Employer applicant-profile access now excludes withdrawn applications in the consolidated Supabase setup SQL.
