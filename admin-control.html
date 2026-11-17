@@ -113,7 +113,7 @@ main{min-width:0;padding:25px clamp(15px,3vw,38px) 45px}
 </main>
 </div>
 <script>
-const supabaseClient=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const supabaseClient=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const el=id=>document.getElementById(id);
 function gate(message){el("loading").classList.add("hidden");el("app").classList.add("hidden");el("gateText").textContent=message;el("gate").classList.remove("hidden")}
 async function count(table,id,hint){const {count,error}=await supabaseClient.from(table).select("*",{count:"exact",head:true});el(id).textContent=error?"—":String(count??0);el(hint).textContent=error?"இந்த கணக்கிற்கு வாசிப்பு அனுமதி இல்லை":"தரவுத்தள எண்ணிக்கை"}
