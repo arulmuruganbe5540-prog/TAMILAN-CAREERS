@@ -95,6 +95,15 @@ Still required before launch:
 - Added `CONNECTIONS-AND-LAUNCH-SETUP.md` with the exact external provider connections and dashboard steps: OpenAI `OPENAI_API_KEY`, Resend `RESEND_API_KEY` + `APP_BASE_URL` (+ optional `RESEND_FROM_EMAIL`), and the matching GitHub/Supabase `GOVERNMENT_MONITOR_SECRET`. Government monitoring remains deferred as previously requested.
 - No service-role or provider secret was added to public website code or GitHub source.
 
+## 17 November 2026 Admin integration repair
+
+- Found that `admin-control.html` and `admin-job-post.html` still called the old `public.is_super_admin()` RPC after its EXECUTE permission had been revoked. Both pages now check only the signed-in user's own `public.user_roles` row using the existing RLS SELECT policy (`user_id = auth.uid()`). No SECURITY DEFINER RPC needs to be re-exposed.
+- Admin Control Center no longer displays a hard-coded personal name. It displays the signed-in account email after authorization succeeds.
+- GitHub Pages deployment run `44090939571` succeeded for commit `02997b8ce3045e7e865a428030dbd19d69538d5f`. The Health Audit for the intermediate commit was still in progress at the time of this note; the latest commit will trigger another audit.
+- Live `user_roles` snapshot: one role assignment exists and it is `job_seeker`; there are currently zero `super_admin` role assignments. Therefore the Admin UI is now checking the right secure source, but it will correctly deny access until the project owner deliberately grants the first Super Admin role.
+- Added `supabase-first-super-admin-bootstrap.sql`, a guarded one-time SQL script requiring the project owner to replace an email placeholder and manually run it. It does not assign a role automatically and refuses to create a second initial Admin if one already exists.
+- Updated README to explain the new Admin authorization path and the first-admin bootstrap.
+
 ## Release rule
 
 The website is **not launch-ready yet**. The target launch date is 19 November 2026, but it is conditional, not guaranteed. GitHub Pages deployment is working and many backend components are installed, but required secrets, real-account end-to-end tests, Auth hardening, and the final CI run still remain. Do not mark the project complete until those checks pass.
