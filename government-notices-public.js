@@ -95,11 +95,13 @@
   `;
   document.head.append(style);
   const toolbar=el("div","tc-gov-toolbar");
-  const title=el("h2","","சரிபார்க்கப்பட்ட அரசு வேலை அறிவிப்புகள்");
+  const title=el("h2","","சரிபார்க்கப்பட்ட அரசு அறிவிப்புகள் மற்றும் தேர்வு புதுப்பிப்புகள்");
   const period=el("select","tc-gov-period");
-  period.innerHTML='<option value="6">கடந்த 6 மாதங்கள்</option><option value="12" selected>கடந்த 1 வருடம்</option>';
-  toolbar.append(title,period);host.append(toolbar);
-  host.append(el("p","tc-gov-note","அதிகாரப்பூர்வ அரசு மூலத்தில் உறுதிப்படுத்தப்பட்ட அறிவிப்புகள் மட்டும். அதிகபட்சம் 15 சமீபத்திய பதிவுகள் காட்டப்படும். விண்ணப்பக் காலம் முடிந்த பதிவுகள் தெளிவாகக் குறிக்கப்படும்."));
+  period.innerHTML='<option value="12" selected>கடந்த 1 வருடம்</option><option value="6">கடந்த 6 மாதங்கள்</option>';
+  const category=el("select","tc-gov-period");
+  category.innerHTML='<option value="all">அனைத்து வகைகளும்</option><option value="recruitment">வேலை அறிவிப்புகள்</option><option value="admit_card">Hall Ticket / Admit Card</option><option value="result">தேர்வு முடிவுகள்</option><option value="answer_key">Answer Key</option><option value="exam_update">தேர்வு தேதி / பிற புதுப்பிப்புகள்</option><option value="other">மற்ற அறிவிப்புகள்</option>';
+  toolbar.append(title,period,category);host.append(toolbar);
+  host.append(el("p","tc-gov-note","அதிகாரப்பூர்வ அரசு மூலத்தில் சரிபார்க்கப்பட்ட வேலை அறிவிப்புகள், Hall Ticket, Result, Answer Key மற்றும் தேர்வு புதுப்பிப்புகள். பழைய பதிவுகள் அவற்றின் உண்மையான அறிவிப்பு தேதியுடன் காட்டப்படும்."));
   const status=el("p","tc-gov-note","அறிவிப்புகள் ஏற்றப்படுகின்றன…");host.append(status);
   const grid=el("div","tc-gov-grid");host.append(grid);
   async function load(){
@@ -109,16 +111,18 @@
       const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
       const {data,error}=await client.from("government_notices")
         .select("id,title,category,official_url,notice_reference,notice_date,application_start,application_end,vacancies,eligibility_summary,details,is_active")
-        .eq("is_active",true).eq("category","recruitment")
-        .order("notice_date",{ascending:false}).limit(100);
+        .eq("is_active",true)
+        .order("notice_date",{ascending:false}).limit(500);
       if(error) throw error;
       const months=Number(period.value);
       const cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-months);
+      const selectedCategory=category.value;
       const scope=host.dataset.scope||"all",stateFilter=host.dataset.state||"";
       const rows=(data||[]).filter(r=>{
         if(!r.notice_date) return false;
         const dt=new Date(r.notice_date+"T00:00:00");if(dt<cutoff)return false;
         const d=r.details||{};
+        if(selectedCategory!=="all" && r.category!==selectedCategory)return false;
         if(scope==="central" && d.scope!=="central")return false;
         if(scope==="state" && d.scope!=="state")return false;
         if(stateFilter==="Tamil Nadu" && String(d.state||"").toLowerCase()!=="tamil nadu")return false;
@@ -127,9 +131,10 @@
       }).slice(0,15);
       if(!rows.length){status.textContent="இந்த காலவரம்பில் இன்னும் அதிகாரப்பூர்வமாகச் சரிபார்த்து வெளியிடப்பட்ட வேலை அறிவிப்புகள் இல்லை.";grid.append(el("div","tc-gov-empty","புதிய அறிவிப்புகள் சரிபார்க்கப்பட்டதும் இங்கே தானாகத் தோன்றும். தற்போது காலியிட எண்ணிக்கை அல்லது தகுதி விவரங்கள் ஊகித்து காட்டப்படவில்லை."));return;}
       rows.forEach(r=>grid.append(card(r)));
-      status.textContent=rows.length+" அதிகாரப்பூர்வ அறிவிப்புகள் · அதிகபட்சம் 15";
+      status.textContent=rows.length+" சரிபார்க்கப்பட்ட அரசு பதிவுகள்";
     }catch(e){status.textContent="அறிவிப்புகளை இப்போது ஏற்ற முடியவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.";grid.append(el("div","tc-gov-empty","தகவல் சேவை / அனுமதி சரிபார்ப்பு தேவை."));}
   }
   period.addEventListener("change",load);
+  category.addEventListener("change",load);
   load();
 })();
