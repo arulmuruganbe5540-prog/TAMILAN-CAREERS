@@ -24,7 +24,7 @@ const allowedJobFields = [
   "required_skills", "skills", "location", "job_location", "work_location",
   "employment_type", "job_type", "experience", "experience_required",
   "salary_min", "salary_max", "category", "job_category",
-  "application_deadline", "deadline",
+  "application_deadline", "deadline", "last_date",
 ] as const;
 
 function cleanJob(row: Record<string, unknown>) {
@@ -134,7 +134,7 @@ Deno.serve(async (req) => {
       preferred_location: preferredLocation || safeText(preferences.data?.preferred_city || seeker.data?.current_city, 120),
     };
 
-    const jobRows = (jobs.data || []).filter((row) => !isExpiredDeadline(row.application_deadline ?? row.deadline)).slice(0, 40).map((row) => cleanJob(row as Record<string, unknown>));
+    const jobRows = (jobs.data || []).filter((row) => !isExpiredDeadline(row.application_deadline ?? row.deadline ?? row.last_date)).slice(0, 40).map((row) => cleanJob(row as Record<string, unknown>));
     if (!jobRows.length) return json({ matches: [], message: "No published jobs are currently available." });
 
     const schema = {
