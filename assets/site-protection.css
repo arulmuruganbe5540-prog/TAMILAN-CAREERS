@@ -1,0 +1,4 @@
+/* TAMILAN CAREERS copy deterrence layer; not DRM. */
+html.tc-protected,html.tc-protected body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.tc-protected input,.tc-protected textarea,.tc-protected select,.tc-protected [contenteditable="true"],.tc-protected [contenteditable=""],.tc-protected .allow-copy,.tc-protected .allow-copy *{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+.tc-protected button,.tc-protected a{-webkit-user-select:none;user-select:none}
