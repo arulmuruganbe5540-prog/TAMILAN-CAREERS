@@ -228,17 +228,48 @@ function showMessage(message, success=false) {
 }
 
 
+let resendCooldownTimer = null;
+let resendSecondsRemaining = 0;
+
+function startResendCooldown(seconds = 60) {
+  const button = document.getElementById("resendBtn");
+  if (resendCooldownTimer) clearInterval(resendCooldownTimer);
+  resendSecondsRemaining = seconds;
+  button.style.display = "block";
+  button.disabled = true;
+  button.textContent = `மீண்டும் அனுப்ப ${resendSecondsRemaining} விநாடிகள் காத்திருக்கவும்`;
+
+  resendCooldownTimer = setInterval(() => {
+    resendSecondsRemaining -= 1;
+    if (resendSecondsRemaining <= 0) {
+      clearInterval(resendCooldownTimer);
+      resendCooldownTimer = null;
+      button.disabled = false;
+      button.textContent = "Email வரவில்லையா? மீண்டும் அனுப்பு";
+      return;
+    }
+    button.textContent = `மீண்டும் அனுப்ப ${resendSecondsRemaining} விநாடிகள் காத்திருக்கவும்`;
+  }, 1000);
+}
+
 document.getElementById("resendBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim().toLowerCase();
   if (!email) { showMessage("முதலில் பதிவு செய்த Email Address உள்ளிடுங்கள்."); return; }
+  if (!supabaseClient) { showMessage("Supabase இணைப்பு கிடைக்கவில்லை."); return; }
+
   const button = document.getElementById("resendBtn");
-  button.disabled = true; button.textContent = "அனுப்பப்படுகிறது...";
+  button.disabled = true;
+  button.textContent = "Email அனுப்பப்படுகிறது...";
   try {
     const {error} = await supabaseClient.auth.resend({type:"signup", email});
     if (error) throw error;
-    showMessage("உறுதிப்படுத்தல் Email மீண்டும் அனுப்பப்பட்டது. Inbox மற்றும் Spam folder பார்க்கவும்.", true);
-  } catch(error) { showMessage(error.message || "Email அனுப்ப முடியவில்லை."); }
-  finally { button.disabled = false; button.textContent = "Email உறுதிப்படுத்தலை மீண்டும் அனுப்பு"; }
+    showMessage("Email மீண்டும் அனுப்புவதற்கான கோரிக்கை ஏற்கப்பட்டது. Inbox, Spam மற்றும் Promotions folder பார்க்கவும்.", true);
+    startResendCooldown(60);
+  } catch(error) {
+    showMessage(error.message || "Email அனுப்ப முடியவில்லை. சிறிது நேரம் கழித்து முயற்சிக்கவும்.");
+    button.disabled = false;
+    button.textContent = "Email வரவில்லையா? மீண்டும் அனுப்பு";
+  }
 });
 
 document.getElementById("authForm").addEventListener("submit",async function(e) {
@@ -299,10 +330,10 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
       } else {
 
         showMessage(
-          "பதிவு வெற்றிகரமாக அனுப்பப்பட்டது. உங்கள் Email-ஐ திறந்து உறுதிப்படுத்துங்கள். Email வரவில்லை என்றால் கீழே உள்ள பொத்தானை அழுத்தவும்.",
+          "பதிவு வெற்றிகரமாக அனுப்பப்பட்டது. உங்கள் Email-ஐ திறந்து உறுதிப்படுத்துங்கள். Email வரவில்லை என்றால் 60 விநாடிகள் கழித்து கீழே உள்ள பொத்தானை அழுத்தி மீண்டும் அனுப்பலாம்.",
           true
         );
-        document.getElementById("resendBtn").style.display = "block";
+        startResendCooldown(60);
 
       }
 
