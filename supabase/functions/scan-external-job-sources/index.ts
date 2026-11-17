@@ -35,6 +35,7 @@ Deno.serve(async(req)=>{
    try{
     const r=await fetch(s.base_url,{headers:{"user-agent":"TAMILAN-CAREERS official job source monitor/1.0"},signal:AbortSignal.timeout(10000),redirect:"follow"});
     if(!r.ok)throw new Error("HTTP "+r.status);
+    const contentType=(r.headers.get("content-type")||"").toLowerCase();if(contentType&&!/(text\/html|application\/xhtml\+xml)/i.test(contentType))throw new Error("Source did not return HTML");
     const final=r.url||s.base_url;if(!allowed(final,s.base_url))throw new Error("Redirect outside registered domain");
     const html=await readLimitedText(r,MAX_BYTES);const rows:Record<string,unknown>[]=[];
     const re=/<a\b([^>]*?)>([\s\S]*?)<\/a\s*>/gi;
