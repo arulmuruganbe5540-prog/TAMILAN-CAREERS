@@ -75,6 +75,34 @@ begin
     end if;
   end loop;
 
+  -- If optional tables already exist, ensure they match the columns this migration uses.
+  foreach v_item in array array[
+    'public.job_posting_drafts.company_id','public.job_posting_drafts.user_id','public.job_posting_drafts.draft','public.job_posting_drafts.updated_at',
+    'public.candidate_resumes.id','public.candidate_resumes.user_id','public.candidate_resumes.resume_title','public.candidate_resumes.file_path','public.candidate_resumes.original_file_name','public.candidate_resumes.file_type','public.candidate_resumes.file_size_bytes','public.candidate_resumes.is_primary','public.candidate_resumes.created_at','public.candidate_resumes.updated_at',
+    'public.candidate_education.id','public.candidate_education.user_id','public.candidate_education.institution_name','public.candidate_education.qualification','public.candidate_education.created_at','public.candidate_education.updated_at',
+    'public.candidate_experience.id','public.candidate_experience.user_id','public.candidate_experience.company_name','public.candidate_experience.job_title','public.candidate_experience.created_at','public.candidate_experience.updated_at',
+    'public.candidate_certifications.id','public.candidate_certifications.user_id','public.candidate_certifications.certificate_name','public.candidate_certifications.created_at','public.candidate_certifications.updated_at'
+  ] loop
+    if to_regclass(split_part(v_item, '.', 1) || '.' || split_part(v_item, '.', 2)) is not null
+       and not exists (
+         select 1
+         from information_schema.columns c
+         where c.table_schema = split_part(v_item, '.', 1)
+           and c.table_name = split_part(v_item, '.', 2)
+           and c.column_name = split_part(v_item, '.', 3)
+       ) then
+      v_missing_columns := array_append(v_missing_columns, v_item);
+    end if;
+  end loop;
+
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'job_applications'
+      and column_name = 'resume_id' and data_type <> 'uuid'
+  ) then
+    raise exception 'TAMILAN CAREERS setup stopped before changes: job_applications.resume_id exists but is not UUID.';
+  end if;
+
   if cardinality(v_missing_columns) > 0 then
     raise exception 'TAMILAN CAREERS setup stopped before changes: required columns are missing: %. Run supabase-schema-audit.sql and resolve the core schema first.', array_to_string(v_missing_columns, ', ');
   end if;
