@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="ta"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101d3a"><title>வேலைக்கு விண்ணப்பிக்க | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#18243a;font-family:Arial,"Noto Sans Tamil",sans-serif;line-height:1.6}header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:21px;font-weight:800;color:#55caff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:white;text-decoration:none;background:#ffffff18;padding:8px 11px;border-radius:8px;font-size:13px}main{max-width:760px;margin:25px auto;padding:0 15px}.card{background:#fff;border:1px solid #e1e9f2;border-radius:15px;padding:22px;margin-bottom:16px}h1{margin:0 0 8px;color:#17385f;font-size:25px}.muted{color:#6a788b;font-size:13px}.jobbox{background:#f2f7fc;border-radius:10px;padding:14px;margin:15px 0}.field{margin:15px 0}label{display:block;font-weight:700;margin-bottom:6px}input,textarea{width:100%;padding:12px;border:1px solid #cfd9e5;border-radius:8px;font:inherit;background:white}textarea{min-height:130px;resize:vertical}.btn{display:inline-block;border:0;border-radius:9px;padding:12px 17px;background:#1688ed;color:white;font-weight:700;font-size:14px;cursor:pointer}.btn:disabled{opacity:.55;cursor:not-allowed}.state{padding:13px;border-radius:9px;background:#f1f6fc;color:#40566e;margin:12px 0}.error{background:#fff0ef;color:#9b302b}.success{background:#eaf8ef;color:#176b37}.notice{font-size:13px;background:#fff8e8;color:#795b24;padding:12px;border-radius:9px}.actions{display:flex;gap:10px;flex-wrap:wrap}
+*{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#18243a;font-family:Arial,"Noto Sans Tamil",sans-serif;line-height:1.6}header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:21px;font-weight:800;color:#55caff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:white;text-decoration:none;background:#ffffff18;padding:8px 11px;border-radius:8px;font-size:13px}main{max-width:760px;margin:25px auto;padding:0 15px}.card{background:#fff;border:1px solid #e1e9f2;border-radius:15px;padding:22px;margin-bottom:16px}h1{margin:0 0 8px;color:#17385f;font-size:25px}.muted{color:#6a788b;font-size:13px}.jobbox{background:#f2f7fc;border-radius:10px;padding:14px;margin:15px 0}.field{margin:15px 0}label{display:block;font-weight:700;margin-bottom:6px}input,textarea{width:100%;padding:12px;border:1px solid #cfd9e5;border-radius:8px;font:inherit;background:white}textarea{min-height:130px;resize:vertical}.btn{display:inline-block;border:0;border-radius:9px;padding:12px 17px;background:#1688ed;color:white;font-weight:700;font-size:14px;cursor:pointer}.btn:disabled{opacity:.55;cursor:not-allowed}.state{padding:13px;border-radius:9px;background:#f1f6fc;color:#40566e;margin:12px 0}.error{background:#fff0ef;color:#9b302b}.success{background:#eaf8ef;color:#176b37}.notice{font-size:13px;background:#fff8e8;color:#795b24;padding:12px;border-radius:9px}.resume-select{width:100%;padding:12px;border:1px solid #cfd9e5;border-radius:8px;background:#fff;font:inherit}.actions{display:flex;gap:10px;flex-wrap:wrap}
 </style></head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="index.html">முகப்பு</a><a href="jobs.html">வேலை தேடல்</a><a href="dashboard.html">Dashboard</a></nav></header>
 <main><section class="card"><h1>வேலைக்கு விண்ணப்பிக்க</h1><p class="muted">உங்கள் விண்ணப்பத்தை அனுப்புவதற்கு முன் வேலை விவரங்களைச் சரிபார்க்கவும்.</p><div id="jobbox" class="jobbox">வேலை விவரம் ஏற்றப்படுகிறது...</div><div id="message" class="state" hidden></div>
-<form id="application" hidden><div class="field"><label for="cover">Cover Letter / விண்ணப்பக் குறிப்பு</label><textarea id="cover" maxlength="5000" placeholder="இந்த வேலைக்கு நீங்கள் ஏன் பொருத்தமானவர் என்பதைச் சுருக்கமாக எழுதுங்கள்"></textarea></div><p class="notice">உங்கள் உள்நுழைந்த கணக்குடன் இந்த விண்ணப்பம் இணைக்கப்படும். விருப்பமிருந்தால் Cover Letter எழுதலாம். விண்ணப்பத்தில் Resume-ஐ இணைக்கும் வசதி அடுத்த கட்டத்தில் சேர்க்கப்படும். OTP, வங்கி PIN அல்லது பணம் எதையும் பகிர வேண்டாம்.</p><button class="btn" id="submit" type="submit">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button></form></section></main>
+<form id="application" hidden><div class="field"><label for="resume">Resume தேர்வு (விருப்பம்)</label><select id="resume" class="resume-select"><option value="">Resume இணைக்காமல் தொடரவும்</option></select><p class="muted" id="resumeHelp">உங்கள் தனிப்பட்ட Resume பட்டியல் ஏற்றப்படுகிறது...</p></div><div class="field"><label for="cover">Cover Letter / விண்ணப்பக் குறிப்பு</label><textarea id="cover" maxlength="5000" placeholder="இந்த வேலைக்கு நீங்கள் ஏன் பொருத்தமானவர் என்பதைச் சுருக்கமாக எழுதுங்கள்"></textarea></div><p class="notice">உங்கள் உள்நுழைந்த கணக்குடன் இந்த விண்ணப்பம் இணைக்கப்படும். தேர்ந்தெடுத்த Resume ID விண்ணப்பத்துடன் இணைக்கப்படும். Resume கோப்பை நிறுவனம் பார்க்கும் பாதுகாப்பான signed-link வசதி அடுத்த கட்டத்தில் அமைக்கப்படும். OTP, வங்கி PIN அல்லது பணம் எதையும் பகிர வேண்டாம்.</p><button class="btn" id="submit" type="submit">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button></form></section></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),jobId=params.get("job");
-let user=null,job=null;
+let user=null,job=null,resumes=[];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
 function msg(t,kind){$("message").hidden=false;$("message").className="state "+(kind||"");$("message").textContent=t}
@@ -24,13 +24,25 @@ async function init(){
  job=data;const status=String(pick(job,["status"])).toLowerCase();
  if(status!=="published"){$("jobbox").textContent="இந்த வேலை தற்போது வெளியிடப்பட்ட நிலையில் இல்லை; விண்ணப்பிக்க முடியாது.";return}
  $("jobbox").innerHTML="<b>"+esc(pick(job,["job_title","title"])||"வேலை")+"</b><br><a href='job-details.html?id="+encodeURIComponent(jobId)+"'>முழு வேலை விவரம்</a>";
+ await loadResumes();
  $("application").hidden=false;
+}
+async function loadResumes(){
+ const select=$("resume"),help=$("resumeHelp");
+ const {data,error}=await db.from("candidate_resumes").select("id,resume_title,original_file_name,file_type,file_size_bytes,created_at").eq("user_id",user.id).order("created_at",{ascending:false});
+ if(error){help.textContent="Resume பட்டியலை ஏற்ற முடியவில்லை. Resume இணைக்காமல் விண்ணப்பிக்கலாம்; Storage அமைப்பு முடிந்தபின் மீண்டும் முயற்சிக்கவும்.";return}
+ resumes=data||[];
+ if(!resumes.length){help.innerHTML="இன்னும் Resume பதிவேற்றப்படவில்லை. <a href=\"resume-documents.html\">இங்கே Resume பதிவேற்றுங்கள்</a>; அல்லது Resume இல்லாமலும் விண்ணப்பிக்கலாம்.";return}
+ select.innerHTML="<option value=\"\">Resume இணைக்காமல் தொடரவும்</option>"+resumes.map(r=>"<option value=\""+esc(r.id)+"\">"+esc(r.resume_title||r.original_file_name)+" — "+esc(r.original_file_name)+"</option>").join("");
+ help.textContent="உங்கள் கணக்கில் உள்ள "+resumes.length+" Resume / ஆவணங்களில் ஒன்றைத் தேர்வு செய்யலாம்.";
 }
 $("application").addEventListener("submit",async e=>{
  e.preventDefault();if(!user||!job)return;
  const cover=$("cover").value.trim();
  const btn=$("submit");btn.disabled=true;btn.textContent="சமர்ப்பிக்கப்படுகிறது...";
- const payload={job_id:job.id,candidate_id:user.id,status:"applied",resume_id:null,cover_letter:cover||null};
+ const selectedResume=$("resume").value||null;
+ if(selectedResume&&!resumes.some(r=>r.id===selectedResume)){msg("தேர்ந்தெடுத்த Resume செல்லுபடியாகவில்லை. மீண்டும் தேர்வு செய்யவும்.","error");btn.disabled=false;btn.textContent="விண்ணப்பத்தைச் சமர்ப்பிக்கவும்";return}
+ const payload={job_id:job.id,candidate_id:user.id,status:"applied",resume_id:selectedResume,cover_letter:cover||null};
  const {error}=await db.from("job_applications").insert(payload);
  if(error){
   if(error.code==="23505"){
