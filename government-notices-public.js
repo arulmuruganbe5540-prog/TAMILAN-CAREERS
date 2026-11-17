@@ -27,7 +27,7 @@
     age_limit:"வயது வரம்பு", salary:"சம்பளம்", pay_scale:"ஊதிய நிலை",
     application_fee:"விண்ணப்பக் கட்டணம்", selection_process:"தேர்வு முறை",
     location:"பணியிடம்", department:"துறை", vacancies_breakdown:"காலியிட விவரம்",
-    notification_pdf_url:"அறிவிப்பு PDF", application_url:"விண்ணப்ப இணைப்பு"
+    notification_pdf_url:"அறிவிப்பு PDF", application_url:"விண்ணப்ப இணைப்பு", syllabus:"பாடத்திட்டம்", exam_date:"தேர்வு தேதி"
   };
   function card(row) {
     const d = row.details && typeof row.details === "object" ? row.details : {};
@@ -124,12 +124,15 @@
         const location=String(j.location||"").toLowerCase();
         const isTamilNadu=authority.includes("tn")||authority.includes("tamil nadu")||location.includes("tamil nadu");
         const salary=j.salary_min||j.salary_max?("₹ "+(j.salary_min||"")+(j.salary_min&&j.salary_max?" – ":"")+(j.salary_max||"")):"";
+        const extra=(label)=>{const match=String(j.description||"").match(new RegExp(label+"\\s*:\\s*([^\\n]+)"));return match?match[1].trim():"";};
         const details={
           scope:isTamilNadu?"state":"central",
           state:isTamilNadu?"Tamil Nadu":"India",
           authority:j.recruitment_authority||j.company_name||"அரசுத் துறை",
-          department:j.department||j.category,
-          qualification:j.qualification||j.education,
+          department:j.recruitment_authority||"",
+          qualification:j.education_level||"",
+          syllabus:extra("பாடத்திட்டம்"),
+          exam_date:extra("தேர்வு தேதி"),
           age_limit:j.age_limit,
           salary,
           selection_process:j.selection_process,
@@ -141,9 +144,9 @@
           id:j.id,title:j.job_title||j.title||"அரசு வேலைவாய்ப்பு",category:"recruitment",
           official_url:j.official_notification_url||j.official_website_url||j.application_url,
           notice_reference:j.notification_number,notice_date:j.notification_date||j.published_at||j.created_at,
-          application_start:j.application_start_date,application_end:j.application_deadline,
+          application_start:extra("விண்ணப்பம் தொடங்கும் தேதி")||null,application_end:j.application_deadline,
           vacancies:j.vacancies??j.vacancy_count??j.openings??null,
-          eligibility_summary:j.qualification||j.education||j.experience||"",
+          eligibility_summary:j.education_level||j.experience_min||"",
           details,is_active:true
         };
       });
