@@ -379,7 +379,7 @@ begin
   select cr.user_id into v_resume_owner
   from public.candidate_resumes cr
   where cr.id = new.resume_id;
-  if not found or v_resume_owner <> new.candidate_id then
+  if not found or v_resume_owner is distinct from new.candidate_id then
     raise exception 'The selected Resume does not belong to this candidate';
   end if;
   return new;
