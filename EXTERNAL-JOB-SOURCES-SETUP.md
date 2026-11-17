@@ -8,6 +8,7 @@ This module extends TAMILAN CAREERS with an official-source directory for Indian
 - Admin must open the official source, inspect the original notice, confirm dates, eligibility, vacancy and apply URL, and only then use the existing controlled publishing workflow.
 - Company logos are not copied. A company listing must link to its official careers page and must not imply partnership.
 - Some portals require JavaScript, login, API access, or block automated access. Those are marked manual; do not bypass access controls or robots restrictions.
+- Automated scans check each source's `robots.txt` before fetching the page and again after redirects. If robots policy blocks the page or cannot be checked safely, the source is skipped.
 
 ## One-time setup
 1. Run `supabase-external-job-sources.sql` in Supabase SQL Editor.
