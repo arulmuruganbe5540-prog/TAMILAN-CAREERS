@@ -1,9 +1,9 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T07:32:35.816354+00:00",
+  "checked_at_utc": "2026-11-17T08:46:46.563247+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
-  "successful_sources": 24,
+  "successful_sources": 23,
   "failed_sources": [
     {
       "source_id": "rrb",
@@ -36,14 +36,14 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "ncs",
-      "url": "https://www.ncs.gov.in/",
-      "error": "Redirected outside the registered official host"
-    },
-    {
       "source_id": "apprenticeship",
       "url": "https://www.apprenticeshipindia.gov.in/",
       "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "ncs",
+      "url": "https://www.ncs.gov.in/",
+      "error": "Redirected outside the registered official host"
     },
     {
       "source_id": "join-indian-navy",
@@ -61,11 +61,6 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
-    },
-    {
       "source_id": "trb-tamilnadu",
       "url": "https://www.trb.tn.gov.in/",
       "error": "<urlopen error timed out>"
@@ -73,6 +68,11 @@
     {
       "source_id": "mrb-tamilnadu",
       "url": "https://www.mrb.tn.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -101,14 +101,14 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "gpsc-gujarat",
-      "url": "https://gpsc.gujarat.gov.in/",
-      "error": "<urlopen error [Errno 101] Network is unreachable>"
-    },
-    {
       "source_id": "jpsc",
       "url": "https://www.jpsc.gov.in/",
       "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
+      "source_id": "gpsc-gujarat",
+      "url": "https://gpsc.gujarat.gov.in/",
+      "error": "<urlopen error [Errno 101] Network is unreachable>"
     },
     {
       "source_id": "kerala-psc",
@@ -134,6 +134,11 @@
       "source_id": "mppsc",
       "url": "https://mppsc.mp.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tgpsc",
+      "url": "https://www.tgpsc.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "rpsc",

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-17T07:32:58.019843+00:00",
+  "generated_at_utc": "2026-11-17T08:47:10.488426+00:00",
   "trusted_sources_scanned": 60,
   "new_source_candidates_seen_this_run": 10,
   "total_source_candidates": 41,
@@ -16,7 +16,7 @@
       "id": "503c54f7c35f2e5b2c4f",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:24:42.521689+00:00",
-      "last_seen_utc": "2026-11-17T07:32:44.090799+00:00",
+      "last_seen_utc": "2026-11-17T08:46:54.040114+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -73,7 +73,7 @@
       "id": "a6886ce8d1dce8c9b1d4",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:24:27.919912+00:00",
-      "last_seen_utc": "2026-11-17T07:32:39.424223+00:00",
+      "last_seen_utc": "2026-11-17T08:46:51.185732+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -92,7 +92,7 @@
       "id": "bf1b954e0f943672afda",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:24:27.919886+00:00",
-      "last_seen_utc": "2026-11-17T07:32:39.424199+00:00",
+      "last_seen_utc": "2026-11-17T08:46:51.185713+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -111,7 +111,7 @@
       "id": "43eea30f98d6a8ddf4ba",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T06:06:19.813626+00:00",
-      "last_seen_utc": "2026-11-17T07:32:47.379907+00:00",
+      "last_seen_utc": "2026-11-17T08:46:58.993600+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -149,7 +149,7 @@
       "id": "09e14bc8be7a521f74e2",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:25:03.884929+00:00",
-      "last_seen_utc": "2026-11-17T07:32:49.914617+00:00",
+      "last_seen_utc": "2026-11-17T08:47:00.741618+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -700,7 +700,7 @@
       "id": "4d434d73e159df55bd7f",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T06:06:22.282087+00:00",
-      "last_seen_utc": "2026-11-17T07:32:49.914649+00:00",
+      "last_seen_utc": "2026-11-17T08:47:00.741675+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -719,7 +719,7 @@
       "id": "c22d35c1ac3ed426b020",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:25:03.884956+00:00",
-      "last_seen_utc": "2026-11-17T07:32:49.914645+00:00",
+      "last_seen_utc": "2026-11-17T08:47:00.741659+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -788,6 +788,10 @@
   ],
   "scan_errors": [
     {
+      "source_id": "ibps",
+      "error": "<urlopen error [SSL: UNEXPECTED_MESSAGE] unexpected message (_ssl.c:1147)>"
+    },
+    {
       "source_id": "rrb",
       "error": "HTTP Error 404: Not Found"
     },
@@ -796,11 +800,11 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "upsc",
+      "source_id": "nabard",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "nabard",
+      "source_id": "upsc",
       "error": "<urlopen error timed out>"
     },
     {
@@ -828,6 +832,10 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "hppsc",
+      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
+    },
+    {
       "source_id": "trb-tamilnadu",
       "error": "<urlopen error timed out>"
     },
@@ -836,16 +844,8 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "hppsc",
-      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
-    },
-    {
       "source_id": "kerala-psc",
       "error": "HTTP Error 403: Forbidden"
-    },
-    {
-      "source_id": "appsc",
-      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "appsc-arunachal",
@@ -856,19 +856,27 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "mpsc-mizoram",
-      "error": "HTTP Error 403: Forbidden"
+      "source_id": "gpsc-gujarat",
+      "error": "<urlopen error [Errno 101] Network is unreachable>"
     },
     {
       "source_id": "psc-cg",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "gpsc-gujarat",
-      "error": "<urlopen error [Errno 101] Network is unreachable>"
+      "source_id": "mpsc-mizoram",
+      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "hpsc",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "tgpsc",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "appsc",
       "error": "<urlopen error timed out>"
     },
     {
@@ -892,16 +900,16 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "tpsc",
-      "error": "<urlopen error timed out>"
+      "source_id": "jpsc",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "upsc-recruitment-results",
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
     },
     {
-      "source_id": "jpsc",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+      "source_id": "tpsc",
+      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "psc-uk",
