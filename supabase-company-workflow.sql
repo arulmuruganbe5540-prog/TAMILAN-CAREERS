@@ -2,6 +2,19 @@
 -- Safe to rerun. This stores unverified profile details as private drafts only.
 begin;
 
+create table if not exists public.job_posting_drafts (
+  id uuid primary key default gen_random_uuid(),
+  company_id uuid not null,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  draft jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint job_posting_drafts_draft_is_object check (jsonb_typeof(draft) = 'object'),
+  constraint job_posting_drafts_company_user_unique unique (company_id, user_id)
+);
+create index if not exists job_posting_drafts_user_id_idx on public.job_posting_drafts(user_id);
+create index if not exists job_posting_drafts_company_id_idx on public.job_posting_drafts(company_id);
+
 create table if not exists public.company_profile_drafts (
   user_id uuid primary key references auth.users(id) on delete cascade,
   profile jsonb not null default '{}'::jsonb,
