@@ -127,7 +127,7 @@ async function submitForReview(){
   message("உங்கள் வேலை வரைவு Admin Review-க்கு அனுப்பப்பட்டது. நிறுவனம் Verified செய்யப்பட்டு Admin வெளியிட்ட பிறகே பொதுவில் தெரியும்.",true);
   await loadDraftForCompany();
  }catch(e){message("Review-க்கு அனுப்ப முடியவில்லை: "+(e.message||e)+". supabase-admin-job-publish-setup.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.",false)}
- finally{btn.disabled=false;btn.textContent="Admin Review-க்கு அனுப்பு"}
+ finally{btn.textContent="Admin Review-க்கு அனுப்பு";btn.disabled=["pending_review","approved"].includes(currentDraft?.draft_status)}
 }
 document.getElementById("saveBtn").addEventListener("click",()=>save(false));
 document.getElementById("submitReviewBtn").addEventListener("click",submitForReview);
