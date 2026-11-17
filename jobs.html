@@ -21,15 +21,26 @@ $("place").value=params.get("location")||"";
 if(params.get("category"))$("q").value=[$("q").value,params.get("category")].filter(Boolean).join(" ");
 const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function pick(j,keys){for(const k of keys)if(j[k]!==undefined&&j[k]!==null&&j[k]!=="")return j[k];return "";}
+function deadlineDate(value){
+ if(!value)return null;
+ const raw=String(value).trim();
+ let m=raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+ if(m)return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]),23,59,59,999);
+ m=raw.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+ if(m)return new Date(Number(m[3]),Number(m[2])-1,Number(m[1]),23,59,59,999);
+ const parsed=new Date(raw);
+ return Number.isNaN(parsed.getTime())?null:parsed;
+}
+function isExpiredJob(job){const d=deadlineDate(pick(job,["application_deadline","deadline","last_date"]));return Boolean(d&&d.getTime()<Date.now());}
 function render(){
  const q=$("q").value.trim().toLowerCase(),type=$("type").value.toLowerCase(),place=$("place").value.trim().toLowerCase();
  const list=aiMatches
-  ? aiMatches.map(match=>{const job=allJobs.find(j=>String(pick(j,["id","job_id"]))===String(match.job_id));return job?{...job,_bilingual:match}:null;}).filter(Boolean)
+  ? aiMatches.map(match=>{const job=allJobs.find(j=>String(pick(j,["id","job_id"]))===String(match.job_id));return job?{...job,_bilingual:match}:null;}).filter(Boolean).filter(j=>!isExpiredJob(j))
   : allJobs.filter(j=>{
    const title=pick(j,["job_title","title"]),desc=pick(j,["description","job_description"]),company=pick(j,["company_name"]),loc=pick(j,["location","job_location","work_location"]),jt=pick(j,["employment_type","job_type"]);
    const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
    const status=String(pick(j,["status"])).toLowerCase();
-   const visible=status==="published";
+   const visible=status==="published"&&!isExpiredJob(j);
    return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase().replace(/_/g," ")===type)&&(!place||String(loc).toLowerCase().includes(place));
   });
  $("count").textContent=list.length+" வேலைகள் கிடைத்துள்ளன";
