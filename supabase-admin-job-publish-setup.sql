@@ -327,7 +327,13 @@ begin
 
   v_salary_min := nullif(v_payload->>'salaryMin','')::numeric;
   v_salary_max := nullif(v_payload->>'salaryMax','')::numeric;
-  v_vacancies := greatest(0, coalesce(nullif(v_payload->>'openings','')::integer, 1));
+  v_vacancies := coalesce(nullif(v_payload->>'openings','')::integer, 1);
+  if v_salary_min is not null and v_salary_min < 0 then raise exception 'Minimum salary cannot be negative'; end if;
+  if v_salary_max is not null and v_salary_max < 0 then raise exception 'Maximum salary cannot be negative'; end if;
+  if v_salary_min is not null and v_salary_max is not null and v_salary_min > v_salary_max then
+    raise exception 'Minimum salary cannot exceed maximum salary';
+  end if;
+  if v_vacancies < 1 then raise exception 'At least one opening is required'; end if;
   if nullif(v_payload->>'deadline','') is not null then
     if (v_payload->>'deadline')::date < (now() at time zone 'Asia/Kolkata')::date then
       raise exception 'Application deadline cannot be in the past';
