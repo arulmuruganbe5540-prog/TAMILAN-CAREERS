@@ -4,11 +4,15 @@
 
 begin;
 
+create schema if not exists private;
+revoke all on schema private from public, anon;
+grant usage on schema private to authenticated;
+
 -- =========================================================
 -- 1. Profile ownership and application-based employer access
 -- =========================================================
 
-create or replace function public.can_company_view_candidate(p_candidate_id uuid)
+create or replace function private.can_company_view_candidate(p_candidate_id uuid)
 returns boolean
 language sql
 stable
@@ -36,8 +40,9 @@ as $function$
   );
 $function$;
 
-revoke all on function public.can_company_view_candidate(uuid) from public, anon;
-grant execute on function public.can_company_view_candidate(uuid) to authenticated;
+revoke all on function private.can_company_view_candidate(uuid) from public, anon;
+revoke all on function private.can_company_view_candidate(uuid) from public, anon, authenticated;
+grant execute on function private.can_company_view_candidate(uuid) to authenticated;
 
 alter table public.profiles enable row level security;
 drop policy if exists "TC users manage own profile row" on public.profiles;
@@ -49,44 +54,44 @@ with check (id = (select auth.uid()));
 drop policy if exists "Employers read applicant profiles" on public.profiles;
 create policy "Employers read applicant profiles"
 on public.profiles for select to authenticated
-using (public.can_company_view_candidate(id));
+using (private.can_company_view_candidate(id));
 
 alter table public.job_seeker_profiles enable row level security;
 drop policy if exists "Employers read applicant job seeker profiles" on public.job_seeker_profiles;
 create policy "Employers read applicant job seeker profiles"
 on public.job_seeker_profiles for select to authenticated
-using (public.can_company_view_candidate(user_id));
+using (private.can_company_view_candidate(user_id));
 
 drop policy if exists "Employers read applicant education" on public.candidate_education;
 create policy "Employers read applicant education"
 on public.candidate_education for select to authenticated
-using (public.can_company_view_candidate(user_id));
+using (private.can_company_view_candidate(user_id));
 
 drop policy if exists "Employers read applicant experience" on public.candidate_experience;
 create policy "Employers read applicant experience"
 on public.candidate_experience for select to authenticated
-using (public.can_company_view_candidate(user_id));
+using (private.can_company_view_candidate(user_id));
 
 drop policy if exists "Employers read applicant skills" on public.candidate_skills;
 create policy "Employers read applicant skills"
 on public.candidate_skills for select to authenticated
-using (public.can_company_view_candidate(user_id));
+using (private.can_company_view_candidate(user_id));
 
 drop policy if exists "Employers read applicant certifications" on public.candidate_certifications;
 create policy "Employers read applicant certifications"
 on public.candidate_certifications for select to authenticated
-using (public.can_company_view_candidate(user_id));
+using (private.can_company_view_candidate(user_id));
 
 drop policy if exists "Employers read applicant languages" on public.candidate_languages;
 create policy "Employers read applicant languages"
 on public.candidate_languages for select to authenticated
-using (public.can_company_view_candidate(user_id));
+using (private.can_company_view_candidate(user_id));
 
 -- Candidate job-search preferences (especially salary expectations and relocation choices)
 -- remain private to the candidate; employers do not need direct access to this table.
 drop policy if exists "Employers read applicant preferences" on public.candidate_preferences;
 
-create or replace function public.can_access_company(p_company_id uuid)
+create or replace function private.can_access_company(p_company_id uuid)
 returns boolean
 language sql
 stable
@@ -110,20 +115,21 @@ as $function$
       )
   );
 $function$;
-revoke all on function public.can_access_company(uuid) from public, anon;
-grant execute on function public.can_access_company(uuid) to authenticated;
+revoke all on function private.can_access_company(uuid) from public, anon;
+revoke all on function private.can_access_company(uuid) from public, anon, authenticated;
+grant execute on function private.can_access_company(uuid) to authenticated;
 
 drop policy if exists "companies_read_active_members" on public.companies;
 create policy "companies_read_active_members"
 on public.companies for select to authenticated
-using (public.can_access_company(id));
+using (private.can_access_company(id));
 
 -- Active company HR / Recruiter members can load their own company's jobs.
 -- Company owners already have the separate jobs_read_own_company policy.
 drop policy if exists "jobs_read_active_company_members" on public.jobs;
 create policy "jobs_read_active_company_members"
 on public.jobs for select to authenticated
-using (public.can_access_company(company_id));
+using (private.can_access_company(company_id));
 
 -- =========================================================
 -- 2. Grants matching existing RLS policies
@@ -187,8 +193,65 @@ grant select on table public.government_notices to anon;
 grant select, insert, update, delete on table public.external_job_sources to authenticated;
 grant select, insert, update, delete on table public.external_job_candidates to authenticated;
 
--- Harden existing SECURITY DEFINER trigger functions: all referenced objects are schema-qualified.
-alter function public.can_access_job_application(uuid) set search_path = '';
+-- Private RLS helper: not exposed as a public Data API RPC endpoint.
+create or replace function private.can_access_job_application(p_application_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $function$
+  select exists (
+    select 1
+    from public.job_applications ja
+    join public.jobs j on j.id = ja.job_id
+    join public.companies c on c.id = j.company_id
+    where ja.id = p_application_id
+      and (
+        ja.candidate_id = auth.uid()
+        or c.owner_user_id = auth.uid()
+        or exists (
+          select 1 from public.company_members cm
+          where cm.company_id = c.id
+            and cm.user_id = auth.uid()
+            and cm.member_status = 'active'
+            and cm.member_role in ('owner', 'hr_manager', 'recruiter')
+        )
+      )
+  );
+$function$;
+revoke all on function private.can_access_job_application(uuid) from public, anon;
+grant execute on function private.can_access_job_application(uuid) to authenticated;
+revoke all on function public.can_access_job_application(uuid) from public, anon, authenticated;
+
+alter policy "job_applications_read_authorized" on public.job_applications
+  using (private.can_access_job_application(id));
+alter policy "application_history_read_authorized" on public.job_application_status_history
+  using (private.can_access_job_application(application_id));
+alter policy "job_interviews_read_authorized" on public.job_interviews
+  using (private.can_access_job_application(application_id));
+alter policy "job_offers_read_authorized" on public.job_offers
+  using (private.can_access_job_application(application_id));
+
+drop policy if exists "job_offers_select_authorized" on storage.objects;
+create policy "job_offers_select_authorized" on storage.objects
+for select to authenticated
+using (
+  bucket_id = 'job-offers'
+  and name ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\.pdf
+
+-- Trigger / event-trigger functions are not public RPC endpoints.
+-- Their owning triggers continue to invoke them; clients do not need EXECUTE.
+revoke all on function public.handle_new_user() from public, anon, authenticated;
+revoke all on function public.log_job_application_status() from public, anon, authenticated;
+revoke all on function public.rls_auto_enable() from public, anon, authenticated;
+
+commit;
+
+  and private.can_access_job_application(split_part(name, '/', 1)::uuid)
+);
+
+-- Trigger function is not a client RPC endpoint.
 alter function public.log_job_application_status() set search_path = '';
 
 -- Trigger / event-trigger functions are not public RPC endpoints.
