@@ -295,7 +295,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   existing_count integer;
 begin
@@ -308,7 +308,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 revoke all on function public.tc_limit_candidate_resume_count() from public;
 drop trigger if exists tc_limit_candidate_resume_count on public.candidate_resumes;
 create trigger tc_limit_candidate_resume_count
