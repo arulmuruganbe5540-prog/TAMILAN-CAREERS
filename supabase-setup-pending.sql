@@ -357,6 +357,14 @@ create table if not exists public.candidate_resumes (
 );
 create index if not exists candidate_resumes_user_created_idx
   on public.candidate_resumes(user_id, created_at desc);
+
+-- Optional resume selected during job application; secure employer access is
+-- provided only by the server-verified company-resume-access function.
+alter table public.job_applications
+  add column if not exists resume_id uuid
+  references public.candidate_resumes(id) on delete set null;
+create index if not exists job_applications_resume_id_idx
+  on public.job_applications(resume_id) where resume_id is not null;
 alter table public.candidate_resumes enable row level security;
 grant select, insert, update, delete on public.candidate_resumes to authenticated;
 drop policy if exists "TC candidates manage own resume metadata" on public.candidate_resumes;
