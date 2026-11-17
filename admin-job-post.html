@@ -31,16 +31,16 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <section id="gate" class="hidden"><div style="font-size:40px">🔐</div><h2>Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதி Super Admin கணக்கிற்கு மட்டுமே.</p><a class="btn primary" href="login.html?next=admin-job-post.html">Login செய்யவும்</a></section>
 <main id="app" class="hidden">
 <section class="hero"><h1>📢 Admin Job Post & Review</h1><p>அருள் முருகன் மங்கையர்க்கரசி — புதிய வேலை அறிவிப்புகளை உருவாக்கி, Draft / Review / Approved நிலைகளில் கட்டுப்படுத்தும் மையம்.</p></section>
-<div class="warning"><b>பாதுகாப்பு:</b> இங்கு சேமிக்கப்படும் வேலை அறிவிப்புகள் Admin Review Queue-ல் மட்டுமே இருக்கும். Approved ஆனாலும் பொதுமக்கள் பார்க்கும் வேலைப் பட்டியலில் தானாக வெளியிடப்படாது. உண்மையான public.jobs வெளியீட்டு வசதி, live jobs அட்டவணையின் சரியான schema மற்றும் RLS சரிபார்த்த பிறகு தனியாக இணைக்கப்படும்.</div>
+<div class="warning"><b>பாதுகாப்பு:</b> Draft / Review / Approve ஆகிய நிலைகளுக்குப் பிறகு தனி Publish செயல் உள்ளது. Publish செய்யும்போது Database Function Super Admin அனுமதி, Approved நிலை, சரிபார்க்கப்பட்ட நிறுவனம் ஆகியவற்றை மீண்டும் சரிபார்க்கும். வெளியிடப்பட்ட வேலை public.jobs அட்டவணையில் சேரும்.</div>
 <div class="grid">
 <section class="panel">
 <h2 id="formTitle">✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்</h2>
 <form id="jobForm" class="form">
 <input type="hidden" id="recordId">
 <div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
-<div class="field"><label for="company">நிறுவனப் பெயர்</label><input id="company" maxlength="180" placeholder="நிறுவனப் பெயர்"></div>
+<div class="field"><label for="company">நிறுவனப் பெயர் *</label><input id="company" maxlength="180" required placeholder="சரிபார்க்கப்பட்ட நிறுவனத்தின் பெயர்"><span class="hint">Publish செய்ய companies அட்டவணையில் இதே பெயரும் verification_status = verified நிலையும் இருக்க வேண்டும்.</span></div>
 <div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>IT / Software</option><option>Manufacturing</option><option>Sales / Marketing</option><option>Accounts / Finance</option><option>Healthcare</option><option>Education</option><option>Construction</option><option>Logistics / Transport</option><option>Customer Support</option><option>Hospitality</option><option>Agriculture</option><option>Government</option><option>Other</option></select></div>
-<div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option></select></div>
 <div class="field"><label for="workplace">பணிமுறை</label><select id="workplace"><option value="">தேர்வு செய்யவும்</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
 <div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" maxlength="180" required placeholder="உதா: ஓமலூர், சேலம்"></div>
 <div class="field"><label for="openings">காலியிடங்கள்</label><input id="openings" type="number" min="1" max="100000" value="1"></div>
@@ -71,7 +71,14 @@ function say(msg,ok=true){$("status").textContent=msg;$("status").className="sta
 function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());return p}
 function fill(p={}){fields.forEach(k=>$(k).value=p[k]??(k==="openings"?"1":""));$("recordId").value=p.id||"";$("formTitle").textContent=p.id?"✏️ வேலை அறிவிப்பைத் திருத்தவும்":"✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
 function resetForm(){fill({});$("jobForm").reset();$("recordId").value="";$("openings").value="1";$("formTitle").textContent="✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
-function statusLabel(s){return ({draft:"Draft",pending_review:"Review காத்திருக்கிறது",approved:"Approved — வெளியீட்டுக்கு தயாராக உள்ளது",rejected:"Rejected"})[s]||s}
+function statusLabel(s){return ({draft:"Draft",pending_review:"Review காத்திருக்கிறது",approved:"Approved",rejected:"Rejected"})[s]||s}
+async function loadCategories(){
+ const sel=$("category"),current=sel.value;
+ const {data,error}=await db.from("job_categories").select("category_name").eq("is_active",true).order("category_name");
+ if(error||!data?.length)return;
+ sel.innerHTML='<option value="">தேர்வு செய்யவும்</option>'+data.map(x=>'<option value="'+esc(x.category_name)+'">'+esc(x.category_name)+'</option>').join("");
+ if(current)sel.value=current;
+}
 async function save(status){
  const p=payload();
  if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், வேலை விவரம் ஆகியவற்றை நிரப்பவும்.",false);return}
@@ -89,16 +96,24 @@ async function save(status){
 }
 async function loadQueue(){
  const f=$("filter").value;
- let q=db.from("admin_job_post_reviews").select("id,title,company_name,status,payload,review_note,created_at,updated_at").order("created_at",{ascending:false}).limit(60);
+ let q=db.from("admin_job_post_reviews").select("id,title,company_name,status,payload,review_note,published_job_id,created_at,updated_at").order("created_at",{ascending:false}).limit(60);
  if(f)q=q.eq("status",f);
  const {data,error}=await q;
  if(error){$("queue").innerHTML='<div class="empty">Review பட்டியலைப் பெற முடியவில்லை. SQL migration இயக்கப்பட வேண்டியிருக்கலாம்.<br>'+esc(error.message)+'</div>';return}
  if(!data?.length){$("queue").innerHTML='<div class="empty">இந்த நிலையில் வேலை அறிவிப்புகள் இல்லை.</div>';return}
- $("queue").innerHTML=data.map(r=>'<article class="item"><h3>'+esc(r.title)+'</h3><div class="meta"><span class="pill '+esc(r.status)+'">'+esc(statusLabel(r.status))+'</span>'+(r.company_name?'<span class="pill">'+esc(r.company_name)+'</span>':'')+'<span class="pill">'+new Date(r.created_at).toLocaleDateString("ta-IN")+'</span></div>'+(r.review_note?'<p>குறிப்பு: '+esc(r.review_note)+'</p>':'')+'<div class="item-actions"><button class="btn soft" data-action="edit" data-id="'+r.id+'">திருத்து</button>'+(r.status==="pending_review"?'<button class="btn green" data-action="approve" data-id="'+r.id+'">Approve</button><button class="btn red" data-action="reject" data-id="'+r.id+'">Reject</button>':'')+(r.status==="rejected"?'<button class="btn soft" data-action="draft" data-id="'+r.id+'">மீண்டும் Draft</button>':'')+'</div></article>').join("");
+ $("queue").innerHTML=data.map(r=>'<article class="item"><h3>'+esc(r.title)+'</h3><div class="meta"><span class="pill '+esc(r.status)+'">'+esc(statusLabel(r.status))+'</span>'+(r.company_name?'<span class="pill">'+esc(r.company_name)+'</span>':'')+'<span class="pill">'+new Date(r.created_at).toLocaleDateString("ta-IN")+'</span></div>'+(r.published_job_id?'<p>✓ Public Job ID: '+esc(r.published_job_id)+'</p>':'')+(r.review_note?'<p>குறிப்பு: '+esc(r.review_note)+'</p>':'')+'<div class="item-actions"><button class="btn soft" data-action="edit" data-id="'+r.id+'">திருத்து</button>'+(r.status==="pending_review"?'<button class="btn green" data-action="approve" data-id="'+r.id+'">Approve</button><button class="btn red" data-action="reject" data-id="'+r.id+'">Reject</button>':'')+(r.status==="approved"&&!r.published_job_id?'<button class="btn primary" data-action="publish" data-id="'+r.id+'">🌐 Publish</button>':'')+(r.status==="rejected"?'<button class="btn soft" data-action="draft" data-id="'+r.id+'">மீண்டும் Draft</button>':'')+'</div></article>').join("");
  $("queue").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>act(b.dataset.action,b.dataset.id,data)));
 }
 async function act(action,id,rows){
  const r=rows.find(x=>x.id===id);if(!r)return;
+ if(action==="publish"){
+  if(!confirm("இந்த Approved வேலைவாய்ப்பை பொதுமக்கள் பார்க்கும் jobs பட்டியலில் வெளியிடவா? Verified company கட்டாயம்."))return;
+  say("Database பாதுகாப்பு சரிபார்த்து வேலை வெளியிடப்படுகிறது...");
+  const {data,error}=await db.rpc("tc_admin_publish_job",{p_review_id:id});
+  if(error){say("Publish செய்ய முடியவில்லை: "+error.message,false);return}
+  say("வேலை வெற்றிகரமாக வெளியிடப்பட்டது. Public Job ID: "+data);
+  await loadQueue();return;
+ }
  if(action==="edit"){fill({...r.payload,id:r.id});say("தேர்ந்தெடுத்த அறிவிப்பு படிவத்தில் ஏற்றப்பட்டது.");window.scrollTo({top:0,behavior:"smooth"});return}
  let update={status:action==="approve"?"approved":action==="reject"?"rejected":"draft",review_note:null,reviewed_by:null,reviewed_at:null};
  if(action==="reject"){const note=prompt("Reject செய்வதற்கான காரணத்தை எழுதுங்கள்:");if(note===null)return;if(!note.trim()){alert("காரணத்தை எழுதவும்.");return}update.review_note=note.trim().slice(0,1000)}
@@ -114,7 +129,7 @@ async function init(){
  const {data:allowed,error:roleError}=await db.rpc("is_super_admin");
  $("loading").classList.add("hidden");
  if(roleError||allowed!==true){$("gateText").textContent="இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.";$("gate").classList.remove("hidden");return}
- $("app").classList.remove("hidden");await loadQueue();
+ $("app").classList.remove("hidden");await loadCategories();await loadQueue();
 }
 $("saveDraft").addEventListener("click",()=>save("draft"));
 $("sendReview").addEventListener("click",()=>save("pending_review"));
