@@ -120,6 +120,9 @@ begin
   where c.id = v_company_id;
 
   if not found then raise exception 'Company record not found'; end if;
+  if v_draft->>'draft_status' = 'published' then
+    raise exception 'This job draft has already been published. Edit it to create a new version before submitting again';
+  end if;
 
   v_title := nullif(btrim(v_draft->>'jobTitle'), '');
   if v_title is null then raise exception 'Job title is required'; end if;
