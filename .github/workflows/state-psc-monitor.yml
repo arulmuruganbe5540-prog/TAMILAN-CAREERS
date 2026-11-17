@@ -3,6 +3,10 @@ on:
   schedule:
     - cron: "30 2 * * *"
   workflow_dispatch:
+  push:
+    paths:
+      - "scripts/state-job-monitor.py"
+      - ".github/workflows/state-psc-monitor.yml"
 permissions:
   contents: write
 jobs:
@@ -15,6 +19,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+      - name: Validate monitor syntax
+        run: python -m py_compile scripts/state-job-monitor.py
       - name: Check official State PSC pages
         run: python scripts/state-job-monitor.py
       - name: Commit source-change report when updated
