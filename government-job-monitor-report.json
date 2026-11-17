@@ -1,9 +1,9 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T01:24:14.884630+00:00",
+  "checked_at_utc": "2026-11-17T06:05:41.550511+00:00",
   "check_interval_hours": 6,
-  "registered_sources": 48,
-  "successful_sources": 15,
+  "registered_sources": 55,
+  "successful_sources": 20,
   "failed_sources": [
     {
       "source_id": "rrb",
@@ -31,6 +31,11 @@
       "error": "Redirected outside the registered official host"
     },
     {
+      "source_id": "nabard",
+      "url": "https://www.nabard.org/careers-notices1.aspx",
+      "error": "<urlopen error timed out>"
+    },
+    {
       "source_id": "apprenticeship",
       "url": "https://www.apprenticeshipindia.gov.in/",
       "error": "HTTP Error 403: Forbidden"
@@ -38,11 +43,6 @@
     {
       "source_id": "join-indian-army",
       "url": "https://joinindianarmy.nic.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "nabard",
-      "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "<urlopen error timed out>"
     },
     {
@@ -54,6 +54,11 @@
       "source_id": "agniveervayu",
       "url": "https://agnipathvayu.cdac.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "tnusrb",
@@ -81,6 +86,11 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "hppsc",
+      "url": "https://hppsc.hp.gov.in/",
+      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
+    },
+    {
       "source_id": "apsc-assam",
       "url": "https://apsc.nic.in/",
       "error": "<urlopen error timed out>"
@@ -91,19 +101,14 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "<urlopen error timed out>"
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "gpsc-gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
       "error": "<urlopen error [Errno 101] Network is unreachable>"
-    },
-    {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "hpsc",
@@ -121,19 +126,9 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "hppsc",
-      "url": "https://hppsc.hp.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
       "source_id": "kpsc",
       "url": "https://kpsc.kar.nic.in/",
       "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "tgpsc",
-      "url": "https://www.tgpsc.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "mppsc",
@@ -151,9 +146,19 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "ibps-other-recruitment",
+      "url": "https://www.ibps.in/index.php/recruitment/",
+      "error": "<urlopen error [SSL: UNEXPECTED_MESSAGE] unexpected message (_ssl.c:1147)>"
+    },
+    {
       "source_id": "tpsc",
       "url": "https://tpsc.tripura.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "upsc-recruitment-tests",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/notice/",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
     },
     {
       "source_id": "psc-uk",
@@ -169,10 +174,15 @@
       "source_id": "psc-wb",
       "url": "https://psc.wb.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "upsc-recruitment-advertisements",
+      "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisement",
+      "error": "The read operation timed out"
     }
   ],
-  "candidate_links_discovered_this_run": 409,
-  "pending_admin_review": 409,
+  "candidate_links_discovered_this_run": 371,
+  "pending_admin_review": 416,
   "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 5,
   "request_timeout_seconds": 12

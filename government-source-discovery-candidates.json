@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-17T01:25:24.166716+00:00",
-  "trusted_sources_scanned": 48,
-  "new_source_candidates_seen_this_run": 58,
-  "total_source_candidates": 37,
+  "generated_at_utc": "2026-11-17T06:06:47.434939+00:00",
+  "trusted_sources_scanned": 55,
+  "new_source_candidates_seen_this_run": 14,
+  "total_source_candidates": 41,
   "policy": "No candidate is added to the trusted source registry automatically. Admin verification is required.",
   "items": [
     {
@@ -16,7 +16,7 @@
       "id": "503c54f7c35f2e5b2c4f",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:24:42.521689+00:00",
-      "last_seen_utc": "2026-11-17T01:24:42.521691+00:00",
+      "last_seen_utc": "2026-11-17T06:06:07.578793+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -73,7 +73,7 @@
       "id": "a6886ce8d1dce8c9b1d4",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:24:27.919912+00:00",
-      "last_seen_utc": "2026-11-17T01:24:27.919914+00:00",
+      "last_seen_utc": "2026-11-17T06:05:53.897195+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -92,7 +92,26 @@
       "id": "bf1b954e0f943672afda",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:24:27.919886+00:00",
-      "last_seen_utc": "2026-11-17T01:24:27.919889+00:00",
+      "last_seen_utc": "2026-11-17T06:05:53.897178+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://empsconline.gov.in/downloadadmitcardv2.aspx",
+      "candidate_domain": "empsconline.gov.in",
+      "link_title": "Admit Cards",
+      "discovered_via_source_id": "mpsc-manipur",
+      "discovered_via_authority": "Manipur Public Service Commission",
+      "evidence_page": "https://mpscmanipur.gov.in/",
+      "id": "43eea30f98d6a8ddf4ba",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T06:06:19.813626+00:00",
+      "last_seen_utc": "2026-11-17T06:06:19.813644+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -130,7 +149,7 @@
       "id": "09e14bc8be7a521f74e2",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:25:03.884929+00:00",
-      "last_seen_utc": "2026-11-17T01:25:03.884947+00:00",
+      "last_seen_utc": "2026-11-17T06:06:22.282061+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -672,6 +691,25 @@
       "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
     },
     {
+      "candidate_url": "https://rpa.meghalaya.gov.in/rpaonline",
+      "candidate_domain": "rpa.meghalaya.gov.in",
+      "link_title": "\"Click here\" for challenging the answer keys.",
+      "discovered_via_source_id": "mpsc-meghalaya",
+      "discovered_via_authority": "Meghalaya Public Service Commission",
+      "evidence_page": "https://mpsc.meghalaya.gov.in/",
+      "id": "4d434d73e159df55bd7f",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T06:06:22.282087+00:00",
+      "last_seen_utc": "2026-11-17T06:06:22.282089+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
       "candidate_url": "https://rpa.meghalaya.gov.in/",
       "candidate_domain": "rpa.meghalaya.gov.in",
       "link_title": "Online Application",
@@ -681,7 +719,7 @@
       "id": "c22d35c1ac3ed426b020",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:25:03.884956+00:00",
-      "last_seen_utc": "2026-11-17T01:25:03.884958+00:00",
+      "last_seen_utc": "2026-11-17T06:06:22.282084+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -700,7 +738,45 @@
       "id": "5ac90ef680d2c9902607",
       "status": "needs_official_source_verification",
       "first_discovered_utc": "2026-11-17T01:24:31.441484+00:00",
-      "last_seen_utc": "2026-11-17T01:24:31.441486+00:00",
+      "last_seen_utc": "2026-11-17T06:05:56.853220+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://tnpsc.gov.in/Document/english/Amendment to the notification.pdf",
+      "candidate_domain": "tnpsc.gov.in",
+      "link_title": "View",
+      "discovered_via_source_id": "tnpsc-groupiv-2026",
+      "discovered_via_authority": "TNPSC Group IV Notification 11/2026",
+      "evidence_page": "https://www.tnpsc.gov.in/web/examdashboard/index.aspx?notid=7a880763-80dc-4c3a-bbbe-81b6a3a75a87",
+      "id": "7032bbd8d10ae07b8e90",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T06:06:40.997481+00:00",
+      "last_seen_utc": "2026-11-17T06:06:40.997500+00:00",
+      "verification": {
+        "government_entity_confirmed": false,
+        "official_parent_directory_link_confirmed": false,
+        "domain_ownership_confirmed": false,
+        "recruitment_function_confirmed": false
+      },
+      "warning": "Suggestion only. A .gov.in/.nic.in suffix or an inbound link is not sufficient proof. Verify the authority and domain before adding it to the trusted source registry."
+    },
+    {
+      "candidate_url": "https://tnpsc.gov.in/document/english/Group I Notification 2026_E.pdf",
+      "candidate_domain": "tnpsc.gov.in",
+      "link_title": "View",
+      "discovered_via_source_id": "tnpsc-groupi-2026",
+      "discovered_via_authority": "TNPSC Group I Notification 05/2026",
+      "evidence_page": "https://www.tnpsc.gov.in/web/examdashboard/index.aspx?notid=33aa5415-6205-4ae9-842e-212d62d088f1",
+      "id": "1141adc949d228d29e2e",
+      "status": "needs_official_source_verification",
+      "first_discovered_utc": "2026-11-17T06:06:42.496681+00:00",
+      "last_seen_utc": "2026-11-17T06:06:42.496704+00:00",
       "verification": {
         "government_entity_confirmed": false,
         "official_parent_directory_link_confirmed": false,
@@ -716,11 +792,11 @@
       "error": "HTTP Error 404: Not Found"
     },
     {
-      "source_id": "upsc",
+      "source_id": "indian-railways",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "indian-railways",
+      "source_id": "upsc",
       "error": "<urlopen error timed out>"
     },
     {
@@ -728,11 +804,11 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "join-indian-army",
+      "source_id": "nabard",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "nabard",
+      "source_id": "join-indian-army",
       "error": "<urlopen error timed out>"
     },
     {
@@ -756,16 +832,20 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "gpsc-goa",
-      "error": "HTTP Error 403: Forbidden"
-    },
-    {
       "source_id": "appsc",
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "gpsc-goa",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
       "source_id": "appsc-arunachal",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "hppsc",
+      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
     },
     {
       "source_id": "apsc-assam",
@@ -776,6 +856,10 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "kerala-psc",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
       "source_id": "gpsc-gujarat",
       "error": "<urlopen error [Errno 101] Network is unreachable>"
     },
@@ -784,7 +868,7 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "kerala-psc",
+      "source_id": "mpsc-mizoram",
       "error": "HTTP Error 403: Forbidden"
     },
     {
@@ -792,24 +876,12 @@
       "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
-      "source_id": "mpsc-mizoram",
-      "error": "HTTP Error 403: Forbidden"
-    },
-    {
       "source_id": "kpsc",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "hppsc",
       "error": "<urlopen error timed out>"
     },
     {
       "source_id": "mppsc",
       "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "tgpsc",
-      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "rpsc",
@@ -824,6 +896,10 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "upsc-recruitment-tests",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
+    },
+    {
       "source_id": "psc-uk",
       "error": "<urlopen error timed out>"
     },
@@ -834,6 +910,10 @@
     {
       "source_id": "psc-wb",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "upsc-recruitment-advertisements",
+      "error": "The read operation timed out"
     }
   ]
 }
