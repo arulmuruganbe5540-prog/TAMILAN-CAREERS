@@ -17,9 +17,11 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "data" / "government-official-sources.json"
 QUEUE = ROOT / "government-job-review-queue.json"
 REPORT = ROOT / "government-job-monitor-report.json"
-KEYWORDS = re.compile(r"recruit|vacanc|advertisement|notification|career|apply|application|"
-                      r"result|merit list|answer key|admit card|hall ticket|exam date|"
-                      r"selection list|provisional list|shortlist|appointment", re.I)
+# Match recruitment-specific notice language, not generic navigation such as Apply/Login.
+KEYWORDS = re.compile(r"recruitment|vacanc|advertisement|notification|career.?notice|"
+                      r"result|merit.?list|answer.?key|admit.?card|hall.?ticket|exam.?date|"
+                      r"selection.?list|provisional.?list|short.?list|appointment.?order|"
+                      r"application.?form|online.?application", re.I)
 CATEGORY = [
     ("admit_card", re.compile(r"admit.?card|hall.?ticket|call.?letter|e.?call.?letter", re.I)),
     ("result", re.compile(r"result|merit.?list|selection.?list|short.?list", re.I)),
