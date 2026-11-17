@@ -6,8 +6,9 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for commit `b976341e83114902a7e8901b68925146066285fa` (run `44063879056`; completed successfully).
-- [x] Latest full website health workflow passed for commit `b976341e83114902a7e8901b68925146066285fa` (run `44063880263`; completed successfully).
+- [x] Latest GitHub Pages deployment succeeded for commit `7b4ed7b4fa396bb2cb7eeaa0dd586940444db5c8` (run `44065324676`; build, deploy, and status-report jobs all succeeded).
+- [x] Latest full website health workflow passed for commit `7b4ed7b4fa396bb2cb7eeaa0dd586940444db5c8` (run `44065323970`; audit job succeeded).
+- [x] Read-only schema audit now compares both `resumes` and `candidate-resumes` Storage bucket IDs so the live bucket can be reconciled before Resume setup.
 - [x] Candidate Resume deletion now removes the private Storage object before deleting its metadata row; if Storage deletion fails, the metadata remains available for retry. This repository change passed the health workflow and Pages deployment; live Supabase behavior still needs real-account testing.
 - [x] Latest GitHub Pages deployment succeeded for main commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` on 17 November 2026 (run `44061663205`; deployment completed successfully).
 - [x] Latest full website health workflow passed for the same commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` (run `44061664222`; Edge Function type checks, SQL lint, privacy guards, website structure checks, Chromium installation, key-page browser smoke tests, and health-report upload all succeeded).
@@ -74,6 +75,7 @@ This is an operational checklist based on the project changes and user-confirmed
 ## Supabase setup and deployment still needing confirmation
 
 - [ ] Run `supabase-setup-pending.sql` for private resume storage, candidate resume metadata, private employer job drafts, candidate education/experience/certifications, and restricted applicant-profile access. Verify the Storage bucket remains private.
+- [ ] Resolve the Resume Storage bucket-name mismatch before running setup: existing Storage policy output references `candidate-resumes`, while the current website, Edge Function, and setup SQL use `resumes`. Run the updated bucket audit and preserve any existing files; do not delete or rename buckets blindly.
 - [ ] Deploy `company-resume-access` Edge Function and test a legitimate employer access plus a denied cross-company access. Secure resume viewing is not live until this is tested.
 - [ ] Run `supabase-interview-notifications.sql`; test invitation, candidate response, and notifications for both parties. Automated reminders additionally need a secure scheduler/Cron.
 - [ ] Run `supabase-candidate-profile-education-experience.sql`; test saving and editing education, experience, and certifications. (The consolidated `supabase-setup-pending.sql` also includes these records.)
