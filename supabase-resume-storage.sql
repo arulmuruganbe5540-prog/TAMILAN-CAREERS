@@ -30,8 +30,9 @@ begin
   end loop;
   if to_regclass('public.candidate_resumes') is not null then
     foreach v_item in array array[
-      'candidate_resumes.id','candidate_resumes.user_id','candidate_resumes.file_path',
-      'candidate_resumes.original_file_name','candidate_resumes.file_type','candidate_resumes.file_size_bytes'
+      'candidate_resumes.id','candidate_resumes.user_id','candidate_resumes.resume_title','candidate_resumes.file_path',
+      'candidate_resumes.original_file_name','candidate_resumes.file_type','candidate_resumes.file_size_bytes',
+      'candidate_resumes.is_primary','candidate_resumes.created_at','candidate_resumes.updated_at'
     ] loop
       if not exists (
         select 1 from information_schema.columns c
@@ -45,6 +46,13 @@ begin
   end if;
   if cardinality(v_missing) > 0 then
     raise exception 'Resume Storage setup stopped: required columns are missing: %', array_to_string(v_missing, ', ');
+  end if;
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema='public' and table_name='job_applications'
+      and column_name in ('id','candidate_id') and data_type <> 'uuid'
+  ) then
+    raise exception 'Resume Storage setup stopped: job_applications.id and candidate_id must be UUID.';
   end if;
   if exists (
     select 1 from information_schema.columns
