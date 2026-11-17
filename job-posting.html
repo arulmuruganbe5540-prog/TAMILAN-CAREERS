@@ -85,7 +85,7 @@ async function loadDraftForCompany(){
    published:"இந்த வேலை பொதுவில் வெளியிடப்பட்டுள்ளது. புதிய மாற்றம் செய்தால் மீண்டும் Review தேவைப்படும்."
   };
   setReviewLock(state==="pending_review"||state==="approved");
-  message(messages[state]||"இந்த நிறுவனத்திற்கான சேமித்த வரைவு ஏற்றப்பட்டது.",state!=="rejected");
+  message((messages[state]||"இந்த நிறுவனத்திற்கான சேமித்த வரைவு ஏற்றப்பட்டது.")+(state==="rejected"&&data.draft.review_note?" Admin குறிப்பு: "+data.draft.review_note:""),state!=="rejected");
  }
  else{
   currentDraft=null;setReviewLock(false);
