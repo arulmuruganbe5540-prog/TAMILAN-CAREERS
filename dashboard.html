@@ -84,7 +84,7 @@ async function loadDashboard() {
   const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
 
   if (sessionError || !sessionData.session) {
-    window.location.replace("login.html");
+    window.location.replace("login.html?next="+encodeURIComponent("dashboard.html"));
     return;
   }
 
@@ -182,7 +182,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     return;
   }
 
-  window.location.replace("login.html");
+  window.location.replace("login.html?next="+encodeURIComponent("dashboard.html"));
 });
 
 loadDashboard().catch(error => {
