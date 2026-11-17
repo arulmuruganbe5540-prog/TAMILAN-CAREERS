@@ -54,7 +54,7 @@ async function load(){
  const out=[];
  (jr.data||[]).forEach(j=>{
   if(!isScopeMatch(j))return;
-  const qual=j.qualification||j.education||"",text=[j.job_title,j.title,j.description,j.recruitment_authority,j.department,qual].join(" ");
+  const qual=j.education_level||"",text=[j.job_title,j.title,j.description,j.recruitment_authority,j.department,qual].join(" ");
   if(!isQualificationMatch(text))return;
   out.push({title:j.job_title||j.title||"அரசு வேலைவாய்ப்பு",qualification:qual,summary:j.description,vacancies:j.vacancies||j.vacancy_count,deadline:j.application_deadline,detail:"job-details.html?id="+encodeURIComponent(j.id),apply:j.application_url||j.official_notification_url,search:text});
  });
