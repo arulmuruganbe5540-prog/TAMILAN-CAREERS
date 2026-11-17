@@ -6,8 +6,9 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for main commit `0345be294def626482bd5b2e08d9f09c6aa611cf` on 17 November 2026 (run `44060639560`; build, status report, and deploy jobs all succeeded).
-- [x] Latest full website health workflow passed for main commit `be2408bdce0102649f4c0815e7acead4952a085c` on 17 November 2026 (run `44060017401`): the audit job completed successfully. The later `0345be2` change was documentation-only and its Pages deployment also succeeded; the full health workflow has not yet rerun for that docs-only commit.
+- [x] Latest GitHub Pages deployment succeeded for main commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` on 17 November 2026 (run `44061663205`; deployment completed successfully).
+- [x] Latest full website health workflow passed for the same commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` (run `44061664222`; Edge Function type checks, SQL lint, privacy guards, website structure checks, Chromium installation, key-page browser smoke tests, and health-report upload all succeeded).
+- [x] Interview/notification SQL now performs a schema preflight for the required application, job, company, and company-member tables/columns before making migration changes. This guard is committed, but the SQL still has not been run against the live Supabase project.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
