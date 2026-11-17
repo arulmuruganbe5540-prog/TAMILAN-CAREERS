@@ -52,13 +52,13 @@ grant select,insert,update on public.external_job_sources,public.external_job_ca
 -- On rerun, preserve admin-controlled enabled/monitor_mode values so an administrator's manual/disabled choice is not overwritten.
 insert into public.external_job_sources(id,source_name,source_type,country,region,base_url,monitor_mode) values
 ('india-ncs','National Career Service','india_government','India',null,'https://www.ncs.gov.in/','manual'),
-('india-upsc','Union Public Service Commission','india_government','India',null,'https://upsc.gov.in/','public_page'),
+('india-upsc','Union Public Service Commission','india_government','India',null,'https://upsc.gov.in/','manual'),
 ('india-ssc','Staff Selection Commission','india_government','India',null,'https://ssc.gov.in/','public_page'),
-('india-rrb','Railway Recruitment Boards','india_government','India',null,'https://indianrailways.gov.in/','public_page'),
+('india-rrb','Railway Recruitment Boards','india_government','India',null,'https://indianrailways.gov.in/','manual'),
 ('india-employment-news','Employment News','india_government','India',null,'https://employmentnews.gov.in/','public_page'),
 ('india-tnpsc','Tamil Nadu Public Service Commission','india_government','India','Tamil Nadu','https://www.tnpsc.gov.in/','public_page'),
 ('india-kerala-psc','Kerala Public Service Commission','india_government','India','Kerala','https://www.keralapsc.gov.in/','public_page'),
-('india-kpsc','Karnataka Public Service Commission','india_government','India','Karnataka','https://kpsc.kar.nic.in/','public_page'),
+('india-kpsc','Karnataka Public Service Commission','india_government','India','Karnataka','https://kpsc.kar.nic.in/','manual'),
 ('india-mpsc','Maharashtra Public Service Commission','india_government','India','Maharashtra','https://mpsc.gov.in/','public_page'),
 ('india-upsc-ora','UPSC Online Recruitment Applications','india_government','India',null,'https://upsconline.nic.in/','public_page'),
 ('usajobs','USAJOBS - US Federal Government','foreign_government','United States',null,'https://www.usajobs.gov/','manual'),
