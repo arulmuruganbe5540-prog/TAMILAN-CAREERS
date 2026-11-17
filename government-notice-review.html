@@ -25,6 +25,7 @@ a.link{display:inline-block;margin-top:8px;background:#126fd0;color:white;text-d
 .hidden{display:none}button{border:0;border-radius:8px;padding:10px 14px;font-weight:bold;background:#fff;color:#17365f}
 @media(max-width:700px){.filters{grid-template-columns:1fr}.hero h1{font-size:21px}}
 </style>
+  <link rel="stylesheet" href="assets/site-protection.css">
 </head>
 <body>
 <header><div class="brand">TAMILAN <span>CAREERS</span> · ADMIN</div><button id="logout">Logout</button></header>
@@ -85,4 +86,5 @@ async function start(){
 $("logout").addEventListener("click",async()=>{await client.auth.signOut();location.replace("login.html");});
 start().catch(e=>$("state").textContent="பிழை: "+(e.message||e));
 </script>
+  <script src="assets/site-protection.js" defer></script>
 </body></html>
