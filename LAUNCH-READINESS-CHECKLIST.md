@@ -34,7 +34,7 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] AI resume matching Edge Function now verifies the caller has the `job_seeker` role in addition to requiring explicit AI consent.
 - [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
 - [x] State PSC monitor was hardened to use HTTPS-only source URLs, validate redirects, enforce bounded redirects, require HTML/XHTML, and check `robots.txt` before scanning and after redirects.
-- [x] State PSC monitor source code and Python syntax were checked successfully on a Dependabot branch; a successful scheduled scan on `main` is still pending. The previous public report is stale and still shows two old HTTP URLs until the main-branch scan refreshes it.
+- [x] Daily State PSC monitor completed successfully on `main` (run `44054341358`): 28 State PSC pages checked; 9 reachable, 19 unreachable/blocked, and 2 pages changed (Nagaland and Tamil Nadu) for manual review. The refreshed report uses HTTPS-only URLs and contains no unverified recruitment snippets; a changed page is not a verified vacancy.
 - [x] State PSC public report no longer includes unverified recruitment keyword snippets; CI now rejects such snippets if they reappear.
 - [x] Resume application integrity guard added to `supabase-setup-pending.sql`: the database rejects a `resume_id` unless the referenced Resume belongs to the applicant, including null/mismatched candidate IDs.
 - [x] Employer applicant-profile access now excludes withdrawn applications in the consolidated Supabase setup SQL.
