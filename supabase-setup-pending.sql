@@ -132,7 +132,7 @@ on conflict (id) do update set
   allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "TC candidate resumes owner can read" on storage.objects;
-create policy "TC resumes owner can read"
+create policy "TC candidate resumes owner can read"
 on storage.objects for select to authenticated
 using (
   bucket_id = 'candidate-resumes'
@@ -140,30 +140,30 @@ using (
 );
 
 drop policy if exists "TC candidate resumes owner can upload" on storage.objects;
-create policy "TC resumes owner can upload"
+create policy "TC candidate resumes owner can upload"
 on storage.objects for insert to authenticated
 with check (
-  bucket_id = 'resumes'
+  bucket_id = 'candidate-resumes'
   and (storage.foldername(name))[1] = (select auth.uid()::text)
 );
 
 drop policy if exists "TC candidate resumes owner can update" on storage.objects;
-create policy "TC resumes owner can update"
+create policy "TC candidate resumes owner can update"
 on storage.objects for update to authenticated
 using (
-  bucket_id = 'resumes'
+  bucket_id = 'candidate-resumes'
   and (storage.foldername(name))[1] = (select auth.uid()::text)
 )
 with check (
-  bucket_id = 'resumes'
+  bucket_id = 'candidate-resumes'
   and (storage.foldername(name))[1] = (select auth.uid()::text)
 );
 
 drop policy if exists "TC candidate resumes owner can delete" on storage.objects;
-create policy "TC resumes owner can delete"
+create policy "TC candidate resumes owner can delete"
 on storage.objects for delete to authenticated
 using (
-  bucket_id = 'resumes'
+  bucket_id = 'candidate-resumes'
   and (storage.foldername(name))[1] = (select auth.uid()::text)
 );
 
@@ -174,7 +174,7 @@ using (
 create table if not exists public.job_posting_drafts (
   id uuid primary key default gen_random_uuid(),
   company_id uuid not null,
-  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   draft jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -282,7 +282,7 @@ comment on table public.job_posting_drafts is
 -- Create candidate education/experience tables before adding employer read policies.
 create table if not exists public.candidate_education (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   institution_name text not null check (length(btrim(institution_name)) between 1 and 180),
   qualification text not null check (length(btrim(qualification)) between 1 and 120),
   field_of_study text, grade text, start_date date, end_date date,
@@ -293,7 +293,7 @@ create table if not exists public.candidate_education (
 );
 create table if not exists public.candidate_experience (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   company_name text not null check (length(btrim(company_name)) between 1 and 180),
   job_title text not null check (length(btrim(job_title)) between 1 and 140),
   employment_type text, city text, start_date date, end_date date,
@@ -329,7 +329,7 @@ for each row execute function public.tc_candidate_profile_records_touch_updated_
 
 create table if not exists public.candidate_certifications (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   certificate_name text not null check (length(btrim(certificate_name)) between 1 and 180),
   issuing_organization text,
   issue_date date,
@@ -531,7 +531,7 @@ for each row execute function public.tc_limit_candidate_resume_count();
 -- =========================================================
 create table if not exists public.candidate_education (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   institution_name text not null check (length(btrim(institution_name)) between 1 and 180),
   qualification text not null check (length(btrim(qualification)) between 1 and 120),
   field_of_study text,
@@ -548,7 +548,7 @@ create table if not exists public.candidate_education (
 
 create table if not exists public.candidate_experience (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   company_name text not null check (length(btrim(company_name)) between 1 and 180),
   job_title text not null check (length(btrim(job_title)) between 1 and 140),
   employment_type text,
