@@ -7,15 +7,12 @@ begin;
 
 alter table public.user_roles enable row level security;
 
-drop policy if exists user_roles_read_own_or_super_admin on public.user_roles;
-create policy user_roles_read_own_or_super_admin
+drop policy if exists user_roles_read_super_admin_all on public.user_roles;
+create policy user_roles_read_super_admin_all
   on public.user_roles
   for select
   to authenticated
-  using (
-    user_id = (select auth.uid())
-    or (select private.is_super_admin())
-  );
+  using ((select private.is_super_admin()));
 
 grant select on public.user_roles to authenticated;
 
