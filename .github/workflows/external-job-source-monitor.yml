@@ -1,5 +1,10 @@
 name: Official external job source discovery
 on:
+  push:
+    paths:
+      - ".github/workflows/external-job-source-monitor.yml"
+      - "supabase/functions/scan-external-job-sources/**"
+      - "supabase-external-job-sources.sql"
   schedule:
     - cron: "41 */8 * * *"
   workflow_dispatch:
