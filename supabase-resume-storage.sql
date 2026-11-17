@@ -1,6 +1,6 @@
 -- TAMILAN CAREERS: private Resume & Document Storage
 -- Run in Supabase SQL Editor for project qkmljuuusfjowexvybvy.
--- Idempotent: enforces a private 5 MB bucket, owner-only file access,
+-- Idempotent: enforces a private 10 MB bucket, owner-only file access,
 -- owner-only metadata, and a maximum of five documents per candidate.
 
 begin;
