@@ -139,5 +139,6 @@ $("saveDraft").addEventListener("click",()=>save("draft"));
 $("sendReview").addEventListener("click",()=>save("pending_review"));
 $("reset").addEventListener("click",resetForm);
 $("filter").addEventListener("change",loadQueue);
+$("type").addEventListener("change",()=>{const p=$("salaryPeriod");if($("type").value==="Daily Wage"&&p.value==="monthly")p.value="daily";else if($("type").value!=="Daily Wage"&&p.value==="daily")p.value="monthly"});
 init();
 </script></body></html>
