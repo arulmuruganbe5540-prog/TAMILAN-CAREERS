@@ -1,261 +1,365 @@
 {
   "monitor_version": 1,
-  "status": "Pending first scheduled check",
-  "purpose": "The daily monitor detects official PSC page changes only; it does not certify vacancies.",
+  "last_updated_utc": "2026-11-17T03:21:03.249418+00:00",
+  "purpose": "Official PSC page change detection only; not a verified vacancy feed.",
   "states_monitored": 28,
+  "changed_pages": [],
+  "unreachable_pages": [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Mizoram",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Telangana",
+    "Tripura",
+    "Uttarakhand",
+    "West Bengal"
+  ],
   "manual_review_required": true,
   "sources": [
     {
       "state": "Andhra Pradesh",
       "url": "https://psc.ap.gov.in/",
+      "checked_at": "2026-11-17T03:14:36.792671+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Arunachal Pradesh",
       "url": "http://www.appsc.gov.in/",
+      "checked_at": "2026-11-17T03:14:47.431235+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Assam",
       "url": "http://apsc.nic.in/",
+      "checked_at": "2026-11-17T03:15:10.333722+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Bihar",
       "url": "https://bpsc.bihar.gov.in/",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:15:33.215748+00:00",
+      "http_status": 200,
+      "final_url": "https://bpsc.bihar.gov.in/",
+      "content_sha256": "e46e4d16a74099957967ada49070d1117367b46e90930e65e0447db59a2efef0",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [
+        "Home - Bihar Public Service Commission Skip to content Skip to content Bihar Public Service Commission Bihar Public Service Commission 15, Nehru Path (Bailey Road), Patna – 800001 (Bihar) English हिन्दी Hamburger Toggle Menu Icon-facebook-2 X-twitter Instagram",
+        "Corrigendum: Integrated 72nd Combined (Preliminary) Competitive Examination – Reduction of 2 Vacancies of Deputy Superintendent of Police (BPS).",
+        "01/2026) Corrigendum: Integrated 72nd Combined (Preliminary) Competitive Examination – Deletion of 44 Vacancies of Sugarcane Officer.",
+        "Important Notice : Facility to edit GENDER in OTR (One Time Registration) What's New Important Notice:- Advertisement for the Posts of Assistant Professor in various Departments (Speciality) of State Medical College & Hospitals has been cancelled.",
+        "Corrigendum: Integrated 72nd Combined (Preliminary) Competitive Examination – Reduction of 2 Vacancies of Deputy Superintendent of Police (BPS).",
+        "01/2026) Corrigendum: Integrated 72nd Combined (Preliminary) Competitive Examination – Deletion of 44 Vacancies of Sugarcane Officer.",
+        "01/2026) Important Notice : Facility to edit GENDER in OTR (One Time Registration) Facility to Candidates to update data in Profile Tab in Online Application System.",
+        "View All Advertisements Online Application View Marksheet Interview Letters Important Announcements ✕ All Notices Programs Interviews Results Advertisement Sr.No Sub Category Date Advertisement No.",
+        "Subject / Details View / Download Records per page : 10 25 50 75 100 Showing 0-0 of 0 records Shri Parmar Ravi Manubhai (Hon'ble Chairman) BPSC, Patna Key Contacts Shri Hemant Kumar Singh Secretary 0612-2215187 bpscpat-bih@nic.in Enquiry Section 0612-2237999 b"
+      ],
+      "review_required": true
     },
     {
       "state": "Chhattisgarh",
       "url": "https://psc.cg.gov.in/",
+      "checked_at": "2026-11-17T03:15:36.208862+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Goa",
       "url": "https://gpsc.goa.gov.in/",
+      "checked_at": "2026-11-17T03:15:59.125732+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "HTTP Error 403: Forbidden",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
+      "checked_at": "2026-11-17T03:16:01.400873+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error [Errno 101] Network is unreachable>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Haryana",
       "url": "https://hpsc.gov.in/",
+      "checked_at": "2026-11-17T03:16:24.315733+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Himachal Pradesh",
       "url": "https://hppsc.hp.gov.in/",
+      "checked_at": "2026-11-17T03:16:47.455346+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Jharkhand",
       "url": "https://www.jpsc.gov.in/",
+      "checked_at": "2026-11-17T03:16:48.801906+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Karnataka",
       "url": "https://kpsc.kar.nic.in/",
+      "checked_at": "2026-11-17T03:16:59.416519+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Kerala",
       "url": "https://www.keralapsc.gov.in/",
+      "checked_at": "2026-11-17T03:17:23.853747+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "HTTP Error 403: Forbidden",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Madhya Pradesh",
       "url": "https://mppsc.mp.gov.in/",
+      "checked_at": "2026-11-17T03:17:31.536887+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Maharashtra",
       "url": "https://mpsc.gov.in/home",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:17:54.605786+00:00",
+      "http_status": 200,
+      "final_url": "https://mpsc.gov.in/home",
+      "content_sha256": "4223820c137eaafd076ba16ebceb0de284e776c04da1954314f705d3ae63de95",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [],
+      "review_required": true
     },
     {
       "state": "Manipur",
       "url": "https://mpscmanipur.gov.in/",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:17:55.962576+00:00",
+      "http_status": 200,
+      "final_url": "https://mpscmanipur.gov.in/",
+      "content_sha256": "f203f039a0fc89282ffbc1f4cd4e39fc856fe75c732f5b95492a91ed6d54381e",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [
+        "MPSC - Manipur Public Service Commission What's New View All → Answer Keys for recruitment examination for the post of Assistant Engineer/ Manager (Civil/ Electrical) in various departments under the Government of Manipur held on 12 th November, 2026.",
+        "New Updated: 13/11/2026 Notification Provisional Answer Key of General Ability Test (Civil Engineering) Provisional Answer Key of General Ability Test (Electrical Engineering) Provisional Answer Key of Civil Engineering Paper-I Provisional Answer Key of Civil ",
+        "Updated: 02/11/2026 Final results for recruitment to the post of Research Assistant in Planning Department on contractual basis.",
+        "Updated: 28/10/2026 Answer Keys and Specimen Question Papers for recruitment examination for the post of Under Secretary (Law) & Law Officer in the Law & Legislative Affairs Department held on 16 th & 17 th October, 2026.",
+        "Updated: 17/10/2026 Notification Provisional Answer Key of Paper-II Provisional Answer Key of Paper-III Provisional Answer Key of Paper-IV Paper-II Specimen Question Paper Paper-III Specimen Question Paper Paper-IV Specimen Question Paper Assistant Engineer/Ma",
+        "Updated: 14/10/2026 Results of the Written Examination and Interview Schedule for Recruitment to the Post of Research Assistant in the Planning Department.",
+        "Updated: 12/10/2026 Final Answer Keys for Recruitment Examination for Research Assistant in the Planning Department.",
+        "Updated: 12/10/2026 Notification Regarding examination schedule for direct recruitment of Assistant Engineer/ Manager Updated: 08/10/2026 Notification Regarding Rescheduling of the Recruitment Examination for the Posts of Under Secretary (Law) and Legal Office",
+        "Updated: 25/09/2026 Notification Paper-I Specimen Question Booklet Paper-II Specimen Question Booklet Answer Keys Notification for recruitment of 13 posts of Dental Surgeon (MHS Grade-IV) in the Health Department, Manipur.",
+        "Updated: 23/09/2026 Notification Syllabus Recruitment Advertisements Apply Online Admit Cards Answer Key Written Results Interview Final Results Previous Year Question Papers Claims and Objections to Answer Keys Candidates who wish to challenge notified answer"
+      ],
+      "review_required": true
     },
     {
       "state": "Meghalaya",
       "url": "https://mpsc.meghalaya.gov.in/",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:17:58.414357+00:00",
+      "http_status": 200,
+      "final_url": "https://mpsc.meghalaya.gov.in/",
+      "content_sha256": "cb20305375842f8ea082341aeecb5e590d099b8e8d2468b28d193b92e950916c",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [
+        "Home | Meghalaya Public Service Commission Skip to main content Search A + A A - A A Back to Top Candidates are hereby advised to refer to the official website of the Meghalaya Public Service Commission (MPSC) only, for any information pertaining to the Commis",
+        "Previous Years Questions Answer Keys Results Results of Screening Test Results of Personal Interview View Marks Advertisements Notifications Notification for Screening/Written Examination Notification for Personal Interview Notification for Answer Keys Notific",
+        "Read More Programmes Advertisements Results Notice NOTICE TENTATIVE PROGRAMME FOR EXAMINATION Foreman under The Directorate of Printing and Stationery, Meghalaya [Dec 2025] Junior Football Coach under The Directorate of Sports and Youth Affairs Department [May",
+        "Scientific Officer for (Chemistry Division) under the Directorate of Forensic Science [May 2025] Senior Scientific Assistant in the Documents Division of the Directorate of Forensic Sciences [ April 2025) NOTICE PROGRAMME OF PERSONAL INTERVIEW Mechanic Motor V",
+        "Electrician Instructor under the Directorate of Employment & Craftsmen Training, Department of Labour Employment & Skill Develoment [June 2025] PROGRAMME FOR EXAMINATION.",
+        "Publicity Assistant cum Khasi Translator under the Directorate of Sericulture & Weaving Department of Textiles (March 2026) Wireman Instructor under the Directorate of Employment & Craftmen Training, Departmentof Labour Emplyment and Skill Development (March 2",
+        "Lower Division Assistant under the Heads of Department (July 2025) Publicity Assistant-cum-Khasi Translator under the Directorate ofSericulture & Weaving Department of Textiles (March 2026) Wireman Instructor under the Directorate of Employment & Craftsmen Tra",
+        "Mechanic Motor Vehicle (M.V) Instructor under the Directorate of Employment & Craftsmen Training, Department of Labour, Employment & Skill Development [June 2025] Electrician Instructor under the Directorate of Employment & Craftsmen Training, Department of La",
+        "Mechanic Motor Vehicle (M.V) Instructor under the Directorate of Employment & Craftsmen Training, Department of Labour, Employment & Skill Development [June 2025] Electrician Instructor under the Directorate of Employment & Craftsmen Training, Department of La",
+        "the Competitive Examinations for the period is hereby confirmed for the following posts as shown below:- Assistant Employment Officer (Gazetted Group 'B') under the Directorate of Employment & Craftsmen Training Department of Labour, Employment & Skill Develop",
+        "NOTICE This is for general information to all the concerned candidates that the Personal Interview for the Post(s) of Assistant Agriculture Engineer Land Use Survey (LUS) in the office of the Research Officer at Shillong, Tura and Jowai under the Department of",
+        "Assistant Employment Officer (Gazetted Group 'B') under the Directorate of Employment & Craftsmen Training Department of Labour, Employment & Skill Development [June 2025] Typist in various Heads of Department [July 2025] TENTATIVE PROGRAMME FOR THE MONTH OF D"
+      ],
+      "review_required": true
     },
     {
       "state": "Mizoram",
       "url": "https://mpsc.mizoram.gov.in/",
+      "checked_at": "2026-11-17T03:18:03.209124+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "HTTP Error 403: Forbidden",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Nagaland",
       "url": "https://npsc.nagaland.gov.in/",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:18:05.127872+00:00",
+      "http_status": 200,
+      "final_url": "https://npsc.nagaland.gov.in/",
+      "content_sha256": "c5e9b81f7140ff5debe40fa6aa1b3d98567a0f40f4521327ea22d2b44c52263b",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [
+        "NPSC :: Nagaland Public Service Commission Skip to main content ABOUT RTI FAQ USER MANUAL VIDEOS REGISTER LOGIN DIGITAL SEVA NAGALAND PUBLIC SERVICE COMMISSION Latest Updates Notifications Examination Advertisments Rejected List Routines Results Syllabus Downl",
+        "What's New Notification NO.NPSC/ADVT-1/04(VOL-1) dt.16.11.2026 (CTSE 2026 Re-exam) New 16-11-2026 04:00 pm • notifications Notification No.",
+        "16.11.2026 ( CESE 2026 Disability Certificate Re-verification) New 16-11-2026 03:48 pm • notifications Notification NPSC/EXAM-18/2023 dt.",
+        "13.11.2026 (Stenographer Recruitment Examination 2026) New 13-11-2026 02:52 pm • notifications Notification No.",
+        "12.11.2026 (Answer Keys of Combined Technical Services Examination 2026) (Updated) New 12-11-2026 12:00 pm • notifications Notification NO.NPSC/EXAM-5/2024 dt.29.10.2026 (Debarment) 29-10-2026 01:52 pm • notifications Browse all the latest updates view Examine",
+        "Open Notifications Browse and view all the notifications issued.",
+        "Hosted by SDC, DIT&C Terms & Conditions Privacy Policy Disclaimer Accessibility General Portal Links Navigate Latest Updates Advertisement Notification Home Results Routine Syllabus Rejected List Rules and Regulations Question Bank Other Downloads Limited Dept"
+      ],
+      "review_required": true
     },
     {
       "state": "Odisha",
       "url": "https://www.opsc.gov.in/",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:18:07.651947+00:00",
+      "http_status": 200,
+      "final_url": "https://www.opsc.gov.in/Public/OPSC/Default.aspx",
+      "content_sha256": "af4361ec59f6229f12fe2e3b9567b6188694c1616e3946c756291cfe870ed568",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [
+        "Odisha Public Service Commission|OPSC Skip to Main Content | Screen Reader Select Language : ENGLISH A - A A + Select Color: : Violet Green Gray Reddish Blue Odisha Public Service Commission (OPSC) Login Apply Online Chairman's Message Brigadier Laxmi Charan P",
+        "Drive recruitment for SC & ST Candidates – 6 , Total - 4866 Latest Notice OPSC follows a robust, transparent and merit based process in all the recruitments.",
+        "Any assurance for selection by unscrupulous elements should not only be ignored, but be brought to our notice for remedial measures.",
+        "27 of 2023-24) - Recommendation Notice View Pdf CANDIDATE'S CORNER Home Advertisements Notifications Rejection Notice Download Admission Certificate Results Transparency & Objectivity Important Orders Recruitment Calendar Examination Syllabus Previous Question"
+      ],
+      "review_required": true
     },
     {
       "state": "Punjab",
       "url": "https://www.ppsc.gov.in/",
+      "checked_at": "2026-11-17T03:18:13.487536+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Rajasthan",
       "url": "https://rpsc.rajasthan.gov.in/",
+      "checked_at": "2026-11-17T03:18:58.669039+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error [Errno 101] Network is unreachable>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Sikkim",
       "url": "https://spsc.sikkim.gov.in/",
+      "checked_at": "2026-11-17T03:19:21.828348+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Tamil Nadu",
       "url": "https://www.tnpsc.gov.in/",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:19:45.438153+00:00",
+      "http_status": 200,
+      "final_url": "https://www.tnpsc.gov.in/",
+      "content_sha256": "cff2750ea302830516ab9b358416a4a73e02bc062886d14682810fe65e418845",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [
+        "TNPSC - Tamil Nadu Public Service Commission MAP × Sitemap தமிழ் For All examination related information for the year 2025 visit Exam Dashboard Menu Home About us Vision and Mission Role and Functions Constitutional Provisions The Commission Historical perspec",
+        "01/2024 – ONSCREEN CERTIFICATE VERIFICATION FOR THE POST OF FOREST WATCHER – LIST OF CANDIDATES ADMITTED FOR ONSCREEN CERTIFICATE VERIFICATION PHASE XI (LIST II)– HOSTED ON THE COMMISSION’S WEBSITE – REG (Press Release) Nov 10 COMBINED CIVIL SERVICES EXAMINATI",
+        "(Press Release) Oct 30 COMBINED TECHNICAL SERVICES EXAMINATION (ITI LEVEL - II) (Certificate Verification) Oct 29 PRESS RELEASE REGARDING OPPORTUNITY TO RE-UPLOAD MISSING/INCOMPLETE CERTIFICATES FOR THE POSTS INCLUDED IN COMBINED TECHNICAL SERVICES EXAMINATION",
+        "(Press Release) Oct 29 COMBINED TECHNICAL SERVICES EXAMINATION (DIPLOMA/ITI LEVEL ) (Certificate Verification) Oct 28 CCSE-IV (GROUP-IV SERVICES)NOTIFICATION NO.",
+        "(PRESS RELEASE) (Press Release) Oct 28 COMBINED CIVIL SERVICES EXAMINATION - IV (GROUP IV SERVICES) (Certificate Verification) Oct 23 COMBINED TECHNICAL SERVICES EXAMINATION (DIPLOMA / ITI LEVEL) (Counselling) Oct 22 COMBINED TECHNICAL SERVICES EXAMINATION (DI",
+        "11/2024, DATED 13.08.2024 AND ITS ADDENDA.) (Press Release) Oct 21 LIMITED TENDER FOR VIDEOGRAPHING THE CONDUCT OF EXAMINATION IN ALL THE VENUES AT CHENNAI AND AT TNPSC OFFICE PREMISES AS REQUIRED BY THE TNPSC FROM TIME TO TIME ON A RENTAL BASIS FOR A PERIOD O",
+        "(Press Release) Oct 21 TENDER CANCELLATION NOTICE-LIMITED TENDER FOR VIDEOGRAPHING THE CONDUCT OF EXAMINATION IN ALL THE VENUES AT CHENNAI AND AT TNPSC OFFICE PREMISES AS REQUIRED BY THE TNPSC FROM TIME TO TIME ON A RENTAL BASIS (Tender) Oct 15 THE ANSWER BOOK",
+        "(Press Release) Oct 13 COMBINED CIVIL SERVICES EXAMINATION - II (GROUP II AND IIA SERVICES) (Certificate Verification) Oct 13 COMBINED TECHNICAL SERVICES EXAMINATION (INTERVIEW POSTS) (Final Result) Oct 13 PRESS RELEASE RELATING TO PUBLICATION OF LIST OF REGIS",
+        "(Press Release) Oct 12 THE RESPONSE PORTIONS (ANSWER PAPERS) PERTAINING TO THE POSTS IN COMBINED TECHNICAL SERVICES EXAMINATION (NON- INTERVIEW POSTS) CONDUCTED BY THE COMMISSION (CBT METHOD) FROM 16.08.2026 TO 20.08.2026 AND FROM 07.09.2026 TO 12.09.2026 (NOT",
+        "(Press Release) Oct 9 PRESS RELEASE RELATING TO PUBLICATION OF LIST OF REGISTER NUMBERS OF CANDIDATES PROVISIONALLY ADMITTED TO PHYSICAL CERTIFICATE VERIFICATION/COUNSELLING (PHASE-VII) FOR THE POSTS INCLUDED IN COMBINED TECHNICAL SERVICES EXAMINATION (DIPLOMA",
+        "(Press Release) Oct 6 PRESS RELEASE REGARDING THE PUBLICATION OF NOTIFICATION TO THE POSTS IN COMBINED CIVIL SERVICES EXAMINATION-IV (GROUP-IV SERVICES) (NOTIFICATION NO.",
+        "11/2026 DATED 06.10.2026) (Press Release) Oct 6 COMBINED TECHNICAL SERVICES EXAMINATION (INTERVIEW POSTS) (Oral Test Mark) Oct 6 COMBINED CIVIL SERVICES EXAMINATION - IV (GROUP IV SERVICES) (Notification) Oct 2 POSTS IN COMBINED TECHNICAL SERVICES EXAMINATION "
+      ],
+      "review_required": true
     },
     {
       "state": "Telangana",
       "url": "https://www.tgpsc.gov.in/",
+      "checked_at": "2026-11-17T03:19:48.547617+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "HTTP Error 403: Forbidden",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Tripura",
       "url": "https://tpsc.tripura.gov.in/",
+      "checked_at": "2026-11-17T03:19:50.139779+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "Uttar Pradesh",
       "url": "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx",
-      "http_status": null,
-      "content_sha256": null,
+      "checked_at": "2026-11-17T03:20:13.606819+00:00",
+      "http_status": 200,
+      "final_url": "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx",
+      "content_sha256": "b78fa91d946fc3a210337f7c8d02670b7703f2fb9a53d7609796b1fdbba662f3",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "recruitment_keyword_snippets": [
+        "All Notifications भारत सरकार GOVERNMENT OF INDIA उत्तर प्रदेश Uttar Pradesh {{'Setting_HM' | translate }} {{'Normal_HM' | translate }} {{'HIGHCONT_HM' | translate }} {{'RESET_HM' | translate }} {{'INFS_HM' | translate }} {{'FONT_HM' | translate }} {{'IN_HM' | ",
+        "Number Date Application Filling Start Date Application Filling Last Date Fee Deposition Last Date Last Date of Fee Reconciliation Modification Start Date Last Date Examination MISCELLANEOUS EXAMINATION A-5/E-1/2026 , 04/11/2026 04/11/2026 04/12/2026 04/12/2026",
+        "Kindly login in to 'Candidate Dashboard' to know the details regarding Application Form, Examination, Interview etc...",
+        "View Advertisement Details × Post/Vacancy Bifurcation Details Note :- {{'Home_HM' | translate }} {{'TNC_HM' | translate }} {{'PP_HM' | translate }} {{'HLP_HM' | translate }} {{'CP_HM' | translate }} {{'SCA_HM' | translate }} {{'DIS_HM' | translate }} {{'RTI_HM"
+      ],
+      "review_required": true
     },
     {
       "state": "Uttarakhand",
       "url": "https://psc.uk.gov.in/",
+      "checked_at": "2026-11-17T03:20:16.265231+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     },
     {
       "state": "West Bengal",
       "url": "https://psc.wb.gov.in/",
+      "checked_at": "2026-11-17T03:20:39.853251+00:00",
       "http_status": null,
-      "content_sha256": null,
+      "error": "<urlopen error timed out>",
       "changed_since_previous_check": false,
-      "review_required": true,
-      "monitor_status": "First scheduled run pending"
+      "review_required": true
     }
   ]
 }
