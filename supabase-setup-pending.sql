@@ -225,7 +225,7 @@ begin
   new.updated_at = now();
   return new;
 end;
-$;
+$$;
 drop trigger if exists tc_candidate_certifications_updated_at on public.candidate_certifications;
 create trigger tc_candidate_certifications_updated_at
 before update on public.candidate_certifications
