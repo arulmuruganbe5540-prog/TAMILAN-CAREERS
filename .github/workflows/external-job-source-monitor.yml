@@ -19,6 +19,6 @@ jobs:
             exit 0
           fi
           curl --fail --show-error --silent --max-time 300 \
-            -X POST "https://qkmljuuusfjowexvy.supabase.co/functions/v1/scan-external-job-sources" \
+            -X POST "https://qkmljuuusfjowexvybvy.supabase.co/functions/v1/scan-external-job-sources" \
             -H "x-monitor-secret: $MONITOR_SECRET" \
             -H "Content-Type: application/json" --data '{}'
