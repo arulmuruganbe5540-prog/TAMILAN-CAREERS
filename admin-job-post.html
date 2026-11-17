@@ -70,6 +70,31 @@ let user=null;
 const fields=["jobKind","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
+function norm(v){return String(v??"").trim().toLowerCase().replace(/\\s+/g," ").replace(/\\/$/,"")}
+function govDuplicateMatch(a,b){
+ const an=norm(a.notification_number||a.notificationNumber),bn=norm(b.notification_number||b.notificationNumber);
+ const aa=norm(a.recruitment_authority||a.authority),ba=norm(b.recruitment_authority||b.authority);
+ const au=norm(a.official_notification_url||a.notification_pdf_url||a.notificationPdfUrl),bu=norm(b.official_notification_url||b.notification_pdf_url||b.notificationPdfUrl);
+ const at=norm(a.job_title||a.title),bt=norm(b.job_title||b.title);
+ const ay=String(a.exam_year||a.examYear||"").trim(),by=String(b.exam_year||b.examYear||"").trim();
+ const ad=String(a.notification_date||a.notificationDate||"").trim(),bd=String(b.notification_date||b.notificationDate||"").trim();
+ if(an&&bn&&an===bn&&aa&&ba&&aa===ba)return "அறிவிப்பு எண் + துறை பொருந்துகிறது";
+ if(au&&bu&&au===bu)return "அதிகாரப்பூர்வ அறிவிப்பு இணைப்பு பொருந்துகிறது";
+ if(at&&bt&&at===bt&&aa&&ba&&aa===ba&&ay&&by&&ay===by&&ad===bd)return "பதவி + துறை + ஆண்டு + அறிவிப்பு தேதி பொருந்துகிறது";
+ return "";
+}
+async function checkGovernmentDuplicate(p,currentReviewId){
+ if(p.jobKind!=="government")return null;
+ const [jobsRes,reviewsRes]=await Promise.all([
+  db.from("jobs").select("id,job_title,recruitment_authority,notification_number,official_notification_url,exam_year,notification_date,status").eq("job_kind","government").eq("status","published").limit(1000),
+  db.from("admin_job_post_reviews").select("id,title,status,payload,published_job_id").in("status",["draft","pending_review","approved"]).limit(1000)
+ ]);
+ if(jobsRes.error)throw new Error("ஏற்கெனவே வெளியிட்ட அரசு வேலைகளைச் சரிபார்க்க முடியவில்லை: "+jobsRes.error.message);
+ if(reviewsRes.error)throw new Error("Admin Review பதிவுகளைச் சரிபார்க்க முடியவில்லை: "+reviewsRes.error.message);
+ for(const j of (jobsRes.data||[])){const reason=govDuplicateMatch(p,j);if(reason)return {title:j.job_title,id:j.id,reason,where:"ஏற்கெனவே வெளியிடப்பட்டது"}}
+ for(const r of (reviewsRes.data||[])){if(r.id===currentReviewId||r.published_job_id)continue;const payload=r.payload||{};if((payload.job_kind||payload.jobKind)!=="government")continue;const reason=govDuplicateMatch(p,payload);if(reason)return {title:r.title,id:r.id,reason,where:r.status==="draft"?"Admin Draft":"Review Queue"}}
+ return null;
+}
 function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());p.job_kind=p.jobKind||"private";p.authority=p.authority||"";p.country_name=p.countryName||"";p.exam_year=p.examYear||"";p.notification_date=p.notificationDate||"";p.notification_number=p.notificationNumber||"";p.age_limit=p.ageLimit||"";p.application_fee=p.applicationFee||"";p.official_url=p.officialUrl||"";p.notification_pdf_url=p.notificationPdfUrl||"";p.application_url=p.applicationUrl||"";p.selection_process=p.selectionProcess||"";p.company_id=$("companyId").value||null;p.source_draft_id=$("sourceDraftId").value||null;return p}
 function fill(p={}){const aliases={jobKind:"job_kind",countryName:"country_name",examYear:"exam_year",notificationDate:"notification_date",notificationNumber:"notification_number",ageLimit:"age_limit",applicationFee:"application_fee",officialUrl:"official_url",notificationPdfUrl:"notification_pdf_url",applicationUrl:"application_url",selectionProcess:"selection_process",authority:"authority"};fields.forEach(k=>$(k).value=p[k]??p[aliases[k]]??(k==="openings"?"1":k==="jobKind"?"private":""));$("salaryPeriod").value=p.salaryPeriod||(p.type==="Daily Wage"?"daily":"monthly");$("recordId").value=p.id||"";$("companyId").value=p.company_id||"";$("sourceDraftId").value=p.source_draft_id||"";$("formTitle").textContent=p.id?"✏️ வேலை அறிவிப்பைத் திருத்தவும்":"✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
 function resetForm(){fill({});$("jobForm").reset();$("recordId").value="";$("openings").value="1";$("formTitle").textContent="✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
@@ -89,6 +114,13 @@ async function save(status){
  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
   if(p.deadline&&p.deadline<today){say("கடைசி தேதி கடந்த தேதியாக இருக்கக்கூடாது.",false);return}
  const id=$("recordId").value;
+ if(p.jobKind==="government"){
+  try{
+   say("ஏற்கெனவே உள்ள அரசு வேலை அறிவிப்புகளுடன் ஒப்பிட்டு சரிபார்க்கிறது...");
+   const duplicate=await checkGovernmentDuplicate(p,id);
+   if(duplicate){say("⚠️ இந்த அரசு வேலை ஏற்கெனவே உள்ளது! ("+duplicate.where+")\\nபதவி: "+duplicate.title+"\\nகாரணம்: "+duplicate.reason+"\\nபதிவை மீண்டும் வெளியிடாமல், ஏற்கெனவே உள்ள அறிவிப்பைத் திறந்து சரிபார்க்கவும்.",false);return}
+  }catch(e){say(e.message||"Duplicate சரிபார்ப்பு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.",false);return}
+ }
  const row={created_by:user.id,title:p.title,company_name:p.company||null,status,payload:p,review_note:null,reviewed_by:null,reviewed_at:null};
  let result;
  if(id)result=await db.from("admin_job_post_reviews").update({title:row.title,company_name:row.company_name,status:row.status,payload:row.payload,review_note:null,reviewed_by:null,reviewed_at:null}).eq("id",id).select("id").single();
