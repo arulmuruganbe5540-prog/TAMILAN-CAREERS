@@ -23,7 +23,7 @@ const allowedJobFields = [
   "id", "job_title", "title", "description", "job_description",
   "required_skills", "skills", "location", "job_location", "work_location",
   "employment_type", "job_type", "experience", "experience_required",
-  "salary_min", "salary_max", "category", "job_category",
+  "salary_min", "salary_max", "salary_currency", "salary_period", "category", "job_category",
   "application_deadline", "deadline", "last_date",
 ] as const;
 
