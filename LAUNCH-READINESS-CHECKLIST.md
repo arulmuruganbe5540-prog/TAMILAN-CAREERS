@@ -113,3 +113,17 @@ This is an operational checklist based on the project changes and user-confirmed
 - The Pages deployment succeeded for the Admin repair commit `02997b8ce3045e7e865a428030dbd19d69538d5f` (run `44090939571`). Subsequent documentation-only commits trigger fresh builds/audits; check the latest workflow run before calling the newest repository state verified.
 
 - Final verification after the Admin authorization repair: Pages deployment run `44091403705` succeeded for commit `2ac0f9cf236147c30047118351f14918f49786be`; Health Audit run `44091331004` succeeded for code commit `6a1ac636aa6c4420a128ef3fcc643eb83f338013`. All health workflow steps, including browser smoke tests, passed.
+
+
+## 17 November 2026 — latest post-login and code-side verification
+
+- [x] Post-login routing now returns to the requested same-site page under the GitHub Pages repository base path, preserves query strings, rejects external redirects, and rejects duplicated repository-base paths.
+- [x] Protected Candidate Profile, Government Notice Review/Publish, and Dashboard pages now preserve the requested page through login.
+- [x] Browser smoke tests cover the redirect helper and key protected-page return targets.
+- [x] Latest Pages deployment succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388` (run `44094932098`).
+- [x] Latest full Health Audit succeeded for the same commit (run `44094931772`), including Deno checks, SQL lint, privacy/security guards, structural checks, and Chromium browser smoke tests.
+- [ ] First Super Admin must still be granted explicitly by the project owner using the guarded bootstrap SQL.
+- [ ] Configure deferred OpenAI, Resend, and Government Monitor secrets.
+- [ ] Enable Supabase Auth leaked-password protection.
+- [ ] Create separate Candidate and Employer accounts and complete all real-user end-to-end tests. Current live data has only one Auth user, one company, zero jobs, and zero applications; production data must not be fabricated for testing.
+- [ ] Final release approval after all owner actions and real-account tests. The website is deployed and code-side CI is green, but it is not yet launch-ready.
