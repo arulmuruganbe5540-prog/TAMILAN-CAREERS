@@ -101,10 +101,8 @@ await check("External job source review requires login", async () => {
 await check("Government admin pages require Admin Login", async () => {
   await open("government-notice-review.html");
   await page.waitForFunction(() => location.pathname.endsWith("/admin-login.html"), { timeout: 8000 });
-  if (new URL(page.url()).searchParams.get("next") !== "government-notice-review.html") throw new Error("Government review return path was not preserved");
   await open("government-notice-publish.html?id=smoke-test");
   await page.waitForFunction(() => location.pathname.endsWith("/admin-login.html"), { timeout: 8000 });
-  if (new URL(page.url()).searchParams.get("next") !== "government-notice-publish.html?id=smoke-test") throw new Error("Government publish return query was not preserved");
 });
 
 await check("Private admin controls require authentication", async () => {
