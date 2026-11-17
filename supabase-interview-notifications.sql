@@ -2,6 +2,43 @@
 -- Run in Supabase SQL Editor. Safe to rerun.
 begin;
 
+-- Stop before creating anything if the existing core schema differs from the
+-- columns used by invitation, response, and notification workflows.
+do $tc_interview_schema_guard$
+declare
+  v_missing text[] := array[]::text[];
+  v_item text;
+begin
+  if to_regclass('public.job_applications') is null
+     or to_regclass('public.jobs') is null
+     or to_regclass('public.companies') is null
+     or to_regclass('public.company_members') is null then
+    raise exception 'Required job_applications, jobs, companies, or company_members table is missing; run supabase-schema-audit.sql first.';
+  end if;
+
+  foreach v_item in array array[
+    'job_applications.id','job_applications.job_id','job_applications.candidate_id','job_applications.status','job_applications.updated_at',
+    'jobs.id','jobs.company_id','jobs.job_title',
+    'companies.id','companies.company_name','companies.owner_user_id',
+    'company_members.company_id','company_members.user_id','company_members.member_status','company_members.member_role'
+  ] loop
+    if not exists (
+      select 1
+      from information_schema.columns c
+      where c.table_schema='public'
+        and c.table_name=split_part(v_item,'.',1)
+        and c.column_name=split_part(v_item,'.',2)
+    ) then
+      v_missing := array_append(v_missing,v_item);
+    end if;
+  end loop;
+
+  if cardinality(v_missing) > 0 then
+    raise exception 'Interview/notification migration stopped: required columns are missing: %', array_to_string(v_missing, ', ');
+  end if;
+end;
+$tc_interview_schema_guard$;
+
 create table if not exists public.tc_notifications (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
