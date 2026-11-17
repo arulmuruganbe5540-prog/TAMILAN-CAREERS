@@ -216,6 +216,21 @@ create table if not exists public.candidate_certifications (
 );
 create index if not exists candidate_certifications_user_issue_idx on public.candidate_certifications(user_id, issue_date desc);
 
+create or replace function public.tc_candidate_certifications_touch_updated_at()
+returns trigger
+language plpgsql
+set search_path = ''
+as $
+begin
+  new.updated_at = now();
+  return new;
+end;
+$;
+drop trigger if exists tc_candidate_certifications_updated_at on public.candidate_certifications;
+create trigger tc_candidate_certifications_updated_at
+before update on public.candidate_certifications
+for each row execute function public.tc_candidate_certifications_touch_updated_at();
+
 -- =========================================================
 -- 3. EMPLOYER READ ACCESS TO ACTUAL APPLICANT PROFILE DETAILS
 -- =========================================================
