@@ -548,4 +548,14 @@ on public.candidate_experience for all to authenticated
 using (user_id = (select auth.uid()))
 with check (user_id = (select auth.uid()));
 
+-- Candidate-owned certifications; employers can read only through the
+-- applicant-only policy created above, never edit candidate records.
+alter table public.candidate_certifications enable row level security;
+grant select, insert, update, delete on public.candidate_certifications to authenticated;
+drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
+create policy "TC seekers manage own certifications"
+on public.candidate_certifications for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
+
 commit;
