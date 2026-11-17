@@ -4,7 +4,7 @@
 (() => {
   const host = document.getElementById("tcGovernmentFeed");
   if (!host) return;
-  const SUPABASE_URL = "https://qkmljuuusfjowexvy.supabase.co";
+  const SUPABASE_URL = "https://qkmljuuusfjowexvybvy.supabase.co";
   const SUPABASE_KEY = "sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
   const el = (tag, cls, value) => {
     const n = document.createElement(tag);
