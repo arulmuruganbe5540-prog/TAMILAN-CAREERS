@@ -40,6 +40,7 @@
     head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "விண்ணப்பக் காலம் முடிந்தது" : (row.application_end ? "விண்ணப்பம் நடைபெறுகிறது" : "அறிவிப்பு பதிவு")));
     article.append(head);
     article.append(el("h3","tc-gov-title",row.title));
+    const detailLink=el("a","tc-gov-link","முழு விவரம் பார்க்க →");detailLink.href="government-notice-details.html?id="+encodeURIComponent(row.id);article.append(detailLink);
     article.append(el("p","tc-gov-meta",[d.authority,state,row.notice_reference ? "அறிவிப்பு எண்: "+row.notice_reference : ""].filter(Boolean).join(" · ")));
     const facts = el("div","tc-gov-facts");
     const pairs = [
