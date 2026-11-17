@@ -19,7 +19,7 @@
 <label><input type="checkbox" data-check="duplicate_checked"> Duplicate / திருத்த அறிவிப்பு சோதித்தேன்</label>
 </div><div class="actions"><button type="submit">சரிபார்த்து பொதுமக்களுக்கு வெளியிடு</button><button class="reject" type="button" id="reject">நிராகரி</button></div></section></form></main>
 <script>
-const client=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2"),$=id=>document.getElementById(id),reviewId=new URLSearchParams(location.search).get("id");
+const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2"),$=id=>document.getElementById(id),reviewId=new URLSearchParams(location.search).get("id");
 const labels={recruitment:"வேலைவாய்ப்பு",result:"தேர்வு முடிவு",admit_card:"Hall Ticket / Admit Card",answer_key:"Answer Key",exam_update:"தேர்வு புதுப்பிப்பு",other:"மற்றவை"};let row;
 function say(t){$("status").textContent=t}
 async function requireAdmin(){const {data:{user},error}=await client.auth.getUser();if(error||!user){location.replace("admin-login.html");return false}const {data:roles,error:roleError}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);if(roleError||!roles?.length){say("இந்தப் பக்கம் Super Admin கணக்கிற்கு மட்டும்.");location.replace("admin-login.html");return false}return true}
