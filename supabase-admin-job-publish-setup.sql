@@ -29,6 +29,7 @@ begin
   end if;
   if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='verification_status')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='company_name')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='created_at')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='member_status')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='member_role')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='category_name')
