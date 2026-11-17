@@ -19,8 +19,8 @@ Supabase Dashboard → SQL Editor → New query. GitHub-ல் உள்ள க�
 Supabase Dashboard → Edge Functions → ஒவ்வொரு Function-ஐத் திறந்து GitHub-ல் உள்ள தற்போதைய `index.ts` code-ஐ Deploy செய்ய வேண்டும்.
 
 - `company-resume-access` — விண்ணப்பித்த Candidate-ன் Resume-ஐ உரிய Company உறுப்பினருக்கு மட்டும் 60 வினாடி பாதுகாப்பான இணைப்பாக வழங்கும்.
-- `scan-external-job-sources` — அனுமதிக்கப்பட்ட வெளிப்புற வேலை ஆதாரங்களில் இணைப்புகளைத் தேடும். கண்டுபிடிப்புகள் தனிப்பட்ட Admin Review-ல் மட்டுமே இருக்கும்.
-- `ingest-government-notices` — அரசு அறிவிப்பு / முடிவு / Hall Ticket இணைப்புகளை தனிப்பட்ட Admin Review-க்கு அனுப்பும்.
+- `scan-external-job-sources` — அனுமதிக்கப்பட்ட வெளிப்புற வேலை ஆதாரங்களில் இணைப்புகளைத் தேடும். `robots.txt` அனுமதி உள்ள பக்கங்களை மட்டுமே scan செய்யும்; கண்டுபிடிப்புகள் தனிப்பட்ட Admin Review-ல் மட்டுமே இருக்கும்.
+- `ingest-government-notices` — `robots.txt` அனுமதி உள்ள அரசு அறிவிப்பு / முடிவு / Hall Ticket பக்கங்களை மட்டுமே scan செய்து தனிப்பட்ட Admin Review-க்கு அனுப்பும்.
 - `ai-resume-match` — Candidate ஒப்புதல் அளித்த பிறகே Resume மற்றும் வேலைக்குத் தொடர்புடைய சுயவிவர விவரங்களை AI சேவைக்கு அனுப்பும்.
 
 Deploy செய்த பிறகு Function-ன் Logs-ல் பிழை இல்லையா எனப் பார்க்கவும். Function Deploy ஆனது மட்டும் live workflow வெற்றியடைந்ததாக அர்த்தமில்லை.
