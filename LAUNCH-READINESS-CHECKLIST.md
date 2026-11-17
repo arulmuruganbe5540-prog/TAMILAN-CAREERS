@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for main commit `d400056364a21b3763ef5d6888df12a7acddb996` on 17 November 2026 (run `44053619836`).
-- [x] Latest full website health workflow passed for main commit `d400056364a21b3763ef5d6888df12a7acddb996` on 17 November 2026 (run `44053620678`): all five Supabase Edge Functions type-checked; SQL delimiter lint, private candidate artifact guard, public feed JavaScript, site structure, and key-page browser smoke tests passed.
+- [x] Latest GitHub Pages deployment succeeded for main commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` on 17 November 2026 (run `44054190080`).
+- [x] Latest full website health workflow passed for main commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` on 17 November 2026 (run `44054190121`): all five Supabase Edge Functions type-checked; SQL delimiter lint, private candidate artifact guard, public feed JavaScript, site structure, and key-page browser smoke tests passed.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -38,6 +38,12 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] State PSC public report no longer includes unverified recruitment keyword snippets; CI now rejects such snippets if they reappear.
 - [x] Resume application integrity guard added to `supabase-setup-pending.sql`: the database rejects a `resume_id` unless the referenced Resume belongs to the applicant, including null/mismatched candidate IDs.
 - [x] Employer applicant-profile access now excludes withdrawn applications in the consolidated Supabase setup SQL.
+- [x] Private job-posting draft RLS in the consolidated setup now restricts all draft actions to active Owner, HR Manager, or Recruiter members.
+- [x] AI resume-match Edge Function verifies `user_roles.role = job_seeker` on the server before using OpenAI; UI role checks alone are not trusted.
+- [x] Interview SQL cancels pending/accepted invitations when an application is withdrawn or rejected, rejects responses for closed applications, and suppresses reminders for closed applications.
+- [x] Robots policy matching in both Supabase government/external scanners supports wildcard and end-anchored rules, prefers Allow on equal-length matches, and fails closed when robots policy cannot be checked.
+- [x] Read-only Supabase schema audit now includes candidate/resume/notification tables, Storage bucket configuration, and Storage object policies.
+- [x] Latest Pages deployment and full health workflow passed on commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` (runs `44054190080` and `44054190121`).
 - [x] Latest SQL migration lint, Edge Function type checks, privacy guard, browser smoke tests, website health workflow, and Pages deployment all passed on commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b`.
 - [x] Latest website health run `44052500315` and Pages deployment run `44052501042` both passed on commit `3c58359a079572588724226fd1bfeb6c55a2a930`.
 
