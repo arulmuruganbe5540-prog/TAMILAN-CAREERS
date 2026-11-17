@@ -153,7 +153,7 @@ document.getElementById("profileForm").addEventListener("submit",async e=>{
   const user=sessionData.session.user;
   const skills=[...new Set(val("skills").split(",").map(x=>x.trim()).filter(Boolean))];
   const langMap={"tamil":"ta","english":"en","hindi":"hi","telugu":"te","kannada":"kn","malayalam":"ml","bengali":"bn","french":"fr","arabic":"ar","spanish":"es"};
-  const languages=[...new Set(val("languages").split(",").map(x=>x.trim()).filter(Boolean).map(x=>langMap[x.toLowerCase()]||x.toLowerCase().replace(/\\s+/g,"-")))];
+  const languages=[...new Set(val("languages").split(",").map(x=>x.trim()).filter(Boolean).map(x=>langMap[x.toLowerCase()]||x.toLowerCase().replace(/\s+/g,"-")))];
   const experienceMonths={"Fresher":0,"Less than 1 year":6,"1–2 years":12,"3–5 years":36,"6–10 years":72,"10+ years":120};
   const months=Object.prototype.hasOwnProperty.call(experienceMonths,val("experience"))?experienceMonths[val("experience")]:null;
   const {error:profileError}=await client.from("profiles").upsert({
