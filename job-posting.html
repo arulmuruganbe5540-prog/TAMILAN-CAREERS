@@ -69,7 +69,7 @@ async function loadDraftForCompany(){
  if(!companyId)return;
  const {data,error}=await client.from("job_posting_drafts").select("draft").eq("company_id",companyId).eq("user_id",currentUser.id).maybeSingle();
  if(error){
-  setReviewLock(false);
+  currentDraft=null;setReviewLock(false);
   message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது உங்கள் உறுப்பினர் அனுமதி இல்லை. முதலில் supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
   const old=currentUser.user_metadata?.job_posting_draft||{};
   if(old.company_id===companyId)fill(old);
