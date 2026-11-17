@@ -17,6 +17,7 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlparse, urldefrag
 from urllib.request import HTTPRedirectHandler, Request, build_opener
+from urllib.robotparser import RobotFileParser
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "data" / "government-official-sources.json"
@@ -87,8 +88,29 @@ class SameHostRedirectHandler(HTTPRedirectHandler):
             raise ValueError("Redirect outside registered HTTPS domain")
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
+def robots_allowed(source_url, user_agent):
+    robots_url = urljoin(source_url, "/robots.txt")
+    req = Request(robots_url, headers={"User-Agent": user_agent})
+    opener = build_opener(SameHostRedirectHandler(source_url))
+    try:
+        with opener.open(req, timeout=TIMEOUT) as response:
+            raw = response.read(256_000)
+        parser = RobotFileParser()
+        parser.set_url(robots_url)
+        parser.parse(raw.decode("utf-8", errors="replace").splitlines())
+        return parser.can_fetch(user_agent, source_url)
+    except HTTPError as exc:
+        if exc.code in (404, 410):
+            return True
+        return False
+    except (URLError, TimeoutError, OSError, ValueError):
+        return False
+
 def fetch(source):
-    req = Request(source["url"], headers={"User-Agent": "TAMILAN-CAREERS-SourceDiscovery/1.0"})
+    user_agent = "TAMILAN-CAREERS-SourceDiscovery/1.0"
+    if not robots_allowed(source["url"], user_agent):
+        raise ValueError("robots.txt disallows this page or could not be checked safely")
+    req = Request(source["url"], headers={"User-Agent": user_agent})
     opener = build_opener(SameHostRedirectHandler(source["url"]))
     with opener.open(req, timeout=TIMEOUT) as response:
         content_type = response.headers.get_content_type().lower()
