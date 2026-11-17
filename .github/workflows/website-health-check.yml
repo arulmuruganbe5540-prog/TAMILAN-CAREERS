@@ -45,6 +45,7 @@ jobs:
           deno check supabase/functions/bilingual-job-search/index.ts
           deno check supabase/functions/ai-resume-match/index.ts
           deno check supabase/functions/ingest-government-notices/index.ts
+          deno check supabase/functions/scan-external-job-sources/index.ts
       - name: Validate audit script
         run: python -m py_compile scripts/website-health-check.py
       - name: Validate public government feed JavaScript
