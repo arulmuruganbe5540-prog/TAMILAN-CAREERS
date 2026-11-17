@@ -44,15 +44,31 @@ async function getDocument(url:string,base:string):Promise<{file?:any;text:strin
 }
 Deno.serve(async(req)=>{
  if(req.method!=="POST")return json({error:"POST only"},405);
+ let requested:string|null=null;try{const body=await req.json();if(body&&typeof body.review_id==="string")requested=body.review_id;}catch{}
  const secret=Deno.env.get("GOVERNMENT_MONITOR_SECRET")||"";
- if(secret.length<24||req.headers.get("x-monitor-secret")!==secret)return json({error:"Unauthorized"},401);
+ const monitorAuthorized=secret.length>=24&&req.headers.get("x-monitor-secret")===secret;
+ let adminAuthorized=false;
+ if(requested&&!monitorAuthorized){
+  const authHeader=req.headers.get("Authorization")||"";
+  const token=authHeader.replace(/^Bearer\\s+/i,"");
+  const anon=Deno.env.get("SUPABASE_ANON_KEY");
+  const supaUrlForAuth=Deno.env.get("SUPABASE_URL");
+  if(token&&anon&&supaUrlForAuth){
+   const userClient=createClient(supaUrlForAuth,anon,{global:{headers:{Authorization:"Bearer "+token}},auth:{persistSession:false,autoRefreshToken:false}});
+   const {data:userData,error:userError}=await userClient.auth.getUser(token);
+   if(!userError&&userData.user){
+    const {data:roleData}=await userClient.from("user_roles").select("role").eq("user_id",userData.user.id).eq("role","super_admin").limit(1);
+    adminAuthorized=!!roleData?.length;
+   }
+  }
+ }
+ if(!monitorAuthorized&&!adminAuthorized)return json({error:"Unauthorized. Monitor secret or Super Admin session required."},401);
  const openai=Deno.env.get("OPENAI_API_KEY");
  if(!openai)return json({error:"OPENAI_API_KEY secret is missing in Supabase Edge Function secrets"},503);
  const supaUrl=Deno.env.get("SUPABASE_URL"),service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
  if(!supaUrl||!service)return json({error:"Supabase server configuration missing"},500);
  const db=createClient(supaUrl,service,{auth:{persistSession:false,autoRefreshToken:false}});
- let requested:string|null=null;try{const body=await req.json();if(body&&typeof body.review_id==="string")requested=body.review_id;}catch{}
- let query=db.from("government_notice_reviews").select("id,title,official_url,category,details,ai_extraction_status,notice_date,application_start,application_end,vacancies,eligibility_summary,government_notice_sources!inner(base_url,authority)").eq("status","pending").in("ai_extraction_status",["pending","failed"]).order("created_at",{ascending:true}).limit(requested?1:5);
+ let query=db.from("government_notice_reviews").select("id,title,official_url,category,details,ai_extraction_status,notice_date,application_start,application_end,vacancies,eligibility_summary,government_notice_sources!inner(base_url,authority)").eq("status","pending").in("ai_extraction_status",requested?["pending","failed","skipped"]:["pending","failed"]).order("created_at",{ascending:true}).limit(requested?1:5);
  if(requested)query=query.eq("id",requested);
  const {data:rows,error}=await query;if(error)return json({error:"Could not load review records",detail:error.message},500);
  const results=[];
@@ -65,7 +81,16 @@ Deno.serve(async(req)=>{
    if(doc.file)content.push(doc.file);for(const f of doc.files||[])content.push(f);
    const response=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{"authorization":"Bearer "+openai,"content-type":"application/json"},body:JSON.stringify({model:MODEL,input:[{role:"user",content}],text:{format:{type:"json_object"}},max_output_tokens:3500}),signal:AbortSignal.timeout(90000)});
    const responseBody=await response.json().catch(()=>({}));
-   if(!response.ok)throw new Error("OpenAI API "+response.status+": "+String(responseBody.error?.message||"request failed").slice(0,300));
+   if(!response.ok){
+    const apiMessage=String(responseBody.error?.message||"request failed").slice(0,300);
+    if(response.status===429&&/no credits|insufficient_quota|billing|quota/i.test(apiMessage)){
+     const pauseMessage="AI extraction paused: OpenAI API credits are exhausted. Add API credits, then use the Admin retry button.";
+     await db.from("government_notice_reviews").update({ai_extraction_status:"skipped",ai_extraction_error:pauseMessage}).eq("status","pending").in("ai_extraction_status",["pending","failed","processing"]);
+     results.push({id:row.id,status:"skipped",error:pauseMessage});
+     break;
+    }
+    throw new Error("OpenAI API "+response.status+": "+apiMessage);
+   }
    const raw=outputText(responseBody);if(!raw)throw new Error("AI returned no structured output");
    const extracted=JSON.parse(raw);
    const dates={notice_date:isoDate(extracted.notice_date),application_start:isoDate(extracted.application_start),application_end:isoDate(extracted.application_end)};
