@@ -120,3 +120,12 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Repository-wide code-search checks made during this continuation found no indexed matches for the revoked `public.is_super_admin` call, TODO/FIXME markers, or service-role key strings. This is a search result, not a proof that no secret or unfinished work exists anywhere; the Health Audit and source review remain the stronger checks.
 - No provider credentials were added, no Super Admin role was silently granted, and no live-user data or permissions were changed during this continuation.
 
+
+## 17 November 2026 — database trigger hardening
+
+- A further live database review found `public.create_company_owner_membership()` was a trigger-only SECURITY DEFINER function with `search_path=public, pg_temp`. Although EXECUTE was already restricted to `postgres` and it was attached to one enabled company trigger, the path was hardened to the empty search path and its function calls are now schema-qualified.
+- Live verification confirmed: SECURITY DEFINER remains enabled for the trigger's intended insert, `search_path=""`, EXECUTE ACL remains `postgres` only, and exactly one enabled trigger remains attached.
+- A transaction-only smoke test inserted a temporary company and confirmed the owner membership row was automatically created. The transaction was rolled back; no test company or membership was retained.
+- The reproducible SQL source is committed as `supabase-company-owner-membership-hardening.sql`.
+- The latest Supabase advisor snapshot at 13:25 UTC still reports: 7 authenticated-callable SECURITY DEFINER application RPCs (each reviewed for user/role checks and empty search_path), 2 intentional backend-only RLS/no-client-policy INFO notices, and leaked-password protection disabled. Performance notices remain 12 RLS init-plan, 15 multiple permissive policies, and 72 unused indexes. No indexes were dropped and no authorization policy was weakened.
+- Public schema audit: all 45 ordinary public tables have RLS enabled; no public ordinary table without RLS was found. No public views were returned by the audit query. All four Storage buckets are private; Resume and Job Offer buckets each have a 10 MB bucket limit.
