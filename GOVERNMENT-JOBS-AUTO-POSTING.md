@@ -13,6 +13,20 @@
 
 The GitHub Actions monitor runs every six hours. It scans registered official sources, then calls the Supabase Edge Function `ingest-government-notices` when the monitor secret is configured. The Edge Function only queues recruitment candidates, with a hard limit of 15 new review candidates per run. It does not publish unverified data.
 
+## Historical archive sources
+
+The registered official-source list includes direct archive/result pages for UPSC examination notifications, UPSC recruitment advertisements and recruitment-test results, SSC archives, TNPSC exam dashboard, and Tamil Nadu MRB results. The discovery function captures the surrounding official table/list context and a possible date hint where available. The date is not treated as verified: Admin must confirm it against the original official page/PDF before publishing.
+
+## Admin review and publishing
+
+- Open `government-notice-review.html` to review discovered candidates.
+- Use the per-record review link to open `government-notice-publish.html`.
+- Enter the original notice date and verified facts, then complete the category-specific checklist.
+- The secure RPC checks super-admin status, registered-source host, required verification flags, and duplicate/pending state before publishing.
+- Unverified items remain private in the review queue; rejected items are not public.
+
+Run `supabase-government-notice-admin-actions.sql` after `supabase-government-notices-setup.sql` to enable the Admin publish/reject actions.
+
 ## One-time secret configuration
 
 The same long random value must be saved in two places. Never paste it into chat, source files, or a public issue.
@@ -21,6 +35,7 @@ The same long random value must be saved in two places. Never paste it into chat
 2. In GitHub, open this repository → Settings → Secrets and variables → Actions → New repository secret. Name it `GOVERNMENT_MONITOR_SECRET` and enter the same value.
 3. Confirm that the `ingest-government-notices` Edge Function is deployed. Its server environment must include `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
 4. Run the GitHub workflow **Frequent official government recruitment monitor** once using Actions → Run workflow.
+5. Deploy the updated `supabase/functions/ingest-government-notices/index.ts` Edge Function after applying the government-notice SQL migrations.
 
 If the GitHub secret is absent, the Supabase sync step is intentionally skipped. If the Edge Function is not deployed or the secret does not match, the sync will fail visibly in the Actions log.
 
