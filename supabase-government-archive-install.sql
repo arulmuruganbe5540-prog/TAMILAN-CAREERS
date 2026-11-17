@@ -3,14 +3,14 @@
 -- Creates the official-source registry, private review queue, published feed,
 -- Admin publish/reject RPCs, and the additional archive/result source URLs.
 -- Safe to re-run. It does not insert any guessed historical notices or auto-publish data.
--- Requires public.is_super_admin() to exist.
+-- Requires private.is_super_admin() to exist.
 
 begin;
 
 -- ===== supabase-government-notices-setup.sql =====
 -- TAMILAN CAREERS: Government notice database foundation
 -- Creates isolated government-notice tables. Does not alter jobs, users, applications, or existing roles.
--- Requires the existing public.is_super_admin() function.
+-- Requires the existing private.is_super_admin() function.
 -- Public visitors can read active published notices and enabled source names only.
 -- Review records and source administration are restricted to super admins.
 
@@ -18,8 +18,8 @@ begin;
 
 do $$
 begin
-  if to_regprocedure('public.is_super_admin()') is null then
-    raise exception 'Required function public.is_super_admin() is missing; no setup was applied.';
+  if to_regprocedure('private.is_super_admin()') is null then
+    raise exception 'Required function private.is_super_admin() is missing; no setup was applied.';
   end if;
 end $$;
 
@@ -98,14 +98,14 @@ create policy government_sources_public_read_enabled
 drop policy if exists government_sources_super_admin_all on public.government_notice_sources;
 create policy government_sources_super_admin_all
   on public.government_notice_sources for all to authenticated
-  using (public.is_super_admin())
-  with check (public.is_super_admin());
+  using (private.is_super_admin())
+  with check (private.is_super_admin());
 
 drop policy if exists government_reviews_super_admin_all on public.government_notice_reviews;
 create policy government_reviews_super_admin_all
   on public.government_notice_reviews for all to authenticated
-  using (public.is_super_admin())
-  with check (public.is_super_admin());
+  using (private.is_super_admin())
+  with check (private.is_super_admin());
 
 drop policy if exists government_notices_public_read_active on public.government_notices;
 create policy government_notices_public_read_active
@@ -115,8 +115,8 @@ create policy government_notices_public_read_active
 drop policy if exists government_notices_super_admin_all on public.government_notices;
 create policy government_notices_super_admin_all
   on public.government_notices for all to authenticated
-  using (public.is_super_admin())
-  with check (public.is_super_admin());
+  using (private.is_super_admin())
+  with check (private.is_super_admin());
 
 grant select on public.government_notice_sources to anon, authenticated;
 grant insert, update, delete on public.government_notice_sources to authenticated;
@@ -261,7 +261,7 @@ declare
   v_required text[];
   v_key text;
 begin
-  if auth.uid() is null or not public.is_super_admin() then
+  if auth.uid() is null or not private.is_super_admin() then
     raise exception 'Super admin access required';
   end if;
 
@@ -373,7 +373,7 @@ security definer
 set search_path = ''
 as $$
 begin
-  if auth.uid() is null or not public.is_super_admin() then
+  if auth.uid() is null or not private.is_super_admin() then
     raise exception 'Super admin access required';
   end if;
   if nullif(btrim(p_reason),'') is null then
