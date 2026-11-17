@@ -2,12 +2,15 @@
 -- Run this ONE file in Supabase SQL Editor. Safe to re-run; no existing job rows are deleted.
 begin;
 
-do $$
+do $
 begin
   if to_regprocedure('public.is_super_admin()') is null then
     raise exception 'Required function public.is_super_admin() is missing; no changes applied.';
   end if;
-end $$;
+  if to_regclass('public.job_posting_drafts') is null then
+    raise exception 'Run supabase-setup-pending.sql first; company job draft table is missing.';
+  end if;
+end $;
 
 create table if not exists public.admin_job_post_reviews (
   id uuid primary key default gen_random_uuid(),
@@ -74,6 +77,153 @@ create trigger tc_admin_job_reviews_updated_at
 before update on public.admin_job_post_reviews
 for each row execute function public.tc_admin_job_reviews_touch_updated_at();
 
+-- Company Owner / HR Manager / Recruiter submits a private job draft for
+-- Super Admin review. The browser cannot insert directly into the admin queue.
+create or replace function public.tc_submit_company_job_draft_for_review(p_draft_id uuid)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $tc_submit_company_draft$
+declare
+  v_company_id uuid;
+  v_user_id uuid;
+  v_draft jsonb;
+  v_company_name text;
+  v_title text;
+  v_payload jsonb;
+  v_review_id uuid;
+begin
+  if auth.uid() is null then raise exception 'Login required'; end if;
+
+  select d.company_id, d.user_id, d.draft
+    into v_company_id, v_user_id, v_draft
+  from public.job_posting_drafts d
+  where d.id = p_draft_id
+    and d.user_id = auth.uid()
+  for update;
+
+  if not found then raise exception 'Company draft not found or not owned by this account'; end if;
+
+  if not exists (
+    select 1 from public.company_members cm
+    where cm.company_id = v_company_id
+      and cm.user_id = auth.uid()
+      and cm.member_status = 'active'
+      and cm.member_role in ('owner','hr_manager','recruiter')
+  ) then
+    raise exception 'Active Owner, HR Manager, or Recruiter permission is required';
+  end if;
+
+  select c.company_name into v_company_name
+  from public.companies c
+  where c.id = v_company_id;
+
+  if not found then raise exception 'Company record not found'; end if;
+
+  v_title := nullif(btrim(v_draft->>'jobTitle'), '');
+  if v_title is null then raise exception 'Job title is required'; end if;
+  if nullif(btrim(v_draft->>'description'), '') is null then
+    raise exception 'Job description is required';
+  end if;
+  if nullif(btrim(v_draft->>'category'), '') is null
+     or nullif(btrim(v_draft->>'employmentType'), '') is null
+     or nullif(btrim(v_draft->>'location'), '') is null then
+    raise exception 'Category, employment type, and location are required';
+  end if;
+
+  select r.id into v_review_id
+  from public.admin_job_post_reviews r
+  where r.payload->>'source_draft_id' = p_draft_id::text
+    and r.status in ('pending_review','approved')
+    and r.published_job_id is null
+  order by r.created_at desc
+  limit 1;
+
+  if v_review_id is not null then
+    raise exception 'This job draft is already under review or approved; wait for the Admin decision';
+  end if;
+
+  v_payload := jsonb_build_object(
+    'title', v_title,
+    'company', coalesce(nullif(btrim(v_draft->>'company_name'), ''), v_company_name),
+    'company_id', v_company_id,
+    'source_draft_id', p_draft_id,
+    'category', v_draft->>'category',
+    'type', v_draft->>'employmentType',
+    'workplace', v_draft->>'workplaceType',
+    'location', v_draft->>'location',
+    'openings', coalesce(nullif(v_draft->>'openings',''), '1'),
+    'experience', v_draft->>'experience',
+    'education', v_draft->>'education',
+    'salaryMin', v_draft->>'salaryMin',
+    'salaryMax', v_draft->>'salaryMax',
+    'skills', v_draft->>'skills',
+    'description', v_draft->>'description',
+    'deadline', v_draft->>'deadline',
+    'email', v_draft->>'contactEmail'
+  );
+
+  insert into public.admin_job_post_reviews(
+    created_by, title, company_name, status, payload
+  ) values (
+    auth.uid(), v_title, coalesce(nullif(btrim(v_draft->>'company_name'), ''), v_company_name),
+    'pending_review', v_payload
+  )
+  returning id into v_review_id;
+
+  update public.job_posting_drafts
+  set draft = draft || jsonb_build_object(
+    'draft_status','pending_review',
+    'submitted_review_id',v_review_id,
+    'submitted_at',now()
+  ),
+  updated_at = now()
+  where id = p_draft_id;
+
+  return v_review_id;
+end;
+$tc_submit_company_draft$;
+
+revoke all on function public.tc_submit_company_job_draft_for_review(uuid) from public, anon;
+grant execute on function public.tc_submit_company_job_draft_for_review(uuid) to authenticated;
+
+-- Reflect Admin decisions back into the private company draft for status visibility.
+create or replace function public.tc_sync_company_job_draft_review_status()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $tc_sync_company_draft$
+declare
+  v_source_draft_id uuid;
+  v_status text;
+begin
+  v_source_draft_id := nullif(new.payload->>'source_draft_id','')::uuid;
+  if v_source_draft_id is null then return new; end if;
+
+  v_status := case when new.published_job_id is not null then 'published' else new.status end;
+
+  update public.job_posting_drafts
+  set draft = draft || jsonb_build_object(
+    'draft_status', v_status,
+    'review_note', coalesce(new.review_note,''),
+    'published_job_id', new.published_job_id,
+    'reviewed_at', new.reviewed_at
+  ),
+  updated_at = now()
+  where id = v_source_draft_id;
+
+  return new;
+end;
+$tc_sync_company_draft$;
+
+revoke all on function public.tc_sync_company_job_draft_review_status() from public, anon, authenticated;
+drop trigger if exists tc_sync_company_job_draft_review_status on public.admin_job_post_reviews;
+create trigger tc_sync_company_job_draft_review_status
+after update of status, published_job_id, review_note on public.admin_job_post_reviews
+for each row execute function public.tc_sync_company_job_draft_review_status();
+
 -- Fields needed by the existing public jobs list/detail pages.
 alter table public.jobs add column if not exists location text;
 alter table public.jobs add column if not exists education_level text;
@@ -127,13 +277,22 @@ begin
     raise exception 'Job description is required';
   end if;
 
-  -- Public jobs policy requires a verified company.
-  select c.id into v_company_id
-  from public.companies c
-  where lower(btrim(c.company_name)) = lower(btrim(coalesce(v_payload->>'company', v_review.company_name, '')))
-    and c.verification_status = 'verified'
-  order by c.created_at asc
-  limit 1;
+  -- Prefer the exact company ID from an authenticated company submission.
+  -- Manual Super Admin posts may still use exact company-name matching.
+  if nullif(v_payload->>'company_id','') is not null then
+    select c.id into v_company_id
+    from public.companies c
+    where c.id = (v_payload->>'company_id')::uuid
+      and lower(btrim(c.company_name)) = lower(btrim(coalesce(v_payload->>'company', v_review.company_name, '')))
+      and c.verification_status = 'verified';
+  else
+    select c.id into v_company_id
+    from public.companies c
+    where lower(btrim(c.company_name)) = lower(btrim(coalesce(v_payload->>'company', v_review.company_name, '')))
+      and c.verification_status = 'verified'
+    order by c.created_at asc
+    limit 1;
+  end if;
 
   if v_company_id is null then
     raise exception 'Verified company not found. Check exact company name and verification_status=verified before publishing.';
@@ -147,7 +306,7 @@ begin
   limit 1;
 
   v_type := lower(replace(btrim(coalesce(v_payload->>'type','')), ' ', '_'));
-  if v_type not in ('full_time','part_time','contract','temporary','internship','freelance') then
+  if v_type not in ('full_time','part_time','contract','temporary','internship','freelance','daily_wage') then
     raise exception 'Unsupported employment type. Select Full Time, Part Time, Contract, Temporary, Internship, or Freelance.';
   end if;
 
