@@ -257,6 +257,58 @@ $$;
 revoke all on function public.tc_mark_all_notifications_read() from public, anon;
 grant execute on function public.tc_mark_all_notifications_read() to authenticated;
 
+-- Notify authorized company users immediately when a candidate submits an application.
+create or replace function public.tc_notify_company_on_new_application()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  v_company_id uuid;
+  v_job_title text;
+  v_company_name text;
+begin
+  select j.company_id,j.job_title,c.company_name
+    into v_company_id,v_job_title,v_company_name
+  from public.jobs j
+  join public.companies c on c.id=j.company_id
+  where j.id=new.job_id;
+
+  if v_company_id is null then return new; end if;
+
+  insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+  select cm.user_id,'application_status','புதிய வேலை விண்ணப்பம் வந்துள்ளது',
+    coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
+    ' பணிக்கு புதிய விண்ணப்பம் வந்துள்ளது.',
+    new.id
+  from public.company_members cm
+  where cm.company_id=v_company_id
+    and cm.member_status='active'
+    and cm.member_role in ('owner','hr_manager','recruiter');
+
+  insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+  select c.owner_user_id,'application_status','புதிய வேலை விண்ணப்பம் வந்துள்ளது',
+    coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
+    ' பணிக்கு புதிய விண்ணப்பம் வந்துள்ளது.',
+    new.id
+  from public.companies c
+  where c.id=v_company_id and c.owner_user_id is not null
+    and not exists (
+      select 1 from public.company_members cm
+      where cm.company_id=v_company_id and cm.user_id=c.owner_user_id
+        and cm.member_status='active'
+        and cm.member_role in ('owner','hr_manager','recruiter')
+    );
+  return new;
+end;
+$;
+revoke all on function public.tc_notify_company_on_new_application() from public, anon, authenticated;
+drop trigger if exists tc_notify_company_on_new_application on public.job_applications;
+create trigger tc_notify_company_on_new_application
+after insert on public.job_applications
+for each row execute function public.tc_notify_company_on_new_application();
+
 -- Scheduled reminder generator. Call from Supabase Cron / trusted server every 15 minutes.
 -- It is intentionally not executable by browser users; configure a scheduled call separately.
 create or replace function public.tc_generate_interview_reminders()
