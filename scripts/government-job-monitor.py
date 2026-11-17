@@ -112,7 +112,7 @@ def fetch_source(source):
         charset = response.headers.get_content_charset() or "utf-8"
     if not host_allowed(final_url, source["url"]):
         raise ValueError("Redirected outside the registered HTTPS domain")
-    if not robots_allowed(final_url, user_agent):
+    if final_url != source["url"] and not robots_allowed(final_url, user_agent):
         raise ValueError("robots.txt disallows the redirected page or could not be checked safely")
     parser = Links()
     parser.feed(raw.decode(charset, errors="replace"))
