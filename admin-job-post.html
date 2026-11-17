@@ -71,7 +71,7 @@ let user=null;
 const fields=["jobKind","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
-function norm(v){return String(v??"").trim().toLowerCase().replace(/\\s+/g," ").replace(/\\/$/,"")}
+function norm(v){return String(v??"").trim().toLowerCase().replace(/\s+/g," ").replace(/\/$/,"")}
 function govDuplicateMatch(a,b){
  const an=norm(a.notification_number||a.notificationNumber),bn=norm(b.notification_number||b.notificationNumber);
  const aa=norm(a.recruitment_authority||a.authority),ba=norm(b.recruitment_authority||b.authority);
