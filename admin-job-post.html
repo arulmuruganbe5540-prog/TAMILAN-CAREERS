@@ -29,7 +29,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 </head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="admin-control.html">Admin Dashboard</a><a href="government-notice-review.html">அரசு அறிவிப்பு</a><a href="index.html">Website</a></nav></header>
 <div id="loading" style="padding:35px;text-align:center">Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
-<section id="gate" class="hidden"><div style="font-size:40px">🔐</div><h2>Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதி Super Admin கணக்கிற்கு மட்டுமே.</p><a class="btn primary" href="login.html?next=admin-job-post.html">Login செய்யவும்</a></section>
+<section id="gate" class="hidden"><div style="font-size:40px">🔐</div><h2>Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதி Super Admin கணக்கிற்கு மட்டுமே.</p><a class="btn primary" href="admin-login.html">Admin Login செய்யவும்</a></section>
 <main id="app" class="hidden">
 <section class="hero"><h1>📢 Super Admin – அனைத்து வேலைகளையும் சேர்க்கவும்</h1><p>அரசு, தனியார், வெளிநாட்டு வேலைகளை நேரடியாகச் சேர்த்து Draft / Review / Approved / Publish முறையில் நிர்வகிக்கலாம்.</p></section>
 <div class="warning"><b>பாதுகாப்பு:</b> Draft / Review / Approve ஆகிய நிலைகளுக்குப் பிறகு தனி Publish செயல் உள்ளது. Publish செய்யும்போது Database Function Super Admin அனுமதி, Approved நிலை, சரிபார்க்கப்பட்ட நிறுவனம் ஆகியவற்றை மீண்டும் சரிபார்க்கும். வெளியிடப்பட்ட வேலை public.jobs அட்டவணையில் சேரும்.</div>
@@ -61,7 +61,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <div class="field"><label for="education">கல்வித் தகுதி</label><input id="education" maxlength="180" placeholder="12th / Diploma / Degree"></div>
 <div class="field"><label id="salaryMinLabel" for="salaryMin">குறைந்தபட்ச சம்பளம் (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" placeholder="12000"></div>
 <div class="field"><label id="salaryMaxLabel" for="salaryMax">அதிகபட்ச சம்பளம் (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" placeholder="18000"></div>
-<div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option></select></div>
+<div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option></select></div><div class="field foreign-only"><label for="salaryCurrency">சம்பள நாணயம்</label><select id="salaryCurrency"><option value="USD">USD — US Dollar</option><option value="AED">AED — UAE Dirham</option><option value="SAR">SAR — Saudi Riyal</option><option value="QAR">QAR — Qatari Riyal</option><option value="OMR">OMR — Omani Rial</option><option value="KWD">KWD — Kuwaiti Dinar</option><option value="BHD">BHD — Bahraini Dinar</option><option value="SGD">SGD — Singapore Dollar</option><option value="MYR">MYR — Malaysian Ringgit</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — Pound Sterling</option><option value="CAD">CAD — Canadian Dollar</option><option value="AUD">AUD — Australian Dollar</option></select></div>
 <div class="field"><label for="examYear">தேர்வு ஆண்டு</label><input id="examYear" type="number" min="1950" max="2100" placeholder="2026"></div><div class="field"><label for="notificationDate">அறிவிப்பு வெளியான தேதி</label><input id="notificationDate" type="date"></div><div class="field"><label for="notificationNumber">அறிவிப்பு எண்</label><input id="notificationNumber" maxlength="120"></div><div class="field"><label for="ageLimit">வயது வரம்பு</label><input id="ageLimit" maxlength="180" placeholder="18–30"></div><div class="field"><label for="applicationFee">விண்ணப்பக் கட்டணம்</label><input id="applicationFee" maxlength="180"></div><div class="field wide"><label for="officialUrl">அதிகாரப்பூர்வ இணையதள URL</label><input id="officialUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="notificationPdfUrl">அதிகாரப்பூர்வ அறிவிப்பு PDF URL</label><input id="notificationPdfUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="applicationUrl">நேரடி விண்ணப்ப இணைப்பு</label><input id="applicationUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="selectionProcess">தேர்வு முறை / Selection Process</label><textarea id="selectionProcess" maxlength="3000"></textarea></div><div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="1200" placeholder="Communication, MS Excel, Driving"></div>
 <div class="field wide"><label for="description">வேலை விவரம் *</label><textarea id="description" maxlength="8000" required placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், நிபந்தனைகள்..."></textarea></div>
 <div class="field"><label for="deadline">விண்ணப்ப கடைசி தேதி</label><input id="deadline" type="date"></div>
@@ -79,7 +79,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id);
 let user=null;
-const fields=["jobKind","governmentScope","governmentDepartment","examName","applicationStartDate","examDate","vacancyBreakdown","syllabus","visaType","contractDuration","accommodation","flightSupport","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
+const fields=["jobKind","governmentScope","governmentDepartment","examName","applicationStartDate","examDate","vacancyBreakdown","syllabus","visaType","contractDuration","accommodation","flightSupport","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","salaryCurrency","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
 function norm(v){return String(v??"").trim().toLowerCase().replace(/\s+/g," ").replace(/\/$/,"")}
@@ -188,17 +188,23 @@ function updateKindFields(){
  const kind=$("jobKind").value;
  document.querySelectorAll(".gov-only").forEach(el=>el.classList.toggle("hidden",kind!=="government"));
  document.querySelectorAll(".foreign-only").forEach(el=>el.classList.toggle("hidden",kind!=="foreign"));
- const currency=kind==="foreign"?"USD":"₹";
+ const code=$( "salaryCurrency" ).value||"USD";
+ const symbols={USD:"$",AED:"AED",SAR:"SAR",QAR:"QAR",OMR:"OMR",KWD:"KWD",BHD:"BHD",SGD:"SGD",MYR:"MYR",EUR:"€",GBP:"£",CAD:"C$",AUD:"A$"};
+ const currency=kind==="foreign"?(symbols[code]||code):"₹";
  $("salaryMinLabel").textContent="குறைந்தபட்ச சம்பளம் ("+currency+")";
  $("salaryMaxLabel").textContent="அதிகபட்ச சம்பளம் ("+currency+")";
 }
 $("jobKind").addEventListener("change",updateKindFields);
+$("salaryCurrency").addEventListener("change",updateKindFields);
 async function init(){
  const {data,error}=await db.auth.getUser();
  if(error||!data.user){$("loading").classList.add("hidden");$("gateText").textContent="முதலில் Admin கணக்கில் Login செய்யவும்.";$("gate").classList.remove("hidden");return}
  user=data.user;
  const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
  $("loading").classList.add("hidden");
+ if(roleError||!roles?.length){$("gateText").textContent="இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.";$("gate").classList.remove("hidden");return}
+ const {data:aal,error:aalError}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalError||aal?.currentLevel!=="aal2"){$("gateText").textContent="Admin Login பக்கத்தில் Authenticator App மூலம் இரண்டாம் பாதுகாப்பு சரிபார்ப்பை முடிக்கவும்.";$("gate").classList.remove("hidden");return}
  if(roleError||!roles?.length){$("gateText").textContent="இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.";$("gate").classList.remove("hidden");return}
  $("app").classList.remove("hidden");await loadCategories();await loadQueue();
 }
