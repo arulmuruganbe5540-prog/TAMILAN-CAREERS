@@ -1,9 +1,9 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T08:58:03.901983+00:00",
+  "checked_at_utc": "2026-11-17T09:01:56.775721+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
-  "successful_sources": 24,
+  "successful_sources": 21,
   "failed_sources": [
     {
       "source_id": "rrb",
@@ -13,186 +13,196 @@
     {
       "source_id": "sbi-careers",
       "url": "https://sbi.co.in/web/careers",
-      "error": "Redirect outside registered HTTPS domain"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "upsc",
       "url": "https://upsc.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "indian-railways",
       "url": "https://indianrailways.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "nabard",
       "url": "https://www.nabard.org/careers-notices1.aspx",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "ncs",
       "url": "https://www.ncs.gov.in/",
-      "error": "Redirect outside registered HTTPS domain"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "apprenticeship",
       "url": "https://www.apprenticeshipindia.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "join-indian-army",
       "url": "https://joinindianarmy.nic.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "join-indian-navy",
       "url": "https://www.joinindiannavy.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "agniveervayu",
       "url": "https://agnipathvayu.cdac.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "tnusrb",
       "url": "https://www.tnusrb.tn.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "trb-tamilnadu",
-      "url": "https://www.trb.tn.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "mrb-tamilnadu",
-      "url": "https://www.mrb.tn.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "gpsc-goa",
-      "url": "https://gpsc.goa.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
+      "source_id": "tnpsc",
+      "url": "https://www.tnpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "appsc-arunachal",
       "url": "https://appsc.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "trb-tamilnadu",
+      "url": "https://www.trb.tn.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "mrb-tamilnadu",
+      "url": "https://www.mrb.tn.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "gpsc-goa",
+      "url": "https://gpsc.goa.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "apsc-assam",
       "url": "https://apsc.nic.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "hppsc",
       "url": "https://hppsc.hp.gov.in/",
-      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
-    },
-    {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "psc-cg",
       "url": "https://psc.cg.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "kpsc",
       "url": "https://kpsc.kar.nic.in/",
-      "error": "Redirect outside registered HTTPS domain"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "gpsc-gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
-      "error": "<urlopen error [Errno 101] Network is unreachable>"
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "kerala-psc",
       "url": "https://www.keralapsc.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
-    },
-    {
-      "source_id": "hpsc",
-      "url": "https://hpsc.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "mpsc-mizoram",
       "url": "https://mpsc.mizoram.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "mppsc",
       "url": "https://mppsc.mp.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "tgpsc",
+      "url": "https://www.tgpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "rpsc",
       "url": "https://rpsc.rajasthan.gov.in/",
-      "error": "<urlopen error [Errno 101] Network is unreachable>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "spsc",
       "url": "https://spsc.sikkim.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "tpsc",
       "url": "https://tpsc.tripura.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "upsc-recruitment-tests",
-      "url": "https://cms.upsc.gov.in/recruitment-tests/notice/",
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "ppsc",
       "url": "https://www.ppsc.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "upsc-recruitment-tests",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/notice/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "psc-uk",
       "url": "https://psc.uk.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "upsc-recruitment-results",
-      "url": "https://cms.upsc.gov.in/recruitment-tests/results/",
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "psc-wb",
       "url": "https://psc.wb.gov.in/",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "upsc-recruitment-results",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/results/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "upsc-recruitment-advertisements",
+      "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisement",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "upsc-exam-notification-archive",
       "url": "https://www.upsc.gov.in/exams-related-info/exam-notification/archives",
-      "error": "The read operation timed out"
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "mrb-results",
       "url": "https://www.mrb.tn.gov.in/content.php?dept_id=ODAw&lang=MQ%3D%3D&menu_id=MjI0",
-      "error": "<urlopen error timed out>"
+      "error": "robots.txt disallows this page or could not be checked safely"
     }
   ],
-  "candidate_links_discovered_this_run": 1125,
-  "pending_admin_review": 1125,
+  "candidate_links_discovered_this_run": 1106,
+  "pending_admin_review": 1106,
   "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 4,
   "request_timeout_seconds": 20
