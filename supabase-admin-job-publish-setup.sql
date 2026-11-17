@@ -21,7 +21,14 @@ begin
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='member_status')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='member_role')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='category_name')
-     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='is_active') then
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='is_active')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='company_id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='category_id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='job_title')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='job_slug')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='employment_type')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='application_deadline')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='status') then
     raise exception 'Company verification or job-category schema differs from this migration; inspect supabase-schema-audit.sql before proceeding.';
   end if;
 end;
