@@ -202,6 +202,20 @@ create table if not exists public.candidate_experience (
 create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
 create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
 
+create table if not exists public.candidate_certifications (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  certificate_name text not null check (length(btrim(certificate_name)) between 1 and 180),
+  issuing_organization text,
+  issue_date date,
+  expiry_date date,
+  credential_id text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint candidate_certifications_dates_valid check (issue_date is null or expiry_date is null or expiry_date >= issue_date)
+);
+create index if not exists candidate_certifications_user_issue_idx on public.candidate_certifications(user_id, issue_date desc);
+
 -- =========================================================
 -- 3. EMPLOYER READ ACCESS TO ACTUAL APPLICANT PROFILE DETAILS
 -- =========================================================
@@ -262,6 +276,11 @@ on public.candidate_skills for select to authenticated
 using (public.can_company_view_candidate(user_id));
 
 -- Candidate certifications are not granted here because the table schema is not part of this migration.
+
+drop policy if exists "Employers read applicant certifications" on public.candidate_certifications;
+create policy "Employers read applicant certifications"
+on public.candidate_certifications for select to authenticated
+using (public.can_company_view_candidate(user_id));
 
 drop policy if exists "Employers read applicant languages" on public.candidate_languages;
 create policy "Employers read applicant languages"
@@ -424,6 +443,15 @@ on public.candidate_preferences for all to authenticated
 using (user_id = (select auth.uid()))
 with check (user_id = (select auth.uid()));
 
+
+-- Candidate-owned certifications
+alter table public.candidate_certifications enable row level security;
+grant select, insert, update, delete on public.candidate_certifications to authenticated;
+drop policy if exists "TC seekers manage own certifications" on public.candidate_certifications;
+create policy "TC seekers manage own certifications"
+on public.candidate_certifications for all to authenticated
+using (user_id = (select auth.uid()))
+with check (user_id = (select auth.uid()));
 
 -- Candidate-owned education records
 alter table public.candidate_education enable row level security;
