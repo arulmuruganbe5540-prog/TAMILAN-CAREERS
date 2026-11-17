@@ -44,6 +44,7 @@
 <div class="notice">மற்ற மாநில வேலைகளுக்கு விண்ணப்பிக்கும் முன் domicile / உள்ளூர் குடியிருப்பு விதி, மாநில மொழித் தகுதி, இடஒதுக்கீடு மற்றும் சான்றிதழ் நிபந்தனைகளை கவனமாகப் படிக்கவும். எல்லா மாநில வேலைகளுக்கும் வெளிமாநிலத்தவர் தகுதியானவர் என்று கருத வேண்டாம்.</div>
 </section>
 <section class="panel"><h2>அனைத்து மாநில PSC-களின் அதிகாரப்பூர்வ பட்டியல்</h2><p class="muted">மாநில PSC இணையதள இணைப்புகள் உத்தரப் பிரதேச PSC மற்றும் பிற மாநில PSC-களின் அதிகாரப்பூர்வ reference பட்டியல்களுடன் ஒப்பிட்டு சேர்க்கப்பட்டுள்ளன.</p><a class="link" href="https://uppsc.up.nic.in/OuterPages/Other_PSC.aspx" target="_blank" rel="noopener">UPPSC – இந்திய மாநில PSC அதிகாரப்பூர்வ இணைப்புப் பட்டியல் ↗</a> · <a class="link" href="https://cms.upsc.gov.in/state-public-service-commissions/" target="_blank" rel="noopener">UPSC – State Public Service Commissions ↗</a></section>
+<section id="tcGovernmentFeed" data-scope="state" data-state="other" aria-live="polite"></section>
 </main>
 <footer><b>TAMILAN CAREERS</b><br>இந்திய மாநில அரசு வேலைவாய்ப்புகள் · <a href="index.html">முகப்பு</a> · <a href="indian-government-jobs.html">மத்திய அரசு வேலைகள்</a> · <a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு வேலைகள்</a></footer>
 <script>
@@ -70,4 +71,6 @@ function renderVacancies(){const q=$("jobSearch").value.trim().toLowerCase(),st=
 $("jobSearch").addEventListener("input",renderVacancies);$("jobState").addEventListener("change",renderVacancies);$("jobStatus").addEventListener("change",renderVacancies);renderVacancies();
 
 $("search").addEventListener("input",render);$("region").addEventListener("change",render);$("sort").addEventListener("change",render);render();
-</script></body></html>
+</script><script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="government-notices-public.js"></script>
+</body></html>
