@@ -12,7 +12,7 @@
 -- - Policies in this script are replaced by name.
 -- - The job_posting_drafts table is created only if absent.
 --
--- After running, verify that the resumes bucket is PRIVATE in Storage settings.
+-- After running, verify that the candidate-resumes bucket is PRIVATE in Storage settings.
 
 begin;
 
@@ -78,7 +78,7 @@ begin
   -- If optional tables already exist, ensure they match the columns this migration uses.
   foreach v_item in array array[
     'public.job_posting_drafts.company_id','public.job_posting_drafts.user_id','public.job_posting_drafts.draft','public.job_posting_drafts.updated_at',
-    'public.candidate_resumes.id','public.candidate_resumes.user_id','public.candidate_resumes.resume_title','public.candidate_resumes.file_path','public.candidate_resumes.original_file_name','public.candidate_resumes.file_type','public.candidate_resumes.file_size_bytes','public.candidate_resumes.is_primary','public.candidate_resumes.created_at','public.candidate_resumes.updated_at',
+    'public.candidate_resumes.id','public.candidate_resumes.user_id','public.candidate_resumes.resume_title','public.candidate_resumes.file_path','public.candidate_resumes.original_file_name','public.candidate_resumes.file_type','public.candidate_resumes.file_size_bytes','public.candidate_resumes.is_primary','public.candidate_resumes.upload_source','public.candidate_resumes.processing_status','public.candidate_resumes.uploaded_at','public.candidate_resumes.updated_at',
     'public.candidate_education.id','public.candidate_education.user_id','public.candidate_education.institution_name','public.candidate_education.qualification','public.candidate_education.created_at','public.candidate_education.updated_at',
     'public.candidate_experience.id','public.candidate_experience.user_id','public.candidate_experience.company_name','public.candidate_experience.job_title','public.candidate_experience.created_at','public.candidate_experience.updated_at',
     'public.candidate_certifications.id','public.candidate_certifications.user_id','public.candidate_certifications.certificate_name','public.candidate_certifications.created_at','public.candidate_certifications.updated_at'
@@ -115,14 +115,15 @@ $tc_setup_schema_guard$;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
-  'resumes',
-  'resumes',
+  'candidate-resumes',
+  'candidate-resumes',
   false,
-  5242880,
+  10485760,
   array[
     'application/pdf',
     'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'image/jpeg', 'image/png', 'image/webp'
   ]::text[]
 )
 on conflict (id) do update set
@@ -130,15 +131,15 @@ on conflict (id) do update set
   file_size_limit = excluded.file_size_limit,
   allowed_mime_types = excluded.allowed_mime_types;
 
-drop policy if exists "TC resumes owner can read" on storage.objects;
+drop policy if exists "TC candidate resumes owner can read" on storage.objects;
 create policy "TC resumes owner can read"
 on storage.objects for select to authenticated
 using (
-  bucket_id = 'resumes'
+  bucket_id = 'candidate-resumes'
   and (storage.foldername(name))[1] = (select auth.uid()::text)
 );
 
-drop policy if exists "TC resumes owner can upload" on storage.objects;
+drop policy if exists "TC candidate resumes owner can upload" on storage.objects;
 create policy "TC resumes owner can upload"
 on storage.objects for insert to authenticated
 with check (
@@ -146,7 +147,7 @@ with check (
   and (storage.foldername(name))[1] = (select auth.uid()::text)
 );
 
-drop policy if exists "TC resumes owner can update" on storage.objects;
+drop policy if exists "TC candidate resumes owner can update" on storage.objects;
 create policy "TC resumes owner can update"
 on storage.objects for update to authenticated
 using (
@@ -158,7 +159,7 @@ with check (
   and (storage.foldername(name))[1] = (select auth.uid()::text)
 );
 
-drop policy if exists "TC resumes owner can delete" on storage.objects;
+drop policy if exists "TC candidate resumes owner can delete" on storage.objects;
 create policy "TC resumes owner can delete"
 on storage.objects for delete to authenticated
 using (
@@ -173,7 +174,7 @@ using (
 create table if not exists public.job_posting_drafts (
   id uuid primary key default gen_random_uuid(),
   company_id uuid not null,
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   draft jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -301,6 +302,9 @@ create table if not exists public.candidate_experience (
   constraint candidate_experience_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
   constraint candidate_experience_current_has_no_end check (is_current = false or end_date is null)
 );
+alter table public.candidate_education add column if not exists updated_at timestamptz not null default now();
+alter table public.candidate_experience add column if not exists updated_at timestamptz not null default now();
+alter table public.candidate_certifications add column if not exists updated_at timestamptz not null default now();
 create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
 create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
 
@@ -331,6 +335,7 @@ create table if not exists public.candidate_certifications (
   issue_date date,
   expiry_date date,
   credential_id text,
+  credential_url text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint candidate_certifications_dates_valid check (issue_date is null or expiry_date is null or expiry_date >= issue_date)
@@ -438,28 +443,21 @@ using (public.can_company_view_candidate(user_id));
 -- =========================================================
 create table if not exists public.candidate_resumes (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  resume_title text not null default 'Resume'
-    check (length(btrim(resume_title)) between 1 and 160),
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
+  resume_title text not null default 'Resume' check (length(btrim(resume_title)) between 1 and 160),
   file_path text not null unique,
-  original_file_name text not null
-    check (length(btrim(original_file_name)) between 1 and 255),
-  file_type text not null check (file_type in (
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-  )),
-  file_size_bytes bigint not null
-    check (file_size_bytes between 1 and 5242880),
+  original_file_name text not null check (length(btrim(original_file_name)) between 1 and 255),
+  file_type text not null check (file_type in ('application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document')),
+  file_size_bytes bigint not null check (file_size_bytes between 1 and 10485760),
+  upload_source text not null default 'document' check (upload_source in ('document','camera','gallery')),
   is_primary boolean not null default false,
-  created_at timestamptz not null default now(),
+  processing_status text not null default 'pending' check (processing_status in ('pending','processing','completed','failed','review_required')),
+  uploaded_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  constraint candidate_resumes_owner_path check (
-    left(file_path, length(user_id::text) + 1) = user_id::text || '/'
-  )
+  constraint candidate_resumes_owner_path check (left(file_path, length(user_id::text) + 1) = user_id::text || '/')
 );
-create index if not exists candidate_resumes_user_created_idx
-  on public.candidate_resumes(user_id, created_at desc);
+create index if not exists candidate_resumes_user_uploaded_idx
+  on public.candidate_resumes(user_id, uploaded_at desc);
 
 -- Optional resume selected during job application; secure employer access is
 -- provided only by the server-verified company-resume-access function.
