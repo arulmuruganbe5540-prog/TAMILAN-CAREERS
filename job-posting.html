@@ -48,13 +48,13 @@ async function init(){
  const {data,error}=await client.auth.getUser();
  if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("job-posting.html"));return}
  currentUser=data.user;
- const {data:rows,error:memberError}=await client.from("company_members").select("company_id,member_role,member_status,companies(company_name)").eq("user_id",currentUser.id).eq("member_status","active");
+ const {data:rows,error:memberError}=await client.from("company_members").select("company_id,member_role,member_status,companies(company_name)").eq("user_id",currentUser.id).eq("member_status","active").in("member_role",["owner","hr_manager","recruiter"]);
  if(memberError){showBlocked("நிறுவன உறுப்பினர் அனுமதியைச் சரிபார்க்க முடியவில்லை. Dashboard-இல் உள்ள நிறுவன நிர்வாகியைத் தொடர்புகொள்ளவும். விவரம்: "+memberError.message);return}
  memberships=rows||[];
- if(!memberships.length){showBlocked("இந்தக் கணக்கில் செயலில் உள்ள நிறுவன உறுப்பினர் அனுமதி இல்லை. முதலில் நிறுவன நிர்வாகி உங்களை Company Member ஆகச் சேர்த்து அனுமதி வழங்க வேண்டும். வேலை வெளியிடும் உரிமை இங்கு தானாக வழங்கப்படாது.");return}
+ if(!memberships.length){showBlocked("இந்தக் கணக்கில் வேலை வரைவு நிர்வகிக்க அனுமதிக்கப்பட்ட Owner / HR Manager / Recruiter உறுப்பினர் அனுமதி இல்லை. நிறுவன நிர்வாகியிடம் சரியான அனுமதி பெறுங்கள்.");return}
  const select=document.getElementById("companyChoice");
  memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"நிறுவனம்")+" — "+(m.member_role||"உறுப்பினர்");select.appendChild(o)});
- document.getElementById("companyInfo").textContent="செயலில் உள்ள நிறுவன உறுப்பினர் இணைப்புகள்: "+memberships.length+". நீங்கள் அங்கீகரிக்கப்பட்ட உறுப்பினராக உள்ள நிறுவனத்திற்கான வரைவைத் தேர்ந்தெடுக்கலாம்.";
+ document.getElementById("companyInfo").textContent="வேலை வரைவு நிர்வகிக்க அனுமதிக்கப்பட்ட நிறுவன இணைப்புகள்: "+memberships.length+". நீங்கள் அங்கீகரிக்கப்பட்ட உறுப்பினராக உள்ள நிறுவனத்திற்கான வரைவைத் தேர்ந்தெடுக்கலாம்.";
  const saved=currentUser.user_metadata?.job_posting_draft||{};
  if(saved.company_id&&memberships.some(m=>m.company_id===saved.company_id))select.value=saved.company_id;
  document.getElementById("loading").classList.add("hidden");document.getElementById("editor").classList.remove("hidden");
@@ -65,7 +65,7 @@ async function loadDraftForCompany(){
  if(!companyId)return;
  const {data,error}=await client.from("job_posting_drafts").select("draft").eq("company_id",companyId).eq("user_id",currentUser.id).maybeSingle();
  if(error){
-  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது அணுகல் மறுக்கப்பட்டது. முதலில் supabase-job-posting-drafts.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
+  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது உங்கள் உறுப்பினர் அனுமதி இல்லை. முதலில் supabase-job-posting-drafts.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
   const old=currentUser.user_metadata?.job_posting_draft||{};
   if(old.company_id===companyId)fill(old);
   return;
