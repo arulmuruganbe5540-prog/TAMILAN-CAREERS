@@ -32,8 +32,8 @@ CATEGORY = [
     ("recruitment", re.compile(r"recruit|vacanc|advertisement|notification|apply|application", re.I)),
 ]
 MAX_BYTES = 2_000_000
-TIMEOUT = 12
-MAX_WORKERS = 5
+TIMEOUT = 20
+MAX_WORKERS = 4
 SLEEP_SECONDS = 0.35
 
 class Links(HTMLParser):
