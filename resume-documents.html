@@ -19,7 +19,7 @@ function message(s,good){$("notice").textContent=s;$("notice").className="notice
 function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function prettySize(n){return n<1024*1024?(n/1024).toFixed(0)+" KB":(n/1024/1024).toFixed(2)+" MB"}
 async function initialise(){
- const {data,error}=await client.auth.getSession();if(error||!data.session){location.replace("login.html");return}
+ const {data,error}=await client.auth.getSession();if(error||!data.session){location.replace("login.html?next="+encodeURIComponent("resume-documents.html"));return}
  currentUser=data.session.user;
  const {data:role,error:roleErr}=await client.from("user_roles").select("role").eq("user_id",currentUser.id).maybeSingle();
  if(roleErr)throw roleErr;if(role?.role!=="job_seeker"){document.querySelector("main").innerHTML='<div class="panel">இந்தப் பக்கம் Job Seeker கணக்குகளுக்காக மட்டுமே.</div>';return}
@@ -44,6 +44,7 @@ async function uploadFile(){
  const mimeByExt={pdf:"application/pdf",doc:"application/msword",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
  const contentType=mimeByExt[ext];
  if(!contentType||(file.type&&file.type!=="application/octet-stream"&&file.type!==contentType)){message("PDF, DOC அல்லது DOCX கோப்புகள் மட்டுமே அனுமதி. கோப்பின் வகையைச் சரிபார்க்கவும்.",false);return}
+ if(!file.size){message("காலியான கோப்பை பதிவேற்ற முடியாது.",false);return}
  if(file.size>MAX){message("கோப்பு 5 MB-ஐ விட அதிகமாக உள்ளது.",false);return}
  const {data:existing,error:listErr}=await client.storage.from(BUCKET).list(currentUser.id,{limit:100});
  if(listErr)throw listErr;if((existing||[]).filter(x=>x.name&&!x.name.startsWith(".")).length>=5){message("அதிகபட்சம் 5 ஆவணங்கள் மட்டுமே பதிவேற்றலாம். புதிய கோப்புக்கு முன் ஒன்றை நீக்கவும்.",false);return}
@@ -63,8 +64,8 @@ async function uploadFile(){
    is_primary:false
   });
   if(recordError){
-   await client.storage.from(BUCKET).remove([path]);
-   throw new Error("கோப்பு சேமிக்கப்பட்டது; ஆனால் Resume பட்டியலில் பதிவு செய்ய முடியவில்லை. Supabase-ல் supabase-setup-pending.sql இயக்கப்பட்டுள்ளதா? "+recordError.message);
+   const {error:cleanupError}=await client.storage.from(BUCKET).remove([path]);
+   throw new Error("Resume பதிவைச் சேமிக்க முடியவில்லை. "+recordError.message+(cleanupError?" கோப்பை தானாக நீக்கவும் முடியவில்லை; ஆதரவைத் தொடர்புகொள்ளவும்.":" பதிவேற்றிய கோப்பு நீக்கப்பட்டது."));
   }
   $("document").value="";message("ஆவணம் பாதுகாப்பாகப் பதிவேற்றப்பட்டு உங்கள் Resume பதிவிலும் சேர்க்கப்பட்டது.",true);await loadFiles()
  }
@@ -77,9 +78,9 @@ async function downloadFile(name){
 async function deleteFile(name){
  if(!confirm("இந்த ஆவணத்தை நிரந்தரமாக நீக்கவா?"))return;
  const path=currentUser.id+"/"+name;
- const {error}=await client.storage.from(BUCKET).remove([path]);if(error)throw error;
  const {error:recordError}=await client.from("candidate_resumes").delete().eq("user_id",currentUser.id).eq("file_path",path);
  if(recordError)throw recordError;
+ const {error}=await client.storage.from(BUCKET).remove([path]);if(error)throw new Error("Resume பட்டியல் பதிவு நீக்கப்பட்டது; ஆனால் Storage கோப்பை நீக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்: "+error.message);
  message("ஆவணமும் அதன் Resume பதிவும் நீக்கப்பட்டன.",true);await loadFiles();
 }
 $("uploadBtn").addEventListener("click",()=>uploadFile().catch(e=>message("பதிவேற்ற முடியவில்லை: "+(e.message||e)+" — Storage bucket / Policies அமைப்பைச் சரிபார்க்கவும்.",false)));
