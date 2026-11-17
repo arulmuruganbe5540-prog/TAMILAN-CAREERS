@@ -118,7 +118,7 @@ async function submitForReview(){
  }catch(e){message("Review-க்கு அனுப்ப முடியவில்லை: "+(e.message||e)+". supabase-admin-job-publish-setup.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.",false)}
  finally{btn.disabled=false;btn.textContent="Admin Review-க்கு அனுப்பு"}
 }
-document.getElementById("saveBtn").addEventListener("click",save);
+document.getElementById("saveBtn").addEventListener("click",()=>save(false));
 document.getElementById("submitReviewBtn").addEventListener("click",submitForReview);
 document.getElementById("reloadBtn").addEventListener("click",loadDraftForCompany);
 document.getElementById("companyChoice").addEventListener("change",loadDraftForCompany);
