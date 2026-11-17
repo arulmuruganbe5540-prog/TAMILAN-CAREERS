@@ -2,7 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const reply=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{"content-type":"application/json","cache-control":"no-store"}});
 const KEYWORDS=/job|career|vacanc|recruit|position|opening|apply|employment|hiring/i;
 const MAX_BYTES=1200000;
-function clean(s:string){return s.replace(/<script[\\s\\S]*?<\\/script>/gi," ").replace(/<style[\\s\\S]*?<\\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&amp;/g,"&").replace(/&nbsp;/g," ").replace(/\\s+/g," ").trim();}
+function clean(s:string){return s.replace(/<script[\s\S]*?<\/script>/gi," ").replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&amp;/g,"&").replace(/&nbsp;/g," ").replace(/\s+/g," ").trim();}
 function allowed(candidate:string,base:string){try{const a=new URL(candidate),b=new URL(base);return a.protocol==="https:"&&(a.hostname===b.hostname||a.hostname.endsWith("."+b.hostname));}catch{return false;}}
 Deno.serve(async(req)=>{
  if(req.method!=="POST")return reply({error:"POST only"},405);
@@ -22,9 +22,9 @@ Deno.serve(async(req)=>{
     if(!r.ok)throw new Error("HTTP "+r.status);
     const final=r.url||s.base_url;if(!allowed(final,s.base_url))throw new Error("Redirect outside registered domain");
     const html=(await r.text()).slice(0,MAX_BYTES);const rows:Record<string,unknown>[]=[];
-    const re=/<a\\b([^>]*?)>([\\s\\S]*?)<\\/a\\s*>/gi;
+    const re=/<a\b([^>]*?)>([\s\S]*?)<\/a\s*>/gi;
     for(const m of html.matchAll(re)){
-     const h=m[1].match(/\\bhref\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))/i);if(!h)continue;
+     const h=m[1].match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);if(!h)continue;
      const label=clean(m[2]);if(!label||label.length<5||label.length>220||!KEYWORDS.test(label))continue;
      let target:URL;try{target=new URL(h[1]||h[2]||h[3],final);}catch{continue;}
      if(!allowed(target.toString(),s.base_url))continue;
