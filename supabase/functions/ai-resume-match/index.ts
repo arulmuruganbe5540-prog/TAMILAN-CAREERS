@@ -79,9 +79,9 @@ Deno.serve(async (req) => {
     const [seeker, skills, education, experience, certifications, preferences, jobs] = await Promise.all([
       supabase.from("job_seeker_profiles").select("headline,bio,current_city,total_experience_months").eq("user_id", userId).maybeSingle(),
       supabase.from("candidate_skills").select("skill_name").eq("user_id", userId),
-      supabase.from("candidate_education").select("qualification,field_of_study,institution_name").eq("user_id", userId),
-      supabase.from("candidate_experience").select("company_name,job_title,description").eq("user_id", userId),
-      supabase.from("candidate_certifications").select("certificate_name,issuing_organization,issue_date,expiry_date").eq("user_id", userId),
+      supabase.from("candidate_education").select("qualification,field_of_study").eq("user_id", userId),
+      supabase.from("candidate_experience").select("job_title,description").eq("user_id", userId),
+      supabase.from("candidate_certifications").select("certificate_name,issuing_organization").eq("user_id", userId),
       supabase.from("candidate_preferences").select("preferred_city,preferred_job_title,preferred_employment_type").eq("user_id", userId).maybeSingle(),
       supabase.from("jobs").select("*").eq("status", "published").limit(100),
     ]);
