@@ -5,6 +5,57 @@
 
 begin;
 
+-- Stop before migration work if the Storage or application schema is incomplete.
+do $tc_resume_storage_guard$
+declare
+  v_missing text[] := array[]::text[];
+  v_item text;
+begin
+  if to_regclass('storage.buckets') is null
+     or to_regclass('storage.objects') is null
+     or to_regclass('public.job_applications') is null then
+    raise exception 'Resume Storage setup stopped: Storage relations or job_applications are missing; run supabase-schema-audit.sql first.';
+  end if;
+  foreach v_item in array array[
+    'job_applications.id','job_applications.candidate_id'
+  ] loop
+    if not exists (
+      select 1 from information_schema.columns c
+      where c.table_schema='public'
+        and c.table_name=split_part(v_item,'.',1)
+        and c.column_name=split_part(v_item,'.',2)
+    ) then
+      v_missing := array_append(v_missing,v_item);
+    end if;
+  end loop;
+  if to_regclass('public.candidate_resumes') is not null then
+    foreach v_item in array array[
+      'candidate_resumes.id','candidate_resumes.user_id','candidate_resumes.file_path',
+      'candidate_resumes.original_file_name','candidate_resumes.file_type','candidate_resumes.file_size_bytes'
+    ] loop
+      if not exists (
+        select 1 from information_schema.columns c
+        where c.table_schema='public'
+          and c.table_name=split_part(v_item,'.',1)
+          and c.column_name=split_part(v_item,'.',2)
+      ) then
+        v_missing := array_append(v_missing,v_item);
+      end if;
+    end loop;
+  end if;
+  if cardinality(v_missing) > 0 then
+    raise exception 'Resume Storage setup stopped: required columns are missing: %', array_to_string(v_missing, ', ');
+  end if;
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema='public' and table_name='job_applications'
+      and column_name='resume_id' and data_type <> 'uuid'
+  ) then
+    raise exception 'Resume Storage setup stopped: job_applications.resume_id exists but is not UUID.';
+  end if;
+end;
+$tc_resume_storage_guard$;
+
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
   'resumes',
