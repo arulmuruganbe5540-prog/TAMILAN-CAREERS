@@ -197,8 +197,7 @@
     }
   ],
   "candidate_links_discovered_this_run": 1114,
-  "pending_admin_review": 1114,
-  "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
+  "note": "Official-source link discovery only. This aggregate report contains no candidate URLs and does not assert that Supabase Admin Review sync succeeded. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 4,
   "request_timeout_seconds": 20
 }
