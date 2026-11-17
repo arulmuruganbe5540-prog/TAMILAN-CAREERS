@@ -46,6 +46,6 @@ Supabase Dashboard → Authentication → Security and Protection பகுத�
 ## 5. தற்போதைய தானியங்கி கண்காணிப்பு
 
 - Government official sources: 48 enabled.
-- External job sources: 30 enabled; 9 public-page sources scan செய்யப்படுகின்றன; 21 manual-only sources தானாக crawl செய்யப்படுவதில்லை.
+- External job sources: 30 enabled; 6 public-page sources scan செய்யப்படுகின்றன; 24 manual-only sources தானாக crawl செய்யப்படுவதில்லை.
 - External candidate links: Admin Review-க்கு மட்டும்; தானாக public ஆகாது.
 - Government notice queue: Admin Review-க்கு மட்டும்; தானாக public ஆகாது.
