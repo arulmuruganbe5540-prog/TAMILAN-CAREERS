@@ -42,6 +42,7 @@ jobs:
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
             -H "Content-Type: application/json" \
             --data '{}'
+      # Run AI extraction after ingestion so fresh candidates are included in the same monitor cycle.
       - name: AI extract official notice details for Admin Review
         if: ${{ env.GOVERNMENT_MONITOR_SECRET != '' }}
         continue-on-error: true
