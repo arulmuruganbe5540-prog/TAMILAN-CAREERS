@@ -15,11 +15,13 @@
 
 Run `supabase-setup-pending.sql` in the Supabase SQL Editor for project `qkmljuuusfjowexvybvy`. It includes the private bucket, Storage policies, candidate resume metadata table, RLS, and the five-document database limit. It also includes other pending profile and employer setup items, so review the full SQL file before running it.
 
-The focused, rerunnable Resume-only SQL is `supabase-resume-storage.sql`.
+The focused, rerunnable Resume-only SQL is `supabase-resume-storage.sql`. The live project already has the private `candidate-resumes` bucket and owner-folder policies; do not create a second `resumes` bucket.
+
+Run `supabase-core-api-access.sql` after reviewing the schema. It grants Data API privileges only where matching RLS policies exist and adds company-scoped applicant-profile reads. It deliberately does not grant employers access to candidate Resume metadata or Storage.
 
 ## Edge Function deployment
 
-Deploy the function directory:
+`company-resume-access` is already deployed to the live project (ACTIVE, version 1, JWT verification enabled). Redeploy only after changing the source. To deploy manually:
 
 ```bash
 supabase functions deploy company-resume-access
@@ -38,4 +40,4 @@ The function expects the standard Supabase Edge Function environment values `SUP
 
 ## Important limitation
 
-A successful GitHub Pages deployment does not run the SQL in Supabase or deploy the Edge Function. The live upload and employer-view workflow remains inactive until those Supabase steps are completed and an authenticated end-to-end test passes.
+A successful GitHub Pages deployment does not run SQL in Supabase or deploy Edge Functions. The bucket, RLS policies, API grants, and signed-URL Function are now configured, but the live upload and employer-view workflow remains unverified until an authenticated end-to-end test passes.
