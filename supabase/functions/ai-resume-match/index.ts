@@ -36,6 +36,28 @@ function cleanJob(row: Record<string, unknown>) {
   return clean;
 }
 
+function isExpiredDeadline(value: unknown) {
+  if (typeof value !== "string" || !value.trim()) return false;
+  const raw = value.trim();
+  let match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  let iso = "";
+  if (match) iso = raw;
+  if (!iso) {
+    match = raw.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);
+    if (match) iso = `${match[3]}-${match[2]}-${match[1]}`;
+  }
+  if (iso) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit",
+    }).formatToParts(new Date());
+    const todayParts = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+    const today = `${todayParts.year}-${todayParts.month}-${todayParts.day}`;
+    return iso < today;
+  }
+  const parsed = new Date(raw);
+  return !Number.isNaN(parsed.getTime()) && parsed.getTime() < Date.now();
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "POST only" }, 405);
@@ -112,7 +134,7 @@ Deno.serve(async (req) => {
       preferred_location: preferredLocation || safeText(preferences.data?.preferred_city || seeker.data?.current_city, 120),
     };
 
-    const jobRows = (jobs.data || []).slice(0, 40).map((row) => cleanJob(row as Record<string, unknown>));
+    const jobRows = (jobs.data || []).filter((row) => !isExpiredDeadline(row.application_deadline ?? row.deadline)).slice(0, 40).map((row) => cleanJob(row as Record<string, unknown>));
     if (!jobRows.length) return json({ matches: [], message: "No published jobs are currently available." });
 
     const schema = {
