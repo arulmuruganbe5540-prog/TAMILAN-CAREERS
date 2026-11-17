@@ -30,7 +30,7 @@ declare
   v_required text[];
   v_key text;
 begin
-  if auth.uid() is null or not public.is_super_admin() then
+  if auth.uid() is null or not private.is_super_admin() then
     raise exception 'Super admin access required';
   end if;
 
@@ -142,7 +142,7 @@ security definer
 set search_path = ''
 as $$
 begin
-  if auth.uid() is null or not public.is_super_admin() then
+  if auth.uid() is null or not private.is_super_admin() then
     raise exception 'Super admin access required';
   end if;
   if nullif(btrim(p_reason),'') is null then
