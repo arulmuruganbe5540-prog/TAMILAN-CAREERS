@@ -321,6 +321,52 @@
       "scope": "state",
       "state": "West Bengal",
       "url": "https://psc.wb.gov.in/"
+    },
+    {
+      "id": "ibps-other-recruitment",
+      "name": "IBPS Other Ongoing Recruitments",
+      "scope": "central",
+      "url": "https://www.ibps.in/index.php/recruitment/"
+    },
+    {
+      "id": "upsc-recruitment-advertisements",
+      "name": "UPSC Recruitment Advertisements",
+      "scope": "central",
+      "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisement"
+    },
+    {
+      "id": "upsc-recruitment-tests",
+      "name": "UPSC Recruitment Tests Notices",
+      "scope": "central",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/notice/"
+    },
+    {
+      "id": "tnpsc-press-releases",
+      "name": "TNPSC Official Press Releases",
+      "scope": "state",
+      "state": "Tamil Nadu",
+      "url": "https://www.tnpsc.gov.in/English/Press_releases.aspx"
+    },
+    {
+      "id": "tnpsc-groupiv-2026",
+      "name": "TNPSC Group IV Notification 11/2026",
+      "scope": "state",
+      "state": "Tamil Nadu",
+      "url": "https://www.tnpsc.gov.in/web/examdashboard/index.aspx?notid=7a880763-80dc-4c3a-bbbe-81b6a3a75a87"
+    },
+    {
+      "id": "tnpsc-groupii-2026",
+      "name": "TNPSC Group II and IIA Notification 07/2026",
+      "scope": "state",
+      "state": "Tamil Nadu",
+      "url": "https://www.tnpsc.gov.in/web/examdashboard/index.aspx?notid=89113de0-6a0e-4d47-a409-c84fb04ef33e"
+    },
+    {
+      "id": "tnpsc-groupi-2026",
+      "name": "TNPSC Group I Notification 05/2026",
+      "scope": "state",
+      "state": "Tamil Nadu",
+      "url": "https://www.tnpsc.gov.in/web/examdashboard/index.aspx?notid=33aa5415-6205-4ae9-842e-212d62d088f1"
     }
   ]
 }
