@@ -4,8 +4,8 @@ begin;
 
 do $tc_admin_guard$
 begin
-  if to_regprocedure('public.is_super_admin()') is null then
-    raise exception 'Required function public.is_super_admin() is missing; no changes applied.';
+  if to_regprocedure('private.is_super_admin()') is null then
+    raise exception 'Required function private.is_super_admin() is missing; no changes applied.';
   end if;
   if to_regclass('public.job_posting_drafts') is null then
     raise exception 'Run supabase-setup-pending.sql first; company job draft table is missing.';
@@ -131,23 +131,23 @@ grant select, insert, update, delete on public.admin_job_post_reviews to authent
 drop policy if exists "TC admin job reviews super admin select" on public.admin_job_post_reviews;
 create policy "TC admin job reviews super admin select"
 on public.admin_job_post_reviews for select to authenticated
-using ((select public.is_super_admin()));
+using ((select private.is_super_admin()));
 
 drop policy if exists "TC admin job reviews super admin insert" on public.admin_job_post_reviews;
 create policy "TC admin job reviews super admin insert"
 on public.admin_job_post_reviews for insert to authenticated
-with check ((select public.is_super_admin()) and created_by = (select auth.uid()));
+with check ((select private.is_super_admin()) and created_by = (select auth.uid()));
 
 drop policy if exists "TC admin job reviews super admin update" on public.admin_job_post_reviews;
 create policy "TC admin job reviews super admin update"
 on public.admin_job_post_reviews for update to authenticated
-using ((select public.is_super_admin()))
-with check ((select public.is_super_admin()));
+using ((select private.is_super_admin()))
+with check ((select private.is_super_admin()));
 
 drop policy if exists "TC admin job reviews super admin delete" on public.admin_job_post_reviews;
 create policy "TC admin job reviews super admin delete"
 on public.admin_job_post_reviews for delete to authenticated
-using ((select public.is_super_admin()));
+using ((select private.is_super_admin()));
 
 create or replace function public.tc_admin_job_reviews_touch_updated_at()
 returns trigger
@@ -371,7 +371,7 @@ declare
   v_vacancies integer;
   v_deadline timestamptz;
 begin
-  if not coalesce(public.is_super_admin(), false) then
+  if not coalesce(private.is_super_admin(), false) then
     raise exception 'Super Admin permission required';
   end if;
 
