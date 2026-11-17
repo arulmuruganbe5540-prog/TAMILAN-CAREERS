@@ -6,6 +6,8 @@
 
 Supabase Dashboard → SQL Editor → New query. GitHub-ல் உள்ள கோப்பைத் திறந்து முழு SQL-ஐ நகலெடுத்து SQL Editor-ல் ஒட்டி Run செய்யவும்.
 
+**முதலில் பாதுகாப்பான Schema Audit:** [supabase-schema-audit.sql](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/blob/main/supabase-schema-audit.sql) கோப்பை முதலில் Run செய்யவும். இது அட்டவணை/Column/Policy/Storage அமைப்புகளின் metadata-ஐ மட்டும் வாசிக்கும்; எந்த மாற்றமும் செய்யாது. Resume, Company, Application அட்டவணைகள் எதிர்பார்த்த அமைப்பில் உள்ளனவா என்பதை உறுதிசெய்த பிறகே கீழே உள்ள மாற்ற SQL-ஐ இயக்கவும்.
+
 1. [supabase-setup-pending.sql](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/blob/main/supabase-setup-pending.sql) — தனிப்பட்ட Resume Storage, Candidate Resume பதிவுகள், Job Drafts, கல்வி, அனுபவம், சான்றிதழ்கள், விண்ணப்பித்த Candidate விவரங்களை Employer பார்க்கும் வரையறுக்கப்பட்ட அனுமதி.
 2. [supabase-candidate-profile-education-experience.sql](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/blob/main/supabase-candidate-profile-education-experience.sql) — கல்வி, அனுபவம், சான்றிதழ் அட்டவணைகள் மற்றும் அவற்றின் பாதுகாப்பு விதிகள். முதல் கோப்பில் இவை ஏற்கெனவே உருவாக்கப்பட்டிருந்தாலும் மீண்டும் இயக்கலாம்.
 3. [supabase-company-application-status.sql](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/blob/main/supabase-company-application-status.sql) — Company விண்ணப்ப நிலை மாற்றும் அனுமதி.
