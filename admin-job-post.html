@@ -30,7 +30,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <div id="loading" style="padding:35px;text-align:center">Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
 <section id="gate" class="hidden"><div style="font-size:40px">🔐</div><h2>Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதி Super Admin கணக்கிற்கு மட்டுமே.</p><a class="btn primary" href="login.html?next=admin-job-post.html">Login செய்யவும்</a></section>
 <main id="app" class="hidden">
-<section class="hero"><h1>📢 Admin Job Post & Review</h1><p>அருள் முருகன் மங்கையர்க்கரசி — புதிய வேலை அறிவிப்புகளை உருவாக்கி, Draft / Review / Approved நிலைகளில் கட்டுப்படுத்தும் மையம்.</p></section>
+<section class="hero"><h1>📢 Super Admin – அனைத்து வேலைகளையும் சேர்க்கவும்</h1><p>அரசு, தனியார், வெளிநாட்டு வேலைகளை நேரடியாகச் சேர்த்து Draft / Review / Approved / Publish முறையில் நிர்வகிக்கலாம்.</p></section>
 <div class="warning"><b>பாதுகாப்பு:</b> Draft / Review / Approve ஆகிய நிலைகளுக்குப் பிறகு தனி Publish செயல் உள்ளது. Publish செய்யும்போது Database Function Super Admin அனுமதி, Approved நிலை, சரிபார்க்கப்பட்ட நிறுவனம் ஆகியவற்றை மீண்டும் சரிபார்க்கும். வெளியிடப்பட்ட வேலை public.jobs அட்டவணையில் சேரும்.</div>
 <div class="grid">
 <section class="panel">
@@ -38,10 +38,10 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <form id="jobForm" class="form">
 <input type="hidden" id="recordId">
 <input type="hidden" id="companyId"><input type="hidden" id="sourceDraftId">
-<div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
-<div class="field"><label for="company">நிறுவனப் பெயர் *</label><input id="company" maxlength="180" required placeholder="சரிபார்க்கப்பட்ட நிறுவனத்தின் பெயர்"><span class="hint">Publish செய்ய companies அட்டவணையில் இதே பெயரும் verification_status = verified நிலையும் இருக்க வேண்டும்.</span></div>
+<div class="field wide"><label for="jobKind">வேலைவாய்ப்பு பிரிவு *</label><select id="jobKind" required><option value="government">அரசு வேலை</option><option value="private" selected>தனியார் வேலை</option><option value="foreign">வெளிநாட்டு வேலை</option></select><span class="hint">Super Admin மூன்று பிரிவுகளிலும் நேரடியாக வேலை சேர்க்கலாம்.</span></div><div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
+<div class="field"><label for="company">நிறுவனப் பெயர் *</label><input id="company" maxlength="180" placeholder="நிறுவனம் / அரசு துறை / நிறுவனம்"><span class="hint">Super Admin நேரடியாகச் சேர்க்கும்போது விருப்பத்தேர்வு. Company submission என்றால் Verified நிறுவனம் கட்டாயம்.</span></div>
 <div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>Accounting &amp; Finance</option><option>Construction</option><option>Customer Support</option><option>Driver &amp; Delivery</option><option>Education</option><option>Engineering</option><option>Government Jobs</option><option>Healthcare</option><option>Hotel &amp; Restaurant</option><option>IT &amp; Software</option><option>Manufacturing</option><option>Office &amp; Administration</option><option>Other Jobs</option><option>Sales &amp; Marketing</option></select></div>
-<div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="authority">அரசு ஆணையம் / துறை</label><input id="authority" maxlength="180" placeholder="TNPSC / UPSC / SSC / RRB..."></div><div class="field"><label for="countryName">நாடு (வெளிநாட்டு வேலை)</label><input id="countryName" maxlength="100" placeholder="UAE / Saudi Arabia / Singapore"></div><div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
 <div class="field"><label for="workplace">பணிமுறை</label><select id="workplace"><option value="">தேர்வு செய்யவும்</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
 <div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" maxlength="180" required placeholder="உதா: ஓமலூர், சேலம்"></div>
 <div class="field"><label for="openings">காலியிடங்கள்</label><input id="openings" type="number" min="1" max="100000" value="1"></div>
@@ -50,7 +50,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <div class="field"><label for="salaryMin">குறைந்தபட்ச சம்பளம் (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" placeholder="12000"></div>
 <div class="field"><label for="salaryMax">அதிகபட்ச சம்பளம் (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" placeholder="18000"></div>
 <div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option></select></div>
-<div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="1200" placeholder="Communication, MS Excel, Driving"></div>
+<div class="field"><label for="examYear">தேர்வு ஆண்டு</label><input id="examYear" type="number" min="1950" max="2100" placeholder="2026"></div><div class="field"><label for="notificationDate">அறிவிப்பு வெளியான தேதி</label><input id="notificationDate" type="date"></div><div class="field"><label for="notificationNumber">அறிவிப்பு எண்</label><input id="notificationNumber" maxlength="120"></div><div class="field"><label for="ageLimit">வயது வரம்பு</label><input id="ageLimit" maxlength="180" placeholder="18–30"></div><div class="field"><label for="applicationFee">விண்ணப்பக் கட்டணம்</label><input id="applicationFee" maxlength="180"></div><div class="field wide"><label for="officialUrl">அதிகாரப்பூர்வ இணையதள URL</label><input id="officialUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="notificationPdfUrl">அதிகாரப்பூர்வ அறிவிப்பு PDF URL</label><input id="notificationPdfUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="applicationUrl">நேரடி விண்ணப்ப இணைப்பு</label><input id="applicationUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="selectionProcess">தேர்வு முறை / Selection Process</label><textarea id="selectionProcess" maxlength="3000"></textarea></div><div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="1200" placeholder="Communication, MS Excel, Driving"></div>
 <div class="field wide"><label for="description">வேலை விவரம் *</label><textarea id="description" maxlength="8000" required placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், நிபந்தனைகள்..."></textarea></div>
 <div class="field"><label for="deadline">விண்ணப்ப கடைசி தேதி</label><input id="deadline" type="date"></div>
 <div class="field"><label for="email">தொடர்பு மின்னஞ்சல்</label><input id="email" type="email" maxlength="180" placeholder="hr@company.com"></div>
@@ -67,7 +67,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id);
 let user=null;
-const fields=["title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","email"];
+const fields=["jobKind","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
 function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());p.company_id=$("companyId").value||null;p.source_draft_id=$("sourceDraftId").value||null;return p}
@@ -83,7 +83,7 @@ async function loadCategories(){
 }
 async function save(status){
  const p=payload();
- if(!p.title||!p.company||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, நிறுவனப் பெயர், துறை, வேலை வகை, இடம், வேலை விவரம் ஆகிய அனைத்தையும் நிரப்பவும்.",false);return}
+ if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், வேலை விவரம் ஆகியவற்றை நிரப்பவும்.",false);return} if(p.jobKind==="government"&&!p.officialUrl){say("அரசு வேலைக்கு அதிகாரப்பூர்வ இணையதள இணைப்பு கட்டாயம்.",false);return} if(p.jobKind==="foreign"&&!p.countryName){say("வெளிநாட்டு வேலைக்கு நாடு குறிப்பிட வேண்டும்.",false);return}
  if(p.openings&&(!Number.isInteger(Number(p.openings))||Number(p.openings)<1)){say("காலியிடங்கள் குறைந்தது 1 ஆக இருக்க வேண்டும்.",false);return}
  if(p.salaryMin!==""&&p.salaryMax!==""&&Number(p.salaryMin)>Number(p.salaryMax)){say("குறைந்தபட்ச சம்பளம் அதிகபட்ச சம்பளத்தை விட அதிகமாக இருக்கக்கூடாது.",false);return}
  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
@@ -111,7 +111,7 @@ async function loadQueue(){
 async function act(action,id,rows){
  const r=rows.find(x=>x.id===id);if(!r)return;
  if(action==="publish"){
-  if(!confirm("இந்த Approved வேலைவாய்ப்பை பொதுமக்கள் பார்க்கும் jobs பட்டியலில் வெளியிடவா? Verified company கட்டாயம்."))return;
+  if(!confirm("இந்த Approved வேலைவாய்ப்பை பொதுமக்கள் பார்க்கும் jobs பட்டியலில் வெளியிடவா? Company சமர்ப்பித்த வேலைக்கு மட்டும் Verified Company கட்டாயம்."))return;
   say("Database பாதுகாப்பு சரிபார்த்து வேலை வெளியிடப்படுகிறது...");
   const {data,error}=await db.rpc("tc_admin_publish_job",{p_review_id:id});
   if(error){say("Publish செய்ய முடியவில்லை: "+error.message,false);return}
