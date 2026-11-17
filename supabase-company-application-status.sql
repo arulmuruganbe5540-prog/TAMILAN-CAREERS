@@ -19,7 +19,7 @@ begin
     raise exception 'Login required';
   end if;
 
-  if p_new_status not in ('under_review', 'shortlisted', 'rejected') then
+  if p_new_status is null or p_new_status not in ('under_review', 'shortlisted', 'rejected') then
     raise exception 'Invalid application status';
   end if;
 
