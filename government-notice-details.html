@@ -29,7 +29,7 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:25px 15px;text-a
 <script>
 (function(){
  const root=document.getElementById("content"),id=new URLSearchParams(location.search).get("id");
- const client=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+ const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
  const labels={post_names:"பதவிகள்",qualification:"கல்வித் தகுதி",education:"கல்வித் தகுதி",age_limit:"வயது வரம்பு",salary:"சம்பளம்",pay_scale:"ஊதிய நிலை",application_fee:"விண்ணப்பக் கட்டணம்",selection_process:"தேர்வு முறை",location:"பணியிடம்",department:"துறை",vacancies_breakdown:"காலியிட விவரம்",experience:"அனுபவம்",job_type:"வேலை வகை",important_dates:"முக்கிய தேதிகள்",how_to_apply:"விண்ணப்பிக்கும் முறை",documents_required:"தேவையான ஆவணங்கள்",official_website:"அதிகாரப்பூர்வ இணையதளம்",notification_pdf_url:"அறிவிப்பு PDF",application_url:"விண்ணப்ப இணைப்பு",apply_url:"விண்ணப்ப இணைப்பு",state:"மாநிலம்",authority:"அறிவிப்பு வெளியிட்ட நிறுவனம்",scope:"வகை",last_date:"கடைசி தேதி",application_start:"விண்ணப்பத் தொடக்கம்"};
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const nice=k=>labels[k]||k.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
