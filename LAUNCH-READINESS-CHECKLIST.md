@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] GitHub Pages deployment and website health workflow were confirmed successful for commit `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`.
-- [x] Website health workflow was confirmed successful for commit `9b50c6c29bddfbcb2da92f10d57acf1296cadded`, including Deno type checks, structural checks, and browser smoke tests. Latest later Pages deployment is still pending.
+- [x] GitHub Pages deployment was confirmed successful for commits `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, and checklist commit `590452ef30930e73d45f0e3b30a8b33398511fc3`.
+- [x] Website health workflow passed for commits `9b50c6c29bddfbcb2da92f10d57acf1296cadded` and `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, including Deno type checks, structural checks, and browser smoke tests.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -15,7 +15,7 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] External-source discovery remains review-only; scanner code does not publish to the public jobs table.
 - [x] A browser smoke test now checks that the external-source review page redirects unauthenticated visitors to login.
 - [x] Scanner response parsing is capped at 1.2 MB while streaming, instead of reading an unbounded response before slicing.
-- [x] Scanner rejects non-HTML responses and records per-source scan failures accurately.
+- [x] Scanner rejects non-HTML responses, requires an explicit HTML/XHTML content type, and records per-source scan failures accurately.
 - [x] AI resume matcher Bearer header parsing was corrected in the repository source.
 
 ## Must finish before enabling external source scanning
