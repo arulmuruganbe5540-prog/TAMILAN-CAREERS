@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for commit `7e1545da8763e4c55cfa32a44747cd4161ad43b1` on 17 November 2026 (run `44050852418`). Earlier confirmed deployments include `91df81e173defbd7fea56a661edd9067a9677ca5`, `637ddb26e6a8b5f82cb8daf7241763f4a546174b`, and `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`.
-- [x] Latest full website health workflow passed for commit `d21cf5931f72f5f5a7813034ba2855cb34ee7c9b` on 17 November 2026 (run `44050748223`): all five Supabase Edge Functions type-checked; SQL migration lint, private candidate artifact guard, public feed JavaScript, site structure, and browser smoke tests passed.
+- [x] Latest GitHub Pages deployment succeeded for commit `3c58359a079572588724226fd1bfeb6c55a2a930` on 17 November 2026 (run `44052501042`).
+- [x] Latest full website health workflow passed for commit `3c58359a079572588724226fd1bfeb6c55a2a930` on 17 November 2026 (run `44052500315`): all five Supabase Edge Functions type-checked; SQL migration lint, private candidate artifact guard, public feed JavaScript, site structure, and browser smoke tests passed.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -28,6 +28,9 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Source-discovery crawler now validates HTTPS redirects, limits redirect count, and accepts only HTML/XHTML content types.
 - [x] Candidate profile migration's malformed experience/certification index statements were corrected; SQL lint now also checks CREATE INDEX ... ON clauses.
 - [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
+- [x] State PSC monitor was hardened to use HTTPS-only source URLs, validate redirects, enforce bounded redirects, require HTML/XHTML, and check `robots.txt` before scanning and after redirects.
+- [x] State PSC public report no longer includes unverified recruitment keyword snippets; CI now rejects such snippets if they reappear.
+- [x] Latest website health run `44052500315` and Pages deployment run `44052501042` both passed on commit `3c58359a079572588724226fd1bfeb6c55a2a930`.
 
 ## Must finish before enabling external source scanning
 
