@@ -38,7 +38,7 @@ jobs:
         if: ${{ env.GOVERNMENT_MONITOR_SECRET != '' }}
         run: |
           curl --fail --show-error --silent --max-time 900 \
-            -X POST "https://qkmljuuusfjowexvy.supabase.co/functions/v1/ingest-government-notices" \
+            -X POST "https://qkmljuuusfjowexvybvy.supabase.co/functions/v1/ingest-government-notices" \
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
             -H "Content-Type: application/json" \
             --data '{}'
@@ -48,7 +48,7 @@ jobs:
         continue-on-error: true
         run: |
           curl --fail --show-error --silent --max-time 600 \
-            -X POST "https://qkmljuuusfjowexvy.supabase.co/functions/v1/extract-government-notice-details" \
+            -X POST "https://qkmljuuusfjowexvybvy.supabase.co/functions/v1/extract-government-notice-details" \
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
             -H "Content-Type: application/json" \
             --data '{}'
