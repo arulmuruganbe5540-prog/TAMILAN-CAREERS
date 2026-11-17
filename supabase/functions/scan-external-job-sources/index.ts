@@ -38,31 +38,27 @@ async function fetchRegisteredPage(baseUrl:string){
 function robotsAllows(text:string,pageUrl:string,userAgent:string){
  const groups:{agents:string[];rules:{allow:boolean;path:string}[]}[]=[];
  let agents:string[]=[],rules:{allow:boolean;path:string}[]=[];
- for(const raw of text.split(/\r?\n/)){
+ for(const raw of text.split("\n")){
   const line=raw.split("#",1)[0].trim();if(!line)continue;
-  const ua=line.match(/^user-agent\s*:\s*(.+)$/i);
-  if(ua){
+  const lower=line.toLowerCase();
+  if(lower.startsWith("user-agent:")){
    if(rules.length){groups.push({agents,rules});agents=[];rules=[];}
-   agents.push(ua[1].trim().toLowerCase());continue;
+   agents.push(line.slice(line.indexOf(":")+1).trim().toLowerCase());continue;
   }
-  const rule=line.match(/^(allow|disallow)\s*:\s*(.*)$/i);
-  if(rule&&agents.length){
-   const path=rule[2].trim();if(path)rules.push({allow:rule[1].toLowerCase()==="allow",path});
-  }
+  const colon=line.indexOf(":");if(colon<0||!agents.length)continue;
+  const directive=line.slice(0,colon).trim().toLowerCase();
+  if(directive!=="allow"&&directive!=="disallow")continue;
+  const path=line.slice(colon+1).trim();if(path)rules.push({allow:directive==="allow",path});
  }
  if(agents.length)groups.push({agents,rules});
- const token=userAgent.split(/[ /]/,1)[0].toLowerCase();
+ const token=userAgent.split(" ")[0].toLowerCase();
  const specific=groups.filter(g=>g.agents.some(a=>a!=="*"&&token.includes(a)));
  const applicable=specific.length?specific:groups.filter(g=>g.agents.includes("*"));
  const allRules=applicable.flatMap(g=>g.rules);
- const parsed=new URL(pageUrl);
- const requestPath=parsed.pathname+parsed.search;
+ const parsed=new URL(pageUrl),requestPath=parsed.pathname+parsed.search;
  const matches=allRules.filter(r=>{
-  const pattern=r.path.split("*").map(part=>part.replace(/[.+?^{}()|[\]\\]/g,"\\ throw new Error("Too many redirects");
-}
-Deno.serve(async(req)=>{
-")).join(".*");
-  try{return new RegExp("^"+pattern).test(requestPath);}catch{return false;}
+  const prefix=r.path.split("*")[0];
+  return prefix.length>0&&requestPath.startsWith(prefix);
  }).sort((a,b)=>b.path.length-a.path.length);
  return !matches.length||matches[0].allow;
 }
