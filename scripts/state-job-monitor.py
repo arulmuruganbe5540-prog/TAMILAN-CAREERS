@@ -9,6 +9,7 @@ import html
 import json
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
@@ -49,8 +50,8 @@ SOURCES = [
     ("Uttarakhand", "https://psc.uk.gov.in/"),
     ("West Bengal", "https://psc.wb.gov.in/"),
 ]
-KEYWORDS = re.compile(r"recruit|advertis|notification|vacanc|application|apply online|"
-                      r"last date|employment|selection|direct recruitment|career", re.I)
+TIMEOUT = 12
+MAX_WORKERS = 4
 
 class TextExtractor(HTMLParser):
     def __init__(self):
@@ -95,7 +96,7 @@ def robots_allowed(source_url, user_agent):
     opener = build_opener(SameHostRedirectHandler(source_url))
     req = Request(robots_url, headers={"User-Agent": user_agent})
     try:
-        with opener.open(req, timeout=22) as response:
+        with opener.open(req, timeout=TIMEOUT) as response:
             raw = response.read(256_000)
         parser = RobotFileParser()
         parser.set_url(robots_url)
@@ -153,11 +154,14 @@ if REPORT.exists():
         old = {}
 
 results = []
-for state, url in SOURCES:
-    item = fetch(state, url, old)
-    results.append(item)
-    print(f'{state}: HTTP {item.get("http_status")} changed={item.get("changed_since_previous_check", False)}')
-    time.sleep(0.6)
+with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+    futures = [pool.submit(fetch, state, url, old) for state, url in SOURCES]
+    for future in as_completed(futures):
+        item = future.result()
+        results.append(item)
+        print(f'{item["state"]}: HTTP {item.get("http_status")} changed={item.get("changed_since_previous_check", False)}')
+order = {state: index for index, (state, _) in enumerate(SOURCES)}
+results.sort(key=lambda item: order.get(item["state"], len(order)))
 
 changed = [x["state"] for x in results if x.get("changed_since_previous_check")]
 errors = [x["state"] for x in results if x.get("http_status") is None or (x.get("http_status") and x["http_status"] >= 400)]
