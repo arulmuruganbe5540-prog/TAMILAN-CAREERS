@@ -16,7 +16,8 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 - A read-only Supabase schema audit is available in `supabase-schema-audit.sql`. It reads schema metadata, RLS policies, grants, function signatures, Storage bucket settings, and Storage policies; it does not modify data or schema.
 - The live audit confirmed `candidate-resumes` is the actual private Resume bucket (10 MB bucket limit; 0 stored objects), while no `resumes` bucket exists. Storage owner-folder policies were verified and duplicate SELECT rules were removed.
 - Resume upload UI and the employer signed-URL Function now use `candidate-resumes`; `company-resume-access` is deployed ACTIVE (version 1) with JWT verification enabled.
-- `supabase-core-api-access.sql` was applied. It grants only the operations already covered by RLS, adds employer read access to candidate profile data for applicants of that company, and lets active HR / Recruiter members load their company's jobs. Employers still have no direct Resume metadata or Storage access.
+- `supabase-core-api-access.sql` was applied. It grants only the operations already covered by RLS, adds employer read access to candidate profile data for applicants of that company, and lets active HR / Recruiter members read their own company and load its jobs. Employers still have no direct Resume metadata or Storage access.
+- Security advisor recheck: the anonymous SECURITY DEFINER execution warnings were cleared for trigger-only functions. Remaining authenticated SECURITY DEFINER warnings are for policy helpers and intended Admin / Candidate RPCs. Auth leaked-password protection remains disabled; `company_invitations` and `job_sources` remain RLS-enabled with no client policies or grants.
 - Trigger-only SECURITY DEFINER functions (`handle_new_user`, `log_job_application_status`, `rls_auto_enable`) no longer have client EXECUTE permission; their database triggers remain attached.
 - A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. The guard passed in run `44075666298`.
 - Schema preflight checks were added to the consolidated setup, focused Resume Storage migration, and employer application-status migration so they stop before changes when required existing columns or types do not match.
@@ -34,7 +35,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 ## 3. Implemented in GitHub, not yet confirmed live in Supabase
 
 - Private Resume upload/list/download/delete UI, owner-only metadata SQL, five-document limit, candidate-owned application Resume link, and 60-second employer signed-URL Function. The live bucket and Function are aligned; authenticated end-to-end upload and employer-view tests remain outstanding.
-- Candidate education, work experience, and certification UI and SQL.
+- Candidate education, work experience, and certification tables are present in live Supabase. RLS-aligned Data API grants are now applied; authenticated UI save/read testing remains outstanding.
 - Employer applicant profile read policies and application status update RPC.
 - Company job draft → Super Admin review → verified-company publish workflow.
 - Interview invitations, candidate accept/decline, notification centre, and reminder generator.
