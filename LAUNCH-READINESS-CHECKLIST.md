@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for main commit `be2408bdce0102649f4c0815e7acead4952a085c` on 17 November 2026 (run `44060018870`).
-- [x] Latest full website health workflow passed for main commit `be2408bdce0102649f4c0815e7acead4952a085c` on 17 November 2026 (run `44060017401`): the audit job completed successfully.
+- [x] Latest GitHub Pages deployment succeeded for main commit `0345be294def626482bd5b2e08d9f09c6aa611cf` on 17 November 2026 (run `44060639560`; build, status report, and deploy jobs all succeeded).
+- [x] Latest full website health workflow passed for main commit `be2408bdce0102649f4c0815e7acead4952a085c` on 17 November 2026 (run `44060017401`): the audit job completed successfully. The later `0345be2` change was documentation-only and its Pages deployment also succeeded; the full health workflow has not yet rerun for that docs-only commit.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
