@@ -49,7 +49,7 @@ async function fetchRegisteredPage(baseUrl:string){
    }else{
     const found=path.indexOf(part,position);
     if(found<0)return false;
-    if(i===parts.length-1&&endAnchored&&found+part.length!==path.length)return false;
+    if(i===parts.length-1&&endAnchored&&part!==""&&found+part.length!==path.length)return false;
     position=found+part.length;
    }
   }
