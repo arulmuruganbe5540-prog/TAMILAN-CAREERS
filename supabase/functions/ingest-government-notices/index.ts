@@ -8,6 +8,7 @@ const json = (body: unknown, status = 200) =>
 
 const MAX_HTML_BYTES = 1_500_000;
 const TIMEOUT_MS = 12_000;
+const MAX_WORKERS = 8;
 const MAX_REVIEW_RECORDS_PER_RUN = 15;
 const KEYWORDS = /recruit|vacanc|advertisement|notification|career|apply|application|result|merit.?list|answer.?key|admit.?card|hall.?ticket|exam.?date|exam.?schedule|selection.?list|short.?list|call.?letter/i;
 const GENERIC = /^(home|careers?|career opportunities|recruitment|recruitment exams?|view all|read more|click here|results?|notifications?|what's new|latest news|menu|more)$/i;
@@ -74,35 +75,57 @@ Deno.serve(async (req) => {
   const { data: sources, error: sourceError } = await admin
     .from("government_notice_sources")
     .select("id,authority,scope,state,base_url")
-    .eq("enabled", true);
+    .eq("enabled", true)
+    .order("id");
   if (sourceError) return json({ error: "Could not load registered sources", detail: sourceError.message }, 500);
 
-  const summary: Array<Record<string, unknown>> = [];
-  let discovered = 0, inserted = 0, failed = 0;
-  for (const source of sources || []) {
-    try {
-      const response = await fetch(source.base_url, {
-        headers: { "user-agent": "TAMILAN-CAREERS-GovernmentNoticeMonitor/1.0" },
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-        redirect: "follow",
-      });
-      if (!response.ok) throw new Error("HTTP " + response.status);
-      const finalUrl = response.url || source.base_url;
-      if (!hostAllowed(finalUrl, source.base_url)) throw new Error("Redirected outside registered host");
-      const html = (await response.text()).slice(0, MAX_HTML_BYTES);
-      const allLinks = extractLinks(html, finalUrl, source.base_url);
-      discovered += allLinks.length;
-      // Queue only actual recruitment links, with a hard per-run review cap.
-      const remaining = Math.max(0, MAX_REVIEW_RECORDS_PER_RUN - inserted);
-      const links = allLinks.filter((item) => item.category === "recruitment").slice(0, remaining);
+  const sourceList = sources || [];
+  const successful: Array<{ source: typeof sourceList[number]; status: number }> = [];
+  const failedSources: Array<{ source_id: string; error: string }> = [];
+  const candidateRows: Array<Record<string, unknown>> = [];
+  let discovered = 0;
 
-      if (links.length) {
-        const rows = links.map((item) => ({
-          source_id: source.id,
+  // Scan in parallel batches to stay within Edge Function execution limits.
+  for (let offset = 0; offset < sourceList.length; offset += MAX_WORKERS) {
+    const batch = sourceList.slice(offset, offset + MAX_WORKERS);
+    const results = await Promise.all(batch.map(async (source) => {
+      try {
+        const response = await fetch(source.base_url, {
+          headers: { "user-agent": "TAMILAN-CAREERS-GovernmentNoticeMonitor/1.0" },
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+          redirect: "follow",
+        });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const finalUrl = response.url || source.base_url;
+        if (!hostAllowed(finalUrl, source.base_url)) throw new Error("Redirected outside registered host");
+        const html = (await response.text()).slice(0, MAX_HTML_BYTES);
+        const links = extractLinks(html, finalUrl, source.base_url);
+        return { source, status: response.status, links, error: null as string | null };
+      } catch (error) {
+        return { source, status: 0, links: [], error: String(error).slice(0, 220) };
+      }
+    }));
+
+    for (const result of results) {
+      if (result.error) {
+        failedSources.push({ source_id: result.source.id, error: result.error });
+        continue;
+      }
+      successful.push({ source: result.source, status: result.status });
+      discovered += result.links.length;
+      for (const item of result.links) {
+        // Only recruitment announcements enter this queue; results and exam updates do not.
+        if (item.category !== "recruitment") continue;
+        candidateRows.push({
+          source_id: result.source.id,
           title: item.title,
           official_url: item.url,
-          category: item.category,
-          details: { authority: source.authority, state: source.state, scope: source.scope },
+          category: "recruitment",
+          details: {
+            authority: result.source.authority,
+            state: result.source.state,
+            scope: result.source.scope,
+          },
           verification: {
             registered_source_host: true,
             notice_document_opened: false,
@@ -113,32 +136,45 @@ Deno.serve(async (req) => {
             duplicate_checked: false,
           },
           status: "pending",
-        }));
-        const { data, error } = await admin.from("government_notice_reviews")
-          .upsert(rows, { onConflict: "official_url", ignoreDuplicates: true })
-          .select("id");
-        if (error) throw new Error("Review queue insert failed: " + error.message);
-        inserted += data?.length || 0;
+        });
       }
-      await admin.from("government_notice_sources")
-        .update({ last_checked_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-        .eq("id", source.id);
-      summary.push({ source_id: source.id, status: response.status, candidates: links.length });
-    } catch (error) {
-      failed++;
-      summary.push({ source_id: source.id, error: String(error).slice(0, 220) });
     }
   }
 
+  // Deduplicate across source pages and cap the complete run at 15 review candidates.
+  const uniqueRows = new Map<string, Record<string, unknown>>();
+  for (const row of candidateRows) {
+    const key = String(row.official_url);
+    if (!uniqueRows.has(key)) uniqueRows.set(key, row);
+  }
+  const selectedRows = [...uniqueRows.values()].slice(0, MAX_REVIEW_RECORDS_PER_RUN);
+
+  let inserted = 0;
+  if (selectedRows.length) {
+    const { data, error } = await admin.from("government_notice_reviews")
+      .upsert(selectedRows, { onConflict: "official_url", ignoreDuplicates: true })
+      .select("id");
+    if (error) return json({ error: "Review queue insert failed", detail: error.message }, 500);
+    inserted = data?.length || 0;
+  }
+
+  await Promise.all(successful.map(({ source }) =>
+    admin.from("government_notice_sources")
+      .update({ last_checked_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .eq("id", source.id)
+  ));
+
   return json({
     ok: true,
-    registered_sources: sources?.length || 0,
+    registered_sources: sourceList.length,
+    successful_sources: successful.length,
+    failed_sources: failedSources.length,
+    failed_source_details: failedSources,
     candidates_found: discovered,
-    new_review_records: inserted,
-    failed_sources: failed,
-    published: 0,
+    recruitment_candidates_eligible: uniqueRows.size,
     review_limit_per_run: MAX_REVIEW_RECORDS_PER_RUN,
-    note: "Discovery only. At most 15 recruitment candidates are queued per run. This function does not verify vacancy facts or publish; records remain private and pending until verified through the trusted workflow.",
-    sources: summary,
+    new_review_records: inserted,
+    published: 0,
+    note: "Discovery only. At most 15 recruitment candidates are queued per run. No vacancy facts are certified and no notice is auto-published by this function.",
   });
 });
