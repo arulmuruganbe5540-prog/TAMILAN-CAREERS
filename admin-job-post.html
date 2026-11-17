@@ -25,7 +25,8 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 .hidden{display:none!important}
 @media(max-width:850px){.grid{grid-template-columns:1fr}}
 @media(max-width:520px){main{margin:15px auto}.form{grid-template-columns:1fr}.wide{grid-column:auto}.hero{padding:18px}.panel{padding:15px}}
-</style></head><body>
+</style>  <link rel="stylesheet" href="assets/site-protection.css">
+</head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="admin-control.html">Admin Dashboard</a><a href="government-notice-review.html">அரசு அறிவிப்பு</a><a href="index.html">Website</a></nav></header>
 <div id="loading" style="padding:35px;text-align:center">Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
 <section id="gate" class="hidden"><div style="font-size:40px">🔐</div><h2>Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதி Super Admin கணக்கிற்கு மட்டுமே.</p><a class="btn primary" href="login.html?next=admin-job-post.html">Login செய்யவும்</a></section>
@@ -173,4 +174,5 @@ $("reset").addEventListener("click",resetForm);
 $("filter").addEventListener("change",loadQueue);
 $("type").addEventListener("change",()=>{const p=$("salaryPeriod");if($("type").value==="Daily Wage"&&p.value==="monthly")p.value="daily";else if($("type").value!=="Daily Wage"&&p.value==="daily")p.value="monthly"});
 init();
-</script></body></html>
+</script>  <script src="assets/site-protection.js" defer></script>
+</body></html>
