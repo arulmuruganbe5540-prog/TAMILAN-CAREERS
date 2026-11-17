@@ -149,7 +149,7 @@ begin
 
   v_payload := jsonb_build_object(
     'title', v_title,
-    'company', coalesce(nullif(btrim(v_draft->>'company_name'), ''), v_company_name),
+    'company', v_company_name,
     'company_id', v_company_id,
     'source_draft_id', p_draft_id,
     'category', v_draft->>'category',
@@ -170,7 +170,7 @@ begin
   insert into public.admin_job_post_reviews(
     created_by, title, company_name, status, payload
   ) values (
-    auth.uid(), v_title, coalesce(nullif(btrim(v_draft->>'company_name'), ''), v_company_name),
+    auth.uid(), v_title, v_company_name,
     'pending_review', v_payload
   )
   returning id into v_review_id;
