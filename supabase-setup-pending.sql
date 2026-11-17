@@ -16,6 +16,71 @@
 
 begin;
 
+-- Fail closed before any migration work if the existing core schema is incomplete.
+do $tc_setup_schema_guard$
+declare
+  v_missing_tables text[] := array[]::text[];
+  v_missing_columns text[] := array[]::text[];
+  v_item text;
+begin
+  foreach v_item in array array[
+    'public.profiles',
+    'public.job_seeker_profiles',
+    'public.candidate_skills',
+    'public.candidate_languages',
+    'public.candidate_preferences',
+    'public.company_members',
+    'public.companies',
+    'public.jobs',
+    'public.job_applications',
+    'storage.buckets',
+    'storage.objects'
+  ] loop
+    if to_regclass(v_item) is null then
+      v_missing_tables := array_append(v_missing_tables, v_item);
+    end if;
+  end loop;
+
+  if cardinality(v_missing_tables) > 0 then
+    raise exception 'TAMILAN CAREERS setup stopped before changes: required tables are missing: %. Run supabase-schema-audit.sql and resolve the core schema first.', array_to_string(v_missing_tables, ', ');
+  end if;
+
+  foreach v_item in array array[
+    'public.profiles.id',
+    'public.job_seeker_profiles.user_id',
+    'public.candidate_skills.user_id',
+    'public.candidate_languages.user_id',
+    'public.candidate_preferences.user_id',
+    'public.company_members.company_id',
+    'public.company_members.user_id',
+    'public.company_members.member_status',
+    'public.company_members.member_role',
+    'public.companies.id',
+    'public.companies.owner_user_id',
+    'public.jobs.id',
+    'public.jobs.company_id',
+    'public.job_applications.id',
+    'public.job_applications.job_id',
+    'public.job_applications.candidate_id',
+    'public.job_applications.status'
+  ] loop
+    if not exists (
+      select 1
+      from information_schema.columns c
+      where c.table_schema = split_part(v_item, '.', 1)
+        and c.table_name = split_part(v_item, '.', 2)
+        and c.column_name = split_part(v_item, '.', 3)
+    ) then
+      v_missing_columns := array_append(v_missing_columns, v_item);
+    end if;
+  end loop;
+
+  if cardinality(v_missing_columns) > 0 then
+    raise exception 'TAMILAN CAREERS setup stopped before changes: required columns are missing: %. Run supabase-schema-audit.sql and resolve the core schema first.', array_to_string(v_missing_columns, ', ');
+  end if;
+end;
+$tc_setup_schema_guard$;
+
 -- =========================================================
 -- 1. PRIVATE RESUME STORAGE (candidate owns their own folder)
 -- =========================================================
