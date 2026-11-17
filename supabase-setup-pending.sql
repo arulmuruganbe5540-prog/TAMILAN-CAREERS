@@ -220,7 +220,7 @@ create or replace function public.tc_candidate_certifications_touch_updated_at()
 returns trigger
 language plpgsql
 set search_path = ''
-as $
+as $$
 begin
   new.updated_at = now();
   return new;
