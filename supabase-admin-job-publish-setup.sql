@@ -277,9 +277,11 @@ begin
   v_payload := v_review.payload;
   v_title := nullif(btrim(v_payload->>'title'), '');
   if v_title is null then raise exception 'Job title is required'; end if;
+  if length(v_title) > 180 then raise exception 'Job title is too long'; end if;
   if nullif(btrim(v_payload->>'description'), '') is null then
     raise exception 'Job description is required';
   end if;
+  if length(v_payload->>'description') > 8000 then raise exception 'Job description is too long'; end if;
 
   -- Prefer the exact company ID from an authenticated company submission.
   -- Manual Super Admin posts may still use exact company-name matching.
@@ -308,6 +310,8 @@ begin
     and lower(btrim(jc.category_name)) = lower(btrim(coalesce(v_payload->>'category','')))
   order by jc.created_at asc
   limit 1;
+
+  if v_category_id is null then raise exception 'Select an active job category in the Admin form'; end if;
 
   v_type := lower(replace(btrim(coalesce(v_payload->>'type','')), ' ', '_'));
   if v_type not in ('full_time','part_time','contract','temporary','internship','freelance','daily_wage') then
@@ -578,7 +582,13 @@ begin
 
   v_salary_min := nullif(v_payload->>'salaryMin','')::numeric;
   v_salary_max := nullif(v_payload->>'salaryMax','')::numeric;
+  if v_salary_min is not null and v_salary_min < 0 then raise exception 'Minimum salary cannot be negative'; end if;
+  if v_salary_max is not null and v_salary_max < 0 then raise exception 'Maximum salary cannot be negative'; end if;
+  if v_salary_min is not null and v_salary_max is not null and v_salary_min > v_salary_max then
+    raise exception 'Minimum salary cannot exceed maximum salary';
+  end if;
   v_vacancies := greatest(0, coalesce(nullif(v_payload->>'openings','')::integer, 1));
+  if v_vacancies < 1 then raise exception 'At least one vacancy is required'; end if;
   if nullif(v_payload->>'deadline','') is not null then
     if (v_payload->>'deadline')::date < (now() at time zone 'Asia/Kolkata')::date then
       raise exception 'Application deadline cannot be in the past';
