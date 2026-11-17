@@ -61,7 +61,7 @@ function render(){
 }
 async function start(){
  const {data:{session},error}=await client.auth.getSession();
- if(error||!session){location.replace("login.html");return;}
+ if(error||!session){location.replace("login.html?next="+encodeURIComponent("government-notice-review.html"));return;}
  const {data,error:readError}=await client.from("government_notice_reviews").select("id,source_id,title,official_url,category,notice_reference,notice_date,application_start,application_end,vacancies,eligibility_summary,details,verification,status,created_at").order("created_at",{ascending:false}).limit(500);
  if(readError){$("state").textContent="இந்தப் பகுதியைப் பார்க்க நிர்வாக அனுமதி தேவை. உங்கள் கணக்கிற்கு is_super_admin() அனுமதி உள்ளதா என்பதைச் சரிபார்க்கவும். விவரம்: "+readError.message;return;}
  rows=data||[];$("state").classList.add("hidden");$("panel").classList.remove("hidden");
