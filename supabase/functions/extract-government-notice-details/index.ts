@@ -68,7 +68,7 @@ Deno.serve(async(req)=>{
  const supaUrl=Deno.env.get("SUPABASE_URL"),service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
  if(!supaUrl||!service)return json({error:"Supabase server configuration missing"},500);
  const db=createClient(supaUrl,service,{auth:{persistSession:false,autoRefreshToken:false}});
- let query=db.from("government_notice_reviews").select("id,title,official_url,category,details,ai_extraction_status,notice_date,application_start,application_end,vacancies,eligibility_summary,government_notice_sources!inner(base_url,authority)").eq("status","pending").in("ai_extraction_status",requested?["pending","failed","skipped"]:["pending","failed"]).order("created_at",{ascending:true}).limit(requested?1:5);
+ let query=db.from("government_notice_reviews").select("id,title,official_url,category,details,ai_extraction_status,notice_date,application_start,application_end,vacancies,eligibility_summary,government_notice_sources!inner(base_url,authority)").eq("status","pending").in("ai_extraction_status",requested?["pending","failed","skipped","processing"]:["pending","failed"]).order("created_at",{ascending:true}).limit(requested?1:5);
  if(requested)query=query.eq("id",requested);
  const {data:rows,error}=await query;if(error)return json({error:"Could not load review records",detail:error.message},500);
  const results=[];
