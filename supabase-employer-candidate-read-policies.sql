@@ -83,12 +83,7 @@ for select
 to authenticated
 using (public.can_company_view_candidate(user_id));
 
-drop policy if exists "Employers read applicant preferences" on public.candidate_preferences;
-create policy "Employers read applicant preferences"
-on public.candidate_preferences
-for select
-to authenticated
-using (public.can_company_view_candidate(user_id));
+-- Candidate job-search preferences remain private; no employer SELECT policy.
 
 -- Intentionally no employer policy on candidate_resumes or resume_extracted_data.
 -- Resume downloads must use a server-verified, short-lived signed URL.
