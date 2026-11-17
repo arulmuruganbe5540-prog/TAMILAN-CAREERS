@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Basic SQL migration guard for malformed PostgreSQL dollar-quote blocks."""
+"""Basic SQL migration guard for malformed PostgreSQL dollar-quote blocks and unsafe SECURITY DEFINER search paths."""
 from pathlib import Path
 import re
 import sys
@@ -24,9 +24,9 @@ for path in SQL_FILES:
 
     lines = content.splitlines()
     for index, line in enumerate(lines):
-        if re.search(r"\\bsecurity\\s+definer\\b", line, re.IGNORECASE):
-            context = "\\n".join(lines[index:index + 10])
-            if not re.search(r"set\\s+search_path\\s*=\\s*''", context, re.IGNORECASE):
+        if re.search(r"\bsecurity\s+definer\b", line, re.IGNORECASE):
+            context = "\n".join(lines[index:index + 10])
+            if not re.search(r"set\s+search_path\s*=\s*''", context, re.IGNORECASE):
                 errors.append(f"{relative}:{index + 1}: SECURITY DEFINER function must set search_path = ''")
 
 if errors:
