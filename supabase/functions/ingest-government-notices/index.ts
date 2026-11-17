@@ -114,13 +114,13 @@ Deno.serve(async (req) => {
       successful.push({ source: result.source, status: result.status });
       discovered += result.links.length;
       for (const item of result.links) {
-        // Only recruitment announcements enter this queue; results and exam updates do not.
-        if (item.category !== "recruitment") continue;
+        // Recruitment, admit cards, results, answer keys and exam updates enter Admin Review.
+        // The category is only a discovery hint; the Admin must verify the official document and date.
         candidateRows.push({
           source_id: result.source.id,
           title: item.title,
           official_url: item.url,
-          category: "recruitment",
+          category: item.category,
           details: {
             authority: result.source.authority,
             state: result.source.state,
@@ -175,6 +175,6 @@ Deno.serve(async (req) => {
     review_limit_per_run: MAX_REVIEW_RECORDS_PER_RUN,
     new_review_records: inserted,
     published: 0,
-    note: "Discovery only. At most 15 recruitment candidates are queued per run. No vacancy facts are certified and no notice is auto-published by this function.",
+    note: "Discovery only. At most 15 government notice candidates across recruitment, admit cards, results, answer keys and exam updates are queued per run. Category is an unverified hint; no facts are certified and no notice is auto-published.",
   });
 });
