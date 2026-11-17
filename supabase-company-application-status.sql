@@ -2,6 +2,39 @@
 -- Safe to rerun. Employers can only update applications for their own company.
 begin;
 
+-- Fail before creating the RPC if the live company/application schema differs.
+do $tc_company_status_guard$
+declare
+  v_missing text[] := array[]::text[];
+  v_item text;
+begin
+  if to_regclass('public.company_members') is null
+     or to_regclass('public.companies') is null
+     or to_regclass('public.jobs') is null
+     or to_regclass('public.job_applications') is null then
+    raise exception 'Company application status setup stopped: required company/application tables are missing; run supabase-schema-audit.sql first.';
+  end if;
+  foreach v_item in array array[
+    'company_members.company_id','company_members.user_id','company_members.member_status','company_members.member_role',
+    'companies.id','companies.owner_user_id',
+    'jobs.id','jobs.company_id','jobs.job_title',
+    'job_applications.id','job_applications.job_id','job_applications.candidate_id','job_applications.status','job_applications.updated_at'
+  ] loop
+    if not exists (
+      select 1 from information_schema.columns c
+      where c.table_schema='public'
+        and c.table_name=split_part(v_item,'.',1)
+        and c.column_name=split_part(v_item,'.',2)
+    ) then
+      v_missing := array_append(v_missing,v_item);
+    end if;
+  end loop;
+  if cardinality(v_missing) > 0 then
+    raise exception 'Company application status setup stopped: required columns are missing: %', array_to_string(v_missing, ', ');
+  end if;
+end;
+$tc_company_status_guard$;
+
 create or replace function public.tc_company_update_application_status(
   p_application_id uuid,
   p_company_id uuid,
