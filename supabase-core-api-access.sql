@@ -7,6 +7,15 @@ begin;
 create schema if not exists private;
 revoke all on schema private from public, anon;
 grant usage on schema private to authenticated;
+create or replace function private.is_super_admin()
+returns boolean language sql stable security definer set search_path = ''
+as $function$
+  select exists (select 1 from public.user_roles where user_id = auth.uid() and role = 'super_admin');
+$function$;
+revoke all on function private.is_super_admin() from public, anon;
+grant execute on function private.is_super_admin() to authenticated;
+revoke all on function public.is_super_admin() from public, anon, authenticated;
+
 
 -- =========================================================
 -- 1. Profile ownership and application-based employer access
