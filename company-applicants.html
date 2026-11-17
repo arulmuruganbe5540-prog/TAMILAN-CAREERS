@@ -29,7 +29,7 @@ const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,
 let memberships=[];
 const allowedRoles=["owner","hr_manager","recruiter"];
 const statusLabels={applied:"விண்ணப்பித்துள்ளார்",under_review:"பரிசீலனையில்",shortlisted:"தேர்வு பட்டியலில்",rejected:"நிராகரிக்கப்பட்டது",withdrawn:"விண்ணப்பம் திரும்பப் பெறப்பட்டது"};
-function message(t,kind){$("message").className=kind==="error"?"error":"panel";$("message").textContent=t}
+function message(t,kind){$("message").hidden=false;$("message").className=kind==="error"?"error":"panel";$("message").textContent=t}
 function dateText(v){if(!v)return "தேதி இல்லை";const d=new Date(v);return Number.isNaN(d.getTime())?"தேதி இல்லை":d.toLocaleString("ta-IN")}
 async function init(){
  const {data:s,error:se}=await db.auth.getSession(),user=s.session?.user;
