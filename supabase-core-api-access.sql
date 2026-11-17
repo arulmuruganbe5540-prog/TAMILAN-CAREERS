@@ -165,4 +165,10 @@ grant select on table public.government_notices to anon;
 grant select, insert, update, delete on table public.external_job_sources to authenticated;
 grant select, insert, update, delete on table public.external_job_candidates to authenticated;
 
+-- Trigger / event-trigger functions are not public RPC endpoints.
+-- Their owning triggers continue to invoke them; clients do not need EXECUTE.
+revoke all on function public.handle_new_user() from public, anon, authenticated;
+revoke all on function public.log_job_application_status() from public, anon, authenticated;
+revoke all on function public.rls_auto_enable() from public, anon, authenticated;
+
 commit;
