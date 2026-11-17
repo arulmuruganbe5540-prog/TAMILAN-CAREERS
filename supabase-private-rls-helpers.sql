@@ -98,6 +98,26 @@ using (
   and private.can_access_job_application(split_part(name, '/', 1)::uuid)
 );
 
+create or replace function private.is_super_admin()
+returns boolean language sql stable security definer set search_path = ''
+as $function$
+  select exists (select 1 from public.user_roles where user_id = auth.uid() and role = 'super_admin');
+$function$;
+revoke all on function private.is_super_admin() from public, anon;
+grant execute on function private.is_super_admin() to authenticated;
+
+alter policy "TC admin job reviews super admin delete" on public.admin_job_post_reviews using (private.is_super_admin());
+alter policy "TC admin job reviews super admin insert" on public.admin_job_post_reviews with check (private.is_super_admin() and created_by = (select auth.uid()));
+alter policy "TC admin job reviews super admin select" on public.admin_job_post_reviews using (private.is_super_admin());
+alter policy "TC admin job reviews super admin update" on public.admin_job_post_reviews using (private.is_super_admin()) with check (private.is_super_admin());
+alter policy "external_candidates_admin_all" on public.external_job_candidates using (private.is_super_admin()) with check (private.is_super_admin());
+alter policy "external_sources_admin_all" on public.external_job_sources using (private.is_super_admin()) with check (private.is_super_admin());
+alter policy "government_reviews_super_admin_all" on public.government_notice_reviews using (private.is_super_admin()) with check (private.is_super_admin());
+alter policy "government_sources_super_admin_all" on public.government_notice_sources using (private.is_super_admin()) with check (private.is_super_admin());
+alter policy "government_notices_super_admin_all" on public.government_notices using (private.is_super_admin()) with check (private.is_super_admin());
+
+revoke all on function public.is_super_admin() from public, anon, authenticated;
+
 revoke all on function public.can_access_company(uuid) from public, anon, authenticated;
 revoke all on function public.can_access_job_application(uuid) from public, anon, authenticated;
 revoke all on function public.can_company_view_candidate(uuid) from public, anon, authenticated;
