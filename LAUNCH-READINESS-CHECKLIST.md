@@ -6,9 +6,10 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest confirmed GitHub Pages deployment succeeded for commit `5ec3856e300c91a4cffa81b52accbb69e1907f6d` (run `44074615579`; build and deploy jobs succeeded). Later documentation-only commits are awaiting the Pages queue.
-- [x] Latest full website health workflow passed for commit `5755707f840b6c0db2cb4296f1fd27133f7c36da` (run `44074830855`; audit job succeeded, including the new private Resume security guard and browser smoke tests).
-- [x] Read-only schema audit now compares both `resumes` and `candidate-resumes` Storage bucket IDs so the live bucket can be reconciled before Resume setup.
+- [x] Latest confirmed GitHub Pages deployment succeeded for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075721444`; build and deploy jobs succeeded).
+- [x] Latest full website health workflow passed for commit `7e48b58ac1e43bc5bd79b92d114012c841e4200f` (run `44075666298`; audit job succeeded, including SQL lint, Edge Function checks, Resume security guard, and browser smoke tests).
+- [x] Read-only schema audit compares `resumes`, `candidate-resumes`, and `job-offers` bucket settings, counts stored objects without exposing paths, and retrieves the live `can_access_job_application` function definition for review.
+- [x] Consolidated setup, focused Resume Storage SQL, and employer application-status SQL now fail early when required existing tables/columns are missing or incompatible.
 - [x] Candidate Resume deletion now removes the private Storage object before deleting its metadata row; if Storage deletion fails, the metadata remains available for retry. This repository change passed the health workflow and Pages deployment; live Supabase behavior still needs real-account testing.
 - [x] Latest GitHub Pages deployment succeeded for main commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` on 17 November 2026 (run `44061663205`; deployment completed successfully).
 - [x] Latest full website health workflow passed for the same commit `98b47f01b3c6eabf7237ccb410c34aa06c7911bf` (run `44061664222`; Edge Function type checks, SQL lint, privacy guards, website structure checks, Chromium installation, key-page browser smoke tests, and health-report upload all succeeded).
