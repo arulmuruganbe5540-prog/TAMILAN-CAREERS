@@ -133,6 +133,17 @@ await check("Company profile draft page requires login", async () => {
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
+await check("Company team management page requires login", async () => {
+  await open("company-members.html");
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+});
+
+await check("Invitation acceptance page rejects a missing token safely", async () => {
+  await open("accept-invitation.html");
+  await page.waitForFunction(() => document.getElementById("status")?.textContent.includes("Token"), { timeout: 8000 });
+  if (!(await page.locator("#acceptBtn").isDisabled())) throw new Error("Invitation button should be disabled without a token");
+});
+
 await check("Company job draft page requires login", async () => {
   await open("job-posting.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
