@@ -1,9 +1,9 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T06:05:41.550511+00:00",
+  "checked_at_utc": "2026-11-17T06:31:12.913418+00:00",
   "check_interval_hours": 6,
   "registered_sources": 55,
-  "successful_sources": 20,
+  "successful_sources": 21,
   "failed_sources": [
     {
       "source_id": "rrb",
@@ -31,14 +31,14 @@
       "error": "Redirected outside the registered official host"
     },
     {
-      "source_id": "nabard",
-      "url": "https://www.nabard.org/careers-notices1.aspx",
-      "error": "<urlopen error timed out>"
-    },
-    {
       "source_id": "apprenticeship",
       "url": "https://www.apprenticeshipindia.gov.in/",
       "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source_id": "nabard",
+      "url": "https://www.nabard.org/careers-notices1.aspx",
+      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "join-indian-army",
@@ -56,11 +56,6 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
-    },
-    {
       "source_id": "tnusrb",
       "url": "https://www.tnusrb.tn.gov.in/",
       "error": "<urlopen error timed out>"
@@ -74,6 +69,11 @@
       "source_id": "mrb-tamilnadu",
       "url": "https://www.mrb.tn.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "gpsc-goa",
@@ -151,14 +151,14 @@
       "error": "<urlopen error [SSL: UNEXPECTED_MESSAGE] unexpected message (_ssl.c:1147)>"
     },
     {
-      "source_id": "tpsc",
-      "url": "https://tpsc.tripura.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
       "source_id": "upsc-recruitment-tests",
       "url": "https://cms.upsc.gov.in/recruitment-tests/notice/",
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
+    },
+    {
+      "source_id": "tpsc",
+      "url": "https://tpsc.tripura.gov.in/",
+      "error": "<urlopen error timed out>"
     },
     {
       "source_id": "psc-uk",
@@ -174,15 +174,10 @@
       "source_id": "psc-wb",
       "url": "https://psc.wb.gov.in/",
       "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "upsc-recruitment-advertisements",
-      "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisement",
-      "error": "The read operation timed out"
     }
   ],
-  "candidate_links_discovered_this_run": 371,
-  "pending_admin_review": 416,
+  "candidate_links_discovered_this_run": 382,
+  "pending_admin_review": 427,
   "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 5,
   "request_timeout_seconds": 12
