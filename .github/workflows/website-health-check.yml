@@ -8,6 +8,8 @@ on:
     paths:
       - "*.html"
       - "*.js"
+      - "data/**"
+      - "supabase-*.sql"
       - "scripts/**"
       - "supabase/functions/**"
       - ".github/dependabot.yml"
@@ -45,6 +47,8 @@ jobs:
           deno check supabase/functions/ingest-government-notices/index.ts
       - name: Validate audit script
         run: python -m py_compile scripts/website-health-check.py
+      - name: Validate public government feed JavaScript
+        run: node --check government-notices-public.js
       - name: Check internal website structure
         run: python scripts/website-health-check.py
       - name: Install browser test dependency
