@@ -41,7 +41,7 @@ Corporation:"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=f
 };
 const photo=departmentPhotos[dept]||departmentPhotos.Other;
 document.querySelector(".hero").style.setProperty("--dept-hero-photo","url('"+photo+"')");
-const chip=document.createElement("span");chip.className="dept-chip";chip.textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு துறை":"இந்திய அரசு துறை")+" · "+name; $("heading").before(chip);
+const chip=document.createElement("span");chip.className="dept-chip";chip.textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு துறை":"மத்திய அரசு துறை")+" · "+name; $("heading").before(chip);
 $("heading").textContent=name+" — Latest Government Jobs";
 $("crumbName").textContent=name;$("backLink").href=scope==="tamil-nadu"?"tamil-nadu-government-jobs.html":"indian-government-jobs.html";$("backLink").textContent=scope==="tamil-nadu"?"தமிழ்நாடு அரசு வேலைகள்":"இந்திய அரசு வேலைகள்";
 const aliases={
