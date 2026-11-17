@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Basic SQL migration guard for PostgreSQL delimiters, index clauses and SECURITY DEFINER search paths."""
+"""Basic SQL migration guard for PostgreSQL delimiters, statement boundaries, index clauses and SECURITY DEFINER search paths."""
 from pathlib import Path
 import re
 import sys
