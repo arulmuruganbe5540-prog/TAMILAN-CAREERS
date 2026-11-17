@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for main commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` on 17 November 2026 (run `44054190080`).
-- [x] Latest full website health workflow passed for main commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` on 17 November 2026 (run `44054190121`): all five Supabase Edge Functions type-checked; SQL delimiter lint, private candidate artifact guard, public feed JavaScript, site structure, and key-page browser smoke tests passed.
+- [x] Latest GitHub Pages deployment succeeded for main commit `f502d7e82b88a4de20b011e2978606ca0cf2d9d1` on 17 November 2026 (run `44056014970`).
+- [x] Latest full website health workflow passed for main commit `f502d7e82b88a4de20b011e2978606ca0cf2d9d1` on 17 November 2026 (run `44056017371`): all five Supabase Edge Functions type-checked; SQL delimiter lint, private candidate artifact guard, public feed JavaScript, site structure, and key-page browser smoke tests passed.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -24,10 +24,11 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Government-source fetcher validates HTTPS redirects before following them and caps redirects.
 - [x] Public-branch privacy fix: unverified government review/source-candidate JSON files were removed from the current branch, ignored locally, and the monitor workflow now commits only the aggregate scan report. Older Git commits still contain historical copies; removing those requires a separate Git-history rewrite and force-push review.
 - [x] CI privacy guard passed: it verifies the two unverified government candidate JSON files are not tracked, remain ignored, and are not staged by the monitor workflow.
-- [x] Official-source monitor run completed successfully on main (run `44053421995`): 20 of 60 registered sources were reachable in the latest report; the other sources were blocked by robots policy or returned errors and were not bypassed. Source discovery completed. Supabase candidate sync was skipped because the monitor secret remains unconfigured, and only the aggregate report was committed.
+- [x] Official-source monitor run completed successfully on main (run `44054710305`): 23 of 60 registered sources were reachable in the latest report; sources blocked by robots policy or returning errors were not bypassed. Source discovery completed. Supabase candidate sync was skipped because the monitor secret remains unconfigured, and only the aggregate report was committed.
 - [x] Source-discovery crawler now validates HTTPS redirects, limits redirect count, and accepts only HTML/XHTML content types.
 - [x] Candidate profile migration's malformed experience/certification index statements were corrected; SQL lint now also checks CREATE INDEX ... ON clauses.
 - [x] Resume application attachment is linked through `job_applications.resume_id`; a database trigger rejects missing, forged, or other-candidate Resume IDs. The SQL files are updated, but Supabase has not yet run this migration.
+- [x] Expired private vacancies are hidden from search and AI matches; direct job-detail and application pages block expired deadlines. The consolidated Supabase SQL also adds a database trigger that rejects applications to unpublished or expired jobs, including requests that bypass the browser.
 - [x] Candidate employer-profile visibility is revoked after an application is withdrawn; private Resume access remains limited to active application states and a verified company member/owner.
 - [x] Employer application status changes create a candidate notification when the notifications table is installed; repeating the same status does not send a duplicate alert.
 - [x] Job-posting draft RLS is restricted to active Owner, HR Manager, and Recruiter roles; unrelated active company members cannot read or edit drafts.
@@ -40,7 +41,7 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Employer applicant-profile access now excludes withdrawn applications in the consolidated Supabase setup SQL.
 - [x] Private job-posting draft RLS in the consolidated setup now restricts all draft actions to active Owner, HR Manager, or Recruiter members.
 - [x] AI resume-match Edge Function verifies `user_roles.role = job_seeker` on the server before using OpenAI; UI role checks alone are not trusted.
-- [x] Interview SQL cancels pending/accepted invitations when an application is withdrawn or rejected, rejects responses for closed applications, and suppresses reminders for closed applications.
+- [x] Interview SQL cancels pending/accepted invitations when an application is withdrawn or rejected, rejects responses for closed applications, suppresses reminders for closed applications, and notifies the company when a candidate withdraws.
 - [x] Robots policy matching in both Supabase government/external scanners supports wildcard and end-anchored rules, prefers Allow on equal-length matches, and fails closed when robots policy cannot be checked.
 - [x] Read-only Supabase schema audit now includes candidate/resume/notification tables, Storage bucket configuration, and Storage object policies.
 - [x] Latest Pages deployment and full health workflow passed on commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` (runs `44054190080` and `44054190121`).
