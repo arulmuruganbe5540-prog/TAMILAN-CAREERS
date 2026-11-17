@@ -1,19 +1,14 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T06:35:08.672685+00:00",
+  "checked_at_utc": "2026-11-17T06:43:13.728436+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
-  "successful_sources": 22,
+  "successful_sources": 23,
   "failed_sources": [
     {
       "source_id": "rrb",
       "url": "https://www.rrbapply.gov.in/",
       "error": "HTTP Error 404: Not Found"
-    },
-    {
-      "source_id": "ibps",
-      "url": "https://www.ibps.in/",
-      "error": "<urlopen error [SSL: UNEXPECTED_MESSAGE] unexpected message (_ssl.c:1147)>"
     },
     {
       "source_id": "sbi-careers",
@@ -46,19 +41,24 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "nabard",
-      "url": "https://www.nabard.org/careers-notices1.aspx",
+      "source_id": "join-indian-navy",
+      "url": "https://www.joinindiannavy.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "join-indian-navy",
-      "url": "https://www.joinindiannavy.gov.in/",
+      "source_id": "nabard",
+      "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "<urlopen error timed out>"
     },
     {
       "source_id": "agniveervayu",
       "url": "https://agnipathvayu.cdac.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "tnusrb",
@@ -74,11 +74,6 @@
       "source_id": "mrb-tamilnadu",
       "url": "https://www.mrb.tn.gov.in/",
       "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "gpsc-goa",
@@ -121,13 +116,13 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "mpsc-mizoram",
-      "url": "https://mpsc.mizoram.gov.in/",
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
+      "source_id": "mpsc-mizoram",
+      "url": "https://mpsc.mizoram.gov.in/",
       "error": "HTTP Error 403: Forbidden"
     },
     {
@@ -196,7 +191,7 @@
       "error": "<urlopen error timed out>"
     }
   ],
-  "candidate_links_discovered_this_run": 1121,
+  "candidate_links_discovered_this_run": 1125,
   "pending_admin_review": 1170,
   "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 5,
