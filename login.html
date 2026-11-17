@@ -122,13 +122,17 @@ if (window.supabase &&
 function getPostLoginTarget(nextPage, currentHref = window.location.href) {
   const current = new URL(currentHref);
   const appBasePath = new URL(".", current.href).pathname;
+  const baseSegment = appBasePath.replace(/^\\/|\\/$/g, "");
   const fallback = new URL("dashboard.html", current.href);
   if (!nextPage) return fallback;
   try {
     const candidate = new URL(nextPage, current.href);
+    const relativePath = candidate.pathname.slice(appBasePath.length);
+    const duplicatedBase = baseSegment && relativePath.startsWith(baseSegment + "/");
     if (
       candidate.origin === current.origin &&
       candidate.pathname.startsWith(appBasePath) &&
+      !duplicatedBase &&
       !candidate.pathname.endsWith("/login.html")
     ) return candidate;
   } catch (error) {}
