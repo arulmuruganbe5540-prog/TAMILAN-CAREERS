@@ -54,6 +54,8 @@ jobs:
         run: python scripts/sql-migration-lint.py
       - name: Guard private government candidate files
         run: python scripts/private-artifact-guard.py
+      - name: Guard company job draft and Admin publication workflow
+        run: python scripts/job-publishing-workflow-guard.py
       - name: Validate public government feed JavaScript
         run: node --check government-notices-public.js
       - name: Check internal website structure
