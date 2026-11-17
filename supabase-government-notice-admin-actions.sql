@@ -70,7 +70,7 @@ begin
   v_host := lower(substring(p_official_url from '^https://([^/:?#]+)'));
   v_source_host := lower(substring(v_source.base_url from '^https://([^/:?#]+)'));
   if v_host is null or v_source_host is null or
-     (v_host <> v_source_host and right(v_host, length(v_source_host) + 1) <> '.' || v_source_host) then
+     (v_host <> v_source_host and right(v_host, length(v_source_host) + 1) <> ('.' || v_source_host)) then
     raise exception 'Official URL host does not match the registered source';
   end if;
 
