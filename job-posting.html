@@ -25,8 +25,9 @@
 <div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" required maxlength="160" placeholder="உதா: ஓமலூர், சேலம்"></div>
 <div class="field"><label for="experience">தேவையான அனுபவம்</label><input id="experience" maxlength="100" placeholder="உதா: Fresher / 2 years"></div>
 <div class="field"><label for="education">கல்வித் தகுதி</label><input id="education" maxlength="160" placeholder="உதா: 12th / Diploma / Degree"></div>
-<div class="field"><label for="salaryMin">குறைந்தபட்ச மாதச் சம்பளம் (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="உதா: 12000"></div>
-<div class="field"><label for="salaryMax">அதிகபட்ச மாதச் சம்பளம் (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" step="1" placeholder="உதா: 18000"></div>
+<div class="field"><label for="salaryMin">குறைந்தபட்ச சம்பளத் தொகை (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="உதா: 12000"></div>
+<div class="field"><label for="salaryMax">அதிகபட்ச சம்பளத் தொகை (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" step="1" placeholder="உதா: 18000"></div>
+<div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option><option value="hourly">மணி</option><option value="yearly">ஆண்டு</option></select></div>
 <div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="800" placeholder="உதா: Communication, MS Excel, Driving"></div>
 <div class="field wide"><label for="description">வேலை விவரம் மற்றும் பொறுப்புகள் *</label><textarea id="description" required maxlength="5000" placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், தேவையான திறன்கள் போன்றவற்றை எழுதவும்."></textarea></div>
 <div class="field"><label for="deadline">விண்ணப்பிக்க கடைசி தேதி</label><input id="deadline" type="date"></div>
@@ -38,7 +39,7 @@
 </main>
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
-const ids=["companyChoice","jobTitle","category","employmentType","workplaceType","openings","location","experience","education","salaryMin","salaryMax","skills","description","deadline","contactEmail"];
+const ids=["companyChoice","jobTitle","category","employmentType","workplaceType","openings","location","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","contactEmail"];
 let currentUser=null, memberships=[], currentDraft=null;
 function message(t,ok){const e=document.getElementById("status");e.textContent=t;e.className="status "+(ok?"ok":"err")}
 function formData(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());return d}
@@ -46,7 +47,7 @@ function setReviewLock(locked){
  ids.filter(id=>id!=="companyChoice").forEach(id=>{document.getElementById(id).disabled=locked});
  ["saveBtn","submitReviewBtn","clearBtn"].forEach(id=>{document.getElementById(id).disabled=locked});
 }
-function fill(d={}){ids.forEach(id=>document.getElementById(id).value=d[id]??(id==="openings"?"1":""))}
+function fill(d={}){ids.forEach(id=>document.getElementById(id).value=d[id]??(id==="openings"?"1":""));document.getElementById("salaryPeriod").value=d.salaryPeriod||(d.employmentType==="Daily Wage"?"daily":"monthly")}
 function showBlocked(t){document.getElementById("loading").classList.add("hidden");const b=document.getElementById("blocked");b.textContent=t;b.classList.remove("hidden")}
 async function init(){
  const {data,error}=await client.auth.getUser();
@@ -133,6 +134,7 @@ document.getElementById("saveBtn").addEventListener("click",()=>save(false));
 document.getElementById("submitReviewBtn").addEventListener("click",submitForReview);
 document.getElementById("reloadBtn").addEventListener("click",loadDraftForCompany);
 document.getElementById("companyChoice").addEventListener("change",loadDraftForCompany);
+document.getElementById("employmentType").addEventListener("change",()=>{const p=document.getElementById("salaryPeriod");if(document.getElementById("employmentType").value==="Daily Wage"&&p.value==="monthly")p.value="daily";else if(document.getElementById("employmentType").value!=="Daily Wage"&&p.value==="daily")p.value="monthly"});
 document.getElementById("clearBtn").addEventListener("click",()=>{fill();message("படிவம் காலி செய்யப்பட்டது. முன்பு சேமித்த வரைவு மாற்றப்படவில்லை; மீண்டும் Save செய்தால் மட்டுமே புதுப்பிக்கப்படும்.",true)});
 init().catch(e=>showBlocked("பக்கத்தைத் திறக்கும்போது பிழை: "+(e.message||e)));
 </script></body></html>
