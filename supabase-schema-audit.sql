@@ -170,18 +170,18 @@ where p.proname = 'can_access_job_application'
 order by n.nspname, p.proname;
 
 -- 7. Private Resume bucket configuration (no file names or contents are read).
--- Check both the repository's current bucket name and the legacy name found in
--- earlier Storage policies. Do not delete or rename either bucket based on this report.
+-- Check the Resume bucket names and the separate job-offers bucket found in
+-- Storage policies. Do not delete or rename any bucket based on this report.
 select id, name, public, file_size_limit, allowed_mime_types
 from storage.buckets
-where id in ('resumes', 'candidate-resumes')
+where id in ('resumes', 'candidate-resumes', 'job-offers')
 order by id;
 
--- 7A. Count existing files in the two possible Resume buckets without
+-- 7A. Count files in the possible Resume buckets and job-offers bucket without
 -- exposing object names, paths, or file contents.
 select bucket_id, count(*) as stored_object_count
 from storage.objects
-where bucket_id in ('resumes', 'candidate-resumes')
+where bucket_id in ('resumes', 'candidate-resumes', 'job-offers')
 group by bucket_id
 order by bucket_id;
 
