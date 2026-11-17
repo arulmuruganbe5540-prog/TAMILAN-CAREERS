@@ -83,11 +83,49 @@ language plpgsql
 security definer
 set search_path = ''
 as $tc_cancel_interviews$
+declare
+  v_company_id uuid;
+  v_job_title text;
+  v_company_name text;
 begin
   if new.status in ('withdrawn','rejected') and old.status is distinct from new.status then
     update public.tc_interview_invitations
        set status='cancelled', updated_at=now()
      where application_id=new.id and status in ('pending','accepted');
+  end if;
+
+  if new.status='withdrawn' and old.status is distinct from new.status then
+    select j.company_id,j.job_title,c.company_name
+      into v_company_id,v_job_title,v_company_name
+    from public.jobs j
+    join public.companies c on c.id=j.company_id
+    where j.id=new.job_id;
+
+    if v_company_id is not null then
+      insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+      select cm.user_id,'application_status','Candidate விண்ணப்பத்தைத் திரும்பப் பெற்றுள்ளார்',
+        coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
+        ' பணிக்கான விண்ணப்பத்தை Candidate திரும்பப் பெற்றுள்ளார்.',
+        new.id
+      from public.company_members cm
+      where cm.company_id=v_company_id
+        and cm.member_status='active'
+        and cm.member_role in ('owner','hr_manager','recruiter');
+
+      insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+      select c.owner_user_id,'application_status','Candidate விண்ணப்பத்தைத் திரும்பப் பெற்றுள்ளார்',
+        coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
+        ' பணிக்கான விண்ணப்பத்தை Candidate திரும்பப் பெற்றுள்ளார்.',
+        new.id
+      from public.companies c
+      where c.id=v_company_id and c.owner_user_id is not null
+        and not exists (
+          select 1 from public.company_members cm
+          where cm.company_id=v_company_id and cm.user_id=c.owner_user_id
+            and cm.member_status='active'
+            and cm.member_role in ('owner','hr_manager','recruiter')
+        );
+    end if;
   end if;
   return new;
 end;
