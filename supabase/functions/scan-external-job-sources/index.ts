@@ -53,7 +53,7 @@ async function fetchRegisteredPage(baseUrl:string){
     position=found+part.length;
    }
   }
-  return !endAnchored||position===path.length;
+  return !endAnchored||parts[parts.length-1]===""||position===path.length;
  }
 function robotsAllows(text:string,pageUrl:string,userAgent:string){
  const groups:{agents:string[];rules:{allow:boolean;path:string}[]}[]=[];
