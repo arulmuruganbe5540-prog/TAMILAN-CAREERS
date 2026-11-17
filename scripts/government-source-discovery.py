@@ -25,10 +25,13 @@ TIMEOUT = 10
 MAX_BYTES = 1_200_000
 MAX_WORKERS = 5
 OFFICIAL_SUFFIXES = (".gov.in", ".nic.in", ".gov", ".mil.in")
+# Require a recruitment-specific signal. Broad terms like "board", "exam",
+# "department" and "apply" created many unrelated portal suggestions.
 RECRUITMENT = re.compile(
-    r"recruit|vacanc|career|job|employment|notification|advertisement|"
-    r"application|apply|selection|exam|commission|board|department|"
-    r"police|teacher|university|railway|staff", re.I
+    r"recruitment|vacanc|job.?opening|career.?notice|employment.?exchange|"
+    r"notification|advertisement|application.?portal|online.?application|"
+    r"recruitment.?portal|admit.?card|hall.?ticket|answer.?key|"
+    r"merit.?list|selection.?list|short.?list|result", re.I
 )
 GENERIC = re.compile(r"^(home|about|contact|privacy|terms|facebook|twitter|youtube|instagram|login|sign in)$", re.I)
 
