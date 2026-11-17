@@ -48,11 +48,9 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 
 ## 4. Live setup still needing confirmation
 
-The following must not be described as live until SQL/function deployment and real-account tests are completed:
-
-1. `supabase-setup-pending.sql` — private Resume Storage, candidate Resume metadata, education/experience/certifications, job drafts hardening, applicant-only employer profile visibility, and application integrity/deadline triggers.
-3. `supabase-admin-job-publish-setup.sql` — protected Company Draft → Admin Review → verified-company publish flow.
-5. `supabase-government-archive-install.sql` — separate Government notice source registry, private review queue, and reviewed publication.
+1. Remaining portions of `supabase-setup-pending.sql` need a schema-specific review. Do not run the whole file blindly: Resume Storage, candidate profile tables, employer applicant read policies, and core API grants are already configured through the focused scripts.
+2. `supabase-admin-job-publish-setup.sql` — protected Company Draft → Admin Review → verified-company publish flow.
+3. `supabase-government-archive-install.sql` — separate Government notice source registry, private review queue, and reviewed publication.
 4. Deploy/redeploy `ai-resume-match`, `ingest-government-notices`, `bilingual-job-search`, and the latest `scan-external-job-sources` source as applicable. `company-resume-access` is already deployed.
 5. The currently deployed `manage-hiring` Function still needs a schema-reviewed member-management implementation.
 6. Real Candidate, Employer, Super Admin, and cross-company denial tests remain outstanding.
@@ -72,6 +70,7 @@ The following must not be described as live until SQL/function deployment and re
 
 - `OPENAI_API_KEY` is required only for the optional AI Functions; its live Supabase Secret configuration is not confirmed. It must be stored in Supabase Function Secrets, never in frontend code or GitHub source.
 - `GOVERNMENT_MONITOR_SECRET` is still unconfigured. The user has asked to defer this setup; do not prompt them to configure it during routine project work.
+- Interview reminders now run through the active `tc-interview-reminders-15m` pg_cron job every 15 minutes. The function is ready, but there are currently no interview records to generate reminders for.
 - The external-source monitor has previously found 23 of 60 registered sources reachable. Robots-blocked/error sources were not bypassed. The monitor's Supabase candidate sync was skipped because the secret was missing.
 - Government and external discoveries remain private until an administrator verifies the original official notice and explicitly publishes it.
 
