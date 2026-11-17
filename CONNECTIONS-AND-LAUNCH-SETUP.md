@@ -84,3 +84,12 @@ Then test registration/login, company verification and job approval, application
 
 ## Current release status
 The website is deployed and the latest CI/Health Audit are green. It is not yet launch-ready because provider secrets, Auth hardening, separate real-user accounts, and end-to-end tests are still outstanding. The 19 November 2026 target is conditional, not a guarantee.
+
+
+## 17 November 2026 — latest verification
+
+- Latest GitHub Pages deployment succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388` (run `44094932098`).
+- Latest full Health Audit succeeded for the same commit (run `44094931772`), including browser smoke tests for post-login return paths.
+- Live Supabase check confirms all 45 public tables have RLS enabled and all four Storage buckets are private. The seven listed Edge Functions are ACTIVE.
+- Current live database still has one Auth user, one company, one company membership, zero jobs, and zero applications. It has no Super Admin assignment. Real multi-account workflows cannot yet be verified.
+- The external provider secrets and first Super Admin bootstrap below remain owner-controlled final setup steps. The website must not be described as launch-ready until they are completed and real-account end-to-end tests pass.
