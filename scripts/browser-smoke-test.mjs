@@ -83,6 +83,18 @@ await check("Bilingual AI job search control is available", async () => {
   if (!(await page.locator("#q").getAttribute("placeholder")).includes("எந்த மொழியிலும்")) throw new Error("Any-language search hint is missing");
 });
 
+await check("Government notice review and publish pages load", async () => {
+  await open("government-notice-review.html");
+  if (!(await page.title()).includes("அரசு")) throw new Error("Government review page title is missing");
+  await open("government-notice-publish.html?id=smoke-test");
+  if (!(await page.title()).includes("அரசு")) throw new Error("Government publish page title is missing");
+});
+
+await check("Job Seeker profile page loads", async () => {
+  await open("job-seeker-profile.html");
+  if (!(await page.title()).includes("Job Seeker Profile")) throw new Error("Job Seeker profile page title is missing");
+});
+
 await check("Tamil Nadu government jobs page loads and filters", async () => {
   await open("tamil-nadu-government-jobs.html");
   if (await page.locator("#departments .card").count() < 5) throw new Error("Department cards are missing");
