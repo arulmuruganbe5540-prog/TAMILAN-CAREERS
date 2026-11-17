@@ -60,8 +60,9 @@ function render(){
   const rawType=pick(j,["employment_type","job_type"]);
   const type=String(rawType).replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
   const workplace=pick(j,["workplace_type"]);
-  const min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
-  const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் அறிவிக்கப்படவில்லை";
+  const min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹",salaryPeriod=pick(j,["salary_period"])||"monthly";
+  const salarySuffix=salaryPeriod==="daily"?" / நாள்":salaryPeriod==="hourly"?" / மணி":salaryPeriod==="yearly"?" / ஆண்டு":" / மாதம்";
+  const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")+salarySuffix):"சம்பளம் அறிவிக்கப்படவில்லை";
   const deadline=pick(j,["application_deadline","deadline","last_date"]);
   const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["company_name"]);
   const id=pick(j,["id","job_id"]);
