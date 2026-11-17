@@ -35,7 +35,8 @@
     const state = d.state || (d.scope === "central" ? "மத்திய அரசு" : "மாநில அரசு");
     const head = el("div", "tc-gov-head");
     head.append(el("span","tc-gov-tag", categoryLabels[row.category] || "அதிகாரப்பூர்வ அறிவிப்பு"));
-    const end = row.application_end ? new Date(row.application_end + "T23:59:59") : null;
+    const endValue = row.application_end ? String(row.application_end).slice(0,10) : "";
+    const end = endValue ? new Date(endValue + "T23:59:59") : null;
     const expired = end && !Number.isNaN(end.getTime()) && end < new Date();
     head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "விண்ணப்பக் காலம் முடிந்தது" : (row.application_end ? "விண்ணப்பம் நடைபெறுகிறது" : "அறிவிப்பு பதிவு")));
     article.append(head);
@@ -159,7 +160,7 @@
       const scope=host.dataset.scope||"all",stateFilter=host.dataset.state||"";
       const rows=data.filter(r=>{
         if(!r.notice_date) return false;
-        const dt=new Date(r.notice_date+"T00:00:00");if(dt<cutoff)return false;
+        const dt=new Date(String(r.notice_date).slice(0,10)+"T00:00:00");if(dt<cutoff)return false;
         const d=r.details||{};
         if(selectedCategory!=="all" && r.category!==selectedCategory)return false;
         if(scope==="central" && d.scope!=="central")return false;
@@ -168,6 +169,7 @@
         if(stateFilter==="other" && String(d.state||"").toLowerCase()==="tamil nadu")return false;
         return true;
       });
+      rows.sort((a,b)=>new Date(String(b.notice_date).slice(0,10))-new Date(String(a.notice_date).slice(0,10)));
       if(!rows.length){status.textContent="இந்த காலவரம்பில் இன்னும் அதிகாரப்பூர்வமாகச் சரிபார்த்து வெளியிடப்பட்ட வேலை அறிவிப்புகள் இல்லை.";grid.append(el("div","tc-gov-empty","புதிய அறிவிப்புகள் சரிபார்க்கப்பட்டதும் இங்கே தானாகத் தோன்றும். தற்போது காலியிட எண்ணிக்கை அல்லது தகுதி விவரங்கள் ஊகித்து காட்டப்படவில்லை."));return;}
       rows.forEach(r=>grid.append(card(r)));
       status.textContent=rows.length+" சரிபார்க்கப்பட்ட அரசு பதிவுகள் · கடந்த "+months+" மாதங்கள்";
