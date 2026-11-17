@@ -16,6 +16,17 @@ begin
      or to_regclass('public.job_categories') is null then
     raise exception 'Required companies, company_members, jobs, or job_categories table is missing; run the read-only schema audit first.';
   end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_posting_drafts' and column_name='company_id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_posting_drafts' and column_name='user_id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_posting_drafts' and column_name='draft')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_posting_drafts' and column_name='updated_at')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='company_id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='user_id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='id')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='created_at') then
+    raise exception 'Required company draft, membership, or category columns are missing; inspect supabase-schema-audit.sql first.';
+  end if;
   if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='verification_status')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='company_name')
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='member_status')
