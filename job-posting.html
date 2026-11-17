@@ -32,14 +32,14 @@
 <div class="field"><label for="deadline">விண்ணப்பிக்க கடைசி தேதி</label><input id="deadline" type="date"></div>
 <div class="field"><label for="contactEmail">விண்ணப்பத் தொடர்பு Email</label><input id="contactEmail" type="email" maxlength="180" placeholder="hr@company.com"></div>
 </form>
-<div class="actions"><button class="btn" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த வரைவை மீண்டும் ஏற்றவும்</button><button class="btn secondary" id="clearBtn" type="button">படிவத்தை காலி செய்</button></div>
+<div class="actions"><button class="btn" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn" id="submitReviewBtn" type="button">Admin Review-க்கு அனுப்பு</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த வரைவை மீண்டும் ஏற்றவும்</button><button class="btn secondary" id="clearBtn" type="button">படிவத்தை காலி செய்</button></div><p class="hint">Review-க்கு அனுப்பிய பிறகு Super Admin சரிபார்ப்பார். நிறுவனம் Verified ஆன பிறகே வேலை பொதுவில் வெளியிடப்படும்.</p>
 <div id="status" class="status" role="status" aria-live="polite"></div>
 </section>
 </main>
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const ids=["companyChoice","jobTitle","category","employmentType","workplaceType","openings","location","experience","education","salaryMin","salaryMax","skills","description","deadline","contactEmail"];
-let currentUser=null, memberships=[];
+let currentUser=null, memberships=[], currentDraft=null;
 function message(t,ok){const e=document.getElementById("status");e.textContent=t;e.className="status "+(ok?"ok":"err")}
 function formData(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());return d}
 function fill(d={}){ids.forEach(id=>document.getElementById(id).value=d[id]??(id==="openings"?"1":""))}
@@ -70,28 +70,56 @@ async function loadDraftForCompany(){
   if(old.company_id===companyId)fill(old);
   return;
  }
- if(data?.draft){fill(data.draft);message("இந்த நிறுவனத்திற்கான சேமித்த வரைவு ஏற்றப்பட்டது.",true)}
+ if(data?.draft){
+  currentDraft=data.draft;fill(data.draft);
+  const state=data.draft.draft_status||"draft";
+  const messages={
+   pending_review:"இந்த வேலை Admin Review-க்காக அனுப்பப்பட்டுள்ளது. முடிவு வரும் வரை மீண்டும் சமர்ப்பிக்க வேண்டாம்.",
+   approved:"இந்த வேலை Admin மூலம் Approved செய்யப்பட்டுள்ளது. வெளியீடு காத்திருக்கிறது.",
+   rejected:"இந்த வேலை Review-ல் நிராகரிக்கப்பட்டது. திருத்தி மீண்டும் அனுப்பலாம்.",
+   published:"இந்த வேலை பொதுவில் வெளியிடப்பட்டுள்ளது. புதிய மாற்றம் செய்தால் மீண்டும் Review தேவைப்படும்."
+  };
+  message(messages[state]||"இந்த நிறுவனத்திற்கான சேமித்த வரைவு ஏற்றப்பட்டது.",state!=="rejected");
+ }
  else{
+  currentDraft=null;
   const old=currentUser.user_metadata?.job_posting_draft||{};
   fill(old.company_id===companyId?old:{});
  }
 }
-async function save(){
- const form=document.getElementById("jobForm");if(!form.reportValidity())return;
+async function save(silent=false){
+ const form=document.getElementById("jobForm");if(!form.reportValidity())return null;
  const d=formData();
- if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("அதிகபட்ச சம்பளம் குறைந்தபட்ச சம்பளத்தைவிட குறைவாக இருக்கக்கூடாது.",false);return}
- if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return}}
- const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return}
- const draft={...d,company_id:d.companyChoice,company_name:(Array.isArray(company.companies)?company.companies[0]:company.companies)?.company_name||"",saved_at:new Date().toISOString(),draft_status:"draft"};
+ if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("அதிகபட்ச சம்பளம் குறைந்தபட்ச சம்பளத்தைவிட குறைவாக இருக்கக்கூடாது.",false);return null}
+ if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return null}}
+ const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return null}
+ const previousStatus=currentDraft?.draft_status;
+ const preserveReview=["pending_review","approved"].includes(previousStatus);
+ const draft={...d,company_id:d.companyChoice,company_name:(Array.isArray(company.companies)?company.companies[0]:company.companies)?.company_name||"",saved_at:new Date().toISOString(),draft_status:preserveReview?previousStatus:"draft"};
+ if(preserveReview&&currentDraft?.submitted_review_id)draft.submitted_review_id=currentDraft.submitted_review_id;
  const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="சேமிக்கப்படுகிறது...";
  try{
-  const {error}=await client.from("job_posting_drafts").upsert({company_id:d.companyChoice,user_id:currentUser.id,draft},{onConflict:"company_id,user_id"});
+  const {data,error}=await client.from("job_posting_drafts").upsert({company_id:d.companyChoice,user_id:currentUser.id,draft},{onConflict:"company_id,user_id"}).select("id").single();
   if(error)throw error;
-  message("வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
- }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false)}
+  currentDraft=draft;
+  if(!silent)message(preserveReview?"வரைவு சேமிக்கப்பட்டது. தற்போதைய Admin Review நிலை மாற்றப்படவில்லை.":"வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
+  return data.id;
+ }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false);return null}
  finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
 }
+async function submitForReview(){
+ const btn=document.getElementById("submitReviewBtn");btn.disabled=true;btn.textContent="Review-க்கு அனுப்பப்படுகிறது...";
+ try{
+  const draftId=await save(true);if(!draftId)return;
+  const {data,error}=await client.rpc("tc_submit_company_job_draft_for_review",{p_draft_id:draftId});
+  if(error)throw error;
+  message("உங்கள் வேலை வரைவு Admin Review-க்கு அனுப்பப்பட்டது. நிறுவனம் Verified செய்யப்பட்டு Admin வெளியிட்ட பிறகே பொதுவில் தெரியும்.",true);
+  await loadDraftForCompany();
+ }catch(e){message("Review-க்கு அனுப்ப முடியவில்லை: "+(e.message||e)+". supabase-admin-job-publish-setup.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.",false)}
+ finally{btn.disabled=false;btn.textContent="Admin Review-க்கு அனுப்பு"}
+}
 document.getElementById("saveBtn").addEventListener("click",save);
+document.getElementById("submitReviewBtn").addEventListener("click",submitForReview);
 document.getElementById("reloadBtn").addEventListener("click",loadDraftForCompany);
 document.getElementById("companyChoice").addEventListener("change",loadDraftForCompany);
 document.getElementById("clearBtn").addEventListener("click",()=>{fill();message("படிவம் காலி செய்யப்பட்டது. முன்பு சேமித்த வரைவு மாற்றப்படவில்லை; மீண்டும் Save செய்தால் மட்டுமே புதுப்பிக்கப்படும்.",true)});
