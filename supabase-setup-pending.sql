@@ -267,6 +267,7 @@ as $function$
     join public.jobs j on j.id = ja.job_id
     join public.companies c on c.id = j.company_id
     where ja.candidate_id = p_candidate_id
+      and ja.status <> 'withdrawn'
       and (
         c.owner_user_id = auth.uid()
         or exists (
