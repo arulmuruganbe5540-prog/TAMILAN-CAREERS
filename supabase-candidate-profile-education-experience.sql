@@ -64,8 +64,9 @@ create table if not exists public.candidate_certifications (
 create index if not exists candidate_education_user_start_idx
   on public.candidate_education(user_id, start_date desc);
 create index if not exists candidate_experience_user_start_idx
-create index if not exists candidate_certifications_user_issue_idx on public.candidate_certifications(user_id, issue_date desc);
   on public.candidate_experience(user_id, start_date desc);
+create index if not exists candidate_certifications_user_issue_idx
+  on public.candidate_certifications(user_id, issue_date desc);
 
 alter table public.candidate_education enable row level security;
 alter table public.candidate_experience enable row level security;
