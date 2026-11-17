@@ -135,6 +135,31 @@ await check("Candidate application history requires login", async () => {
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
+await check("Expired published vacancies cannot be opened for application", async () => {
+  await page.route("**/rest/v1/jobs**", route => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({
+      id: "expired-smoke",
+      status: "published",
+      job_title: "Expired smoke-test vacancy",
+      application_deadline: "2020-01-01"
+    })
+  }));
+  try {
+    await open("job-details.html?id=expired-smoke");
+    await page.waitForFunction(
+      () => document.getElementById("content")?.textContent.includes("விண்ணப்பக் காலம் முடிந்துவிட்டது"),
+      { timeout: 8000 }
+    );
+    if (await page.locator('#content a[href*="apply.html"]').count()) {
+      throw new Error("Expired vacancy still exposes an apply link");
+    }
+  } finally {
+    await page.unroute("**/rest/v1/jobs**");
+  }
+});
+
 await check("AI resume matching page requires login", async () => {
   await open("ai-job-matches.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
