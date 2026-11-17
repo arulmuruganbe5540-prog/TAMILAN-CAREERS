@@ -122,7 +122,7 @@ if (window.supabase &&
 function getPostLoginTarget(nextPage, currentHref = window.location.href) {
   const current = new URL(currentHref);
   const appBasePath = new URL(".", current.href).pathname;
-  const baseSegment = appBasePath.replace(/^\\/|\\/$/g, "");
+  const baseSegment = appBasePath.slice(1).endsWith("/") ? appBasePath.slice(1, -1) : appBasePath.slice(1);
   const fallback = new URL("dashboard.html", current.href);
   if (!nextPage) return fallback;
   try {
