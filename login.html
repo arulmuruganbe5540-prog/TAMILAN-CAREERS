@@ -119,6 +119,22 @@ if (window.supabase &&
   );
 }
 
+function getPostLoginTarget(nextPage, currentHref = window.location.href) {
+  const current = new URL(currentHref);
+  const appBasePath = new URL(".", current.href).pathname;
+  const fallback = new URL("dashboard.html", current.href);
+  if (!nextPage) return fallback;
+  try {
+    const candidate = new URL(nextPage, current.href);
+    if (
+      candidate.origin === current.origin &&
+      candidate.pathname.startsWith(appBasePath) &&
+      !candidate.pathname.endsWith("/login.html")
+    ) return candidate;
+  } catch (error) {}
+  return fallback;
+}
+
 function togglePassword() { toggleFieldPassword("password", document.getElementById("passwordToggle")); }
 function toggleFieldPassword(id, button) {
   const field = document.getElementById(id);
@@ -299,24 +315,9 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
         true
       );
 
-      // LOGIN SUCCESS: return to the requested page without duplicating
-      // the GitHub Pages repository base path (for example /TAMILAN-CAREERS/).
+      // Return to the requested in-site page after authentication.
       const nextPage = new URLSearchParams(window.location.search).get("next");
-      let target = new URL("dashboard.html", window.location.href);
-      if (nextPage) {
-        try {
-          const candidate = new URL(nextPage, window.location.href);
-          const appBasePath = new URL(".", window.location.href).pathname;
-          if (
-            candidate.origin === window.location.origin &&
-            candidate.pathname.startsWith(appBasePath) &&
-            !candidate.pathname.endsWith("/login.html")
-          ) {
-            target = candidate;
-          }
-        } catch (e) {}
-      }
-      window.location.replace(target.href);
+      window.location.replace(getPostLoginTarget(nextPage).href);
 
       return;
     }
