@@ -59,8 +59,8 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <div class="field"><label for="openings">காலியிடங்கள்</label><input id="openings" type="number" min="1" max="100000" value="1"></div>
 <div class="field"><label for="experience">அனுபவம்</label><input id="experience" maxlength="120" placeholder="Fresher / 2 years"></div>
 <div class="field"><label for="education">கல்வித் தகுதி</label><input id="education" maxlength="180" placeholder="12th / Diploma / Degree"></div>
-<div class="field"><label for="salaryMin">குறைந்தபட்ச சம்பளம் (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" placeholder="12000"></div>
-<div class="field"><label for="salaryMax">அதிகபட்ச சம்பளம் (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" placeholder="18000"></div>
+<div class="field"><label id="salaryMinLabel" for="salaryMin">குறைந்தபட்ச சம்பளம் (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" placeholder="12000"></div>
+<div class="field"><label id="salaryMaxLabel" for="salaryMax">அதிகபட்ச சம்பளம் (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" placeholder="18000"></div>
 <div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option></select></div>
 <div class="field"><label for="examYear">தேர்வு ஆண்டு</label><input id="examYear" type="number" min="1950" max="2100" placeholder="2026"></div><div class="field"><label for="notificationDate">அறிவிப்பு வெளியான தேதி</label><input id="notificationDate" type="date"></div><div class="field"><label for="notificationNumber">அறிவிப்பு எண்</label><input id="notificationNumber" maxlength="120"></div><div class="field"><label for="ageLimit">வயது வரம்பு</label><input id="ageLimit" maxlength="180" placeholder="18–30"></div><div class="field"><label for="applicationFee">விண்ணப்பக் கட்டணம்</label><input id="applicationFee" maxlength="180"></div><div class="field wide"><label for="officialUrl">அதிகாரப்பூர்வ இணையதள URL</label><input id="officialUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="notificationPdfUrl">அதிகாரப்பூர்வ அறிவிப்பு PDF URL</label><input id="notificationPdfUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="applicationUrl">நேரடி விண்ணப்ப இணைப்பு</label><input id="applicationUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="selectionProcess">தேர்வு முறை / Selection Process</label><textarea id="selectionProcess" maxlength="3000"></textarea></div><div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="1200" placeholder="Communication, MS Excel, Driving"></div>
 <div class="field wide"><label for="description">வேலை விவரம் *</label><textarea id="description" maxlength="8000" required placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், நிபந்தனைகள்..."></textarea></div>
@@ -188,6 +188,9 @@ function updateKindFields(){
  const kind=$("jobKind").value;
  document.querySelectorAll(".gov-only").forEach(el=>el.classList.toggle("hidden",kind!=="government"));
  document.querySelectorAll(".foreign-only").forEach(el=>el.classList.toggle("hidden",kind!=="foreign"));
+ const currency=kind==="foreign"?"USD":"₹";
+ $("salaryMinLabel").textContent="குறைந்தபட்ச சம்பளம் ("+currency+")";
+ $("salaryMaxLabel").textContent="அதிகபட்ச சம்பளம் ("+currency+")";
 }
 $("jobKind").addEventListener("change",updateKindFields);
 async function init(){
