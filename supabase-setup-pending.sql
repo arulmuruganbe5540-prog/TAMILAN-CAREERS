@@ -202,6 +202,25 @@ create table if not exists public.candidate_experience (
 create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
 create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
 
+create or replace function public.tc_candidate_profile_records_touch_updated_at()
+returns trigger
+language plpgsql
+set search_path = ''
+as $
+begin
+  new.updated_at = now();
+  return new;
+end;
+$;
+drop trigger if exists tc_candidate_education_updated_at on public.candidate_education;
+create trigger tc_candidate_education_updated_at
+before update on public.candidate_education
+for each row execute function public.tc_candidate_profile_records_touch_updated_at();
+drop trigger if exists tc_candidate_experience_updated_at on public.candidate_experience;
+create trigger tc_candidate_experience_updated_at
+before update on public.candidate_experience
+for each row execute function public.tc_candidate_profile_records_touch_updated_at();
+
 create table if not exists public.candidate_certifications (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
