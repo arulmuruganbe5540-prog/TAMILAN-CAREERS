@@ -10,7 +10,7 @@ to authenticated
 using (
   bucket_id = 'job-offers'
   and name ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.pdf$'
-  and public.can_access_job_application(split_part(name, '/', 1)::uuid)
+  and private.can_access_job_application(split_part(name, '/', 1)::uuid)
 );
 
 commit;
