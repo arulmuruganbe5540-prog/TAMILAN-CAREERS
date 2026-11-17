@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
 
   try {
     const authHeader = req.headers.get("Authorization") || "";
-    const token = authHeader.replace(/^Bearer\\s+/i, "");
+    const token = authHeader.replace(/^Bearer\s+/i, "");
     if (!token) return json({ error: "Login required" }, 401);
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
