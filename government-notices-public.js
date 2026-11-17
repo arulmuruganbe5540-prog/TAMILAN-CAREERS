@@ -36,7 +36,7 @@
     head.append(el("span","tc-gov-tag", "அதிகாரப்பூர்வ அறிவிப்பு"));
     const end = row.application_end ? new Date(row.application_end + "T23:59:59") : null;
     const expired = end && !Number.isNaN(end.getTime()) && end < new Date();
-    head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "விண்ணப்பக் காலம் முடிந்தது" : (row.application_end ? "விண்ணப்ப விவரம்" : "அறிவிப்பு பதிவு")));
+    head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "விண்ணப்பக் காலம் முடிந்தது" : (row.application_end ? "விண்ணப்பம் நடைபெறுகிறது" : "அறிவிப்பு பதிவு")));
     article.append(head);
     article.append(el("h3","tc-gov-title",row.title));
     article.append(el("p","tc-gov-meta",[d.authority,state,row.notice_reference ? "அறிவிப்பு எண்: "+row.notice_reference : ""].filter(Boolean).join(" · ")));
