@@ -9,13 +9,14 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 ## 1. Confirmed GitHub / website work
 
 - Public GitHub repository and `main` branch are present.
-- GitHub Pages deployment and the website health workflow both succeeded for commit `7b4ed7b4fa396bb2cb7eeaa0dd586940444db5c8` (runs `44065324676` and `44065323970`).
+- Latest confirmed GitHub Pages deployment succeeded for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075721444`). Latest confirmed full website health workflow passed for commit `7e48b58ac1e43bc5bd79b92d114012c841e4200f` (run `44075666298`), including SQL lint, Edge Function type checks, private Resume security regression checks, and browser smoke tests.
 - The health workflow checks Edge Function types, SQL migration delimiters and SECURITY DEFINER search paths, privacy guards, company publication flow, website structure, and browser smoke tests. The expanded workflow including the new Resume security regression guard passed on commit `5755707f840b6c0db2cb4296f1fd27133f7c36da` (run `44074830855`); the Resume guard, Deno checks, SQL lint, and browser smoke tests all passed.
 - The current repository contains Tamil/English public pages for job search, job details, applications, candidate profile, saved jobs, company pages, notifications, Resume documents, Government Jobs, State PSC directory, and exam practice.
 - The current repository includes separate Private Jobs and Government Jobs areas; scraped/discovered links are not auto-published.
 - A read-only Supabase schema audit is available in `supabase-schema-audit.sql`. It reads schema metadata, RLS policies, grants, function signatures, Storage bucket settings, and Storage policies; it does not modify data or schema.
-- The audit was expanded to compare both `resumes` and `candidate-resumes` bucket IDs.
-- A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. The guard passed in run `44074830855`.
+- The audit was expanded to compare `resumes`, `candidate-resumes`, and `job-offers` bucket settings; count stored objects without exposing paths; and retrieve the live `can_access_job_application` function definition.
+- A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. The guard passed in run `44075666298`.
+- Schema preflight checks were added to the consolidated setup, focused Resume Storage migration, and employer application-status migration so they stop before changes when required existing columns or types do not match.
 
 ## 2. Supabase work confirmed by the user
 
