@@ -8,6 +8,7 @@ const json = (body: unknown, status = 200) =>
 
 const MAX_HTML_BYTES = 1_500_000;
 const TIMEOUT_MS = 12_000;
+const MAX_REVIEW_RECORDS_PER_RUN = 15;
 const KEYWORDS = /recruit|vacanc|advertisement|notification|career|apply|application|result|merit.?list|answer.?key|admit.?card|hall.?ticket|exam.?date|exam.?schedule|selection.?list|short.?list|call.?letter/i;
 const GENERIC = /^(home|careers?|career opportunities|recruitment|recruitment exams?|view all|read more|click here|results?|notifications?|what's new|latest news|menu|more)$/i;
 
@@ -89,8 +90,11 @@ Deno.serve(async (req) => {
       const finalUrl = response.url || source.base_url;
       if (!hostAllowed(finalUrl, source.base_url)) throw new Error("Redirected outside registered host");
       const html = (await response.text()).slice(0, MAX_HTML_BYTES);
-      const links = extractLinks(html, finalUrl, source.base_url);
-      discovered += links.length;
+      const allLinks = extractLinks(html, finalUrl, source.base_url);
+      discovered += allLinks.length;
+      // Queue only actual recruitment links, with a hard per-run review cap.
+      const remaining = Math.max(0, MAX_REVIEW_RECORDS_PER_RUN - inserted);
+      const links = allLinks.filter((item) => item.category === "recruitment").slice(0, remaining);
 
       if (links.length) {
         const rows = links.map((item) => ({
@@ -133,7 +137,8 @@ Deno.serve(async (req) => {
     new_review_records: inserted,
     failed_sources: failed,
     published: 0,
-    note: "Discovery only. This function never verifies notice facts or publishes. Every candidate remains private and pending until a trusted verification/publishing workflow is implemented.",
+    review_limit_per_run: MAX_REVIEW_RECORDS_PER_RUN,
+    note: "Discovery only. At most 15 recruitment candidates are queued per run. This function does not verify vacancy facts or publish; records remain private and pending until verified through the trusted workflow.",
     sources: summary,
   });
 });
