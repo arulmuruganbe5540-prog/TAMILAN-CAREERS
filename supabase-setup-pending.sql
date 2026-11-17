@@ -206,12 +206,12 @@ create or replace function public.tc_candidate_profile_records_touch_updated_at(
 returns trigger
 language plpgsql
 set search_path = ''
-as $
+as $$
 begin
   new.updated_at = now();
   return new;
 end;
-$;
+$$;
 drop trigger if exists tc_candidate_education_updated_at on public.candidate_education;
 create trigger tc_candidate_education_updated_at
 before update on public.candidate_education
