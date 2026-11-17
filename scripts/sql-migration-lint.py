@@ -14,7 +14,11 @@ for path in SQL_FILES:
     content = path.read_text(encoding="utf-8", errors="replace")
     relative = path.relative_to(ROOT)
     if INVALID_SINGLE_DOLLAR.search(content):
-        errors.append(f"{relative}: invalid single-dollar PL/pgSQL delimiter; use $$ or a named dollar tag")
+        errors.append(f"{relative}: invalid single-dollar PL/pgSQL delimiter; use $ or a named dollar tag")
+    for match in re.finditer(r"\\bcreate\\s+(?:unique\\s+)?index\\b(.*?);", content, re.IGNORECASE | re.DOTALL):
+        if not re.search(r"\\bon\\s+(?:public\\.)?[a-z_][a-z0-9_]*", match.group(1), re.IGNORECASE):
+            errors.append(f"{relative}: CREATE INDEX statement is missing a valid ON table clause")
+
     counts = {}
     for match in TAG.finditer(content):
         counts[match.group(0)] = counts.get(match.group(0), 0) + 1
