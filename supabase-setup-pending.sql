@@ -1,13 +1,14 @@
 -- TAMILAN CAREERS: consolidated pending Supabase setup
 -- Project: qkmljuuusfjowexvybvy
 -- Run as the Supabase project owner in SQL Editor.
--- This script creates private resume storage, private employer job drafts,
+-- This script creates private resume storage and candidate resume metadata,
+-- private employer job drafts,
 -- and restricted employer read access to candidate profiles for actual applicants.
 -- It does NOT publish jobs, change application status, expose resumes to employers,
 -- or grant access to candidates who have not applied to that employer's company.
 --
 -- Safe rerun notes:
--- - The resumes bucket is created only if absent; existing bucket settings are not changed.
+-- - The resumes bucket is always enforced as private with a 5 MB file limit.
 -- - Policies in this script are replaced by name.
 -- - The job_posting_drafts table is created only if absent.
 --
@@ -31,7 +32,10 @@ values (
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   ]::text[]
 )
-on conflict (id) do nothing;
+on conflict (id) do update set
+  public = false,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "TC resumes owner can read" on storage.objects;
 create policy "TC resumes owner can read"
@@ -253,6 +257,30 @@ using (public.can_company_view_candidate(user_id));
 -- =========================================================
 -- 4. CANDIDATE RESUME METADATA (owner-only; no employer access)
 -- =========================================================
+create table if not exists public.candidate_resumes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  resume_title text not null default 'Resume'
+    check (length(btrim(resume_title)) between 1 and 160),
+  file_path text not null unique,
+  original_file_name text not null
+    check (length(btrim(original_file_name)) between 1 and 255),
+  file_type text not null check (file_type in (
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  )),
+  file_size_bytes bigint not null
+    check (file_size_bytes between 1 and 5242880),
+  is_primary boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint candidate_resumes_owner_path check (
+    left(file_path, length(user_id::text) + 1) = user_id::text || '/'
+  )
+);
+create index if not exists candidate_resumes_user_created_idx
+  on public.candidate_resumes(user_id, created_at desc);
 alter table public.candidate_resumes enable row level security;
 grant select, insert, update, delete on public.candidate_resumes to authenticated;
 drop policy if exists "TC candidates manage own resume metadata" on public.candidate_resumes;
@@ -261,6 +289,31 @@ on public.candidate_resumes for all to authenticated
 using (user_id = (select auth.uid()))
 with check (user_id = (select auth.uid()));
 -- Employers intentionally receive no SELECT policy on candidate_resumes.
+
+create or replace function public.tc_limit_candidate_resume_count()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  existing_count integer;
+begin
+  perform pg_advisory_xact_lock(hashtextextended(new.user_id::text, 0));
+  select count(*) into existing_count
+  from public.candidate_resumes
+  where user_id = new.user_id;
+  if existing_count >= 5 then
+    raise exception 'A maximum of 5 documents is allowed per candidate';
+  end if;
+  return new;
+end;
+$;
+revoke all on function public.tc_limit_candidate_resume_count() from public;
+drop trigger if exists tc_limit_candidate_resume_count on public.candidate_resumes;
+create trigger tc_limit_candidate_resume_count
+before insert on public.candidate_resumes
+for each row execute function public.tc_limit_candidate_resume_count();
 
 
 -- =========================================================
