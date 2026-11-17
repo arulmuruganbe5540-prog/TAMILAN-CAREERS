@@ -16,7 +16,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlparse, urldefrag
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "data" / "government-official-sources.json"
@@ -66,12 +66,39 @@ def host(url):
 def trusted_domain_hint(hostname):
     return any(hostname == suffix.lstrip(".") or hostname.endswith(suffix) for suffix in OFFICIAL_SUFFIXES)
 
+def host_allowed(candidate_url, source_url):
+    a, b = urlparse(candidate_url), urlparse(source_url)
+    if a.scheme != "https" or not a.hostname or not b.hostname:
+        return False
+    ah, bh = a.hostname.lower(), b.hostname.lower()
+    return ah == bh or ah.endswith("." + bh)
+
+class SameHostRedirectHandler(HTTPRedirectHandler):
+    def __init__(self, source_url):
+        super().__init__()
+        self.source_url = source_url
+        self.redirect_count = 0
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        self.redirect_count += 1
+        if self.redirect_count > 5:
+            raise ValueError("Too many redirects")
+        if not host_allowed(newurl, self.source_url):
+            raise ValueError("Redirect outside registered HTTPS domain")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
 def fetch(source):
     req = Request(source["url"], headers={"User-Agent": "TAMILAN-CAREERS-SourceDiscovery/1.0"})
-    with urlopen(req, timeout=TIMEOUT) as response:
+    opener = build_opener(SameHostRedirectHandler(source["url"]))
+    with opener.open(req, timeout=TIMEOUT) as response:
+        content_type = response.headers.get_content_type().lower()
+        if content_type not in ("text/html", "application/xhtml+xml"):
+            raise ValueError("Source did not return an HTML content type")
         raw = response.read(MAX_BYTES)
         final_url = response.geturl()
         charset = response.headers.get_content_charset() or "utf-8"
+    if not host_allowed(final_url, source["url"]):
+        raise ValueError("Redirected outside registered HTTPS domain")
     parser = AnchorParser()
     parser.feed(raw.decode(charset, errors="replace"))
     found = []
