@@ -93,6 +93,7 @@ async function loadProfile(){
  const values={fullName:p.full_name||m.full_name||"",phone:p.phone||m.phone||"",location:s.current_city||m.location||"",headline:s.headline||m.headline||"",about:s.bio||m.about||"",education:m.education||"",experience,skills:(skillResult.data||[]).map(x=>x.skill_name).join(", ")||(Array.isArray(m.skills)?m.skills.join(", "):(m.skills||"")),languages:savedLanguages||m.languages||"",jobType:pref.preferred_employment_type||m.preferred_job_type||"",preferredLocation:pref.preferred_city||m.preferred_location||""};
  for(const id of ids)document.getElementById(id).value=values[id]||"";
  updateProgress();
+ await loadRecords();
 }
 
 let currentUserId=null;
