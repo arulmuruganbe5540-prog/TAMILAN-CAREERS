@@ -183,7 +183,7 @@ begin
     v_company_id, v_category_id, v_review.created_by, v_title, v_slug,
     'TC-' || upper(substr(replace(gen_random_uuid()::text,'-',''),1,10)),
     v_payload->>'description', v_type, v_workplace, v_experience_min,
-    v_salary_min, v_salary_max, 'INR', 'monthly', v_vacancies,
+    v_salary_min, v_salary_max, '₹', 'monthly', v_vacancies,
     v_deadline, 'published', now(),
     nullif(btrim(v_payload->>'location'), ''),
     nullif(btrim(v_payload->>'education'), ''),
