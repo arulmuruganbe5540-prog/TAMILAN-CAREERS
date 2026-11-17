@@ -15,10 +15,10 @@
 - Read-only schema and RLS audit SQL: `supabase-schema-audit.sql`
 - Government notices database setup SQL: `supabase-government-notices-setup.sql` (creates isolated source, private review and public published-notice tables; does not auto-publish or alter existing job/application tables).
 - Government notice discovery Edge Function: `supabase/functions/ingest-government-notices/index.ts` (server-side scan of enabled registered sources; writes candidates only to the private review table; never publishes).
-- Admin Job Post & Review Queue: `admin-job-post.html` (Super Admin only; use `supabase-admin-job-publish-setup.sql` to create the protected review queue and secure publish function. Approved jobs can be published only after a verified company is matched).
-- Admin Control Center: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/admin-control.html (colorful responsive admin dashboard; requires signed-in account and `public.is_super_admin()` approval; links to existing admin/workflow pages; read-only counters where RLS permits).
+- Admin Job Post & Review Queue: `admin-job-post.html` (Super Admin + MFA AAL2 only; use `supabase-admin-job-publish-setup.sql` for the protected review queue and secure publish function. Company-submitted jobs require a verified company; manual Super Admin posts can be entered directly).
+- Admin Control Center: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/admin-control.html (responsive Admin dashboard; requires the signed-in user's `super_admin` role and MFA AAL2; links to admin/workflow pages).
 - Initial Super Admin bootstrap: `supabase-first-super-admin-bootstrap.sql` (one-time, guarded SQL for the project owner to grant the first `super_admin` role to an explicitly selected existing Auth account; requires replacing the email placeholder and running it manually in Supabase SQL Editor). Admin browser pages now read only the signed-in user's own `user_roles` row under RLS rather than calling the revoked public SECURITY DEFINER RPC.
-- Admin government notice review page: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/government-notice-review.html (read-only queue with category/status filters and a verification checklist; access is enforced by the `government_notice_reviews` RLS policy using `public.is_super_admin()`).
+- Admin government notice review page: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/government-notice-review.html (review queue with category/status filters and verification checklist; access is enforced by Supabase RLS and Super Admin authorization).
 - New government portal discovery: `scripts/government-source-discovery.py` scans links from already trusted government sources and creates `government-source-discovery-candidates.json`. Newly found domains are suggestions only and require verification before joining the trusted list; this runs every six hours with the official-source monitor.
 - Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
 - Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
@@ -80,7 +80,7 @@
 - Government source discovery and state PSC page-change monitoring run on schedules and report candidates/changes; source monitoring does not prove that a vacancy is open. New sources and vacancies require verification before publication.
 - Job listing freshness must be handled by scheduled trusted-source sync, expiry checks and duplicate detection. Do not invent vacancy counts or publish unverified scraped jobs.
 - `.github/dependabot.yml` asks GitHub to check GitHub Actions updates weekly and open update pull requests. These PRs are tested before merging; unreviewed dependency or application-code updates are not pushed straight to the live website.
-- New job-search and AI tools should be added through tested releases, not by allowing an AI agent to rewrite production code automatically. Security fixes, API/model changes and database migrations require validation and a rollback path.
+- New job-search and AI tools should be added through tested releases, not by allowing an automated agent to rewrite production code automatically. Security fixes, API/model changes and database migrations require validation and a rollback path.
 
 ## Technology
 - Static responsive HTML/CSS/JavaScript frontend
@@ -152,9 +152,9 @@
 
 ## Admin job publishing setup
 - Run `supabase-admin-job-publish-setup.sql` once in the Supabase SQL Editor. This creates the Admin-only review queue, adds optional display fields to `public.jobs` (`location`, `education_level`, `required_skills`, `contact_email`), and installs `public.tc_admin_publish_job(uuid)`.
-- The publish function re-checks Super Admin permission, requires the review item to be approved, and requires an exact company-name match with `companies.verification_status = 'verified'`. It inserts a `published` row and records its ID on the review item. Repeated publish calls for the same item return the existing job ID.
+- The publish function re-checks Super Admin permission (including the MFA AAL2 helper), requires the review item to be approved, and validates active job category and required fields. Company-submitted jobs require an exact match with `companies.verification_status = 'verified'`; manually entered Super Admin posts may be published without linking a company record. It inserts a `published` row and records its ID on the review item. Repeated publish calls for the same item return the existing job ID.
 - The function does not weaken the existing `jobs` RLS policies. The function is SECURITY DEFINER and executable only by authenticated users; it performs its own Super Admin check.
-- The category is linked when an active `job_categories.category_name` exactly matches the selected category. If no match exists, category_id remains NULL because that column is nullable.
+- The category is linked only when an active `job_categories.category_name` exactly matches the selected category; otherwise the publish function rejects the post.
 - Existing job rows are not deleted or rewritten. The migration is safe to re-run.
 
 
