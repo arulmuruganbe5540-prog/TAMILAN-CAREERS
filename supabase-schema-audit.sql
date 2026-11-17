@@ -154,6 +154,22 @@ where n.nspname = 'public'
   )
 order by p.proname;
 
+-- 6A. Inspect the helper used by the existing job-offers Storage policy.
+-- Its definition is needed to verify that a signed-in user can access only
+-- the offer document attached to an application they are authorized to view.
+select
+  n.nspname as schema_name,
+  p.proname as function_name,
+  pg_get_function_identity_arguments(p.oid) as arguments,
+  p.prosecdef as security_definer,
+  p.proconfig as function_settings,
+  pg_get_functiondef(p.oid) as function_definition
+from pg_proc p
+join pg_namespace n on n.oid = p.pronamespace
+where n.nspname = 'public'
+  and p.proname = 'can_access_job_application'
+order by p.proname;
+
 -- 7. Private Resume bucket configuration (no file names or contents are read).
 -- Check both the repository's current bucket name and the legacy name found in
 -- earlier Storage policies. Do not delete or rename either bucket based on this report.
