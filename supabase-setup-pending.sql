@@ -176,6 +176,32 @@ for each row execute function public.tc_job_posting_drafts_touch_updated_at();
 comment on table public.job_posting_drafts is
   'Private company job-posting drafts only. Not public jobs and not application records.';
 
+-- Create candidate education/experience tables before adding employer read policies.
+create table if not exists public.candidate_education (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  institution_name text not null check (length(btrim(institution_name)) between 1 and 180),
+  qualification text not null check (length(btrim(qualification)) between 1 and 120),
+  field_of_study text, grade text, start_date date, end_date date,
+  is_current boolean not null default false, description text,
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now(),
+  constraint candidate_education_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
+  constraint candidate_education_current_has_no_end check (is_current = false or end_date is null)
+);
+create table if not exists public.candidate_experience (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  company_name text not null check (length(btrim(company_name)) between 1 and 180),
+  job_title text not null check (length(btrim(job_title)) between 1 and 140),
+  employment_type text, city text, start_date date, end_date date,
+  is_current boolean not null default false, description text,
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now(),
+  constraint candidate_experience_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
+  constraint candidate_experience_current_has_no_end check (is_current = false or end_date is null)
+);
+create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
+create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
+
 -- =========================================================
 -- 3. EMPLOYER READ ACCESS TO ACTUAL APPLICANT PROFILE DETAILS
 -- =========================================================
@@ -185,7 +211,7 @@ returns boolean
 language sql
 stable
 security definer
-set search_path = public, pg_temp
+set search_path = ''
 as $function$
   select exists (
     select 1
@@ -235,10 +261,7 @@ create policy "Employers read applicant skills"
 on public.candidate_skills for select to authenticated
 using (public.can_company_view_candidate(user_id));
 
-drop policy if exists "Employers read applicant certifications" on public.candidate_certifications;
-create policy "Employers read applicant certifications"
-on public.candidate_certifications for select to authenticated
-using (public.can_company_view_candidate(user_id));
+-- Candidate certifications are not granted here because the table schema is not part of this migration.
 
 drop policy if exists "Employers read applicant languages" on public.candidate_languages;
 create policy "Employers read applicant languages"
@@ -299,7 +322,7 @@ as $$
 declare
   existing_count integer;
 begin
-  perform pg_advisory_xact_lock(hashtextextended(new.user_id::text, 0));
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(new.user_id::text, 0));
   select count(*) into existing_count
   from public.candidate_resumes
   where user_id = new.user_id;
