@@ -89,7 +89,7 @@ async function save(status){
  let result;
  if(id)result=await db.from("admin_job_post_reviews").update({title:row.title,company_name:row.company_name,status:row.status,payload:row.payload,review_note:null,reviewed_by:null,reviewed_at:null}).eq("id",id).select("id").single();
  else result=await db.from("admin_job_post_reviews").insert(row).select("id").single();
- if(result.error){say("சேமிக்க முடியவில்லை. Supabase-ல் supabase-admin-job-post-review.sql இயக்கப்பட்டதா எனப் பார்க்கவும். "+result.error.message,false);return}
+ if(result.error){say("சேமிக்க முடியவில்லை. Supabase-ல் supabase-admin-job-publish-setup.sql இயக்கப்பட்டதா எனப் பார்க்கவும். "+result.error.message,false);return}
  $("recordId").value=result.data.id;
  say(status==="draft"?"வேலை Draft ஆக பாதுகாப்பாகச் சேமிக்கப்பட்டது.": "வேலை Review Queue-க்கு அனுப்பப்பட்டது. பொதுப் பக்கத்தில் இன்னும் வெளியிடப்படவில்லை.");
  await loadQueue();
