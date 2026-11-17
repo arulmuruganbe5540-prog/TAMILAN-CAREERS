@@ -7,8 +7,7 @@ This is an operational checklist based on the project changes and user-confirmed
 ## Confirmed complete
 
 - [x] GitHub Pages deployment and website health workflow were confirmed successful for commit `f7ae09a31e70de51b3779ec22e4bc8e03db448fa`.
-- [x] Website health workflow was also confirmed successful for commit `9b50c6c29bddfbcb2da92f10d57acf1296cadded`, including browser smoke tests. Latest later Pages deployment is still pending.
-- [x] Website health workflow passed for that same commit, including Deno type checks, structural checks, and browser smoke tests.
+- [x] Website health workflow was confirmed successful for commit `9b50c6c29bddfbcb2da92f10d57acf1296cadded`, including Deno type checks, structural checks, and browser smoke tests. Latest later Pages deployment is still pending.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -22,7 +21,8 @@ This is an operational checklist based on the project changes and user-confirmed
 ## Must finish before enabling external source scanning
 
 - [ ] Create a unique random `GOVERNMENT_MONITOR_SECRET` of at least 32 characters. Do not paste it into chat or commit it.
-- [ ] Redeploy the latest scanner source from GitHub after the recent bounded-response, non-HTML response rejection, and per-source status fixes. The user-confirmed deployment was the earlier version; repository changes are not live until redeployed.\n- [ ] Add the exact same secret in Supabase Edge Function Secrets and GitHub repository Actions Secrets.
+- [ ] Redeploy the latest scanner source from GitHub after the recent bounded-response, non-HTML response rejection, and per-source status fixes. The user-confirmed deployment was the earlier version; repository changes are not live until redeployed.
+- [ ] Add the exact same secret in Supabase Edge Function Secrets and GitHub repository Actions Secrets.
 - [ ] Check the scanner Edge Function's **Verify JWT with legacy secret** setting. Because the function uses its own `x-monitor-secret` header, the gateway must not block the request by requiring a Supabase JWT; turn legacy JWT verification off if it is on.
 - [ ] Run the GitHub workflow manually and inspect the private candidate queue.
 - [ ] Verify the Admin review page with a Super Admin account.
