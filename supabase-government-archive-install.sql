@@ -5,6 +5,8 @@
 -- Safe to re-run. It does not insert any guessed historical notices or auto-publish data.
 -- Requires public.is_super_admin() to exist.
 
+begin;
+
 -- ===== supabase-government-notices-setup.sql =====
 -- TAMILAN CAREERS: Government notice database foundation
 -- Creates isolated government-notice tables. Does not alter jobs, users, applications, or existing roles.
@@ -184,8 +186,6 @@ on conflict (id) do update set
   state = excluded.state,
   base_url = excluded.base_url,
   updated_at = now();
-
-commit;
 
 -- IMPORTANT:
 -- This migration creates secure storage and visibility boundaries only.
@@ -393,5 +393,4 @@ revoke all on function public.tc_admin_publish_government_notice(uuid,text,text,
 revoke all on function public.tc_admin_reject_government_notice(uuid,text) from public, anon;
 grant execute on function public.tc_admin_publish_government_notice(uuid,text,text,text,date,date,date,integer,text,jsonb,jsonb) to authenticated;
 grant execute on function public.tc_admin_reject_government_notice(uuid,text) to authenticated;
-
 commit;
