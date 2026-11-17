@@ -18,6 +18,8 @@ permissions:
 jobs:
   discover:
     runs-on: ubuntu-latest
+    env:
+      GOVERNMENT_MONITOR_SECRET: ${{ secrets.GOVERNMENT_MONITOR_SECRET }}
     timeout-minutes: 20
     steps:
       - name: Checkout repository
@@ -33,9 +35,7 @@ jobs:
       - name: Discover possible new official recruiting portals
         run: python scripts/government-source-discovery.py
       - name: Sync up to 15 recruitment candidates to Supabase Admin Review
-        if: env.GOVERNMENT_MONITOR_SECRET != ''
-        env:
-          GOVERNMENT_MONITOR_SECRET: ${{ secrets.GOVERNMENT_MONITOR_SECRET }}
+        if: ${{ env.GOVERNMENT_MONITOR_SECRET != '' }}
         run: |
           curl --fail --show-error --silent --max-time 900 \
             -X POST "https://qkmljuuusfjowexvy.supabase.co/functions/v1/ingest-government-notices" \
@@ -49,7 +49,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Refresh official government job review queue"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"
             git push
           else
             echo "No review queue changes."
