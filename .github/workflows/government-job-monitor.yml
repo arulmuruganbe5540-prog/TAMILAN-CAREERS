@@ -5,6 +5,7 @@ on:
       - 'scripts/government-job-monitor.py'
       - 'scripts/government-source-discovery.py'
       - 'data/government-official-sources.json'
+      - 'supabase/functions/ingest-government-notices/**'
       - '.github/workflows/government-job-monitor.yml'
   schedule:
     - cron: "17 */6 * * *"
