@@ -365,6 +365,31 @@ alter table public.job_applications
   references public.candidate_resumes(id) on delete set null;
 create index if not exists job_applications_resume_id_idx
   on public.job_applications(resume_id) where resume_id is not null;
+
+-- Reject forged Resume IDs that do not belong to the applicant.
+create or replace function public.tc_validate_application_resume_owner()
+returns trigger
+language plpgsql
+set search_path = ''
+as $
+declare
+  v_resume_owner uuid;
+begin
+  if new.resume_id is null then return new; end if;
+  select cr.user_id into v_resume_owner
+  from public.candidate_resumes cr
+  where cr.id = new.resume_id;
+  if not found or v_resume_owner <> new.candidate_id then
+    raise exception 'The selected Resume does not belong to this candidate';
+  end if;
+  return new;
+end;
+$;
+revoke all on function public.tc_validate_application_resume_owner() from public;
+drop trigger if exists tc_validate_application_resume_owner on public.job_applications;
+create trigger tc_validate_application_resume_owner
+before insert or update of resume_id, candidate_id on public.job_applications
+for each row execute function public.tc_validate_application_resume_owner();
 alter table public.candidate_resumes enable row level security;
 grant select, insert, update, delete on public.candidate_resumes to authenticated;
 drop policy if exists "TC candidates manage own resume metadata" on public.candidate_resumes;
