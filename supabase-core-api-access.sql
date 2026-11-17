@@ -87,35 +87,44 @@ create policy "Employers read applicant preferences"
 on public.candidate_preferences for select to authenticated
 using (public.can_company_view_candidate(user_id));
 
+create or replace function public.can_access_company(p_company_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $function$
+  select exists (
+    select 1
+    from public.companies c
+    where c.id = p_company_id
+      and (
+        c.owner_user_id = auth.uid()
+        or exists (
+          select 1
+          from public.company_members cm
+          where cm.company_id = c.id
+            and cm.user_id = auth.uid()
+            and cm.member_status = 'active'
+            and cm.member_role in ('owner', 'hr_manager', 'recruiter')
+        )
+      )
+  );
+$function$;
+revoke all on function public.can_access_company(uuid) from public, anon;
+grant execute on function public.can_access_company(uuid) to authenticated;
+
 drop policy if exists "companies_read_active_members" on public.companies;
 create policy "companies_read_active_members"
 on public.companies for select to authenticated
-using (
-  exists (
-    select 1
-    from public.company_members cm
-    where cm.company_id = companies.id
-      and cm.user_id = (select auth.uid())
-      and cm.member_status = 'active'
-      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
-  )
-);
+using (public.can_access_company(id));
 
 -- Active company HR / Recruiter members can load their own company's jobs.
 -- Company owners already have the separate jobs_read_own_company policy.
 drop policy if exists "jobs_read_active_company_members" on public.jobs;
 create policy "jobs_read_active_company_members"
 on public.jobs for select to authenticated
-using (
-  exists (
-    select 1
-    from public.company_members cm
-    where cm.company_id = jobs.company_id
-      and cm.user_id = (select auth.uid())
-      and cm.member_status = 'active'
-      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
-  )
-);
+using (public.can_access_company(company_id));
 
 -- =========================================================
 -- 2. Grants matching existing RLS policies
