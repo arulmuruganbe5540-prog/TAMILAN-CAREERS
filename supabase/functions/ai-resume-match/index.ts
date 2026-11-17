@@ -24,7 +24,7 @@ const allowedJobFields = [
   "required_skills", "skills", "location", "job_location", "work_location",
   "employment_type", "job_type", "experience", "experience_required",
   "salary_min", "salary_max", "category", "job_category",
-  "application_deadline", "deadline", "company_id",
+  "application_deadline", "deadline",
 ] as const;
 
 function cleanJob(row: Record<string, unknown>) {
