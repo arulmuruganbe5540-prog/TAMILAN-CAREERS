@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T06:43:13.728436+00:00",
+  "checked_at_utc": "2026-11-17T06:46:49.540648+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 23,
@@ -16,13 +16,23 @@
       "error": "Redirected outside the registered official host"
     },
     {
+      "source_id": "upsc",
+      "url": "https://upsc.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
       "source_id": "indian-railways",
       "url": "https://indianrailways.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "upsc",
-      "url": "https://upsc.gov.in/",
+      "source_id": "nabard",
+      "url": "https://www.nabard.org/careers-notices1.aspx",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "join-indian-army",
+      "url": "https://joinindianarmy.nic.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -36,18 +46,8 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "join-indian-army",
-      "url": "https://joinindianarmy.nic.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
       "source_id": "join-indian-navy",
       "url": "https://www.joinindiannavy.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "nabard",
-      "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "<urlopen error timed out>"
     },
     {
@@ -76,6 +76,11 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "<urlopen error timed out>"
+    },
+    {
       "source_id": "gpsc-goa",
       "url": "https://gpsc.goa.gov.in/",
       "error": "HTTP Error 403: Forbidden"
@@ -86,14 +91,14 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "hppsc",
-      "url": "https://hppsc.hp.gov.in/",
-      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
-    },
-    {
       "source_id": "apsc-assam",
       "url": "https://apsc.nic.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "hppsc",
+      "url": "https://hppsc.hp.gov.in/",
+      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
     },
     {
       "source_id": "psc-cg",
@@ -101,14 +106,19 @@
       "error": "<urlopen error timed out>"
     },
     {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
       "source_id": "gpsc-gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
       "error": "<urlopen error [Errno 101] Network is unreachable>"
     },
     {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "hpsc",
@@ -121,19 +131,9 @@
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source_id": "mpsc-mizoram",
-      "url": "https://mpsc.mizoram.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
-    },
-    {
       "source_id": "kpsc",
       "url": "https://kpsc.kar.nic.in/",
       "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "tgpsc",
-      "url": "https://www.tgpsc.gov.in/",
-      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "mppsc",
@@ -161,8 +161,8 @@
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
     },
     {
-      "source_id": "psc-uk",
-      "url": "https://psc.uk.gov.in/",
+      "source_id": "ppsc",
+      "url": "https://www.ppsc.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -171,8 +171,8 @@
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1147)>"
     },
     {
-      "source_id": "ppsc",
-      "url": "https://www.ppsc.gov.in/",
+      "source_id": "psc-uk",
+      "url": "https://psc.uk.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -194,6 +194,6 @@
   "candidate_links_discovered_this_run": 1125,
   "pending_admin_review": 1170,
   "note": "Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
-  "scan_workers": 5,
-  "request_timeout_seconds": 12
+  "scan_workers": 4,
+  "request_timeout_seconds": 20
 }
