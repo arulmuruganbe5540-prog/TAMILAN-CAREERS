@@ -98,7 +98,7 @@ grant select, insert, update, delete on public.job_posting_drafts to authenticat
 
 drop policy if exists "TC job drafts select own active member" on public.job_posting_drafts;
 drop policy if exists "TC job drafts select own authorized member" on public.job_posting_drafts;
-create policy "TC job drafts select own active member"
+create policy "TC job drafts select own authorized member"
 on public.job_posting_drafts for select to authenticated
 using (
   user_id = (select auth.uid())
@@ -113,7 +113,7 @@ using (
 
 drop policy if exists "TC job drafts insert own active member" on public.job_posting_drafts;
 drop policy if exists "TC job drafts insert own authorized member" on public.job_posting_drafts;
-create policy "TC job drafts insert own active member"
+create policy "TC job drafts insert own authorized member"
 on public.job_posting_drafts for insert to authenticated
 with check (
   user_id = (select auth.uid())
@@ -128,7 +128,7 @@ with check (
 
 drop policy if exists "TC job drafts update own active member" on public.job_posting_drafts;
 drop policy if exists "TC job drafts update own authorized member" on public.job_posting_drafts;
-create policy "TC job drafts update own active member"
+create policy "TC job drafts update own authorized member"
 on public.job_posting_drafts for update to authenticated
 using (
   user_id = (select auth.uid())
@@ -153,7 +153,7 @@ with check (
 
 drop policy if exists "TC job drafts delete own active member" on public.job_posting_drafts;
 drop policy if exists "TC job drafts delete own authorized member" on public.job_posting_drafts;
-create policy "TC job drafts delete own active member"
+create policy "TC job drafts delete own authorized member"
 on public.job_posting_drafts for delete to authenticated
 using (
   user_id = (select auth.uid())
