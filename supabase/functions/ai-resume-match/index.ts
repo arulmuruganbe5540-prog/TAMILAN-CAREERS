@@ -60,6 +60,16 @@ Deno.serve(async (req) => {
     if (authError || !authData.user) return json({ error: "Invalid or expired login session" }, 401);
     const userId = authData.user.id;
 
+    const { data: roleData, error: roleError } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (roleError) return json({ error: "Could not verify your account role" }, 403);
+    if (roleData?.role !== "job_seeker") {
+      return json({ error: "AI resume matching is available only to Job Seeker accounts." }, 403);
+    }
+
     const body = await req.json().catch(() => ({}));
     if (body?.consent !== true) return json({ error: "Explicit consent is required before sending resume text to the AI service." }, 400);
     const resumeText = safeText(body?.resume_text, 18000).trim();
