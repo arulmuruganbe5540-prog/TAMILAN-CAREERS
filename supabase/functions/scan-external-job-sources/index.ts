@@ -3,6 +3,20 @@ const reply=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status
 const KEYWORDS=/job|career|vacanc|recruit|position|opening|apply|employment|hiring/i;
 const MAX_BYTES=1200000;
 function clean(s:string){return s.replace(/<script[\s\S]*?<\/script>/gi," ").replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&amp;/g,"&").replace(/&nbsp;/g," ").replace(/\s+/g," ").trim();}
+async function readLimitedText(response:Response,limit:number){
+ const reader=response.body?.getReader();if(!reader)return "";
+ const decoder=new TextDecoder();let total=0,output="";
+ try{
+  while(true){
+   const {done,value}=await reader.read();if(done)break;
+   const remaining=limit-total;
+   if(value.byteLength>remaining){output+=decoder.decode(value.subarray(0,remaining),{stream:true});total=limit;await reader.cancel().catch(()=>{});break;}
+   output+=decoder.decode(value,{stream:true});total+=value.byteLength;
+   if(total>=limit){await reader.cancel().catch(()=>{});break;}
+  }
+ }finally{output+=decoder.decode();reader.releaseLock();}
+ return output;
+}
 function allowed(candidate:string,base:string){try{const a=new URL(candidate),b=new URL(base);return a.protocol==="https:"&&(a.hostname===b.hostname||a.hostname.endsWith("."+b.hostname));}catch{return false;}}
 Deno.serve(async(req)=>{
  if(req.method!=="POST")return reply({error:"POST only"},405);
@@ -21,7 +35,7 @@ Deno.serve(async(req)=>{
     const r=await fetch(s.base_url,{headers:{"user-agent":"TAMILAN-CAREERS official job source monitor/1.0"},signal:AbortSignal.timeout(10000),redirect:"follow"});
     if(!r.ok)throw new Error("HTTP "+r.status);
     const final=r.url||s.base_url;if(!allowed(final,s.base_url))throw new Error("Redirect outside registered domain");
-    const html=(await r.text()).slice(0,MAX_BYTES);const rows:Record<string,unknown>[]=[];
+    const html=await readLimitedText(r,MAX_BYTES);const rows:Record<string,unknown>[]=[];
     const re=/<a\b([^>]*?)>([\s\S]*?)<\/a\s*>/gi;
     for(const m of html.matchAll(re)){
      const h=m[1].match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);if(!h)continue;
