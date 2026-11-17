@@ -25,6 +25,17 @@ const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co"
 const root=document.getElementById("content"),params=new URLSearchParams(location.search),jobId=params.get("id");
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
+function deadlineDate(value){
+ if(!value)return null;
+ const raw=String(value).trim();
+ let m=raw.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);
+ if(m)return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]),23,59,59,999);
+ m=raw.match(/^(\\d{2})-(\\d{2})-(\\d{4})$/);
+ if(m)return new Date(Number(m[3]),Number(m[2])-1,Number(m[1]),23,59,59,999);
+ const parsed=new Date(raw);
+ return Number.isNaN(parsed.getTime())?null:parsed;
+}
+function isExpiredJob(job){const d=deadlineDate(pick(job,["application_deadline","deadline","last_date"]));return Boolean(d&&d.getTime()<Date.now());}
 function fact(label,value){return value?'<div class="fact"><small>'+esc(label)+'</small><b>'+esc(value)+'</b></div>':""}
 async function show(){
  if(!jobId){root.innerHTML='<section class="panel"><h2 class="section-title">வேலை விவரத்தைத் திறக்கவும்</h2><p>இந்தப் பக்கம் குறிப்பிட்ட வேலை அறிவிப்பின் ID மூலம் திறக்கப்பட வேண்டும். முதலில் வேலை தேடல் பக்கத்திற்குச் சென்று, உங்களுக்குப் பிடித்த வேலைத் தலைப்பைத் தேர்ந்தெடுக்கவும்.</p><div class="actions"><a class="btn primary" href="jobs.html">வேலை தேடல் பக்கத்திற்குச் செல்லுங்கள்</a></div></section>';return}
@@ -33,6 +44,7 @@ async function show(){
  if(!data){root.textContent="இந்த வேலை அறிவிப்பு கிடைக்கவில்லை அல்லது நீக்கப்பட்டுள்ளது.";return}
  const j=data,status=String(pick(j,["status"])).toLowerCase();
  if(status!=="published"){root.textContent="இந்த வேலை அறிவிப்பு தற்போது விண்ணப்பத்திற்கு திறந்திருக்கவில்லை.";return}
+ if(isExpiredJob(j)){root.textContent="இந்த வேலைக்கான விண்ணப்பக் காலம் முடிந்துவிட்டது. புதிய வேலைகளை வேலை தேடல் பக்கத்தில் பார்க்கலாம்.";return}
  let company=pick(j,["company_name"]);if(j.company_id){const {data:companyRow}=await db.from("companies").select("company_name").eq("id",j.company_id).maybeSingle();if(companyRow?.company_name)company=companyRow.company_name;}
  const title=pick(j,["job_title","title"])||"வேலை விவரம்",loc=pick(j,["location","job_location","work_location"]),rawType=pick(j,["employment_type","job_type"]),type=String(rawType).replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()),deadline=pick(j,["application_deadline","deadline"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹";
  const salary=min||max?currency+" "+(min||"")+(min&&max?" – ":"")+(max||""):"சம்பளம் அறிவிக்கப்படவில்லை";
