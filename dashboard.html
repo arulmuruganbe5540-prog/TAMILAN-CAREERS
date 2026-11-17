@@ -91,7 +91,7 @@ async function loadDashboard() {
   const user = sessionData.session.user;
 
   document.getElementById("welcomeTitle").textContent =
-    "வணக்கம், " + (user.user_metadata?.full_name || user.email || "பயனரே");
+    "வணக்கம், " + (user.user_metadata?.full_name || "பயனரே");
 
   document.getElementById("welcomeText").textContent =
     "உங்கள் கணக்கு அனுமதிகள் சரிபார்க்கப்பட்டுள்ளன. கீழே கிடைக்கும் வசதிகளைப் பார்க்கலாம்.";
@@ -154,7 +154,6 @@ async function loadDashboard() {
   });
 
   const statusLines = [
-    "Email: " + (user.email || "கிடைக்கவில்லை"),
     "Account role: " + (role || "user_roles அட்டவணையில் role இல்லை"),
     "Active company memberships: " + memberships.length
   ];
