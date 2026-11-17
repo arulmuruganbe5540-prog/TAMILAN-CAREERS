@@ -67,7 +67,28 @@ const vacancies=[
 {state:"Himachal Pradesh",stateTa:"ஹிமாச்சலப் பிரதேசம்",title:"Agriculture Development Officer (Group-A, Job Trainee) — 23 posts",titleTa:"வேளாண்மை மேம்பாட்டு அலுவலர் (குரூப்-A) — 23 பணியிடங்கள்",dept:"Himachal Pradesh Public Service Commission",notification:"63/9-2026; extension notice 22-10-2026",date:"25-09-2026",status:"open",start:"25-09-2026",end:"30-11-2026",url:"https://hppsc.hp.gov.in/Home",source:"https://hppsc.hp.gov.in/Home",note:"HPPSC 22-10-2026 நீட்டிப்பு அறிவிப்பின்படி விண்ணப்பக் கடைசி தேதி 30-11-2026 இரவு 11:59 வரை. 23 பணியிடங்கள். இது Job Trainee முறை; HP இடஒதுக்கீடு/வார்டு-ஆஃப்-எக்ஸ்-சர்வீஸ்மேன் வகை நிபந்தனைகள் உள்ளன. முழு தகுதியை அசல் அறிவிப்பில் சரிபார்க்கவும்."},
 {state:"Gujarat",stateTa:"குஜராத்",title:"Sports Authority of Gujarat — Deputy Executive Engineer / Assistant Engineer (Civil)",titleTa:"விளையாட்டு ஆணையம் — துணை செயற்பொறியாளர் / உதவி பொறியாளர் (சிவில்)",dept:"Gujarat Public Service Commission",notification:"62/2026-27 and 63/2026-27",date:"06-11-2026",status:"open",start:"06-11-2026",end:"20-11-2026",url:"https://gpsc-ojas.gujarat.gov.in/",source:"https://gpsc.gujarat.gov.in/",note:"மொத்தம் 8 பணியிடங்கள்: Deputy Executive Engineer (Civil), Class-II — 4; Assistant Engineer (Civil), Class-II — 4. விண்ணப்பம் 06-11-2026 மதியம் 1:00 முதல் 20-11-2026 இரவு 11:59 வரை. GPSC அதிகாரப்பூர்வ தளத்தில் அறிவிப்பு எண் 62/2026-27 மற்றும் 63/2026-27-ஐத் தேர்ந்தெடுத்து முழு நிபந்தனைகளைச் சரிபார்க்கவும்."}
 ];
-function renderVacancies(){const q=$("jobSearch").value.trim().toLowerCase(),st=$("jobState").value,ss=$("jobStatus").value;const list=vacancies.filter(v=>(!st||v.state===st)&&(!ss||v.status===ss)&&(v.title+" "+v.titleTa+" "+v.state+" "+v.dept+" "+v.notification).toLowerCase().includes(q));$("vacancyList").innerHTML=list.length?list.map(v=>'<article class="state"><span class="tag">'+(v.status==="open"?"விண்ணப்பம் நடைபெறுகிறது":"புதிய அறிவிப்பு")+'</span><h3>'+v.titleTa+'</h3><div class="english">'+v.title+'</div><div class="psc">'+v.stateTa+' · '+v.dept+'</div><div class="psc">அறிவிப்பு எண்: <b>'+v.notification+'</b> · தேதி: '+v.date+'</div>'+(v.status==="open"?'<div class="psc">விண்ணப்ப காலம்: <b>'+v.start+' முதல் '+v.end+'</b></div>':'<div class="psc">விண்ணப்பத் தேதிகள்: அதிகாரப்பூர்வ அறிவிப்பில் சரிபார்க்கவும்</div>')+'<p class="muted">'+v.note+'</p><div class="links"><a class="pill" href="'+v.source+'" target="_blank" rel="noopener">அதிகாரப்பூர்வ அறிவிப்பு / Source ↗</a><a class="pill" href="'+v.url+'" target="_blank" rel="noopener">அதிகாரப்பூர்வ Apply ↗</a></div></article>').join(""):'<div class="empty">இந்த வடிகட்டலுக்கு தற்போது பட்டியலிடப்பட்ட அறிவிப்பு இல்லை.</div>';}
+function vacancyDeadline(v){
+ const parts=String(v.end||"").split("-").map(Number);
+ if(parts.length!==3||parts.some(n=>!Number.isInteger(n)||n<=0))return null;
+ const [day,month,year]=parts;
+ const date=new Date(year,month-1,day,23,59,59,999);
+ return date.getFullYear()===year&&date.getMonth()===month-1&&date.getDate()===day?date:null;
+}
+function vacancyExpired(v){const deadline=vacancyDeadline(v);return Boolean(deadline&&deadline.getTime()<Date.now());}
+function renderVacancies(){
+ const q=$("jobSearch").value.trim().toLowerCase(),st=$("jobState").value,ss=$("jobStatus").value;
+ const list=vacancies.filter(v=>{
+  const expired=vacancyExpired(v);
+  const statusMatch=!ss||(ss==="open"&&v.status==="open"&&!expired);
+  return (!st||v.state===st)&&statusMatch&&(v.title+" "+v.titleTa+" "+v.state+" "+v.dept+" "+v.notification).toLowerCase().includes(q);
+ });
+ $("vacancyList").innerHTML=list.length?list.map(v=>{
+  const expired=vacancyExpired(v);
+  const tag=v.status==="open"?(expired?"விண்ணப்பக் காலம் முடிந்தது":"விண்ணப்பம் நடைபெறுகிறது"):"புதிய அறிவிப்பு";
+  const period=v.status==="open"?(expired?'<div class="psc">கடைசி தேதி கடந்துள்ளது; அதிகாரப்பூர்வ தளத்தில் விண்ணப்ப நிலையை மீண்டும் சரிபார்க்கவும்.</div>':'<div class="psc">விண்ணப்ப காலம்: <b>'+v.start+' முதல் '+v.end+'</b></div>'):'<div class="psc">விண்ணப்பத் தேதிகள்: அதிகாரப்பூர்வ அறிவிப்பில் சரிபார்க்கவும்</div>';
+  return '<article class="state"><span class="tag">'+tag+'</span><h3>'+v.titleTa+'</h3><div class="english">'+v.title+'</div><div class="psc">'+v.stateTa+' · '+v.dept+'</div><div class="psc">அறிவிப்பு எண்: <b>'+v.notification+'</b> · தேதி: '+v.date+'</div>'+period+'<p class="muted">'+v.note+'</p><div class="links"><a class="pill" href="'+v.source+'" target="_blank" rel="noopener">அதிகாரப்பூர்வ அறிவிப்பு / Source ↗</a><a class="pill" href="'+v.url+'" target="_blank" rel="noopener">அதிகாரப்பூர்வ Apply ↗</a></div></article>';
+ }).join(""):'<div class="empty">இந்த வடிகட்டலுக்கு தற்போது பட்டியலிடப்பட்ட அறிவிப்பு இல்லை.</div>';
+}
 $("jobSearch").addEventListener("input",renderVacancies);$("jobState").addEventListener("change",renderVacancies);$("jobStatus").addEventListener("change",renderVacancies);renderVacancies();
 
 $("search").addEventListener("input",render);$("region").addEventListener("change",render);$("sort").addEventListener("change",render);render();
