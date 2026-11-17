@@ -10,12 +10,12 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 
 - Public GitHub repository and `main` branch are present.
 - GitHub Pages deployment and the website health workflow both succeeded for commit `7b4ed7b4fa396bb2cb7eeaa0dd586940444db5c8` (runs `44065324676` and `44065323970`).
-- The health workflow checks Edge Function types, SQL migration delimiters and SECURITY DEFINER search paths, privacy guards, company publication flow, website structure, and browser smoke tests.
+- The health workflow checks Edge Function types, SQL migration delimiters and SECURITY DEFINER search paths, privacy guards, company publication flow, website structure, and browser smoke tests. The expanded workflow including the new Resume security regression guard passed on commit `5755707f840b6c0db2cb4296f1fd27133f7c36da` (run `44074830855`); the Resume guard, Deno checks, SQL lint, and browser smoke tests all passed.
 - The current repository contains Tamil/English public pages for job search, job details, applications, candidate profile, saved jobs, company pages, notifications, Resume documents, Government Jobs, State PSC directory, and exam practice.
 - The current repository includes separate Private Jobs and Government Jobs areas; scraped/discovered links are not auto-published.
 - A read-only Supabase schema audit is available in `supabase-schema-audit.sql`. It reads schema metadata, RLS policies, grants, function signatures, Storage bucket settings, and Storage policies; it does not modify data or schema.
 - The audit was expanded to compare both `resumes` and `candidate-resumes` bucket IDs.
-- A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. Its newest workflow run is still pending at the time of this audit.
+- A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. The guard passed in run `44074830855`.
 
 ## 2. Supabase work confirmed by the user
 
