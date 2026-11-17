@@ -37,6 +37,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <h2 id="formTitle">✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்</h2>
 <form id="jobForm" class="form">
 <input type="hidden" id="recordId">
+<input type="hidden" id="companyId"><input type="hidden" id="sourceDraftId">
 <div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
 <div class="field"><label for="company">நிறுவனப் பெயர் *</label><input id="company" maxlength="180" required placeholder="சரிபார்க்கப்பட்ட நிறுவனத்தின் பெயர்"><span class="hint">Publish செய்ய companies அட்டவணையில் இதே பெயரும் verification_status = verified நிலையும் இருக்க வேண்டும்.</span></div>
 <div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>Accounting &amp; Finance</option><option>Construction</option><option>Customer Support</option><option>Driver &amp; Delivery</option><option>Education</option><option>Engineering</option><option>Government Jobs</option><option>Healthcare</option><option>Hotel &amp; Restaurant</option><option>IT &amp; Software</option><option>Manufacturing</option><option>Office &amp; Administration</option><option>Other Jobs</option><option>Sales &amp; Marketing</option></select></div>
@@ -68,8 +69,8 @@ let user=null;
 const fields=["title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","skills","description","deadline","email"];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
-function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());return p}
-function fill(p={}){fields.forEach(k=>$(k).value=p[k]??(k==="openings"?"1":""));$("recordId").value=p.id||"";$("formTitle").textContent=p.id?"✏️ வேலை அறிவிப்பைத் திருத்தவும்":"✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
+function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());p.company_id=$("companyId").value||null;p.source_draft_id=$("sourceDraftId").value||null;return p}
+function fill(p={}){fields.forEach(k=>$(k).value=p[k]??(k==="openings"?"1":""));$("recordId").value=p.id||"";$("companyId").value=p.company_id||"";$("sourceDraftId").value=p.source_draft_id||"";$("formTitle").textContent=p.id?"✏️ வேலை அறிவிப்பைத் திருத்தவும்":"✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
 function resetForm(){fill({});$("jobForm").reset();$("recordId").value="";$("openings").value="1";$("formTitle").textContent="✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
 function statusLabel(s){return ({draft:"Draft",pending_review:"Review காத்திருக்கிறது",approved:"Approved",rejected:"Rejected"})[s]||s}
 async function loadCategories(){
