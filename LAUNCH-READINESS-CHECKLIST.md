@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for main commit `f502d7e82b88a4de20b011e2978606ca0cf2d9d1` on 17 November 2026 (run `44056014970`).
-- [x] Latest full website health workflow passed for main commit `f502d7e82b88a4de20b011e2978606ca0cf2d9d1` on 17 November 2026 (run `44056017371`): all five Supabase Edge Functions type-checked; SQL delimiter lint, private candidate artifact guard, public feed JavaScript, site structure, and key-page browser smoke tests passed.
+- [x] Latest GitHub Pages deployment succeeded for main commit `805a7450e04cb4250ef3b2a597ecc18ce5ddf6bc` on 17 November 2026 (run `44059315835`).
+- [x] Latest full website health workflow passed for main commit `805a7450e04cb4250ef3b2a597ecc18ce5ddf6bc` on 17 November 2026 (run `44059315569`): all configured CI checks completed successfully.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -53,6 +53,9 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Latest Pages deployment and full health workflow passed on commit `f18fbe1e3b3e4df7552bda6432167f97f65bba54` (runs `44054190080` and `44054190121`).
 - [x] Latest SQL migration lint, Edge Function type checks, privacy guard, browser smoke tests, website health workflow, and Pages deployment all passed on commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b`.
 - [x] Latest website health run `44052500315` and Pages deployment run `44052501042` both passed on commit `3c58359a079572588724226fd1bfeb6c55a2a930`.
+
+
+- [ ] Company job draft submission and Admin publication workflow has been strengthened in repository SQL/UI: India-timezone deadline validation, exact company ID preservation, verified-company-only publication, duplicate submission protection, Admin status sync, and monthly/daily salary period. This remains **not live** until schema audit is checked, SQL is run, and real Company → Admin → public-job flow is tested.
 
 ## Must finish before enabling external source scanning
 
