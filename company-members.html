@@ -39,6 +39,6 @@ async function loadCompany(){
 }
 $("company").addEventListener("change",()=>loadCompany().catch(e=>message(e.message)));
 $("refreshBtn").addEventListener("click",()=>loadCompany().catch(e=>message(e.message)));
-$("inviteForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("inviteBtn");btn.disabled=true;try{await call("invite_member",{company_id:$("company").value,email:$("email").value.trim(),member_role:$("role").value});$("email").value="";message("அழைப்பு Email அனுப்பப்பட்டது.",true);await loadCompany()}catch(err){message(err.message)}finally{btn.disabled=false}});
+$("inviteForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("inviteBtn");btn.disabled=true;try{const result=await call("invite_member",{company_id:$("company").value,email:$("email").value.trim(),member_role:$("role").value});$("email").value="";if(result.email_sent){message("அழைப்பு Email அனுப்பப்பட்டது.",true)}else{try{await navigator.clipboard.writeText(result.invitation_url);message("Email அனுப்பப்படவில்லை. அழைப்பு இணைப்பு Clipboard-ல் நகலெடுக்கப்பட்டது. அதை WhatsApp / SMS மூலம் அழைக்கப்பட்ட நபருக்கு அனுப்புங்கள். 7 நாட்களில் காலாவதியாகும்.",true)}catch{message("Email அனுப்பப்படவில்லை. இந்த அழைப்பு இணைப்பை அழைக்கப்பட்ட நபருக்கு அனுப்புங்கள்: "+result.invitation_url,true)}}await loadCompany()}catch(err){message(err.message)}finally{btn.disabled=false}});
 init().catch(e=>message(e.message||String(e)));
 </script></body></html>
