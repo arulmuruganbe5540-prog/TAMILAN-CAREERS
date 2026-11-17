@@ -83,7 +83,7 @@ await check("Bilingual AI job search control is available", async () => {
   if (!(await page.locator("#q").getAttribute("placeholder")).includes("எந்த மொழியிலும்")) throw new Error("Any-language search hint is missing");
 });
 
-await check("Government admin pages require login", async () => {
+await check("External job source review requires login", async () => {\n  await open("external-job-review.html");\n  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });\n});\n\nawait check("Government admin pages require login", async () => {
   await open("government-notice-review.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
   await open("government-notice-publish.html?id=smoke-test");
