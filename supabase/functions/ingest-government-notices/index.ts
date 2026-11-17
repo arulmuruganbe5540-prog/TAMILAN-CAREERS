@@ -76,6 +76,55 @@ async function readLimitedText(response: Response, limit: number) {
   }
   return output;
 }
+function robotsAllows(text: string, pageUrl: string, userAgent: string) {
+  const groups: Array<{ agents: string[]; rules: Array<{ allow: boolean; path: string }> }> = [];
+  let agents: string[] = [];
+  let rules: Array<{ allow: boolean; path: string }> = [];
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.split("#", 1)[0].trim();
+    if (!line) continue;
+    const ua = line.match(/^user-agent\s*:\s*(.+)$/i);
+    if (ua) {
+      if (rules.length) { groups.push({ agents, rules }); agents = []; rules = []; }
+      agents.push(ua[1].trim().toLowerCase());
+      continue;
+    }
+    const rule = line.match(/^(allow|disallow)\s*:\s*(.*)$/i);
+    if (rule && agents.length) {
+      const path = rule[2].trim();
+      if (path) rules.push({ allow: rule[1].toLowerCase() === "allow", path });
+    }
+  }
+  if (agents.length) groups.push({ agents, rules });
+  const token = userAgent.split(/[ /]/, 1)[0].toLowerCase();
+  const specific = groups.filter((g) => g.agents.some((a) => a !== "*" && token.includes(a)));
+  const applicable = specific.length ? specific : groups.filter((g) => g.agents.includes("*"));
+  const allRules = applicable.flatMap((g) => g.rules);
+  const parsed = new URL(pageUrl);
+  const requestPath = parsed.pathname + parsed.search;
+  const matches = allRules.filter((r) => {
+    const pattern = r.path.split("*").map((part) => part.replace(/[.+?^{}()|[\]\\]/g, "\\  return output;
+}
+function category(text: string) {
+")).join(".*");
+    try { return new RegExp("^" + pattern).test(requestPath); } catch { return false; }
+  }).sort((a, b) => b.path.length - a.path.length);
+  return !matches.length || matches[0].allow;
+}
+async function robotsPermits(pageUrl: string, userAgent: string) {
+  try {
+    const robotsUrl = new URL("/robots.txt", pageUrl).toString();
+    const response = await fetchRegisteredPage(robotsUrl);
+    if (response.status === 404 || response.status === 410) return true;
+    if (!response.ok) return false;
+    const contentType = (response.headers.get("content-type") || "").toLowerCase();
+    if (contentType && !/(text\/plain|application\/octet-stream)/i.test(contentType)) return false;
+    const body = await readLimitedText(response, 256_000);
+    return robotsAllows(body, pageUrl, userAgent);
+  } catch {
+    return false;
+  }
+}
 function category(text: string) {
   if (/admit.?card|hall.?ticket|call.?letter/i.test(text)) return "admit_card";
   if (/result|merit.?list|selection.?list|short.?list/i.test(text)) return "result";
@@ -157,6 +206,8 @@ Deno.serve(async (req) => {
     const batch = sourceList.slice(offset, offset + MAX_WORKERS);
     const results = await Promise.all(batch.map(async (source) => {
       try {
+        const userAgent = "TAMILAN-CAREERS-GovernmentNoticeMonitor/1.0";
+        if (!(await robotsPermits(source.base_url, userAgent))) throw new Error("robots.txt disallows this page or could not be checked safely");
         const response = await fetchRegisteredPage(source.base_url);
         if (!response.ok) throw new Error("HTTP " + response.status);
         const contentType = (response.headers.get("content-type") || "").toLowerCase();
