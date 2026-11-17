@@ -10,6 +10,20 @@ begin
   if to_regclass('public.job_posting_drafts') is null then
     raise exception 'Run supabase-setup-pending.sql first; company job draft table is missing.';
   end if;
+  if to_regclass('public.companies') is null
+     or to_regclass('public.company_members') is null
+     or to_regclass('public.jobs') is null
+     or to_regclass('public.job_categories') is null then
+    raise exception 'Required companies, company_members, jobs, or job_categories table is missing; run the read-only schema audit first.';
+  end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='verification_status')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='companies' and column_name='company_name')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='member_status')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='company_members' and column_name='member_role')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='category_name')
+     or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='job_categories' and column_name='is_active') then
+    raise exception 'Company verification or job-category schema differs from this migration; inspect supabase-schema-audit.sql before proceeding.';
+  end if;
 end;
 $tc_admin_guard$;
 
