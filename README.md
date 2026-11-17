@@ -23,7 +23,10 @@
 - Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
 - Company job posting draft: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-posting.html
 - Private job-draft database SQL: `supabase-job-posting-drafts.sql`
-- Consolidated pending Supabase setup: `supabase-setup-pending.sql` (resume storage + private job drafts + employer applicant-profile read policies + owner-only candidate resume metadata and Job Seeker profile, education and experience self-management policies)
+- Consolidated pending Supabase setup: `supabase-setup-pending.sql` (private resume storage + job drafts + restricted employer applicant-profile access + owner-only candidate resume, education, experience and certification records).
+- Candidate education / experience / certification migration: `supabase-candidate-profile-education-experience.sql`.
+- Supabase launch setup guide (Tamil, ordered SQL / Edge Function / Secret / testing steps): `SUPABASE-LAUNCH-SETUP-GUIDE.md`.
+- Launch readiness checklist: `LAUNCH-READINESS-CHECKLIST.md`.
 - Indian Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
 - All 28 State Government Jobs (official State PSC directory + verified notification tracker): https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/state-government-jobs.html
 - Daily 28-state PSC source-monitor report: `state-job-monitor-report.json` (first scheduled run pending; source changes require manual vacancy verification).
@@ -34,7 +37,7 @@
 - Resume-to-job matching page: reads PDF/DOCX text locally in the browser and ranks currently published internal jobs against profile/resume keywords, skills and preferred location (transparent rule-based first version; not generative AI).
 - Tamil / English responsive public homepage, job search and individual job details pages.
 - Supabase email registration, login, password reset flow and account dashboard.
-- Job seeker profile editor connected to `profiles`, `job_seeker_profiles`, `candidate_skills`, `candidate_languages`, `candidate_preferences`, `candidate_education` and `candidate_experience`; supports multiple education and work-history records with add/edit/delete controls (requires matching RLS policies).
+- Job seeker profile editor connected to `profiles`, `job_seeker_profiles`, `candidate_skills`, `candidate_languages`, `candidate_preferences`, `candidate_education` and `candidate_experience`; supports multiple education, work-history and certification records with add/edit/delete controls (requires matching RLS policies).
 - Saved jobs page with browser-local save/remove controls (not account-synced).
 - Job application form frontend with Job Seeker role check and private application submission.
 - Applicant application-tracking page linked from the Job Seeker dashboard; candidates can request withdrawal of their own active applications through a server-side permission-checked RPC.
