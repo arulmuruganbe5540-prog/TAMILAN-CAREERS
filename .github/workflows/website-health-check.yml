@@ -41,6 +41,7 @@ jobs:
         run: |
           deno check supabase/functions/bilingual-job-search/index.ts
           deno check supabase/functions/ai-resume-match/index.ts
+          deno check supabase/functions/ingest-government-notices/index.ts
       - name: Validate audit script
         run: python -m py_compile scripts/website-health-check.py
       - name: Check internal website structure
