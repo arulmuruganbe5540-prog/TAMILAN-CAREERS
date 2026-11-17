@@ -53,6 +53,17 @@ Used by:
 
 Do not enable automated publishing. Discovered notices stay in the private Admin Review queue until a Super Admin verifies the official source and publishes them.
 
+## First Super Admin account (required for Admin Control Center)
+
+The current database has zero `super_admin` assignments. The Admin pages now check the signed-in account's own `user_roles` row through RLS and will deny access until the project owner grants the first Admin role.
+
+- Open `supabase-first-super-admin-bootstrap.sql` in the repository.
+- Replace only the email placeholder with the exact email of the owner's existing, confirmed Supabase Auth account.
+- Run the SQL once in the Supabase SQL Editor as the project owner.
+- Verify the result reports one Super Admin assignment. Do not grant this role to an unknown or third-party account.
+
+This is deliberately a final owner-controlled privilege step; it is not automatically applied by deployment.
+
 ## Supabase Auth security setting
 In Supabase Dashboard → Authentication → Settings / Security (wording may vary), enable leaked-password protection. The current Supabase security advisor reports this as disabled. This is a dashboard setting, not a GitHub code change.
 
