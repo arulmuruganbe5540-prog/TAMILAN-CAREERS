@@ -51,7 +51,7 @@ check("Resume bucket migrations always configure a private bucket", setup_bucket
       re.search(r"insert\s+into\s+storage\.buckets[\s\S]{0,350}?false", setup, re.IGNORECASE) and
       re.search(r"insert\s+into\s+storage\.buckets[\s\S]{0,350}?false", focused, re.IGNORECASE))
 check("Storage policies restrict all four operations to the owner's folder", all(
-    re.search(pattern, setup, re.IGNORECASE) and "bucket_id = 'resumes'" in setup
+    re.search(pattern, setup, re.IGNORECASE) and "bucket_id = 'candidate-resumes'" in setup
     for pattern in [
         r"on\s+storage\.objects\s+for\s+select",
         r"on\s+storage\.objects\s+for\s+insert",
