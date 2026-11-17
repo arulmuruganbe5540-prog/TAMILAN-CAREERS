@@ -1,88 +1,89 @@
 # TAMILAN CAREERS — Project Status & Handover
 
-Last audited: 17 November 2026 (India time) — live Storage, API grants, notifications, interview workflow, and Cron rechecked  
+Last live audit: 17 November 2026 (India time)  
 Repository: `arulmuruganbe5540-prog/TAMILAN-CAREERS`  
 Live Pages: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
 
-This file separates repository work from live Supabase setup. A committed HTML, SQL, or Edge Function file is **not** proof that the corresponding Supabase feature is live.
+This status distinguishes committed website code from verified live Supabase configuration. A deployed page or Edge Function is not proof that a real authenticated workflow has passed end-to-end testing.
 
-## 1. Confirmed GitHub / website work
+## 1. GitHub Pages and CI
 
-- Public GitHub repository and `main` branch are present.
-- Latest verified GitHub Pages build/deploy succeeded for commit `d04d6a45ff9dc1731708e562d0f64e3cfdaaf0c8` (run `44080577810`). Latest full website health audit passed for commit `05e2290ddd0cf0ff8ca40ad2054b822171ee7922` (run `44080537230`), including SQL lint, Edge Function type checks, privacy guards, and key-page browser smoke tests.
-- The health workflow checks Edge Function types, SQL migration delimiters and SECURITY DEFINER search paths, privacy guards, company publication flow, website structure, and browser smoke tests. The expanded workflow including the new Resume security regression guard passed on commit `5755707f840b6c0db2cb4296f1fd27133f7c36da` (run `44074830855`); the Resume guard, Deno checks, SQL lint, and browser smoke tests all passed.
-- The current repository contains Tamil/English public pages for job search, job details, applications, candidate profile, saved jobs, company pages, notifications, Resume documents, Government Jobs, State PSC directory, and exam practice.
-- The current repository includes separate Private Jobs and Government Jobs areas; scraped/discovered links are not auto-published.
-- A read-only Supabase schema audit is available in `supabase-schema-audit.sql`. It reads schema metadata, RLS policies, grants, function signatures, Storage bucket settings, and Storage policies; it does not modify data or schema.
-- The live audit confirmed `candidate-resumes` is the actual private Resume bucket (10 MB bucket limit; 0 stored objects), while no `resumes` bucket exists. Storage owner-folder policies were verified and duplicate SELECT rules were removed.
-- Resume upload UI and the employer signed-URL Function now use `candidate-resumes`; `company-resume-access` is deployed ACTIVE (version 1) with JWT verification enabled.
-- `supabase-core-api-access.sql` was applied. It grants only the operations already covered by RLS, adds employer read access to candidate profile data for applicants of that company, and lets active HR / Recruiter members read their own company and load its jobs. A SECURITY DEFINER membership helper prevents recursive `companies` / `company_members` RLS evaluation. Employers still have no direct Resume metadata or Storage access.
-- Authenticated-role SQL smoke tests verified own Candidate profile/Resume metadata access, denial of another user reading the test Resume row, and access to the user's own company and membership. Test rows were rolled back; no production records were left behind.
-- Security advisor recheck: the anonymous SECURITY DEFINER execution warnings were cleared for trigger-only functions. Remaining authenticated SECURITY DEFINER warnings are for policy helpers and intended Admin / Candidate RPCs. Auth leaked-password protection remains disabled; `company_invitations` and `job_sources` remain RLS-enabled with no client policies or grants.
-- Trigger-only SECURITY DEFINER functions (`handle_new_user`, `log_job_application_status`, `rls_auto_enable`) no longer have client EXECUTE permission; their database triggers remain attached.
-- A private Resume security regression guard was added to CI. It checks that the website, server Function, SQL migrations, and security guide agree on the bucket name and that employer access remains server-verified. The guard passed in run `44075666298`.
-- Schema preflight checks were added to the consolidated setup, focused Resume Storage migration, and employer application-status migration so they stop before changes when required existing columns or types do not match.
+- GitHub Pages is enabled and deploying successfully. Latest confirmed Pages deployment: run `44085240569`, commit `ff17f5fbd1f3b39845d2c9bc03f40ba50f359960` (success). A newer build for the latest team-page permission refinement is running.
+- Latest confirmed full website Health Audit: run `44085131126`, commit `686da22cc2de92db0e17da16f6454aa4834817f8` (success). Deno Edge Function checks, SQL delimiter lint, privacy guards, website structure, JavaScript checks, and browser smoke tests all passed.
+- A newer Health Audit is running for the latest company-team page permission refinement. Do not treat that run as passed until its final conclusion is success.
+- CI now checks the tracked `company-members` Edge Function and browser smoke tests for the company team page and safe missing-token handling on the invitation page.
 
-## 2. Supabase live work verified
+## 2. Recent security and database work verified live
 
-- `supabase-company-workflow.sql` — user reported successful execution. Company profile drafts and private company job drafts are set up.
-- `supabase-candidate-withdraw-application.sql` — user reported successful execution. Candidate-owned application withdrawal is set up.
-- `supabase-external-job-sources.sql` — user reported successful execution. External job source registry and private candidate-review tables are set up.
-- Live Supabase API grants and employer applicant-profile policies — applied through `supabase-core-api-access.sql`; verification confirms the expected table privileges are now present while RLS remains enabled.
-- `supabase-company-application-status.sql` — applied. The secure company application status RPC is installed.
-- `supabase-interview-notifications.sql` — applied. Private notification and interview-invitation tables, RLS policies, send/respond/mark-read functions, and application notification triggers are installed.
-- `pg_cron` was enabled and `tc-interview-reminders-15m` is active (`*/15 * * * *`), calling `tc_generate_interview_reminders()`.
-- A transactional workflow smoke test created a temporary job/application, sent an interview invitation, accepted it, changed the application to shortlisted, and generated a reminder. The test verified 1 accepted interview and 5 visible notifications; the entire transaction was rolled back and a follow-up query confirmed no test rows or company-status changes remained.
-- Edge Function `scan-external-job-sources` — user reported an earlier successful deployment. The newest repository safeguards have **not** yet been redeployed.
-- Edge Function `manage-hiring` — deployed, but the currently deployed version is only the login/token and role-status handler; the newer company-member actions are not confirmed deployed.
-- The user has shared Storage policy rows for `candidate-resumes` and `job-offers`. These rows prove that policies exist, but do not by themselves prove which buckets currently exist or whether either bucket contains files. The `job-offers` policy calls `public.can_access_job_application(uuid)`; that function is not defined in the repository SQL, so its live definition and security settings must be reviewed from Supabase before relying on the policy.
+- Candidate salary, preferred-location, and relocation preferences remain private to the candidate; the employer SELECT policy was removed.
+- Thirty missing public foreign-key indexes were added. The latest FK audit returned zero unindexed public foreign keys.
+- The job-offer Storage SELECT policy had an over-escaped PDF filename expression that rejected valid UUID/UUID.pdf paths. The policy now uses the correct regex; a SQL test with a representative UUID/PDF path returned true.
+- The company-invitation acceptance RPC now has an empty search_path and is executable only by `service_role`.
+- Authorization-only RLS helpers were moved from exposed `public` into the non-exposed `private` schema: `can_access_company`, `can_access_job_application`, `can_company_view_candidate`, and `is_super_admin`. Public helper EXECUTE permissions were revoked; authenticated users can execute the private helpers for RLS evaluation.
+- Simulated authenticated SQL checks verified: the existing company owner can access their company; an unrelated company, nonexistent application, and unrelated candidate are denied; the current non-admin user is not a Super Admin; exposed public helper RPCs are not callable.
+- Security advisor warnings for exposed RLS helper functions reduced from 11 to 7. The remaining seven SECURITY DEFINER RPCs are application actions (Admin publish, candidate withdrawal, company application status, notification read, interview response/send) with empty search_path and user/role checks. They remain callable by authenticated users because the website needs those protected actions.
+- Security advisor INFO notices remain for `company_invitations` and `job_sources`: RLS is enabled with no client policies. These tables are intentionally service-role / backend-only.
+- Leaked-password protection remains disabled in Supabase Auth; this is still a security improvement to configure in project Auth settings.
+- Performance advisor currently reports 12 auth-RLS init-plan notices, 15 multiple-permissive-policy notices, and 72 unused-index INFO notices. Health advisor returned no findings.
 
-## 3. Implemented in GitHub, not yet confirmed live in Supabase
+## 3. Resume and job-offer Storage
 
-- Private Resume upload/list/download/delete UI, owner-only metadata SQL, five-document limit, candidate-owned application Resume link, and 60-second employer signed-URL Function. The live bucket and Function are aligned; authenticated end-to-end upload and employer-view tests remain outstanding.
-- Candidate education, work experience, and certification tables are present in live Supabase. RLS-aligned Data API grants are now applied; authenticated UI save/read testing remains outstanding.
-- Employer applicant profile read policies and application status update RPC.
-- Company job draft → Super Admin review → verified-company publish workflow.
-- Interview invitations, candidate accept/decline, notification centre, and reminder generator are installed in Supabase. The reminder generator is scheduled every 15 minutes. Transactional database smoke testing passed, but separate real Candidate and Employer accounts still need end-to-end verification.
-- AI Resume-to-job matching. The local rule-based matcher is separate from the optional AI Function.
-- Government notice private review/publish archive and ingestion Function.
-- External source scanner latest safeguards and source monitor workflow.
+- Live Resume bucket: `candidate-resumes`, private, 10 MB bucket limit. `resume-documents.html` and the active `company-resume-access` Edge Function both use this exact bucket.
+- `company-resume-access` is ACTIVE version 1 with JWT verification. It verifies application status, company ownership / active company membership, candidate ownership, and the candidate folder path before returning a 60-second signed URL.
+- The Resume page stores metadata in `candidate_resumes`, checks for a Job Seeker profile, and enforces file type, 5 MB page limit, and five-document limit.
+- Job-offer Storage access now calls the private application-authorization helper and validates the UUID/UUID.pdf object path.
+- Live data currently has zero Resume records, zero Resume Storage objects, zero job-offer objects, and zero job applications. Real upload, application attachment, signed URL expiry, and cross-company denial still need end-to-end tests.
 
-## 4. Live setup still needing confirmation
+## 4. Company Member Management
 
-1. Remaining portions of `supabase-setup-pending.sql` need a schema-specific review. Do not run the whole file blindly: Resume Storage, candidate profile tables, employer applicant read policies, and core API grants are already configured through the focused scripts.
-2. `supabase-admin-job-publish-setup.sql` — protected Company Draft → Admin Review → verified-company publish flow.
-3. `supabase-government-archive-install.sql` — separate Government notice source registry, private review queue, and reviewed publication.
-4. Deploy/redeploy `ai-resume-match`, `ingest-government-notices`, `bilingual-job-search`, and the latest `scan-external-job-sources` source as applicable. `company-resume-access` is already deployed.
-5. The currently deployed `manage-hiring` Function still needs a schema-reviewed member-management implementation.
-6. Real Candidate, Employer, Super Admin, and cross-company denial tests remain outstanding.
+- Edge Function `company-members` is ACTIVE version 4 with JWT verification. Its tracked source is `supabase/functions/company-members/index.ts`.
+- Supported actions: list companies, list members, list pending invitations, invite, accept invitation, cancel invitation, update role, and remove member.
+- Owners can invite/manage HR Managers, Recruiters, and Viewers. Active HR Managers can manage Recruiters and Viewers. The function prevents self-removal, self-role changes, and owner changes.
+- Invitation tokens are random, stored as SHA-256 hashes, expire after seven days, and are not returned by list actions. Acceptance requires a confirmed signed-in email matching the invited email.
+- New website pages: `company-members.html` and `accept-invitation.html`. Dashboard, Company Profile, and Company Applicants pages link to team management.
+- Email delivery requires Supabase Function Secrets `RESEND_API_KEY` and `APP_BASE_URL`; optional `RESEND_FROM_EMAIL` should be a verified Resend sender. These values are not confirmed configured. See `COMPANY-MEMBERS-SETUP.md`.
+- Live database currently has one company and one active owner member, zero invitations, and no second confirmed account. Real invitation email, acceptance, role change, and removal tests remain outstanding.
+- `manage-hiring` remains a legacy login/role-status function; do not mistake it for the active `company-members` implementation.
 
-## 5. Resume Storage — reconciled, end-to-end test pending
+## 5. Active Supabase Edge Functions
 
-- Live bucket: `candidate-resumes`, Private, 10 MB bucket limit; object count currently 0.
-- The actual Storage policies restrict SELECT / INSERT / UPDATE / DELETE to the authenticated user's own first-level folder.
-- The two redundant legacy SELECT policies were removed. One owner-only rule remains for each Storage operation.
-- `resume-documents.html` and `company-resume-access` now both use `candidate-resumes`.
-- Edge Function `company-resume-access` is ACTIVE (version 1), with `verify_jwt=true`, and creates a 60-second signed URL only after checking the application, company owner / active HR role, candidate ownership, and folder path.
-- The live `candidate_resumes` table references `job_seeker_profiles(user_id)`; the Resume page now checks that a Job Seeker profile exists before allowing upload.
-- `supabase-resume-storage.sql`, `supabase-setup-pending.sql`, and `RESUME-SECURITY-SETUP.md` were reconciled to the live bucket and metadata columns.
-- No actual Resume objects or attached applications exist yet, so upload, application attachment, signed URL delivery, expiry, and cross-company denial still require authenticated end-to-end testing. Do not describe the full Resume workflow as live until those tests pass.
+| Function | Live state | Notes |
+|---|---|---|
+| `company-members` | ACTIVE v4, JWT on | Team membership and invitations |
+| `company-resume-access` | ACTIVE v1, JWT on | 60-second authorized Resume links |
+| `scan-external-job-sources` | ACTIVE v2, JWT off | Uses its own `x-monitor-secret` authentication |
+| `ingest-government-notices` | ACTIVE v1, JWT off | Uses its own `x-monitor-secret` authentication |
+| `bilingual-job-search` | ACTIVE v1, JWT on | Requires `OPENAI_API_KEY` |
+| `ai-resume-match` | ACTIVE v1, JWT on | Requires `OPENAI_API_KEY` |
+| `manage-hiring` | ACTIVE v3, JWT off | Legacy basic login/role-status handler |
 
-## 6. Secrets and scheduled monitors
+- External scanner v2 now uses bounded streaming reads, HTTPS-domain and redirect checks, robots.txt checks, HTML content-type checks, manual-source skipping, and per-source success/failure status.
+- The external scanner and Government ingestion functions require `GOVERNMENT_MONITOR_SECRET`. The user explicitly asked to defer this secret setup; do not prompt for it during routine work. Deployment is complete, but scheduled ingestion cannot authenticate until the secret is configured.
+- AI Resume Match and bilingual search are deployed, but their OpenAI-backed actions will return a configuration error until `OPENAI_API_KEY` is added to Supabase Function Secrets. Never put that key in website code or GitHub.
 
-- `OPENAI_API_KEY` is required only for the optional AI Functions; its live Supabase Secret configuration is not confirmed. It must be stored in Supabase Function Secrets, never in frontend code or GitHub source.
-- `GOVERNMENT_MONITOR_SECRET` is still unconfigured. The user has asked to defer this setup; do not prompt them to configure it during routine project work.
-- Interview reminders now run through the active `tc-interview-reminders-15m` pg_cron job every 15 minutes. The function is ready, but there are currently no interview records to generate reminders for.
-- The external-source monitor has previously found 23 of 60 registered sources reachable. Robots-blocked/error sources were not bypassed. The monitor's Supabase candidate sync was skipped because the secret was missing.
-- Government and external discoveries remain private until an administrator verifies the original official notice and explicitly publishes it.
+## 6. Other installed workflows
 
-## 7. User actions required
+- Candidate education, experience, skills, languages, and certification tables are present with RLS; candidate profile save/read testing still needs real accounts.
+- Company job draft → Admin review → verified-company publish workflow is installed in SQL/source. Real Super Admin and employer workflow tests remain outstanding.
+- Interview invitations, candidate accept/decline, notifications, application status updates, and the 15-minute reminder cron job are installed. A transactional smoke test passed and rolled back all test data; separate real Candidate and Employer account testing remains outstanding.
+- Government notice sources, private review queue, and publication archive remain separate from Private Jobs. Discovered external links are not automatically published.
 
-### End-to-end verification
-- No SQL copy/paste is required for the completed bucket reconciliation or core API grants.
-- The live database currently has one auth user and one company member, but no jobs, applications, Resume records, or Storage objects. End-to-end Resume / Interview testing needs a real published job, an attached candidate application, one uploaded document, and a separate company owner / active HR account.
-- Real Candidate, Employer, Super Admin, and cross-company denial tests remain outstanding. Do not share passwords, OTPs, service-role keys, or other secrets in chat.
+## 7. Current live data and launch blockers
+
+Live database snapshot:
+- 1 company; 1 active owner membership; 0 invitations.
+- 0 jobs; 0 applications; 0 Resume metadata records; 0 Resume Storage objects; 0 job-offer objects.
+- Only one auth user is present, so cross-account workflows cannot yet be tested.
+
+Still required before launch:
+1. Confirm the latest Pages build and latest Health Audit both finish successfully after the most recent company-team page change.
+2. Configure Resend secrets before testing real company invitations.
+3. Configure `OPENAI_API_KEY` before testing AI Resume Match and bilingual AI search.
+4. Keep `GOVERNMENT_MONITOR_SECRET` deferred until the user chooses to configure it.
+5. Run real Candidate, Employer/HR, Super Admin, invitation, Resume upload/view/expiry, interview response, and cross-company denial tests using separate accounts.
+6. Enable Supabase Auth leaked-password protection.
+7. Review remaining performance advisor notices and intended authenticated SECURITY DEFINER RPCs.
 
 ## Release rule
 
-The website is **not launch-ready yet**. The target launch date is 19 November 2026, but that date is conditional, not guaranteed. GitHub Pages deployment is working, but the remaining Supabase migrations, Function deployments, secrets (where needed), RLS verification, and real-account tests are launch blockers. Do not mark the project complete until those checks pass.
+The website is **not launch-ready yet**. The target launch date is 19 November 2026, but it is conditional, not guaranteed. GitHub Pages deployment is working and many backend components are installed, but required secrets, real-account end-to-end tests, Auth hardening, and the final CI run still remain. Do not mark the project complete until those checks pass.
