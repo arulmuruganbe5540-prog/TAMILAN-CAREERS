@@ -116,7 +116,7 @@ function resetRecordForm(kind){
  document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"கல்வியைச் சேமிக்கவும்":"அனுபவத்தைச் சேமிக்கவும்";
 }
 async function loadRecords(){
- const [ed,ex]=await Promise.all([
+ const [ed,ex,certs]=await Promise.all([
   client.from("candidate_education").select("id,institution_name,qualification,field_of_study,grade,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false}),
   client.from("candidate_experience").select("id,company_name,job_title,employment_type,city,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false}),
   client.from("candidate_certifications").select("id,certificate_name,issuing_organization,issue_date,expiry_date,credential_id").eq("user_id",currentUserId).order("issue_date",{ascending:false})
