@@ -1,9 +1,12 @@
 {
-  "monitor_version": 1,
-  "last_updated_utc": "2026-11-17T03:21:03.249418+00:00",
+  "monitor_version": 2,
+  "last_updated_utc": "2026-11-17T09:19:25.333082+00:00",
   "purpose": "Official PSC page change detection only; not a verified vacancy feed.",
   "states_monitored": 28,
-  "changed_pages": [],
+  "changed_pages": [
+    "Nagaland",
+    "Tamil Nadu"
+  ],
   "unreachable_pages": [
     "Andhra Pradesh",
     "Arunachal Pradesh",
@@ -21,7 +24,6 @@
     "Punjab",
     "Rajasthan",
     "Sikkim",
-    "Telangana",
     "Tripura",
     "Uttarakhand",
     "West Bengal"
@@ -31,34 +33,34 @@
     {
       "state": "Andhra Pradesh",
       "url": "https://psc.ap.gov.in/",
-      "checked_at": "2026-11-17T03:14:36.792671+00:00",
+      "checked_at": "2026-11-17T09:18:26.661035+00:00",
       "http_status": null,
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Arunachal Pradesh",
-      "url": "http://www.appsc.gov.in/",
-      "checked_at": "2026-11-17T03:14:47.431235+00:00",
+      "url": "https://www.appsc.gov.in/",
+      "checked_at": "2026-11-17T09:18:26.661474+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Assam",
-      "url": "http://apsc.nic.in/",
-      "checked_at": "2026-11-17T03:15:10.333722+00:00",
+      "url": "https://apsc.nic.in/",
+      "checked_at": "2026-11-17T09:18:26.661752+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Bihar",
       "url": "https://bpsc.bihar.gov.in/",
-      "checked_at": "2026-11-17T03:15:33.215748+00:00",
+      "checked_at": "2026-11-17T09:18:26.662062+00:00",
       "http_status": 200,
       "final_url": "https://bpsc.bihar.gov.in/",
       "content_sha256": "e46e4d16a74099957967ada49070d1117367b46e90930e65e0447db59a2efef0",
@@ -68,88 +70,88 @@
     {
       "state": "Chhattisgarh",
       "url": "https://psc.cg.gov.in/",
-      "checked_at": "2026-11-17T03:15:36.208862+00:00",
+      "checked_at": "2026-11-17T09:18:31.228729+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Goa",
       "url": "https://gpsc.goa.gov.in/",
-      "checked_at": "2026-11-17T03:15:59.125732+00:00",
+      "checked_at": "2026-11-17T09:18:39.067402+00:00",
       "http_status": null,
-      "error": "HTTP Error 403: Forbidden",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
-      "checked_at": "2026-11-17T03:16:01.400873+00:00",
+      "checked_at": "2026-11-17T09:18:39.321566+00:00",
       "http_status": null,
-      "error": "<urlopen error [Errno 101] Network is unreachable>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Haryana",
       "url": "https://hpsc.gov.in/",
-      "checked_at": "2026-11-17T03:16:24.315733+00:00",
+      "checked_at": "2026-11-17T09:18:39.797414+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Himachal Pradesh",
       "url": "https://hppsc.hp.gov.in/",
-      "checked_at": "2026-11-17T03:16:47.455346+00:00",
+      "checked_at": "2026-11-17T09:18:40.548833+00:00",
       "http_status": null,
-      "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Jharkhand",
       "url": "https://www.jpsc.gov.in/",
-      "checked_at": "2026-11-17T03:16:48.801906+00:00",
+      "checked_at": "2026-11-17T09:18:41.388055+00:00",
       "http_status": null,
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Karnataka",
       "url": "https://kpsc.kar.nic.in/",
-      "checked_at": "2026-11-17T03:16:59.416519+00:00",
+      "checked_at": "2026-11-17T09:18:43.536662+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Kerala",
       "url": "https://www.keralapsc.gov.in/",
-      "checked_at": "2026-11-17T03:17:23.853747+00:00",
+      "checked_at": "2026-11-17T09:18:45.209219+00:00",
       "http_status": null,
-      "error": "HTTP Error 403: Forbidden",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Madhya Pradesh",
       "url": "https://mppsc.mp.gov.in/",
-      "checked_at": "2026-11-17T03:17:31.536887+00:00",
+      "checked_at": "2026-11-17T09:18:47.054332+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Maharashtra",
       "url": "https://mpsc.gov.in/home",
-      "checked_at": "2026-11-17T03:17:54.605786+00:00",
+      "checked_at": "2026-11-17T09:18:51.410242+00:00",
       "http_status": 200,
       "final_url": "https://mpsc.gov.in/home",
       "content_sha256": "4223820c137eaafd076ba16ebceb0de284e776c04da1954314f705d3ae63de95",
@@ -159,7 +161,7 @@
     {
       "state": "Manipur",
       "url": "https://mpscmanipur.gov.in/",
-      "checked_at": "2026-11-17T03:17:55.962576+00:00",
+      "checked_at": "2026-11-17T09:18:51.616950+00:00",
       "http_status": 200,
       "final_url": "https://mpscmanipur.gov.in/",
       "content_sha256": "f203f039a0fc89282ffbc1f4cd4e39fc856fe75c732f5b95492a91ed6d54381e",
@@ -169,7 +171,7 @@
     {
       "state": "Meghalaya",
       "url": "https://mpsc.meghalaya.gov.in/",
-      "checked_at": "2026-11-17T03:17:58.414357+00:00",
+      "checked_at": "2026-11-17T09:18:52.059546+00:00",
       "http_status": 200,
       "final_url": "https://mpsc.meghalaya.gov.in/",
       "content_sha256": "cb20305375842f8ea082341aeecb5e590d099b8e8d2468b28d193b92e950916c",
@@ -179,26 +181,26 @@
     {
       "state": "Mizoram",
       "url": "https://mpsc.mizoram.gov.in/",
-      "checked_at": "2026-11-17T03:18:03.209124+00:00",
+      "checked_at": "2026-11-17T09:18:52.617355+00:00",
       "http_status": null,
-      "error": "HTTP Error 403: Forbidden",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Nagaland",
       "url": "https://npsc.nagaland.gov.in/",
-      "checked_at": "2026-11-17T03:18:05.127872+00:00",
+      "checked_at": "2026-11-17T09:18:54.083053+00:00",
       "http_status": 200,
       "final_url": "https://npsc.nagaland.gov.in/",
-      "content_sha256": "c5e9b81f7140ff5debe40fa6aa1b3d98567a0f40f4521327ea22d2b44c52263b",
-      "changed_since_previous_check": false,
+      "content_sha256": "6f8235af6817da56a1c5c10a79f69b34fbb7ab6ad1bc7b38da50b7a0ac8ab82e",
+      "changed_since_previous_check": true,
       "review_required": true
     },
     {
       "state": "Odisha",
       "url": "https://www.opsc.gov.in/",
-      "checked_at": "2026-11-17T03:18:07.651947+00:00",
+      "checked_at": "2026-11-17T09:18:54.350672+00:00",
       "http_status": 200,
       "final_url": "https://www.opsc.gov.in/Public/OPSC/Default.aspx",
       "content_sha256": "af4361ec59f6229f12fe2e3b9567b6188694c1616e3946c756291cfe870ed568",
@@ -208,62 +210,63 @@
     {
       "state": "Punjab",
       "url": "https://www.ppsc.gov.in/",
-      "checked_at": "2026-11-17T03:18:13.487536+00:00",
+      "checked_at": "2026-11-17T09:18:56.739642+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Rajasthan",
       "url": "https://rpsc.rajasthan.gov.in/",
-      "checked_at": "2026-11-17T03:18:58.669039+00:00",
+      "checked_at": "2026-11-17T09:18:57.004946+00:00",
       "http_status": null,
-      "error": "<urlopen error [Errno 101] Network is unreachable>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Sikkim",
       "url": "https://spsc.sikkim.gov.in/",
-      "checked_at": "2026-11-17T03:19:21.828348+00:00",
+      "checked_at": "2026-11-17T09:18:59.371935+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Tamil Nadu",
       "url": "https://www.tnpsc.gov.in/",
-      "checked_at": "2026-11-17T03:19:45.438153+00:00",
+      "checked_at": "2026-11-17T09:19:01.354023+00:00",
       "http_status": 200,
       "final_url": "https://www.tnpsc.gov.in/",
-      "content_sha256": "cff2750ea302830516ab9b358416a4a73e02bc062886d14682810fe65e418845",
-      "changed_since_previous_check": false,
+      "content_sha256": "34b3c7c7b35e1da6e420430cd9b5e5c0b9be352d83f73391c10afd91154ffaef",
+      "changed_since_previous_check": true,
       "review_required": true
     },
     {
       "state": "Telangana",
       "url": "https://www.tgpsc.gov.in/",
-      "checked_at": "2026-11-17T03:19:48.547617+00:00",
-      "http_status": null,
-      "error": "HTTP Error 403: Forbidden",
+      "checked_at": "2026-11-17T09:19:04.440049+00:00",
+      "http_status": 200,
+      "final_url": "https://www.tgpsc.gov.in/",
+      "content_sha256": "18355a8e970f1e78904ddbd0a6fb208f0e9ab0ac5c09a4975da549ac73ba64b8",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Tripura",
       "url": "https://tpsc.tripura.gov.in/",
-      "checked_at": "2026-11-17T03:19:50.139779+00:00",
+      "checked_at": "2026-11-17T09:19:06.171751+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "Uttar Pradesh",
       "url": "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx",
-      "checked_at": "2026-11-17T03:20:13.606819+00:00",
+      "checked_at": "2026-11-17T09:19:10.078760+00:00",
       "http_status": 200,
       "final_url": "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx",
       "content_sha256": "b78fa91d946fc3a210337f7c8d02670b7703f2fb9a53d7609796b1fdbba662f3",
@@ -273,18 +276,18 @@
     {
       "state": "Uttarakhand",
       "url": "https://psc.uk.gov.in/",
-      "checked_at": "2026-11-17T03:20:16.265231+00:00",
+      "checked_at": "2026-11-17T09:19:11.673414+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     },
     {
       "state": "West Bengal",
       "url": "https://psc.wb.gov.in/",
-      "checked_at": "2026-11-17T03:20:39.853251+00:00",
+      "checked_at": "2026-11-17T09:19:13.019987+00:00",
       "http_status": null,
-      "error": "<urlopen error timed out>",
+      "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
       "review_required": true
     }
