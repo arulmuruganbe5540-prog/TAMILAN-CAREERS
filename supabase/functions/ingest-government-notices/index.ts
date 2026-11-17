@@ -216,6 +216,7 @@ Deno.serve(async (req) => {
         }
         const finalUrl = response.url || source.base_url;
         if (!hostAllowed(finalUrl, source.base_url)) throw new Error("Redirected outside registered HTTPS domain");
+        if (!(await robotsPermits(finalUrl, userAgent))) throw new Error("robots.txt disallows the redirected page or could not be checked safely");
         const html = await readLimitedText(response, MAX_HTML_BYTES);
         const links = extractLinks(html, finalUrl, source.base_url);
         return { source, status: response.status, links, error: null as string | null };
