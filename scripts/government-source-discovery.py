@@ -21,9 +21,9 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "data" / "government-official-sources.json"
 OUTPUT = ROOT / "government-source-discovery-candidates.json"
-TIMEOUT = 10
-MAX_BYTES = 1_200_000
-MAX_WORKERS = 5
+TIMEOUT = 5
+MAX_BYTES = 800_000
+MAX_WORKERS = 10
 OFFICIAL_SUFFIXES = (".gov.in", ".nic.in", ".gov", ".mil.in")
 # Require a recruitment-specific signal. Broad terms like "board", "exam",
 # "department" and "apply" created many unrelated portal suggestions.
