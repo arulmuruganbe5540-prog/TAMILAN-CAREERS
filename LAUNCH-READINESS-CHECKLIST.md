@@ -6,8 +6,8 @@ This is an operational checklist based on the project changes and user-confirmed
 
 ## Confirmed complete
 
-- [x] Latest GitHub Pages deployment succeeded for commit `3c58359a079572588724226fd1bfeb6c55a2a930` on 17 November 2026 (run `44052501042`).
-- [x] Latest full website health workflow passed for commit `3c58359a079572588724226fd1bfeb6c55a2a930` on 17 November 2026 (run `44052500315`): all five Supabase Edge Functions type-checked; SQL migration lint, private candidate artifact guard, public feed JavaScript, site structure, and browser smoke tests passed.
+- [x] Latest GitHub Pages deployment succeeded for commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b` on 17 November 2026 (run `44053036994`).
+- [x] Latest full website health workflow passed for commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b` on 17 November 2026 (run `44053037291`): all five Supabase Edge Functions type-checked; SQL migration lint, private candidate artifact guard, public feed JavaScript, site structure, and browser smoke tests passed.
 - [x] Company workflow SQL was reported successful by the user.
 - [x] Candidate application withdrawal SQL was reported successful by the user.
 - [x] External job-source registry SQL was reported successful by the user.
@@ -30,6 +30,9 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Latest Pages deployment and health workflow were both confirmed successful on 17 November 2026.
 - [x] State PSC monitor was hardened to use HTTPS-only source URLs, validate redirects, enforce bounded redirects, require HTML/XHTML, and check `robots.txt` before scanning and after redirects.
 - [x] State PSC public report no longer includes unverified recruitment keyword snippets; CI now rejects such snippets if they reappear.
+- [x] Resume application integrity guard added to `supabase-setup-pending.sql`: the database rejects a `resume_id` unless the referenced Resume belongs to the applicant, including null/mismatched candidate IDs.
+- [x] Employer applicant-profile access now excludes withdrawn applications in the consolidated Supabase setup SQL.
+- [x] Latest SQL migration lint, Edge Function type checks, privacy guard, browser smoke tests, website health workflow, and Pages deployment all passed on commit `bd78a6f4e69cbe0e440317d30fd9fc58c43e902b`.
 - [x] Latest website health run `44052500315` and Pages deployment run `44052501042` both passed on commit `3c58359a079572588724226fd1bfeb6c55a2a930`.
 
 ## Must finish before enabling external source scanning
