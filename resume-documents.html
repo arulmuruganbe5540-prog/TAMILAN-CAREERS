@@ -78,10 +78,12 @@ async function downloadFile(name){
 async function deleteFile(name){
  if(!confirm("இந்த ஆவணத்தை நிரந்தரமாக நீக்கவா?"))return;
  const path=currentUser.id+"/"+name;
- const {error:recordError}=await client.from("candidate_resumes").delete().eq("user_id",currentUser.id).eq("file_path",path);
- if(recordError)throw recordError;
- const {error}=await client.storage.from(BUCKET).remove([path]);if(error)throw new Error("Resume பட்டியல் பதிவு நீக்கப்பட்டது; ஆனால் Storage கோப்பை நீக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்: "+error.message);
- message("ஆவணமும் அதன் Resume பதிவும் நீக்கப்பட்டன.",true);await loadFiles();
+  // Delete the private Storage object first; retain metadata if Storage rejects the request.
+  const {error:storageError}=await client.storage.from(BUCKET).remove([path]);
+  if(storageError)throw new Error("Storage கோப்பை நீக்க முடியவில்லை; Resume பதிவு பாதுகாப்பாகவே உள்ளது. மீண்டும் முயற்சிக்கவும்: "+storageError.message);
+  const {error:recordError}=await client.from("candidate_resumes").delete().eq("user_id",currentUser.id).eq("file_path",path);
+  if(recordError)throw new Error("Storage கோப்பு நீக்கப்பட்டது; ஆனால் Resume பதிவை நீக்க முடியவில்லை. பக்கத்தைப் புதுப்பித்து மீண்டும் முயற்சிக்கவும்: "+recordError.message);
+  message("ஆவணமும் அதன் Resume பதிவும் நீக்கப்பட்டன.",true);await loadFiles();
 }
 $("uploadBtn").addEventListener("click",()=>uploadFile().catch(e=>message("பதிவேற்ற முடியவில்லை: "+(e.message||e)+" — Storage bucket / Policies அமைப்பைச் சரிபார்க்கவும்.",false)));
 $("refreshBtn").addEventListener("click",()=>loadFiles().catch(e=>message(e.message||String(e),false)));
