@@ -9,9 +9,9 @@
 </style></head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="dashboard.html">Dashboard</a><a href="jobs.html">வேலைகள்</a></nav></header>
 <main>
-<section class="hero"><h1>🏢 நிறுவன விவரங்கள்</h1><p>உங்கள் நிறுவனத்தின் அடிப்படை விவரங்களை நிரப்பி வரைவு வடிவில் சேமிக்கலாம்.</p></section>
+<section class="hero"><h1>🏢 நிறுவன விவரங்கள்</h1><p>உங்கள் நிறுவன விவரங்களை தனிப்பட்ட வரைவு வடிவில் சேமித்து பின்னர் திருத்தலாம்.</p></section>
 <section class="panel">
-<div class="notice"><b>முக்கிய குறிப்பு:</b> இது தற்போது உங்கள் கணக்கில் சேமிக்கப்படும் வரைவு மட்டுமே. நிறுவனச் சரிபார்ப்பு, அதிகாரப்பூர்வ நிறுவனப் பதிவு, வேலை வெளியிடும் அனுமதி ஆகியவை backend நிர்வாகச் சரிபார்ப்பு இணைக்கப்பட்ட பிறகே செயல்படும். இங்கே உள்ளிடும் தகவல்கள் நிறுவன அனுமதியைத் தானாக வழங்காது.</div>
+<div class="notice"><b>முக்கிய குறிப்பு:</b> இது உங்கள் கணக்கிற்குரிய தனிப்பட்ட Database வரைவு மட்டுமே. நிறுவனச் சரிபார்ப்பு, அதிகாரப்பூர்வ நிறுவனப் பதிவு, வேலை வெளியிடும் அனுமதி ஆகியவை backend நிர்வாகச் சரிபார்ப்பு இணைக்கப்பட்ட பிறகே செயல்படும். இங்கே உள்ளிடும் தகவல்கள் நிறுவன அனுமதியைத் தானாக வழங்காது.</div>
 <form id="companyForm">
 <div class="field wide"><label for="companyName">நிறுவனத்தின் பெயர் *</label><input id="companyName" required maxlength="160" placeholder="உதா: ABC Technologies"></div>
 <div class="field"><label for="industry">துறை *</label><select id="industry" required><option value="">தேர்வு செய்யவும்</option><option>IT / Software</option><option>Manufacturing</option><option>Healthcare</option><option>Education</option><option>Retail / Sales</option><option>Construction</option><option>Logistics / Transport</option><option>Finance / Banking</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
@@ -30,32 +30,47 @@
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const ids=["companyName","industry","size","email","phone","website","city","address","about"];
-let currentUser=null;
+let currentUser=null,legacyDraft={};
 function message(text,ok){const el=document.getElementById("status");el.textContent=text;el.className="status "+(ok?"ok":"err")}
-function fill(data={}){ids.forEach(id=>document.getElementById(id).value=data[id]||"")}
+function readForm(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());return d}
+function fill(data={}){ids.forEach(id=>document.getElementById(id).value=data[id]??"")}
 async function init(){
  const {data,error}=await client.auth.getUser();
  if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("company-profile.html"));return}
  currentUser=data.user;
- const saved=currentUser.user_metadata?.company_profile_draft||{};
- fill(saved);
+ legacyDraft=currentUser.user_metadata?.company_profile_draft||{};
+ const {data:row,error:loadError}=await client.from("company_profile_drafts").select("profile").eq("user_id",currentUser.id).maybeSingle();
+ if(loadError){
+  fill(legacyDraft);
+  message("Database வரைவு அட்டவணை இன்னும் அமைக்கப்படவில்லை. பழைய கணக்கு வரைவைக் காட்டுகிறோம். supabase-company-workflow.sql இயக்கவும். விவரம்: "+loadError.message,false);
+  return;
+ }
+ fill(row?.profile||legacyDraft);
+ if(row?.profile)message("உங்கள் தனிப்பட்ட நிறுவன வரைவு Database-லிருந்து ஏற்றப்பட்டது.",true);
+ else if(Object.keys(legacyDraft).length)message("பழைய வரைவு ஏற்றப்பட்டது. Save செய்தால் பாதுகாப்பான Database-ல் சேமிக்கப்படும்.",true);
 }
 async function save(){
  if(!currentUser){message("முதலில் Login செய்யவும்.",false);return}
  const form=document.getElementById("companyForm");
  if(!form.reportValidity())return;
- const draft={};ids.forEach(id=>draft[id]=document.getElementById(id).value.trim());
+ const draft=readForm();
  if(draft.website){try{const u=new URL(draft.website);if(!["http:","https:"].includes(u.protocol))throw 0}catch(e){message("சரியான Website URL உள்ளிடவும்.",false);return}}
  const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="சேமிக்கப்படுகிறது...";
  try{
-  const {data,error}=await client.auth.updateUser({data:{company_profile_draft:draft}});
+  const {error}=await client.from("company_profile_drafts").upsert({user_id:currentUser.id,profile:draft},{onConflict:"user_id"});
   if(error)throw error;
-  currentUser=data.user;
-  message("நிறுவன விவர வரைவு உங்கள் கணக்கில் சேமிக்கப்பட்டது. இது இன்னும் சரிபார்க்கப்பட்ட நிறுவனப் பதிவு அல்ல.",true);
- }catch(e){message("சேமிக்க முடியவில்லை: "+(e.message||e),false)}
+  message("நிறுவன விவரங்கள் உங்கள் தனிப்பட்ட Database வரைவில் சேமிக்கப்பட்டன. இது இன்னும் சரிபார்க்கப்பட்ட Company பதிவு அல்ல.",true);
+ }catch(e){message("Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false)}
  finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
 }
+async function reloadDraft(){
+ if(!currentUser)return;
+ const {data,error}=await client.from("company_profile_drafts").select("profile").eq("user_id",currentUser.id).maybeSingle();
+ if(error){message("மீண்டும் ஏற்ற முடியவில்லை: "+error.message,false);return}
+ fill(data?.profile||legacyDraft);
+ message(data?.profile?"சேமித்த Database வரைவு மீண்டும் ஏற்றப்பட்டது.":"சேமித்த வரைவு இல்லை; காலியான / பழைய வரைவு காட்டப்படுகிறது.",true);
+}
 document.getElementById("saveBtn").addEventListener("click",save);
-document.getElementById("reloadBtn").addEventListener("click",()=>fill(currentUser?.user_metadata?.company_profile_draft||{}));
+document.getElementById("reloadBtn").addEventListener("click",reloadDraft);
 init().catch(e=>message(e.message||String(e),false));
 </script></body></html>
