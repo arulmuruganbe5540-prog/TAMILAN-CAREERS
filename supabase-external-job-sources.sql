@@ -78,5 +78,5 @@ insert into public.external_job_sources(id,source_name,source_type,country,regio
 ('unilever-careers','Unilever Careers','foreign_company','United Kingdom',null,'https://careers.unilever.com/','manual'),
 ('siemens-careers','Siemens Careers','foreign_company','Germany',null,'https://jobs.siemens.com/','manual'),
 ('samsung-careers','Samsung Careers','foreign_company','South Korea',null,'https://www.samsungcareers.com/','manual')
-on conflict(id) do update set source_name=excluded.source_name,source_type=excluded.source_type,country=excluded.country,region=excluded.region,base_url=excluded.base_url,updated_at=now();
+on conflict(id) do update set source_name=excluded.source_name,source_type=excluded.source_type,country=excluded.country,region=excluded.region,base_url=excluded.base_url,monitor_mode=excluded.monitor_mode,updated_at=now();
 commit;
