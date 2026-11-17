@@ -285,7 +285,7 @@ create table if not exists public.candidate_education (
   user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   institution_name text not null check (length(btrim(institution_name)) between 1 and 180),
   qualification text not null check (length(btrim(qualification)) between 1 and 120),
-  field_of_study text, grade text, start_date date, end_date date,
+  field_of_study text, grade text, country_id uuid references public.countries(id), start_date date, end_date date,
   is_current boolean not null default false, description text,
   created_at timestamptz not null default now(), updated_at timestamptz not null default now(),
   constraint candidate_education_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
@@ -296,7 +296,7 @@ create table if not exists public.candidate_experience (
   user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   company_name text not null check (length(btrim(company_name)) between 1 and 180),
   job_title text not null check (length(btrim(job_title)) between 1 and 140),
-  employment_type text, city text, start_date date, end_date date,
+  employment_type text, city text, country_id uuid references public.countries(id), start_date date, end_date date,
   is_current boolean not null default false, description text,
   created_at timestamptz not null default now(), updated_at timestamptz not null default now(),
   constraint candidate_experience_dates_valid check (start_date is null or end_date is null or end_date >= start_date),
@@ -304,7 +304,6 @@ create table if not exists public.candidate_experience (
 );
 alter table public.candidate_education add column if not exists updated_at timestamptz not null default now();
 alter table public.candidate_experience add column if not exists updated_at timestamptz not null default now();
-alter table public.candidate_certifications add column if not exists updated_at timestamptz not null default now();
 create index if not exists candidate_education_user_start_idx on public.candidate_education(user_id, start_date desc);
 create index if not exists candidate_experience_user_start_idx on public.candidate_experience(user_id, start_date desc);
 
@@ -340,6 +339,7 @@ create table if not exists public.candidate_certifications (
   updated_at timestamptz not null default now(),
   constraint candidate_certifications_dates_valid check (issue_date is null or expiry_date is null or expiry_date >= issue_date)
 );
+alter table public.candidate_certifications add column if not exists updated_at timestamptz not null default now();
 create index if not exists candidate_certifications_user_issue_idx on public.candidate_certifications(user_id, issue_date desc);
 
 create or replace function public.tc_candidate_certifications_touch_updated_at()
@@ -553,6 +553,7 @@ create table if not exists public.candidate_experience (
   job_title text not null check (length(btrim(job_title)) between 1 and 140),
   employment_type text,
   city text,
+  country_id uuid references public.countries(id),
   start_date date,
   end_date date,
   is_current boolean not null default false,
