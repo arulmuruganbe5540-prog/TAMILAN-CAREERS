@@ -31,7 +31,8 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 - Live Supabase API grants and employer applicant-profile policies — applied through `supabase-core-api-access.sql`; verification confirms the expected table privileges are now present while RLS remains enabled.
 - `supabase-company-application-status.sql` — applied. The secure company application status RPC is installed.
 - `supabase-interview-notifications.sql` — applied. Private notification and interview-invitation tables, RLS policies, send/respond/mark-read functions, and application notification triggers are installed.
-- `pg_cron` was enabled and `tc-interview-reminders-15m` is active (`*/15 * * * *`), calling `tc_generate_interview_reminders()`. A manual run returned 0 reminders because no interview records exist yet.
+- `pg_cron` was enabled and `tc-interview-reminders-15m` is active (`*/15 * * * *`), calling `tc_generate_interview_reminders()`.
+- A transactional workflow smoke test created a temporary job/application, sent an interview invitation, accepted it, changed the application to shortlisted, and generated a reminder. The test verified 1 accepted interview and 5 visible notifications; the entire transaction was rolled back and a follow-up query confirmed no test rows or company-status changes remained.
 - Edge Function `scan-external-job-sources` — user reported an earlier successful deployment. The newest repository safeguards have **not** yet been redeployed.
 - Edge Function `manage-hiring` — deployed, but the currently deployed version is only the login/token and role-status handler; the newer company-member actions are not confirmed deployed.
 - The user has shared Storage policy rows for `candidate-resumes` and `job-offers`. These rows prove that policies exist, but do not by themselves prove which buckets currently exist or whether either bucket contains files. The `job-offers` policy calls `public.can_access_job_application(uuid)`; that function is not defined in the repository SQL, so its live definition and security settings must be reviewed from Supabase before relying on the policy.
@@ -42,7 +43,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 - Candidate education, work experience, and certification tables are present in live Supabase. RLS-aligned Data API grants are now applied; authenticated UI save/read testing remains outstanding.
 - Employer applicant profile read policies and application status update RPC.
 - Company job draft → Super Admin review → verified-company publish workflow.
-- Interview invitations, candidate accept/decline, notification centre, and reminder generator are installed in Supabase. The reminder generator is scheduled every 15 minutes; real Candidate–Employer testing remains outstanding.
+- Interview invitations, candidate accept/decline, notification centre, and reminder generator are installed in Supabase. The reminder generator is scheduled every 15 minutes. Transactional database smoke testing passed, but separate real Candidate and Employer accounts still need end-to-end verification.
 - AI Resume-to-job matching. The local rule-based matcher is separate from the optional AI Function.
 - Government notice private review/publish archive and ingestion Function.
 - External source scanner latest safeguards and source monitor workflow.
