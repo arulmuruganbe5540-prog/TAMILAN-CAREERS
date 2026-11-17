@@ -12,8 +12,9 @@ on:
       - "supabase-*.sql"
       - "scripts/**"
       - "supabase/functions/**"
+      - ".gitignore"
       - ".github/dependabot.yml"
-      - ".github/workflows/website-health-check.yml"
+      - ".github/workflows/**"
 
 permissions:
   contents: read
