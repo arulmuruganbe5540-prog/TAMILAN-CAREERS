@@ -35,6 +35,26 @@ async function fetchRegisteredPage(baseUrl:string){
  }
  throw new Error("Too many redirects");
 }
+ function robotsPatternMatches(pattern:string,path:string){
+  const endAnchored=pattern.endsWith("$");
+  const raw=endAnchored?pattern.slice(0,-1):pattern;
+  const parts=raw.split("*");
+  if(parts.length===1)return path.startsWith(raw)&&(!endAnchored||path.length===raw.length);
+  let position=0;
+  for(let i=0;i<parts.length;i++){
+   const part=parts[i];
+   if(i===0){
+    if(part&&!path.startsWith(part))return false;
+    position=part.length;
+   }else{
+    const found=path.indexOf(part,position);
+    if(found<0)return false;
+    if(i===parts.length-1&&endAnchored&&found+part.length!==path.length)return false;
+    position=found+part.length;
+   }
+  }
+  return !endAnchored||position===path.length;
+ }
 function robotsAllows(text:string,pageUrl:string,userAgent:string){
  const groups:{agents:string[];rules:{allow:boolean;path:string}[]}[]=[];
  let agents:string[]=[],rules:{allow:boolean;path:string}[]=[];
@@ -56,10 +76,8 @@ function robotsAllows(text:string,pageUrl:string,userAgent:string){
  const applicable=specific.length?specific:groups.filter(g=>g.agents.includes("*"));
  const allRules=applicable.flatMap(g=>g.rules);
  const parsed=new URL(pageUrl),requestPath=parsed.pathname+parsed.search;
- const matches=allRules.filter(r=>{
-  const prefix=r.path.split("*")[0];
-  return prefix.length>0&&requestPath.startsWith(prefix);
- }).sort((a,b)=>b.path.length-a.path.length);
+ const matches=allRules.filter(r=>robotsPatternMatches(r.path,requestPath))
+  .sort((a,b)=>b.path.length-a.path.length);
  return !matches.length||matches[0].allow;
 }
 async function robotsPermits(pageUrl:string,userAgent:string){
