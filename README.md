@@ -55,6 +55,7 @@
 ## Important implementation status
 - Job search reads the Supabase `jobs` table; real listing visibility depends on the table schema, RLS and published job records.
 - Job application frontend is committed. Run `supabase-job-applications.sql` only after confirming `public.jobs.id` is UUID; then test with a Job Seeker account.
+- Employer application status workflow: `company-applicants.html` now provides secure status changes (under review, shortlisted, rejected) through `tc_company_update_application_status`; run `supabase-company-application-status.sql` once in Supabase SQL Editor. The function checks the signed-in user's active company membership and only permits updates for that company's applications.
 - Employer applicant-profile read policies have been prepared in `supabase-setup-pending.sql`, but they are not live until that script is run and verified in Supabase. Application status changes and employer resume downloads are not implemented.
 - Government job pages provide information and official links; verify every vacancy and deadline at the relevant official source.
 - Never pay an individual or share OTPs, passwords, bank PINs or account credentials to obtain a job.
