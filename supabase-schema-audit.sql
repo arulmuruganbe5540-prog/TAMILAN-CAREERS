@@ -16,6 +16,18 @@ where table_schema = 'public'
     'company_members',
     'job_applications',
     'user_roles',
+    'job_seeker_profiles',
+    'candidate_skills',
+    'candidate_languages',
+    'candidate_preferences',
+    'candidate_education',
+    'candidate_experience',
+    'candidate_certifications',
+    'candidate_resumes',
+    'job_posting_drafts',
+    'company_profile_drafts',
+    'tc_notifications',
+    'tc_interview_invitations',
     'government_notice_sources',
     'government_notice_reviews',
     'government_notices'
@@ -38,7 +50,7 @@ left join information_schema.constraint_column_usage ccu
   on ccu.constraint_schema = tc.constraint_schema
  and ccu.constraint_name = tc.constraint_name
 where tc.constraint_schema = 'public'
-  and tc.table_name in ('jobs','companies','company_members','job_applications','government_notice_sources','government_notice_reviews','government_notices')
+  and tc.table_name in ('jobs','companies','company_members','job_applications','candidate_resumes','candidate_education','candidate_experience','candidate_certifications','tc_notifications','tc_interview_invitations','government_notice_sources','government_notice_reviews','government_notices')
 order by tc.table_name, tc.constraint_type, tc.constraint_name;
 
 select
@@ -52,7 +64,7 @@ select
   with_check
 from pg_policies
 where schemaname = 'public'
-  and tablename in ('jobs','companies','company_members','job_applications','user_roles','government_notice_sources','government_notice_reviews','government_notices')
+  and tablename in ('jobs','companies','company_members','job_applications','user_roles','job_seeker_profiles','candidate_skills','candidate_languages','candidate_preferences','candidate_education','candidate_experience','candidate_certifications','candidate_resumes','job_posting_drafts','company_profile_drafts','tc_notifications','tc_interview_invitations','government_notice_sources','government_notice_reviews','government_notices')
 order by tablename, policyname;
 
 
@@ -74,7 +86,9 @@ select
 from information_schema.role_table_grants
 where table_schema = 'public'
   and table_name in (
-    'jobs','companies','company_members','job_applications','user_roles',
+    'jobs','companies','company_members','job_applications','user_roles','candidate_resumes',
+    'candidate_education','candidate_experience','candidate_certifications','tc_notifications',
+    'tc_interview_invitations','job_posting_drafts','company_profile_drafts',
     'government_notice_sources','government_notice_reviews','government_notices'
   )
 order by table_name, grantee, privilege_type;
@@ -94,5 +108,18 @@ where n.nspname = 'public'
     or p.proname ilike '%role%'
     or p.proname ilike '%publish%'
     or p.proname ilike '%government%'
+    or p.proname ilike 'tc_%'
+    or p.proname ilike '%company_view_candidate%'
   )
 order by p.proname;
+
+-- 7. Private Resume bucket configuration (no file names or contents are read).
+select id, name, public, file_size_limit, allowed_mime_types
+from storage.buckets
+where id = 'resumes';
+
+-- 8. Storage object policies protecting the private Resume bucket.
+select schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
+from pg_policies
+where schemaname = 'storage' and tablename = 'objects'
+order by policyname;
