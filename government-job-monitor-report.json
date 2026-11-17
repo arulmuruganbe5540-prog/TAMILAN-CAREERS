@@ -1,9 +1,9 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T06:46:49.540648+00:00",
+  "checked_at_utc": "2026-11-17T07:32:35.816354+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
-  "successful_sources": 23,
+  "successful_sources": 24,
   "failed_sources": [
     {
       "source_id": "rrb",
@@ -56,14 +56,14 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
-    },
-    {
       "source_id": "tnusrb",
       "url": "https://www.tnusrb.tn.gov.in/",
       "error": "<urlopen error timed out>"
+    },
+    {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "trb-tamilnadu",
@@ -73,11 +73,6 @@
     {
       "source_id": "mrb-tamilnadu",
       "url": "https://www.mrb.tn.gov.in/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
@@ -106,14 +101,14 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
-    },
-    {
       "source_id": "gpsc-gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
       "error": "<urlopen error [Errno 101] Network is unreachable>"
+    },
+    {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
     },
     {
       "source_id": "kerala-psc",
@@ -126,8 +121,8 @@
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
+      "source_id": "mpsc-mizoram",
+      "url": "https://mpsc.mizoram.gov.in/",
       "error": "HTTP Error 403: Forbidden"
     },
     {
