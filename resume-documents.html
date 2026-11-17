@@ -23,6 +23,9 @@ async function initialise(){
  currentUser=data.session.user;
  const {data:role,error:roleErr}=await client.from("user_roles").select("role").eq("user_id",currentUser.id).maybeSingle();
  if(roleErr)throw roleErr;if(role?.role!=="job_seeker"){document.querySelector("main").innerHTML='<div class="panel">இந்தப் பக்கம் Job Seeker கணக்குகளுக்காக மட்டுமே.</div>';return}
+ const {data:seeker,error:seekerError}=await client.from("job_seeker_profiles").select("user_id").eq("user_id",currentUser.id).maybeSingle();
+ if(seekerError)throw seekerError;
+ if(!seeker){document.querySelector("main").innerHTML='<div class="panel"><h2>முதலில் சுயவிவரத்தை உருவாக்குங்கள்</h2><p>Resume பதிவேற்றுவதற்கு முன் உங்கள் Job Seeker சுயவிவரத்தைச் சேமிக்க வேண்டும்.</p><a class="btn" href="job-seeker-profile.html">சுயவிவரத்தைத் திறக்கவும்</a></div>';return}
  await loadFiles();
 }
 async function loadFiles(){
