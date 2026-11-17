@@ -214,8 +214,7 @@ report = {
     "registered_sources":len(config.get("sources",[])),
     "successful_sources":len(source_results), "failed_sources":errors,
     "candidate_links_discovered_this_run":sum(x["links_found"] for x in source_results),
-    "pending_admin_review":queue["pending_review"],
-    "note":"Official-source link discovery only. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
+    "note":"Official-source link discovery only. This aggregate report contains no candidate URLs and does not assert that Supabase Admin Review sync succeeded. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
     "scan_workers":MAX_WORKERS, "request_timeout_seconds":TIMEOUT
 }
 QUEUE.write_text(json.dumps(queue,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
