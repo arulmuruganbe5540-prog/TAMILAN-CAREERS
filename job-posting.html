@@ -65,7 +65,7 @@ async function loadDraftForCompany(){
  if(!companyId)return;
  const {data,error}=await client.from("job_posting_drafts").select("draft").eq("company_id",companyId).eq("user_id",currentUser.id).maybeSingle();
  if(error){
-  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது உங்கள் உறுப்பினர் அனுமதி இல்லை. முதலில் supabase-job-posting-drafts.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
+  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது உங்கள் உறுப்பினர் அனுமதி இல்லை. முதலில் supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
   const old=currentUser.user_metadata?.job_posting_draft||{};
   if(old.company_id===companyId)fill(old);
   return;
@@ -88,7 +88,7 @@ async function save(){
   const {error}=await client.from("job_posting_drafts").upsert({company_id:d.companyChoice,user_id:currentUser.id,draft},{onConflict:"company_id,user_id"});
   if(error)throw error;
   message("வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
- }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-job-posting-drafts.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false)}
+ }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false)}
  finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
 }
 document.getElementById("saveBtn").addEventListener("click",save);
