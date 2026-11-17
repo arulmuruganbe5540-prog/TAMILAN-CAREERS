@@ -9,7 +9,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 ## 1. Confirmed GitHub / website work
 
 - Public GitHub repository and `main` branch are present.
-- Latest confirmed GitHub Pages deployment succeeded for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075721444`). Latest confirmed full website health workflow passed for commit `7e48b58ac1e43bc5bd79b92d114012c841e4200f` (run `44075666298`), including SQL lint, Edge Function type checks, private Resume security regression checks, and browser smoke tests.
+- Latest confirmed GitHub Pages deployment succeeded for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075721444`). Latest confirmed full website health workflow passed for commit `026e7b9b4a564b28d896ea141f7b93d8df371b44` (run `44075723027`), including SQL lint, Edge Function type checks, private Resume security regression checks, and browser smoke tests.
 - The health workflow checks Edge Function types, SQL migration delimiters and SECURITY DEFINER search paths, privacy guards, company publication flow, website structure, and browser smoke tests. The expanded workflow including the new Resume security regression guard passed on commit `5755707f840b6c0db2cb4296f1fd27133f7c36da` (run `44074830855`); the Resume guard, Deno checks, SQL lint, and browser smoke tests all passed.
 - The current repository contains Tamil/English public pages for job search, job details, applications, candidate profile, saved jobs, company pages, notifications, Resume documents, Government Jobs, State PSC directory, and exam practice.
 - The current repository includes separate Private Jobs and Government Jobs areas; scraped/discovered links are not auto-published.
