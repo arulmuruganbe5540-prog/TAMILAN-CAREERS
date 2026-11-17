@@ -58,7 +58,7 @@ main{min-width:0;padding:25px clamp(15px,3vw,38px) 45px}
 <div id="app" class="layout hidden">
 <aside>
 <div class="brand">TAMILAN <span>CAREERS</span></div>
-<div class="admin-card"><div class="avatar">அ</div><div><strong>அருள் முருகன்<br>மங்கையர்க்கரசி</strong><small>SUPER ADMIN · முழு நிர்வாகம்</small></div></div>
+<div class="admin-card"><div class="avatar" id="adminAvatar">A</div><div><strong id="adminIdentity">Admin</strong><small>SUPER ADMIN · முழு நிர்வாகம்</small></div></div>
 <div class="nav-label">MAIN CONTROL</div>
 <nav>
 <a class="active" href="#overview"><span class="ico">▦</span>முகப்பு / Dashboard</a>
@@ -82,7 +82,7 @@ main{min-width:0;padding:25px clamp(15px,3vw,38px) 45px}
 <div class="side-foot">TAMILAN CAREERS<br>Admin Control Center<br>பாதுகாப்பான நிர்வாக அணுகல்</div>
 </aside>
 <main id="overview">
-<div class="topbar"><div class="welcome"><small>ADMIN CONTROL CENTER / OVERVIEW</small><h1>வணக்கம், அருள் முருகன் மங்கையர்க்கரசி 👋</h1></div><div class="top-actions"><a class="btn light" href="index.html">🌐 Website பார்க்க</a><button class="btn blue" id="refresh">↻ Refresh</button></div></div>
+<div class="topbar"><div class="welcome"><small>ADMIN CONTROL CENTER / OVERVIEW</small><h1 id="adminWelcome">வணக்கம், Admin 👋</h1></div><div class="top-actions"><a class="btn light" href="index.html">🌐 Website பார்க்க</a><button class="btn blue" id="refresh">↻ Refresh</button></div></div>
 <section class="hero"><h2>உங்கள் TAMILAN CAREERS — முழு கட்டுப்பாட்டு மையம்</h2><p>வேலைவாய்ப்பு அறிவிப்புகள், அரசு வேலை ஆய்வு, விண்ணப்பங்கள், நிறுவனங்கள், பயனர்கள் மற்றும் இணையதளப் பகுதிகளை ஒரே இடத்தில் நிர்வகிக்க வடிவமைக்கப்பட்ட Admin Dashboard.</p><span class="chip">✦ Secure Admin Session · தமிழ் முன்னுரிமை</span></section>
 <div class="stats">
 <div class="stat"><div class="top"><span>வேலைவாய்ப்புகள்</span><span class="symbol s1">💼</span></div><strong id="jobsCount">—</strong><small id="jobsHint">தரவுத்தள அனுமதி சரிபார்க்கப்படுகிறது</small></div>
@@ -105,7 +105,7 @@ main{min-width:0;padding:25px clamp(15px,3vw,38px) 45px}
 </div>
 <div class="bottom-grid">
 <section class="panel"><h3>⚡ விரைவு அணுகல்</h3><div class="quick"><a href="job-posting.html">✚ புதிய வேலை வரைவு</a><a href="government-notice-review.html">🏛️ அரசு அறிவிப்பு ஆய்வு</a><a href="jobs.html">💼 வேலைகள் பார்க்க</a><a href="company-applicants.html">📨 விண்ணப்பங்கள் பார்க்க</a></div></section>
-<section class="panel"><h3>🛡️ பாதுகாப்பு குறிப்பு</h3><div class="notice">இந்த Admin பகுதி Supabase Login மற்றும் <b>public.is_super_admin()</b> அனுமதியைச் சரிபார்த்த பிறகே திறக்கும். இங்கு காட்டப்படும் இணைப்புகள் அனைத்தும் ஏற்கனவே உள்ள பக்கங்களுக்கான அணுகல். Database-இல் உண்மையான மாற்றங்கள் செய்யும் கட்டுப்பாடுகள் தனியாக பாதுகாப்பாக இணைக்கப்பட வேண்டும்.</div></section>
+<section class="panel"><h3>🛡️ பாதுகாப்பு குறிப்பு</h3><div class="notice">இந்த Admin பகுதி Supabase Login மற்றும் <b>user_roles அட்டவணையில் உங்களுடைய கணக்கிற்கு வழங்கப்பட்ட super_admin அனுமதியைச் சரிபார்த்த பிறகே திறக்கும். ஒவ்வொரு தரவு மாற்றமும் தனித்தனி Database RLS மற்றும் பாதுகாப்பான server-side கட்டுப்பாடுகளால் சரிபார்க்கப்படும்.</div></section>
 </div>
 </main>
 </div>
@@ -115,7 +115,7 @@ const el=id=>document.getElementById(id);
 function gate(message){el("loading").classList.add("hidden");el("app").classList.add("hidden");el("gateText").textContent=message;el("gate").classList.remove("hidden")}
 async function count(table,id,hint){const {count,error}=await supabaseClient.from(table).select("*",{count:"exact",head:true});el(id).textContent=error?"—":String(count??0);el(hint).textContent=error?"இந்த கணக்கிற்கு வாசிப்பு அனுமதி இல்லை":"தரவுத்தள எண்ணிக்கை"}
 async function loadStats(){await Promise.all([count("jobs","jobsCount","jobsHint"),count("job_applications","appsCount","appsHint"),count("companies","companiesCount","companiesHint")]);const {count,error}=await supabaseClient.from("government_notice_reviews").select("*",{count:"exact",head:true});el("noticesCount").textContent=error?"—":String(count??0);el("noticesHint").textContent=error?"ஆய்வு அட்டவணை அணுகல் இல்லை":"ஆய்வு வரிசை மொத்தம்"}
-async function init(){const {data,error}=await supabaseClient.auth.getUser();if(error||!data.user){gate("Admin பகுதியைத் திறக்க முதலில் Login செய்யவும்.");return}const {data:allowed,error:roleError}=await supabaseClient.rpc("is_super_admin");if(roleError||allowed!==true){gate("இந்த Login கணக்கிற்கு Super Admin அனுமதி இல்லை. அனுமதி வழங்கப்பட்ட Admin கணக்கில் Login செய்யவும்.");return}el("loading").classList.add("hidden");el("app").classList.remove("hidden");await loadStats()}
+async function init(){const {data,error}=await supabaseClient.auth.getUser();if(error||!data.user){gate("Admin பகுதியைத் திறக்க முதலில் Login செய்யவும்.");return}const {data:roles,error:roleError}=await supabaseClient.from("user_roles").select("role").eq("user_id",data.user.id).eq("role","super_admin").limit(1);if(roleError||!roles?.length){gate("இந்த Login கணக்கிற்கு Super Admin அனுமதி இல்லை. அனுமதி வழங்கப்பட்ட Admin கணக்கில் Login செய்யவும்.");return}const email=data.user.email||"Admin";el("adminIdentity").textContent=email;el("adminAvatar").textContent=(email.trim()[0]||"A").toUpperCase();el("adminWelcome").textContent="வணக்கம், "+email+" 👋";el("loading").classList.add("hidden");el("app").classList.remove("hidden");await loadStats()}
 el("logout").addEventListener("click",async e=>{e.preventDefault();await supabaseClient.auth.signOut();location.replace("login.html")});
 el("refresh").addEventListener("click",loadStats);
 init();
