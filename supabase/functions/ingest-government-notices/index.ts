@@ -23,6 +23,59 @@ function hostAllowed(candidate: string, base: string) {
     return a.protocol === "https:" && (a.hostname === b.hostname || a.hostname.endsWith("." + b.hostname));
   } catch { return false; }
 }
+
+async function fetchRegisteredPage(baseUrl: string) {
+  let current = baseUrl;
+  for (let hop = 0; hop <= 5; hop++) {
+    if (!hostAllowed(current, baseUrl)) throw new Error("Redirect outside registered HTTPS domain");
+    const response = await fetch(current, {
+      headers: { "user-agent": "TAMILAN-CAREERS-GovernmentNoticeMonitor/1.0" },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      redirect: "manual",
+    });
+    if ([301, 302, 303, 307, 308].includes(response.status)) {
+      const location = response.headers.get("location");
+      await response.body?.cancel().catch(() => {});
+      if (!location) throw new Error("Redirect response missing Location");
+      if (hop === 5) throw new Error("Too many redirects");
+      current = new URL(location, current).toString();
+      continue;
+    }
+    return response;
+  }
+  throw new Error("Too many redirects");
+}
+
+async function readLimitedText(response: Response, limit: number) {
+  const reader = response.body?.getReader();
+  if (!reader) return "";
+  const decoder = new TextDecoder();
+  let total = 0;
+  let output = "";
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const remaining = limit - total;
+      if (value.byteLength > remaining) {
+        output += decoder.decode(value.subarray(0, remaining), { stream: true });
+        total = limit;
+        await reader.cancel().catch(() => {});
+        break;
+      }
+      output += decoder.decode(value, { stream: true });
+      total += value.byteLength;
+      if (total >= limit) {
+        await reader.cancel().catch(() => {});
+        break;
+      }
+    }
+  } finally {
+    output += decoder.decode();
+    reader.releaseLock();
+  }
+  return output;
+}
 function category(text: string) {
   if (/admit.?card|hall.?ticket|call.?letter/i.test(text)) return "admit_card";
   if (/result|merit.?list|selection.?list|short.?list/i.test(text)) return "result";
@@ -104,15 +157,15 @@ Deno.serve(async (req) => {
     const batch = sourceList.slice(offset, offset + MAX_WORKERS);
     const results = await Promise.all(batch.map(async (source) => {
       try {
-        const response = await fetch(source.base_url, {
-          headers: { "user-agent": "TAMILAN-CAREERS-GovernmentNoticeMonitor/1.0" },
-          signal: AbortSignal.timeout(TIMEOUT_MS),
-          redirect: "follow",
-        });
+        const response = await fetchRegisteredPage(source.base_url);
         if (!response.ok) throw new Error("HTTP " + response.status);
+        const contentType = (response.headers.get("content-type") || "").toLowerCase();
+        if (!/(text\/html|application\/xhtml\+xml)/i.test(contentType)) {
+          throw new Error("Source did not return an HTML content type");
+        }
         const finalUrl = response.url || source.base_url;
-        if (!hostAllowed(finalUrl, source.base_url)) throw new Error("Redirected outside registered host");
-        const html = (await response.text()).slice(0, MAX_HTML_BYTES);
+        if (!hostAllowed(finalUrl, source.base_url)) throw new Error("Redirected outside registered HTTPS domain");
+        const html = await readLimitedText(response, MAX_HTML_BYTES);
         const links = extractLinks(html, finalUrl, source.base_url);
         return { source, status: response.status, links, error: null as string | null };
       } catch (error) {
