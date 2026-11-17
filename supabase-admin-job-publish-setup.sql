@@ -31,6 +31,40 @@ begin
      or not exists (select 1 from information_schema.columns where table_schema='public' and table_name='jobs' and column_name='status') then
     raise exception 'Company verification or job-category schema differs from this migration; inspect supabase-schema-audit.sql before proceeding.';
   end if;
+  if exists (
+    select 1
+    from pg_type t
+    join pg_enum e on e.enumtypid = t.oid
+    where t.typname = (
+      select udt_name from information_schema.columns
+      where table_schema='public' and table_name='jobs' and column_name='salary_period'
+    )
+  ) and not exists (
+    select 1
+    from pg_type t
+    join pg_enum e on e.enumtypid = t.oid
+    where t.typname = (
+      select udt_name from information_schema.columns
+      where table_schema='public' and table_name='jobs' and column_name='salary_period'
+    )
+      and e.enumlabel = 'daily'
+  ) then
+    raise exception 'jobs.salary_period enum does not support daily; inspect schema audit before enabling Daily Wage posts.';
+  end if;
+  if exists (
+    select 1 from pg_constraint
+    where conrelid = 'public.jobs'::regclass
+      and contype = 'c'
+      and pg_get_constraintdef(oid) ilike '%salary_period%'
+  ) and not exists (
+    select 1 from pg_constraint
+    where conrelid = 'public.jobs'::regclass
+      and contype = 'c'
+      and pg_get_constraintdef(oid) ilike '%salary_period%'
+      and pg_get_constraintdef(oid) ilike '%daily%'
+  ) then
+    raise exception 'jobs.salary_period check constraint does not support daily; inspect schema audit before enabling Daily Wage posts.';
+  end if;
 end;
 $tc_admin_guard$;
 
@@ -207,6 +241,7 @@ begin
     'education', v_draft->>'education',
     'salaryMin', v_draft->>'salaryMin',
     'salaryMax', v_draft->>'salaryMax',
+    'salaryPeriod', coalesce(nullif(v_draft->>'salaryPeriod',''), case when v_draft->>'employmentType' = 'Daily Wage' then 'daily' else 'monthly' end),
     'skills', v_draft->>'skills',
     'description', v_draft->>'description',
     'deadline', v_draft->>'deadline',
@@ -300,6 +335,7 @@ declare
   v_experience_min numeric;
   v_salary_min numeric;
   v_salary_max numeric;
+  v_salary_period text;
   v_vacancies integer;
   v_deadline timestamptz;
 begin
@@ -387,6 +423,10 @@ begin
 
   v_salary_min := nullif(v_payload->>'salaryMin','')::numeric;
   v_salary_max := nullif(v_payload->>'salaryMax','')::numeric;
+  v_salary_period := lower(coalesce(nullif(v_payload->>'salaryPeriod',''), case when v_type='daily_wage' then 'daily' else 'monthly' end));
+  if v_salary_period not in ('monthly','daily') then
+    raise exception 'Salary period must be Monthly or Daily';
+  end if;
   if v_salary_min is not null and v_salary_min < 0 then
     raise exception 'Minimum salary cannot be negative';
   end if;
@@ -425,7 +465,7 @@ begin
     v_company_id, v_category_id, v_review.created_by, v_title, v_slug,
     'TC-' || upper(substr(replace(gen_random_uuid()::text,'-',''),1,10)),
     v_payload->>'description', v_type, v_workplace, v_experience_min,
-    v_salary_min, v_salary_max, '₹', 'monthly', v_vacancies,
+    v_salary_min, v_salary_max, '₹', v_salary_period, v_vacancies,
     v_deadline, 'published', now(),
     nullif(btrim(v_payload->>'location'), ''),
     nullif(btrim(v_payload->>'education'), ''),
