@@ -25,7 +25,7 @@ The registered official-source list includes direct archive/result pages for UPS
 - The secure RPC checks super-admin status, registered-source host, required verification flags, and duplicate/pending state before publishing.
 - Unverified items remain private in the review queue; rejected items are not public.
 
-Run `supabase-government-notice-admin-actions.sql` after `supabase-government-notices-setup.sql` to enable the Admin publish/reject actions.
+Run the single consolidated migration `supabase-government-archive-install.sql` in Supabase SQL Editor. It installs the government source registry, review/published tables, expanded archive sources, and secure Admin publish/reject RPCs. It is safe to re-run and does not auto-publish discovered notices.
 
 ## One-time secret configuration
 
