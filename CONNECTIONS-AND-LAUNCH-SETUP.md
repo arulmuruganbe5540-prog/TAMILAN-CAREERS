@@ -10,8 +10,8 @@ Supabase project: https://supabase.com/dashboard/project/qkmljuuusfjowexvybvy
 - GitHub repository and GitHub Pages deployment are connected.
 - Supabase project is connected to the website using its project URL and browser-safe public/anon key. Never place a Supabase service-role/secret key in website HTML or JavaScript.
 - The Supabase Edge Functions are deployed and active: company-members, company-resume-access, scan-external-job-sources, ingest-government-notices, bilingual-job-search, ai-resume-match, and legacy manage-hiring.
-- Latest GitHub Pages build/deploy run 44085660477 succeeded for commit e3d9a78013254cb0c78b9bf1cd4dd7f76a9e5b58.
-- Latest full Health Audit run 44085660992 succeeded for the same commit. Deno type-check, SQL delimiter lint, privacy guards, website structure, JavaScript checks, and browser smoke tests all passed.
+- Latest GitHub Pages deployment run `44095184723` succeeded for commit `cd607324586ab899ecf154442dc123ed3fd44831`.
+- Latest full Health Audit run `44094931772` succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388`. Deno type-check, SQL delimiter lint, privacy guards, website structure, JavaScript checks, and browser smoke tests all passed.
 
 ## External provider connections still needed
 
@@ -88,8 +88,8 @@ The website is deployed and the latest CI/Health Audit are green. It is not yet 
 
 ## 17 November 2026 — latest verification
 
-- Latest GitHub Pages deployment succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388` (run `44094932098`).
-- Latest full Health Audit succeeded for the same commit (run `44094931772`), including browser smoke tests for post-login return paths.
+- Latest GitHub Pages deployment succeeded for commit `cd607324586ab899ecf154442dc123ed3fd44831` (run `44095184723`).
+- Latest full Health Audit succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388` (run `44094931772`), including browser smoke tests for post-login return paths.
 - Live Supabase check confirms all 45 public tables have RLS enabled and all four Storage buckets are private. The seven listed Edge Functions are ACTIVE.
 - Current live database still has one Auth user, one company, one company membership, zero jobs, and zero applications. It has no Super Admin assignment. Real multi-account workflows cannot yet be verified.
 - The external provider secrets and first Super Admin bootstrap below remain owner-controlled final setup steps. The website must not be described as launch-ready until they are completed and real-account end-to-end tests pass.
