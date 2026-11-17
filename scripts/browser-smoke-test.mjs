@@ -110,6 +110,11 @@ await check("Company applicant page requires login", async () => {
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
+await check("Notification center requires login", async () => {
+  await open("notifications.html");
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+});
+
 await check("Tamil Nadu government jobs page loads and filters", async () => {
   await open("tamil-nadu-government-jobs.html");
   if (await page.locator("#departments .card").count() < 5) throw new Error("Department cards are missing");
