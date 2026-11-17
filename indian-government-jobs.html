@@ -24,7 +24,8 @@
 
 @media(max-width:900px){.exam-info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:470px){.exam-info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.exam-info-card{height:145px}}
-</style></head>
+</style>  <link rel="stylesheet" href="assets/site-protection.css">
+</head>
 <body>
 <header><a class="brand" href="index.html">TAMILAN CAREERS</a><nav><a href="index.html">முகப்பு</a><a href="indian-government-jobs.html">இந்திய அரசு வேலைகள்</a><a href="state-government-jobs.html">மாநில அரசு வேலைகள்</a><a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு வேலைகள்</a><a href="login.html">Login</a></nav></header>
 <section class="hero" style="background-image:linear-gradient(105deg,rgba(8,22,48,.28),rgba(8,22,48,.16)),url('https://upload.wikimedia.org/wikipedia/commons/f/fb/Glimpse_of_the_new_Parliament_Building%2C_in_New_Delhi.jpg')"><h1>🇮🇳 இந்திய மத்திய அரசு வேலைவாய்ப்புகள்</h1><p>மத்திய அரசு துறைகளின் வேலை அறிவிப்புகள், தேர்வு விவரங்கள், முடிவுகள் மற்றும் தயாரிப்பு வழிகாட்டுதல் — ஒரே இடத்தில்.</p><small class="photo-credit">படம்: New Parliament Building · <a href="https://commons.wikimedia.org/wiki/File:Glimpse_of_the_new_Parliament_Building,_in_New_Delhi.jpg" target="_blank" rel="noopener">Ministry of Parliamentary Affairs / GODL-India</a></small></section>
@@ -54,4 +55,5 @@
 <script>function filterCards(){const q=document.getElementById('q').value.toLowerCase(),d=document.getElementById('dept').value;document.querySelectorAll('#departments .card').forEach(c=>{const okq=c.innerText.toLowerCase().includes(q),okd=!d||c.dataset.dept===d;c.style.display=okq&&okd?'':'none';});}</script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="government-notices-public.js"></script>
+  <script src="assets/site-protection.js" defer></script>
 </body></html>

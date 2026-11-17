@@ -16,7 +16,8 @@ input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-s
 .submit{width:100%;border:0;border-radius:11px;padding:15px;margin-top:21px;background:linear-gradient(110deg,#1979e5,#7259e5);color:#fff;font-size:15px;font-weight:900;cursor:pointer}.submit:disabled{opacity:.6;cursor:wait}
 .msg{display:none;margin-top:15px;padding:12px;border-radius:10px;font-size:13px;line-height:1.6}.safe{margin-top:18px;padding:12px;border-radius:10px;background:#f1f6ff;color:#526580;font-size:11px;line-height:1.7;text-align:center}
 .back{text-align:center;margin-top:20px}.back a{color:#176fc5;text-decoration:none;font-size:13px;font-weight:800}
-</style></head>
+</style>  <link rel="stylesheet" href="assets/site-protection.css">
+</head>
 <body>
 <main class="card">
 <div class="logo">TAMILAN CAREERS</div>
@@ -60,4 +61,5 @@ mfaForm.addEventListener("submit",async e=>{e.preventDefault();mfaSubmit.disable
 document.getElementById("mfaCancel").addEventListener("click",async()=>{await client.auth.signOut();location.replace("admin-login.html")});
 (async()=>{try{const {data,error}=await client.auth.getUser();if(!error&&data?.user)await beginMfa(data.user)}catch(e){message(e.message||"பாதுகாப்பு சரிபார்ப்பு தோல்வியடைந்தது.")}})();
 </script>
+  <script src="assets/site-protection.js" defer></script>
 </body></html>

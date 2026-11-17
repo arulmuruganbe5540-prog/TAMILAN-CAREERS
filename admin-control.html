@@ -51,7 +51,8 @@ main{min-width:0;padding:25px clamp(15px,3vw,38px) 45px}
 @media(max-width:1000px){.modules{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.layout{display:block}aside{position:relative;height:auto;padding:13px}.admin-card{margin:10px 3px;padding:12px;display:flex;align-items:center;gap:12px}.avatar{margin:0;flex:none}.admin-card small{margin-top:2px}nav{display:flex;overflow:auto;gap:5px;padding-bottom:5px}nav a{white-space:nowrap;padding:9px 10px;font-size:11px}.nav-label,.side-foot{display:none}main{padding:17px 13px 35px}.hero{padding:20px}.modules{grid-template-columns:1fr 1fr;gap:9px}.module{padding:13px}.module p{min-height:55px}.bottom-grid{grid-template-columns:1fr}.quick{grid-template-columns:1fr 1fr}}
 @media(max-width:390px){.modules{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}}
-</style></head>
+</style>  <link rel="stylesheet" href="assets/site-protection.css">
+</head>
 <body>
 <div id="loading" style="padding:30px;text-align:center;color:#52617a">Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
 <div id="gate" class="hidden"><div style="font-size:42px">🔐</div><h2>TAMILAN CAREERS Admin</h2><p id="gateText">இந்தப் பகுதியைத் திறக்க நிர்வாக அனுமதி தேவை.</p><a class="btn blue" href="admin-login.html">Admin Login செய்யவும்</a></div>
@@ -124,4 +125,5 @@ el("logout").addEventListener("click",async e=>{e.preventDefault();await supabas
 el("refresh").addEventListener("click",loadStats);
 init();
 </script>
+  <script src="assets/site-protection.js" defer></script>
 </body></html>
