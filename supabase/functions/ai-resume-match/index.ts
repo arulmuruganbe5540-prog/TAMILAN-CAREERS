@@ -134,7 +134,7 @@ Deno.serve(async (req) => {
       preferred_location: preferredLocation || safeText(preferences.data?.preferred_city || seeker.data?.current_city, 120),
     };
 
-    const jobRows = (jobs.data || []).filter((row) => !isExpiredDeadline(row.application_deadline ?? row.deadline ?? row.last_date)).slice(0, 40).map((row) => cleanJob(row as Record<string, unknown>));
+    const jobRows = (jobs.data || []).filter((row) => !isExpiredDeadline(row.application_deadline || row.deadline || row.last_date)).slice(0, 40).map((row) => cleanJob(row as Record<string, unknown>));
     if (!jobRows.length) return json({ matches: [], message: "No published jobs are currently available." });
 
     const schema = {
