@@ -9,6 +9,10 @@ on:
       - ".github/workflows/state-psc-monitor.yml"
 permissions:
   contents: write
+
+concurrency:
+  group: repository-maintenance-commits
+  cancel-in-progress: false
 jobs:
   monitor:
     runs-on: ubuntu-latest
@@ -30,6 +34,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Update daily State PSC source monitor report"
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"
             git push
           else
             echo "No source-monitor report changes to commit."
