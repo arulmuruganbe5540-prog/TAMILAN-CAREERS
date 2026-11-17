@@ -135,6 +135,11 @@ begin
     raise exception 'Category, employment type, and location are required';
   end if;
 
+  if nullif(v_draft->>'deadline','') is not null
+     and (v_draft->>'deadline')::date < (now() at time zone 'Asia/Kolkata')::date then
+    raise exception 'Application deadline cannot be in the past';
+  end if;
+
   if nullif(btrim(v_draft->>'deadline'),'') is not null then
     if (v_draft->>'deadline') !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}  select r.id into v_review_id
   from public.admin_job_post_reviews r
