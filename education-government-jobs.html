@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>படிப்பு வாரியான அரசு வேலைகள் | TAMILAN CAREERS</title>
+<meta name="description" content="கல்வித் தகுதி அடிப்படையில் மத்திய மற்றும் தமிழ்நாடு அரசு வேலை அறிவிப்புகளைத் தேடுங்கள்.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font-family:Arial,"Noto Sans Tamil",sans-serif}header{background:#101d3a;color:white;padding:16px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}header a{color:#fff;text-decoration:none}.brand{font-size:21px;font-weight:800;color:#54c8ff}main{max-width:1050px;margin:25px auto;padding:0 16px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff;padding:26px;border-radius:16px}.hero p{color:#deebff;line-height:1.7}.filter,.job,.empty{background:#fff;border:1px solid #e1e8f1;border-radius:13px;padding:17px;margin:14px 0}.job h2{font-size:18px;margin:0 0 8px;color:#174777}.job p{line-height:1.7;color:#5d6c80}.meta{display:flex;gap:8px;flex-wrap:wrap}.tag{background:#edf5ff;color:#225b8e;border-radius:20px;padding:6px 10px;font-size:12px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.btn{display:inline-block;padding:10px 14px;border-radius:8px;background:#1688ed;color:#fff;text-decoration:none;font-weight:bold;font-size:13px}.btn.alt{background:#eaf4ff;color:#145b9a}input,select{width:100%;padding:12px;border:1px solid #d7e0eb;border-radius:8px;background:#fff;font-size:14px}.filter{display:grid;grid-template-columns:1fr 1fr;gap:10px}.muted{color:#6c7b90;font-size:13px}@media(max-width:600px){.filter{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="assets/site-protection.css">
+</head>
+<body>
+<header><a class="brand" href="index.html">TAMILAN CAREERS</a><nav><a href="indian-government-jobs.html">மத்திய அரசு</a> · <a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு</a></nav></header>
+<main>
+<div class="hero"><h1 id="heading">படிப்பு வாரியான அரசு வேலைகள்</h1><p id="intro">கல்வித் தகுதிக்கு ஏற்ற சரிபார்க்கப்பட்ட அரசு வேலை அறிவிப்புகளை இங்கே பார்க்கலாம்.</p></div>
+<section class="filter"><select id="qualification"><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Any Qualification</option></select><input id="search" type="search" placeholder="வேலை / துறை / அறிவிப்பு தேடுங்கள்"></section>
+<p class="muted" id="summary">அறிவிப்புகள் ஏற்றப்படுகின்றன...</p><section id="results"></section>
+</main>
+<script>
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const params=new URLSearchParams(location.search),scope=params.get("scope")==="tamil-nadu"?"tamil-nadu":"central";
+const q=params.get("qualification")||"Any Qualification", $=id=>document.getElementById(id);
+$("qualification").value=q;
+$("heading").textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" · "+q+" வேலைவாய்ப்புகள்";
+$("intro").textContent=q+" கல்வித் தகுதியுடன் விண்ணப்பிக்கக்கூடிய "+(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" வேலை அறிவிப்புகள்.";
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let items=[];
+function render(){
+ const term=$("search").value.trim().toLowerCase();
+ const list=items.filter(x=>(!term||x.search.toLowerCase().includes(term)));
+ $("summary").textContent=list.length+" அறிவிப்புகள்";
+ if(!list.length){$("results").innerHTML='<div class="empty">இந்தக் கல்வித் தகுதிக்கான வெளியிடப்பட்ட அறிவிப்புகள் தற்போது இல்லை. வேறு கல்வித் தகுதியைத் தேர்ந்தெடுக்கலாம்.</div>';return;}
+ $("results").innerHTML=list.map(x=>'<article class="job"><h2>'+esc(x.title)+'</h2><div class="meta">'+(x.vacancies?'<span class="tag">காலியிடங்கள்: '+esc(x.vacancies)+'</span>':'')+(x.deadline?'<span class="tag">கடைசி தேதி: '+esc(x.deadline)+'</span>':'')+(x.qualification?'<span class="tag">கல்வி: '+esc(x.qualification)+'</span>':'')+'</div>'+(x.summary?'<p>'+esc(x.summary)+'</p>':'')+'<div class="actions"><a class="btn" href="'+esc(x.detail)+'">முழு விவரம் பார்க்க</a>'+(x.apply?'<a class="btn alt" href="'+esc(x.apply)+'" target="_blank" rel="noopener">அதிகாரப்பூர்வ இணைப்பு ↗</a>':'')+'</div></article>').join("");
+}
+function isScopeMatch(j){
+ const a=String(j.recruitment_authority||j.authority||"").toLowerCase(),l=String(j.location||"").toLowerCase(),d=String(j.department||"").toLowerCase();
+ const tn=a.includes("tn")||a.includes("tamil nadu")||l.includes("tamil nadu")||d.includes("tamil nadu");
+ return scope==="tamil-nadu"?tn:!tn;
+}
+function isQualificationMatch(text){
+ const s=String(text||"").toLowerCase(),q=$("qualification").value.toLowerCase();
+ if(q==="any qualification")return true;
+ const aliases={"10th pass":["10th","sslc","10ம்","பத்தாம்"],"12th pass":["12th","hsc","plus two","12ம்","பன்னிரண்டாம்"],"iti":["iti"],"diploma":["diploma"],"degree":["degree","graduate","b.e","b.sc","b.com","b.a"],"postgraduate":["postgraduate","post graduate","pg","master","முதுநிலை"]};
+ return (aliases[q]||[q]).some(x=>s.includes(x));
+}
+async function load(){
+ try{
+ const [jr,nr]=await Promise.all([
+  db.from("jobs").select("*").eq("status","published").eq("job_kind","government").limit(1000),
+  db.from("government_notices").select("*").eq("is_active",true).limit(500)
+ ]);
+ if(jr.error)throw jr.error;if(nr.error)throw nr.error;
+ const out=[];
+ (jr.data||[]).forEach(j=>{
+  if(!isScopeMatch(j))return;
+  const qual=j.qualification||j.education||"",text=[j.job_title,j.title,j.description,j.recruitment_authority,j.department,qual].join(" ");
+  if(!isQualificationMatch(text))return;
+  out.push({title:j.job_title||j.title||"அரசு வேலைவாய்ப்பு",qualification:qual,summary:j.description,vacancies:j.vacancies||j.vacancy_count,deadline:j.application_deadline,detail:"job-details.html?id="+encodeURIComponent(j.id),apply:j.application_url||j.official_notification_url,search:text});
+ });
+ (nr.data||[]).forEach(n=>{
+  const d=n.details||{},st=String(d.state||"").toLowerCase();
+  if(scope==="central"&&d.scope!=="central")return;
+  if(scope==="tamil-nadu"&&st!=="tamil nadu")return;
+  const qual=d.qualification||d.education||n.eligibility_summary||"",text=[n.title,n.eligibility_summary,d.department,d.recruitment_authority,d.post_names,d.exam_name,qual].join(" ");
+  if(!isQualificationMatch(text))return;
+  out.push({title:n.title,qualification:qual,summary:n.eligibility_summary,vacancies:n.vacancies,deadline:n.application_end,detail:"government-notice-details.html?id="+encodeURIComponent(n.id),apply:n.official_url,search:text});
+ });
+ items=out;render();
+ }catch(e){$("summary").textContent="அறிவிப்புகளைப் பெற முடியவில்லை";$("results").innerHTML='<div class="empty">தகவல் சேவையில் சிக்கல். பின்னர் மீண்டும் முயற்சிக்கவும்.</div>';}
+}
+$("qualification").addEventListener("change",()=>{const p=new URLSearchParams(location.search);p.set("scope",scope);p.set("qualification",$("qualification").value);history.replaceState(null,"","?"+p.toString());$("heading").textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" · "+$("qualification").value+" வேலைவாய்ப்புகள்";render();});
+$("search").addEventListener("input",render);
+load();
+</script>
+<script src="assets/site-protection.js" defer></script>
+</body></html>
