@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T09:22:44.653034+00:00",
+  "checked_at_utc": "2026-11-17T09:26:16.255529+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 23,
@@ -76,13 +76,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "gpsc-goa",
-      "url": "https://gpsc.goa.gov.in/",
+      "source_id": "appsc-arunachal",
+      "url": "https://appsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "appsc-arunachal",
-      "url": "https://appsc.gov.in/",
+      "source_id": "gpsc-goa",
+      "url": "https://gpsc.goa.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -93,6 +93,11 @@
     {
       "source_id": "hppsc",
       "url": "https://hppsc.hp.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -111,8 +116,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
