@@ -34,6 +34,9 @@ begin
       and cm.user_id = auth.uid()
       and cm.member_status = 'active'
       and cm.member_role in ('owner', 'hr_manager', 'recruiter')
+  ) and not exists (
+    select 1 from public.companies c
+    where c.id = p_company_id and c.owner_user_id = auth.uid()
   ) then
     raise exception 'You do not have permission to manage this company applications';
   end if;
