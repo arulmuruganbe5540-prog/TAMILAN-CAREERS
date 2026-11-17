@@ -54,7 +54,7 @@ main{min-width:0;padding:25px clamp(15px,3vw,38px) 45px}
 </style></head>
 <body>
 <div id="loading" style="padding:30px;text-align:center;color:#52617a">Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
-<div id="gate" class="hidden"><div style="font-size:42px">🔐</div><h2>TAMILAN CAREERS Admin</h2><p id="gateText">இந்தப் பகுதியைத் திறக்க நிர்வாக அனுமதி தேவை.</p><a class="btn blue" href="login.html?next=admin-control.html">Login செய்யவும்</a></div>
+<div id="gate" class="hidden"><div style="font-size:42px">🔐</div><h2>TAMILAN CAREERS Admin</h2><p id="gateText">இந்தப் பகுதியைத் திறக்க நிர்வாக அனுமதி தேவை.</p><a class="btn blue" href="admin-login.html">Admin Login செய்யவும்</a></div>
 <div id="app" class="layout hidden">
 <aside>
 <div class="brand">TAMILAN <span>CAREERS</span></div>
@@ -118,7 +118,7 @@ function gate(message){el("loading").classList.add("hidden");el("app").classList
 async function count(table,id,hint){const {count,error}=await supabaseClient.from(table).select("*",{count:"exact",head:true});el(id).textContent=error?"—":String(count??0);el(hint).textContent=error?"இந்த கணக்கிற்கு வாசிப்பு அனுமதி இல்லை":"தரவுத்தள எண்ணிக்கை"}
 async function loadStats(){await Promise.all([count("jobs","jobsCount","jobsHint"),count("job_applications","appsCount","appsHint"),count("companies","companiesCount","companiesHint")]);const {count,error}=await supabaseClient.from("government_notice_reviews").select("*",{count:"exact",head:true});el("noticesCount").textContent=error?"—":String(count??0);el("noticesHint").textContent=error?"ஆய்வு அட்டவணை அணுகல் இல்லை":"ஆய்வு வரிசை மொத்தம்"}
 async function init(){const {data,error}=await supabaseClient.auth.getUser();if(error||!data.user){gate("Admin பகுதியைத் திறக்க முதலில் Login செய்யவும்.");return}const {data:roles,error:roleError}=await supabaseClient.from("user_roles").select("role").eq("user_id",data.user.id).eq("role","super_admin").limit(1);if(roleError||!roles?.length){gate("இந்த Login கணக்கிற்கு Super Admin அனுமதி இல்லை. அனுமதி வழங்கப்பட்ட Admin கணக்கில் Login செய்யவும்.");return}const email=data.user.email||"Admin";el("adminIdentity").textContent=email;el("adminAvatar").textContent=(email.trim()[0]||"A").toUpperCase();el("adminWelcome").textContent="வணக்கம், "+email+" 👋";el("loading").classList.add("hidden");el("app").classList.remove("hidden");await loadStats()}
-el("logout").addEventListener("click",async e=>{e.preventDefault();await supabaseClient.auth.signOut();location.replace("login.html")});
+el("logout").addEventListener("click",async e=>{e.preventDefault();await supabaseClient.auth.signOut();location.replace("admin-login.html")});
 el("refresh").addEventListener("click",loadStats);
 init();
 </script>
