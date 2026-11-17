@@ -30,6 +30,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 - Live Supabase API grants and employer applicant-profile policies — applied through `supabase-core-api-access.sql`; verification confirms the expected table privileges are now present while RLS remains enabled.
 - `supabase-company-application-status.sql` — applied. The secure company application status RPC is installed.
 - `supabase-interview-notifications.sql` — applied. Private notification and interview-invitation tables, RLS policies, send/respond/mark-read functions, and application notification triggers are installed.
+- `pg_cron` was enabled and `tc-interview-reminders-15m` is active (`*/15 * * * *`), calling `tc_generate_interview_reminders()`. A manual run returned 0 reminders because no interview records exist yet.
 - Edge Function `scan-external-job-sources` — user reported an earlier successful deployment. The newest repository safeguards have **not** yet been redeployed.
 - Edge Function `manage-hiring` — deployed, but the currently deployed version is only the login/token and role-status handler; the newer company-member actions are not confirmed deployed.
 - The user has shared Storage policy rows for `candidate-resumes` and `job-offers`. These rows prove that policies exist, but do not by themselves prove which buckets currently exist or whether either bucket contains files. The `job-offers` policy calls `public.can_access_job_application(uuid)`; that function is not defined in the repository SQL, so its live definition and security settings must be reviewed from Supabase before relying on the policy.
@@ -40,7 +41,7 @@ This file separates repository work from live Supabase setup. A committed HTML, 
 - Candidate education, work experience, and certification tables are present in live Supabase. RLS-aligned Data API grants are now applied; authenticated UI save/read testing remains outstanding.
 - Employer applicant profile read policies and application status update RPC.
 - Company job draft → Super Admin review → verified-company publish workflow.
-- Interview invitations, candidate accept/decline, notification centre, and reminder generator are installed in Supabase. The reminder generator is not scheduled yet, and real Candidate–Employer testing remains outstanding.
+- Interview invitations, candidate accept/decline, notification centre, and reminder generator are installed in Supabase. The reminder generator is scheduled every 15 minutes; real Candidate–Employer testing remains outstanding.
 - AI Resume-to-job matching. The local rule-based matcher is separate from the optional AI Function.
 - Government notice private review/publish archive and ingestion Function.
 - External source scanner latest safeguards and source monitor workflow.
@@ -54,8 +55,7 @@ The following must not be described as live until SQL/function deployment and re
 5. `supabase-government-archive-install.sql` — separate Government notice source registry, private review queue, and reviewed publication.
 4. Deploy/redeploy `ai-resume-match`, `ingest-government-notices`, `bilingual-job-search`, and the latest `scan-external-job-sources` source as applicable. `company-resume-access` is already deployed.
 5. The currently deployed `manage-hiring` Function still needs a schema-reviewed member-management implementation.
-6. The interview reminder generator still needs a trusted Supabase Cron schedule.
-7. Real Candidate, Employer, Super Admin, and cross-company denial tests remain outstanding.
+6. Real Candidate, Employer, Super Admin, and cross-company denial tests remain outstanding.
 
 ## 5. Resume Storage — reconciled, end-to-end test pending
 
