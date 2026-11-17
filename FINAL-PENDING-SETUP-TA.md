@@ -22,7 +22,11 @@ Supabase இயல்பான SMTP சேவை பொதுப் பயனர
 
 **கவனம்:** Gmail சாதாரண Login Password-ஐ SMTP password ஆகப் பயன்படுத்த வேண்டாம். App Password-ஐ யாரிடமும் பகிர வேண்டாம்.
 
-## 2. OpenAI API Credits
+## 2. Company Member Invitation — Email இல்லாவிட்டாலும் பயன்படுத்தலாம்
+
+Company Members பக்கத்தில் அழைப்பை உருவாக்கும்போது Email அனுப்ப முடியாவிட்டால், பாதுகாப்பான 7 நாள் அழைப்பு இணைப்பு Clipboard-ல் நகலெடுக்கப்படும். அதை அழைக்கப்பட்டவருக்கு WhatsApp / SMS மூலம் அனுப்பலாம். அவர் அழைப்பில் குறிப்பிடப்பட்ட அதே Email முகவரியால் Login செய்து ஏற்க வேண்டும்.
+
+## 3. OpenAI API Credits
 
 Government notice AI extraction-ஐச் சோதித்தபோது OpenAI API பதில்: `429 — You have no credits remaining`.
 
@@ -32,11 +36,11 @@ Government notice AI extraction-ஐச் சோதித்தபோது Open
 
 Billing: https://platform.openai.com/settings/organization/billing/overview
 
-## 3. Leaked Password Protection
+## 4. Leaked Password Protection
 
 Supabase Dashboard → Authentication → Security and Protection பகுதியில் Leaked Password Protection-ஐ இயக்கி Save செய்யவும். இந்த அமைப்பு Dashboard-இல் செய்ய வேண்டியது; அதை இங்கிருந்து மாற்ற முடியாது.
 
-## 4. இறுதி நேரடி சோதனை
+## 5. இறுதி நேரடி சோதனை
 
 1. Admin Login: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/admin-login.html
 2. Admin Control: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/admin-control.html
