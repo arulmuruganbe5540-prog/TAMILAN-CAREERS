@@ -18,6 +18,23 @@ async function readLimitedText(response:Response,limit:number){
  return output;
 }
 function allowed(candidate:string,base:string){try{const a=new URL(candidate),b=new URL(base);return a.protocol==="https:"&&(a.hostname===b.hostname||a.hostname.endsWith("."+b.hostname));}catch{return false;}}
+async function fetchRegisteredPage(baseUrl:string){
+ let current=baseUrl;
+ for(let hop=0;hop<=5;hop++){
+  if(!allowed(current,baseUrl))throw new Error("Redirect outside registered HTTPS domain");
+  const response=await fetch(current,{headers:{"user-agent":"TAMILAN-CAREERS official job source monitor/1.0"},signal:AbortSignal.timeout(10000),redirect:"manual"});
+  if([301,302,303,307,308].includes(response.status)){
+   const location=response.headers.get("location");
+   await response.body?.cancel().catch(()=>{});
+   if(!location)throw new Error("Redirect response missing Location");
+   if(hop===5)throw new Error("Too many redirects");
+   current=new URL(location,current).toString();
+   continue;
+  }
+  return response;
+ }
+ throw new Error("Too many redirects");
+}
 Deno.serve(async(req)=>{
  if(req.method!=="POST")return reply({error:"POST only"},405);
  const secret=Deno.env.get("GOVERNMENT_MONITOR_SECRET")||"";
@@ -33,7 +50,7 @@ Deno.serve(async(req)=>{
   const batch=eligible.slice(i,i+5);
   const results=await Promise.all(batch.map(async s=>{
    try{
-    const r=await fetch(s.base_url,{headers:{"user-agent":"TAMILAN-CAREERS official job source monitor/1.0"},signal:AbortSignal.timeout(10000),redirect:"follow"});
+    const r=await fetchRegisteredPage(s.base_url);
     if(!r.ok)throw new Error("HTTP "+r.status);
     const contentType=(r.headers.get("content-type")||"").toLowerCase();if(!/(text\/html|application\/xhtml\+xml)/i.test(contentType))throw new Error("Source did not return an HTML content type");
     const final=r.url||s.base_url;if(!allowed(final,s.base_url))throw new Error("Redirect outside registered domain");
