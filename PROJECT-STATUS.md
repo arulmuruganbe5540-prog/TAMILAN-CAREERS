@@ -108,3 +108,15 @@ Still required before launch:
 ## Release rule
 
 The website is **not launch-ready yet**. The target launch date is 19 November 2026, but it is conditional, not guaranteed. GitHub Pages deployment is working and many backend components are installed, but required secrets, real-account end-to-end tests, Auth hardening, and the final CI run still remain. Do not mark the project complete until those checks pass.
+
+
+## 17 November 2026 — latest continuation check
+
+- The latest full website Health Audit remains run `44091331004`, completed successfully for code commit `6a1ac636aa6c4420a128ef3fcc643eb83f338013`. It ran after the Admin authorization repair and passed all configured checks, including Deno checks, SQL lint, privacy/workflow guards, structural checks, and browser smoke tests.
+- Documentation and launch setup commit `ed82f6dc094790a45e17039bac5713a65496b6ed` was deployed successfully by Pages run `44091592918`.
+- The latest commit `399901485d6df56716372645dd4e7f7ad58d75a7` refreshes only the official government-source discovery report. Its Pages build job succeeded; the deploy job was still in progress when this status note was written. Do not claim this latest deployment is complete until the run concludes successfully.
+- Latest official-source discovery report: 60 registered sources, 22 successful checks, 38 unsuccessful checks, and 1,135 candidate links discovered. This is discovery-only data; it does not verify vacancies, prove a source is safe to publish, or sync/publish jobs. Many sources are intentionally skipped because robots.txt cannot be safely checked; two IBPS endpoints had TLS/protocol errors and the RRB endpoint returned HTTP 404. These limitations must remain visible to Admin reviewers.
+- The committed `website-health-report.json` is an older snapshot (03:27 UTC); use the successful Health Audit run and its uploaded artifact as the newer verification evidence, not that stale committed timestamp.
+- Repository-wide code-search checks made during this continuation found no indexed matches for the revoked `public.is_super_admin` call, TODO/FIXME markers, or service-role key strings. This is a search result, not a proof that no secret or unfinished work exists anywhere; the Health Audit and source review remain the stronger checks.
+- No provider credentials were added, no Super Admin role was silently granted, and no live-user data or permissions were changed during this continuation.
+
