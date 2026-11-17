@@ -97,6 +97,7 @@ alter table public.job_posting_drafts enable row level security;
 grant select, insert, update, delete on public.job_posting_drafts to authenticated;
 
 drop policy if exists "TC job drafts select own active member" on public.job_posting_drafts;
+drop policy if exists "TC job drafts select own authorized member" on public.job_posting_drafts;
 create policy "TC job drafts select own active member"
 on public.job_posting_drafts for select to authenticated
 using (
@@ -106,10 +107,12 @@ using (
     where cm.company_id = job_posting_drafts.company_id
       and cm.user_id = (select auth.uid())
       and cm.member_status = 'active'
+      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
   )
 );
 
 drop policy if exists "TC job drafts insert own active member" on public.job_posting_drafts;
+drop policy if exists "TC job drafts insert own authorized member" on public.job_posting_drafts;
 create policy "TC job drafts insert own active member"
 on public.job_posting_drafts for insert to authenticated
 with check (
@@ -119,10 +122,12 @@ with check (
     where cm.company_id = job_posting_drafts.company_id
       and cm.user_id = (select auth.uid())
       and cm.member_status = 'active'
+      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
   )
 );
 
 drop policy if exists "TC job drafts update own active member" on public.job_posting_drafts;
+drop policy if exists "TC job drafts update own authorized member" on public.job_posting_drafts;
 create policy "TC job drafts update own active member"
 on public.job_posting_drafts for update to authenticated
 using (
@@ -132,6 +137,7 @@ using (
     where cm.company_id = job_posting_drafts.company_id
       and cm.user_id = (select auth.uid())
       and cm.member_status = 'active'
+      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
   )
 )
 with check (
@@ -141,10 +147,12 @@ with check (
     where cm.company_id = job_posting_drafts.company_id
       and cm.user_id = (select auth.uid())
       and cm.member_status = 'active'
+      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
   )
 );
 
 drop policy if exists "TC job drafts delete own active member" on public.job_posting_drafts;
+drop policy if exists "TC job drafts delete own authorized member" on public.job_posting_drafts;
 create policy "TC job drafts delete own active member"
 on public.job_posting_drafts for delete to authenticated
 using (
@@ -154,6 +162,7 @@ using (
     where cm.company_id = job_posting_drafts.company_id
       and cm.user_id = (select auth.uid())
       and cm.member_status = 'active'
+      and cm.member_role in ('owner', 'hr_manager', 'recruiter')
   )
 );
 
