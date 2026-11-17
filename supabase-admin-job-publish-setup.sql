@@ -166,7 +166,7 @@ begin
   v_salary_max := nullif(v_payload->>'salaryMax','')::numeric;
   v_vacancies := greatest(0, coalesce(nullif(v_payload->>'openings','')::integer, 1));
   if nullif(v_payload->>'deadline','') is not null then
-    v_deadline := (v_payload->>'deadline')::date::timestamptz;
+    v_deadline := ((v_payload->>'deadline')::date + time '23:59:59') at time zone 'Asia/Kolkata';
   end if;
 
   v_slug := trim(both '-' from regexp_replace(lower(v_title), '[^a-z0-9]+', '-', 'g'));
