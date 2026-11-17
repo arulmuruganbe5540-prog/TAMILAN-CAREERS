@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ta"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101a35"><title>Admin Job Post | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fc;color:#1b2942;font-family:Arial,"Noto Sans Tamil",sans-serif}
+header{background:linear-gradient(110deg,#101b39,#214d91,#7656ce);color:white;padding:17px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;color:#6de0ff;font-size:19px}.brand span{color:white}
+nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:white;text-decoration:none;background:#ffffff1d;padding:9px 12px;border-radius:9px;font-size:12px}
+main{max-width:1150px;margin:24px auto;padding:0 15px}.hero{padding:23px;border-radius:19px;background:linear-gradient(120deg,#16264d,#2775cb 60%,#8059d7);color:white;box-shadow:0 12px 30px #1d43801c}
+.hero h1{margin:0 0 8px;font-size:23px}.hero p{margin:0;line-height:1.8;color:#e3eeff;font-size:13px}
+.warning{background:#fff6df;color:#79571a;border:1px solid #f0dba9;border-radius:12px;padding:13px;margin:15px 0;font-size:12px;line-height:1.8}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:15px;margin-top:16px;align-items:start}
+.panel{background:white;border:1px solid #e2e9f3;border-radius:16px;padding:19px;box-shadow:0 5px 22px #1a34500a}
+.panel h2{font-size:16px;margin:0 0 14px}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}.wide{grid-column:1/-1}label{font-size:12px;font-weight:800;color:#40516d}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d8e1ed;border-radius:9px;background:white;font:inherit;font-size:13px;color:#24344f}
+textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;line-height:1.5}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.btn{border:0;border-radius:9px;padding:11px 14px;font-size:12px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(110deg,#2479e9,#765be2);color:white}.soft{background:#edf3fb;color:#30517e}.green{background:#e6f8ef;color:#16794d}.red{background:#fff0ef;color:#b43a37}.btn:disabled{opacity:.55;cursor:wait}
+.status{display:none;padding:11px;border-radius:9px;margin-top:12px;font-size:12px;line-height:1.6}.status.ok{display:block;background:#e8f8ef;color:#167346}.status.err{display:block;background:#fff0ef;color:#b42318}
+.queue{display:flex;flex-direction:column;gap:10px}.item{border:1px solid #e5ebf3;border-radius:12px;padding:13px}.item h3{font-size:13px;margin:0 0 6px}.meta{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0}.pill{font-size:10px;border-radius:30px;padding:5px 8px;background:#f0f3f8;color:#56657b}.pill.pending_review{background:#fff4dc;color:#95620a}.pill.approved{background:#e5f8ed;color:#167448}.pill.rejected{background:#fff0ef;color:#b53a37}
+.item p{font-size:11px;color:#6b7890;line-height:1.6;margin:7px 0}.item-actions{display:flex;gap:6px;flex-wrap:wrap}.item-actions button{padding:7px 9px;font-size:10px}
+.empty{padding:18px;border:1px dashed #d7e0ec;border-radius:11px;color:#7a8799;text-align:center;font-size:12px;line-height:1.7}
+#gate{max-width:480px;margin:12vh auto;background:white;padding:28px;border-radius:18px;text-align:center;line-height:1.8;border:1px solid #e2e9f3}
+.hidden{display:none!important}
+@media(max-width:850px){.grid{grid-template-columns:1fr}}
+@media(max-width:520px){main{margin:15px auto}.form{grid-template-columns:1fr}.wide{grid-column:auto}.hero{padding:18px}.panel{padding:15px}}
+</style></head><body>
+<header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="admin-control.html">Admin Dashboard</a><a href="government-notice-review.html">அரசு அறிவிப்பு</a><a href="index.html">Website</a></nav></header>
+<div id="loading" style="padding:35px;text-align:center">Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section id="gate" class="hidden"><div style="font-size:40px">🔐</div><h2>Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதி Super Admin கணக்கிற்கு மட்டுமே.</p><a class="btn primary" href="login.html?next=admin-job-post.html">Login செய்யவும்</a></section>
+<main id="app" class="hidden">
+<section class="hero"><h1>📢 Admin Job Post & Review</h1><p>அருள் முருகன் மங்கையர்க்கரசி — புதிய வேலை அறிவிப்புகளை உருவாக்கி, Draft / Review / Approved நிலைகளில் கட்டுப்படுத்தும் மையம்.</p></section>
+<div class="warning"><b>பாதுகாப்பு:</b> இங்கு சேமிக்கப்படும் வேலை அறிவிப்புகள் Admin Review Queue-ல் மட்டுமே இருக்கும். Approved ஆனாலும் பொதுமக்கள் பார்க்கும் வேலைப் பட்டியலில் தானாக வெளியிடப்படாது. உண்மையான public.jobs வெளியீட்டு வசதி, live jobs அட்டவணையின் சரியான schema மற்றும் RLS சரிபார்த்த பிறகு தனியாக இணைக்கப்படும்.</div>
+<div class="grid">
+<section class="panel">
+<h2 id="formTitle">✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்</h2>
+<form id="jobForm" class="form">
+<input type="hidden" id="recordId">
+<div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
+<div class="field"><label for="company">நிறுவனப் பெயர்</label><input id="company" maxlength="180" placeholder="நிறுவனப் பெயர்"></div>
+<div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>IT / Software</option><option>Manufacturing</option><option>Sales / Marketing</option><option>Accounts / Finance</option><option>Healthcare</option><option>Education</option><option>Construction</option><option>Logistics / Transport</option><option>Customer Support</option><option>Hospitality</option><option>Agriculture</option><option>Government</option><option>Other</option></select></div>
+<div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="workplace">பணிமுறை</label><select id="workplace"><option value="">தேர்வு செய்யவும்</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
+<div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" maxlength="180" required placeholder="உதா: ஓமலூர், சேலம்"></div>
+<div class="field"><label for="openings">காலியிடங்கள்</label><input id="openings" type="number" min="1" max="100000" value="1"></div>
+<div class="field"><label for="experience">அனுபவம்</label><input id="experience" maxlength="120" placeholder="Fresher / 2 years"></div>
+<div class="field"><label for="education">கல்வித் தகுதி</label><input id="education" maxlength="180" placeholder="12th / Diploma / Degree"></div>
+<div class="field"><label for="salaryMin">குறைந்தபட்ச சம்பளம் (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" placeholder="12000"></div>
+<div class="field"><label for="salaryMax">அதிகபட்ச சம்பளம் (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" placeholder="18000"></div>
+<div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="1200" placeholder="Communication, MS Excel, Driving"></div>
+<div class="field wide"><label for="description">வேலை விவரம் *</label><textarea id="description" maxlength="8000" required placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், நிபந்தனைகள்..."></textarea></div>
+<div class="field"><label for="deadline">விண்ணப்ப கடைசி தேதி</label><input id="deadline" type="date"></div>
+<div class="field"><label for="email">தொடர்பு மின்னஞ்சல்</label><input id="email" type="email" maxlength="180" placeholder="hr@company.com"></div>
+</form>
+<div class="actions"><button class="btn primary" id="saveDraft">Draft சேமி</button><button class="btn green" id="sendReview">Review-க்கு அனுப்பு</button><button class="btn soft" id="reset">புதிய படிவம்</button></div>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+</section>
+<section class="panel">
+<h2>📋 Admin Review Queue</h2>
+<div class="field" style="margin-bottom:12px"><label for="filter">நிலை வடிகட்டி</label><select id="filter"><option value="">அனைத்து நிலைகளும்</option><option value="draft">Draft</option><option value="pending_review">Review காத்திருக்கிறது</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+<div id="queue" class="queue"><div class="empty">Review பட்டியல் ஏற்றப்படுகிறது...</div></div>
+</section></div></main>
+<script>
+const db=window.supabase.createClient("https://qkmljuuusfjowexvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const $=id=>document.getElementById(id);
+let user=null;
+const fields=["title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","skills","description","deadline","email"];
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
+function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());return p}
+function fill(p={}){fields.forEach(k=>$(k).value=p[k]??(k==="openings"?"1":""));$("recordId").value=p.id||"";$("formTitle").textContent=p.id?"✏️ வேலை அறிவிப்பைத் திருத்தவும்":"✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
+function resetForm(){fill({});$("jobForm").reset();$("recordId").value="";$("openings").value="1";$("formTitle").textContent="✍️ புதிய வேலை அறிவிப்பு உருவாக்கவும்"}
+function statusLabel(s){return ({draft:"Draft",pending_review:"Review காத்திருக்கிறது",approved:"Approved — வெளியீட்டுக்கு தயாராக உள்ளது",rejected:"Rejected"})[s]||s}
+async function save(status){
+ const p=payload();
+ if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், வேலை விவரம் ஆகியவற்றை நிரப்பவும்.",false);return}
+ if(p.salaryMin&&p.salaryMax&&Number(p.salaryMin)>Number(p.salaryMax)){say("குறைந்தபட்ச சம்பளம் அதிகபட்ச சம்பளத்தை விட அதிகமாக இருக்கக்கூடாது.",false);return}
+ if(p.deadline&&p.deadline<new Date().toISOString().slice(0,10)){say("கடைசி தேதி கடந்த தேதியாக இருக்கக்கூடாது.",false);return}
+ const id=$("recordId").value;
+ const row={created_by:user.id,title:p.title,company_name:p.company||null,status,payload:p,review_note:null,reviewed_by:null,reviewed_at:null};
+ let result;
+ if(id)result=await db.from("admin_job_post_reviews").update({title:row.title,company_name:row.company_name,status:row.status,payload:row.payload,review_note:null,reviewed_by:null,reviewed_at:null}).eq("id",id).select("id").single();
+ else result=await db.from("admin_job_post_reviews").insert(row).select("id").single();
+ if(result.error){say("சேமிக்க முடியவில்லை. Supabase-ல் supabase-admin-job-post-review.sql இயக்கப்பட்டதா எனப் பார்க்கவும். "+result.error.message,false);return}
+ $("recordId").value=result.data.id;
+ say(status==="draft"?"வேலை Draft ஆக பாதுகாப்பாகச் சேமிக்கப்பட்டது.": "வேலை Review Queue-க்கு அனுப்பப்பட்டது. பொதுப் பக்கத்தில் இன்னும் வெளியிடப்படவில்லை.");
+ await loadQueue();
+}
+async function loadQueue(){
+ const f=$("filter").value;
+ let q=db.from("admin_job_post_reviews").select("id,title,company_name,status,payload,review_note,created_at,updated_at").order("created_at",{ascending:false}).limit(60);
+ if(f)q=q.eq("status",f);
+ const {data,error}=await q;
+ if(error){$("queue").innerHTML='<div class="empty">Review பட்டியலைப் பெற முடியவில்லை. SQL migration இயக்கப்பட வேண்டியிருக்கலாம்.<br>'+esc(error.message)+'</div>';return}
+ if(!data?.length){$("queue").innerHTML='<div class="empty">இந்த நிலையில் வேலை அறிவிப்புகள் இல்லை.</div>';return}
+ $("queue").innerHTML=data.map(r=>'<article class="item"><h3>'+esc(r.title)+'</h3><div class="meta"><span class="pill '+esc(r.status)+'">'+esc(statusLabel(r.status))+'</span>'+(r.company_name?'<span class="pill">'+esc(r.company_name)+'</span>':'')+'<span class="pill">'+new Date(r.created_at).toLocaleDateString("ta-IN")+'</span></div>'+(r.review_note?'<p>குறிப்பு: '+esc(r.review_note)+'</p>':'')+'<div class="item-actions"><button class="btn soft" data-action="edit" data-id="'+r.id+'">திருத்து</button>'+(r.status==="pending_review"?'<button class="btn green" data-action="approve" data-id="'+r.id+'">Approve</button><button class="btn red" data-action="reject" data-id="'+r.id+'">Reject</button>':'')+(r.status==="rejected"?'<button class="btn soft" data-action="draft" data-id="'+r.id+'">மீண்டும் Draft</button>':'')+'</div></article>').join("");
+ $("queue").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>act(b.dataset.action,b.dataset.id,data)));
+}
+async function act(action,id,rows){
+ const r=rows.find(x=>x.id===id);if(!r)return;
+ if(action==="edit"){fill({...r.payload,id:r.id});say("தேர்ந்தெடுத்த அறிவிப்பு படிவத்தில் ஏற்றப்பட்டது.");window.scrollTo({top:0,behavior:"smooth"});return}
+ let update={status:action==="approve"?"approved":action==="reject"?"rejected":"draft",review_note:null,reviewed_by:null,reviewed_at:null};
+ if(action==="reject"){const note=prompt("Reject செய்வதற்கான காரணத்தை எழுதுங்கள்:");if(note===null)return;if(!note.trim()){alert("காரணத்தை எழுதவும்.");return}update.review_note=note.trim().slice(0,1000)}
+ if(action==="approve"){if(!confirm("இந்த அறிவிப்பை Admin Review-ல் Approved எனக் குறிக்கவா? இது பொதுவில் வெளியிடாது."))return;update.reviewed_by=user.id;update.reviewed_at=new Date().toISOString()}
+ const {error}=await db.from("admin_job_post_reviews").update(update).eq("id",id);
+ if(error){say("நிலை மாற்ற முடியவில்லை: "+error.message,false);return}
+ say("நிலை மாற்றப்பட்டது: "+statusLabel(update.status));await loadQueue();
+}
+async function init(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data.user){$("loading").classList.add("hidden");$("gateText").textContent="முதலில் Admin கணக்கில் Login செய்யவும்.";$("gate").classList.remove("hidden");return}
+ user=data.user;
+ const {data:allowed,error:roleError}=await db.rpc("is_super_admin");
+ $("loading").classList.add("hidden");
+ if(roleError||allowed!==true){$("gateText").textContent="இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.";$("gate").classList.remove("hidden");return}
+ $("app").classList.remove("hidden");await loadQueue();
+}
+$("saveDraft").addEventListener("click",()=>save("draft"));
+$("sendReview").addEventListener("click",()=>save("pending_review"));
+$("reset").addEventListener("click",resetForm);
+$("filter").addEventListener("change",loadQueue);
+init();
+</script></body></html>
