@@ -44,6 +44,7 @@ jobs:
         run: |
           deno check supabase/functions/bilingual-job-search/index.ts
           deno check supabase/functions/ai-resume-match/index.ts
+          deno check supabase/functions/company-resume-access/index.ts
           deno check supabase/functions/ingest-government-notices/index.ts
           deno check supabase/functions/scan-external-job-sources/index.ts
       - name: Validate audit script
