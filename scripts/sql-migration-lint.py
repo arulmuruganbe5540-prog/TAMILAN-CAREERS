@@ -22,6 +22,13 @@ for path in SQL_FILES:
         if count % 2:
             errors.append(f"{relative}: unpaired {tag} delimiter ({count} occurrences)")
 
+    lines = content.splitlines()
+    for index, line in enumerate(lines):
+        if re.search(r"\\bsecurity\\s+definer\\b", line, re.IGNORECASE):
+            context = "\\n".join(lines[index:index + 10])
+            if not re.search(r"set\\s+search_path\\s*=\\s*''", context, re.IGNORECASE):
+                errors.append(f"{relative}:{index + 1}: SECURITY DEFINER function must set search_path = ''")
+
 if errors:
     print("SQL migration lint failed:")
     for error in errors:
