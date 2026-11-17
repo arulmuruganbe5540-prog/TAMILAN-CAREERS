@@ -97,7 +97,7 @@ async function save(silent=false){
  const form=document.getElementById("jobForm");if(!form.reportValidity())return null;
  const d=formData();
  if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("அதிகபட்ச சம்பளம் குறைந்தபட்ச சம்பளத்தைவிட குறைவாக இருக்கக்கூடாது.",false);return null}
- if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return null}const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");if(d.deadline<today){message("விண்ணப்பக் கடைசி தேதி கடந்த தேதியாக இருக்கக்கூடாது.",false);return null}}
+ if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return null}const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;if(d.deadline<today){message("விண்ணப்பக் கடைசி தேதி கடந்த தேதியாக இருக்கக்கூடாது.",false);return null}}
  const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return null}
  const previousStatus=currentDraft?.draft_status;
  const sameContent=ids.every(id=>String(currentDraft?.[id]??"")===String(d[id]??""));
