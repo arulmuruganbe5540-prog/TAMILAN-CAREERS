@@ -14,8 +14,15 @@ for path in SQL_FILES:
     content = path.read_text(encoding="utf-8", errors="replace")
     relative = path.relative_to(ROOT)
     if INVALID_SINGLE_DOLLAR.search(content):
-        errors.append(f"{relative}: invalid single-dollar PL/pgSQL delimiter; use $$ or a named dollar tag")
+        errors.append(f"{relative}: invalid single-dollar PL/pgSQL delimiter; use $ or a named dollar tag")
 
+    # Function declarations must start a SQL statement, never be spliced into
+    # a quoted regex, another statement, or a PL/pgSQL expression.
+    for match in re.finditer(r"\bcreate\s+or\s+replace\s+function\b", content, re.IGNORECASE):
+        line_start = content.rfind("\n", 0, match.start()) + 1
+        if content[line_start:match.start()].strip():
+            line_number = content.count("\n", 0, match.start()) + 1
+            errors.append(f"{relative}:{line_number}: CREATE OR REPLACE FUNCTION is embedded inside another statement")
     for match in re.finditer(r"\bcreate\s+(?:unique\s+)?index\b(.*?);", content, re.IGNORECASE | re.DOTALL):
         if not re.search(r"\bon\s+(?:public\.)?[a-z_][a-z0-9_]*", match.group(1), re.IGNORECASE):
             errors.append(f"{relative}: CREATE INDEX statement is missing a valid ON table clause")
