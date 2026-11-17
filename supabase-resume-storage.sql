@@ -13,7 +13,8 @@ declare
 begin
   if to_regclass('storage.buckets') is null
      or to_regclass('storage.objects') is null
-     or to_regclass('public.job_applications') is null then
+     or to_regclass('public.job_applications') is null
+     or to_regclass('public.job_seeker_profiles') is null then
     raise exception 'Resume Storage setup stopped: Storage relations or job_applications are missing; run supabase-schema-audit.sql first.';
   end if;
   foreach v_item in array array[
@@ -32,7 +33,7 @@ begin
     foreach v_item in array array[
       'candidate_resumes.id','candidate_resumes.user_id','candidate_resumes.resume_title','candidate_resumes.file_path',
       'candidate_resumes.original_file_name','candidate_resumes.file_type','candidate_resumes.file_size_bytes',
-      'candidate_resumes.is_primary','candidate_resumes.created_at','candidate_resumes.updated_at'
+      'candidate_resumes.is_primary','candidate_resumes.upload_source','candidate_resumes.processing_status','candidate_resumes.uploaded_at','candidate_resumes.updated_at'
     ] loop
       if not exists (
         select 1 from information_schema.columns c
@@ -66,45 +67,44 @@ $tc_resume_storage_guard$;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
-  'resumes',
-  'resumes',
+  'candidate-resumes',
+  'candidate-resumes',
   false,
-  5242880,
+  10485760,
   array[
     'application/pdf',
     'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'image/jpeg', 'image/png', 'image/webp'
   ]::text[]
 )
 on conflict (id) do update set
-  public = false,
-  file_size_limit = excluded.file_size_limit,
-  allowed_mime_types = excluded.allowed_mime_types;
+  public = false;
 
-drop policy if exists "TC resumes owner can read" on storage.objects;
-create policy "TC resumes owner can read"
-on storage.objects for select to authenticated
-using (bucket_id = 'resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
-
-drop policy if exists "TC resumes owner can upload" on storage.objects;
-create policy "TC resumes owner can upload"
-on storage.objects for insert to authenticated
-with check (bucket_id = 'resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
-
-drop policy if exists "TC resumes owner can update" on storage.objects;
-create policy "TC resumes owner can update"
-on storage.objects for update to authenticated
-using (bucket_id = 'resumes' and (storage.foldername(name))[1] = (select auth.uid()::text))
-with check (bucket_id = 'resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
-
-drop policy if exists "TC resumes owner can delete" on storage.objects;
-create policy "TC resumes owner can delete"
-on storage.objects for delete to authenticated
-using (bucket_id = 'resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
+-- Remove the two redundant legacy SELECT policies; the canonical owner SELECT rule below replaces them.
+drop policy if exists "candidate_resumes_delete_own wg4598_0" on storage.objects;
+drop policy if exists "candidate_resumes_delete_own wg4598_1" on storage.objects;
+drop policy if exists "candidate_resumes_insert_own wg4598_0" on storage.objects;
+drop policy if exists "candidate_resumes_select_own wg4598_0" on storage.objects;
+drop policy if exists "candidate_resumes_update_own wg4598_0" on storage.objects;
+drop policy if exists "candidate_resumes_update_own wg4598_1" on storage.objects;
+drop policy if exists "TC candidate resumes owner can read" on storage.objects;
+drop policy if exists "TC candidate resumes owner can upload" on storage.objects;
+drop policy if exists "TC candidate resumes owner can update" on storage.objects;
+drop policy if exists "TC candidate resumes owner can delete" on storage.objects;
+create policy "TC candidate resumes owner can read" on storage.objects
+for select to authenticated using (bucket_id = 'candidate-resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
+create policy "TC candidate resumes owner can upload" on storage.objects
+for insert to authenticated with check (bucket_id = 'candidate-resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
+create policy "TC candidate resumes owner can update" on storage.objects
+for update to authenticated using (bucket_id = 'candidate-resumes' and (storage.foldername(name))[1] = (select auth.uid()::text))
+with check (bucket_id = 'candidate-resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
+create policy "TC candidate resumes owner can delete" on storage.objects
+for delete to authenticated using (bucket_id = 'candidate-resumes' and (storage.foldername(name))[1] = (select auth.uid()::text));
 
 create table if not exists public.candidate_resumes (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references public.job_seeker_profiles(user_id) on delete cascade,
   resume_title text not null default 'Resume'
     check (length(btrim(resume_title)) between 1 and 160),
   file_path text not null unique,
@@ -115,9 +115,11 @@ create table if not exists public.candidate_resumes (
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   )),
-  file_size_bytes bigint not null check (file_size_bytes between 1 and 5242880),
+  file_size_bytes bigint not null check (file_size_bytes between 1 and 10485760),
+  upload_source text not null default 'document' check (upload_source in ('document','camera','gallery')),
   is_primary boolean not null default false,
-  created_at timestamptz not null default now(),
+  processing_status text not null default 'pending' check (processing_status in ('pending','processing','completed','failed','review_required')),
+  uploaded_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint candidate_resumes_owner_path check (
     left(file_path, length(user_id::text) + 1) = user_id::text || '/'
@@ -125,7 +127,7 @@ create table if not exists public.candidate_resumes (
 );
 
 create index if not exists candidate_resumes_user_created_idx
-  on public.candidate_resumes(user_id, created_at desc);
+  on public.candidate_resumes(user_id, uploaded_at desc);
 
 -- Link an optional candidate-owned resume to an application. The employer still
 -- cannot read the metadata directly; company-resume-access verifies membership.
@@ -173,7 +175,7 @@ returns trigger language plpgsql security definer set search_path = ''
 as $$
 declare existing_count integer;
 begin
-  perform pg_advisory_xact_lock(hashtextextended(new.user_id::text, 0));
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(new.user_id::text, 0));
   select count(*) into existing_count from public.candidate_resumes where user_id = new.user_id;
   if existing_count >= 5 then
     raise exception 'A maximum of 5 documents is allowed per candidate';
