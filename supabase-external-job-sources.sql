@@ -47,7 +47,8 @@ create policy external_sources_admin_all on public.external_job_sources for all 
 drop policy if exists external_candidates_admin_all on public.external_job_candidates;
 create policy external_candidates_admin_all on public.external_job_candidates for all to authenticated using(public.is_super_admin()) with check(public.is_super_admin());
 grant select,insert,update,delete on public.external_job_sources,public.external_job_candidates to authenticated;
--- On rerun, preserve admin-controlled enabled/monitor_mode values so an administrator's manual/disabled choice is not overwritten.\ninsert into public.external_job_sources(id,source_name,source_type,country,region,base_url,monitor_mode) values
+-- On rerun, preserve admin-controlled enabled/monitor_mode values so an administrator's manual/disabled choice is not overwritten.
+insert into public.external_job_sources(id,source_name,source_type,country,region,base_url,monitor_mode) values
 ('india-ncs','National Career Service','india_government','India',null,'https://www.ncs.gov.in/','manual'),
 ('india-upsc','Union Public Service Commission','india_government','India',null,'https://upsc.gov.in/','public_page'),
 ('india-ssc','Staff Selection Commission','india_government','India',null,'https://ssc.gov.in/','public_page'),
