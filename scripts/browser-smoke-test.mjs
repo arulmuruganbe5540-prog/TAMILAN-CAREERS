@@ -95,15 +95,15 @@ await check("Bilingual AI job search control is available", async () => {
 
 await check("External job source review requires login", async () => {
   await open("external-job-review.html");
-  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  await page.waitForFunction(() => location.pathname.endsWith("/admin-login.html"), { timeout: 8000 });
 });
 
-await check("Government admin pages require login", async () => {
+await check("Government admin pages require Admin Login", async () => {
   await open("government-notice-review.html");
-  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  await page.waitForFunction(() => location.pathname.endsWith("/admin-login.html"), { timeout: 8000 });
   if (new URL(page.url()).searchParams.get("next") !== "government-notice-review.html") throw new Error("Government review return path was not preserved");
   await open("government-notice-publish.html?id=smoke-test");
-  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  await page.waitForFunction(() => location.pathname.endsWith("/admin-login.html"), { timeout: 8000 });
   if (new URL(page.url()).searchParams.get("next") !== "government-notice-publish.html?id=smoke-test") throw new Error("Government publish return query was not preserved");
 });
 
