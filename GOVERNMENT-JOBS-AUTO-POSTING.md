@@ -44,3 +44,25 @@ If the GitHub secret is absent, the Supabase sync step is intentionally skipped.
 A discovered link is not a complete job post. Before a notice can appear publicly, its original official document must be opened and checked for the post title, vacancy count, education/experience, age limit, pay, application dates, fee/selection details, and the official application URL. Duplicates and amendments must be reconciled. If any important field cannot be verified, keep the notice in Admin Review.
 
 **Current limitation:** the discovery Edge Function is not yet an automatic fact verifier or public publisher. The public feed will show only records that have already been published into `government_notices`. Do not bulk-publish link-only candidates to fill the 15 slots. The next implementation stage is official PDF extraction, amendment/duplicate handling, expiry/archive handling, and a trusted server-side publisher for fully verified records.
+
+
+## AI-assisted full-detail extraction (implemented)
+
+The government monitor now has a second server-side stage: `extract-government-notice-details`.
+
+- After the discovery sync, GitHub Actions calls the extraction Edge Function.
+- It reads a direct official PDF using the OpenAI Responses API PDF file input, or extracts readable text from the registered official HTML page and linked same-domain PDFs.
+- It prepares structured fields for post-wise vacancy counts, qualifications, age limits, experience, salary, selection process, application fee, dates, documents, official website and application URL.
+- Extracted fields are saved to the private Admin Review record and shown with AI status, summary and confidence.
+- The public job-detail page renders the structured post-wise fields after an Admin explicitly verifies and publishes the notice.
+- AI output is only a draft. It is never treated as verified, never auto-published, and missing or ambiguous facts remain blank.
+
+### Additional one-time secret
+
+Add `OPENAI_API_KEY` in Supabase Dashboard → Project Settings → Edge Functions → Secrets. Do not put this key in GitHub source code or the browser. The extractor uses `gpt-4o-mini` through the Responses API.
+
+The existing `GOVERNMENT_MONITOR_SECRET` must also be configured with the same value in Supabase Edge Function Secrets and GitHub Actions Secrets. Without it, scheduled scanning and the extraction call will be skipped or rejected. If the OpenAI key is missing, the extraction step reports an error and the review candidates remain safely pending.
+
+### Current operating boundary
+
+AI can extract from readable official PDFs/pages, but it cannot guarantee every portal exposes a downloadable PDF or allows automated access. Admin must compare the extracted draft against the original official notice, especially post-wise vacancies, eligibility, age cut-off, pay, fee, dates and application links. Only the existing Super Admin publish action makes a record public.
