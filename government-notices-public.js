@@ -111,16 +111,48 @@
     try{
       if(!window.supabase?.createClient) throw new Error("தகவல் சேவை தற்போது கிடைக்கவில்லை.");
       const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-      const {data,error}=await client.from("government_notices")
-        .select("id,title,category,official_url,notice_reference,notice_date,application_start,application_end,vacancies,eligibility_summary,details,is_active")
-        .eq("is_active",true)
-        .order("notice_date",{ascending:false}).limit(500);
-      if(error) throw error;
+      const [noticeResult,jobResult]=await Promise.all([
+        client.from("government_notices")
+          .select("id,title,category,official_url,notice_reference,notice_date,application_start,application_end,vacancies,eligibility_summary,details,is_active")
+          .eq("is_active",true).order("notice_date",{ascending:false}).limit(500),
+        client.from("jobs").select("*").eq("status","published").eq("job_kind","government").order("created_at",{ascending:false}).limit(500)
+      ]);
+      if(noticeResult.error) throw noticeResult.error;
+      if(jobResult.error) throw jobResult.error;
+      const postedJobs=(jobResult.data||[]).map(j=>{
+        const authority=String(j.recruitment_authority||"").toLowerCase();
+        const location=String(j.location||"").toLowerCase();
+        const isTamilNadu=authority.includes("tn")||authority.includes("tamil nadu")||location.includes("tamil nadu");
+        const salary=j.salary_min||j.salary_max?("₹ "+(j.salary_min||"")+(j.salary_min&&j.salary_max?" – ":"")+(j.salary_max||"")):"";
+        const details={
+          scope:isTamilNadu?"state":"central",
+          state:isTamilNadu?"Tamil Nadu":"India",
+          authority:j.recruitment_authority||j.company_name||"அரசுத் துறை",
+          department:j.department||j.category,
+          qualification:j.qualification||j.education,
+          age_limit:j.age_limit,
+          salary,
+          selection_process:j.selection_process,
+          location:j.location,
+          application_url:j.application_url,
+          notification_pdf_url:j.official_notification_url
+        };
+        return {
+          id:j.id,title:j.job_title||j.title||"அரசு வேலைவாய்ப்பு",category:"recruitment",
+          official_url:j.official_notification_url||j.official_website_url||j.application_url,
+          notice_reference:j.notification_number,notice_date:j.notification_date||j.published_at||j.created_at,
+          application_start:j.application_start_date,application_end:j.application_deadline,
+          vacancies:j.vacancies??j.vacancy_count??j.openings??null,
+          eligibility_summary:j.qualification||j.education||j.experience||"",
+          details,is_active:true
+        };
+      });
+      const data=[...(noticeResult.data||[]),...postedJobs];
       const months=Number(period.value);
       const cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-months);
       const selectedCategory=category.value;
       const scope=host.dataset.scope||"all",stateFilter=host.dataset.state||"";
-      const rows=(data||[]).filter(r=>{
+      const rows=data.filter(r=>{
         if(!r.notice_date) return false;
         const dt=new Date(r.notice_date+"T00:00:00");if(dt<cutoff)return false;
         const d=r.details||{};
