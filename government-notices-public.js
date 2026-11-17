@@ -21,6 +21,7 @@
     const d = new Date(value + (String(value).length === 10 ? "T00:00:00" : ""));
     return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString("ta-IN");
   };
+  const categoryLabels = {recruitment:"வேலைவாய்ப்பு அறிவிப்பு",result:"தேர்வு முடிவு",admit_card:"Hall Ticket / Admit Card",answer_key:"Answer Key",exam_update:"தேர்வு தேதி / புதுப்பிப்பு",other:"அரசு அறிவிப்பு"};
   const detailLabels = {
     post_names:"பதவிகள்", qualification:"கல்வித் தகுதி", education:"கல்வித் தகுதி",
     age_limit:"வயது வரம்பு", salary:"சம்பளம்", pay_scale:"ஊதிய நிலை",
@@ -33,7 +34,7 @@
     const article = el("article", "tc-gov-card");
     const state = d.state || (d.scope === "central" ? "மத்திய அரசு" : "மாநில அரசு");
     const head = el("div", "tc-gov-head");
-    head.append(el("span","tc-gov-tag", "அதிகாரப்பூர்வ அறிவிப்பு"));
+    head.append(el("span","tc-gov-tag", categoryLabels[row.category] || "அதிகாரப்பூர்வ அறிவிப்பு"));
     const end = row.application_end ? new Date(row.application_end + "T23:59:59") : null;
     const expired = end && !Number.isNaN(end.getTime()) && end < new Date();
     head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "விண்ணப்பக் காலம் முடிந்தது" : (row.application_end ? "விண்ணப்பம் நடைபெறுகிறது" : "அறிவிப்பு பதிவு")));
@@ -128,10 +129,10 @@
         if(stateFilter==="Tamil Nadu" && String(d.state||"").toLowerCase()!=="tamil nadu")return false;
         if(stateFilter==="other" && String(d.state||"").toLowerCase()==="tamil nadu")return false;
         return true;
-      }).slice(0,15);
+      });
       if(!rows.length){status.textContent="இந்த காலவரம்பில் இன்னும் அதிகாரப்பூர்வமாகச் சரிபார்த்து வெளியிடப்பட்ட வேலை அறிவிப்புகள் இல்லை.";grid.append(el("div","tc-gov-empty","புதிய அறிவிப்புகள் சரிபார்க்கப்பட்டதும் இங்கே தானாகத் தோன்றும். தற்போது காலியிட எண்ணிக்கை அல்லது தகுதி விவரங்கள் ஊகித்து காட்டப்படவில்லை."));return;}
       rows.forEach(r=>grid.append(card(r)));
-      status.textContent=rows.length+" சரிபார்க்கப்பட்ட அரசு பதிவுகள்";
+      status.textContent=rows.length+" சரிபார்க்கப்பட்ட அரசு பதிவுகள் · கடந்த "+months+" மாதங்கள்";
     }catch(e){status.textContent="அறிவிப்புகளை இப்போது ஏற்ற முடியவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.";grid.append(el("div","tc-gov-empty","தகவல் சேவை / அனுமதி சரிபார்ப்பு தேவை."));}
   }
   period.addEventListener("change",load);
