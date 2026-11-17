@@ -101,8 +101,10 @@ await check("External job source review requires login", async () => {
 await check("Government admin pages require login", async () => {
   await open("government-notice-review.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  if (new URL(page.url()).searchParams.get("next") !== "government-notice-review.html") throw new Error("Government review return path was not preserved");
   await open("government-notice-publish.html?id=smoke-test");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  if (new URL(page.url()).searchParams.get("next") !== "government-notice-publish.html?id=smoke-test") throw new Error("Government publish return query was not preserved");
 });
 
 await check("Private admin controls require authentication", async () => {
@@ -121,6 +123,7 @@ await check("Private admin controls require authentication", async () => {
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  if (new URL(page.url()).searchParams.get("next") !== "job-seeker-profile.html") throw new Error("Candidate profile return path was not preserved");
 });
 
 await check("Resume documents page requires login", async () => {
@@ -131,6 +134,7 @@ await check("Resume documents page requires login", async () => {
 await check("Job application page requires login", async () => {
   await open("apply.html?job=smoke-test");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  if (new URL(page.url()).searchParams.get("next") !== "apply.html?job=smoke-test") throw new Error("Application return query was not preserved");
 });
 
 await check("Company applicant page requires login", async () => {
@@ -157,6 +161,7 @@ await check("Invitation acceptance page rejects a missing token safely", async (
 await check("Company job draft page requires login", async () => {
   await open("job-posting.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  if (new URL(page.url()).searchParams.get("next") !== "job-posting.html") throw new Error("Company job posting return path was not preserved");
 });
 
 await check("Notification center requires login", async () => {
@@ -202,6 +207,7 @@ await check("AI resume matching page requires login", async () => {
 await check("Dashboard requires login", async () => {
   await open("dashboard.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  if (new URL(page.url()).searchParams.get("next") !== "dashboard.html") throw new Error("Dashboard return path was not preserved");
 });
 
 await check("Tamil Nadu government jobs page loads and filters", async () => {
