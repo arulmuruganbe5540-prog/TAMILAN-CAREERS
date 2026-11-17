@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T08:54:49.086235+00:00",
+  "checked_at_utc": "2026-11-17T08:58:03.901983+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 24,
@@ -96,14 +96,19 @@
       "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1147)>"
     },
     {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+    },
+    {
       "source_id": "psc-cg",
       "url": "https://psc.cg.gov.in/",
       "error": "<urlopen error timed out>"
     },
     {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
-      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+      "source_id": "kpsc",
+      "url": "https://kpsc.kar.nic.in/",
+      "error": "Redirect outside registered HTTPS domain"
     },
     {
       "source_id": "gpsc-gujarat",
@@ -111,9 +116,9 @@
       "error": "<urlopen error [Errno 101] Network is unreachable>"
     },
     {
-      "source_id": "kpsc",
-      "url": "https://kpsc.kar.nic.in/",
-      "error": "Redirect outside registered HTTPS domain"
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
+      "error": "HTTP Error 403: Forbidden"
     },
     {
       "source_id": "hpsc",
