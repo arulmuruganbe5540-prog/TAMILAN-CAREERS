@@ -31,6 +31,16 @@ jobs:
         run: python scripts/government-job-monitor.py
       - name: Discover possible new official recruiting portals
         run: python scripts/government-source-discovery.py
+      - name: Sync up to 15 recruitment candidates to Supabase Admin Review
+        if: env.GOVERNMENT_MONITOR_SECRET != ''
+        env:
+          GOVERNMENT_MONITOR_SECRET: ${{ secrets.GOVERNMENT_MONITOR_SECRET }}
+        run: |
+          curl --fail --show-error --silent --max-time 900 \
+            -X POST "https://qkmljuuusfjowexvy.supabase.co/functions/v1/ingest-government-notices" \
+            -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
+            -H "Content-Type: application/json" \
+            --data '{}'
       - name: Commit review queues and monitor reports
         run: |
           git add government-job-review-queue.json government-job-monitor-report.json government-source-discovery-candidates.json
