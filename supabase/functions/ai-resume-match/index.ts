@@ -39,9 +39,13 @@ function cleanJob(row: Record<string, unknown>) {
 function isExpiredDeadline(value: unknown) {
   if (typeof value !== "string" || !value.trim()) return false;
   const raw = value.trim();
-  let match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  let match = raw.match(/^(\d{4})-(\d{2})-(\d{2})T00:00:00(?:\.\d+)?(?:Z|\+00:00)$/i);
   let iso = "";
-  if (match) iso = raw;
+  if (match) iso = `${match[1]}-${match[2]}-${match[3]}`;
+  if (!iso) {
+    match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (match) iso = raw;
+  }
   if (!iso) {
     match = raw.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);
     if (match) iso = `${match[3]}-${match[2]}-${match[1]}`;
