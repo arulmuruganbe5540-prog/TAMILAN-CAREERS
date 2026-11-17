@@ -43,7 +43,7 @@
     const facts = el("div","tc-gov-facts");
     const pairs = [
       ["அறிவிப்பு தேதி",dateText(row.notice_date)],
-      ["காலியிடங்கள்",row.vacancies === null || row.vacancies === undefined ? "அதிகாரப்பூர்வ PDF-ல் பார்க்கவும்" : row.vacancies],
+      ["காலியிடங்கள்",row.vacancies === null || row.vacancies === undefined ? "அதிகாரப்பூர்வ PDF-ல் பார்க்கவும்" : Number(row.vacancies).toLocaleString("en-IN")],
       ["விண்ணப்ப தொடக்கம்",dateText(row.application_start)],
       ["கடைசி தேதி",dateText(row.application_end)]
     ];
@@ -53,12 +53,12 @@
     const extras = Object.entries(d).filter(([k,v]) => detailLabels[k] && v && !String(v).startsWith("http"));
     if (extras.length) {
       const list=el("dl","tc-gov-details");
-      extras.forEach(([k,v])=>{list.append(el("dt","",detailLabels[k]));list.append(el("dd","",Array.isArray(v)?v.join(", "):v));});
+      extras.forEach(([k,v])=>{list.append(el("dt","",detailLabels[k]));list.append(el("dd","",Array.isArray(v)?v.join(", "):(typeof v==="object"?JSON.stringify(v):v)));});
       article.append(list);
     }
     const links=el("div","tc-gov-links");
     const noticeUrl=safeUrl(d.notification_pdf_url)||safeUrl(row.official_url);
-    if (noticeUrl) { const a=el("a","tc-gov-link","அசல் அரசு அறிவிப்பு / PDF ↗");a.href=noticeUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
+    if (noticeUrl) { const a=el("a","tc-gov-link",d.notification_pdf_url?"அசல் அரசு PDF ↗":"அதிகாரப்பூர்வ மூல அறிவிப்பு ↗");a.href=noticeUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
     const applyUrl=safeUrl(d.application_url)||safeUrl(d.apply_url);
     if (applyUrl) { const a=el("a","tc-gov-link apply","அதிகாரப்பூர்வ விண்ணப்பம் ↗");a.href=applyUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
     article.append(links);
