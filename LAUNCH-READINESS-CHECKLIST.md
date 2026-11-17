@@ -20,7 +20,7 @@ This is an operational checklist based on the project changes and user-confirmed
 ## Must finish before enabling external source scanning
 
 - [ ] Create a unique random `GOVERNMENT_MONITOR_SECRET` of at least 32 characters. Do not paste it into chat or commit it.
-- [ ] Add the exact same secret in Supabase Edge Function Secrets and GitHub repository Actions Secrets.
+- [ ] Redeploy the latest scanner source from GitHub after the recent bounded-response and accurate per-source status fixes. The user-confirmed deployment was the earlier version; repository changes are not live until redeployed.\n- [ ] Add the exact same secret in Supabase Edge Function Secrets and GitHub repository Actions Secrets.
 - [ ] Check the scanner Edge Function's **Verify JWT with legacy secret** setting. Because the function uses its own `x-monitor-secret` header, the gateway must not block the request by requiring a Supabase JWT; turn legacy JWT verification off if it is on.
 - [ ] Run the GitHub workflow manually and inspect the private candidate queue.
 - [ ] Verify the Admin review page with a Super Admin account.
@@ -34,7 +34,7 @@ This is an operational checklist based on the project changes and user-confirmed
 - [ ] Run `supabase-candidate-profile-education-experience.sql`; test saving and editing education and experience.
 - [ ] Run `supabase-company-application-status.sql`; test permitted and denied employer status updates.
 - [ ] For Government Jobs archive, run `supabase-government-archive-install.sql`, deploy `ingest-government-notices`, configure its protected monitor secret, and test the private review queue. Do not auto-publish scraped links.
-- [ ] For AI resume matching, deploy `ai-resume-match`, add `OPENAI_API_KEY` as a Supabase Function Secret, and test with explicit candidate consent. Rule-based matching and AI matching must be described separately.
+- [ ] For AI resume matching, redeploy the latest `ai-resume-match` source (Bearer token parsing was corrected in GitHub), add `OPENAI_API_KEY` as a Supabase Function Secret, and test with explicit candidate consent. Rule-based matching and AI matching must be described separately.
 - [ ] Review the deployed `manage-hiring` function and exact company/member schema before replacing the current minimal login/status handler with member-management actions. Do not deploy schema-dependent changes without the schema audit.
 
 ## Final launch checks
