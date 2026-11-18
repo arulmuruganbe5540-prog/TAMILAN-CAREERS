@@ -42,7 +42,7 @@ using (
   public.tc_can_access_company_verification(company_id, submitted_by, id, false)
 );
 
--- Verification requests must be created through the SECURITY DEFINER submission RPC.
+-- Verification requests must be created through the trusted submission RPC.
 drop policy if exists "Company owners submit own verification request" on public.company_verification_requests;
 
 drop policy if exists "Company owners view own verification documents" on public.company_verification_documents;
