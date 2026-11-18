@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "last_updated_utc": "2026-11-17T09:19:25.333082+00:00",
+  "last_updated_utc": "2026-11-18T03:17:56.235381+00:00",
   "purpose": "Official PSC page change detection only; not a verified vacancy feed.",
   "states_monitored": 28,
   "changed_pages": [
@@ -33,7 +33,7 @@
     {
       "state": "Andhra Pradesh",
       "url": "https://psc.ap.gov.in/",
-      "checked_at": "2026-11-17T09:18:26.661035+00:00",
+      "checked_at": "2026-11-18T03:16:55.233082+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -42,7 +42,7 @@
     {
       "state": "Arunachal Pradesh",
       "url": "https://www.appsc.gov.in/",
-      "checked_at": "2026-11-17T09:18:26.661474+00:00",
+      "checked_at": "2026-11-18T03:16:55.233478+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -51,7 +51,7 @@
     {
       "state": "Assam",
       "url": "https://apsc.nic.in/",
-      "checked_at": "2026-11-17T09:18:26.661752+00:00",
+      "checked_at": "2026-11-18T03:16:55.233835+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -60,7 +60,7 @@
     {
       "state": "Bihar",
       "url": "https://bpsc.bihar.gov.in/",
-      "checked_at": "2026-11-17T09:18:26.662062+00:00",
+      "checked_at": "2026-11-18T03:16:55.234197+00:00",
       "http_status": 200,
       "final_url": "https://bpsc.bihar.gov.in/",
       "content_sha256": "e46e4d16a74099957967ada49070d1117367b46e90930e65e0447db59a2efef0",
@@ -70,7 +70,7 @@
     {
       "state": "Chhattisgarh",
       "url": "https://psc.cg.gov.in/",
-      "checked_at": "2026-11-17T09:18:31.228729+00:00",
+      "checked_at": "2026-11-18T03:16:59.628652+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -79,7 +79,7 @@
     {
       "state": "Goa",
       "url": "https://gpsc.goa.gov.in/",
-      "checked_at": "2026-11-17T09:18:39.067402+00:00",
+      "checked_at": "2026-11-18T03:17:07.648785+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -88,7 +88,7 @@
     {
       "state": "Gujarat",
       "url": "https://gpsc.gujarat.gov.in/",
-      "checked_at": "2026-11-17T09:18:39.321566+00:00",
+      "checked_at": "2026-11-18T03:17:07.677994+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -97,7 +97,7 @@
     {
       "state": "Haryana",
       "url": "https://hpsc.gov.in/",
-      "checked_at": "2026-11-17T09:18:39.797414+00:00",
+      "checked_at": "2026-11-18T03:17:08.292564+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -106,7 +106,7 @@
     {
       "state": "Himachal Pradesh",
       "url": "https://hppsc.hp.gov.in/",
-      "checked_at": "2026-11-17T09:18:40.548833+00:00",
+      "checked_at": "2026-11-18T03:17:11.911722+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -115,7 +115,7 @@
     {
       "state": "Jharkhand",
       "url": "https://www.jpsc.gov.in/",
-      "checked_at": "2026-11-17T09:18:41.388055+00:00",
+      "checked_at": "2026-11-18T03:17:12.406105+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -124,7 +124,7 @@
     {
       "state": "Karnataka",
       "url": "https://kpsc.kar.nic.in/",
-      "checked_at": "2026-11-17T09:18:43.536662+00:00",
+      "checked_at": "2026-11-18T03:17:12.645518+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -133,7 +133,7 @@
     {
       "state": "Kerala",
       "url": "https://www.keralapsc.gov.in/",
-      "checked_at": "2026-11-17T09:18:45.209219+00:00",
+      "checked_at": "2026-11-18T03:17:14.289269+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -142,7 +142,7 @@
     {
       "state": "Madhya Pradesh",
       "url": "https://mppsc.mp.gov.in/",
-      "checked_at": "2026-11-17T09:18:47.054332+00:00",
+      "checked_at": "2026-11-18T03:17:17.572503+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -151,7 +151,7 @@
     {
       "state": "Maharashtra",
       "url": "https://mpsc.gov.in/home",
-      "checked_at": "2026-11-17T09:18:51.410242+00:00",
+      "checked_at": "2026-11-18T03:17:19.911803+00:00",
       "http_status": 200,
       "final_url": "https://mpsc.gov.in/home",
       "content_sha256": "4223820c137eaafd076ba16ebceb0de284e776c04da1954314f705d3ae63de95",
@@ -161,7 +161,7 @@
     {
       "state": "Manipur",
       "url": "https://mpscmanipur.gov.in/",
-      "checked_at": "2026-11-17T09:18:51.616950+00:00",
+      "checked_at": "2026-11-18T03:17:20.549943+00:00",
       "http_status": 200,
       "final_url": "https://mpscmanipur.gov.in/",
       "content_sha256": "f203f039a0fc89282ffbc1f4cd4e39fc856fe75c732f5b95492a91ed6d54381e",
@@ -171,7 +171,7 @@
     {
       "state": "Meghalaya",
       "url": "https://mpsc.meghalaya.gov.in/",
-      "checked_at": "2026-11-17T09:18:52.059546+00:00",
+      "checked_at": "2026-11-18T03:17:21.196049+00:00",
       "http_status": 200,
       "final_url": "https://mpsc.meghalaya.gov.in/",
       "content_sha256": "cb20305375842f8ea082341aeecb5e590d099b8e8d2468b28d193b92e950916c",
@@ -181,7 +181,7 @@
     {
       "state": "Mizoram",
       "url": "https://mpsc.mizoram.gov.in/",
-      "checked_at": "2026-11-17T09:18:52.617355+00:00",
+      "checked_at": "2026-11-18T03:17:22.421838+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -190,17 +190,17 @@
     {
       "state": "Nagaland",
       "url": "https://npsc.nagaland.gov.in/",
-      "checked_at": "2026-11-17T09:18:54.083053+00:00",
+      "checked_at": "2026-11-18T03:17:23.348901+00:00",
       "http_status": 200,
       "final_url": "https://npsc.nagaland.gov.in/",
-      "content_sha256": "6f8235af6817da56a1c5c10a79f69b34fbb7ab6ad1bc7b38da50b7a0ac8ab82e",
+      "content_sha256": "730de19c633c0287f584faed2373d5e7113a7d8fb5a584da10c6c60e5d774d77",
       "changed_since_previous_check": true,
       "review_required": true
     },
     {
       "state": "Odisha",
       "url": "https://www.opsc.gov.in/",
-      "checked_at": "2026-11-17T09:18:54.350672+00:00",
+      "checked_at": "2026-11-18T03:17:23.816624+00:00",
       "http_status": 200,
       "final_url": "https://www.opsc.gov.in/Public/OPSC/Default.aspx",
       "content_sha256": "af4361ec59f6229f12fe2e3b9567b6188694c1616e3946c756291cfe870ed568",
@@ -210,7 +210,7 @@
     {
       "state": "Punjab",
       "url": "https://www.ppsc.gov.in/",
-      "checked_at": "2026-11-17T09:18:56.739642+00:00",
+      "checked_at": "2026-11-18T03:17:26.088017+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -219,7 +219,7 @@
     {
       "state": "Rajasthan",
       "url": "https://rpsc.rajasthan.gov.in/",
-      "checked_at": "2026-11-17T09:18:57.004946+00:00",
+      "checked_at": "2026-11-18T03:17:28.225167+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -228,7 +228,7 @@
     {
       "state": "Sikkim",
       "url": "https://spsc.sikkim.gov.in/",
-      "checked_at": "2026-11-17T09:18:59.371935+00:00",
+      "checked_at": "2026-11-18T03:17:29.827895+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -237,17 +237,17 @@
     {
       "state": "Tamil Nadu",
       "url": "https://www.tnpsc.gov.in/",
-      "checked_at": "2026-11-17T09:19:01.354023+00:00",
+      "checked_at": "2026-11-18T03:17:30.539179+00:00",
       "http_status": 200,
       "final_url": "https://www.tnpsc.gov.in/",
-      "content_sha256": "34b3c7c7b35e1da6e420430cd9b5e5c0b9be352d83f73391c10afd91154ffaef",
+      "content_sha256": "7022f9c27a3786bb6c99df320b911e9732f09e445160792c87556b054a8c8edf",
       "changed_since_previous_check": true,
       "review_required": true
     },
     {
       "state": "Telangana",
       "url": "https://www.tgpsc.gov.in/",
-      "checked_at": "2026-11-17T09:19:04.440049+00:00",
+      "checked_at": "2026-11-18T03:17:33.626364+00:00",
       "http_status": 200,
       "final_url": "https://www.tgpsc.gov.in/",
       "content_sha256": "18355a8e970f1e78904ddbd0a6fb208f0e9ab0ac5c09a4975da549ac73ba64b8",
@@ -257,7 +257,7 @@
     {
       "state": "Tripura",
       "url": "https://tpsc.tripura.gov.in/",
-      "checked_at": "2026-11-17T09:19:06.171751+00:00",
+      "checked_at": "2026-11-18T03:17:35.247876+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -266,7 +266,7 @@
     {
       "state": "Uttar Pradesh",
       "url": "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx",
-      "checked_at": "2026-11-17T09:19:10.078760+00:00",
+      "checked_at": "2026-11-18T03:17:40.884850+00:00",
       "http_status": 200,
       "final_url": "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx",
       "content_sha256": "b78fa91d946fc3a210337f7c8d02670b7703f2fb9a53d7609796b1fdbba662f3",
@@ -276,7 +276,7 @@
     {
       "state": "Uttarakhand",
       "url": "https://psc.uk.gov.in/",
-      "checked_at": "2026-11-17T09:19:11.673414+00:00",
+      "checked_at": "2026-11-18T03:17:42.112934+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
@@ -285,7 +285,7 @@
     {
       "state": "West Bengal",
       "url": "https://psc.wb.gov.in/",
-      "checked_at": "2026-11-17T09:19:13.019987+00:00",
+      "checked_at": "2026-11-18T03:17:43.929351+00:00",
       "http_status": null,
       "error": "robots.txt disallows this page or could not be checked safely",
       "changed_since_previous_check": false,
