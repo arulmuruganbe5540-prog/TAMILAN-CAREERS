@@ -356,6 +356,10 @@ translation_audit = {
         translation_page_results,
         key=lambda item: item["english_dictionary_matched"] / max(1, item["english_candidate_strings"])
     )[:15],
+    "lowest_tamil_coverage_pages": sorted(
+        translation_page_results,
+        key=lambda item: item["tamil_dictionary_matched"] / max(1, item["pure_tamil_source_strings"])
+    )[:20],
     "mixed_source_examples": sorted(mixed_source_examples)[:40],
     "note": "Exact dictionary-key coverage estimate for static HTML text and selected attributes. English-source and pure-Tamil-source keys are audited separately; mixed Tamil-English strings are reported separately. Dynamic JavaScript/API text and translation quality are not certified.",
 }
