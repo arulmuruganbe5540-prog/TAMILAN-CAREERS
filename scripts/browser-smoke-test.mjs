@@ -519,6 +519,8 @@ await check("Automatic Spain locale translates newly expanded Spanish job vocabu
     await spanishPage.waitForFunction(() => document.getElementById("tc-es-job-title")?.textContent === "Puesto de trabajo", { timeout: 5000 });
     await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-employer"; e.textContent="Employer"; document.body.appendChild(e); });
     await spanishPage.waitForFunction(() => document.getElementById("tc-es-employer")?.textContent === "Empleador", { timeout: 5000 });
+    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-tamil-source"; e.textContent="வேலை தேடுபவர்"; document.body.appendChild(e); });
+    await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-source")?.textContent === "Persona que busca empleo", { timeout: 5000 });
   } finally {
     await spanishPage.close();
   }
@@ -539,6 +541,8 @@ await check("Automatic Malaysia locale translates newly expanded Malay job vocab
     await malayPage.waitForFunction(() => document.getElementById("tc-ms-job-title")?.textContent === "Jawatan", { timeout: 5000 });
     await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-employer"; e.textContent="Employer"; document.body.appendChild(e); });
     await malayPage.waitForFunction(() => document.getElementById("tc-ms-employer")?.textContent === "Majikan", { timeout: 5000 });
+    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-tamil-source"; e.textContent="வேலை தேடுபவர்"; document.body.appendChild(e); });
+    await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-source")?.textContent === "Pencari Kerja", { timeout: 5000 });
   } finally {
     await malayPage.close();
   }
