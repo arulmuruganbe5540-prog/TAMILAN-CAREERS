@@ -53,12 +53,12 @@ await check("Redesigned homepage is mobile-friendly and hides country-detection 
     viewport: document.documentElement.clientWidth,
     document: document.documentElement.scrollWidth,
     hero: document.querySelector(".hero h1")?.getBoundingClientRect().width || 0,
-    nav: !!document.querySelector(".main-nav")
+    nav: !!document.querySelector(".main-nav"),
+    visibleText: (document.body.innerText || "").toLowerCase()
   }));
   if (layout.document > layout.viewport + 1) throw new Error("Homepage has horizontal page overflow on mobile: " + JSON.stringify(layout));
   if (!layout.nav || layout.hero <= 0) throw new Error("Mobile navigation or hero content is missing");
-  const visibleText = (document.body.innerText || "").toLowerCase();
-  if (visibleText.includes("your country detected") || visibleText.includes("உங்கள் நாடு கண்டறியப்பட்டது")) {
+  if (layout.visibleText.includes("your country detected") || layout.visibleText.includes("உங்கள் நாடு கண்டறியப்பட்டது")) {
     throw new Error("Country detection notice should remain hidden");
   }
   await page.setViewportSize({ width: 390, height: 844 });
