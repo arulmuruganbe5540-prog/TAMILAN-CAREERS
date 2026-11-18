@@ -22,7 +22,7 @@ Invitation tokens are random, stored as SHA-256 hashes, expire after seven days,
 Email invitations require these Function Secrets:
 
 - `RESEND_API_KEY` — Resend API key.
-- `APP_BASE_URL` — `https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS` (HTTPS URL; no trailing slash required).
+- `APP_BASE_URL` — `https://tamilancareers.in` (HTTPS URL; no trailing slash required).
 - `RESEND_FROM_EMAIL` — optional; use a sender verified in Resend. If omitted, the test sender `TAMILAN CAREERS <onboarding@resend.dev>` is used and may be restricted by Resend.
 
 Do not put these secrets in HTML, JavaScript, GitHub source, or chat. The function supports the current Supabase publishable/secret key environment variables and legacy anon/service-role environment variables.
