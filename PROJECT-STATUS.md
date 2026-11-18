@@ -182,3 +182,14 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Live schema migration applied successfully. Current published job count is 0, so no real job report or verified-company public listing flow can be end-to-end tested yet. No test job or report was inserted.
 - Supabase security advisor now lists the two new authenticated SECURITY DEFINER RPCs among the project's authenticated-callable functions; these are intentionally callable and perform their own auth.uid() / Super Admin checks. Existing unrelated advisor notices remain: backend-only RLS tables and leaked-password protection disabled.
 - GitHub Pages deployment and browser end-to-end tests for this change are not yet confirmed. Do not claim the new pages are live until the matching CI/Pages runs succeed.
+
+## 18 November 2026 — Company identity re-verification and data privacy
+
+- Audited company verification tables, RLS, trigger behavior, storage policies, and company-facing page queries.
+- Found that a company owner could change company identity fields while retaining the existing verified status. Reworked `tc_guard_company_verification_status` and its trigger to cover every company update: owners cannot transfer ownership or self-assign verified/rejected status; changes to company name, slug, description, website, logo, industry, size, or registration number automatically move a verified company back to pending. Only Super Admin can verify/reject.
+- Restricted `companies` Data API SELECT privileges for both anon and authenticated users to display-safe columns only. `registration_number` and `owner_user_id` are no longer selectable from the companies table. Company verification requests continue to hold legal details behind their own owner/admin RLS policies.
+- Updated `company-profile.html` duplicate-request recovery to look up the user's own open verification request rather than querying private registration and owner columns from `companies`.
+- Added Tamil UI guidance explaining that changes to verified company identity details trigger re-verification.
+- Applied migration successfully. SQL checks confirmed anon/authenticated cannot select the full companies table; both can read public display fields; neither can read registration_number or owner_user_id. Trigger now fires before every INSERT/UPDATE on companies and uses SECURITY DEFINER with an empty search_path.
+- Audited company-facing pages: company applicant/member/job pages use only company display name and verification status; public jobs page uses company id/name; admin verification uses display name/status/website while legal details come from protected verification request rows.
+- No real company verification records or test identities were created. End-to-end company-owner UI test remains pending. GitHub Pages deployment for the latest commit is pending; do not yet claim these latest changes are live.
