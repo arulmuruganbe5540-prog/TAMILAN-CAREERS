@@ -153,6 +153,36 @@ await check("Multi-word job search matches every entered keyword", async () => {
   }
 });
 
+await check("Education and workplace filters narrow jobs correctly", async () => {
+  await page.route("**/rest/v1/jobs**", route => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify([{
+      id: "filter-smoke",
+      status: "published",
+      job_title: "Junior Technician",
+      description: "Technical support",
+      location: "Salem",
+      employment_type: "full_time",
+      job_kind: "private",
+      education_level: "ITI,Diploma",
+      workplace_type: "Remote"
+    }])
+  }));
+  try {
+    await open("jobs.html");
+    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
+    await page.locator("#education").selectOption("ITI");
+    if (!(await page.locator("#count").innerText()).includes("1 வேலைகள்")) throw new Error("ITI qualification filter did not match");
+    await page.locator("#workplace").selectOption("remote");
+    if (!(await page.locator("#count").innerText()).includes("1 வேலைகள்")) throw new Error("Remote workplace filter did not match");
+    await page.locator("#education").selectOption("Degree");
+    if (!(await page.locator("#count").innerText()).includes("0 வேலைகள்")) throw new Error("Non-matching education should return no results");
+  } finally {
+    await page.unroute("**/rest/v1/jobs**");
+  }
+});
+
 await check("External job source review requires login", async () => {
   await open("external-job-review.html");
   await page.waitForFunction(() => location.pathname.endsWith("/admin-login.html"), { timeout: 8000 });
