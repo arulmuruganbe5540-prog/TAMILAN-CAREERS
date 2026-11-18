@@ -451,8 +451,8 @@ await check("Homepage Tamil and English preferences translate the full static ho
     if (!response || !response.ok()) throw new Error("English homepage failed to load");
     await englishPage.waitForFunction(() => window.TC_TRANSLATE?.language === "en", { timeout: 10000 });
     if (!(await englishPage.getByText("Explore opportunities by country", { exact: true }).count())) throw new Error("English homepage copy is missing");
-    if (!(await englishPage.getByText("Reach qualified applicants by publishing your company vacancies.", { exact: true }).count()) && !(await englishPage.getByText("உங்கள் நிறுவனத்தின் காலிப்பணியிடங்களை வெளியிட்டு தகுதியான விண்ணப்பதாரர்களைச் சென்றடையுங்கள்.", { exact: true }).count() === 0)) {
-      throw new Error("Homepage employer text did not return to English");
+    if (!(await englishPage.getByText("Build your team with the right talent.", { exact: true }).count())) {
+      throw new Error("Homepage employer heading did not return to English");
     }
   } finally { await englishPage.close(); }
 });
