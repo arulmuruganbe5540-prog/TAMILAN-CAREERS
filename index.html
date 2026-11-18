@@ -204,11 +204,11 @@ function searchJobs(){
    const db=window.supabase.createClient(url,key);
    const country=await detectCountry(db);
    if(country){
-     countryText.textContent="We detected your country: "+country.country_name+". Showing relevant opportunities first.";
+     countryText.textContent="We detected your approximate country from your network: "+country.country_name+". Showing relevant opportunities first. No GPS is used.";
      document.title="Jobs in "+country.country_name+" | TAMILAN CAREERS";
      applyLayout(country);
    }else{
-     countryText.textContent="Explore verified job opportunities from India and around the world.";
+     countryText.textContent="Country could not be detected. Explore verified job opportunities from around the world. No GPS is used.";
      applyLayout(null);
    }
    let localJobs=[];
@@ -236,7 +236,7 @@ function searchJobs(){
   }
  }
  load();
-})();;
+})();
 </script>
 
   <script src="assets/site-protection.js" defer></script>
