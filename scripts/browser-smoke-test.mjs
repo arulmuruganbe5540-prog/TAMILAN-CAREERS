@@ -398,6 +398,13 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
     document.body.appendChild(el);
   });
   await page.waitForFunction(() => document.getElementById("tc-translation-education-test")?.textContent === "ബിരുദം", null, { timeout: 5000 });
+  await page.evaluate(() => {
+    const el = document.createElement("span");
+    el.id = "tc-translation-admin-test";
+    el.textContent = "Admin Control Center";
+    document.body.appendChild(el);
+  });
+  await page.waitForFunction(() => document.getElementById("tc-translation-admin-test")?.textContent === "അഡ്മിൻ നിയന്ത്രണ കേന്ദ്രം", null, { timeout: 5000 });
   const clock = await page.locator("#tc-world-clock").innerText();
   if (!clock.includes("Asia/Kolkata")) throw new Error("Detected country timezone was not applied to the clock: " + clock);
   await page.unroute("https://ipapi.co/json/");
