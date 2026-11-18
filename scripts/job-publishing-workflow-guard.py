@@ -46,13 +46,13 @@ checks = {
     "submission rejects past dates using India timezone":
         "(now() at time zone 'Asia/Kolkata')::date" in migration,
     "publisher requires verified company":
-        "c.verification_status = 'verified'" in migration,
+        "c.verification_status='verified'" in migration,
     "publisher is idempotent for already-published review":
         "if v_review.published_job_id is not null then" in migration,
     "publisher only accepts approved review":
         "v_review.status <> 'approved'" in migration,
     "salary period is validated before insert":
-        "v_salary_period not in ('monthly','daily')" in migration and "v_salary_period, v_vacancies" in migration,
+        "v_salary_period not in ('monthly','daily')" in migration and "v_salary_currency,v_salary_period,v_vacancies" in migration,
 }
 
 failed = [name for name, ok in checks.items() if not ok]
