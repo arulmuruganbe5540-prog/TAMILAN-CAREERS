@@ -351,7 +351,7 @@ CREATE OR REPLACE FUNCTION public.tc_admin_publish_job(p_review_id uuid)
  RETURNS uuid
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO ''
+ SET search_path = ''
 AS $function$
 declare
   v_review public.admin_job_post_reviews%rowtype;
