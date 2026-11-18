@@ -32,7 +32,7 @@ Important current status: the deployed `ai-resume-match` and `bilingual-job-sear
 ### 2. Resend — company invitation emails
 Create a Resend account, verify a sender/domain if possible, and add these Supabase Edge Function secrets:
 - `RESEND_API_KEY` — required
-- `APP_BASE_URL` — set exactly to `https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS`
+- `APP_BASE_URL` — set exactly to `https://tamilancareers.in`
 - `RESEND_FROM_EMAIL` — optional; use an email sender verified in Resend
 
 Used by `company-members`. Without these, invitation records and team management code exist, but real email delivery cannot be verified.
