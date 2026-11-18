@@ -15,7 +15,7 @@ fr:[["Home","Accueil"],["Jobs","Emplois"],["Find Jobs","Trouver un emploi"],["Se
 if(cols[lang]===undefined&&!extraLanguageRows[lang])return;
 var map=Object.create(null);if(cols[lang]!==undefined)rows.forEach(function(r){r.forEach(function(v){if(v)map[v]=r[cols[lang]]})});
 (extraLanguageRows[lang]||[]).forEach(function(r){map[r[0]]=r[1]});
-function replaceText(node){var raw=node.nodeValue;if(!raw||!raw.trim())return;var lead=raw.match(/^\\s*/)[0],trail=raw.match(/\\s*$/)[0],key=raw.trim();if(map[key]&&map[key]!==key)node.nodeValue=lead+map[key]+trail}
+function replaceText(node){var raw=node.nodeValue;if(!raw||!raw.trim())return;var lead=raw.match(/^\s*/)[0],trail=raw.match(/\s*$/)[0],key=raw.trim();if(map[key]&&map[key]!==key)node.nodeValue=lead+map[key]+trail}
 function scan(root){var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){if(!n.parentElement||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/i.test(n.parentElement.tagName)||n.parentElement.closest("[data-no-translate]"))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});var nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);nodes.forEach(replaceText);
 root.querySelectorAll&&root.querySelectorAll("input[placeholder],textarea[placeholder],input[aria-label],button[aria-label],img[alt]").forEach(function(el){["placeholder","aria-label","alt"].forEach(function(a){var v=el.getAttribute(a);if(v&&map[v])el.setAttribute(a,map[v])})});
 }
