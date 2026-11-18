@@ -27,7 +27,7 @@ Used by:
 - `ai-resume-match`
 - `bilingual-job-search`
 
-Until configured, these AI actions will return a configuration error. The normal non-AI website functions remain separate.
+Important current status: the deployed `ai-resume-match` and `bilingual-job-search` Edge Functions are intentionally disabled and currently return HTTP 410. Adding the secret alone will not enable them; their implementation must first be replaced with the real Responses API integration, then tested. Keep `OPENAI_API_KEY` only in Supabase Edge Function Secrets (never in browser code or GitHub). Before sending resume/profile content to an AI provider, show candidates a clear disclosure and obtain their consent. Apply request-size limits, rate limits, and usage caps. The existing `resume-job-search.html` is a separate local, rule-based matcher and does not send resume text to AI.
 
 ### 2. Resend — company invitation emails
 Create a Resend account, verify a sender/domain if possible, and add these Supabase Edge Function secrets:
