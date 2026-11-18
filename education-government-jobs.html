@@ -24,7 +24,7 @@
 <header><a class="brand" href="index.html">TAMILAN CAREERS</a><nav><a href="indian-government-jobs.html">மத்திய அரசு</a> · <a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு</a></nav></header>
 <main>
 <div class="hero"><h1 id="heading">படிப்பு வாரியான அரசு வேலைகள்</h1><p id="intro">கல்வித் தகுதிக்கு ஏற்ற சரிபார்க்கப்பட்ட அரசு வேலை அறிவிப்புகளை இங்கே பார்க்கலாம்.</p></div>
-<section class="filter"><select id="qualification"><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Any Qualification</option></select><input id="search" type="search" placeholder="வேலை / துறை / அறிவிப்பு தேடுங்கள்"></section>
+<section class="filter"><select id="qualification"><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Studying</option><option>Diploma Studying</option><option>Any Qualification</option></select><input id="search" type="search" placeholder="வேலை / துறை / அறிவிப்பு தேடுங்கள்"></section>
 <p class="muted" id="summary">அறிவிப்புகள் ஏற்றப்படுகின்றன...</p><section id="results"></section>
 </main>
 <script>
@@ -51,7 +51,7 @@ function isScopeMatch(j){
 function isQualificationMatch(text){
  const s=String(text||"").toLowerCase(),q=$("qualification").value.toLowerCase();
  if(q==="any qualification")return true;
- const aliases={"10th pass":["10th","sslc","10ம்","பத்தாம்"],"12th pass":["12th","hsc","plus two","12ம்","பன்னிரண்டாம்"],"iti":["iti"],"diploma":["diploma"],"degree":["degree","graduate","b.e","b.sc","b.com","b.a"],"postgraduate":["postgraduate","post graduate","pg","master","முதுநிலை"]};
+ const aliases={"10th pass":["10th","sslc","10ம்","பத்தாம்"],"12th pass":["12th","hsc","plus two","12ம்","பன்னிரண்டாம்"],"iti":["iti"],"diploma":["diploma"],"degree":["degree","graduate","b.e","b.sc","b.com","b.a"],"postgraduate":["postgraduate","post graduate","pg","master","முதுநிலை"],"studying":["studying","currently studying","pursuing","student","apprentice","internship","part-time","படித்து","படிக்கும்"],"diploma studying":["diploma studying","diploma pursuing","diploma student","diploma apprentice","படிக்கும் டிப்ளமோ"]};
  return (aliases[q]||[q]).some(x=>s.includes(x));
 }
 async function load(){
