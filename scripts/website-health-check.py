@@ -168,7 +168,8 @@ for page in HTML_FILES:
             })
 
 # Audit exact-match coverage of the curated UI translation dictionaries.
-# This is a source-text estimate; it cannot certify dynamic API content or complete sentences.
+# HTML is predominantly Tamil with some English; keep English-source and mixed-source
+# strings separate so the report does not mislabel Tamil paragraphs as missing English keys.
 class TranslationParser(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -197,6 +198,7 @@ class TranslationParser(HTMLParser):
             self.texts.append(data.strip())
 
 translation_source = (ROOT / "assets" / "auto-translate.js").read_text(encoding="utf-8")
+global_source = (ROOT / "assets" / "global-experience.js").read_text(encoding="utf-8")
 decoder = json.JSONDecoder()
 translation_rows = []
 base_marker = "var rows="
@@ -230,8 +232,13 @@ extra_maps = json.loads(extra_source)
 for language, pairs in extra_maps.items():
     translation_maps[language] = {pair[0] for pair in pairs if len(pair) > 1 and pair[0] and pair[1]}
 
+supported_match = re.search(r"var SUPPORTED_LANGS=(\[[^\]]+\])", global_source)
+supported_languages = json.loads(supported_match.group(1)) if supported_match else sorted(translation_maps)
 translation_page_results = []
-all_candidates = set()
+all_english_candidates = set()
+mixed_source_examples = set()
+brand_only = {"TAMILAN", "CAREERS", "TAMILAN CAREERS", "TAMILAN CAREERS ·"}
+
 for page in HTML_FILES:
     parser = TranslationParser()
     try:
@@ -245,39 +252,59 @@ for page in HTML_FILES:
         and re.search(r"[A-Za-z]", value)
         and not re.fullmatch(r"[\d\s.,:;|/()[\]{}\-+%#@!]+", value.strip())
         and not value.strip().startswith(("http://", "https://", "www."))
+        and value.strip() not in brand_only
+        and not re.fullmatch(r"[a-z0-9_]+", value.strip())
     }
-    all_candidates.update(candidates)
-    english_only = sorted(value for value in candidates if value not in translation_maps["en"])
+    english_candidates = {
+        value for value in candidates
+        if not re.search(r"[\u0B80-\u0BFF]", value)
+    }
+    mixed_candidates = {
+        value for value in candidates
+        if re.search(r"[\u0B80-\u0BFF]", value)
+    }
+    all_english_candidates.update(english_candidates)
+    mixed_source_examples.update(mixed_candidates)
+    missing = sorted(value for value in english_candidates if value not in translation_maps["en"])
     script_ready = any("site-protection.js" in src or "global-experience.js" in src for src in parser.script_sources)
     translation_page_results.append({
         "file": str(page.relative_to(ROOT)),
-        "candidate_strings": len(candidates),
-        "dictionary_matched": len(candidates) - len(english_only),
-        "missing_dictionary_entries": len(english_only),
+        "english_candidate_strings": len(english_candidates),
+        "english_dictionary_matched": len(english_candidates) - len(missing),
+        "english_dictionary_missing": len(missing),
+        "mixed_tamil_english_strings": len(mixed_candidates),
         "locale_loader_present": script_ready,
-        "examples_missing": english_only[:12],
+        "examples_missing": missing[:15],
     })
 
 translation_coverage = {}
-for language, keys in translation_maps.items():
-    matched = sum(1 for value in all_candidates if value in keys)
+for language in supported_languages:
+    keys = translation_maps.get(language, set())
+    matched = sum(1 for value in all_english_candidates if value in keys)
     translation_coverage[language] = {
-        "mapped_strings": matched,
-        "total_candidate_strings": len(all_candidates),
-        "exact_match_percent": round(matched * 100 / len(all_candidates), 1) if all_candidates else 100.0,
+        "dictionary_entries": len(keys),
+        "mapped_english_source_strings": matched,
+        "total_english_source_strings": len(all_english_candidates),
+        "exact_match_percent": round(matched * 100 / len(all_english_candidates), 1) if all_english_candidates else 100.0,
     }
+
 translation_audit = {
     "html_pages_scanned": len(translation_page_results),
-    "unique_static_candidate_strings": len(all_candidates),
+    "supported_languages": supported_languages,
+    "supported_language_count": len(supported_languages),
+    "languages_without_dictionary": [language for language in supported_languages if language not in translation_maps],
+    "unique_english_source_strings": len(all_english_candidates),
+    "unique_mixed_tamil_english_strings": len(mixed_source_examples),
     "pages_missing_locale_loader": [
         item["file"] for item in translation_page_results if not item["locale_loader_present"]
     ],
     "coverage_by_language": translation_coverage,
     "lowest_coverage_pages": sorted(
         translation_page_results,
-        key=lambda item: item["dictionary_matched"] / max(1, item["candidate_strings"])
+        key=lambda item: item["english_dictionary_matched"] / max(1, item["english_candidate_strings"])
     )[:15],
-    "note": "Exact dictionary-key coverage estimate for static HTML text and selected attributes only. It excludes dynamic JavaScript/API content and does not certify translation quality.",
+    "mixed_source_examples": sorted(mixed_source_examples)[:40],
+    "note": "Exact dictionary-key coverage estimate for static HTML text and selected attributes. Tamil-English mixed strings are reported separately because the current dictionary uses English source keys. Dynamic JavaScript/API text and translation quality are not certified.",
 }
 
 result = {
