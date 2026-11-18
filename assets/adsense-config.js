@@ -1,0 +1,2 @@
+/* Add the publisher ID and ad unit slot IDs from your own AdSense account after approval. Never use another publisher's ID. */
+window.TC_ADSENSE_CONFIG={publisherId:"",slots:{guide_top:"",guide_middle:"",guide_bottom:""}};
