@@ -213,3 +213,17 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - GitHub Health Audit and Pages deployment for these migrations must be confirmed against their matching workflow runs before marking deployment complete.
 
 - Updated `.github/workflows/website-health-check.yml` so future changes under `supabase/migrations/**` automatically trigger the SQL migration lint and full website Health Audit. Previously the path filter did not include the migrations directory, so database-only migrations could bypass the push-triggered audit.
+
+
+## 18 November 2026 — verification document RLS and review UI follow-up
+
+- Added and applied `20261118240000_company_verification_open_request_document_policy.sql`: document metadata inserts are now limited to the request owner's company and requests that remain `pending` or `more_information`.
+- Added and applied `20261118250000_company_verification_private_identity_rls_helper.sql`, then moved the helper into the non-exposed `private` schema in `20261118260000_company_verification_private_rls_helper_schema.sql`. This was necessary because the earlier company identity privacy migration deliberately revoked direct reads of `companies.owner_user_id`; the old verification RLS expressions still queried that protected column directly and could fail with permission errors.
+- The private SECURITY DEFINER helper checks the signed-in user against the company owner and request submitter, and optionally requires an open request. Verification request/document owner SELECT policies and Storage owner read/upload policies now use this helper. Direct INSERT policy for verification requests was removed: new requests must go through the validated submission RPC. Super Admin read policies remain separate.
+- Confirmed `authenticated` cannot SELECT the whole `companies` table, can SELECT safe display fields, and cannot SELECT `owner_user_id` or `registration_number`. The helper now lives in `private`, not the exposed `public` API schema.
+- Rollback-only authenticated-role tests passed: owner can read their own verification request, add metadata for an open request, and cannot add document metadata for a closed request. The helper denies closed requests for upload. All test data rolled back; zero test rows remain.
+- Updated `company-verification-status.html` to show a clear unavailable message if a signed document URL cannot be created, and to label successful links as short-lived (5 minutes).
+- Updated `admin-company-verification.html` to report document query/link failures and hide review actions for terminal/closed requests. The database still independently rejects review attempts on closed requests.
+- Supabase Health Advisor: no findings. Security Advisor no longer reports the new verification helper as a public API SECURITY DEFINER RPC; remaining warnings are pre-existing application RPCs and the Auth leaked-password protection setting. Performance notices remain elsewhere in the project.
+- One Health Audit initially failed because its simple migration-lint rule interpreted the phrase "SECURITY DEFINER" in a SQL comment as an unconfigured function. The comment was corrected; the new Health Audit run `44355469251` and Pages deployment `44355470018` were started for the latest code commit and must be checked for final completion.
+- Actual browser upload, signed-download, and cross-account denial tests remain pending because there are currently no real company verification requests/documents. No real verification records were created.
