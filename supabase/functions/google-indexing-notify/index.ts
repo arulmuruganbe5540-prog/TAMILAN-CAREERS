@@ -113,8 +113,9 @@ Deno.serve(async (req) => {
       let employer = String(job.employer_name || "").trim();
       if (!employer && job.company_id) {
         const { data: company } = await admin.from("companies")
-          .select("company_name").eq("id", job.company_id).maybeSingle();
+          .select("company_name,verification_status").eq("id", job.company_id).maybeSingle();
         employer = String(company?.company_name || "").trim();
+        if (company && company.verification_status !== "verified") employer = "";
       }
       const remote = job.workplace_type === "remote";
       const deadline = job.application_deadline
