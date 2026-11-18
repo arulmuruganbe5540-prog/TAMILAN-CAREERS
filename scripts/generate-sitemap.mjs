@@ -54,7 +54,7 @@ async function fetchPublishedJobs() {
 }
 
 function existingStaticEntries(xml) {
-  const entries = xml.match(/<url>\\s*[\\s\\S]*?<\\/url>/g) || [];
+  const entries = xml.match(/<url>\s*[\s\S]*?<\/url>/g) || [];
   return entries.filter((entry) => !entry.includes("/job-details.html?id="));
 }
 
@@ -73,7 +73,7 @@ async function main() {
     const url = `${SITE_ORIGIN}/job-details.html?id=${encodeURIComponent(job.id)}`;
     const lastmod = validDate(job.updated_at) || validDate(job.published_at);
     jobEntries.push(
-      `  <url>\\n    <loc>${xmlEscape(url)}</loc>${lastmod ? `\\n    <lastmod>${lastmod}</lastmod>` : ""}\\n  </url>`
+      `  <url>\n    <loc>${xmlEscape(url)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}\n  </url>`
     );
   }
 
@@ -84,7 +84,7 @@ async function main() {
     ...jobEntries,
     '</urlset>',
     ''
-  ].join("\\n");
+  ].join("\n");
 
   if (output !== original) {
     await writeFile(SITEMAP_PATH, output, "utf8");
