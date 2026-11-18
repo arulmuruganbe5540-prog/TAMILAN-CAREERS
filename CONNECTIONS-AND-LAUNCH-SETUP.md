@@ -2,7 +2,7 @@
 
 Last checked: 17 November 2026 (India time)
 
-Live website: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
+Live website: https://tamilancareers.in/
 GitHub repository: https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS
 Supabase project: https://supabase.com/dashboard/project/qkmljuuusfjowexvybvy
 
