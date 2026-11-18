@@ -7,6 +7,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font-family:Arial,"Noto Sans Tamil",sans-serif}header{background:#101d3a;color:white;padding:16px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}header a{color:#fff;text-decoration:none}.brand{font-size:21px;font-weight:800;color:#54c8ff}main{max-width:1050px;margin:25px auto;padding:0 16px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff;padding:26px;border-radius:16px}.hero p{color:#deebff;line-height:1.7}.filter,.job,.empty{background:#fff;border:1px solid #e1e8f1;border-radius:13px;padding:17px;margin:14px 0}.job h2{font-size:18px;margin:0 0 8px;color:#174777}.job p{line-height:1.7;color:#5d6c80}.meta{display:flex;gap:8px;flex-wrap:wrap}.tag{background:#edf5ff;color:#225b8e;border-radius:20px;padding:6px 10px;font-size:12px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.btn{display:inline-block;padding:10px 14px;border-radius:8px;background:#1688ed;color:#fff;text-decoration:none;font-weight:bold;font-size:13px}.btn.alt{background:#eaf4ff;color:#145b9a}input,select{width:100%;padding:12px;border:1px solid #d7e0eb;border-radius:8px;background:#fff;font-size:14px}.filter{display:grid;grid-template-columns:1fr 1fr;gap:10px}.muted{color:#6c7b90;font-size:13px}@media(max-width:600px){.filter{grid-template-columns:1fr}}
+
+.edu-current{display:flex;align-items:center;gap:18px;background:#fff;border:1px solid #dfe8f3;border-radius:16px;padding:12px;margin:14px 0;box-shadow:0 8px 24px #102a4a0d}.edu-current img{width:128px;height:112px;object-fit:cover;border-radius:12px;background:#102a4a}.edu-current small{display:block;color:#1688ed;font-size:11px;font-weight:800;letter-spacing:1px}.edu-current b{display:block;font-size:20px;color:#153e6a;margin:5px 0}.edu-current p{margin:0;color:#60718a;font-size:13px;line-height:1.6}@media(max-width:480px){.edu-current{gap:12px;padding:10px}.edu-current img{width:96px;height:100px}.edu-current b{font-size:17px}}
 </style>
 <link rel="stylesheet" href="assets/site-protection.css">
 
@@ -24,7 +26,7 @@
 <header><a class="brand" href="index.html">TAMILAN CAREERS</a><nav><a href="indian-government-jobs.html">மத்திய அரசு</a> · <a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு</a></nav></header>
 <main>
 <div class="hero"><h1 id="heading">படிப்பு வாரியான அரசு வேலைகள்</h1><p id="intro">கல்வித் தகுதிக்கு ஏற்ற சரிபார்க்கப்பட்ட அரசு வேலை அறிவிப்புகளை இங்கே பார்க்கலாம்.</p></div>
-<section class="filter"><select id="qualification"><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Studying</option><option>Diploma Studying</option><option>Any Qualification</option></select><input id="search" type="search" placeholder="வேலை / துறை / அறிவிப்பு தேடுங்கள்"></section>
+<section class="edu-current" aria-live="polite"><img id="eduHeroImage" src="assets/education-studying.svg" alt="கல்வித் தகுதி தொடர்பான படம்"><div><small>SELECTED EDUCATION CATEGORY</small><b id="eduHeroTitle">படிப்பு வாரியான வேலைவாய்ப்புகள்</b><p id="eduHeroText">தேர்ந்தெடுத்த கல்வித் தகுதிக்கான வேலை அறிவிப்புகள் இங்கே காண்பிக்கப்படும்.</p></div></section><section class="filter"><select id="qualification"><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Studying</option><option>Diploma Studying</option><option>Any Qualification</option></select><input id="search" type="search" placeholder="வேலை / துறை / அறிவிப்பு தேடுங்கள்"></section>
 <p class="muted" id="summary">அறிவிப்புகள் ஏற்றப்படுகின்றன...</p><section id="results"></section>
 </main>
 <script>
@@ -34,6 +36,10 @@ const q=params.get("qualification")||"Any Qualification", $=id=>document.getElem
 $("qualification").value=q;
 $("heading").textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" · "+q+" வேலைவாய்ப்புகள்";
 $("intro").textContent=q+" கல்வித் தகுதியுடன் விண்ணப்பிக்கக்கூடிய "+(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" வேலை அறிவிப்புகள்.";
+
+const eduArt={"10th Pass":["10th","10ம் வகுப்பு முடித்தவர்கள்"],"12th Pass":["12th","12ம் வகுப்பு முடித்தவர்கள்"],"ITI":["iti","ITI தொழிற்பயிற்சி முடித்தவர்கள்"],"Diploma":["diploma","டிப்ளமோ முடித்தவர்கள்"],"Diploma Studying":["diploma-studying","டிப்ளமோ படித்துக்கொண்டிருப்பவர்கள்"],"Degree":["degree","பட்டப்படிப்பு முடித்தவர்கள்"],"Postgraduate":["postgraduate","முதுநிலைப் பட்டதாரிகள்"],"Studying":["studying","தற்போது படித்துக்கொண்டிருக்கும் மாணவர்கள்"],"Any Qualification":["studying","அனைத்து கல்வித் தகுதிகளும்"]};
+function updateEducationBanner(){const selected=$("qualification").value,info=eduArt[selected]||eduArt["Any Qualification"];const img=$("eduHeroImage");img.src="assets/education-"+info[0]+".svg";img.alt=selected+" தொடர்பான கல்விப் படம்";$("eduHeroTitle").textContent=selected;$("eduHeroText").textContent=info[1]+" தொடர்பான வேலைவாய்ப்புகள் மற்றும் தகுதி விவரங்கள்."}
+updateEducationBanner();
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let items=[];
 function render(){
@@ -79,7 +85,7 @@ async function load(){
  items=out;render();
  }catch(e){$("summary").textContent="அறிவிப்புகளைப் பெற முடியவில்லை";$("results").innerHTML='<div class="empty">தகவல் சேவையில் சிக்கல். பின்னர் மீண்டும் முயற்சிக்கவும்.</div>';}
 }
-$("qualification").addEventListener("change",()=>{const p=new URLSearchParams(location.search);p.set("scope",scope);p.set("qualification",$("qualification").value);history.replaceState(null,"","?"+p.toString());$("heading").textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" · "+$("qualification").value+" வேலைவாய்ப்புகள்";render();});
+$("qualification").addEventListener("change",()=>{updateEducationBanner();const p=new URLSearchParams(location.search);p.set("scope",scope);p.set("qualification",$("qualification").value);history.replaceState(null,"","?"+p.toString());$("heading").textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" · "+$("qualification").value+" வேலைவாய்ப்புகள்";render();});
 $("search").addEventListener("input",render);
 load();
 </script>
