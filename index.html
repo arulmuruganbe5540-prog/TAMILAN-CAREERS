@@ -131,6 +131,9 @@ nav{justify-content:center}
     <div class="category" onclick="chooseCategory('')"><div class="emoji">🔧</div><h3>Other Jobs</h3><p>மற்ற வேலைவாய்ப்புகள்</p></div>
   </div>
 </main>
+<section class="container country-job-section" id="country-government" data-home-section="country_government_jobs"><div class="sectionhead"><div><h2 id="governmentHeading">Government Jobs in your country</h2><p id="governmentIntro">Your country's government vacancies first.</p></div></div><div class="jobs" id="governmentJobList"><div class="empty">அரசு வேலைகள் ஏற்றப்படுகின்றன...</div></div></section>
+<section class="container country-job-section" id="country-private" data-home-section="country_private_jobs"><div class="sectionhead"><div><h2 id="privateHeading">Private Jobs in your country</h2><p>உங்கள் நாட்டின் தனியார் வேலைவாய்ப்புகள்.</p></div></div><div class="jobs" id="privateJobList"><div class="empty">தனியார் வேலைகள் ஏற்றப்படுகின்றன...</div></div></section>
+<section class="container country-job-section" id="overseas-jobs" data-home-section="overseas_jobs"><div class="sectionhead"><div><h2>Overseas Job Opportunities</h2><p>உங்கள் நாட்டிற்கு வெளியே உள்ள வெளிநாட்டு வேலைவாய்ப்புகள்.</p></div></div><div class="jobs" id="overseasJobList"><div class="empty">வெளிநாட்டு வேலைகள் ஏற்றப்படுகின்றன...</div></div></section>
 <section class="container" id="jobs" data-home-section="local_latest_jobs">
   <div class="sectionhead">
     <div>
@@ -176,67 +179,58 @@ function searchJobs(){
 
 <script>
 (function(){
- const url="https://qkmljuuusfjowexvybvy.supabase.co";
- const key="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
- const host=document.getElementById("jobList"),info=document.getElementById("jobInfo"),countryText=document.getElementById("heroCountryText");
+ const url="https://qkmljuuusfjowexvybvy.supabase.co",key="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+ const info=document.getElementById("jobInfo"),countryText=document.getElementById("heroCountryText");
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
- const sectionMap={smart_search:"home",job_categories:"categories",local_latest_jobs:"jobs",employer_cta:"employer"};
+ const sections={smart_search:"home",job_categories:"categories",country_government_jobs:"country-government",country_private_jobs:"country-private",overseas_jobs:"overseas-jobs",local_latest_jobs:"jobs",employer_cta:"employer"};
+ const defaults=Object.keys(sections);
  function applyLayout(country){
-   const order=Array.isArray(country?.homepage_sections)?country.homepage_sections:Object.keys(sectionMap);
-   const footer=document.querySelector("footer");
-   order.forEach(key=>{const id=sectionMap[key],el=id==="home"?document.querySelector('[data-home-section="smart_search"]'):document.querySelector('[data-home-section="'+key+'"]');if(el&&footer)document.body.insertBefore(el,footer)});
-   Object.entries(sectionMap).forEach(([key])=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el)el.hidden=Array.isArray(country?.homepage_sections)&&!country.homepage_sections.includes(key)});
+  const order=Array.isArray(country?.homepage_sections)?country.homepage_sections:defaults,footer=document.querySelector("footer");
+  order.forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el&&footer)document.body.insertBefore(el,footer)});
+  Object.keys(sections).forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el)el.hidden=Array.isArray(country?.homepage_sections)&&!country.homepage_sections.includes(key)});
  }
  async function detectCountry(db){
-   try{
-     const response=await fetch("https://ipapi.co/json/",{cache:"no-store"});
-     if(!response.ok)throw new Error("Country lookup unavailable");
-     const geo=await response.json(),code=String(geo.country_code||"").toUpperCase();
-     if(!/^[A-Z]{2}$/.test(code))throw new Error("Country code unavailable");
-     const {data,error}=await db.from("countries").select("country_code,country_name,is_active,default_language_code,currency_code,homepage_sections").eq("country_code",code).eq("is_active",true).maybeSingle();
-     if(error)throw error;
-     return data||{country_code:code,country_name:geo.country_name||"your region",is_active:true,homepage_sections:null};
-   }catch(e){return null}
+  try{const response=await fetch("https://ipapi.co/json/",{cache:"no-store"});if(!response.ok)throw new Error("Country lookup unavailable");
+   const geo=await response.json(),code=String(geo.country_code||"").toUpperCase();if(!/^[A-Z]{2}$/.test(code))throw new Error("Country code unavailable");
+   const {data,error}=await db.from("countries").select("country_code,country_name,is_active,default_language_code,currency_code,homepage_sections").eq("country_code",code).eq("is_active",true).maybeSingle();if(error)throw error;
+   return data||{country_code:code,country_name:geo.country_name||"your region",is_active:true,homepage_sections:null};
+  }catch(e){return null}
  }
+ function jobCard(j){
+  const id=pick(j,["id","job_id"]),title=pick(j,["job_title","title"])||"வேலைவாய்ப்பு",company=pick(j,["employer_name","company_name"]),loc=pick(j,["location","job_location","work_location"]),jobCountry=pick(j,["country_name"]),type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"]),scope=pick(j,["government_scope"]);
+  const salary=min||max?((currency?currency+" ":"")+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் குறிப்பிடப்படவில்லை";
+  const scopeLabel=scope==="central"?"Central Government":scope==="tamil-nadu"?"Tamil Nadu Government":scope==="national"?"National Government":"";
+  return '<article class="job"><span class="tag">'+esc(scopeLabel||jobCountry||"Job")+'</span><h3>'+esc(title)+'</h3><p class="company">'+esc(company)+'</p><p>'+esc(loc)+(jobCountry?" · "+esc(jobCountry):"")+' · '+esc(type)+'</p><div class="jobbottom"><b>'+esc(salary)+'</b><a class="apply" href="job-details.html?id='+encodeURIComponent(id)+'">விவரம் / Apply</a></div></article>';
+ }
+ function showList(id,jobs,empty){const el=document.getElementById(id);if(el)el.innerHTML=jobs.length?jobs.map(jobCard).join(""):'<div class="empty">'+esc(empty)+'</div>'}
  async function load(){
-  try{
-   const db=window.supabase.createClient(url,key);
-   const country=await detectCountry(db);
-   if(country){
-     countryText.textContent="We detected your approximate country from your network: "+country.country_name+". Showing relevant opportunities first. No GPS is used.";
-     document.title="Jobs in "+country.country_name+" | TAMILAN CAREERS";
-     applyLayout(country);
-   }else{
-     countryText.textContent="Country could not be detected. Explore verified job opportunities from around the world. No GPS is used.";
-     applyLayout(null);
-   }
-   let localJobs=[];
-   if(country?.country_name){
-     const local=await db.from("jobs").select("*").eq("status","published").eq("country_name",country.country_name).order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(4);
-     if(!local.error)localJobs=local.data||[];
-   }
-   const global=await db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8);
-   if(global.error)throw global.error;
-   const seen=new Set(localJobs.map(j=>j.id)),others=(global.data||[]).filter(j=>!seen.has(j.id));
-   const jobs=[...localJobs,...others].slice(0,8);
-   info.textContent=country?("Latest jobs · "+country.country_name+" first"):"Latest opportunities across countries";
-   if(!jobs.length){host.innerHTML='<div class="empty">புதிய வேலைவாய்ப்புகள் விரைவில் இங்கே தோன்றும்.<br><a href="jobs.html">அனைத்து வேலைகளையும் தேடுங்கள்</a></div>';return}
-   host.innerHTML=jobs.map(j=>{
-    const id=pick(j,["id","job_id"]),title=pick(j,["job_title","title"])||"வேலைவாய்ப்பு";
-    const company=pick(j,["company_name","employer_name"]),loc=pick(j,["location","job_location","work_location"]);
-    const jobCountry=pick(j,["country_name"]),type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]);
-    const currency=pick(j,["salary_currency"]),salary=min||max?((currency?currency+" ":"₹ ")+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் குறிப்பிடப்படவில்லை";
-    const local=country&&jobCountry.toLowerCase()===country.country_name.toLowerCase();
-    return '<article class="job"><span class="tag">'+(local?"உங்கள் நாட்டில்":"மற்ற வாய்ப்பு")+'</span><h3>'+esc(title)+'</h3><p class="company">'+esc(company)+'</p><p>'+esc(loc)+(jobCountry?" · "+esc(jobCountry):"")+' · '+esc(type)+'</p><div class="jobbott"><b>'+esc(salary)+'</b><a class="apply" href="job-details.html?id='+encodeURIComponent(id)+'">விவரம் / Apply</a></div></article>';
-   }).join("");
-  }catch(e){
-   info.textContent="வேலைவாய்ப்புகளை ஏற்ற முடியவில்லை";
-   host.innerHTML='<div class="empty">வேலை விவரங்களை இப்போது பெற முடியவில்லை. தயவுசெய்து <a href="jobs.html">வேலை தேடல் பக்கத்தை</a> முயற்சிக்கவும்.</div>';
+  const db=window.supabase.createClient(url,key),country=await detectCountry(db);
+  if(!country){countryText.textContent="உங்கள் நாடு கண்டறியப்படவில்லை. உலக வேலைவாய்ப்புகளைப் பாருங்கள். GPS பயன்படுத்தப்படவில்லை.";applyLayout(null);
+   const {data,error}=await db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8);
+   showList("governmentJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("privateJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("overseasJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("jobList",error?[]:(data||[]),"புதிய வேலைவாய்ப்புகள் விரைவில் இங்கே தோன்றும்.");return;
   }
+  const c=country.country_name;
+  countryText.textContent="உங்கள் நாடு தானாகக் கண்டறியப்பட்டது: "+c+". முதலில் "+c+" அரசு வேலைகள், அடுத்து தனியார் வேலைகள்; பின்னர் வெளிநாட்டு வேலைகள் காட்டப்படும். GPS பயன்படுத்தப்படவில்லை.";
+  document.title="Jobs in "+c+" | TAMILAN CAREERS";
+  document.getElementById("governmentHeading").textContent=c+" Government Jobs";
+  document.getElementById("governmentIntro").textContent=c+" நாட்டின் அரசு வேலைவாய்ப்புகள் முதலில்.";
+  document.getElementById("privateHeading").textContent=c+" Private Jobs";
+  applyLayout(country);
+  const [gov,priv,overseas,latest]=await Promise.all([
+   db.from("jobs").select("*").eq("status","published").eq("country_name",c).eq("job_kind","government").order("government_scope",{ascending:true}).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
+   db.from("jobs").select("*").eq("status","published").eq("country_name",c).eq("job_kind","private").order("published_at",{ascending:false,nullsFirst:false}).limit(6),
+   db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign").neq("country_name",c).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
+   db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8)
+  ]);
+  showList("governmentJobList",gov.error?[]:(gov.data||[]),"இந்த நாட்டிற்கான அரசு வேலைகள் தற்போது இல்லை.");
+  showList("privateJobList",priv.error?[]:(priv.data||[]),"இந்த நாட்டிற்கான தனியார் வேலைகள் தற்போது இல்லை.");
+  showList("overseasJobList",overseas.error?[]:(overseas.data||[]),"தற்போது வெளிநாட்டு வேலைகள் இல்லை.");
+  info.textContent="Latest Jobs · "+c+" government and private jobs shown first";
+  showList("jobList",latest.error?[]:(latest.data||[]),"புதிய வேலைவாய்ப்புகள் விரைவில் இங்கே தோன்றும்.");
  }
- load();
-})();
+ load().catch(()=>{countryText.textContent="வேலைவாய்ப்புகளை ஏற்ற முடியவில்லை. பின்னர் முயற்சிக்கவும்.";});
+})();;
 </script>
 
   <script src="assets/site-protection.js" defer></script>
