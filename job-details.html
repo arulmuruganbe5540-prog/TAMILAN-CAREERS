@@ -80,9 +80,15 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
   const countryName=pick(j,["country_name"]);
   const isRemote=/remote/i.test(String(work));
   const hasApplyPath=Boolean(pick(j,["application_url"])) || Boolean(id);
-  const completeDescription=String(description||"").trim();
+  const completeDescription=[
+    String(description||"").trim(),
+    requirements ? "Qualifications: "+String(requirements).trim() : "",
+    responsibilities ? "Responsibilities: "+String(responsibilities).trim() : "",
+    skills ? "Required skills: "+String(skills).trim() : ""
+  ].filter(Boolean).join("\\n\\n");
+  const hasDetailedRequirements=Boolean(requirements||responsibilities||skills);
   const schemaEligible=Boolean(
-    title && completeDescription.length>=80 && company &&
+    title && completeDescription.length>=120 && hasDetailedRequirements && company &&
     publishedAt && !Number.isNaN(new Date(publishedAt).getTime()) &&
     hasApplyPath && ((loc && countryName) || (isRemote && countryName))
   );
