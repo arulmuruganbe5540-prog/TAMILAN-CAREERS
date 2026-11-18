@@ -368,6 +368,20 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
   await page.unroute("https://ipapi.co/json/");
 });
 
+
+await check("Automatic Saudi Arabia Arabic translation enables right-to-left layout", async () => {
+  await page.route("https://ipapi.co/json/", route => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ country_code: "SA", region: "Riyadh", timezone: "Asia/Riyadh" })
+  }));
+  await open("index.html");
+  await page.waitForFunction(() => window.TC_LOCALE?.language === "ar" && window.TC_TRANSLATE?.language === "ar", { timeout: 10000 });
+  if (await page.locator("html").getAttribute("dir") !== "rtl") throw new Error("Arabic page direction is not right-to-left");
+  if (!(await page.getByText("الرئيسية", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Arabic");
+  await page.unroute("https://ipapi.co/json/");
+});
+
 if (pageErrors.length) failures.push({ name: "Uncaught browser JavaScript errors", error: pageErrors.join(" | ") });
 await browser.close();
 console.log(JSON.stringify({ status: failures.length ? "failed" : "passed", checks: results, browser_errors: pageErrors, failures }, null, 2));
