@@ -66,7 +66,7 @@ jobs:
       - name: Install browser test dependency
         run: npm install --no-save --no-package-lock playwright@1.56.1
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: Run key-page browser smoke tests
         run: |
           python -m http.server 4173 --bind 127.0.0.1 >/tmp/tc-http.log 2>&1 &
