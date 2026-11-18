@@ -369,6 +369,23 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
 });
 
 
+await check("Automatic Karnataka language detection and Kannada navigation work", async () => {
+  const kannadaPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await kannadaPage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ country_code: "IN", region: "Karnataka", timezone: "Asia/Kolkata" })
+    }));
+    const response = await kannadaPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Karnataka homepage failed to load");
+    await kannadaPage.waitForFunction(() => window.TC_LOCALE?.language === "kn" && window.TC_TRANSLATE?.language === "kn", { timeout: 10000 });
+    if (!(await kannadaPage.getByText("ಮುಖಪುಟ", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Kannada");
+  } finally {
+    await kannadaPage.close();
+  }
+});
+
 await check("Automatic Saudi Arabia Arabic translation enables right-to-left layout", async () => {
   const arabicPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
