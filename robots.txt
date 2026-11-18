@@ -1,14 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /admin-
-Disallow: /dashboard.html
-Disallow: /company-applicants.html
-Disallow: /company-members.html
-Disallow: /company-profile.html
-Disallow: /apply.html
-Disallow: /resume-documents.html
-Disallow: /my-applications.html
-Disallow: /notifications.html
-Disallow: /reset-password.html
+
+# Account, application, company and admin pages declare noindex in their HTML.
+# Keep them crawlable so search engines can read that directive.
 
 Sitemap: https://tamilancareers.in/sitemap.xml
