@@ -424,6 +424,39 @@ await check("Saved language preference overrides automatic country language and 
   }
 });
 
+
+await check("Homepage Tamil and English preferences translate the full static homepage and ads are absent", async () => {
+  const tamilPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await tamilPage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ta"));
+    await tamilPage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
+    }));
+    const response = await tamilPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Tamil homepage failed to load");
+    await tamilPage.waitForFunction(() => window.TC_TRANSLATE?.language === "ta", { timeout: 10000 });
+    if (!(await tamilPage.getByText("நீங்கள் விரும்பும் எதிர்காலத்தை உருவாக்குங்கள்.", { exact: true }).count())) throw new Error("Homepage hero copy did not translate to Tamil");
+    if (!(await tamilPage.getByText("வேலைவாய்ப்புகளை ஆராயுங்கள்", { exact: true }).count())) throw new Error("Homepage section heading did not translate to Tamil");
+    if (await tamilPage.locator('script[src*="pagead2.googlesyndication.com"]').count()) throw new Error("AdSense script remains on homepage");
+  } finally { await tamilPage.close(); }
+  const englishPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await englishPage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
+    await englishPage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
+    }));
+    const response = await englishPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("English homepage failed to load");
+    await englishPage.waitForFunction(() => window.TC_TRANSLATE?.language === "en", { timeout: 10000 });
+    if (!(await englishPage.getByText("Explore opportunities by country", { exact: true }).count())) throw new Error("English homepage copy is missing");
+    if (!(await englishPage.getByText("Reach qualified applicants by publishing your company vacancies.", { exact: true }).count()) && !(await englishPage.getByText("உங்கள் நிறுவனத்தின் காலிப்பணியிடங்களை வெளியிட்டு தகுதியான விண்ணப்பதாரர்களைச் சென்றடையுங்கள்.", { exact: true }).count() === 0)) {
+      throw new Error("Homepage employer text did not return to English");
+    }
+  } finally { await englishPage.close(); }
+});
+
 if (pageErrors.length) failures.push({ name: "Uncaught browser JavaScript errors", error: pageErrors.join(" | ") });
 await browser.close();
 console.log(JSON.stringify({ status: failures.length ? "failed" : "passed", checks: results, browser_errors: pageErrors, failures }, null, 2));
