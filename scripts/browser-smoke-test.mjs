@@ -444,6 +444,8 @@ await check("Automatic Saudi Arabia Arabic translation enables right-to-left lay
     await arabicPage.waitForFunction(() => window.TC_LOCALE?.language === "ar" && window.TC_TRANSLATE?.language === "ar", { timeout: 10000 });
     if (await arabicPage.locator("html").getAttribute("dir") !== "rtl") throw new Error("Arabic page direction is not right-to-left");
     if (!(await arabicPage.getByText("الرئيسية", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Arabic");
+    await arabicPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ar-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
+    await arabicPage.waitForFunction(() => document.getElementById("tc-ar-job-title")?.textContent === "المسمى الوظيفي", { timeout: 5000 });
   } finally {
     await arabicPage.close();
   }
