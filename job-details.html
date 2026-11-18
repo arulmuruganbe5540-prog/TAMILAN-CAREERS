@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ta"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10233f">
-<title>வேலைவாய்ப்பு முழு விவரம் | TAMILAN CAREERS</title>
+<title>வேலைவாய்ப்பு விவரம் | TAMILAN CAREERS</title>
 <meta name="description" content="வேலைவாய்ப்பு, கல்வித்தகுதி, சம்பளம், அனுபவம், வேலை இடம் மற்றும் விண்ணப்ப விவரங்கள்.">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -16,6 +16,17 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
 @media(max-width:760px){.layout{grid-template-columns:1fr}.side{position:static}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:20px}}
 @media(max-width:480px){main{padding:0 11px}.panel{padding:15px}.facts{grid-template-columns:1fr}.actions .btn{flex:1}}
 </style>  <link rel="stylesheet" href="assets/site-protection.css">
+
+<meta name="description" content="வேலைவாய்ப்பு தகுதி, சம்பளம், வேலை இடம், அனுபவம், விண்ணப்பக் கடைசி தேதி மற்றும் விண்ணப்பிக்கும் வழிமுறைகளைப் பாருங்கள்.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="theme-color" content="#101d3a">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TAMILAN CAREERS">
+<meta property="og:locale" content="ta_IN">
+<meta property="og:title" content="வேலைவாய்ப்பு விவரம் | TAMILAN CAREERS">
+<meta property="og:description" content="வேலைவாய்ப்பு தகுதி, சம்பளம், வேலை இடம், அனுபவம், விண்ணப்பக் கடைசி தேதி மற்றும் விண்ணப்பிக்கும் வழிமுறைகளைப் பாருங்கள்.">
+<meta name="twitter:card" content="summary">
+<script src="assets/seo.js" defer></script>
 </head>
 <body>
 <header><a class="brand" href="index.html">TAMILAN <span>CAREERS</span></a><nav><a href="index.html">முகப்பு</a><a href="jobs.html">வேலை தேடல்</a><a href="saved-jobs.html">சேமித்த வேலைகள்</a><a href="dashboard.html">Dashboard</a></nav></header>
@@ -32,12 +43,12 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
  function fact(k,v){return v?'<div class="fact"><small>'+esc(k)+'</small><b>'+esc(v)+'</b></div>':""}
  function panel(title,body){return '<section class="panel"><div class="kicker">JOB INFORMATION</div><h2>'+esc(title)+'</h2>'+body+'</section>'}
  async function show(){
-  if(!id){root.textContent="வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திலிருந்து ஒரு வேலையைத் தேர்ந்தெடுக்கவும்.";return}
+  if(!id){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திலிருந்து ஒரு வேலையைத் தேர்ந்தெடுக்கவும்.";return}
   const {data:j,error}=await db.from("jobs").select("*").eq("id",id).maybeSingle();
-  if(error||!j){root.textContent="இந்த வேலை விவரம் கிடைக்கவில்லை.";return}
-  if(String(pick(j,["status"])).toLowerCase()!=="published"){root.textContent="இந்த வேலை அறிவிப்பு தற்போது பொதுமக்களுக்குக் கிடைக்கவில்லை.";return}
+  if(error||!j){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="இந்த வேலை விவரம் கிடைக்கவில்லை.";return}
+  if(String(pick(j,["status"])).toLowerCase()!=="published"){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="இந்த வேலை அறிவிப்பு தற்போது பொதுமக்களுக்குக் கிடைக்கவில்லை.";return}
   const end=deadline(pick(j,["application_deadline","deadline","last_date"]));
-  if(end&&end.getTime()<Date.now()){root.textContent="இந்த வேலைக்கான விண்ணப்பக் காலம் முடிந்துவிட்டது. புதிய வேலைகளை வேலை தேடல் பக்கத்தில் பார்க்கலாம்.";return}
+  if(end&&end.getTime()<Date.now()){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="இந்த வேலைக்கான விண்ணப்பக் காலம் முடிந்துவிட்டது. புதிய வேலைகளை வேலை தேடல் பக்கத்தில் பார்க்கலாம்.";return}
   let company=pick(j,["employer_name","company_name"]);if(j.company_id){try{const c=await db.from("companies").select("company_name").eq("id",j.company_id).maybeSingle();if(c.data?.company_name)company=c.data.company_name}catch(e){}}
   const title=pick(j,["job_title","title"])||"வேலைவாய்ப்பு",jobKind=pick(j,["job_kind"]),jobKindLabel=jobKind==="government"?"அரசு வேலை":jobKind==="foreign"?"வெளிநாட்டு வேலை":"தனியார் வேலை",loc=pick(j,["location","job_location","work_location"]),type=String(pick(j,["employment_type","job_type"])).replace(/_/g," "),work=pick(j,["workplace_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹",period=pick(j,["salary_period"])||"monthly";
   const salarySuffix=p=>p==="yearly"?" / ஆண்டு":p==="daily"?" / நாள்":p==="hourly"?" / மணி":" / மாதம்";const salary=min||max?currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")+salarySuffix(period):"நிறுவனம் குறிப்பிடவில்லை";
@@ -46,6 +57,40 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
   const description=pick(j,["description","job_description"]),skills=pick(j,["required_skills","skills"]),requirements=pick(j,["requirements","qualifications"]),responsibilities=pick(j,["responsibilities","job_responsibilities"]),benefits=pick(j,["benefits","perks"]);
   root.className="";
   root.innerHTML='<section class="hero"><div class="eyebrow">TAMILAN CAREERS · JOB DETAILS</div><h1>'+esc(title)+'</h1><p>'+esc(company||"நிறுவன விவரம்")+(loc?" · "+esc(loc):"")+'</p><div class="chips">'+(type?'<span class="chip">'+esc(type)+'</span>':"")+(work?'<span class="chip">'+esc(work)+'</span>':"")+'<span class="chip">'+esc(jobKindLabel)+'</span><span class="chip">வெளியிடப்பட்ட வேலை</span></div><div class="actions"><a class="btn primary" href="'+esc(apply)+'">Login செய்து விண்ணப்பிக்கவும்</a><button class="btn light" id="share">பகிரவும் ↗</button><button class="btn green" id="save">☆ சேமிக்க</button></div></section>'+(jobKind==="government"?'<section class="panel"><div class="kicker">EXAM PREPARATION</div><h2>இந்த வேலைக்கான தேர்வு தயாரிப்பு</h2><p class="copy">பாடத்திட்டம், தேர்வு முறை, கேள்வி வங்கி மாதிரித் தேர்வு, பழைய வினாத்தாள்கள், Hall Ticket, Answer Key மற்றும் Result ஆகியவற்றை ஒரே இடத்தில் பார்க்கலாம்.</p><a class="btn primary" href="job-exam-center.html?job_id='+encodeURIComponent(id)+'">தேர்வு தயாரிப்பு மையத்திற்குச் செல்லவும் →</a></section>':"")+'<div class="stats">'+[['சம்பளம்',salary],['பணியிடம்',loc||"குறிப்பிடப்படவில்லை"],['வேலை வகை',type||"குறிப்பிடப்படவில்லை"],['கடைசி தேதி',end?date(pick(j,["application_deadline","deadline","last_date"])):"குறிப்பிடப்படவில்லை"]].map(([k,v])=>'<div class="stat"><small>'+esc(k)+'</small><b>'+esc(v)+'</b></div>').join("")+'</div><div class="layout"><div>'+panel("முக்கிய வேலை விவரங்கள்",'<div class="facts">'+details+'</div>')+panel("வேலை விளக்கம்",'<div class="copy">'+esc(description||"இந்த வேலைக்கான விரிவான விளக்கம் நிறுவனம் வழங்கவில்லை.")+'</div>')+(pick(j,["selection_process"])?panel("தேர்வு முறை",'<div class="copy">'+esc(pick(j,["selection_process"]))+'</div>'):"")+(pick(j,["official_website_url"])?panel("அதிகாரப்பூர்வ இணையதளம்",'<a class="btn light" target="_blank" rel="noopener" href="'+esc(pick(j,["official_website_url"]))+'">அதிகாரப்பூர்வ இணையதளத்தைத் திறக்கவும்</a>'):"")+(pick(j,["official_notification_url"])?panel("அதிகாரப்பூர்வ அறிவிப்பு PDF",'<a class="btn light" target="_blank" rel="noopener" href="'+esc(pick(j,["official_notification_url"]))+'">அறிவிப்பு PDF பார்க்கவும்</a>'):"")+(skills?panel("தேவையான திறன்கள்",'<div class="copy">'+esc(skills)+'</div>'):"")+(requirements?panel("கல்வி மற்றும் பிற தகுதிகள்",'<div class="copy">'+esc(requirements)+'</div>'):"")+(responsibilities?panel("பணிப் பொறுப்புகள்",'<div class="copy">'+esc(responsibilities)+'</div>'):"")+(benefits?panel("சலுகைகள்",'<div class="copy">'+esc(benefits)+'</div>'):"")+'</div><aside class="side"><section class="panel"><div class="kicker">APPLY FOR THIS JOB</div><h2>விண்ணப்ப விவரங்கள்</h2><p style="font-size:13px;color:#586980">விண்ணப்பிக்கும் முன் தகுதி, சம்பளம் மற்றும் கடைசி தேதியைச் சரிபார்க்கவும்.</p><a class="btn primary" href="'+esc(apply)+'">விண்ணப்பிக்க Login</a><button class="btn light" style="width:100%;margin-top:8px" id="share2">வேலை இணைப்பைப் பகிரவும்</button><div class="warning">வேலைக்காக முன்பணம் அல்லது பதிவு கட்டணம் கேட்பவர்களிடம் எச்சரிக்கையாக இருங்கள். நிறுவனத்தைச் சரிபார்த்த பிறகே தனிப்பட்ட ஆவணங்களை வழங்கவும்.</div></section></aside></div>';
+  // Add per-job SEO metadata and Google JobPosting structured data only for complete, published listings.
+  const pageUrl=location.origin+location.pathname+"?id="+encodeURIComponent(id);
+  document.title=title+" | "+(company||"வேலைவாய்ப்பு")+" | TAMILAN CAREERS";
+  function updateMeta(selector, attribute, value) {
+    let node=document.head.querySelector(selector);
+    if(!node){node=document.createElement("meta");const match=selector.match(/name="([^"]+)"|property="([^"]+)"/);if(match)node.setAttribute(match[1]?"name":"property",match[1]||match[2]);document.head.appendChild(node);}
+    node.setAttribute("content",String(value||""));
+  }
+  updateMeta('meta[name="description"]',"name",(description||title)+" "+[company,loc,type].filter(Boolean).join(" · ")+" TAMILAN CAREERS-ல் வேலை விவரங்களையும் விண்ணப்ப முறையையும் பாருங்கள்.");
+  updateMeta('meta[property="og:title"]',"property",document.title);
+  updateMeta('meta[property="og:description"]',"property",(description||title).slice(0,250));
+  let canonical=document.head.querySelector('link[rel="canonical"]');
+  if(!canonical){canonical=document.createElement("link");canonical.rel="canonical";document.head.appendChild(canonical);}
+  canonical.href=pageUrl;
+  if(description && company && j.created_at && (loc || /remote|work from home/i.test(String(work)))) {
+    const posting={"@context":"https://schema.org","@type":"JobPosting","title":title,"description":String(description),"identifier":{"@type":"PropertyValue","name":company,"value":String(id)},"datePosted":new Date(j.created_at).toISOString(),"hiringOrganization":{"@type":"Organization","name":company},"url":pageUrl};
+    if(end) posting.validThrough=end.toISOString();
+    const typeMap={"full time":"FULL_TIME","full_time":"FULL_TIME","part time":"PART_TIME","part_time":"PART_TIME","contract":"CONTRACTOR","temporary":"TEMPORARY","internship":"INTERN"};
+    const normalizedType=typeMap[String(type).toLowerCase()];
+    if(normalizedType) posting.employmentType=normalizedType;
+    const country=pick(j,["country_name"]);
+    if(loc) posting.jobLocation={"@type":"Place","address":{"@type":"PostalAddress","addressLocality":loc,"addressCountry":country||"India"}};
+    if(/remote|work from home/i.test(String(work))){posting.jobLocationType="TELECOMMUTE";posting.applicantLocationRequirements={"@type":"Country","name":country||"India"};}
+    const low=Number(min),high=Number(max);
+    if((Number.isFinite(low)&&low>0)||(Number.isFinite(high)&&high>0)){
+      const value={"@type":"QuantitativeValue","unitText":period==="yearly"?"YEAR":period==="daily"?"DAY":period==="hourly"?"HOUR":"MONTH"};
+      if(Number.isFinite(low)&&low>0)value.minValue=low;
+      if(Number.isFinite(high)&&high>0)value.maxValue=high;
+      posting.baseSalary={"@type":"MonetaryAmount","currency":currency||"INR","value":value};
+    }
+    let ld=document.getElementById("tc-jobposting-jsonld");
+    if(!ld){ld=document.createElement("script");ld.type="application/ld+json";ld.id="tc-jobposting-jsonld";document.head.appendChild(ld);}
+    ld.textContent=JSON.stringify(posting);
+  }
   async function share(){const u=location.href;if(navigator.share){try{await navigator.share({title,text:"TAMILAN CAREERS வேலைவாய்ப்பு: "+title,url:u})}catch(e){}}else{try{await navigator.clipboard.writeText(u);alert("இணைப்பு நகலெடுக்கப்பட்டது")}catch(e){alert(u)}}}
   document.getElementById("share").addEventListener("click",share);document.getElementById("share2").addEventListener("click",share);
   const save=document.getElementById("save"),key="tc_saved_jobs_v1";let saved=[];try{saved=JSON.parse(localStorage.getItem(key)||"[]");if(!Array.isArray(saved))saved=[]}catch(e){}
