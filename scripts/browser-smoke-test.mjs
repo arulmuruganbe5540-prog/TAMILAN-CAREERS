@@ -424,6 +424,8 @@ await check("Automatic Karnataka language detection and Kannada navigation work"
     if (!response || !response.ok()) throw new Error("Karnataka homepage failed to load");
     await kannadaPage.waitForFunction(() => window.TC_LOCALE?.language === "kn" && window.TC_TRANSLATE?.language === "kn", { timeout: 10000 });
     if (!(await kannadaPage.getByText("ಮುಖಪುಟ", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Kannada");
+    await kannadaPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-kn-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
+    await kannadaPage.waitForFunction(() => document.getElementById("tc-kn-job-title")?.textContent === "ಹುದ್ದೆಯ ಹೆಸರು", { timeout: 5000 });
   } finally {
     await kannadaPage.close();
   }
