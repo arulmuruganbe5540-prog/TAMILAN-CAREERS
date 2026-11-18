@@ -8,3 +8,6 @@ document.addEventListener('cut',e=>{if(!editable(e.target))e.preventDefault()},t
 document.addEventListener('dragstart',e=>{if(e.target&&e.target.closest&&e.target.closest('img,svg'))e.preventDefault()},true);
 document.addEventListener('keydown',e=>{if(editable(e.target))return;const k=String(e.key||'').toLowerCase();if((e.ctrlKey||e.metaKey)&&['c','x'].includes(k)){e.preventDefault();e.stopPropagation()}},true);
 })();
+
+/* Shared global locale, regional time and display preferences */
+(function(){var s=document.createElement('script');s.src='assets/global-experience.js';s.defer=true;document.head.appendChild(s);})();
