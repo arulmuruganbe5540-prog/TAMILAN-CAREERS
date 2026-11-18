@@ -175,7 +175,7 @@ return reply({ success: true, companies: [...items.values()] });
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         }
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               const resendKey = Deno.env.get('RESEND_API_KEY');
-const appUrl = Deno.env.get('APP_BASE_URL') || 'https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS';
+const appUrl = Deno.env.get('APP_BASE_URL') || 'https://tamilancareers.in';
 const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || 'TAMILAN CAREERS <onboarding@resend.dev>';
 let appBase = appUrl.replace(/\/+$/g, '');
 try { if (new URL(appBase).protocol !== 'https:') throw new Error('https required'); }
