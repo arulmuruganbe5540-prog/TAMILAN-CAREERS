@@ -23,17 +23,23 @@ async function open(path) {
   if (!response || !response.ok()) throw new Error("Page returned " + (response?.status() ?? "no response"));
 }
 
-await check("Homepage loads and category interaction works", async () => {
+await check("Homepage loads, career categories navigate and job search works", async () => {
   await open("index.html");
   if (!(await page.title()).includes("TAMILAN CAREERS")) throw new Error("Unexpected homepage title");
-  await page.locator(".category").first().click();
-  if (await page.locator("#category").inputValue() !== "IT & Software") throw new Error("Category did not update search filter");
+  const categoryCard = page.locator('.category-card[href*="category=IT"]').first();
+  await categoryCard.click();
+  await page.waitForURL(/jobs\.html\?/);
+  if (new URL(page.url()).searchParams.get("category") !== "IT & Software") {
+    throw new Error("Career category link did not pass the selected category");
+  }
+  await open("index.html");
   await page.locator("#keyword").fill("accountant");
   await page.locator("#location").fill("Salem");
-  await page.locator(".searchbtn").click();
+  await page.locator("#category").selectOption("Accounting");
+  await page.locator(".search-submit").click();
   await page.waitForURL(/jobs\.html\?/);
   const url = new URL(page.url());
-  if (url.searchParams.get("q") !== "accountant" || url.searchParams.get("location") !== "Salem") {
+  if (url.searchParams.get("q") !== "accountant" || url.searchParams.get("location") !== "Salem" || url.searchParams.get("category") !== "Accounting") {
     throw new Error("Search filters were not transferred to the jobs URL");
   }
 });
