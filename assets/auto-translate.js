@@ -13,8 +13,11 @@ var extraLanguageRows={"es":[["Home","Inicio"],["Jobs","Empleos"],["Find Jobs","
 
 
 if(cols[lang]===undefined&&!extraLanguageRows[lang])return;
-var map=Object.create(null);if(cols[lang]!==undefined)rows.forEach(function(r){if(r[0]&&r[cols[lang]])map[r[0]]=r[cols[lang]]});
-(extraLanguageRows[lang]||[]).forEach(function(r){map[r[0]]=r[1]});
+var map=Object.create(null),tamilTargets=Object.create(null),tamilAmbiguous=Object.create(null),extraTargets=Object.create(null);
+if(cols[lang]!==undefined)rows.forEach(function(r){if(!r[0])return;var target=lang==="en"?r[0]:r[cols[lang]];if(target){map[r[0]]=target;if(r[1]){if(tamilTargets[r[1]]&&tamilTargets[r[1]]!==target)tamilAmbiguous[r[1]]=true;else tamilTargets[r[1]]=target}}});
+(extraLanguageRows[lang]||[]).forEach(function(r){map[r[0]]=r[1];extraTargets[r[0]]=r[1]});
+if(cols[lang]===undefined)rows.forEach(function(r){var target=extraTargets[r[0]];if(r[1]&&target){if(tamilTargets[r[1]]&&tamilTargets[r[1]]!==target)tamilAmbiguous[r[1]]=true;else tamilTargets[r[1]]=target}});
+Object.keys(tamilTargets).forEach(function(source){if(!tamilAmbiguous[source])map[source]=tamilTargets[source]});
 function replaceText(node){var raw=node.nodeValue;if(!raw||!raw.trim())return;var lead=raw.match(/^\s*/)[0],trail=raw.match(/\s*$/)[0],key=raw.trim();if(map[key]&&map[key]!==key)node.nodeValue=lead+map[key]+trail}
 function translateAttributes(el){if(!el||el.nodeType!==Node.ELEMENT_NODE||el.closest("[data-no-translate]"))return;["placeholder","aria-label","alt","title"].forEach(function(a){var v=el.getAttribute(a);if(v&&map[v]&&map[v]!==v)el.setAttribute(a,map[v])});if(el.matches('input[type="button"],input[type="submit"],button')){var value=el.getAttribute("value");if(value&&map[value]&&map[value]!==value)el.setAttribute("value",map[value])}}
 function scan(root){var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){if(!n.parentElement||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/i.test(n.parentElement.tagName)||n.parentElement.closest("[data-no-translate]"))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});var nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);nodes.forEach(replaceText);
