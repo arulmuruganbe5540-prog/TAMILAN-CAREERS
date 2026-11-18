@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION public.tc_submit_company_verification(
  p_legal_entity_type text,p_country_code text,p_legal_name text,p_registration_number text,
  p_registered_address text,p_official_email text,p_contact_person text,p_contact_phone text,
  p_recruitment_authorization text DEFAULT NULL
-) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path TO ''
+) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = ''
 AS $function$
 declare v_user uuid := (select auth.uid()); v_company_id uuid; v_request_id uuid; v_slug text;
 begin
