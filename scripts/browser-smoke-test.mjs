@@ -404,6 +404,26 @@ await check("Automatic Saudi Arabia Arabic translation enables right-to-left lay
   }
 });
 
+
+await check("Saved language preference overrides automatic country language and persists", async () => {
+  const preferencePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await preferencePage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ta"));
+    await preferencePage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ country_code: "SA", region: "Riyadh", timezone: "Asia/Riyadh" })
+    }));
+    const response = await preferencePage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Language preference homepage failed to load");
+    await preferencePage.waitForFunction(() => window.TC_LOCALE?.language === "ta" && window.TC_TRANSLATE?.language === "ta", { timeout: 10000 });
+    if (await preferencePage.locator("#tc-language-select").inputValue() !== "ta") throw new Error("Saved language is not selected in the language menu");
+    if (!(await preferencePage.getByText("முகப்பு", { exact: true }).count())) throw new Error("Saved Tamil preference was not applied to navigation");
+  } finally {
+    await preferencePage.close();
+  }
+});
+
 if (pageErrors.length) failures.push({ name: "Uncaught browser JavaScript errors", error: pageErrors.join(" | ") });
 await browser.close();
 console.log(JSON.stringify({ status: failures.length ? "failed" : "passed", checks: results, browser_errors: pageErrors, failures }, null, 2));
