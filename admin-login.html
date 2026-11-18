@@ -24,7 +24,7 @@ input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-s
 <div class="label">SECURE ADMINISTRATOR ACCESS</div>
 <div class="shield">🔐</div>
 <h1>தனி Admin Login</h1>
-<p class="intro">இந்த Login, Super Admin அனுமதி உள்ள உங்களுடைய கணக்கிற்காக மட்டுமே. Company / Student கணக்குகள் இங்கு அனுமதிக்கப்படாது.</p>
+<p class="intro">Email + Password மூலம் Login செய்யவும். Super Admin அனுமதி உள்ள கணக்கு மட்டுமே அனுமதிக்கப்படும்.</p>
 <form id="adminForm">
 <label for="email">Admin Email</label>
 <input id="email" type="email" autocomplete="username" placeholder="உங்கள் Admin Email" required>
@@ -32,34 +32,19 @@ input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-s
 <div class="pass"><input id="password" type="password" autocomplete="current-password" placeholder="உங்கள் Password" required><button class="toggle" id="toggle" type="button">காட்டு</button></div>
 <button class="submit" id="submit" type="submit">Admin Login</button>
 </form>
-<section id="mfaPanel" style="display:none;margin-top:20px;padding:16px;border:1px solid #dbe5f3;border-radius:14px;background:#f7faff">
-<h2 id="mfaTitle" style="font-size:17px;margin:0 0 8px;color:#17345f">இரண்டாம் பாதுகாப்பு சரிபார்ப்பு</h2>
-<p id="mfaHelp" style="font-size:12px;line-height:1.7;color:#526580;margin:0 0 12px"></p>
-<img id="mfaQr" alt="Authenticator QR code" style="display:none;width:190px;height:190px;max-width:100%;margin:10px auto;background:#fff;padding:8px;border:1px solid #dbe2ed;border-radius:10px">
-<div id="mfaSecretWrap" style="display:none;font-size:11px;line-height:1.7;word-break:break-all;color:#34445f;margin:8px 0">Manual setup key: <code id="mfaSecret"></code></div>
-<form id="mfaForm"><label for="mfaCode">Authenticator App-ல் வரும் 6 இலக்க Code</label><input id="mfaCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required><button class="submit" id="mfaSubmit" type="submit">Code சரிபார்க்கவும்</button></form>
-<button type="button" id="mfaCancel" style="width:100%;margin-top:10px;padding:10px;border:1px solid #dbe2ed;border-radius:9px;background:white;color:#526580;font-weight:800">Logout / ரத்து</button>
-</section>
+
 <div class="msg" id="message" role="status" aria-live="polite"></div>
-<div class="safe">🛡️ Login வெற்றி மட்டும் போதாது. Database-ல் <b>super_admin</b> அனுமதி சரிபார்க்கப்பட்ட பிறகே Admin Control திறக்கும்.</div>
+<div class="safe">🛡️ Password Login மற்றும் Database-ல் உள்ள <b>super_admin</b> அனுமதி சரிபார்க்கப்பட்ட பிறகே Admin Control திறக்கும்.</div>
 <div class="back"><a href="index.html">← Website முகப்புக்குச் செல்ல</a></div>
 </main>
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const form=document.getElementById("adminForm"),button=document.getElementById("submit"),box=document.getElementById("message"),mfaPanel=document.getElementById("mfaPanel"),mfaForm=document.getElementById("mfaForm"),mfaSubmit=document.getElementById("mfaSubmit");
-let pendingFactorId=null,mfaMode="verify";
+const form=document.getElementById("adminForm"),button=document.getElementById("submit"),box=document.getElementById("message");
 function message(t,ok=false){box.textContent=t;box.style.display=t?"block":"none";box.style.background=ok?"#e8f8ee":"#fff0f0";box.style.color=ok?"#176b3a":"#ad2525"}
-function showMfa(o){pendingFactorId=o.factorId;mfaMode=o.mode;document.getElementById("mfaTitle").textContent=o.title;document.getElementById("mfaHelp").textContent=o.help;const q=document.getElementById("mfaQr"),s=document.getElementById("mfaSecretWrap");q.style.display=o.qr?"block":"none";if(o.qr)q.src=o.qr;s.style.display=o.secret?"block":"none";if(o.secret)document.getElementById("mfaSecret").textContent=o.secret;mfaPanel.style.display="block";form.style.display="none";document.getElementById("mfaCode").focus()}
-async function finishAdminAccess(user){const {data,error}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);if(error)throw new Error("Super Admin அனுமதியை சரிபார்க்க முடியவில்லை.");if(!data?.length){await client.auth.signOut();throw new Error("இந்த கணக்கிற்கு Super Admin அனுமதி இல்லை.")}const {data:a,error:ae}=await client.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||a?.currentLevel!=="aal2")throw new Error("இரண்டாம் பாதுகாப்பு சரிபார்ப்பு நிறைவு பெறவில்லை.");message("இரட்டை பாதுகாப்பு சரிபார்ப்பு வெற்றி. Admin Control திறக்கப்படுகிறது...",true);location.replace("admin-control.html")}
-async function beginMfa(user){const {data:roleRows,error:roleError}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);if(roleError)throw new Error("Admin அனுமதியை சரிபார்க்க முடியவில்லை.");if(!roleRows?.length){await client.auth.signOut();throw new Error("இந்த கணக்கிற்கு Super Admin அனுமதி இல்லை.");}message("இரண்டாம் பாதுகாப்பு சரிபார்ப்பு தயாராகிறது...");const {data,error}=await client.auth.mfa.listFactors();if(error)throw error;const verified=(data?.totp||[]).filter(f=>f.status==="verified");if(verified.length){const factor=verified[0];const {data:a}=await client.auth.mfa.getAuthenticatorAssuranceLevel();if(a?.currentLevel==="aal2"){await finishAdminAccess(user);return}const {data:c,error:ce}=await client.auth.mfa.challenge({factorId:factor.id});if(ce)throw ce;window.__tcMfaChallengeId=c.id;showMfa({title:"Authenticator Code சரிபார்ப்பு",help:"Authenticator App திறந்து TAMILAN CAREERS-க்கான தற்போதைய 6 இலக்க code-ஐ உள்ளிடுங்கள்.",mode:"verify",factorId:factor.id});message("Authenticator code உள்ளிடவும்.");return}
-for(const f of (data?.totp||[]).filter(x=>x.status!=="verified")){const {error:ue}=await client.auth.mfa.unenroll({factorId:f.id});if(ue)throw ue}
-const {data:en,error:ee}=await client.auth.mfa.enroll({factorType:"totp",friendlyName:"TAMILAN CAREERS Super Admin"});if(ee)throw ee;
-showMfa({title:"முதல் முறை பாதுகாப்பு அமைப்பு",help:"Google Authenticator அல்லது Microsoft Authenticator App நிறுவி QR code-ஐ scan செய்யவும். App தரும் 6 இலக்க code-ஐ கீழே உள்ளிடவும். இது முடிந்த பிறகே Admin திறக்கும்.",qr:en?.totp?.qr_code||"",secret:en?.totp?.secret||"",mode:"enroll",factorId:en.id});message("Authenticator App இணைத்து 6 இலக்க code சரிபார்க்கவும்.")}
+async function finishAdminAccess(user){const {data,error}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);if(error)throw new Error("Super Admin அனுமதியை சரிபார்க்க முடியவில்லை.");if(!data?.length){await client.auth.signOut();throw new Error("இந்த கணக்கிற்கு Super Admin அனுமதி இல்லை.");}message("Super Admin Login வெற்றி. Admin Control திறக்கப்படுகிறது...",true);location.replace("admin-control.html")}
 document.getElementById("toggle").addEventListener("click",()=>{const p=document.getElementById("password"),v=p.type==="password";p.type=v?"text":"password";document.getElementById("toggle").textContent=v?"மறை":"காட்டு"});
-form.addEventListener("submit",async e=>{e.preventDefault();button.disabled=true;button.textContent="சரிபார்க்கப்படுகிறது...";message("");try{const email=document.getElementById("email").value.trim().toLowerCase(),password=document.getElementById("password").value;const {data,error}=await client.auth.signInWithPassword({email,password});if(error)throw error;if(!data.user)throw new Error("Login சரிபார்க்க முடியவில்லை.");await beginMfa(data.user)}catch(err){message(err.message||"Login செய்ய முடியவில்லை.")}finally{button.disabled=false;button.textContent="Admin Login"}});
-mfaForm.addEventListener("submit",async e=>{e.preventDefault();mfaSubmit.disabled=true;mfaSubmit.textContent="சரிபார்க்கப்படுகிறது...";message("");try{const code=document.getElementById("mfaCode").value.replace(/\D/g,"").slice(0,6);if(code.length!==6)throw new Error("6 இலக்க code உள்ளிடவும்.");let challengeId=window.__tcMfaChallengeId;if(mfaMode==="enroll"){const {data:c,error:ce}=await client.auth.mfa.challenge({factorId:pendingFactorId});if(ce)throw ce;challengeId=c.id}const {error}=await client.auth.mfa.verify({factorId:pendingFactorId,challengeId,code});if(error)throw error;const {data:u,error:ue}=await client.auth.getUser();if(ue||!u?.user)throw new Error("Login session சரிபார்க்க முடியவில்லை.");await finishAdminAccess(u.user)}catch(err){message(err.message||"Code சரிபார்க்க முடியவில்லை.")}finally{mfaSubmit.disabled=false;mfaSubmit.textContent="Code சரிபார்க்கவும்"}});
-document.getElementById("mfaCancel").addEventListener("click",async()=>{await client.auth.signOut();location.replace("admin-login.html")});
-(async()=>{try{const {data,error}=await client.auth.getUser();if(!error&&data?.user)await beginMfa(data.user)}catch(e){message(e.message||"பாதுகாப்பு சரிபார்ப்பு தோல்வியடைந்தது.")}})();
+form.addEventListener("submit",async e=>{e.preventDefault();button.disabled=true;button.textContent="சரிபார்க்கப்படுகிறது...";message("");try{const email=document.getElementById("email").value.trim().toLowerCase(),password=document.getElementById("password").value;const {data,error}=await client.auth.signInWithPassword({email,password});if(error)throw error;if(!data.user)throw new Error("Login சரிபார்க்க முடியவில்லை.");await finishAdminAccess(data.user)}catch(err){message(err.message||"Login செய்ய முடியவில்லை.")}finally{button.disabled=false;button.textContent="Admin Login"}});
+(async()=>{try{const {data,error}=await client.auth.getUser();if(!error&&data?.user)await finishAdminAccess(data.user)}catch(e){message(e.message||"Login சரிபார்ப்பு தோல்வியடைந்தது.")}})();
 </script>
   <script src="assets/site-protection.js" defer></script>
 </body></html>
