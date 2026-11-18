@@ -167,6 +167,119 @@ for page in HTML_FILES:
                 "detail": (check.stderr or check.stdout).strip()[:2000]
             })
 
+# Audit exact-match coverage of the curated UI translation dictionaries.
+# This is a source-text estimate; it cannot certify dynamic API content or complete sentences.
+class TranslationParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.texts = []
+        self.attributes = []
+        self.ignored = []
+        self.script_sources = []
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag in ("script", "style", "noscript", "code", "pre", "textarea"):
+            self.ignored.append(tag)
+        if tag == "script" and attrs.get("src"):
+            self.script_sources.append(attrs["src"])
+        for key in ("placeholder", "aria-label", "title", "alt", "value"):
+            value = attrs.get(key)
+            if value:
+                self.attributes.append(value.strip())
+    def handle_endtag(self, tag):
+        if tag in self.ignored:
+            for index in range(len(self.ignored) - 1, -1, -1):
+                if self.ignored[index] == tag:
+                    del self.ignored[index]
+                    break
+    def handle_data(self, data):
+        if not self.ignored and data.strip():
+            self.texts.append(data.strip())
+
+translation_source = (ROOT / "assets" / "auto-translate.js").read_text(encoding="utf-8")
+decoder = json.JSONDecoder()
+translation_rows = []
+base_marker = "var rows="
+base_start = translation_source.index(base_marker) + len(base_marker)
+base_rows, _ = decoder.raw_decode(translation_source[base_start:].lstrip())
+translation_rows.extend(base_rows)
+push_marker = "rows.push.apply(rows,"
+push_pos = 0
+while True:
+    push_pos = translation_source.find(push_marker, push_pos)
+    if push_pos < 0:
+        break
+    array_start = push_pos + len(push_marker)
+    extra_rows, consumed = decoder.raw_decode(translation_source[array_start:].lstrip())
+    translation_rows.extend(extra_rows)
+    push_pos = array_start + consumed
+
+translation_maps = {
+    "en": {row[0] for row in translation_rows if len(row) > 0 and row[0]},
+    "ta": {row[0] for row in translation_rows if len(row) > 1 and row[0] and row[1]},
+    "hi": {row[0] for row in translation_rows if len(row) > 2 and row[0] and row[2]},
+    "ml": {row[0] for row in translation_rows if len(row) > 3 and row[0] and row[3]},
+}
+extra_marker = "var extraLanguageRows="
+extra_start = translation_source.index(extra_marker) + len(extra_marker)
+extra_end = translation_source.index("};\nif(cols", extra_start) + 1
+extra_source = translation_source[extra_start:extra_end]
+extra_source = re.sub(r"(^|\n)([a-z]{2}):", r'\1"\2":', extra_source)
+extra_source = re.sub(r",\s*}", "}", extra_source)
+extra_maps = json.loads(extra_source)
+for language, pairs in extra_maps.items():
+    translation_maps[language] = {pair[0] for pair in pairs if len(pair) > 1 and pair[0] and pair[1]}
+
+translation_page_results = []
+all_candidates = set()
+for page in HTML_FILES:
+    parser = TranslationParser()
+    try:
+        parser.feed(page.read_text(encoding="utf-8", errors="replace"))
+    except OSError:
+        continue
+    candidates = {
+        re.sub(r"\s+", " ", value).strip()
+        for value in parser.texts + parser.attributes
+        if 2 <= len(value.strip()) <= 160
+        and re.search(r"[A-Za-z]", value)
+        and not re.fullmatch(r"[\d\s.,:;|/()[\]{}\-+%#@!]+", value.strip())
+        and not value.strip().startswith(("http://", "https://", "www."))
+    }
+    all_candidates.update(candidates)
+    english_only = sorted(value for value in candidates if value not in translation_maps["en"])
+    script_ready = any("site-protection.js" in src or "global-experience.js" in src for src in parser.script_sources)
+    translation_page_results.append({
+        "file": str(page.relative_to(ROOT)),
+        "candidate_strings": len(candidates),
+        "dictionary_matched": len(candidates) - len(english_only),
+        "missing_dictionary_entries": len(english_only),
+        "locale_loader_present": script_ready,
+        "examples_missing": english_only[:12],
+    })
+
+translation_coverage = {}
+for language, keys in translation_maps.items():
+    matched = sum(1 for value in all_candidates if value in keys)
+    translation_coverage[language] = {
+        "mapped_strings": matched,
+        "total_candidate_strings": len(all_candidates),
+        "exact_match_percent": round(matched * 100 / len(all_candidates), 1) if all_candidates else 100.0,
+    }
+translation_audit = {
+    "html_pages_scanned": len(translation_page_results),
+    "unique_static_candidate_strings": len(all_candidates),
+    "pages_missing_locale_loader": [
+        item["file"] for item in translation_page_results if not item["locale_loader_present"]
+    ],
+    "coverage_by_language": translation_coverage,
+    "lowest_coverage_pages": sorted(
+        translation_page_results,
+        key=lambda item: item["dictionary_matched"] / max(1, item["candidate_strings"])
+    )[:15],
+    "note": "Exact dictionary-key coverage estimate for static HTML text and selected attributes only. It excludes dynamic JavaScript/API content and does not certify translation quality.",
+}
+
 result = {
     "checked_at_utc": datetime.now(timezone.utc).isoformat(),
     "html_pages_checked": len(HTML_FILES),
@@ -177,6 +290,7 @@ result = {
     "status": "needs_attention" if issues else ("warnings" if warnings else "healthy"),
     "errors_detail": issues[:500],
     "warnings_detail": warnings[:500],
+    "translation_audit": translation_audit,
     "scope_note": "Read-only structural and JavaScript syntax check. It does not prove browser runtime behavior, authenticated Supabase flows, live external government sites, email delivery, payment, or complete real-user journeys.",
 }
 REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
