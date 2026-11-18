@@ -184,25 +184,16 @@ await check("Education and workplace filters narrow jobs correctly", async () =>
 });
 
 await check("Candidate skills match relevant jobs and filter the results", async () => {
-  const initId = await page.addInitScript(() => {
-    localStorage.setItem("sb-qkmljuuusfjowexvybvy-auth-token", JSON.stringify({
-      access_token: "smoke-test-token",
-      refresh_token: "smoke-test-refresh",
-      token_type: "bearer",
-      expires_in: 3600,
-      expires_at: Math.floor(Date.now() / 1000) + 3600,
-      user: { id: "candidate-smoke", aud: "authenticated", role: "authenticated" }
-    }));
-  });
-  await page.route("**/auth/v1/user**", route => route.fulfill({
+  const skillPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await skillPage.route("**/auth/v1/user**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify({ id: "candidate-smoke", aud: "authenticated", role: "authenticated", email: "candidate@example.test", app_metadata: {}, user_metadata: {} })
   }));
-  await page.route("**/rest/v1/candidate_skills**", route => route.fulfill({
+  await skillPage.route("**/rest/v1/candidate_skills**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ skill_name: "MS Excel" }])
   }));
-  await page.route("**/rest/v1/jobs**", route => route.fulfill({
+  await skillPage.route("**/rest/v1/jobs**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([
       { id: "skill-match", status: "published", job_title: "Accounts Assistant", description: "Accounts work", required_skills: "MS Excel, Tally", location: "Salem", employment_type: "full_time", job_kind: "private" },
@@ -210,18 +201,25 @@ await check("Candidate skills match relevant jobs and filter the results", async
     ])
   }));
   try {
-    await open("jobs.html");
-    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("2 வேலைகள்"));
-    await page.locator("#skillMatch").selectOption("matched");
-    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
-    if (!(await page.locator(".job").innerText()).includes("உங்கள் திறன்கள்: 1/2 பொருத்தம்")) {
+    await skillPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    await skillPage.evaluate(() => localStorage.setItem("sb-qkmljuuusfjowexvybvy-auth-token", JSON.stringify({
+      access_token: "test-access-token",
+      refresh_token: "test-refresh-token",
+      token_type: "bearer",
+      expires_in: 3600,
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+      user: { id: "candidate-smoke", aud: "authenticated", role: "authenticated" }
+    })));
+    const response = await skillPage.goto(base + "/jobs.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Jobs page failed to load");
+    await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("2 வேலைகள்"));
+    await skillPage.locator("#skillMatch").selectOption("matched");
+    await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
+    if (!(await skillPage.locator(".job").innerText()).includes("உங்கள் திறன்கள்: 1/2 பொருத்தம்")) {
       throw new Error("Matched job did not show the candidate skill match score");
     }
   } finally {
-    await page.unroute("**/auth/v1/user**");
-    await page.unroute("**/rest/v1/candidate_skills**");
-    await page.unroute("**/rest/v1/jobs**");
-    await page.removeInitScript(initId);
+    await skillPage.close();
   }
 });
 
