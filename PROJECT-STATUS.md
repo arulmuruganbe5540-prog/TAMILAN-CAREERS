@@ -248,3 +248,12 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Latest full Health Audit run `44385541563` passed for commit `1acbdf1fc969fe9daeb692c2bb7eb7157658b4c5`; browser smoke tests passed (32 passed, 0 failed), with no uncaught browser JavaScript errors.
 - GitHub Pages build and deployment run `44385542125` succeeded for the same commit.
 - This improves translation coverage for dynamic UI attributes; it does not mean every page or every supported language has been fully translated. Full translation coverage remains a separate task.
+
+
+## 19 November 2026 — education, industry and employer-form translations
+
+- Expanded the curated Tamil, Hindi and Malayalam dictionary with 36 terms covering education levels (including ITI, Diploma, Degree and PhD/Research), industries, job categories, business entity types, and company verification document labels.
+- Added a browser smoke assertion for dynamic Malayalam translation of the education term `Degree`.
+- Latest full Health Audit run `44386300040` passed for commit `16a0cdde784c6ff84dd62bcfaa93101f139a1fc1`; the browser smoke suite completed with no failures.
+- GitHub Pages deployment run `44386300019` succeeded for the same commit.
+- This expands coverage for the listed terms in Tamil, Hindi and Malayalam. Other languages still use their own shorter dictionaries, and a full-site translation audit remains outstanding.
