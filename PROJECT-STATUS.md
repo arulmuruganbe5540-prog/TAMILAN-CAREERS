@@ -170,3 +170,15 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Manually invoked the function safely; it returned 0 because there are currently no published jobs. This confirms execution, not the future scheduled run.
 - The hourly GitHub Actions sitemap workflow completed successfully. Its logs confirmed 14 static URLs and 0 active published job URLs.
 - Google Indexing API deletion notices are still pending Search Console ownership verification and the Google service-account secret. Closed jobs will no longer be included by the dynamic sitemap generator.
+
+## 18 November 2026 — Job trust and safety reporting
+
+- Hardened the public jobs_read_published policy: Admin-managed jobs without a company may be public; any job linked to a company is public only while that company has verification_status='verified'. The previous policy allowed any is_admin_managed=true row to bypass the company-verification predicate.
+- Added public.job_reports with RLS, one report per signed-in user per job, constrained report reasons/statuses, and bounded report details. Reports can be submitted only for currently published jobs.
+- Added authenticated tc_submit_job_report RPC and Super Admin-only tc_review_job_report RPC. Both use an empty search path and explicit authorization; no public/anonymous execution.
+- Added a Tamil report form to job-details.html for upfront-payment demands, fake/misleading listings, impersonation, misuse of personal data, expired/filled jobs, and other issues. Login is required before submission.
+- Added a verified-employer badge to job detail pages only when the linked company record currently says verified.
+- Added admin-job-reports.html and linked it from Admin Control Center. Super Admin can review the report, set status to reviewing/actioned/dismissed, and add an admin note. A report does not automatically remove a job.
+- Live schema migration applied successfully. Current published job count is 0, so no real job report or verified-company public listing flow can be end-to-end tested yet. No test job or report was inserted.
+- Supabase security advisor now lists the two new authenticated SECURITY DEFINER RPCs among the project's authenticated-callable functions; these are intentionally callable and perform their own auth.uid() / Super Admin checks. Existing unrelated advisor notices remain: backend-only RLS tables and leaked-password protection disabled.
+- GitHub Pages deployment and browser end-to-end tests for this change are not yet confirmed. Do not claim the new pages are live until the matching CI/Pages runs succeed.
