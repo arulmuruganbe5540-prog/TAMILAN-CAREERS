@@ -40,7 +40,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <input type="hidden" id="recordId">
 <input type="hidden" id="companyId"><input type="hidden" id="sourceDraftId">
 <div class="field wide"><label for="jobKind">வேலைவாய்ப்பு பிரிவு *</label><select id="jobKind" required><option value="government">அரசு வேலை</option><option value="private" selected>தனியார் வேலை</option><option value="foreign">வெளிநாட்டு வேலை</option></select><span class="hint">Super Admin மூன்று பிரிவுகளிலும் நேரடியாக வேலை சேர்க்கலாம்.</span></div>
-<div class="field wide gov-only"><label for="governmentScope">அரசு வேலை வகை *</label><select id="governmentScope"><option value="">தேர்வு செய்யவும்</option><option value="central">மத்திய அரசு வேலை</option><option value="tamil-nadu">தமிழ்நாடு அரசு வேலை</option></select><span class="hint">மத்திய அரசு அல்லது தமிழ்நாடு அரசு — இதில் ஒன்றைத் தேர்ந்தெடுக்கவும்.</span></div>
+<div class="field wide gov-only"><label for="governmentScope">அரசு வேலை வகை *</label><select id="governmentScope"><option value="">தேர்வு செய்யவும்</option><option value="central">மத்திய அரசு வேலை</option><option value="tamil-nadu">தமிழ்நாடு அரசு வேலை</option><option value="national">இந்த நாட்டின் தேசிய அரசு வேலை (UAE / Singapore / Sri Lanka / USA)</option></select><span class="hint">மத்திய அரசு அல்லது தமிழ்நாடு அரசு — இதில் ஒன்றைத் தேர்ந்தெடுக்கவும்.</span></div>
 <div class="field gov-only"><label for="governmentDepartment">அரசுத் துறை / ஆட்சேர்ப்பு நிறுவனம்</label><select id="governmentDepartment"><option value="">தேர்வு செய்யவும்</option><option>UPSC</option><option>SSC</option><option>Railway</option><option>Banking</option><option>Defence</option><option>Central Police</option><option>Postal</option><option>PSU</option><option>Teaching</option><option>Medical</option><option>TNPSC</option><option>Police</option><option>TRB</option><option>MRB</option><option>Forest</option><option>Health</option><option>Transport</option><option>TANGEDCO</option><option>Revenue</option><option>Courts</option><option>Agriculture</option><option>Municipal Administration</option><option>Universities</option><option>Other</option></select></div>
 <div class="field gov-only"><label for="examName">தேர்வு / ஆட்சேர்ப்பு பெயர்</label><input id="examName" maxlength="180" placeholder="உதா: TNPSC Group IV / SSC CGL"></div>
 <div class="field gov-only"><label for="applicationStartDate">விண்ணப்பம் தொடங்கும் தேதி</label><input id="applicationStartDate" type="date"></div>
@@ -53,7 +53,7 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <div class="field foreign-only"><label for="flightSupport">விமான டிக்கெட் / பயண உதவி</label><input id="flightSupport" maxlength="300" placeholder="நிறுவனம் வழங்குமா?"></div><div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
 <div class="field"><label for="company">நிறுவனப் பெயர் *</label><input id="company" maxlength="180" placeholder="நிறுவனம் / அரசு துறை / நிறுவனம்"><span class="hint">Super Admin நேரடியாகச் சேர்க்கும்போது விருப்பத்தேர்வு. Company submission என்றால் Verified நிறுவனம் கட்டாயம்.</span></div>
 <div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>Accounting &amp; Finance</option><option>Construction</option><option>Customer Support</option><option>Driver &amp; Delivery</option><option>Education</option><option>Engineering</option><option>Government Jobs</option><option>Healthcare</option><option>Hotel &amp; Restaurant</option><option>IT &amp; Software</option><option>Manufacturing</option><option>Office &amp; Administration</option><option>Other Jobs</option><option>Sales &amp; Marketing</option></select></div>
-<div class="field"><label for="authority">அரசு ஆணையம் / துறை</label><input id="authority" maxlength="180" placeholder="TNPSC / UPSC / SSC / RRB..."></div><div class="field"><label for="countryName">நாடு (வெளிநாட்டு வேலை)</label><input id="countryName" maxlength="100" placeholder="UAE / Saudi Arabia / Singapore"></div><div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="authority">அரசு ஆணையம் / துறை</label><input id="authority" maxlength="180" placeholder="TNPSC / UPSC / SSC / RRB..."></div><div class="field"><label for="countryName">வேலை இருக்கும் நாடு *</label><select id="countryName" required><option value="">நாடுகளை ஏற்றுகிறது...</option></select><span class="hint">அரசு, தனியார், வெளிநாட்டு — எல்லா வேலைகளுக்கும் சரியான நாட்டைத் தேர்ந்தெடுக்கவும். Dubai வேலைகளுக்கு United Arab Emirates தேர்வு செய்யவும்.</span></div><div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
 <div class="field"><label for="workplace">பணிமுறை</label><select id="workplace"><option value="">தேர்வு செய்யவும்</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
 <div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" maxlength="180" required placeholder="உதா: ஓமலூர், சேலம்"></div>
 <div class="field"><label for="openings">காலியிடங்கள்</label><input id="openings" type="number" min="1" max="100000" value="1"></div>
@@ -176,13 +176,29 @@ async function act(action,id,rows){
   say("வேலை வெற்றிகரமாக வெளியிடப்பட்டது. Public Job ID: "+data);
   await loadQueue();return;
  }
- if(action==="edit"){fill({...r.payload,id:r.id});say("தேர்ந்தெடுத்த அறிவிப்பு படிவத்தில் ஏற்றப்பட்டது.");window.scrollTo({top:0,behavior:"smooth"});return}
+ if(action==="edit"){fill({...r.payload,id:r.id});await loadCountryOptions(r.payload?.country_name||r.payload?.countryName||"");say("தேர்ந்தெடுத்த அறிவிப்பு படிவத்தில் ஏற்றப்பட்டது.");window.scrollTo({top:0,behavior:"smooth"});return}
  let update={status:action==="approve"?"approved":action==="reject"?"rejected":"draft",review_note:null,reviewed_by:null,reviewed_at:null};
  if(action==="reject"){const note=prompt("Reject செய்வதற்கான காரணத்தை எழுதுங்கள்:");if(note===null)return;if(!note.trim()){alert("காரணத்தை எழுதவும்.");return}update.review_note=note.trim().slice(0,1000)}
  if(action==="approve"){if(!confirm("இந்த அறிவிப்பை Admin Review-ல் Approved எனக் குறிக்கவா? இது பொதுவில் வெளியிடாது."))return;update.reviewed_by=user.id;update.reviewed_at=new Date().toISOString()}
  const {error}=await db.from("admin_job_post_reviews").update(update).eq("id",id);
  if(error){say("நிலை மாற்ற முடியவில்லை: "+error.message,false);return}
  say("நிலை மாற்றப்பட்டது: "+statusLabel(update.status));await loadQueue();
+}
+async function loadCountryOptions(selected=""){
+ const el=$("countryName"),{data,error}=await db.from("countries").select("country_name,is_active").eq("is_active",true).order("country_name");
+ if(error){el.innerHTML='<option value="">நாடுகளை ஏற்ற முடியவில்லை</option>';return}
+ const names=(data||[]).map(x=>x.country_name);
+ if(selected&&!names.includes(selected))names.unshift(selected);
+ el.innerHTML='<option value="">நாட்டைத் தேர்வு செய்யவும்</option>'+names.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("");
+ el.value=selected||"India";
+ updateGovernmentScopeOptions();
+}
+function updateGovernmentScopeOptions(){
+ const country=$("countryName").value,scope=$("governmentScope");
+ if(!scope)return;
+ const india=country==="India";
+ Array.from(scope.options).forEach(o=>{if(o.value==="central"||o.value==="tamil-nadu")o.disabled=!india;if(o.value==="national")o.disabled=india});
+ if($("jobKind").value==="government"&&((india&&scope.value==="national")||(!india&&(scope.value==="central"||scope.value==="tamil-nadu"))))scope.value=india?"central":"national";
 }
 function updateKindFields(){
  const kind=$("jobKind").value;
@@ -203,7 +219,7 @@ async function init(){
  const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
  $("loading").classList.add("hidden");
  if(roleError||!roles?.length){$("gateText").textContent="இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.";$("gate").classList.remove("hidden");return}
- $("app").classList.remove("hidden");await loadCategories();await loadQueue();
+ $("app").classList.remove("hidden");await loadCountryOptions();await loadCategories();await loadQueue();
 }
 $("saveDraft").addEventListener("click",()=>save("draft"));
 $("sendReview").addEventListener("click",()=>save("pending_review"));
@@ -211,6 +227,7 @@ $("reset").addEventListener("click",resetForm);
 $("filter").addEventListener("change",loadQueue);
 $("type").addEventListener("change",()=>{const p=$("salaryPeriod");if($("type").value==="Daily Wage"&&p.value==="monthly")p.value="daily";else if($("type").value!=="Daily Wage"&&p.value==="daily")p.value="monthly"});
 updateKindFields();
+$("countryName").addEventListener("change",updateGovernmentScopeOptions);
 init();
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
