@@ -55,7 +55,7 @@ function render(){
   const title=pick(j,["job_title","title"]),desc=pick(j,["description","job_description"]),company=pick(j,["company_name","employer_name"]),loc=pick(j,["location","job_location","work_location"]),jt=pick(j,["employment_type","job_type"]),jobKind=String(pick(j,["job_kind"])).toLowerCase();
   const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
   const visible=String(pick(j,["status"])).toLowerCase()==="published"&&!isExpiredJob(j);
-  return visible&&(!kind||jobKind===kind)&&q.split(/\\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase().replace(/_/g," ")===type)&&(!place||String(loc).toLowerCase().includes(place));
+  return visible&&(!kind||jobKind===kind)&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase().replace(/_/g," ")===type)&&(!place||String(loc).toLowerCase().includes(place));
  });
  $("count").textContent=list.length+" வேலைகள் கிடைத்துள்ளன";
  if(!list.length){$("results").innerHTML='<div class="empty">இந்தத் தேடலுக்கு தற்போது வேலைகள் இல்லை. வேறு சொல் அல்லது இடத்தை முயற்சிக்கவும்.</div>';return;}
