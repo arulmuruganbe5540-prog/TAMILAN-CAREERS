@@ -36,6 +36,13 @@ This status distinguishes committed website code from verified live Supabase con
 - Re-ran Supabase performance advisors: `unindexed_foreign_keys = 0` (down from 10) and `auth_rls_initplan = 0` (down from 15). Remaining advisor findings: 22 multiple-permissive-policy notices and many unused-index notices; unused-index notices are expected while the project has very little real traffic/data, so indexes were not dropped.
 - Security advisor was rechecked after the RLS optimization. No changes were made to policy roles, ownership checks, or public grants. The previously documented Auth leaked-password-protection setting remains disabled and needs a dashboard-side security setting change. The full Health Audit run `44424175818` passed for the migration-code commit `65832544accb974cdb111b79f16af893f17524d0`; Pages deployment run `44424200948` succeeded for the latest status/documentation commit `52e0e942bb4c1c24bf219522aae18c3f4168b126`. Storage review: all five Supabase Storage buckets are private. Candidate resumes and company verification documents have 10 MB limits and restricted MIME types; resume object policies are owner-scoped, while verification files are limited to the submitting company owner and Super Admin review.
 
+## 19 November 2026 — company invitation custom-domain correction
+
+- The deployed `company-members` Edge Function used the old GitHub Pages URL as its fallback invitation base URL. Updated the GitHub source and deployed version 8 with the fallback set to `https://tamilancareers.in`.
+- Verified the live Edge Function reports version 8, keeps `verify_jwt=true`, contains the custom-domain fallback, and no longer contains the old GitHub Pages fallback.
+- Updated `CONNECTIONS-AND-LAUNCH-SETUP.md` to specify `APP_BASE_URL=https://tamilancareers.in`. If the Supabase secret `APP_BASE_URL` is already configured to the old URL, the project owner must update that secret in Supabase Dashboard; the function cannot read or change secret values through this workflow.
+- Real invitation email delivery remains unverified until the Resend secret and sender are confirmed and an authenticated end-to-end invite is sent.
+
 ## 1. GitHub Pages and CI
 
 - GitHub Pages is enabled and deploying successfully. Latest confirmed Pages deployment: run `44085240569`, commit `ff17f5fbd1f3b39845d2c9bc03f40ba50f359960` (success). A newer build for the latest team-page permission refinement is running.
