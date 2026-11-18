@@ -1,78 +1,88 @@
 <!DOCTYPE html>
-<html lang="ta">
-<head>
+<html lang="ta"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>நிறுவன விவரங்கள் | TAMILAN CAREERS</title>
+<title>நிறுவனப் பதிவு மற்றும் சரிபார்ப்பு | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:800;color:#54c8ff;font-size:21px}.brand span{color:white}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:850px;margin:25px auto;padding:0 15px}.hero,.panel{background:#fff;border:1px solid #e2eaf3;border-radius:15px;padding:22px;margin-bottom:16px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 8px}.hero p{margin:0;line-height:1.7;color:#e1efff}.notice{background:#fff7e8;border:1px solid #f3d49b;color:#7c4a08;padding:13px;border-radius:10px;line-height:1.7;margin-top:14px}form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.wide{grid-column:1/-1}label{font-weight:bold;font-size:14px;color:#34445b}input,select,textarea{width:100%;padding:12px;border:1px solid #d5dfeb;border-radius:8px;font:inherit;background:white}textarea{min-height:100px;resize:vertical}.hint{font-size:12px;color:#738197;line-height:1.5}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:8px;padding:12px 17px;background:#1688ed;color:white;font-weight:bold;cursor:pointer}.btn.secondary{background:#eaf2fb;color:#175b99}.status{margin-top:14px;padding:12px;border-radius:9px;display:none;line-height:1.6}.status.ok{display:block;background:#e7f8ed;color:#16743b}.status.err{display:block;background:#fff0f0;color:#b42318}@media(max-width:620px){form{grid-template-columns:1fr}.wide{grid-column:auto}}
-</style>  <link rel="stylesheet" href="assets/site-protection.css">
-</head><body>
+:root{--navy:#101d3a;--blue:#1688ed;--ink:#172033;--muted:#718097;--line:#e2eaf3;--bg:#f3f6fb}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}header{background:var(--navy);color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:900;color:#54c8ff;font-size:21px}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:8px 11px;border-radius:8px;font-size:12px}main{max-width:980px;margin:24px auto;padding:0 15px}.hero,.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin-bottom:16px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 7px}.hero p{margin:0;color:#e1efff;line-height:1.8}.notice{background:#fff7e8;border:1px solid #f3d49b;color:#79500d;padding:13px;border-radius:10px;line-height:1.8;margin-top:14px;font-size:13px}.section-title{margin:0 0 5px;font-size:18px}.muted,.hint{font-size:12px;color:var(--muted);line-height:1.7}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.wide{grid-column:1/-1}label{font-weight:700;font-size:13px;color:#34445b}input,select,textarea{width:100%;padding:12px;border:1px solid #d5dfeb;border-radius:8px;font:inherit;background:#fff;color:#172033}textarea{min-height:90px;resize:vertical}.doc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.doc{border:1px solid var(--line);padding:13px;border-radius:11px;background:#fafcff}.doc input{padding:8px;font-size:12px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.btn{border:0;border-radius:8px;padding:12px 17px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer}.btn.secondary{background:#eaf2fb;color:#175b99}.btn:disabled{opacity:.55;cursor:wait}.status{margin-top:14px;padding:12px;border-radius:9px;display:none;line-height:1.7;font-size:13px}.status.ok{display:block;background:#e7f8ed;color:#16743b}.status.err{display:block;background:#fff0f0;color:#b42318}.hidden{display:none!important}.request-card{border:1px solid #cfe3f8;background:#f3f9ff;padding:14px;border-radius:11px;margin-top:13px}.pill{display:inline-block;padding:4px 9px;border-radius:20px;background:#fff1d8;color:#885500;font-size:11px;font-weight:bold}
+@media(max-width:650px){.form-grid,.doc-grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}main{padding:0 11px}}
+</style></head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="dashboard.html">Dashboard</a><a href="company-members.html">குழு உறுப்பினர்கள்</a><a href="jobs.html">வேலைகள்</a></nav></header>
 <main>
-<section class="hero"><h1>🏢 நிறுவன விவரங்கள்</h1><p>உங்கள் நிறுவன விவரங்களை தனிப்பட்ட வரைவு வடிவில் சேமித்து பின்னர் திருத்தலாம்.</p></section>
-<section class="panel">
-<div class="notice"><b>முக்கிய குறிப்பு:</b> இது உங்கள் கணக்கிற்குரிய தனிப்பட்ட Database வரைவு மட்டுமே. நிறுவனச் சரிபார்ப்பு, அதிகாரப்பூர்வ நிறுவனப் பதிவு, வேலை வெளியிடும் அனுமதி ஆகியவை backend நிர்வாகச் சரிபார்ப்பு இணைக்கப்பட்ட பிறகே செயல்படும். இங்கே உள்ளிடும் தகவல்கள் நிறுவன அனுமதியைத் தானாக வழங்காது.</div>
-<form id="companyForm">
-<div class="field wide"><label for="companyName">நிறுவனத்தின் பெயர் *</label><input id="companyName" required maxlength="160" placeholder="உதா: ABC Technologies"></div>
+<section class="hero"><h1>🏢 நிறுவனப் பதிவு & அதிகாரப்பூர்வ சரிபார்ப்பு</h1><p>உங்கள் நிறுவனத்தைப் பதிவு செய்து சட்டப்பூர்வ ஆவணங்களைச் சமர்ப்பிக்கவும். Admin சரிபார்த்த பிறகே நிறுவனம் Verified ஆகும்; அதன் பிறகே அனுமதிக்கப்பட்ட தனியார் வேலைகளை வெளியிட முடியும்.</p>
+<div class="notice"><b>முக்கிய பாதுகாப்பு:</b> ஆவணங்களைச் சமர்ப்பிப்பது மட்டும் Verified அனுமதி அல்ல. TAMILAN CAREERS நிர்வாகம் பதிவு விவரங்களை அதிகாரப்பூர்வ பதிவகம் / உரிய அரசு அமைப்பில் சரிபார்க்கும். வெளிநாட்டு ஆட்சேர்ப்பு நிறுவனங்களுக்கு Recruitment Licence மற்றும் Sponsor / Work Authorization விவரங்களும் அவசியம்.</div></section>
+<section class="panel"><h2 class="section-title">1. நிறுவன அடிப்படை விவரங்கள்</h2><p class="muted">உங்கள் கணக்கின் தனிப்பட்ட வரைவு தானாகச் சேமிக்கப்படாது; விரும்பினால் கீழே Save Draft செய்யலாம்.</p>
+<form id="companyForm" class="form-grid">
+<div class="field wide"><label for="companyName">பொதுவாகக் காட்டப்படும் நிறுவனப் பெயர் *</label><input id="companyName" required maxlength="160" placeholder="உதா: ABC Technologies"></div>
 <div class="field"><label for="industry">துறை *</label><select id="industry" required><option value="">தேர்வு செய்யவும்</option><option>IT / Software</option><option>Manufacturing</option><option>Healthcare</option><option>Education</option><option>Retail / Sales</option><option>Construction</option><option>Logistics / Transport</option><option>Finance / Banking</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
 <div class="field"><label for="size">நிறுவன அளவு</label><select id="size"><option value="">தேர்வு செய்யவும்</option><option>1–10</option><option>11–50</option><option>51–200</option><option>201–500</option><option>501–1000</option><option>1000+</option></select></div>
-<div class="field"><label for="email">அதிகாரப்பூர்வ Email</label><input id="email" type="email" maxlength="180" placeholder="hr@company.com"></div>
-<div class="field"><label for="phone">தொடர்பு தொலைபேசி</label><input id="phone" type="tel" inputmode="tel" maxlength="20" placeholder="தொடர்பு எண்"></div>
-<div class="field"><label for="website">Website</label><input id="website" type="url" maxlength="240" placeholder="https://example.com"></div>
+<div class="field"><label for="email">அதிகாரப்பூர்வ Email *</label><input id="email" type="email" required maxlength="180" placeholder="hr@company.com"></div>
+<div class="field"><label for="phone">தொடர்பு தொலைபேசி *</label><input id="phone" type="tel" required inputmode="tel" maxlength="30" placeholder="+91..."></div>
+<div class="field"><label for="website">அதிகாரப்பூர்வ Website</label><input id="website" type="url" maxlength="240" placeholder="https://example.com"></div>
 <div class="field"><label for="city">நகரம் / மாவட்டம் *</label><input id="city" required maxlength="100" placeholder="உதா: சென்னை"></div>
-<div class="field wide"><label for="address">முகவரி</label><textarea id="address" maxlength="800" placeholder="நிறுவனத்தின் முகவரி"></textarea></div>
-<div class="field wide"><label for="about">நிறுவனத்தைப் பற்றி</label><textarea id="about" maxlength="1500" placeholder="நிறுவனத்தின் செயல்பாடு, சேவைகள் போன்ற விவரங்கள்"></textarea></div>
+<div class="field wide"><label for="address">நிறுவன முகவரி / விளக்கம்</label><textarea id="address" maxlength="1200" placeholder="முகவரி மற்றும் நிறுவன செயல்பாடு"></textarea></div>
+<div class="field wide"><label for="about">நிறுவனத்தைப் பற்றி</label><textarea id="about" maxlength="1500" placeholder="சேவைகள், தயாரிப்புகள், செயல்பாடுகள்"></textarea></div>
 </form>
-<div class="actions"><button class="btn" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த விவரங்களை மீண்டும் ஏற்றவும்</button></div>
-<div id="status" class="status" role="status" aria-live="polite"></div>
+<div class="actions"><button class="btn secondary" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn secondary" id="reloadBtn" type="button">வரைவை மீண்டும் ஏற்றவும்</button></div>
+</section>
+<section class="panel"><h2 class="section-title">2. சட்டப்பூர்வ பதிவு விவரங்கள்</h2><div class="form-grid" id="legalForm">
+<div class="field"><label for="entityType">சட்டப்பூர்வ நிறுவன வகை *</label><select id="entityType" required><option value="">தேர்வு செய்யவும்</option><option value="sole_proprietorship">Sole Proprietorship</option><option value="partnership">Partnership</option><option value="llp">LLP</option><option value="private_limited">Private Limited</option><option value="public_limited">Public Limited</option><option value="government">Government</option><option value="nonprofit">Non-profit</option><option value="foreign_company">Foreign Recruitment Company</option><option value="other">Other</option></select></div>
+<div class="field"><label for="countryCode">பதிவு செய்யப்பட்ட நாடு *</label><select id="countryCode" required><option value="">நாடுகளை ஏற்றுகிறது...</option></select></div>
+<div class="field wide"><label for="legalName">அரசுப் பதிவில் உள்ள முழு சட்டப்பூர்வப் பெயர் *</label><input id="legalName" required maxlength="180" placeholder="Certificate-ல் உள்ள பெயர்"></div>
+<div class="field"><label for="registrationNumber">Company / Business Registration Number *</label><input id="registrationNumber" required maxlength="120" placeholder="பதிவு எண்"></div>
+<div class="field"><label for="contactPerson">அங்கீகரிக்கப்பட்ட தொடர்பு நபர் *</label><input id="contactPerson" required maxlength="120" placeholder="முழுப் பெயர்"></div>
+<div class="field wide"><label for="registeredAddress">முழுமையான பதிவு அலுவலக முகவரி *</label><textarea id="registeredAddress" required minlength="8" maxlength="1200" placeholder="அரசுப் பதிவில் உள்ள முகவரி"></textarea></div>
+<div class="field wide hidden" id="authorizationField"><label for="authorization">Recruitment Licence / Sponsor / Work Authorization விவரங்கள் *</label><textarea id="authorization" maxlength="1500" placeholder="உரிம எண், வழங்கிய அதிகார அமைப்பு, செல்லுபடியாகும் தேதி, sponsor/work authorization விவரங்கள்"></textarea><span class="hint">வெளிநாட்டு ஆட்சேர்ப்பு நிறுவனங்களுக்கு கட்டாயம். உரிய ஆவணங்களையும் கீழே இணைக்கவும்.</span></div>
+</div></section>
+<section class="panel"><h2 class="section-title">3. சரிபார்ப்பு ஆவணங்கள்</h2><p class="muted">PDF, JPG, PNG அல்லது WEBP மட்டும். ஒவ்வொரு கோப்பும் அதிகபட்சம் 10 MB. தெளிவான, முழுமையான ஆவணங்களைப் பதிவேற்றவும்.</p>
+<div class="doc-grid">
+<div class="doc"><label for="docRegistration">Business Registration Certificate * </label><input id="docRegistration" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp" required><div class="hint">அரசு / பதிவு அமைப்பு வழங்கிய சான்றிதழ்</div></div>
+<div class="doc"><label for="docTax">Tax Registration / Tax ID</label><input id="docTax" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
+<div class="doc"><label for="docAddress">Registered Address Proof</label><input id="docAddress" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
+<div class="doc"><label for="docSignatory">Authorized Signatory Proof / ID</label><input id="docSignatory" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
+<div class="doc"><label for="docRecruitment">Recruitment Licence</label><input id="docRecruitment" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
+<div class="doc"><label for="docWork">Work / Sponsor Authorization</label><input id="docWork" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
+</div>
+<div class="notice">உங்கள் ஆவணங்கள் பொதுமக்களுக்கு காட்டப்படாது. பாதுகாக்கப்பட்ட Private Storage-ல் சேமிக்கப்படும்; நிறுவன உரிமையாளர் மற்றும் அனுமதிக்கப்பட்ட Super Admin மட்டுமே அணுக முடியும்.</div>
+<div class="actions"><button class="btn" id="submitBtn" type="button">சரிபார்ப்புக்கு சமர்ப்பிக்கவும்</button></div>
+<div id="status" class="status" role="status" aria-live="polite"></div><div id="requestInfo" class="request-card hidden"></div>
 </section>
 </main>
 <script>
-const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
-const ids=["companyName","industry","size","email","phone","website","city","address","about"];
-let currentUser=null,legacyDraft={};
-function message(text,ok){const el=document.getElementById("status");el.textContent=text;el.className="status "+(ok?"ok":"err")}
-function readForm(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());return d}
-function fill(data={}){ids.forEach(id=>document.getElementById(id).value=data[id]??"")}
-async function init(){
- const {data,error}=await client.auth.getUser();
- if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("company-profile.html"));return}
- currentUser=data.user;
- legacyDraft=currentUser.user_metadata?.company_profile_draft||{};
- const {data:row,error:loadError}=await client.from("company_profile_drafts").select("profile").eq("user_id",currentUser.id).maybeSingle();
- if(loadError){
-  fill(legacyDraft);
-  message("Database வரைவு அட்டவணை இன்னும் அமைக்கப்படவில்லை. பழைய கணக்கு வரைவைக் காட்டுகிறோம். supabase-company-workflow.sql இயக்கவும். விவரம்: "+loadError.message,false);
-  return;
- }
- fill(row?.profile||legacyDraft);
- if(row?.profile)message("உங்கள் தனிப்பட்ட நிறுவன வரைவு Database-லிருந்து ஏற்றப்பட்டது.",true);
- else if(Object.keys(legacyDraft).length)message("பழைய வரைவு ஏற்றப்பட்டது. Save செய்தால் பாதுகாப்பான Database-ல் சேமிக்கப்படும்.",true);
-}
-async function save(){
- if(!currentUser){message("முதலில் Login செய்யவும்.",false);return}
- const form=document.getElementById("companyForm");
- if(!form.reportValidity())return;
- const draft=readForm();
- if(draft.website){try{const u=new URL(draft.website);if(!["http:","https:"].includes(u.protocol))throw 0}catch(e){message("சரியான Website URL உள்ளிடவும்.",false);return}}
- const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="சேமிக்கப்படுகிறது...";
- try{
-  const {error}=await client.from("company_profile_drafts").upsert({user_id:currentUser.id,profile:draft},{onConflict:"user_id"});
-  if(error)throw error;
-  message("நிறுவன விவரங்கள் உங்கள் தனிப்பட்ட Database வரைவில் சேமிக்கப்பட்டன. இது இன்னும் சரிபார்க்கப்பட்ட Company பதிவு அல்ல.",true);
- }catch(e){message("Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false)}
- finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
-}
-async function reloadDraft(){
- if(!currentUser)return;
- const {data,error}=await client.from("company_profile_drafts").select("profile").eq("user_id",currentUser.id).maybeSingle();
- if(error){message("மீண்டும் ஏற்ற முடியவில்லை: "+error.message,false);return}
- fill(data?.profile||legacyDraft);
- message(data?.profile?"சேமித்த Database வரைவு மீண்டும் ஏற்றப்பட்டது.":"சேமித்த வரைவு இல்லை; காலியான / பழைய வரைவு காட்டப்படுகிறது.",true);
-}
-document.getElementById("saveBtn").addEventListener("click",save);
-document.getElementById("reloadBtn").addEventListener("click",reloadDraft);
-init().catch(e=>message(e.message||String(e),false));
-</script>  <script src="assets/site-protection.js" defer></script>
-</body></html>
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const $=id=>document.getElementById(id);
+const ids=["companyName","industry","size","email","phone","website","city","address","about","entityType","countryCode","legalName","registrationNumber","contactPerson","registeredAddress","authorization"];
+let user=null,legacy={},countries=[];
+const docFields=[["docRegistration","business_registration"],["docTax","tax_registration"],["docAddress","registered_address_proof"],["docSignatory","authorized_signatory_id"],["docRecruitment","recruitment_license"],["docWork","work_authorization"]];
+function say(t,ok){$("status").textContent=t;$("status").className="status "+(ok?"ok":"err")}
+function dataForm(){const d={};ids.forEach(id=>d[id]=$(id).value.trim());return d}
+function fill(d={}){ids.forEach(id=>$(id).value=d[id]||"");toggleAuthorization()}
+function toggleAuthorization(){$("authorizationField").classList.toggle("hidden",$("entityType").value!=="foreign_company");$("authorization").required=$("entityType").value==="foreign_company"}
+async function loadCountries(){const {data,error}=await db.from("countries").select("country_code,country_name").eq("is_active",true).order("country_name");if(error)throw error;countries=data||[];$("countryCode").innerHTML='<option value="">நாட்டைத் தேர்வு செய்யவும்</option>'+countries.map(c=>'<option value="'+c.country_code+'">'+c.country_name.replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[x]))+'</option>').join("")}
+async function saveDraft(){if(!user)throw new Error("முதலில் Login செய்யவும்");const d=dataForm();const {error}=await db.from("company_profile_drafts").upsert({user_id:user.id,profile:d},{onConflict:"user_id"});if(error)throw error;legacy=d}
+async function loadDraft(){const {data,error}=await db.from("company_profile_drafts").select("profile").eq("user_id",user.id).maybeSingle();if(error)throw error;legacy=data?.profile||legacy;fill(legacy);say(data?.profile?"சேமித்த வரைவு ஏற்றப்பட்டது.":"சேமித்த வரைவு இல்லை.",true)}
+function getFileExt(file){const m={"application/pdf":"pdf","image/jpeg":"jpg","image/png":"png","image/webp":"webp"};return m[file.type]||""}
+async function uploadDocuments(companyId,requestId){let uploaded=0;for(const [field,type] of docFields){const input=$(field),file=input.files?.[0];if(!file)continue;const ext=getFileExt(file);if(!ext)throw new Error("இந்த கோப்பு வகை அனுமதிக்கப்படவில்லை: "+file.name);if(file.size<1||file.size>10485760)throw new Error("ஒவ்வொரு கோப்பும் 10 MB-க்குள் இருக்க வேண்டும்: "+file.name);const safeName=type+"-"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+"."+ext;const path=companyId+"/"+user.id+"/"+requestId+"/"+safeName;const {error:upError}=await db.storage.from("company-verification").upload(path,file,{contentType:file.type,upsert:false});if(upError)throw new Error(file.name+" பதிவேற்றம் தோல்வி: "+upError.message);const {error:rowError}=await db.from("company_verification_documents").insert({request_id:requestId,company_id:companyId,uploaded_by:user.id,document_type:type,storage_path:path,original_file_name:file.name,mime_type:file.type,file_size_bytes:file.size});if(rowError){await db.storage.from("company-verification").remove([path]);throw new Error(file.name+" ஆவண விவரத்தைச் சேமிக்க முடியவில்லை: "+rowError.message)}uploaded++;}return uploaded}
+async function submit(){const form=$("companyForm");if(!form.reportValidity())return;for(const id of ["entityType","countryCode","legalName","registrationNumber","contactPerson","registeredAddress"]){if(!$(id).reportValidity())return}if(!$("docRegistration").files.length){say("Business Registration Certificate கட்டாயம் பதிவேற்ற வேண்டும்.",false);return}
+const d=dataForm();if(d.website){try{const u=new URL(d.website);if(!["https:","http:"].includes(u.protocol))throw 0}catch{say("சரியான Website URL உள்ளிடவும்.",false);return}}
+const selected=countries.find(c=>c.country_code===d.countryCode);if(!selected){say("செயலில் உள்ள நாட்டைத் தேர்வு செய்யவும்.",false);return}
+for(const [field] of docFields){const f=$(field).files?.[0];if(f&&(!getFileExt(f)||f.size>10485760)){say("PDF/JPG/PNG/WEBP கோப்புகள் மட்டும்; ஒவ்வொன்றும் 10 MB-க்குள் இருக்க வேண்டும்.",false);return}}
+const btn=$("submitBtn");btn.disabled=true;btn.textContent="சமர்ப்பிக்கப்படுகிறது...";
+try{
+ await saveDraft();
+ const args={p_company_name:d.companyName,p_industry:d.industry,p_company_size:d.size,p_description:[d.address,d.about].filter(Boolean).join("\n\n"),p_website_url:d.website,p_legal_entity_type:d.entityType,p_country_code:d.countryCode,p_legal_name:d.legalName,p_registration_number:d.registrationNumber,p_registered_address:d.registeredAddress,p_official_email:d.email,p_contact_person:d.contactPerson,p_contact_phone:d.phone,p_recruitment_authorization:d.authorization};
+ let result,requestId,companyId;
+ const {data,error}=await db.rpc("tc_submit_company_verification",args);
+ if(error){const {data:co}=await db.from("companies").select("id").eq("owner_user_id",user.id).eq("registration_number",d.registrationNumber).maybeSingle();if(!co)throw error;const {data:rq,error:rqError}=await db.from("company_verification_requests").select("id,company_id,status").eq("company_id",co.id).in("status",["pending","under_review","more_information"]).maybeSingle();if(rqError||!rq)throw error;requestId=rq.id;companyId=rq.company_id;result={status:rq.status}}else{result=data;requestId=data.request_id;companyId=data.company_id}
+ let count=0;try{count=await uploadDocuments(companyId,requestId)}catch(uploadErr){say("விண்ணப்பம் உருவாக்கப்பட்டது; ஆனால் சில ஆவணங்கள் பதிவேற்றப்படவில்லை. மீதமுள்ள கோப்புகளைத் தேர்வு செய்து மீண்டும் சமர்ப்பிக்கவும். விவரம்: "+uploadErr.message,false);$("requestInfo").classList.remove("hidden");$("requestInfo").textContent="விண்ணப்ப எண்: "+requestId+" · நிலை: "+result.status;return}
+ $("requestInfo").classList.remove("hidden");$("requestInfo").innerHTML="<b>விண்ணப்பம் பெறப்பட்டது</b><br>Request ID: "+requestId+"<br>பதிவேற்றிய ஆவணங்கள்: "+count+"<br>நிலை: <span class='pill'>"+(result.status||"pending")+"</span><br>Admin சரிபார்த்த பிறகு முடிவு தெரிவிக்கப்படும்.";
+ say("நிறுவனச் சரிபார்ப்பு விண்ணப்பம் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது. இது இன்னும் Verified அல்ல.",true);
+}catch(e){say("சமர்ப்பிக்க முடியவில்லை: "+(e.message||e),false)}finally{btn.disabled=false;btn.textContent="சரிபார்ப்புக்கு சமர்ப்பிக்கவும்"}}
+$("entityType").addEventListener("change",toggleAuthorization);
+$("saveBtn").addEventListener("click",async()=>{try{await saveDraft();say("உங்கள் நிறுவன வரைவு பாதுகாப்பாகச் சேமிக்கப்பட்டது.",true)}catch(e){say("வரைவைச் சேமிக்க முடியவில்லை: "+e.message,false)}});
+$("reloadBtn").addEventListener("click",()=>loadDraft().catch(e=>say("மீண்டும் ஏற்ற முடியவில்லை: "+e.message,false)));
+$("submitBtn").addEventListener("click",submit);
+async function init(){const {data,error}=await db.auth.getUser();if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("company-profile.html"));return}user=data.user;await loadCountries();await loadDraft();if(user.email){$("email").value=legacy.email||user.email}}
+init().catch(e=>say("பக்கத்தைத் தயாரிக்க முடியவில்லை: "+(e.message||e),false));
+</script><script src="assets/site-protection.js" defer></script></body></html>
