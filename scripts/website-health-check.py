@@ -224,11 +224,7 @@ translation_maps = {
 }
 extra_marker = "var extraLanguageRows="
 extra_start = translation_source.index(extra_marker) + len(extra_marker)
-extra_end = translation_source.index("\\n\\nif(cols", extra_start) + 1
-extra_source = translation_source[extra_start:extra_end]
-extra_source = re.sub(r"(^|\n)([a-z]{2}):", r'\1"\2":', extra_source)
-extra_source = re.sub(r",\s*}", "}", extra_source)
-extra_maps = json.loads(extra_source)
+extra_maps, _ = decoder.raw_decode(translation_source[extra_start:].lstrip())
 for language, pairs in extra_maps.items():
     translation_maps[language] = {pair[0] for pair in pairs if len(pair) > 1 and pair[0] and pair[1]}
 
