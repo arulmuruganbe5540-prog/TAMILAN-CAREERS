@@ -356,6 +356,7 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
   await open("index.html");
   await page.waitForFunction(() => window.TC_LOCALE?.language === "ml", null, { timeout: 10000 });
   await page.waitForFunction(() => window.TC_TRANSLATE?.language === "ml", null, { timeout: 10000 });
+  if (await page.evaluate(() => window.TC_TRANSLATE.translatedTerms) < 300) throw new Error("Active Malayalam dictionary size was reported incorrectly");
   if (!(await page.getByText("ഹോം", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Malayalam");
   await page.evaluate(() => {
     const el = document.createElement("span");
