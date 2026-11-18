@@ -10,7 +10,7 @@ update public.countries set homepage_sections='["smart_search","job_categories",
 where country_code in ('IN','LK','AE','US','SG');
 
 create or replace function public.tc_admin_publish_job(p_review_id uuid)
-returns uuid language plpgsql security definer set search_path to ''
+returns uuid language plpgsql security definer set search_path = ''
 as $function$
 declare
   v_review public.admin_job_post_reviews%rowtype;
@@ -109,7 +109,7 @@ end;
 $function$;
 
 create or replace function public.tc_submit_company_job_draft_for_review(p_draft_id uuid)
-returns uuid language plpgsql security definer set search_path to ''
+returns uuid language plpgsql security definer set search_path = ''
 as $function$
 declare
   v_company_id uuid;
