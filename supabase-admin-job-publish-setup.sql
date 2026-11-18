@@ -209,7 +209,8 @@ begin
 
   select c.company_name into v_company_name
   from public.companies c
-  where c.id = v_company_id;
+  where c.id = v_company_id
+    and c.verification_status = 'verified';
 
   if not found or nullif(btrim(v_company_name), '') is null then
     raise exception 'Company record or company name not found';
@@ -263,6 +264,7 @@ begin
     'title', v_title,
     'company', v_company_name,
     'company_id', v_company_id,
+    'job_kind', 'private',
     'source_draft_id', p_draft_id,
     'category', v_draft->>'category',
     'type', v_draft->>'employmentType',
