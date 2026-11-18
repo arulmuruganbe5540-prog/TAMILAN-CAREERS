@@ -89,9 +89,7 @@ Deno.serve(async (req) => {
     const { data: roleRows, error: roleError } = await admin.from("user_roles")
       .select("role").eq("user_id", authData.user.id);
     if (roleError) return reply({ error: "Could not verify administrator role" }, 500);
-    if (!(roleRows || []).some((row: { role: string }) => row.role === "super_admin")) {
-      return reply({ error: "Super Admin access required" }, 403);
-    }
+    const isSuperAdmin = (roleRows || []).some((row: { role: string }) => row.role === "super_admin");
 
     const body = await req.json().catch(() => ({}));
     const jobId = String(body.job_id || "");
@@ -107,6 +105,16 @@ Deno.serve(async (req) => {
       .select("id,job_title,description,employer_name,company_id,status,published_at,application_deadline,location,workplace_type,country_name")
       .eq("id", jobId).maybeSingle();
     if (jobError || !job) return reply({ error: "Job not found" }, 404);
+
+    if (!isSuperAdmin) {
+      if (!job.company_id) return reply({ error: "Super Admin access required for this job" }, 403);
+      const { data: memberships, error: membershipError } = await admin.from("company_members")
+        .select("member_role,member_status").eq("company_id", job.company_id)
+        .eq("user_id", authData.user.id).eq("member_status", "active")
+        .in("member_role", ["owner", "hr_manager"]);
+      if (membershipError) return reply({ error: "Could not verify company permission" }, 500);
+      if (!(memberships || []).length) return reply({ error: "Company Owner or HR Manager access required" }, 403);
+    }
 
     const pageUrl = "https://tamilancareers.in/job-details.html?id=" + encodeURIComponent(jobId);
     if (action === "URL_UPDATED") {
