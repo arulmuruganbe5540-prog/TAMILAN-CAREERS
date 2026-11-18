@@ -504,6 +504,46 @@ await check("Homepage Tamil and English preferences, removed hero block and AdSe
   } finally { await englishPage.close(); }
 });
 
+await check("Automatic Spain locale translates newly expanded Spanish job vocabulary", async () => {
+  const spanishPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await spanishPage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ country_code: "ES", region: "Madrid", timezone: "Europe/Madrid" })
+    }));
+    const response = await spanishPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Spain homepage failed to load");
+    await spanishPage.waitForFunction(() => window.TC_LOCALE?.language === "es" && window.TC_TRANSLATE?.language === "es", { timeout: 10000 });
+    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
+    await spanishPage.waitForFunction(() => document.getElementById("tc-es-job-title")?.textContent === "Puesto de trabajo", { timeout: 5000 });
+    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-employer"; e.textContent="Employer"; document.body.appendChild(e); });
+    await spanishPage.waitForFunction(() => document.getElementById("tc-es-employer")?.textContent === "Empleador", { timeout: 5000 });
+  } finally {
+    await spanishPage.close();
+  }
+});
+
+await check("Automatic Malaysia locale translates newly expanded Malay job vocabulary", async () => {
+  const malayPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await malayPage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ country_code: "MY", region: "Kuala Lumpur", timezone: "Asia/Kuala_Lumpur" })
+    }));
+    const response = await malayPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Malaysia homepage failed to load");
+    await malayPage.waitForFunction(() => window.TC_LOCALE?.language === "ms" && window.TC_TRANSLATE?.language === "ms", { timeout: 10000 });
+    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
+    await malayPage.waitForFunction(() => document.getElementById("tc-ms-job-title")?.textContent === "Jawatan", { timeout: 5000 });
+    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-employer"; e.textContent="Employer"; document.body.appendChild(e); });
+    await malayPage.waitForFunction(() => document.getElementById("tc-ms-employer")?.textContent === "Majikan", { timeout: 5000 });
+  } finally {
+    await malayPage.close();
+  }
+});
+
 if (pageErrors.length) failures.push({ name: "Uncaught browser JavaScript errors", error: pageErrors.join(" | ") });
 await browser.close();
 console.log(JSON.stringify({ status: failures.length ? "failed" : "passed", checks: results, browser_errors: pageErrors, failures }, null, 2));
