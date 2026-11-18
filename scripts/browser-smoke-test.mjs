@@ -52,12 +52,12 @@ await check("Redesigned homepage is mobile-friendly and hides country-detection 
   const layout = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     document: document.documentElement.scrollWidth,
-    hero: document.querySelector(".hero h1")?.getBoundingClientRect().width || 0,
+    search: document.querySelector(".search-panel")?.getBoundingClientRect().width || 0,
     nav: !!document.querySelector(".main-nav"),
     visibleText: (document.body.innerText || "").toLowerCase()
   }));
   if (layout.document > layout.viewport + 1) throw new Error("Homepage has horizontal page overflow on mobile: " + JSON.stringify(layout));
-  if (!layout.nav || layout.hero <= 0) throw new Error("Mobile navigation or hero content is missing");
+  if (!layout.nav || layout.search <= 0) throw new Error("Mobile navigation or job search panel is missing");
   if (layout.visibleText.includes("your country detected") || layout.visibleText.includes("உங்கள் நாடு கண்டறியப்பட்டது")) {
     throw new Error("Country detection notice should remain hidden");
   }
@@ -425,7 +425,7 @@ await check("Saved language preference overrides automatic country language and 
 });
 
 
-await check("Homepage Tamil and English preferences translate the full static homepage and ads are absent", async () => {
+await check("Homepage Tamil and English preferences, removed hero block and AdSense script", async () => {
   const tamilPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
     await tamilPage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ta"));
@@ -436,9 +436,9 @@ await check("Homepage Tamil and English preferences translate the full static ho
     const response = await tamilPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
     if (!response || !response.ok()) throw new Error("Tamil homepage failed to load");
     await tamilPage.waitForFunction(() => window.TC_TRANSLATE?.language === "ta", { timeout: 10000 });
-    if (!(await tamilPage.getByText("நீங்கள் விரும்பும் எதிர்காலத்தை உருவாக்குங்கள்.", { exact: true }).count())) throw new Error("Homepage hero copy did not translate to Tamil");
+    if (await tamilPage.locator(".hero-wrap").count()) throw new Error("Removed homepage hero block has returned");
     if (!(await tamilPage.getByText("வேலைவாய்ப்புகளை ஆராயுங்கள்", { exact: true }).count())) throw new Error("Homepage section heading did not translate to Tamil");
-    if (await tamilPage.locator('script[src*="pagead2.googlesyndication.com"]').count()) throw new Error("AdSense script remains on homepage");
+    if (!(await tamilPage.locator('script[src*="pagead2.googlesyndication.com"]').count())) throw new Error("AdSense script is missing from homepage");
   } finally { await tamilPage.close(); }
   const englishPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
