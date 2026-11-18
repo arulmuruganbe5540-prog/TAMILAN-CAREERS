@@ -219,7 +219,7 @@ function searchJobs(){
   applyLayout(country);
   const [gov,priv,overseas,latest]=await Promise.all([
    db.from("jobs").select("*").eq("status","published").eq("country_name",c).eq("job_kind","government").order("government_scope",{ascending:true}).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
-   db.from("jobs").select("*").eq("status","published").eq("country_name",c).eq("job_kind","private").order("published_at",{ascending:false,nullsFirst:false}).limit(6),
+   db.from("jobs").select("*").eq("status","published").eq("country_name",c).in("job_kind",["private","foreign"]).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
    db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign").neq("country_name",c).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
    db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8)
   ]);
