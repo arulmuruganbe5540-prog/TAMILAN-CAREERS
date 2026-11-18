@@ -1,186 +1,251 @@
-
 <!DOCTYPE html>
 <html lang="ta">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAMILAN CAREERS | உலகளாவிய அரசு, தனியார் மற்றும் வெளிநாட்டு வேலைவாய்ப்புகள்</title>
-<meta name="description" content="உலகம் முழுவதும் அரசு, தனியார் மற்றும் வெளிநாட்டு வேலைவாய்ப்புகளைத் தேடுங்கள். உங்கள் நாட்டிற்கான வேலைகள் முதலில் தானாகக் காட்டப்படும்.">
-<meta name="google-site-verification" content="KMgLdj9FS0A3vbwMAeSzNUDnPndy3_3knlRFVpB--0k" />
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f5f7fb;color:#172033}
-header{background:#101d3a;color:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-.logo{font-size:23px;font-weight:800;color:#54c8ff}
-.logo span{color:white}
-nav{display:flex;gap:20px;flex-wrap:wrap}
-nav a{color:white;text-decoration:none;font-size:14px}
-nav a:hover{color:#54c8ff}
-.actions{display:flex;gap:10px}
-button{border:0;border-radius:8px;padding:11px 17px;font-weight:bold;cursor:pointer}
-.login{background:transparent;border:1px solid #54c8ff;color:white}
-.register{background:#1688ed;color:white}
-.hero{background:linear-gradient(120deg,#101d3a,#174d83);color:white;text-align:center;padding:65px 18px 75px}
-.hero h1{font-size:clamp(27px,5vw,43px);margin-bottom:15px}
-.hero p{font-size:16px;color:#d9e9ff;line-height:1.8}
-.searchbox{background:white;color:#172033;max-width:950px;margin:30px auto 0;padding:15px;border-radius:13px;display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:10px;box-shadow:0 8px 30px #07152b55}
-input,select{width:100%;padding:14px;border:1px solid #dce2ec;border-radius:8px;font-size:14px;background:white;min-width:0}
-.searchbtn{background:#1688ed;color:white;padding:14px 24px}
-.container{max-width:1150px;margin:auto;padding:38px 18px}
-.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.sectionhead h2{font-size:24px}
-.sectionhead p{color:#69758a;font-size:14px;margin-top:7px}
-.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
-.category{background:white;padding:22px;border-radius:12px;border:1px solid #e7ebf2;text-align:center;cursor:pointer}
-.category:hover{border-color:#1688ed;transform:translateY(-2px)}
-.category .emoji{font-size:30px;margin-bottom:10px}
-.category h3{font-size:15px}
-.category p{font-size:12px;color:#788398;margin-top:6px}
-.jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.job{background:white;border:1px solid #e5eaf2;border-radius:12px;padding:20px}
-.job h3{font-size:17px;margin:12px 0 8px}
-.company{color:#66748a;font-size:14px}
-.tag{display:inline-block;background:#eaf4ff;color:#1769b0;padding:6px 10px;border-radius:6px;font-size:12px;margin:12px 5px 0 0}
-.jobbottom{display:flex;justify-content:space-between;align-items:center;margin-top:17px;gap:10px}
-.apply{background:#1688ed;color:white}
-.empty{grid-column:1/-1;background:white;border-radius:12px;padding:28px;text-align:center;color:#66748a;line-height:1.8}
-.employer{background:#101d3a;color:white;text-align:center;padding:45px 20px}
-.employer h2{font-size:26px;margin-bottom:12px}
-.employer p{color:#d3e0f2;line-height:1.8}
-.employer button{background:#54c8ff;color:#10203b;margin-top:18px}
-footer{background:#09152c;color:#d3deef;padding:30px 6%;text-align:center;line-height:2;font-size:13px}
-footer strong{color:#54c8ff}
-@media(max-width:750px){
-.searchbox{grid-template-columns:1fr}
-.categories{grid-template-columns:repeat(2,1fr)}
-.jobs{grid-template-columns:1fr}
-header{justify-content:center;text-align:center}
-nav{justify-content:center}
-.actions{justify-content:center}
-.hero{padding-top:45px}
-}
-</style>
-  <link rel="stylesheet" href="assets/site-protection.css">
-
+<title>TAMILAN CAREERS | Global Jobs, Government Jobs & Overseas Careers</title>
+<meta name="description" content="Find verified government, private and overseas job opportunities. Explore jobs by country, qualification, industry and skills with TAMILAN CAREERS.">
+<meta name="google-site-verification" content="KMgLdj9FS0A3vbwMAeSzNUDnPndy3_3knlRFVpB--0k">
+<meta name="theme-color" content="#07152f">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-<meta name="theme-color" content="#101d3a">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TAMILAN CAREERS">
 <meta property="og:locale" content="ta_IN">
-<meta property="og:title" content="TAMILAN CAREERS | தமிழ்நாடு மற்றும் இந்தியா வேலைவாய்ப்புகள்">
-<meta property="og:description" content="தமிழ்நாடு மற்றும் இந்தியா முழுவதும் அரசு, தனியார் மற்றும் வெளிநாட்டு வேலைவாய்ப்புகளைத் தேடுங்கள். தகுதி, இடம், சம்பளம் மற்றும் கடைசி தேதி அடிப்படையில் வேலைகளைப் பாருங்கள்.">
+<meta property="og:title" content="TAMILAN CAREERS | Global Employment Platform">
+<meta property="og:description" content="Discover government, private and international career opportunities.">
 <meta name="twitter:card" content="summary">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/site-protection.css">
 <script src="assets/seo.js" defer></script>
+<style>
+:root{--navy:#07152f;--navy2:#0c2145;--blue:#287bff;--cyan:#42d5ee;--ink:#14213a;--muted:#687792;--line:#e4eaf4;--surface:#fff;--bg:#f4f7fc;--shadow:0 18px 50px rgba(12,35,75,.09)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,Arial,"Noto Sans Tamil",sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(7,21,47,.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.09);color:white}
+.header-inner{max-width:1240px;margin:auto;min-height:76px;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.brand{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#07152f;font-size:22px;font-weight:950;box-shadow:0 7px 22px #287bff55}
+.brand-name{font-size:20px;font-weight:900;letter-spacing:.5px}.brand-name span{color:var(--cyan)}
+.main-nav{display:flex;align-items:center;justify-content:center;gap:19px;flex-wrap:wrap}
+.main-nav a{font-size:13px;font-weight:700;color:#dce7fa;transition:.2s}
+.main-nav a:hover{color:var(--cyan)}
+.header-actions{display:flex;gap:9px;white-space:nowrap}
+.btn{border:0;border-radius:11px;padding:11px 17px;font-weight:800;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-outline{background:transparent;border:1px solid #7191c2;color:white}
+.btn-primary{background:linear-gradient(110deg,#287bff,#25b9e8);color:white;box-shadow:0 8px 22px #287bff40}
+.mobile-nav{display:none}
+.hero-wrap{background:radial-gradient(ellipse at 82% 15%,#2462ae 0,transparent 34%),radial-gradient(ellipse at 5% 95%,#0c8aa8 0,transparent 34%),linear-gradient(120deg,#07152f 0%,#0c2854 58%,#123e72 100%);color:white;overflow:hidden;position:relative}
+.hero{max-width:1240px;margin:auto;padding:76px 22px 82px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:44px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #8bcfff55;border-radius:999px;background:#ffffff10;color:#bfeaff;font-size:12px;font-weight:800;letter-spacing:.5px}
+.eyebrow i{width:7px;height:7px;background:#52e3cb;border-radius:50%;box-shadow:0 0 12px #52e3cb}
+.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.13;letter-spacing:-1.6px;margin:20px 0 17px;max-width:700px}
+.hero h1 span{background:linear-gradient(90deg,#58dff2,#73a9ff);background-clip:text;-webkit-background-clip:text;color:transparent}
+.hero-copy{max-width:620px;color:#d2e1f7;font-size:16px;line-height:1.9}
+.hero-points{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px;color:#d7eaff;font-size:13px;font-weight:700}
+.hero-points span{display:flex;align-items:center;gap:7px}.hero-points b{color:#5de0c0}
+.hero-art{min-height:300px;display:grid;place-items:center;position:relative}
+.glow-orb{position:absolute;width:290px;height:290px;border-radius:50%;background:linear-gradient(135deg,#2d8dff,#44d9e8);filter:blur(2px);opacity:.19}
+.opportunity-card{position:relative;width:min(100%,390px);padding:24px;border:1px solid #ffffff35;border-radius:25px;background:linear-gradient(145deg,#ffffff20,#ffffff08);box-shadow:0 25px 70px #020a1c66;backdrop-filter:blur(14px);transform:rotate(2deg)}
+.opportunity-top{display:flex;align-items:center;justify-content:space-between;color:#cce5ff;font-size:12px;font-weight:800}
+.live-dot{width:8px;height:8px;background:#4ce0b0;border-radius:50%;display:inline-block;margin-right:6px}
+.opportunity-card h3{font-size:25px;margin:22px 0 7px}
+.opportunity-card p{color:#d0e1f5;font-size:13px}
+.mini-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:23px}
+.mini-stat{padding:14px;border-radius:15px;background:#071b3d99;border:1px solid #ffffff14}
+.mini-stat strong{display:block;font-size:22px;color:#71e1ef}.mini-stat small{color:#c2d4ed;font-size:11px}
+.floating-chip{position:absolute;padding:11px 15px;background:white;color:#14213a;border-radius:13px;font-size:12px;font-weight:900;box-shadow:var(--shadow)}
+.chip-one{top:16px;right:0;transform:rotate(5deg)}.chip-two{bottom:8px;left:-4px;transform:rotate(-5deg)}
+.search-panel{max-width:1110px;margin:-35px auto 0;position:relative;z-index:5;padding:0 20px}
+.search-card{background:white;border:1px solid #e8eef7;border-radius:20px;padding:17px;box-shadow:0 22px 60px #122c501b}
+.search-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 4px 13px}
+.search-title strong{font-size:15px}.search-title span{font-size:12px;color:var(--muted)}
+.search-fields{display:grid;grid-template-columns:1.35fr 1fr 1fr auto;gap:10px}
+.field{position:relative}.field input,.field select{width:100%;height:52px;border:1px solid #dfe7f2;border-radius:12px;padding:0 14px;background:#f9fbfe;color:var(--ink);outline:none;min-width:0}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #287bff16}
+.search-submit{height:52px;padding:0 27px;border-radius:12px;border:0;background:linear-gradient(110deg,#287bff,#20b8dc);color:white;font-weight:900}
+.trust-strip{max-width:1160px;margin:28px auto 0;padding:0 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.trust-item{display:flex;align-items:center;gap:11px;padding:14px 16px;border-radius:14px;background:white;border:1px solid var(--line)}
+.trust-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;background:#eaf3ff;font-size:19px}
+.trust-item strong{display:block;font-size:13px}.trust-item small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.container{max-width:1240px;margin:auto;padding:64px 22px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:25px}
+.section-kicker{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#287bff;font-weight:900}
+.section-head h2{font-size:clamp(23px,3vw,31px);line-height:1.25;margin-top:5px;letter-spacing:-.5px}
+.section-head p{font-size:13px;color:var(--muted);margin-top:7px}
+.text-link{color:#216de0;font-size:13px;font-weight:900;white-space:nowrap}
+.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.category-card{min-height:150px;display:flex;align-items:flex-start;gap:14px;padding:21px;background:white;border:1px solid var(--line);border-radius:18px;transition:.22s;cursor:pointer}
+.category-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:#9cc6ff}
+.category-icon{width:48px;height:48px;flex:0 0 48px;border-radius:15px;display:grid;place-items:center;font-size:23px}
+.category-card h3{font-size:15px;margin:3px 0 5px}.category-card p{font-size:12px;color:var(--muted);line-height:1.6}
+.tone-blue{background:#eaf2ff}.tone-cyan{background:#e6fbff}.tone-violet{background:#f1edff}.tone-orange{background:#fff2e7}.tone-green{background:#e8f8ef}.tone-pink{background:#fff0f5}.tone-yellow{background:#fff8df}.tone-slate{background:#edf1f7}
+.feature-band{background:linear-gradient(115deg,#eaf3ff,#e9fbff);border:1px solid #d9eafb;border-radius:25px;padding:30px;display:grid;grid-template-columns:1fr 1.4fr;gap:28px;align-items:center}
+.feature-band h2{font-size:27px;line-height:1.3}.feature-band p{font-size:13px;color:#5c6d86;margin-top:10px;line-height:1.8}
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.feature-link{display:flex;align-items:center;gap:12px;padding:15px;border-radius:15px;background:#ffffffd9;border:1px solid #ffffff}
+.feature-link .ficon{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:#eaf3ff;font-size:20px}
+.feature-link strong{display:block;font-size:13px}.feature-link small{color:var(--muted);font-size:11px}
+.job-section{background:white;border-top:1px solid #e9eef6;border-bottom:1px solid #e9eef6}
+.job-section .container{padding-top:58px;padding-bottom:58px}
+.job-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.job-card{background:white;border:1px solid var(--line);border-radius:17px;padding:19px;transition:.2s;min-width:0}
+.job-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.job-label{display:inline-flex;padding:5px 9px;border-radius:999px;background:#edf5ff;color:#2368c8;font-size:10px;font-weight:900}
+.job-card h3{font-size:16px;line-height:1.4;margin:13px 0 6px}
+.job-company{font-size:12px;color:#61708a;font-weight:700}
+.job-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.job-meta span{font-size:11px;color:#62718a;background:#f3f6fa;padding:5px 8px;border-radius:7px}
+.job-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #edf1f6;margin-top:15px;padding-top:14px}
+.job-bottom b{font-size:12px}.apply-link{font-size:12px;font-weight:900;color:#216de0}
+.empty-state{grid-column:1/-1;text-align:center;padding:28px;background:#f8faff;border:1px dashed #d4deed;border-radius:16px;color:var(--muted);font-size:13px}
+.employer-banner{max-width:1196px;margin:12px auto 65px;padding:0 22px}
+.employer-inner{position:relative;overflow:hidden;border-radius:25px;padding:42px;background:radial-gradient(circle at 90% 15%,#2c9ce9 0,transparent 28%),linear-gradient(110deg,#081a39,#123e70);color:white;display:flex;justify-content:space-between;align-items:center;gap:24px}
+.employer-inner h2{font-size:27px}.employer-inner p{font-size:13px;color:#d2e4fa;margin-top:9px;line-height:1.8}
+.employer-inner .btn{background:#fff;color:#12366a;white-space:nowrap}
+.site-footer{background:#061229;color:#c9d7ec;padding:45px 22px 25px}
+.footer-inner{max-width:1196px;margin:auto}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:28px;padding-bottom:30px}
+.footer-brand p{font-size:12px;color:#9fb1cc;max-width:300px;margin-top:12px;line-height:1.8}
+.footer-col h4{color:white;font-size:13px;margin-bottom:13px}.footer-col a{display:block;color:#aebed5;font-size:12px;margin:8px 0}.footer-col a:hover{color:var(--cyan)}
+.footer-bottom{border-top:1px solid #ffffff18;padding-top:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#8fa2bf;font-size:11px}
+.footer-bottom strong{color:var(--cyan)}
+@media(max-width:1000px){.main-nav{gap:11px}.main-nav a{font-size:12px}.header-inner{gap:12px}.category-grid{grid-template-columns:repeat(2,1fr)}.job-grid{grid-template-columns:repeat(2,1fr)}.trust-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.header-inner{min-height:68px;padding:10px 16px;flex-wrap:wrap}.main-nav{order:3;width:100%;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:7px 0 5px;scrollbar-width:none}.main-nav::-webkit-scrollbar{display:none}.main-nav a{white-space:nowrap;font-size:12px}.brand-name{font-size:17px}.brand-mark{width:37px;height:37px}.header-actions .btn{padding:9px 11px;font-size:12px}.hero{padding:52px 18px 65px}.hero-grid{grid-template-columns:1fr;gap:15px}.hero h1{font-size:39px}.hero-art{min-height:230px}.opportunity-card{max-width:340px}.glow-orb{width:220px;height:220px}.chip-one{right:2%}.chip-two{left:3%}.search-panel{margin-top:-25px;padding:0 14px}.search-card{padding:14px;border-radius:17px}.search-fields{grid-template-columns:1fr 1fr}.search-submit{grid-column:1/-1}.search-title span{display:none}.trust-strip{padding:0 14px;gap:8px}.trust-item{padding:11px}.container{padding:48px 16px}.section-head{align-items:flex-start}.category-grid{gap:10px}.category-card{padding:15px;min-height:130px;gap:10px}.category-icon{width:40px;height:40px;flex-basis:40px;font-size:20px}.category-card h3{font-size:13px}.category-card p{font-size:11px}.feature-band{grid-template-columns:1fr;padding:22px}.feature-band h2{font-size:23px}.job-section .container{padding:45px 16px}.employer-banner{padding:0 16px;margin-bottom:45px}.employer-inner{padding:28px;display:block}.employer-inner h2{font-size:23px}.employer-inner .btn{margin-top:18px}.footer-top{grid-template-columns:1fr 1fr;gap:25px}.footer-brand{grid-column:1/-1}}
+@media(max-width:420px){.hero h1{font-size:33px}.hero-copy{font-size:14px}.hero-points{gap:10px;font-size:11px}.search-fields{grid-template-columns:1fr}.search-submit{grid-column:auto}.trust-strip{grid-template-columns:1fr 1fr}.trust-item{gap:8px}.trust-icon{width:32px;height:32px;flex-basis:32px}.category-grid{grid-template-columns:1fr 1fr}.job-grid{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
-<header>
-  <div class="logo">TAMILAN <span>CAREERS</span></div>
-  <nav>
-    <a href="#home">முகப்பு</a>
-    <a href="#jobs">வேலைவாய்ப்புகள்</a>
-    <a href="community.html">அறிவிப்புகள் & மாணவர் கருத்துகள்</a>
-    <a href="#categories">துறைகள்</a>
-    <a href="#employer">நிறுவனங்கள்</a>
-    <a href="indian-government-jobs.html">மத்திய அரசு வேலைகள்</a>
-    <a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு வேலைகள்</a>
-    <a href="exam-preparation.html">அரசுத் தேர்வு தயாரிப்பு</a>
-    <a href="about.html">எங்களைப் பற்றி</a>
-    <a href="help.html">உதவி</a>
-    <a href="saved-jobs.html">சேமித்த வேலைகள்</a>
+<header class="site-header">
+ <div class="header-inner">
+  <a class="brand" href="#home" aria-label="TAMILAN CAREERS home"><span class="brand-mark">TC</span><span class="brand-name">TAMILAN <span>CAREERS</span></span></a>
+  <nav class="main-nav" aria-label="Main navigation">
+   <a href="#home">Home</a><a href="#jobs">Find Jobs</a><a href="indian-government-jobs.html">Government</a><a href="#overseas-jobs">Overseas</a><a href="#categories">Career Fields</a><a href="community.html">Community</a><a href="#employer">For Employers</a>
   </nav>
-  <div class="actions">
-    <button class="login" onclick="window.location.href='login.html'">Login</button>
-    <button class="register" onclick="window.location.href='login.html'">Register</button>
-  </div>
+  <div class="header-actions"><a class="btn btn-outline" href="login.html">Login</a><a class="btn btn-primary" href="login.html">Register</a></div>
+ </div>
 </header>
-<section class="hero" id="home" data-home-section="smart_search">
-  <h1>உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!</h1>
-  <p id="heroCountryText">உங்கள் நாட்டிற்கான வேலைவாய்ப்புகளைத் தானாகத் தேடுகிறோம்...<br>தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</p>
-  <div class="searchbox">
-    <input id="keyword" type="text" placeholder="வேலை / திறமை தேடுங்கள்">
-    <input id="location" type="text" placeholder="இடம் (எ.கா. சேலம்)">
-    <select id="category">
-      <option value="">அனைத்து துறைகளும்</option>
-      <option>IT & Software</option>
-      <option>Sales & Marketing</option>
-      <option>Accounting</option>
-      <option>Manufacturing</option>
-      <option>Education</option>
-      <option>Healthcare</option>
-    </select>
-    <button class="searchbtn" onclick="searchJobs()">தேடுக</button>
+
+<section class="hero-wrap" id="home" data-home-section="smart_search">
+ <div class="hero">
+  <div class="hero-grid">
+   <div>
+    <div class="eyebrow"><i></i> YOUR NEXT OPPORTUNITY STARTS HERE</div>
+    <h1>Find the work you love.<br><span>Build the future you want.</span></h1>
+    <p class="hero-copy">உங்கள் திறமைக்கும் தகுதிக்கும் ஏற்ற வேலைவாய்ப்புகளை உலகம் முழுவதும் தேடுங்கள். அரசு, தனியார் மற்றும் வெளிநாட்டு வேலைகள் — அனைத்தும் ஒரே தளத்தில்.</p>
+    <div class="hero-points"><span><b>✓</b> Country-focused jobs</span><span><b>✓</b> Career opportunities worldwide</span><span><b>✓</b> Safer job discovery</span></div>
+   </div>
+   <div class="hero-art" aria-hidden="true">
+    <div class="glow-orb"></div>
+    <div class="opportunity-card">
+     <div class="opportunity-top"><span><span class="live-dot"></span>CAREER DISCOVERY</span><span>✦ GLOBAL</span></div>
+     <h3>Your skills.<br>New possibilities.</h3>
+     <p>Explore opportunities that move your career forward.</p>
+     <div class="mini-stat-grid"><div class="mini-stat"><strong>01</strong><small>Discover jobs</small></div><div class="mini-stat"><strong>02</strong><small>Match your skills</small></div><div class="mini-stat"><strong>03</strong><small>Explore countries</small></div><div class="mini-stat"><strong>04</strong><small>Grow your career</small></div></div>
+    </div>
+    <div class="floating-chip chip-one">🌍 Global opportunities</div><div class="floating-chip chip-two">🎯 Find your career path</div>
+   </div>
   </div>
+ </div>
 </section>
+
+<div class="search-panel">
+ <div class="search-card">
+  <div class="search-title"><strong>🔎 Search your next opportunity</strong><span>Start with a role, skill or location</span></div>
+  <div class="search-fields">
+   <div class="field"><input id="keyword" type="search" placeholder="Job title or skill" aria-label="Job title or skill"></div>
+   <div class="field"><input id="location" type="text" placeholder="City or location" aria-label="City or location"></div>
+   <div class="field"><select id="category" aria-label="Career field"><option value="">All career fields</option><option>IT & Software</option><option>Sales & Marketing</option><option>Accounting</option><option>Manufacturing</option><option>Education</option><option>Healthcare</option><option>Logistics</option></select></div>
+   <button class="search-submit" onclick="searchJobs()">Search Jobs →</button>
+  </div>
+ </div>
+</div>
+
+<div class="trust-strip" aria-label="Platform highlights">
+ <div class="trust-item"><span class="trust-icon">🛡️</span><div><strong>Safer job discovery</strong><small>Employer verification process</small></div></div>
+ <div class="trust-item"><span class="trust-icon">🌐</span><div><strong>Worldwide reach</strong><small>Explore opportunities by country</small></div></div>
+ <div class="trust-item"><span class="trust-icon">🎓</span><div><strong>All qualifications</strong><small>From freshers to experienced</small></div></div>
+ <div class="trust-item"><span class="trust-icon">📱</span><div><strong>Mobile friendly</strong><small>Search easily on any device</small></div></div>
+</div>
+
 <main class="container" id="categories" data-home-section="job_categories">
-  <div class="sectionhead">
-    <div>
-      <h2>வேலைவாய்ப்பு துறைகள்</h2>
-      <p>உங்களுக்குப் பிடித்த துறையைத் தேர்வு செய்யுங்கள்.</p>
-    </div>
-  </div>
-  <div class="categories">
-    <div class="category" onclick="chooseCategory('IT & Software')"><div class="emoji">💻</div><h3>IT & Software</h3><p>தொழில்நுட்ப வேலைகள்</p></div>
-    <div class="category" onclick="chooseCategory('Sales & Marketing')"><div class="emoji">📈</div><h3>Sales & Marketing</h3><p>விற்பனை மற்றும் சந்தைப்படுத்தல்</p></div>
-    <div class="category" onclick="chooseCategory('Accounting')"><div class="emoji">💰</div><h3>Accounting</h3><p>கணக்கியல் வேலைகள்</p></div>
-    <div class="category" onclick="chooseCategory('Manufacturing')"><div class="emoji">🏭</div><h3>Manufacturing</h3><p>தொழிற்சாலை வேலைகள்</p></div>
-    <div class="category" onclick="chooseCategory('Education')"><div class="emoji">📚</div><h3>Education</h3><p>கல்வித்துறை வேலைகள்</p></div>
-    <div class="category" onclick="chooseCategory('Healthcare')"><div class="emoji">🏥</div><h3>Healthcare</h3><p>மருத்துவத்துறை வேலைகள்</p></div>
-    <div class="category" onclick="chooseCategory('')"><div class="emoji">🚚</div><h3>Logistics</h3><p>போக்குவரத்து மற்றும் கிடங்கு</p></div>
-    <div class="category" onclick="chooseCategory('')"><div class="emoji">🔧</div><h3>Other Jobs</h3><p>மற்ற வேலைவாய்ப்புகள்</p></div>
-  </div>
+ <div class="section-head"><div><div class="section-kicker">EXPLORE CAREERS</div><h2>Find jobs by career field</h2><p>உங்கள் விருப்பமான துறையைத் தேர்ந்தெடுத்து வேலைகளைத் தேடுங்கள்.</p></div><a class="text-link" href="jobs.html">Browse all jobs →</a></div>
+ <div class="category-grid">
+  <a class="category-card" href="jobs.html?category=IT%20%26%20Software"><span class="category-icon tone-blue">💻</span><div><h3>IT & Software</h3><p>Technology, software and digital roles</p></div></a>
+  <a class="category-card" href="jobs.html?category=Sales%20%26%20Marketing"><span class="category-icon tone-orange">📈</span><div><h3>Sales & Marketing</h3><p>Sales, business growth and marketing</p></div></a>
+  <a class="category-card" href="jobs.html?category=Accounting"><span class="category-icon tone-green">💼</span><div><h3>Finance & Accounting</h3><p>Accounts, banking and finance careers</p></div></a>
+  <a class="category-card" href="jobs.html?category=Manufacturing"><span class="category-icon tone-violet">🏭</span><div><h3>Manufacturing</h3><p>Production, factory and engineering</p></div></a>
+  <a class="category-card" href="jobs.html?category=Education"><span class="category-icon tone-yellow">📚</span><div><h3>Education</h3><p>Teaching, training and academic roles</p></div></a>
+  <a class="category-card" href="jobs.html?category=Healthcare"><span class="category-icon tone-pink">🏥</span><div><h3>Healthcare</h3><p>Medical, nursing and healthcare roles</p></div></a>
+  <a class="category-card" href="jobs.html?category=Logistics"><span class="category-icon tone-cyan">🚚</span><div><h3>Logistics</h3><p>Transport, delivery and supply chain</p></div></a>
+  <a class="category-card" href="jobs.html"><span class="category-icon tone-slate">🧰</span><div><h3>More opportunities</h3><p>Discover jobs across other industries</p></div></a>
+ </div>
 </main>
-<section class="container country-job-section" id="country-government" data-home-section="country_government_jobs"><div class="sectionhead"><div><h2 id="governmentHeading">Government Jobs in your country</h2><p id="governmentIntro">Your country's government vacancies first.</p></div></div><div class="jobs" id="governmentJobList"><div class="empty">அரசு வேலைகள் ஏற்றப்படுகின்றன...</div></div></section>
-<section class="container country-job-section" id="country-private" data-home-section="country_private_jobs"><div class="sectionhead"><div><h2 id="privateHeading">Private Jobs in your country</h2><p>உங்கள் நாட்டின் தனியார் வேலைவாய்ப்புகள்.</p></div></div><div class="jobs" id="privateJobList"><div class="empty">தனியார் வேலைகள் ஏற்றப்படுகின்றன...</div></div></section>
-<section class="container country-job-section" id="overseas-jobs" data-home-section="overseas_jobs"><div class="sectionhead"><div><h2>Overseas Job Opportunities</h2><p>உங்கள் நாட்டிற்கு வெளியே உள்ள வெளிநாட்டு வேலைவாய்ப்புகள்.</p></div></div><div class="jobs" id="overseasJobList"><div class="empty">வெளிநாட்டு வேலைகள் ஏற்றப்படுகின்றன...</div></div></section>
-<section class="container" id="jobs" data-home-section="local_latest_jobs">
-  <div class="sectionhead">
-    <div>
-      <h2>வேலைவாய்ப்புகள்</h2>
-      <p id="jobInfo">புதிய வேலைவாய்ப்புகள் இங்கே இடம்பெறும்.</p>
-    </div>
+
+<section class="container" aria-label="Career tools">
+ <div class="feature-band">
+  <div><div class="section-kicker">TOOLS FOR YOUR NEXT STEP</div><h2>More than a job search.<br>A career companion.</h2><p>வேலை தேடுவதிலிருந்து தேர்வுக்குத் தயாராவது வரை, உங்கள் அடுத்த முன்னேற்றத்திற்கான பயனுள்ள வசதிகள்.</p></div>
+  <div class="feature-grid">
+   <a class="feature-link" href="resume-search.html"><span class="ficon">📄</span><span><strong>Resume & Skills</strong><small>Build and explore your profile</small></span></a>
+   <a class="feature-link" href="exam-preparation.html"><span class="ficon">📝</span><span><strong>Exam Preparation</strong><small>Practice for career exams</small></span></a>
+   <a class="feature-link" href="saved-jobs.html"><span class="ficon">🔖</span><span><strong>Saved Jobs</strong><small>Keep opportunities in one place</small></span></a>
+   <a class="feature-link" href="job-search-guide.html"><span class="ficon">🧭</span><span><strong>Career Guidance</strong><small>Practical job-search guides</small></span></a>
   </div>
-  <div class="jobs" id="jobList">
-    <div class="empty" id="tcLatestJobs">புதிய வேலைவாய்ப்புகள் ஏற்றப்படுகின்றன...</div>
-  </div>
+ </div>
 </section>
 
-<section class="employer" id="employer" data-home-section="employer_cta">
-  <h2>உங்கள் நிறுவனத்திற்கு பணியாளர்கள் தேவையா?</h2>
-  <p>உங்கள் நிறுவனத்தில் உள்ள காலிப்பணியிடங்களை TAMILAN CAREERS மூலம் வெளியிடுங்கள்.<br>தகுதியான நபர்களை எளிதாகச் சென்றடையுங்கள்.</p>
-  <button onclick="window.location.href='login.html'">நிறுவனமாக பதிவு / Login</button>
+<section class="job-section country-job-section" id="country-government" data-home-section="country_government_jobs">
+ <div class="container"><div class="section-head"><div><div class="section-kicker">PUBLIC SERVICE CAREERS</div><h2 id="governmentHeading">Government Jobs</h2><p id="governmentIntro">Explore public-sector career opportunities.</p></div><a class="text-link" href="indian-government-jobs.html">Explore government jobs →</a></div><div class="job-grid" id="governmentJobList"><div class="empty-state">Loading government opportunities...</div></div></div>
 </section>
-<footer>
-  <strong>TAMILAN CAREERS</strong><br>
-  வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.<br>
-  <div style="max-width:900px;margin:16px auto;display:flex;gap:9px;justify-content:center;flex-wrap:wrap"><a href="jobs.html">அனைத்து வேலைகள்</a><a href="indian-government-jobs.html">மத்திய அரசு வேலைகள்</a><a href="tamil-nadu-government-jobs.html">தமிழ்நாடு அரசு வேலைகள்</a><a href="jobs.html?job_kind=private">தனியார் வேலைகள்</a><a href="jobs.html?job_kind=foreign">வெளிநாட்டு வேலைகள்</a><a href="jobs.html?type=Full%20Time">Full Time</a><a href="jobs.html?type=Part%20Time">Part Time</a></div>
-  <br><a href="about.html">எங்களைப் பற்றி</a> · <a href="job-search-guide.html">வேலை தேடல் வழிகாட்டி</a> · <a href="government-job-application-guide.html">அரசு வேலை விண்ணப்ப வழிகாட்டி</a> · <a href="help.html">உதவி மையம்</a> · <a href="terms.html">விதிமுறைகள்</a> · <a href="privacy.html">தனியுரிமை</a> · <a href="cookie-policy.html">Cookie கொள்கை</a> · <a href="saved-jobs.html">சேமித்த வேலைகள்</a><br><a href="admin-login.html" style="display:inline-block;margin-top:12px;padding:8px 14px;border:1px solid #54c8ff;border-radius:8px;color:#54c8ff;font-weight:800;text-decoration:none">🔐 Super Admin Login</a><br>© 2026 TAMILAN CAREERS. All Rights Reserved.
+<section class="container country-job-section" id="country-private" data-home-section="country_private_jobs">
+ <div class="section-head"><div><div class="section-kicker">PRIVATE SECTOR</div><h2 id="privateHeading">Private Jobs</h2><p>Discover opportunities from private employers.</p></div><a class="text-link" href="jobs.html?job_kind=private">View private jobs →</a></div><div class="job-grid" id="privateJobList"><div class="empty-state">Loading private opportunities...</div></div>
+</section>
+<section class="container country-job-section" id="overseas-jobs" data-home-section="overseas_jobs">
+ <div class="section-head"><div><div class="section-kicker">CAREERS WITHOUT BORDERS</div><h2>Overseas Job Opportunities</h2><p>Explore international roles and opportunities beyond your home country.</p></div><a class="text-link" href="jobs.html?job_kind=foreign">Explore overseas jobs →</a></div><div class="job-grid" id="overseasJobList"><div class="empty-state">Loading overseas opportunities...</div></div>
+</section>
+<section class="job-section" id="jobs" data-home-section="local_latest_jobs">
+ <div class="container"><div class="section-head"><div><div class="section-kicker">RECENT OPPORTUNITIES</div><h2>Latest Jobs</h2><p id="jobInfo">Newly published opportunities will appear here.</p></div><a class="text-link" href="jobs.html">View all jobs →</a></div><div class="job-grid" id="jobList"><div class="empty-state" id="tcLatestJobs">Loading latest jobs...</div></div></div>
+</section>
+
+<section class="employer-banner" id="employer" data-home-section="employer_cta">
+ <div class="employer-inner"><div><div class="section-kicker" style="color:#77e6f3">FOR EMPLOYERS</div><h2>Build your team with the right talent.</h2><p>உங்கள் நிறுவனத்தின் காலிப்பணியிடங்களை வெளியிட்டு தகுதியான விண்ணப்பதாரர்களைச் சென்றடையுங்கள்.</p></div><a class="btn" href="login.html">Post a Job →</a></div>
+</section>
+
+<footer class="site-footer">
+ <div class="footer-inner">
+  <div class="footer-top">
+   <div class="footer-brand"><a class="brand" href="#home"><span class="brand-mark">TC</span><span class="brand-name">TAMILAN <span>CAREERS</span></span></a><p>Connecting people with meaningful career opportunities. Find government, private and international jobs in one place.</p></div>
+   <div class="footer-col"><h4>Explore Jobs</h4><a href="jobs.html">All Jobs</a><a href="indian-government-jobs.html">Central Government</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Government</a><a href="jobs.html?job_kind=private">Private Jobs</a><a href="jobs.html?job_kind=foreign">Overseas Jobs</a></div>
+   <div class="footer-col"><h4>Career Resources</h4><a href="exam-preparation.html">Exam Preparation</a><a href="job-search-guide.html">Job Search Guide</a><a href="government-job-application-guide.html">Government Application Guide</a><a href="community.html">Community</a><a href="saved-jobs.html">Saved Jobs</a></div>
+   <div class="footer-col"><h4>About & Support</h4><a href="about.html">About Us</a><a href="help.html">Help Centre</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="cookie-policy.html">Cookie Policy</a><a href="admin-login.html">Admin Login</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 <strong>TAMILAN CAREERS</strong>. All rights reserved.</span><span>Discover opportunities. Build your future.</span></div>
+ </div>
 </footer>
-<script>
-function showMessage(message){
-  alert(message);
-}
-function chooseCategory(value){
-  document.getElementById('category').value=value;
-  document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
-}
-function searchJobs(){
-  const keyword=document.getElementById('keyword').value.trim();
-  const location=document.getElementById('location').value.trim();
-  const category=document.getElementById('category').value;
-  const params = new URLSearchParams();
-  if (keyword) params.set('q', keyword);
-  if (location) params.set('location', location);
-  if (category) params.set('category', category);
-  window.location.href = 'jobs.html' + (params.toString() ? '?' + params.toString() : '');
-}
-</script>
 
 <script>
+function searchJobs(){
+ const keyword=document.getElementById("keyword").value.trim();
+ const location=document.getElementById("location").value.trim();
+ const category=document.getElementById("category").value;
+ const params=new URLSearchParams();
+ if(keyword)params.set("q",keyword);
+ if(location)params.set("location",location);
+ if(category)params.set("category",category);
+ window.location.href="jobs.html"+(params.toString()?"?"+params.toString():"");
+}
+document.getElementById("keyword").addEventListener("keydown",e=>{if(e.key==="Enter")searchJobs()});
+document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="Enter")searchJobs()});
+
 (function(){
- const url="https://qkmljuuusfjowexvybvy.supabase.co",key="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
- const info=document.getElementById("jobInfo"),countryText=document.getElementById("heroCountryText");
+ const url="https://qkmljuuusfjowexvybvy.supabase.co";
+ const key="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+ const info=document.getElementById("jobInfo");
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
  const sections={smart_search:"home",job_categories:"categories",country_government_jobs:"country-government",country_private_jobs:"country-private",overseas_jobs:"overseas-jobs",local_latest_jobs:"jobs",employer_cta:"employer"};
@@ -191,48 +256,62 @@ function searchJobs(){
   Object.keys(sections).forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el)el.hidden=country?Array.isArray(country.homepage_sections)&&!country.homepage_sections.includes(key):(key==="country_government_jobs"||key==="country_private_jobs")});
  }
  async function detectCountry(db){
-  try{const response=await fetch("https://ipapi.co/json/",{cache:"no-store"});if(!response.ok)throw new Error("Country lookup unavailable");
-   const geo=await response.json(),code=String(geo.country_code||"").toUpperCase();if(!/^[A-Z]{2}$/.test(code))throw new Error("Country code unavailable");
-   const {data,error}=await db.from("countries").select("country_code,country_name,is_active,default_language_code,currency_code,homepage_sections").eq("country_code",code).eq("is_active",true).maybeSingle();if(error)throw error;
+  try{
+   const response=await fetch("https://ipapi.co/json/",{cache:"no-store"});
+   if(!response.ok)throw new Error("Country lookup unavailable");
+   const geo=await response.json(),code=String(geo.country_code||"").toUpperCase();
+   if(!/^[A-Z]{2}$/.test(code))throw new Error("Country code unavailable");
+   const {data,error}=await db.from("countries").select("country_code,country_name,is_active,default_language_code,currency_code,homepage_sections").eq("country_code",code).eq("is_active",true).maybeSingle();
+   if(error)throw error;
    return data;
   }catch(e){return null}
  }
  function jobCard(j){
-  const id=pick(j,["id","job_id"]),title=pick(j,["job_title","title"])||"வேலைவாய்ப்பு",company=pick(j,["employer_name","company_name"]),loc=pick(j,["location","job_location","work_location"]),jobCountry=pick(j,["country_name"]),type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"]),scope=pick(j,["government_scope"]);
-  const salary=min||max?((currency?currency+" ":"")+(min||"")+(min&&max?" – ":"")+(max||"")):"சம்பளம் குறிப்பிடப்படவில்லை";
+  const id=pick(j,["id","job_id"]),title=pick(j,["job_title","title"])||"Job opportunity",company=pick(j,["employer_name","company_name"]),loc=pick(j,["location","job_location","work_location"]),jobCountry=pick(j,["country_name"]),type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"]),scope=pick(j,["government_scope"]);
+  const salary=min||max?((currency?currency+" ":"")+(min||"")+(min&&max?" – ":"")+(max||"")):"Salary not specified";
   const scopeLabel=scope==="central"?"Central Government":scope==="tamil-nadu"?"Tamil Nadu Government":scope==="national"?"National Government":"";
-  return '<article class="job"><span class="tag">'+esc(scopeLabel||jobCountry||"Job")+'</span><h3>'+esc(title)+'</h3><p class="company">'+esc(company)+'</p><p>'+esc(loc)+(jobCountry?" · "+esc(jobCountry):"")+' · '+esc(type)+'</p><div class="jobbottom"><b>'+esc(salary)+'</b><a class="apply" href="job-details.html?id='+encodeURIComponent(id)+'">விவரம் / Apply</a></div></article>';
+  return '<article class="job-card"><span class="job-label">'+esc(scopeLabel||jobCountry||"JOB")+'</span><h3>'+esc(title)+'</h3><p class="job-company">'+esc(company)+'</p><div class="job-meta"><span>📍 '+esc(loc||"Location not specified")+'</span>'+(type?'<span>'+esc(type)+'</span>':"")+'</div><div class="job-bottom"><b>'+esc(salary)+'</b><a class="apply-link" href="job-details.html?id='+encodeURIComponent(id)+'">View details →</a></div></article>';
  }
- function showList(id,jobs,empty){const el=document.getElementById(id);if(el)el.innerHTML=jobs.length?jobs.map(jobCard).join(""):'<div class="empty">'+esc(empty)+'</div>'}
+ function showList(id,jobs,empty){
+  const el=document.getElementById(id);
+  if(el)el.innerHTML=jobs.length?jobs.map(jobCard).join(""):'<div class="empty-state">'+esc(empty)+'</div>';
+ }
  async function load(){
-  const db=window.supabase.createClient(url,key),country=await detectCountry(db);
-  if(!country){countryText.textContent="உங்கள் நாடு கண்டறியப்படவில்லை. உலக வேலைவாய்ப்புகளைப் பாருங்கள். GPS பயன்படுத்தப்படவில்லை.";applyLayout(null);
-   const [{data,error},{data:foreignData,error:foreignError}]=await Promise.all([db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8),db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign").order("published_at",{ascending:false,nullsFirst:false}).limit(6)]);
-   showList("governmentJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("privateJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("overseasJobList",foreignError?[]:(foreignData||[]),"வெளிநாட்டு வேலைகள் தற்போது இல்லை.");showList("jobList",error?[]:(data||[]),"புதிய வேலைவாய்ப்புகள் விரைவில் இங்கே தோன்றும்.");return;
+  const db=window.supabase.createClient(url,key);
+  const country=await detectCountry(db);
+  if(!country){
+   applyLayout(null);
+   const [{data,error},{data:foreignData,error:foreignError}]=await Promise.all([
+    db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(6),
+    db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign").order("published_at",{ascending:false,nullsFirst:false}).limit(6)
+   ]);
+   showList("governmentJobList",[],"Government jobs are not available to display right now.");
+   showList("privateJobList",[],"Private jobs are not available to display right now.");
+   showList("overseasJobList",foreignError?[]:(foreignData||[]),"New overseas jobs will appear here when published.");
+   showList("jobList",error?[]:(data||[]),"New verified opportunities will appear here when published.");
+   return;
   }
   const c=country.country_name;
-  countryText.textContent="உங்கள் நாடு தானாகக் கண்டறியப்பட்டது: "+c+". முதலில் "+c+" அரசு வேலைகள், அடுத்து தனியார் வேலைகள்; பின்னர் வெளிநாட்டு வேலைகள் காட்டப்படும். GPS பயன்படுத்தப்படவில்லை.";
-  document.title="Jobs in "+c+" | TAMILAN CAREERS";
+  document.title="Jobs & Careers | TAMILAN CAREERS";
   document.getElementById("governmentHeading").textContent=c+" Government Jobs";
-  document.getElementById("governmentIntro").textContent=c+" நாட்டின் அரசு வேலைவாய்ப்புகள் முதலில்.";
+  document.getElementById("governmentIntro").textContent="Public-sector career opportunities in "+c+".";
   document.getElementById("privateHeading").textContent=c+" Private Jobs";
   applyLayout(country);
   const [gov,priv,overseas,latest]=await Promise.all([
    db.from("jobs").select("*").eq("status","published").eq("country_name",c).eq("job_kind","government").order("government_scope",{ascending:true}).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
    db.from("jobs").select("*").eq("status","published").eq("country_name",c).in("job_kind",["private","foreign"]).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
    db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign").neq("country_name",c).order("published_at",{ascending:false,nullsFirst:false}).limit(6),
-   db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8)
+   db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(6)
   ]);
-  showList("governmentJobList",gov.error?[]:(gov.data||[]),"இந்த நாட்டிற்கான அரசு வேலைகள் தற்போது இல்லை.");
-  showList("privateJobList",priv.error?[]:(priv.data||[]),"இந்த நாட்டிற்கான தனியார் வேலைகள் தற்போது இல்லை.");
-  showList("overseasJobList",overseas.error?[]:(overseas.data||[]),"தற்போது வெளிநாட்டு வேலைகள் இல்லை.");
-  info.textContent="Latest Jobs · "+c+" government and private jobs shown first";
-  showList("jobList",latest.error?[]:(latest.data||[]),"புதிய வேலைவாய்ப்புகள் விரைவில் இங்கே தோன்றும்.");
+  showList("governmentJobList",gov.error?[]:(gov.data||[]),"No government jobs are currently published for this country.");
+  showList("privateJobList",priv.error?[]:(priv.data||[]),"No private jobs are currently published for this country.");
+  showList("overseasJobList",overseas.error?[]:(overseas.data||[]),"New international opportunities will appear here when published.");
+  info.textContent="Recently published opportunities from across the platform.";
+  showList("jobList",latest.error?[]:(latest.data||[]),"New verified opportunities will appear here when published.");
  }
- load().catch(()=>{countryText.textContent="வேலைவாய்ப்புகளை ஏற்ற முடியவில்லை. பின்னர் முயற்சிக்கவும்.";});
-})();;
+ load().catch(()=>{applyLayout(null);showList("jobList",[],"Jobs could not be loaded. Please try again later.");});
+})();
 </script>
-
-  <script src="assets/site-protection.js" defer></script>
+<script src="assets/site-protection.js" defer></script>
 </body>
 </html>
