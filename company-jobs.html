@@ -12,7 +12,7 @@
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let memberships=[],user=null;
-function msg(t,bad=false){$("message").textContent=t;$("message").className=bad?"panel notice":"panel"}
+function msg(t,bad=false){$("message").textContent=t;$("message").className=bad?"panel notice":"panel";$("message").classList.remove("hidden")}
 function date(v){if(!v)return "—";const d=new Date(v);return Number.isNaN(d.getTime())?"—":d.toLocaleDateString("ta-IN")}
 async function init(){
  const {data:s,error:se}=await db.auth.getSession();user=s.session?.user;
