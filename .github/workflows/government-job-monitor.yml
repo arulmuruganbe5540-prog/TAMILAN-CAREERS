@@ -6,7 +6,6 @@ on:
       - 'scripts/government-source-discovery.py'
       - 'data/government-official-sources.json'
       - 'supabase/functions/ingest-government-notices/**'
-      - 'supabase/functions/extract-government-notice-details/**'
       - '.github/workflows/government-job-monitor.yml'
   schedule:
     - cron: "17 */6 * * *"
@@ -66,16 +65,6 @@ jobs:
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
             -H "Content-Type: application/json" \
             --data-binary @/tmp/government-notice-sync-payload.json
-      # Run AI extraction after ingestion so fresh candidates are included in the same monitor cycle.
-      - name: AI extract official notice details for Admin Review
-        if: ${{ env.GOVERNMENT_MONITOR_SECRET != '' }}
-        continue-on-error: true
-        run: |
-          curl --fail --show-error --silent --max-time 600 \
-            -X POST "https://qkmljuuusfjowexvybvy.supabase.co/functions/v1/extract-government-notice-details" \
-            -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
-            -H "Content-Type: application/json" \
-            --data '{}'
       - name: Commit aggregate monitor report only
         run: |
           git add government-job-monitor-report.json
