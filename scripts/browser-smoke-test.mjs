@@ -354,7 +354,8 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
     body: JSON.stringify({ country_code: "IN", region: "Kerala", timezone: "Asia/Kolkata" })
   }));
   await open("index.html");
-  await page.waitForFunction(() => window.TC_LOCALE?.language === "ml" && window.TC_TRANSLATE?.language === "ml", { timeout: 10000 });
+  await page.waitForFunction(() => window.TC_LOCALE?.language === "ml", null, { timeout: 10000 });
+  await page.waitForFunction(() => window.TC_TRANSLATE?.language === "ml", null, { timeout: 10000 });
   if (!(await page.getByText("ഹോം", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Malayalam");
   await page.evaluate(() => {
     const el = document.createElement("span");
@@ -362,7 +363,10 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
     el.textContent = "Find Jobs";
     document.body.appendChild(el);
   });
-  await page.waitForFunction(() => document.getElementById("tc-translation-dynamic-test")?.textContent === "ജോലി കണ്ടെത്തുക", { timeout: 5000 });
+  await page.waitForFunction(() => document.getElementById("tc-translation-dynamic-test")?.textContent === "ജോലി കണ്ടെത്തുക", null, { timeout: 5000 }).catch(async () => {
+    const actual = await page.locator("#tc-translation-dynamic-test").textContent();
+    throw new Error("Dynamic Malayalam text was not translated; actual=" + actual);
+  });
   await page.evaluate(() => {
     const input = document.createElement("input");
     input.id = "tc-translation-attribute-test";
@@ -378,7 +382,15 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
   await page.waitForFunction(() =>
     document.getElementById("tc-translation-attribute-test")?.placeholder === "ലോഗിൻ" &&
     document.getElementById("tc-translation-title-test")?.title === "ഹോം" &&
-    document.getElementById("tc-translation-title-test")?.getAttribute("aria-label") === "ജോലി കണ്ടെത്തുക", { timeout: 5000 });
+    document.getElementById("tc-translation-title-test")?.getAttribute("aria-label") === "ജോലി കണ്ടെത്തുക", null, { timeout: 5000 }).catch(async () => {
+    const actual = await page.evaluate(() => ({
+      placeholder: document.getElementById("tc-translation-attribute-test")?.placeholder,
+      title: document.getElementById("tc-translation-title-test")?.title,
+      ariaLabel: document.getElementById("tc-translation-title-test")?.getAttribute("aria-label"),
+      language: window.TC_TRANSLATE?.language
+    }));
+    throw new Error("Dynamic Malayalam attributes were not translated: " + JSON.stringify(actual));
+  });
   const clock = await page.locator("#tc-world-clock").innerText();
   if (!clock.includes("Asia/Kolkata")) throw new Error("Detected country timezone was not applied to the clock: " + clock);
   await page.unroute("https://ipapi.co/json/");
