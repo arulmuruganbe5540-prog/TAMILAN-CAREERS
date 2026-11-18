@@ -265,3 +265,11 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - A source-text audit of 12 key pages now finds no untranslated English-only text in `jobs.html` or `job-details.html`; the remaining matches in Candidate Profile, Login, Dashboard, Company Profile, and Job Posting are mostly intentional brand names, examples, or mixed-language phrases that have separate curated entries where appropriate.
 - Latest full Health Audit run `44386980640` passed for commit `143108ff706d0b474234dcfcf1fabf52dae701bb`; Pages build and deployment run `44386980875` also succeeded for the same commit.
 - This is a targeted dictionary expansion, not a claim that every page and every supported language is fully translated. A complete site-wide translation review remains open.
+
+
+## 19 November 2026 — Admin dashboard translation coverage
+
+- Added 38 Tamil/Hindi/Malayalam translations for the Admin Control Center, navigation groups, review sections, jobs/applications/companies, team/users, learning, and website design controls.
+- Added a browser smoke assertion that verifies the dynamically inserted `Admin Control Center` label translates into Malayalam.
+- Latest full Health Audit run `44387382862` passed for commit `3cfce7f8c7f2f5e5a835a379b7c2ffb1ac360632`; the Pages build and deployment run `44387382517` also succeeded.
+- Translation remains dictionary-based. Pages and dynamic strings not yet included in the curated dictionaries may still show English; no machine-translation API is configured.
