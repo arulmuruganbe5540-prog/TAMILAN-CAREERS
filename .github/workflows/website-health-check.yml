@@ -12,6 +12,7 @@ on:
       - "supabase-*.sql"
       - "scripts/**"
       - "supabase/functions/**"
+      - "supabase/migrations/**"
       - ".gitignore"
       - ".github/dependabot.yml"
       - ".github/workflows/**"
