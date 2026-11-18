@@ -24,6 +24,7 @@
 <div class="field"><label for="workplaceType">பணியிடம் வகை</label><select id="workplaceType"><option value="">தேர்வு செய்யவும்</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
 <div class="field"><label for="openings">காலியிடங்கள் எண்ணிக்கை</label><input id="openings" type="number" min="1" max="10000" step="1" value="1"></div>
 <div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" required maxlength="160" placeholder="உதா: ஓமலூர், சேலம்"></div>
+<div class="field"><label for="countryName">வேலை இருக்கும் நாடு *</label><select id="countryName" required><option value="">நாடுகளை ஏற்றுகிறது...</option></select><span class="hint">Dubai வேலைகளுக்கு United Arab Emirates தேர்வு செய்யவும்.</span></div>
 <div class="field"><label for="experience">தேவையான அனுபவம்</label><input id="experience" maxlength="100" placeholder="உதா: Fresher / 2 years"></div>
 <div class="field wide"><label>கல்வித் தகுதி (ஒன்றுக்கு மேற்பட்டவற்றைத் தேர்வு செய்யலாம்)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல கல்வித் தகுதிகளைத் தேர்வு செய்யலாம்.</span></div>
 <div class="field"><label for="salaryMin">குறைந்தபட்ச சம்பளத் தொகை (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="உதா: 12000"></div>
@@ -40,9 +41,16 @@
 </main>
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
-const ids=["companyChoice","jobTitle","category","employmentType","workplaceType","openings","location","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","contactEmail"];
-let currentUser=null, memberships=[], currentDraft=null;
+const ids=["companyChoice","jobTitle","category","employmentType","workplaceType","openings","location","countryName","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","contactEmail"];
+let currentUser=null, memberships=[], currentDraft=null;\nlet activeCountries=[];
 function message(t,ok){const e=document.getElementById("status");e.textContent=t;e.className="status "+(ok?"ok":"err")}
+async function loadCountries(){
+ const {data,error}=await client.from("countries").select("country_name,is_active").eq("is_active",true).order("country_name");
+ if(error)throw new Error("நாட்டு பட்டியலை ஏற்ற முடியவில்லை: "+error.message);
+ activeCountries=(data||[]).map(x=>x.country_name);
+ const el=document.getElementById("countryName");
+ el.innerHTML='<option value="">நாட்டைத் தேர்வு செய்யவும்</option>'+activeCountries.map(n=>'<option value="'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")+'">'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</option>').join("");
+}
 function formData(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());d.education=Array.from(document.querySelectorAll(".education-choice:checked")).map(x=>x.value).join(", ");return d}
 function setReviewLock(locked){
  ids.filter(id=>id!=="companyChoice").forEach(id=>{document.getElementById(id).disabled=locked});
