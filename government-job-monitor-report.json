@@ -1,9 +1,9 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-17T19:24:51.402329+00:00",
+  "checked_at_utc": "2026-11-18T01:30:41.858435+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
-  "successful_sources": 23,
+  "successful_sources": 22,
   "failed_sources": [
     {
       "source_id": "rrb",
@@ -71,8 +71,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "appsc-arunachal",
-      "url": "https://appsc.gov.in/",
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -81,13 +81,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "apsc-assam",
-      "url": "https://apsc.nic.in/",
+      "source_id": "appsc-arunachal",
+      "url": "https://appsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
+      "source_id": "apsc-assam",
+      "url": "https://apsc.nic.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -96,13 +96,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "gpsc-gujarat",
-      "url": "https://gpsc.gujarat.gov.in/",
+      "source_id": "hppsc",
+      "url": "https://hppsc.hp.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -111,8 +106,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
+      "source_id": "gpsc-gujarat",
+      "url": "https://gpsc.gujarat.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -121,8 +121,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "hppsc",
-      "url": "https://hppsc.hp.gov.in/",
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -133,6 +133,11 @@
     {
       "source_id": "mppsc",
       "url": "https://mppsc.mp.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "tgpsc",
+      "url": "https://www.tgpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
