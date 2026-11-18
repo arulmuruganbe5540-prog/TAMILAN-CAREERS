@@ -2,7 +2,7 @@
 
 Last live audit: 19 November 2026 (India time)  
 Repository: `arulmuruganbe5540-prog/TAMILAN-CAREERS`  
-Live Pages: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
+Live Pages: https://tamilancareers.in
 
 This status distinguishes committed website code from verified live Supabase configuration. A deployed page or Edge Function is not proof that a real authenticated workflow has passed end-to-end testing.
 
@@ -34,7 +34,7 @@ This status distinguishes committed website code from verified live Supabase con
 - Applied and recorded migration `20261118234952_add_remaining_foreign_key_indexes_20261119`: added the 10 missing foreign-key indexes identified by the live advisor. The matching GitHub migration file and `supabase-foreign-key-indexes.sql` setup script are committed.
 - Applied and recorded migration `20261118235023_optimize_rls_auth_uid_policy_initplans`: wrapped direct `auth.uid()` policy calls in scalar SELECTs on the 15 affected policies. This preserves the existing ownership and authorization predicates while allowing PostgreSQL to evaluate the auth value once per statement.
 - Re-ran Supabase performance advisors: `unindexed_foreign_keys = 0` (down from 10) and `auth_rls_initplan = 0` (down from 15). Remaining advisor findings: 22 multiple-permissive-policy notices and many unused-index notices; unused-index notices are expected while the project has very little real traffic/data, so indexes were not dropped.
-- Security advisor was rechecked after the RLS optimization. No changes were made to policy roles, ownership checks, or public grants. The previously documented Auth leaked-password-protection setting remains disabled and needs a dashboard-side security setting change. The full Health Audit run `44424175818` passed for the migration-code commit `65832544accb974cdb111b79f16af893f17524d0`; Pages deployment run `44424200948` succeeded for the latest status/documentation commit `52e0e942bb4c1c24bf219522aae18c3f4168b126`.
+- Security advisor was rechecked after the RLS optimization. No changes were made to policy roles, ownership checks, or public grants. The previously documented Auth leaked-password-protection setting remains disabled and needs a dashboard-side security setting change. The full Health Audit run `44424175818` passed for the migration-code commit `65832544accb974cdb111b79f16af893f17524d0`; Pages deployment run `44424200948` succeeded for the latest status/documentation commit `52e0e942bb4c1c24bf219522aae18c3f4168b126`. Storage review: all five Supabase Storage buckets are private. Candidate resumes and company verification documents have 10 MB limits and restricted MIME types; resume object policies are owner-scoped, while verification files are limited to the submitting company owner and Super Admin review.
 
 ## 1. GitHub Pages and CI
 
