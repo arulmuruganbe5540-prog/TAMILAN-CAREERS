@@ -10,7 +10,7 @@
 </head><body>
 <header><div class="brand">TAMILAN <span>CAREERS</span></div><nav><a href="dashboard.html">Dashboard</a><a href="company-profile.html">நிறுவன விவரம்</a></nav></header>
 <main>
-<section class="hero"><h1>📢 வேலை வெளியீட்டு வரைவு</h1><p>நிறுவனத்திற்கான காலிப்பணியிட விவரங்களை முன்கூட்டியே தயார் செய்து உங்கள் கணக்கில் சேமிக்கலாம்.</p></section>
+<section class="hero"><h1>📢 தனியார் வேலை வெளியீடு</h1><p>சரிபார்க்கப்பட்ட தனியார் நிறுவனங்கள் மட்டுமே தங்களுக்கான தனியார் வேலை அறிவிப்புகளை Admin Review-க்கு அனுப்பலாம்.</p></section>
 <div id="loading" class="info">உங்கள் Login மற்றும் நிறுவன அனுமதி சரிபார்க்கப்படுகிறது...</div>
 <section id="blocked" class="empty hidden"></section>
 <section id="editor" class="panel hidden">
@@ -54,13 +54,13 @@ async function init(){
  const {data,error}=await client.auth.getUser();
  if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("job-posting.html"));return}
  currentUser=data.user;
- const {data:rows,error:memberError}=await client.from("company_members").select("company_id,member_role,member_status,companies(company_name)").eq("user_id",currentUser.id).eq("member_status","active").in("member_role",["owner","hr_manager","recruiter"]);
+ const {data:rows,error:memberError}=await client.from("company_members").select("company_id,member_role,member_status,companies(company_name,verification_status)").eq("user_id",currentUser.id).eq("member_status","active").in("member_role",["owner","hr_manager","recruiter"]);
  if(memberError){showBlocked("நிறுவன உறுப்பினர் அனுமதியைச் சரிபார்க்க முடியவில்லை. Dashboard-இல் உள்ள நிறுவன நிர்வாகியைத் தொடர்புகொள்ளவும். விவரம்: "+memberError.message);return}
- memberships=rows||[];
- if(!memberships.length){showBlocked("இந்தக் கணக்கில் வேலை வரைவு நிர்வகிக்க அனுமதிக்கப்பட்ட Owner / HR Manager / Recruiter உறுப்பினர் அனுமதி இல்லை. நிறுவன நிர்வாகியிடம் சரியான அனுமதி பெறுங்கள்.");return}
+ memberships=(rows||[]).filter(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;return c?.verification_status==="verified"});
+ if(!memberships.length){showBlocked("இந்தக் கணக்கில் சரிபார்க்கப்பட்ட (Verified) நிறுவனத்திற்கான Owner / HR Manager / Recruiter அனுமதி இல்லை. முதலில் நிறுவனச் சரிபார்ப்பை Admin மூலம் முடிக்கவும்.");return}
  const select=document.getElementById("companyChoice");
  memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"நிறுவனம்")+" — "+(m.member_role||"உறுப்பினர்");select.appendChild(o)});
- document.getElementById("companyInfo").textContent="வேலை வரைவு நிர்வகிக்க அனுமதிக்கப்பட்ட நிறுவன இணைப்புகள்: "+memberships.length+". நீங்கள் அங்கீகரிக்கப்பட்ட உறுப்பினராக உள்ள நிறுவனத்திற்கான வரைவைத் தேர்ந்தெடுக்கலாம்.";
+ document.getElementById("companyInfo").textContent="Admin மூலம் Verified செய்யப்பட்ட தனியார் நிறுவனங்கள்: "+memberships.length+". இங்கு தனியார் வேலைகளை மட்டுமே சமர்ப்பிக்கலாம்.";
  const saved=currentUser.user_metadata?.job_posting_draft||{};
  if(saved.company_id&&memberships.some(m=>m.company_id===saved.company_id))select.value=saved.company_id;
  document.getElementById("loading").classList.add("hidden");document.getElementById("editor").classList.remove("hidden");
