@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin-
+Disallow: /dashboard.html
+Disallow: /company-applicants.html
+Disallow: /company-members.html
+Disallow: /company-profile.html
+Disallow: /apply.html
+Disallow: /resume-documents.html
+Disallow: /my-applications.html
+Disallow: /notifications.html
+Disallow: /reset-password.html
+
+Sitemap: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/sitemap.xml
