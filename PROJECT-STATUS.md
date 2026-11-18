@@ -160,3 +160,13 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Latest GitHub combined commit status lookup returned no status contexts, and the available repository connection did not expose push-triggered Pages/Health Audit run listings. Therefore deployment of the latest code HEAD is **not verified**. Do not claim the new code is live until the matching Pages build/deploy and Health Audit runs are confirmed successful.
 - Remaining items that cannot be truthfully marked complete yet: real browser Admin MFA login; draft → review → approve → publish test with a temporary test job followed by cleanup; checking the test listing in public job/Central/TN/detail pages; real private and foreign job form tests; actual Android/mobile browser checks; and enabling leaked-password protection. No test job was inserted and no real job data was fabricated.
 - Release status remains **not fully complete / not launch-ready** until the latest deployment and the owner-session end-to-end checks above pass.
+
+
+## 2026-11-18 — Automatic published-job expiry
+
+- Added Supabase migration `auto_expire_published_jobs` and repository SQL file `supabase/migrations/20261118190000_auto_expire_published_jobs.sql`.
+- Deployed database function `public.tc_expire_published_jobs()`: closes jobs only when `status='published'`, `application_deadline` is present, and its stored India-local end-of-day timestamp is earlier than the current time.
+- Scheduled Supabase pg_cron job `expire-published-jobs-daily` at `35 18 * * *` UTC (00:05 Asia/Kolkata). Verified the database timezone is UTC and the cron job is active.
+- Manually invoked the function safely; it returned 0 because there are currently no published jobs. This confirms execution, not the future scheduled run.
+- The hourly GitHub Actions sitemap workflow completed successfully. Its logs confirmed 14 static URLs and 0 active published job URLs.
+- Google Indexing API deletion notices are still pending Search Console ownership verification and the Google service-account secret. Closed jobs will no longer be included by the dynamic sitemap generator.
