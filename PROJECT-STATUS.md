@@ -237,3 +237,14 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - The database schema already supports country code, legal entity type, authorization details, and private document categories for recruitment licences and work authorization. No new user data or sample verification records were created.
 - Migration applied to the live Supabase project: `20261118270000_foreign_employer_authorization_requirements.sql`. GitHub source and the matching migration file are committed.
 - Automated migration/Health Audit and Pages deployment status must be checked against the latest commit before calling the work deployed. Real foreign employer submission, document upload, official registry lookup, and Admin decision tests remain pending until a real overseas employer application exists. This is a manual review workflow, not a government registry integration.
+
+
+## 19 November 2026 — dynamic translation reliability
+
+- Improved `assets/auto-translate.js` so translated UI text is applied to dynamic placeholders, accessible labels, image alt text, title attributes, and button/submit values.
+- Dynamic attribute translation now observes changes to those attributes, skips values that are already translated, and uses canonical English dictionary keys to avoid translation cycles.
+- Fixed a MutationObserver queueing issue: DOM mutation records arriving while a previous animation-frame scan was pending are now queued instead of silently discarded. This prevents newly inserted form fields and accessibility labels from remaining in English.
+- Expanded the browser smoke test to create dynamic Malayalam text, an input placeholder, a button title, and an aria-label, then verify their translations.
+- Latest full Health Audit run `44385541563` passed for commit `1acbdf1fc969fe9daeb692c2bb7eb7157658b4c5`; browser smoke tests passed (32 passed, 0 failed), with no uncaught browser JavaScript errors.
+- GitHub Pages build and deployment run `44385542125` succeeded for the same commit.
+- This improves translation coverage for dynamic UI attributes; it does not mean every page or every supported language has been fully translated. Full translation coverage remains a separate task.
