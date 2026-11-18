@@ -42,7 +42,8 @@
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const ids=["companyChoice","jobTitle","category","employmentType","workplaceType","openings","location","countryName","experience","education","salaryMin","salaryMax","salaryPeriod","skills","description","deadline","contactEmail"];
-let currentUser=null, memberships=[], currentDraft=null;\nlet activeCountries=[];
+let currentUser=null, memberships=[], currentDraft=null;
+let activeCountries=[];
 function message(t,ok){const e=document.getElementById("status");e.textContent=t;e.className="status "+(ok?"ok":"err")}
 async function loadCountries(){
  const {data,error}=await client.from("countries").select("country_name,is_active").eq("is_active",true).order("country_name");
