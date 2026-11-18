@@ -391,6 +391,13 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
     }));
     throw new Error("Dynamic Malayalam attributes were not translated: " + JSON.stringify(actual));
   });
+  await page.evaluate(() => {
+    const el = document.createElement("span");
+    el.id = "tc-translation-education-test";
+    el.textContent = "Degree";
+    document.body.appendChild(el);
+  });
+  await page.waitForFunction(() => document.getElementById("tc-translation-education-test")?.textContent === "ബിരുദം", null, { timeout: 5000 });
   const clock = await page.locator("#tc-world-clock").innerText();
   if (!clock.includes("Asia/Kolkata")) throw new Error("Detected country timezone was not applied to the clock: " + clock);
   await page.unroute("https://ipapi.co/json/");
