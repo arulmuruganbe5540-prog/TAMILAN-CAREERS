@@ -174,7 +174,16 @@ async function act(action,id,rows){
   say("Database பாதுகாப்பு சரிபார்த்து வேலை வெளியிடப்படுகிறது...");
   const {data,error}=await db.rpc("tc_admin_publish_job",{p_review_id:id});
   if(error){say("Publish செய்ய முடியவில்லை: "+error.message,false);return}
-  say("வேலை வெற்றிகரமாக வெளியிடப்பட்டது. Public Job ID: "+data);
+  const publishedJobId=String(data||"");
+  const {data:indexData,error:indexError}=await db.functions.invoke("google-indexing-notify",{
+   body:{job_id:publishedJobId,action:"URL_UPDATED"}
+  });
+  if(indexError||!indexData?.ok){
+   const reason=indexData?.error||indexError?.message||"Indexing notification was not sent";
+   say("வேலை வெற்றிகரமாக வெளியிடப்பட்டது. Public Job ID: "+publishedJobId+" · Google Indexing அறிவிப்பு இப்போது அனுப்பப்படவில்லை: "+reason,true);
+  }else{
+   say("வேலை வெற்றிகரமாக வெளியிடப்பட்டது; Google Indexing API-க்கும் அறிவிக்கப்பட்டது. Public Job ID: "+publishedJobId,true);
+  }
   await loadQueue();return;
  }
  if(action==="edit"){fill({...r.payload,id:r.id});await loadCountryOptions(r.payload?.country_name||r.payload?.countryName||"");say("தேர்ந்தெடுத்த அறிவிப்பு படிவத்தில் ஏற்றப்பட்டது.");window.scrollTo({top:0,behavior:"smooth"});return}
