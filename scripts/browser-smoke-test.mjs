@@ -84,13 +84,16 @@ await check("Government exam practice starts and checks an answer", async () => 
   if (!(await page.locator("#result").isVisible())) throw new Error("Quiz result did not appear");
 });
 
-await check("Bilingual AI job search control is available", async () => {
+await check("Rule-based job search filters work without AI controls", async () => {
   await open("jobs.html");
-  const button = page.locator("#aiSearch");
-  if (!(await button.isVisible())) throw new Error("Bilingual AI search button is missing");
-  const label = await button.innerText();
-  if (!label.includes("தமிழ்") || !label.includes("English")) throw new Error("Search button does not promise Tamil and English results");
-  if (!(await page.locator("#q").getAttribute("placeholder")).includes("எந்த மொழியிலும்")) throw new Error("Any-language search hint is missing");
+  if (!(await page.locator("#q").isVisible())) throw new Error("Job keyword search is missing");
+  if (!(await page.locator("#kind").isVisible())) throw new Error("Job category filter is missing");
+  if (!(await page.locator("#place").isVisible())) throw new Error("Job location filter is missing");
+  if (await page.locator("#aiSearch").count()) throw new Error("An AI search control must not be shown");
+  await page.locator("#q").fill("accountant");
+  await page.locator("#place").fill("Salem");
+  await page.locator("#kind").selectOption("private");
+  if (!(await page.locator("#count").innerText()).includes("வேலைகள் கிடைத்துள்ளன")) throw new Error("Rule-based filters did not refresh the result count");
 });
 
 await check("External job source review requires login", async () => {
@@ -197,9 +200,10 @@ await check("Expired published vacancies cannot be opened for application", asyn
   }
 });
 
-await check("AI resume matching page requires login", async () => {
-  await open("ai-job-matches.html");
+await check("Rule-based Resume job search requires login", async () => {
+  await open("resume-job-search.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
+  if (new URL(page.url()).searchParams.get("next") !== "resume-job-search.html") throw new Error("Resume search return path was not preserved");
 });
 
 await check("Dashboard requires login", async () => {
