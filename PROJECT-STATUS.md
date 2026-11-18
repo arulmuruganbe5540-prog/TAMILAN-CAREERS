@@ -1,10 +1,20 @@
 # TAMILAN CAREERS — Project Status & Handover
 
-Last live audit: 17 November 2026 (India time)  
+Last live audit: 19 November 2026 (India time)  
 Repository: `arulmuruganbe5540-prog/TAMILAN-CAREERS`  
 Live Pages: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
 
 This status distinguishes committed website code from verified live Supabase configuration. A deployed page or Edge Function is not proof that a real authenticated workflow has passed end-to-end testing.
+
+## 19 November 2026 — site-wide translation audit and locale-loader repair
+
+- Added a repeatable translation coverage audit to `scripts/website-health-check.py`. It scans every HTML page, reads the curated dictionaries, separates English-source text from Tamil-English mixed text, reports per-language dictionary matches, and checks whether each page loads the shared locale system.
+- The audit scanned 50 HTML pages and found 0 structural errors, 0 warnings, and 0 pages missing the locale loader after the repair below.
+- Found that `admin-company-verification.html` was the only HTML page missing `assets/site-protection.js`, which injects the shared locale/country/language experience. Added the shared script. All 50 pages now include the locale loader.
+- The actual language selector contains 22 languages (not 23). All 22 have a dictionary, but dictionary coverage is uneven: Tamil/Hindi/Malayalam/English dictionaries matched 189 of 433 unique English-source static strings (43.6%); Sinhala/Chinese/Malay/Spanish/Arabic/French/German/Japanese/Portuguese/Italian matched 15 of 433 (3.5%); Kannada/Telugu/Marathi/Bengali/Gujarati/Punjabi/Odia/Assamese matched 12 of 433 (2.8%).
+- The audit also identified 283 unique Tamil-English mixed static strings. These are not fully covered by the current English-source dictionary model. Dynamic JavaScript/API content is not included in these figures, and a dictionary match is not a translation-quality certification.
+- Latest full Health Audit run `44422183387` passed for commit `0f3cebc02414a6b8c3cf2023787d18bc14946e35`; GitHub Pages build/deployment run `44422182853` also succeeded for the same commit.
+- Translation is therefore not complete. Remaining work is to expand/standardize source phrases and translate the mixed-language public and candidate/employer flows, then re-run the site-wide audit.
 
 ## 1. GitHub Pages and CI
 
