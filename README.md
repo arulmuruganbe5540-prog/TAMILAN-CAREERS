@@ -5,36 +5,36 @@
 தமிழ்நாடு மற்றும் இந்தியா முழுவதும் வேலை தேடுவோரையும் வேலைவாய்ப்பு வழங்கும் நிறுவனங்களையும் இணைக்கும் தமிழ்-முன்னுரிமை வேலைவாய்ப்பு தளம்.
 
 ## Live website
-- Homepage: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/
-- Job search: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/jobs.html
-- Job details: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-details.html
-- Apply for a job: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/apply.html
-- My applications: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/my-applications.html
-- Company applicant dashboard: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/company-applicants.html
+- Homepage: https://tamilancareers.in/
+- Job search: https://tamilancareers.in/jobs.html
+- Job details: https://tamilancareers.in/job-details.html
+- Apply for a job: https://tamilancareers.in/apply.html
+- My applications: https://tamilancareers.in/my-applications.html
+- Company applicant dashboard: https://tamilancareers.in/company-applicants.html
 - Job applications database SQL: `supabase-job-applications.sql`
 - Read-only schema and RLS audit SQL: `supabase-schema-audit.sql`
 - Government notices database setup SQL: `supabase-government-notices-setup.sql` (creates isolated source, private review and public published-notice tables; does not auto-publish or alter existing job/application tables).
 - Government notice discovery Edge Function: `supabase/functions/ingest-government-notices/index.ts` (server-side scan of enabled registered sources; writes candidates only to the private review table; never publishes).
 - Admin Job Post & Review Queue: `admin-job-post.html` (Super Admin + MFA AAL2 only; use `supabase-admin-job-publish-setup.sql` for the protected review queue and secure publish function. Company-submitted jobs require a verified company; manual Super Admin posts can be entered directly).
-- Admin Control Center: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/admin-control.html (responsive Admin dashboard; requires the signed-in user's `super_admin` role and MFA AAL2; links to admin/workflow pages).
+- Admin Control Center: https://tamilancareers.in/admin-control.html (responsive Admin dashboard; requires the signed-in user's `super_admin` role and MFA AAL2; links to admin/workflow pages).
 - Initial Super Admin bootstrap: `supabase-first-super-admin-bootstrap.sql` (one-time, guarded SQL for the project owner to grant the first `super_admin` role to an explicitly selected existing Auth account; requires replacing the email placeholder and running it manually in Supabase SQL Editor). Admin browser pages now read only the signed-in user's own `user_roles` row under RLS rather than calling the revoked public SECURITY DEFINER RPC.
-- Admin government notice review page: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/government-notice-review.html (review queue with category/status filters and verification checklist; access is enforced by Supabase RLS and Super Admin authorization).
+- Admin government notice review page: https://tamilancareers.in/government-notice-review.html (review queue with category/status filters and verification checklist; access is enforced by Supabase RLS and Super Admin authorization).
 - New government portal discovery: `scripts/government-source-discovery.py` scans links from already trusted government sources and creates `government-source-discovery-candidates.json`. Newly found domains are suggestions only and require verification before joining the trusted list; this runs every six hours with the official-source monitor.
-- Saved jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/saved-jobs.html
-- Job seeker profile: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-seeker-profile.html
-- Resume-based rule search: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-job-search.html
-- Resume & documents: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/resume-documents.html
-- Company job posting draft: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/job-posting.html
+- Saved jobs: https://tamilancareers.in/saved-jobs.html
+- Job seeker profile: https://tamilancareers.in/job-seeker-profile.html
+- Resume-based rule search: https://tamilancareers.in/resume-job-search.html
+- Resume & documents: https://tamilancareers.in/resume-documents.html
+- Company job posting draft: https://tamilancareers.in/job-posting.html
 - Private job-draft database SQL: `supabase-job-posting-drafts.sql`
 - Consolidated pending Supabase setup: `supabase-setup-pending.sql` (private resume storage + job drafts + restricted employer applicant-profile access + owner-only candidate resume, education, experience and certification records).
 - Candidate education / experience / certification migration: `supabase-candidate-profile-education-experience.sql`.
 - Supabase launch setup guide (Tamil, ordered SQL / Edge Function / Secret / testing steps): `SUPABASE-LAUNCH-SETUP-GUIDE.md`.
 - Launch readiness checklist: `LAUNCH-READINESS-CHECKLIST.md`.
-- Central Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/indian-government-jobs.html
-- All 28 State Government Jobs (official State PSC directory + verified notification tracker): https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/state-government-jobs.html
+- Central Government Jobs: https://tamilancareers.in/indian-government-jobs.html
+- All 28 State Government Jobs (official State PSC directory + verified notification tracker): https://tamilancareers.in/state-government-jobs.html
 - Daily 28-state PSC source-monitor report: `state-job-monitor-report.json` (first scheduled run pending; source changes require manual vacancy verification).
-- Tamil Nadu Government Jobs: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/tamil-nadu-government-jobs.html
-- Government Exam Preparation: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/exam-preparation.html
+- Tamil Nadu Government Jobs: https://tamilancareers.in/tamil-nadu-government-jobs.html
+- Government Exam Preparation: https://tamilancareers.in/exam-preparation.html
 
 ## Main features currently in the repository
 - Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
@@ -146,7 +146,7 @@
 
 
 ## Official external job-source discovery (admin review only)
-- Admin candidate review: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/external-job-review.html
+- Admin candidate review: https://tamilancareers.in/external-job-review.html
 - Setup guide: `EXTERNAL-JOB-SOURCES-SETUP.md`
 - Source registry SQL: `supabase-external-job-sources.sql`
 - Supabase scanner: `supabase/functions/scan-external-job-sources/index.ts`
