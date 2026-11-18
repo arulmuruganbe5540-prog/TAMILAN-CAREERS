@@ -42,8 +42,8 @@ Supabase Dashboard → Authentication → Security and Protection பகுத�
 
 ## 5. இறுதி நேரடி சோதனை
 
-1. Admin Login: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/admin-login.html
-2. Admin Control: https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/admin-control.html
+1. Admin Login: https://tamilancareers.in/admin-login.html
+2. Admin Control: https://tamilancareers.in/admin-control.html
 3. ஒரு சோதனை Company கணக்கு உருவாக்கவும்.
 4. ஒரு Draft Job உருவாக்கி, அனுமதி/வெளியீட்டு செயல்முறையைச் சோதிக்கவும்.
 5. தனி Job Seeker கணக்கில் Login செய்து அந்த Job-க்கு விண்ணப்பிக்கவும்.
