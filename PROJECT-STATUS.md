@@ -257,3 +257,11 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Latest full Health Audit run `44386300040` passed for commit `16a0cdde784c6ff84dd62bcfaa93101f139a1fc1`; the browser smoke suite completed with no failures.
 - GitHub Pages deployment run `44386300019` succeeded for the same commit.
 - This expands coverage for the listed terms in Tamil, Hindi and Malayalam. Other languages still use their own shorter dictionaries, and a full-site translation audit remains outstanding.
+
+
+## 19 November 2026 — candidate login and profile translation coverage
+
+- Added 18 Tamil/Hindi/Malayalam translations for mixed-language candidate-facing labels, including login role choices, password confirmation, profile education/credential fields, common example placeholders, and page titles.
+- A source-text audit of 12 key pages now finds no untranslated English-only text in `jobs.html` or `job-details.html`; the remaining matches in Candidate Profile, Login, Dashboard, Company Profile, and Job Posting are mostly intentional brand names, examples, or mixed-language phrases that have separate curated entries where appropriate.
+- Latest full Health Audit run `44386980640` passed for commit `143108ff706d0b474234dcfcf1fabf52dae701bb`; Pages build and deployment run `44386980875` also succeeded for the same commit.
+- This is a targeted dictionary expansion, not a claim that every page and every supported language is fully translated. A complete site-wide translation review remains open.
