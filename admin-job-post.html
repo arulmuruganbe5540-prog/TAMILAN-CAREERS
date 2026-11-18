@@ -78,7 +78,8 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id);
-let user=null;\nlet countryCurrencyMap={};
+let user=null;
+let countryCurrencyMap={};
 const fields=["jobKind","governmentScope","governmentDepartment","examName","applicationStartDate","examDate","vacancyBreakdown","syllabus","visaType","contractDuration","accommodation","flightSupport","title","company","category","type","workplace","location","openings","experience","education","salaryMin","salaryMax","salaryPeriod","salaryCurrency","skills","description","deadline","email","authority","countryName","examYear","notificationDate","notificationNumber","ageLimit","applicationFee","officialUrl","notificationPdfUrl","applicationUrl","selectionProcess"];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function say(msg,ok=true){$("status").textContent=msg;$("status").className="status "+(ok?"ok":"err")}
