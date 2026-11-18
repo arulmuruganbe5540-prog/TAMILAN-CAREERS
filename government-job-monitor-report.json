@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-18T13:28:21.281745+00:00",
+  "checked_at_utc": "2026-11-18T17:11:06.999391+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 23,
@@ -9,11 +9,6 @@
       "source_id": "rrb",
       "url": "https://www.rrbapply.gov.in/",
       "error": "HTTP Error 404: Not Found"
-    },
-    {
-      "source_id": "ibps",
-      "url": "https://www.ibps.in/",
-      "error": "<urlopen error [SSL: UNEXPECTED_MESSAGE] unexpected message (_ssl.c:1147)>"
     },
     {
       "source_id": "sbi-careers",
@@ -61,11 +56,6 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "tnusrb",
       "url": "https://www.tnusrb.tn.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
@@ -81,13 +71,18 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "gpsc-goa",
-      "url": "https://gpsc.goa.gov.in/",
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "appsc-arunachal",
       "url": "https://appsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "gpsc-goa",
+      "url": "https://gpsc.goa.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -101,13 +96,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "hppsc",
-      "url": "https://hppsc.hp.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "kpsc",
-      "url": "https://kpsc.kar.nic.in/",
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -116,13 +106,23 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "kpsc",
+      "url": "https://kpsc.kar.nic.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "kerala-psc",
       "url": "https://www.keralapsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
+      "source_id": "hppsc",
+      "url": "https://hppsc.hp.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -131,18 +131,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "hpsc",
-      "url": "https://hpsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "mppsc",
       "url": "https://mppsc.mp.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "tgpsc",
-      "url": "https://www.tgpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -161,18 +151,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "upsc-recruitment-tests",
-      "url": "https://cms.upsc.gov.in/recruitment-tests/notice/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "ppsc",
       "url": "https://www.ppsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "upsc-recruitment-results",
-      "url": "https://cms.upsc.gov.in/recruitment-tests/results/",
+      "source_id": "upsc-recruitment-tests",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/notice/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -186,12 +171,27 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "upsc-recruitment-results",
+      "url": "https://cms.upsc.gov.in/recruitment-tests/results/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "upsc-recruitment-advertisements",
+      "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisement",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "upsc-exam-notification-archive",
+      "url": "https://www.upsc.gov.in/exams-related-info/exam-notification/archives",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "mrb-results",
       "url": "https://www.mrb.tn.gov.in/content.php?dept_id=ODAw&lang=MQ%3D%3D&menu_id=MjI0",
       "error": "robots.txt disallows this page or could not be checked safely"
     }
   ],
-  "candidate_links_discovered_this_run": 1136,
+  "candidate_links_discovered_this_run": 1112,
   "note": "Official-source link discovery only. This aggregate report contains no candidate URLs and does not assert that Supabase Admin Review sync succeeded. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 4,
   "request_timeout_seconds": 20
