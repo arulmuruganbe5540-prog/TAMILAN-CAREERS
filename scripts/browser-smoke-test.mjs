@@ -122,6 +122,37 @@ await check("Rule-based job search filters work without AI controls", async () =
   if (!(await page.locator("#count").innerText()).includes("வேலைகள் கிடைத்துள்ளன")) throw new Error("Rule-based filters did not refresh the result count");
 });
 
+await check("Multi-word job search matches every entered keyword", async () => {
+  await page.route("**/rest/v1/jobs**", route => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify([{
+      id: "multiword-smoke",
+      status: "published",
+      job_title: "Accountant",
+      description: "Maintain daily accounts",
+      required_skills: "Excel Tally",
+      location: "Salem",
+      employment_type: "full_time",
+      job_kind: "private"
+    }])
+  }));
+  try {
+    await open("jobs.html");
+    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
+    await page.locator("#q").fill("accountant excel");
+    if (!(await page.locator("#count").innerText()).includes("1 வேலைகள்")) {
+      throw new Error("A job matching both keywords was not found");
+    }
+    await page.locator("#q").fill("accountant missingword");
+    if (!(await page.locator("#count").innerText()).includes("0 வேலைகள்")) {
+      throw new Error("Search should require every entered keyword to match");
+    }
+  } finally {
+    await page.unroute("**/rest/v1/jobs**");
+  }
+});
+
 await check("External job source review requires login", async () => {
   await open("external-job-review.html");
   await page.waitForFunction(() => location.pathname.endsWith("/admin-login.html"), { timeout: 8000 });
