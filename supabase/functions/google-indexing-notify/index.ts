@@ -119,11 +119,11 @@ Deno.serve(async (req) => {
     const pageUrl = "https://tamilancareers.in/job-details.html?id=" + encodeURIComponent(jobId);
     if (action === "URL_UPDATED") {
       let employer = String(job.employer_name || "").trim();
-      if (!employer && job.company_id) {
+      if (job.company_id) {
         const { data: company } = await admin.from("companies")
           .select("company_name,verification_status").eq("id", job.company_id).maybeSingle();
-        employer = String(company?.company_name || "").trim();
-        if (company && company.verification_status !== "verified") employer = "";
+        employer = company?.verification_status === "verified"
+          ? String(company.company_name || "").trim() : "";
       }
       const remote = job.workplace_type === "remote";
       const deadline = job.application_deadline
