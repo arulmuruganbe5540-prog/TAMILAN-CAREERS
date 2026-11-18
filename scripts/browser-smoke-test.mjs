@@ -346,6 +346,28 @@ await check("Tamil Nadu government jobs page loads and filters", async () => {
   if (await page.locator("#departments .card:visible").count() < 1) throw new Error("TNPSC search returned no departments");
 });
 
+
+await check("Automatic Kerala language detection and dynamic Malayalam translation work", async () => {
+  await page.route("https://ipapi.co/json/", route => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ country_code: "IN", region: "Kerala", timezone: "Asia/Kolkata" })
+  }));
+  await open("index.html");
+  await page.waitForFunction(() => window.TC_LOCALE?.language === "ml" && window.TC_TRANSLATE?.language === "ml", { timeout: 10000 });
+  if (!(await page.getByText("ഹോം", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Malayalam");
+  await page.evaluate(() => {
+    const el = document.createElement("span");
+    el.id = "tc-translation-dynamic-test";
+    el.textContent = "Find Jobs";
+    document.body.appendChild(el);
+  });
+  await page.waitForFunction(() => document.getElementById("tc-translation-dynamic-test")?.textContent === "ജോലി കണ്ടെത്തുക", { timeout: 5000 });
+  const clock = await page.locator("#tc-world-clock").innerText();
+  if (!clock.includes("Asia/Kolkata")) throw new Error("Detected country timezone was not applied to the clock: " + clock);
+  await page.unroute("https://ipapi.co/json/");
+});
+
 if (pageErrors.length) failures.push({ name: "Uncaught browser JavaScript errors", error: pageErrors.join(" | ") });
 await browser.close();
 console.log(JSON.stringify({ status: failures.length ? "failed" : "passed", checks: results, browser_errors: pageErrors, failures }, null, 2));
