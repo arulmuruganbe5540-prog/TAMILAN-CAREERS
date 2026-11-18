@@ -29,3 +29,4 @@
     script.textContent = JSON.stringify(schema);
   }
 })();
+(function(){var s=document.createElement('script');s.src='assets/global-experience.js';s.defer=true;document.head.appendChild(s);})();
