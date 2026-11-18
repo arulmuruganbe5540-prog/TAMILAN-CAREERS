@@ -370,16 +370,21 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
 
 
 await check("Automatic Saudi Arabia Arabic translation enables right-to-left layout", async () => {
-  await page.route("https://ipapi.co/json/", route => route.fulfill({
-    status: 200,
-    contentType: "application/json",
-    body: JSON.stringify({ country_code: "SA", region: "Riyadh", timezone: "Asia/Riyadh" })
-  }));
-  await open("index.html");
-  await page.waitForFunction(() => window.TC_LOCALE?.language === "ar" && window.TC_TRANSLATE?.language === "ar", { timeout: 10000 });
-  if (await page.locator("html").getAttribute("dir") !== "rtl") throw new Error("Arabic page direction is not right-to-left");
-  if (!(await page.getByText("الرئيسية", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Arabic");
-  await page.unroute("https://ipapi.co/json/");
+  const arabicPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await arabicPage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ country_code: "SA", region: "Riyadh", timezone: "Asia/Riyadh" })
+    }));
+    const response = await arabicPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Arabic homepage failed to load");
+    await arabicPage.waitForFunction(() => window.TC_LOCALE?.language === "ar" && window.TC_TRANSLATE?.language === "ar", { timeout: 10000 });
+    if (await arabicPage.locator("html").getAttribute("dir") !== "rtl") throw new Error("Arabic page direction is not right-to-left");
+    if (!(await arabicPage.getByText("الرئيسية", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Arabic");
+  } finally {
+    await arabicPage.close();
+  }
 });
 
 if (pageErrors.length) failures.push({ name: "Uncaught browser JavaScript errors", error: pageErrors.join(" | ") });
