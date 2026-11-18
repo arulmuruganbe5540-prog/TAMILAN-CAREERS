@@ -85,7 +85,7 @@ async function load(){
  items=out;render();
  }catch(e){$("summary").textContent="அறிவிப்புகளைப் பெற முடியவில்லை";$("results").innerHTML='<div class="empty">தகவல் சேவையில் சிக்கல். பின்னர் மீண்டும் முயற்சிக்கவும்.</div>';}
 }
-$("qualification").addEventListener("change",()=>{updateEducationBanner();const p=new URLSearchParams(location.search);p.set("scope",scope);p.set("qualification",$("qualification").value);history.replaceState(null,"","?"+p.toString());$("heading").textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" · "+$("qualification").value+" வேலைவாய்ப்புகள்";render();});
+$("qualification").addEventListener("change",()=>{updateEducationBanner();const p=new URLSearchParams(location.search);p.set("scope",scope);p.set("qualification",$("qualification").value);history.replaceState(null,"","?"+p.toString());$("heading").textContent=(scope==="tamil-nadu"?"தமிழ்நாடு அரசு":"மத்திய அரசு")+" · "+$("qualification").value+" வேலைவாய்ப்புகள்";load();});
 $("search").addEventListener("input",render);
 load();
 </script>
