@@ -29,6 +29,13 @@ This status distinguishes committed website code from verified live Supabase con
 - Security advisor review: 14 SECURITY DEFINER functions are flagged because authenticated users can execute some of them. Manual review confirmed that all authenticated-executable functions check the caller identity and the appropriate candidate/company/Super Admin authorization; none of the reviewed functions is executable by `anon`. `company_invitations` and `job_sources` have RLS enabled, no policies, and no anon/authenticated table privileges, so they remain inaccessible through the public Data API. No blanket privilege changes were made.
 - Remaining security items: leaked-password protection is disabled in Supabase Auth; 10 unindexed foreign-key findings and 15 RLS initplan performance findings remain to be reviewed. These settings and schema changes were not altered during this read-only audit.
 
+## 19 November 2026 — live Supabase performance fixes
+
+- Applied and recorded migration `20261118234952_add_remaining_foreign_key_indexes_20261119`: added the 10 missing foreign-key indexes identified by the live advisor. The matching GitHub migration file and `supabase-foreign-key-indexes.sql` setup script are committed.
+- Applied and recorded migration `20261118235023_optimize_rls_auth_uid_policy_initplans`: wrapped direct `auth.uid()` policy calls in scalar SELECTs on the 15 affected policies. This preserves the existing ownership and authorization predicates while allowing PostgreSQL to evaluate the auth value once per statement.
+- Re-ran Supabase performance advisors: `unindexed_foreign_keys = 0` (down from 10) and `auth_rls_initplan = 0` (down from 15). Remaining advisor findings: 22 multiple-permissive-policy notices and many unused-index notices; unused-index notices are expected while the project has very little real traffic/data, so indexes were not dropped.
+- Security advisor was rechecked after the RLS optimization. No changes were made to policy roles, ownership checks, or public grants. The previously documented Auth leaked-password-protection setting remains disabled and needs a dashboard-side security setting change.
+
 ## 1. GitHub Pages and CI
 
 - GitHub Pages is enabled and deploying successfully. Latest confirmed Pages deployment: run `44085240569`, commit `ff17f5fbd1f3b39845d2c9bc03f40ba50f359960` (success). A newer build for the latest team-page permission refinement is running.
