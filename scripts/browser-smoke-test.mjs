@@ -44,6 +44,26 @@ await check("Homepage loads, career categories navigate and job search works", a
   }
 });
 
+await check("Redesigned homepage is mobile-friendly and hides country-detection notices", async () => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await open("index.html");
+  await page.locator(".site-header").waitFor({ state: "visible" });
+  await page.locator("#keyword").waitFor({ state: "visible" });
+  const layout = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    document: document.documentElement.scrollWidth,
+    hero: document.querySelector(".hero h1")?.getBoundingClientRect().width || 0,
+    nav: !!document.querySelector(".main-nav")
+  }));
+  if (layout.document > layout.viewport + 1) throw new Error("Homepage has horizontal page overflow on mobile: " + JSON.stringify(layout));
+  if (!layout.nav || layout.hero <= 0) throw new Error("Mobile navigation or hero content is missing");
+  const visibleText = (document.body.innerText || "").toLowerCase();
+  if (visibleText.includes("your country detected") || visibleText.includes("உங்கள் நாடு கண்டறியப்பட்டது")) {
+    throw new Error("Country detection notice should remain hidden");
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+});
+
 await check("Login page role, mode and password controls work", async () => {
   await open("login.html");
   await page.locator("#company").click();
