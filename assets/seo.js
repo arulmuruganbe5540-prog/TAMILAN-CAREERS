@@ -20,7 +20,7 @@
       "inLanguage": ["ta-IN", "en-IN"],
       "potentialAction": {
         "@type": "SearchAction",
-        "target": origin + path.replace(/index\\.html$/, "") + "jobs.html?q={search_term_string}",
+        "target": origin + path.replace(/index\.html$/, "") + "jobs.html?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     };
