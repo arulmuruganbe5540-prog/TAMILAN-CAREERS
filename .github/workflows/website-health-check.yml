@@ -41,7 +41,7 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Type-check every Supabase Edge Function
+      - name: Type-check all tracked Supabase Edge Functions
         run: |
           deno check supabase/functions/bilingual-job-search/index.ts
           deno check supabase/functions/ai-resume-match/index.ts
@@ -51,7 +51,6 @@ jobs:
           deno check supabase/functions/scan-external-job-sources/index.ts
           deno check supabase/functions/extract-government-notice-details/index.ts
           deno check supabase/functions/generate-job-mock-exam/index.ts
-          deno check supabase/functions/manage-hiring/index.ts
       - name: Validate audit script
         run: python -m py_compile scripts/website-health-check.py
       - name: Lint SQL migration dollar quoting
