@@ -63,8 +63,8 @@ function isQualificationMatch(text){
 async function load(){
  try{
  const [jr,nr]=await Promise.all([
-  db.from("jobs").select("*").eq("status","published").eq("job_kind","government").limit(1000),
-  db.from("government_notices").select("*").eq("is_active",true).limit(500)
+  db.from("jobs").select("*").eq("status","published").eq("job_kind","government").order("published_at",{ascending:false,nullsFirst:false}).limit(1000),
+  db.from("government_notices").select("*").eq("is_active",true).order("published_at",{ascending:false,nullsFirst:false}).limit(500)
  ]);
  if(jr.error)throw jr.error;if(nr.error)throw nr.error;
  const out=[];
