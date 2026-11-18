@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
     }
 
     const { data: job, error: jobError } = await admin.from("jobs")
-      .select("id,job_title,description,employer_name,company_id,status,published_at,application_deadline,location,workplace_type,country_name")
+      .select("id,job_title,description,employer_name,company_id,status,published_at,application_deadline,location,workplace_type,country_name,required_skills")
       .eq("id", jobId).maybeSingle();
     if (jobError || !job) return reply({ error: "Job not found" }, 404);
 
@@ -134,6 +134,7 @@ Deno.serve(async (req) => {
       const eligible = job.status === "published" && !expired &&
         Boolean(String(job.job_title || "").trim()) &&
         String(job.description || "").trim().length >= 120 &&
+        Boolean(String(job.required_skills || "").trim()) &&
         Boolean(employer) && Boolean(job.published_at) &&
         Boolean(job.country_name) &&
         (remote || Boolean(job.location));
