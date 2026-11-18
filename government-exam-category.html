@@ -2,13 +2,18 @@
 <html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10233f"><title>அரசுத் தேர்வு பிரிவு | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17263d;font-family:Arial,"Noto Sans Tamil",sans-serif;line-height:1.7}header{background:#10233f;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.brand{font-weight:900;color:#54c8ff;text-decoration:none;font-size:20px}.brand span{color:white}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:white;text-decoration:none;background:#ffffff1a;padding:8px 11px;border-radius:8px;font-size:12px}main{max-width:1100px;margin:22px auto;padding:0 15px}.crumb{font-size:12px;color:#718097}.hero{margin-top:12px;display:grid;grid-template-columns:230px 1fr;gap:20px;align-items:center;background:linear-gradient(120deg,#10233f,#18548b);color:white;padding:20px;border-radius:17px}.art{height:175px;border-radius:12px;background-image:url('assets/exam-info-16.svg');background-size:400% 400%;background-repeat:no-repeat;background-position:0 0}.hero h1{font-size:clamp(23px,4vw,34px);margin:0}.hero p{color:#d8e8fa;margin:7px 0}.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.menu a{background:#fff;border:1px solid #e1e8f1;border-radius:12px;padding:16px;text-decoration:none;color:#174777;font-weight:800}.menu small{display:block;color:#748198;font-weight:400;margin-top:4px}.panel{background:white;border:1px solid #e2e9f2;border-radius:13px;padding:17px;margin:15px 0}.panel h2{margin:0 0 10px;font-size:19px}.feed{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.item{border:1px solid #e5ebf3;border-radius:11px;padding:13px}.item h3{font-size:15px;margin:4px 0}.item p{font-size:12px;color:#64748b;margin:5px 0}.item a{color:#1168ad;font-weight:700;text-decoration:none}.empty{padding:18px;text-align:center;color:#6b7890;background:#f7f9fc;border-radius:9px}.tag{font-size:10px;background:#eaf4ff;color:#18588d;padding:4px 7px;border-radius:20px}.all{display:inline-block;margin:8px 0;color:#1168ad;font-weight:700}
+.guide-panel{background:#fff;border:1px solid #dfe8f3;border-radius:14px;padding:18px;margin:16px 0;box-shadow:0 7px 22px #102a4a08}
+.guide-panel h2{margin:0 0 8px;color:#174777;font-size:18px}.guide-panel p{margin:0;color:#64748b;font-size:13px}
+.guide-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}
+.guide-item{background:#f4f8fd;border-radius:9px;padding:10px 12px;font-size:12px;color:#29435f}
+@media(max-width:600px){.guide-list{grid-template-columns:1fr}}
 @media(max-width:650px){.hero{grid-template-columns:1fr}.art{height:150px}.menu{grid-template-columns:1fr 1fr}.feed{grid-template-columns:1fr}}@media(max-width:390px){.menu{grid-template-columns:1fr}}
 </style>  <link rel="stylesheet" href="assets/site-protection.css">
 </head><body>
 <header><a class="brand" href="index.html">TAMILAN <span>CAREERS</span></a><nav><a href="index.html">முகப்பு</a><a href="indian-government-jobs.html">16 பிரிவுகள்</a><a href="jobs.html">அனைத்து வேலைகள்</a></nav></header>
 <main><div class="crumb"><a href="indian-government-jobs.html">இந்திய அரசு வேலைகள்</a> / பிரிவு விவரம்</div>
 <section class="hero"><div class="art" id="art"></div><div><h1 id="heading">அரசுத் தேர்வு பிரிவு</h1><p id="intro">இந்தப் பிரிவுக்கான சரிபார்க்கப்பட்ட அறிவிப்புகள், தேதிகள் மற்றும் தேர்வு தகவல்கள்.</p><span class="tag">அதிகாரப்பூர்வ அறிவிப்புகள் மட்டும்</span></div></section>
-<section class="menu" id="resourceMenu"></section>
+<section class="menu" id="resourceMenu"></section>\n<section class="guide-panel" id="categoryGuide"><h2>இந்தப் பிரிவில் கிடைக்கும் தகவல்கள்</h2><p>தகவல்கள் ஏற்றப்படுகின்றன...</p></section>
 <section class="panel"><h2>இந்தப் பிரிவின் அரசு வேலை அறிவிப்புகள்</h2><p style="color:#6b7890;font-size:12px">அறிவிப்பு தேதி வரிசையில் சமீபத்திய பதிவுகள். அதிகாரப்பூர்வமாக வெளியிடப்பட்ட பதிவுகள் மட்டுமே.</p><div id="notices" class="feed"><div class="empty">அறிவிப்புகள் ஏற்றப்படுகின்றன…</div></div></section>
 <section class="panel"><h2>இந்தப் பிரிவின் வேலைப் பதிவுகள்</h2><div id="jobs" class="feed"><div class="empty">வேலைகள் ஏற்றப்படுகின்றன…</div></div><a class="all" id="allJobs" href="jobs.html">அனைத்து அரசு வேலைகளையும் பார்க்க →</a></section>
 </main>
@@ -35,6 +40,24 @@ const c=cats[slug]||cats["job-notifications"],esc=v=>String(v??"").replace(/[&<>
 const resources=[["hall-ticket","Hall Ticket / Admit Card","நுழைவுச்சீட்டு பதிவிறக்கம்"],["exam-results","Exam Results","தேர்வு முடிவுகள்"],["answer-key","Answer Key","விடைக்குறிப்புகள்"],["exam-timetable","Exam Date / Timetable","தேர்வு அட்டவணை"]];
 document.getElementById("resourceMenu").innerHTML=resources.map(x=>'<a href="government-exam-resource.html?category='+encodeURIComponent(slug)+'&type='+x[0]+'">'+x[1]+'<small>'+x[2]+' →</small></a>').join("");
 document.getElementById("allJobs").href="jobs.html?job_kind=government&q="+encodeURIComponent(c[0]);
+const guides={
+"job-notifications":["அறிவிப்பு எண் மற்றும் வெளியீட்டு தேதி","பதவி பெயர், காலியிடங்கள், தகுதி","வயது வரம்பு, சம்பளம், இடஒதுக்கீடு","விண்ணப்ப தொடக்கம், கடைசி தேதி, அதிகாரப்பூர்வ Apply இணைப்பு"],
+"exam-results":["தேர்வு பெயர் மற்றும் தேர்வு தேதி","Result PDF / மதிப்பெண் பட்டியல்","பதிவு எண் மூலம் முடிவு பார்க்கும் அதிகாரப்பூர்வ இணைப்பு","அடுத்த கட்டத் தேர்வு அல்லது சான்றிதழ் சரிபார்ப்பு"],
+"exam-timetable":["தேர்வு நாள் மற்றும் நேரம்","Paper / Subject வாரியான அட்டவணை","தேர்வு மையம் மற்றும் வழிமுறைகள்","மாற்றியமைக்கப்பட்ட அட்டவணை அறிவிப்புகள்"],
+"exam-notifications":["தேர்வு அறிவிப்பு மற்றும் தகுதி","விண்ணப்ப நடைமுறை மற்றும் கட்டண விவரம்","தேர்வு முறை மற்றும் முக்கிய தேதிகள்","அதிகாரப்பூர்வ அறிவிப்பு PDF"],
+"hall-ticket":["Hall Ticket வெளியீட்டு தேதி","பதிவிறக்க அதிகாரப்பூர்வ இணைப்பு","தேர்வு மையம், நாள், நேரம்","தேர்வுக்கு எடுத்துச் செல்ல வேண்டிய ஆவணங்கள்"],
+"answer-key":["Provisional / Final Answer Key","வினா எண் வாரியான விடைகள்","ஆட்சேபனை சமர்ப்பிக்கும் கடைசி தேதி","அதிகாரப்பூர்வ Answer Key PDF"],
+"selection-merit-list":["தேர்வு செய்யப்பட்டோர் பட்டியல்","Merit Rank / Selection List PDF","தேர்வு நிலை மற்றும் அடுத்தகட்ட அறிவிப்பு","இறுதி தேர்வு பட்டியல்"],
+"interview-date":["Interview தேதி மற்றும் நேரம்","அழைப்புக் கடிதம் / Interview Memo","இடம் மற்றும் எடுத்துச் செல்ல வேண்டிய ஆவணங்கள்","நேர்முகத் தேர்வு வழிமுறைகள்"],
+"syllabus":["பாடவாரியான Syllabus","தேர்வு முறை மற்றும் மதிப்பெண் பகிர்வு","Paper / Subject விவரங்கள்","அதிகாரப்பூர்வ Syllabus PDF"],
+"previous-year-papers":["ஆண்டு வாரியான பழைய வினாத்தாள்கள்","Paper / Subject வாரியான பதிவிறக்கம்","அதிகாரப்பூர்வ Model Question Papers","தேர்வு தயாரிப்பு பயிற்சி"],
+"cut-off-marks":["Category வாரியான Cut Off","முந்தைய ஆண்டு Cut Off விவரங்கள்","தேர்வு நிலை / கட்டம் வாரியான மதிப்பெண்கள்","அதிகாரப்பூர்வ Cut Off PDF"],
+"study-materials":["பாடக்குறிப்புகள் மற்றும் Study Materials","Model Tests / Practice Questions","அதிகாரப்பூர்வ பாடத்திட்ட இணைப்புகள்","தேர்வு தயாரிப்பு வழிகாட்டி"],
+"application-last-date":["விண்ணப்ப கடைசி தேதி","கட்டணம் செலுத்தும் கடைசி தேதி","திருத்தம் செய்யும் கால அவகாசம்","விண்ணப்ப நிலை பார்க்கும் அதிகாரப்பூர்வ இணைப்பு"],
+"document-verification":["Certificate Verification தேதி","தேவையான அசல் ஆவணங்கள்","சான்றிதழ் வடிவம் / சரிபார்ப்பு பட்டியல்","அடுத்தகட்டத் தேர்வு நிலை"],
+"government-job-alerts":["புதிய அரசு வேலை அறிவிப்புகள்","கல்வித் தகுதி மற்றும் வயது வரம்பு","விண்ணப்ப கடைசி தேதி நினைவூட்டல்","அதிகாரப்பூர்வ Apply / Notification இணைப்பு"],
+"guidance-faqs":["தகுதி மற்றும் வயது வரம்பு விளக்கம்","விண்ணப்பிக்கும் படிப்படியான வழிமுறை","தேவையான ஆவணங்கள் மற்றும் கட்டணம்","பொதுவான கேள்விகள் மற்றும் பதில்கள்"]};
+document.getElementById("categoryGuide").innerHTML='<h2>இந்தப் பிரிவில் கிடைக்கும் தகவல்கள்</h2><p>'+esc(c[1])+' தொடர்பான தகவல்களை இங்கே ஒழுங்காகப் பார்க்கலாம். அதிகாரப்பூர்வமாக உறுதிப்படுத்தப்பட்ட பதிவுகள் மட்டுமே வெளியிடப்படும்.</p><div class="guide-list">'+(guides[slug]||guides["job-notifications"]).map(x=>'<div class="guide-item">✓ '+esc(x)+'</div>').join("")+'</div>';
 const titleMatch=c[0].replace(/\s*\/.*$/,"").split(/[ /&]/)[0];
 async function load(){const n=document.getElementById("notices"),jhost=document.getElementById("jobs");
 try{const {data,error}=await db.from("government_notices").select("id,title,category,notice_date,notice_reference,official_url,details,is_active").eq("is_active",true).order("notice_date",{ascending:false}).limit(500);if(error)throw error;
