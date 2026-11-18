@@ -188,13 +188,13 @@ function searchJobs(){
  function applyLayout(country){
   const order=Array.isArray(country?.homepage_sections)?country.homepage_sections:defaults,footer=document.querySelector("footer");
   order.forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el&&footer)document.body.insertBefore(el,footer)});
-  Object.keys(sections).forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el)el.hidden=Array.isArray(country?.homepage_sections)&&!country.homepage_sections.includes(key)});
+  Object.keys(sections).forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el)el.hidden=country?Array.isArray(country.homepage_sections)&&!country.homepage_sections.includes(key):(key==="country_government_jobs"||key==="country_private_jobs")});
  }
  async function detectCountry(db){
   try{const response=await fetch("https://ipapi.co/json/",{cache:"no-store"});if(!response.ok)throw new Error("Country lookup unavailable");
    const geo=await response.json(),code=String(geo.country_code||"").toUpperCase();if(!/^[A-Z]{2}$/.test(code))throw new Error("Country code unavailable");
    const {data,error}=await db.from("countries").select("country_code,country_name,is_active,default_language_code,currency_code,homepage_sections").eq("country_code",code).eq("is_active",true).maybeSingle();if(error)throw error;
-   return data||{country_code:code,country_name:geo.country_name||"your region",is_active:true,homepage_sections:null};
+   return data;
   }catch(e){return null}
  }
  function jobCard(j){
@@ -207,8 +207,8 @@ function searchJobs(){
  async function load(){
   const db=window.supabase.createClient(url,key),country=await detectCountry(db);
   if(!country){countryText.textContent="உங்கள் நாடு கண்டறியப்படவில்லை. உலக வேலைவாய்ப்புகளைப் பாருங்கள். GPS பயன்படுத்தப்படவில்லை.";applyLayout(null);
-   const {data,error}=await db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8);
-   showList("governmentJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("privateJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("overseasJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("jobList",error?[]:(data||[]),"புதிய வேலைவாய்ப்புகள் விரைவில் இங்கே தோன்றும்.");return;
+   const [{data,error},{data:foreignData,error:foreignError}]=await Promise.all([db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(8),db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign").order("published_at",{ascending:false,nullsFirst:false}).limit(6)]);
+   showList("governmentJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("privateJobList",[],"நாட்டை கண்டறிய முடியவில்லை.");showList("overseasJobList",foreignError?[]:(foreignData||[]),"வெளிநாட்டு வேலைகள் தற்போது இல்லை.");showList("jobList",error?[]:(data||[]),"புதிய வேலைவாய்ப்புகள் விரைவில் இங்கே தோன்றும்.");return;
   }
   const c=country.country_name;
   countryText.textContent="உங்கள் நாடு தானாகக் கண்டறியப்பட்டது: "+c+". முதலில் "+c+" அரசு வேலைகள், அடுத்து தனியார் வேலைகள்; பின்னர் வெளிநாட்டு வேலைகள் காட்டப்படும். GPS பயன்படுத்தப்படவில்லை.";
