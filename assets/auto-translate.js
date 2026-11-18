@@ -22,7 +22,7 @@ or:[["Home","ମୂଳପୃଷ୍ଠା"],["Jobs","ଚାକିରି"],["Find 
 as:[["Home","মুখ্যপৃষ্ঠা"],["Jobs","চাকৰি"],["Find Jobs","চাকৰি বিচাৰক"],["Login","লগইন"],["Register","পঞ্জীয়ন"],["Dashboard","ডেশ্বব'ৰ্ড"],["My Applications","মোৰ আবেদনসমূহ"],["Saved Jobs","সংৰক্ষিত চাকৰি"],["Notifications","জাননীসমূহ"],["Profile","প্ৰ'ফাইল"],["Resume","জীৱন-বৃত্তান্ত"],["Apply Now","এতিয়াই আবেদন কৰক"],["Submit","দাখিল কৰক"],["Save","সংৰক্ষণ কৰক"],["Cancel","বাতিল কৰক"],["Search","বিচাৰক"],["Location","স্থান"],["Education","শিক্ষা"],["Skills","দক্ষতা"],["Government Jobs","চৰকাৰী চাকৰি"],["Private Jobs","ব্যক্তিগত খণ্ডৰ চাকৰি"],["Overseas Jobs","বিদেশৰ চাকৰি"],["Contact Us","যোগাযোগ কৰক"],["About Us","আমাৰ বিষয়ে"],["Help","সহায়"]]
 };
 if(cols[lang]===undefined&&!extraLanguageRows[lang])return;
-var map=Object.create(null);if(cols[lang]!==undefined)rows.forEach(function(r){r.forEach(function(v){if(v)map[v]=r[cols[lang]]})});
+var map=Object.create(null);if(cols[lang]!==undefined)rows.forEach(function(r){if(r[0]&&r[cols[lang]])map[r[0]]=r[cols[lang]]});
 (extraLanguageRows[lang]||[]).forEach(function(r){map[r[0]]=r[1]});
 function replaceText(node){var raw=node.nodeValue;if(!raw||!raw.trim())return;var lead=raw.match(/^\s*/)[0],trail=raw.match(/\s*$/)[0],key=raw.trim();if(map[key]&&map[key]!==key)node.nodeValue=lead+map[key]+trail}
 function translateAttributes(el){if(!el||el.nodeType!==Node.ELEMENT_NODE||el.closest("[data-no-translate]"))return;["placeholder","aria-label","alt","title"].forEach(function(a){var v=el.getAttribute(a);if(v&&map[v]&&map[v]!==v)el.setAttribute(a,map[v])});if(el.matches('input[type="button"],input[type="submit"],button')){var value=el.getAttribute("value");if(value&&map[value]&&map[value]!==value)el.setAttribute("value",map[value])}}
