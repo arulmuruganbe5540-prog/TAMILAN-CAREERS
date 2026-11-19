@@ -1,6 +1,8 @@
 # TAMILAN CAREERS — Launch Readiness Checklist
 
-Last reviewed: 17 November 2026
+Last reviewed: 19 November 2026
+
+> Historical note: older checklist entries below were written before the no-AI decision and are retained as an audit trail only. The current live setup and product-scope section below supersedes all earlier AI/API and setup instructions.
 
 This is an operational checklist based on the project changes and user-confirmed setup steps available at the time of writing. A feature is not considered live merely because its code or SQL file exists.
 
