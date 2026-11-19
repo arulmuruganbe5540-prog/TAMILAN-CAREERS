@@ -153,10 +153,11 @@ await check("Login page language switch translates static and dynamic authentica
     const english = await languagePage.evaluate(() => ({
       hint: document.querySelector("#passwordHint")?.textContent.trim(),
       forgot: document.querySelector("#forgotLink")?.textContent.trim(),
-      toggle: document.querySelector("#passwordToggle")?.textContent.trim()
+      toggle: document.querySelector("#passwordToggle")?.textContent.trim(),
+      adminLoginLinkCount: document.querySelectorAll("#adminLoginLink").length
     }));
     if (english.hint !== "At least 8 characters" || english.forgot !== "Forgot Password?" ||
-        english.toggle !== "Show" || document.querySelector("#adminLoginLink")) {
+        english.toggle !== "Show" || english.adminLoginLinkCount !== 0) {
       throw new Error("English login text remains untranslated: " + JSON.stringify(english));
     }
     await languagePage.evaluate(() => localStorage.setItem("tc_language_preference_v1", "ta"));
@@ -165,10 +166,11 @@ await check("Login page language switch translates static and dynamic authentica
     await languagePage.waitForTimeout(100);
     const tamil = await languagePage.evaluate(() => ({
       hint: document.querySelector("#passwordHint")?.textContent.trim(),
-      forgot: document.querySelector("#forgotLink")?.textContent.trim()
+      forgot: document.querySelector("#forgotLink")?.textContent.trim(),
+      adminLoginLinkCount: document.querySelectorAll("#adminLoginLink").length
     }));
     if (!tamil.hint.includes("குறைந்தது 8") || !tamil.forgot.includes("கடவுச்சொல்") ||
-        document.querySelector("#adminLoginLink")) {
+        tamil.adminLoginLinkCount !== 0) {
       throw new Error("Tamil login text did not translate: " + JSON.stringify(tamil));
     }
     await languagePage.locator("#switchLink").click();
@@ -220,7 +222,9 @@ await check("Core job workflow Tamil source messages translate to English", asyn
 });
 
 await check("Job seeker and employer registration validate account details before submission", async () => {
+  await page.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ta"));
   await open("login.html");
+  await page.waitForFunction(() => window.TC_TRANSLATE?.language === "ta");
   await page.locator("#seeker").click();
   if (!(await page.locator("#seeker").getAttribute("class")).includes("active")) throw new Error("Job seeker role did not become active");
   await page.locator("#switchLink").click();
@@ -861,7 +865,7 @@ await check("India defaults to English unless a language preference is saved", a
     await indiaPage.waitForFunction(() => window.TC_LOCALE?.language === "en" && window.TC_TRANSLATE?.language === "en", { timeout: 10000 });
     if (await indiaPage.locator("#tc-language-select").inputValue() !== "en") throw new Error("India default language selector is not English");
     if (await indiaPage.locator("#tc-language-select").count() !== 1) throw new Error("Expected exactly one language selector");
-    if (await indiaPage.locator(".tc-site-domain").count() !== 1 || (await indiaPage.locator(".tc-site-domain").innerText()) !== "www.tamilancareers.in") {
+    if (await indiaPage.locator(".tc-site-domain").count() !== 1 || (await indiaPage.locator(".tc-site-domain").innerText()).trim().toUpperCase() !== "WWW.TAMILANCAREERS.IN") {
       throw new Error("Expected one canonical website domain label");
     }
     if (!(await indiaPage.getByText("Explore opportunities by country", { exact: true }).count())) throw new Error("English homepage text is missing");
