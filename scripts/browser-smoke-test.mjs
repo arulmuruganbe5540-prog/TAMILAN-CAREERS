@@ -111,6 +111,42 @@ await check("Government exam practice starts and checks an answer", async () => 
   if (!(await page.locator("#result").isVisible())) throw new Error("Quiz result did not appear");
 });
 
+await check("All 16 government exam categories have a dedicated practice track", async () => {
+  await open("exam-preparation.html");
+  const coverage = await page.evaluate(() => {
+    const tracks = {
+      tn: "TNPSC VAO",
+      police: "TNUSRB Police Constable",
+      teacher: "TNTET Paper I",
+      power: "TANGEDCO Field Assistant",
+      forest: "TN Forest Watcher",
+      health: "Medical Officer",
+      upsc: "UPSC Civil Services",
+      ssc: "SSC CGL",
+      rail: "RRB NTPC",
+      bank: "IBPS PO",
+      defence: "Indian Army Agniveer",
+      postal: "India Post GDS",
+      insurance: "LIC AAO",
+      court: "Court Assistant",
+      psu: "ONGC Recruitment",
+      state: "Kerala PSC"
+    };
+    const bank = window.TC_EXAM_BANK || [];
+    return {
+      categories: document.querySelectorAll("#category option").length,
+      total: bank.filter(q => q.exam).length,
+      missing: Object.entries(tracks).filter(([key, exam]) =>
+        ![...document.querySelectorAll("#category option")].some(option => option.value === key) ||
+        !bank.some(q => q.exam === exam)
+      ).map(([, exam]) => exam)
+    };
+  });
+  if (coverage.categories !== 16) throw new Error("Expected 16 exam categories; found " + coverage.categories);
+  if (coverage.total < 80) throw new Error("Expected at least 80 exam-specific questions; found " + coverage.total);
+  if (coverage.missing.length) throw new Error("Missing category question tracks: " + coverage.missing.join(", "));
+});
+
 await check("Rule-based job search filters work without AI controls", async () => {
   await open("jobs.html");
   if (!(await page.locator("#q").isVisible())) throw new Error("Job keyword search is missing");
