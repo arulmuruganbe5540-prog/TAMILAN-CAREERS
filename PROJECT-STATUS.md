@@ -1,3 +1,11 @@
+## TAMILAN AI retrieval CI verified — 19 November 2026
+
+- The new read-only job-context endpoint and static safety guard are committed. Final Health Audit run `44469643202` passed on commit `8c85b75fa13a6293e4352b3d4dd00961d840eee8`, including Deno type-check, retrieval guard, existing security guards, website structure and browser smoke tests.
+- GitHub Pages deployment run `44469644291` passed for the same commit.
+- The function source uses only anon/publishable key + caller JWT, relies on existing jobs RLS, selects only published public fields (max five), enforces a 2 KB request body cap, and returns actual job IDs with official/internal citation links. It excludes application URLs as evidence citations and marks job descriptions untrusted.
+- Supabase live function inventory confirms the new endpoint is not deployed. Feature flag is not configured and remains OFF. No database changes, secrets, or deployments were made.
+- Remaining: rate limiting/usage controls, authenticated runtime tests, model adapter, and pilot review. Current live job records remain zero.
+
 ## TAMILAN AI read-only retrieval foundation — 19 November 2026
 
 - Added `supabase/functions/tamilan-ai-job-context/index.ts` as a new, separate read-only context endpoint. It does not call a model and is not deployed.
