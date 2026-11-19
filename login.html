@@ -269,7 +269,7 @@ function startResendCooldown(seconds = 60) {
 
 document.getElementById("resendBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim().toLowerCase();
-  if (!email) { showMessage("முதலில் பதிவு செய்த Email Address உள்ளிடுங்கள்."); return; }
+  if (!email) { showMessage("Enter the email address you used to register."); return; }
   if (!supabaseClient) { showMessage("Unable to connect to the authentication service."); return; }
 
   const button = document.getElementById("resendBtn");
@@ -278,10 +278,10 @@ document.getElementById("resendBtn").addEventListener("click", async () => {
   try {
     const {error} = await supabaseClient.auth.resend({type:"signup", email});
     if (error) throw error;
-    showMessage("Email மீண்டும் அனுப்புவதற்கான கோரிக்கை ஏற்கப்பட்டது. Inbox, Spam மற்றும் Promotions folder பார்க்கவும்.", true);
+    showMessage("Your request to resend the email has been accepted. Check your inbox, spam and promotions folders.", true);
     startResendCooldown(60);
   } catch(error) {
-    showMessage(error.message || "Email அனுப்ப முடியவில்லை. சிறிது நேரம் கழித்து முயற்சிக்கவும்.");
+    showMessage(error.message || "Unable to send the email. Please try again later.");
     button.disabled = false;
     button.textContent = "Didn't receive the email? Resend";
   }
@@ -295,19 +295,19 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
   const password = document.getElementById("password").value;
   const fullName = document.getElementById("fullName").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value;
-  if (isRegister && password !== confirmPassword) { showMessage("இரண்டு Password-களும் ஒன்றாக இருக்க வேண்டும்."); return; }
-  if (isRegister && (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password))) { showMessage("Password-ல் குறைந்தது ஒரு பெரிய எழுத்து, ஒரு சிறிய எழுத்து, ஒரு எண் இருக்க வேண்டும்."); return; }
-  if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("தொடர்வதற்கு I agree to the Privacy Policyயை ஏற்கவும்."); return; }
+  if (isRegister && password !== confirmPassword) { showMessage("Both passwords must match."); return; }
+  if (isRegister && (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password))) { showMessage("Your password must include at least one uppercase letter, one lowercase letter and one number."); return; }
+  if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("Please accept the Privacy Policy to continue."); return; }
 
   if (!supabaseClient) {
-    showMessage("Unable to connect to the authentication service. Publishable Key-ஐ சரிபார்க்கவும்.");
+    showMessage("Unable to connect to the authentication service. Check the publishable key.");
     return;
   }
 
   const button = document.getElementById("submitBtn");
 
   button.disabled = true;
-  button.textContent = "தயவுசெய்து காத்திருக்கவும்...";
+  button.textContent = "Please wait...";
 
   showMessage("");
 
@@ -338,14 +338,14 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
         document.getElementById("resendBtn").style.display = "none";
 
         showMessage(
-          "கணக்கு உருவாக்கப்பட்டது. உங்கள் கணக்கு விவரங்கள் சரிபார்க்கப்பட வேண்டும்.",
+          "Your account has been created. Your account details must be verified.",
           true
         );
 
       } else {
 
         showMessage(
-          "பதிவு வெற்றிகரமாக அனுப்பப்பட்டது. உங்கள் Email-ஐ திறந்து உறுதிப்படுத்துங்கள். Email வரவில்லை என்றால் 60 விநாடிகள் கழித்து கீழே உள்ள பொத்தானை அழுத்தி மீண்டும் அனுப்பலாம்.",
+          "Registration submitted successfully. Open your email and confirm your address. If the email does not arrive, wait 60 seconds and use the button below to resend it.",
           true
         );
         startResendCooldown(60);
@@ -364,7 +364,7 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
       if (error) throw error;
 
       showMessage(
-        "Login வெற்றிகரமாக முடிந்தது. Dashboard திறக்கப்படுகிறது...",
+        "Login successful. Opening your dashboard...",
         true
       );
 
@@ -377,7 +377,7 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
 
   } catch(error) {
 
-    showMessage(error.message || "ஏதோ தவறு ஏற்பட்டுள்ளது.");
+    showMessage(error.message || "Something went wrong.");
 
   } finally {
 
