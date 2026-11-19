@@ -38,6 +38,7 @@
 - Government Exam Preparation: https://tamilancareers.in/exam-preparation.html
 
 ## Main features currently in the repository
+- AI development roadmap (Tamil, owner-approved exploration; no live AI endpoint enabled yet): `TAMILAN-AI-ROADMAP-TA.md`.
 - Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
 - Tamil / English responsive public homepage, job search and individual job details pages.
 - Supabase email registration, login, password reset flow and account dashboard.
