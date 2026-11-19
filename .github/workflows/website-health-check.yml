@@ -64,6 +64,8 @@ jobs:
         run: python scripts/job-publishing-workflow-guard.py
       - name: Guard Super Admin company verification and resubmission workflow
         run: python scripts/company-verification-workflow-guard.py
+      - name: Guard global header and language selection across key pages
+        run: python scripts/global-language-workflow-guard.py
       - name: Guard private Resume storage and employer access workflow
         run: python scripts/resume-security-workflow-guard.py
       - name: Validate public government feed JavaScript
