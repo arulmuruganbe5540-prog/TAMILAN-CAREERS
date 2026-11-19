@@ -1,3 +1,13 @@
+## TAMILAN AI read-only retrieval foundation — 19 November 2026
+
+- Added `supabase/functions/tamilan-ai-job-context/index.ts` as a new, separate read-only context endpoint. It does not call a model and is not deployed.
+- Added `[functions.tamilan-ai-job-context] verify_jwt = true` to `supabase/config.toml`.
+- Endpoint is fail-closed: `TAMILAN_AI_RETRIEVAL_ENABLED` must equal `true`; no such secret has been configured. It uses `SUPABASE_ANON_KEY` plus the caller Bearer JWT, preserving jobs RLS; it does not use service-role credentials.
+- Query scope is published jobs only, max five, safe public fields only, optional title/country filter. It returns actual job IDs and citation URLs and marks job description content untrusted. It never queries candidate data or `job_sources`.
+- Added `scripts/tamilan-ai-retrieval-guard.py` and updated the website health workflow to run this guard and Deno type-check the new function.
+- Feature remains OFF. Function is not deployed. Rate limiting, usage monitoring, authenticated runtime tests, model adapter and UI remain unimplemented. Keep disabled until these controls are added and verified.
+- Live jobs remain 0. No vacancy recommendation is possible at present. No Supabase schema, data, policy, secrets or Edge Function deployment was changed.
+
 ## TAMILAN AI readiness follow-up — 19 November 2026
 
 - Added `TAMILAN-AI-READINESS-CHECK-TA.md` with the latest GitHub Actions, Pages deployment, live job-count, and Supabase Security Advisor results.
