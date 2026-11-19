@@ -637,7 +637,11 @@ await check("Super Admin approves and publishes a mocked job review", async () =
   }));
   try {
     await p.goto(base + "/admin-job-post.html", { waitUntil: "domcontentloaded" });
-    await p.locator("#app").waitFor({ state: "visible", timeout: 10000 });
+    await p.waitForTimeout(500);
+    if (await p.locator("#app").isHidden()) {
+      const gateMessage = await p.locator("#gateText").innerText().catch(() => "No gate message");
+      throw new Error("Super Admin test account was blocked: " + gateMessage);
+    }
     await p.locator('[data-action="approve"][data-id="review-smoke"]').click();
     await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("Approved"));
     await p.locator('[data-action="publish"][data-id="review-smoke"]').click();
