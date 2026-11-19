@@ -23,10 +23,10 @@ h1.page-title{font-size:24px;color:var(--navy);margin:0 0 4px}h2{color:var(--nav
 </style>
 </head>
 <body>
-<div class="top"><span>Government Jobs • Exam Updates • Career Information</span><label>Language / மொழி <select id="lang"><option value="en">English</option><option value="ta">தமிழ்</option></select></label></div>
+<div class="top"><span>Government Jobs • Exam Updates • Career Information</span><label>Language <select id="lang"><option value="en">English</option><option value="ta">தமிழ்</option></select></label></div>
 <header><div class="head"><div class="brand tc-domain-brand">WWW.TAMILANCAREERS.IN</div></div><div class="nav"><div class="navin"><a href="#home" data-view="home" class="active">Home</a><a href="#category" data-view="category">10th Govt Jobs</a><a href="#category" data-view="category">12th Govt Jobs</a><a href="#category" data-view="category">ITI / Diploma</a><a href="#category" data-view="category">Degree Jobs</a><a href="#home">Results</a><a href="#home">Admit Card</a></div></div></header>
 <main class="wrap">
-<div class="notice"><b>DEMO WEBSITE – SAMPLE CONTENT ONLY.</b> இந்த Demo-வில் உள்ள வேலை அறிவிப்புகள், தேதிகள், நிறுவனங்கள், சம்பளம் மற்றும் இணைப்புகள் அனைத்தும் வடிவமைப்பைக் காட்டுவதற்கான கற்பனை மாதிரிகள். உண்மையான வேலைவாய்ப்பு அறிவிப்புகள் அல்ல.</div>
+<div class="notice"><b>DEMO WEBSITE – SAMPLE CONTENT ONLY.</b> All job notices, dates, companies, salaries and links in this demo are fictional samples for layout demonstration only. They are not real job postings.</div>
 <section id="home" class="view active">
 <div class="hero"><h1>Latest Government Jobs 2026–2027</h1><p>Find government jobs, recruitment notifications, exam dates, hall tickets and results in one place.</p></div>
 <div class="search"><input id="searchHome" placeholder="Search jobs, qualification, department..."><button class="btn" onclick="searchDemo()">SEARCH</button></div>
@@ -87,7 +87,7 @@ h1.page-title{font-size:24px;color:var(--navy);margin:0 0 4px}h2{color:var(--nav
 function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('[data-view]').forEach(a=>a.classList.toggle('active',a.dataset.view===id));window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const a=e.target.closest('[data-view]');if(a){e.preventDefault();showView(a.dataset.view);history.replaceState(null,'','#'+a.dataset.view)}});
 function searchDemo(){const q=(document.getElementById('searchHome').value||document.getElementById('sideSearch').value).toLowerCase();showView('home');document.querySelectorAll('.searchable tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
-document.getElementById('lang').addEventListener('change',e=>{if(e.target.value==='ta'){alert('தமிழ் மொழி மாற்றம் அடுத்த Demo மேம்பாட்டில் முழுமைப்படுத்தப்படும். இந்த பதிப்பில் layout மற்றும் navigation demo காட்டப்படுகிறது.')}});
+document.getElementById('lang').addEventListener('change',e=>{if(e.target.value==='ta'){alert('This version demonstrates the layout and navigation only.')}});
 if(location.hash==='#category')showView('category');if(location.hash==='#job')showView('job');
 </script>
 </body></html>
