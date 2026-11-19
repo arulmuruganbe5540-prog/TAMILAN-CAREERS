@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="ta"><head>
+<html lang="en"><head>
 <meta name="robots" content="noindex,nofollow"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>வெளிநாட்டு வேலை Source Review | TAMILAN CAREERS</title>
+<title>Overseas Job Source Review | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="assets/site-protection.css">
 <style>
@@ -29,17 +29,17 @@ button.secondary{background:#59677c}button.danger{background:#a83d32}button:disa
 </style></head>
 <body><header><strong><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span> · ADMIN</strong><div><a href="admin-control.html">Admin Dashboard</a> · <button id="logout" class="secondary">Logout</button></div></header>
 <main>
-<section class="hero"><h1>இந்தியா & வெளிநாட்டு வேலைவாய்ப்பு Source Review</h1><p>அரசு மற்றும் நிறுவனங்களின் அதிகாரப்பூர்வ Career பக்கங்களில் கண்டறியப்பட்ட இணைப்புகளை ஆய்வு செய்யும் பகுதி.</p></section>
-<div class="warning">⚠️ இவை தானாகச் சரிபார்க்கப்பட்ட வேலைகள் அல்ல. அசல் அறிவிப்பு, தேதிகள், தகுதி, விண்ணப்ப இணைப்பு மற்றும் duplicate நிலையை உறுதிப்படுத்திய பிறகே Verified செய்யவும். Verified என்பது பொதுவெளியீடு அல்ல; வெளியீடு தனி நிர்வாக முடிவு.</div>
-<div id="state" class="state">Super Admin மற்றும் MFA அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section class="hero"><h1>India & Overseas Job Source Review</h1><p>Review links discovered on official government and company career pages.</p></section>
+<div class="warning">⚠️ These jobs are not automatically verified. Confirm the original notice, dates, eligibility, application link and duplicate status before marking a source as verified. Verification does not publish a job; publication requires a separate admin decision.</div>
+<div id="state" class="state">Checking Super Admin and MFA permissions...</div>
 <section id="panel" hidden>
-<div class="filters"><input id="q" placeholder="வேலை / நிறுவனம் / நாடு தேடுக"><select id="type"><option value="">அனைத்து வகைகளும்</option><option value="india_government">இந்திய அரசு</option><option value="foreign_government">வெளிநாட்டு அரசு</option><option value="india_company">இந்திய நிறுவனம்</option><option value="foreign_company">வெளிநாட்டு நிறுவனம்</option></select><select id="status"><option value="pending">நிலுவை</option><option value="verified">சரிபார்க்கப்பட்டது</option><option value="published">வெளியிடப்பட்டது</option><option value="rejected">நிராகரிக்கப்பட்டது</option><option value="all">அனைத்தும்</option></select></div>
+<div class="filters"><input id="q" placeholder="Search jobs, companies or countries"><select id="type"><option value="">All Types</option><option value="india_government">Indian Government</option><option value="foreign_government">Foreign Government</option><option value="india_company">Indian Company</option><option value="foreign_company">Foreign Company</option></select><select id="status"><option value="pending">நிலுவை</option><option value="verified">சரிபார்க்கப்பட்டது</option><option value="published">வெளியிடப்பட்டது</option><option value="rejected">நிராகரிக்கப்பட்டது</option><option value="all">அனைத்தும்</option></select></div>
 <div id="count" class="meta"></div><div id="list"></div></section></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2"),$=id=>document.getElementById(id);
 let rows=[];
-const typeNames={india_government:"இந்திய அரசு",foreign_government:"வெளிநாட்டு அரசு",india_company:"இந்திய நிறுவனம்",foreign_company:"வெளிநாட்டு நிறுவனம்"};
-const checks=[["source_domain_matched","அதிகாரப்பூர்வ domain உறுதி"],["original_notice_opened","அசல் அறிவிப்பு / வேலைப் பக்கம் திறந்து பார்த்தது"],["dates_verified","தேதி / கடைசி தேதி சரிபார்த்தது"],["eligibility_verified","தகுதி சரிபார்த்தது"],["application_link_verified","Apply இணைப்பு சரிபார்த்தது"],["duplicate_checked","Duplicate சோதனை முடிந்தது"]];
+const typeNames={india_government:"Indian Government",foreign_government:"Foreign Government",india_company:"Indian Company",foreign_company:"Foreign Company"};
+const checks=[["source_domain_matched","Official domain confirmed"],["original_notice_opened","Original notice / job page opened"],["dates_verified","Dates / deadline verified"],["eligibility_verified","Eligibility verified"],["application_link_verified","Application link verified"],["duplicate_checked","Duplicate check completed"]];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 async function requireAdmin(){
  const {data:{user},error}=await db.auth.getUser();
