@@ -153,11 +153,10 @@ await check("Login page language switch translates static and dynamic authentica
     const english = await languagePage.evaluate(() => ({
       hint: document.querySelector("#passwordHint")?.textContent.trim(),
       forgot: document.querySelector("#forgotLink")?.textContent.trim(),
-      admin: document.querySelector("#adminLoginLink")?.textContent.trim(),
       toggle: document.querySelector("#passwordToggle")?.textContent.trim()
     }));
     if (english.hint !== "At least 8 characters" || english.forgot !== "Forgot Password?" ||
-        english.admin !== "Super Admin Login" || english.toggle !== "Show") {
+        english.toggle !== "Show" || document.querySelector("#adminLoginLink")) {
       throw new Error("English login text remains untranslated: " + JSON.stringify(english));
     }
     await languagePage.evaluate(() => localStorage.setItem("tc_language_preference_v1", "ta"));
@@ -166,11 +165,10 @@ await check("Login page language switch translates static and dynamic authentica
     await languagePage.waitForTimeout(100);
     const tamil = await languagePage.evaluate(() => ({
       hint: document.querySelector("#passwordHint")?.textContent.trim(),
-      admin: document.querySelector("#adminLoginLink")?.textContent.trim(),
       forgot: document.querySelector("#forgotLink")?.textContent.trim()
     }));
-    if (!tamil.hint.includes("குறைந்தது 8") || !tamil.admin.includes("சூப்பர்") ||
-        !tamil.forgot.includes("கடவுச்சொல்")) {
+    if (!tamil.hint.includes("குறைந்தது 8") || !tamil.forgot.includes("கடவுச்சொல்") ||
+        document.querySelector("#adminLoginLink")) {
       throw new Error("Tamil login text did not translate: " + JSON.stringify(tamil));
     }
     await languagePage.locator("#switchLink").click();
