@@ -13,6 +13,7 @@ async function init(){
  const {data:s}=await db.auth.getSession();if(!s.session){location.replace("login.html?next="+encodeURIComponent("admin-job-reports.html"));return}
  const {data:r,error}=await db.from("user_roles").select("role").eq("user_id",s.session.user.id).eq("role","super_admin").maybeSingle();
  if(error||!r){$("message").textContent="Super Admin அனுமதி தேவை.";return}
+ const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){$("message").textContent="Authenticator MFA சரிபார்ப்பு தேவை. Admin Login வழியாக மீண்டும் உள்நுழையவும்.";return}
  allowed=true;$("message").textContent="Admin அனுமதி உறுதி செய்யப்பட்டது.";await load();
 }
 async function load(){
