@@ -69,6 +69,8 @@ jobs:
         run: python scripts/admin-mfa-guard.py
       - name: Guard Super Admin external job candidate review
         run: python scripts/external-job-review-guard.py
+      - name: Guard staged TAMILAN AI rollout and browser secret boundary
+        run: python scripts/tamilan-ai-safety-guard.py
       - name: Check internal website structure
         run: python scripts/website-health-check.py
       - name: Install browser test dependency
