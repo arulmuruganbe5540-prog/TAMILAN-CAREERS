@@ -297,8 +297,12 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
    ]);
    showList("governmentJobList",[],"Government jobs are not available to display right now.");
    showList("privateJobList",[],"Private jobs are not available to display right now.");
-   showList("overseasJobList",foreignError?[]:(foreignData||[]),"New overseas jobs will appear here when published.");
-   showList("jobList",error?[]:(data||[]),"New verified opportunities will appear here when published.");
+   const overseasJobs=foreignError?[]:(foreignData||[]);
+   showList("overseasJobList",overseasJobs,"New overseas jobs will appear here when published.");
+   const overseasSection=document.getElementById("overseas-jobs");
+   const alreadyShownIds=new Set((overseasSection&&!overseasSection.hidden?overseasJobs:[]).map(j=>String(pick(j,["id","job_id"]))).filter(Boolean));
+   const latestJobs=(data||[]).filter(j=>{const id=String(pick(j,["id","job_id"]));return !id||!alreadyShownIds.has(id)});
+   showList("jobList",error?[]:latestJobs,error?"New verified opportunities will appear here when published.":latestJobs.length?"New verified opportunities will appear here when published.":"Recent opportunities are already shown in the sections above.");
    return;
   }
   const c=country.country_name;
@@ -316,8 +320,25 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
   showList("governmentJobList",gov.error?[]:(gov.data||[]),"No government jobs are currently published for this country.");
   showList("privateJobList",priv.error?[]:(priv.data||[]),"No private jobs are currently published for this country.");
   showList("overseasJobList",overseas.error?[]:(overseas.data||[]),"New international opportunities will appear here when published.");
-  info.textContent="Recently published opportunities from across the platform.";
-  showList("jobList",latest.error?[]:(latest.data||[]),"New verified opportunities will appear here when published.");
+  const featuredSections=[
+   {id:"country-government",jobs:gov.data||[],error:gov.error},
+   {id:"country-private",jobs:priv.data||[],error:priv.error},
+   {id:"overseas-jobs",jobs:overseas.data||[],error:overseas.error}
+  ];
+  const alreadyShownIds=new Set();
+  featuredSections.forEach(item=>{
+   const section=document.getElementById(item.id);
+   if(!item.error&&section&&!section.hidden)item.jobs.forEach(j=>{
+    const id=String(pick(j,["id","job_id"]));
+    if(id)alreadyShownIds.add(id);
+   });
+  });
+  const latestJobs=(latest.data||[]).filter(j=>{
+   const id=String(pick(j,["id","job_id"]));
+   return !id||!alreadyShownIds.has(id);
+  });
+  info.textContent="Recently published opportunities not already featured above.";
+  showList("jobList",latest.error?[]:latestJobs,latest.error?"New verified opportunities will appear here when published.":latestJobs.length?"New verified opportunities will appear here when published.":"Recent opportunities are already shown in the sections above.");
  }
  load().catch(()=>{applyLayout(null);showList("jobList",[],"Jobs could not be loaded. Please try again later.");});
 })();
