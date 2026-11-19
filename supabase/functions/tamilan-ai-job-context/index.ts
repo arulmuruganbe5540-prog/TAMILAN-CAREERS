@@ -1,6 +1,6 @@
 // TAMILAN AI read-only job context endpoint. Fail-closed and source-only.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { MAX_RESULTS, normalizeCountry, normalizeSearchQuery, publicJobSource, rateLimitDecision } from "./logic.ts";
+import { MAX_RESULTS, parseRetrievalInput, publicJobSource, rateLimitDecision } from "./logic.ts";
 
 const ALLOWED_ORIGINS = new Set(["https://tamilancareers.in", "https://www.tamilancareers.in"]);
 function responseHeaders(origin: string | null, retryAfter?: number): Headers {
@@ -37,15 +37,10 @@ Deno.serve(async (request: Request) => {
   } catch {
     return json({ error: "Invalid JSON body" }, 400, origin);
   }
-  if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "JSON object required" }, 400, origin);
-  const input = body as Record<string, unknown>;
-  const query = normalizeSearchQuery(input.query);
-  if (query === null) return json({ error: "query must be plain text up to 80 characters" }, 400, origin);
-  const country = normalizeCountry(input.country);
-  if (country === null) return json({ error: "country must be plain text up to 100 characters" }, 400, origin);
-  if (Object.keys(input).some((key) => !new Set(["query", "country"]).has(key))) {
-    return json({ error: "Unsupported request field" }, 400, origin);
-  }
+  const parsedInput = parseRetrievalInput(body);
+  if (!parsedInput.ok) return json({ error: parsedInput.error }, 400, origin);
+  const { query, country } = parsedInput.value;
+
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
   if (!supabaseUrl || !anonKey) return json({ error: "Public Supabase configuration is missing" }, 503, origin);
