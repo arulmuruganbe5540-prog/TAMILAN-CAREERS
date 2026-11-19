@@ -1,3 +1,13 @@
+## Super Admin backend MFA enforcement — 19 November 2026
+
+- Added and applied `20261119080000_require_mfa_for_super_admin_rpc_actions.sql`.
+- Added private helper `private.require_super_admin_mfa()`: it requires an authenticated user and, when that account has any verified Auth MFA factor, requires the current JWT to have `aal2`. The helper uses an empty search path and has direct execution revoked from PUBLIC, anon and authenticated.
+- Enforced the helper inside `tc_admin_publish_job`, `tc_review_company_verification`, `tc_review_job_report`, and the `tc_guard_company_verification_status` trigger. The external candidate review RPC already had its own equivalent conditional AAL2 check.
+- Added the new migration to `scripts/admin-mfa-guard.py`, so CI checks that backend enforcement is not accidentally removed.
+- Live SQL verification confirmed all four functions call the helper, retain empty search_path and SECURITY DEFINER where expected; anon execution is denied. Authenticated execution remains only on the application RPCs that need it; the private helper itself cannot be called directly by authenticated users.
+- The Supabase Security Advisor still flags the expected authenticated-callable SECURITY DEFINER RPCs. These are application workflows with in-function ownership/role validation; do not blanket-revoke their grants. The advisor also reports two default-deny RLS/no-policy tables and Leaked Password Protection disabled.
+- Real Super Admin AAL1/AAL2 browser testing still requires the owner to enroll and test their authenticator device(s). Do not claim that owner-dependent MFA enrollment or end-to-end login has been completed.
+
 ## External job candidate review — final verification, 19 November 2026
 
 - Added database-side MFA enforcement to `tc_review_external_job_candidate`: if the current Super Admin has any verified Auth MFA factor, the JWT must carry `aal2`. Accounts with no enrolled factor retain the existing password-only compatibility until owner enrollment, matching the current Admin MFA rollout policy.
