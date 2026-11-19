@@ -47,3 +47,14 @@ create policy "Super admins delete site assets" on storage.objects
   for delete to authenticated using (
     bucket_id = 'site-assets' and (select private.is_super_admin())
   );
+
+-- Seed the first default homepage configuration without overwriting later Admin edits.
+insert into public.site_settings (setting_key, site_name, headline, subtitle, primary_color)
+values (
+  'homepage',
+  'TAMILAN CAREERS',
+  'உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!',
+  'இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.',
+  '#101d3a'
+)
+on conflict (setting_key) do nothing;
