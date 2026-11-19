@@ -1,3 +1,9 @@
+## 19 November 2026 — MFA regression guard
+
+- Added `scripts/admin-mfa-guard.py` and wired it into the GitHub Actions website health-check workflow.
+- The guard checks that all eight protected Admin pages retain Super Admin role and AAL checks, the Admin Login page retains the MFA challenge/verify path, the security page retains TOTP enrollment, and the exam-resource publishing form remains hidden until authorization succeeds.
+- The updated health-check workflow is running against the latest commit; its result must be confirmed before considering this regression check verified.
+
 ## 19 November 2026 — MFA recovery-factor support
 
 - Updated the Admin security page to permit enrollment of more than one verified TOTP authenticator factor. This supports a second authenticator device as a recovery path if the primary device is lost.
