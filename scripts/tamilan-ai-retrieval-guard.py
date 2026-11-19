@@ -14,6 +14,7 @@ if not FUNCTION.is_file() or not LOGIC.is_file() or not HANDLER.is_file():
 else:
     source = FUNCTION.read_text(encoding='utf-8')
     logic = LOGIC.read_text(encoding='utf-8')
+    handler = HANDLER.read_text(encoding='utf-8')
     combined = source + "\n" + handler + "\n" + logic
     required = {
         'default-off feature flag': 'env("TAMILAN_AI_RETRIEVAL_ENABLED") !== "true"',
