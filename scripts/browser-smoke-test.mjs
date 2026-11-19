@@ -183,6 +183,44 @@ await check("Login page language switch translates static and dynamic authentica
   }
 });
 
+
+await check("Core job workflow Tamil source messages translate to English", async () => {
+  const languagePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await languagePage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
+    }));
+    await languagePage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
+    await languagePage.goto(base + "/jobs.html", { waitUntil: "domcontentloaded" });
+    await languagePage.waitForFunction(() => !!window.TC_TRANSLATE && window.TC_TRANSLATE.language === "en");
+    const samples = [
+      "வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திலிருந்து ஒரு வேலையைத் தேர்ந்தெடுக்கவும்.",
+      "இந்த வேலை விவரம் கிடைக்கவில்லை.",
+      "வேலை விவரங்களை ஏற்ற முடியவில்லை",
+      "விண்ணப்பத்தைச் சமர்ப்பிக்கவும்",
+      "மாற்றத்தைச் சேமிக்கவும்",
+      "உங்கள் கணக்கு அனுமதிகள் சரிபார்க்கப்பட்டுள்ளன. கீழே கிடைக்கும் வசதிகளைப் பார்க்கலாம்."
+    ];
+    await languagePage.evaluate(values => {
+      const host = document.createElement("div");
+      host.id = "translation-fixture";
+      values.forEach(value => { const p = document.createElement("p"); p.textContent = value; host.appendChild(p); });
+      document.body.appendChild(host);
+    }, samples);
+    await languagePage.waitForTimeout(150);
+    const result = await languagePage.locator("#translation-fixture").innerText();
+    if (/வேலை ID கிடைக்கவில்லை|இந்த வேலை விவரம் கிடைக்கவில்லை|வேலை விவரங்களை ஏற்ற முடியவில்லை|விண்ணப்பத்தைச் சமர்ப்பிக்கவும்|மாற்றத்தைச் சேமிக்கவும்|உங்கள் கணக்கு அனுமதிகள்/.test(result)) {
+      throw new Error("Tamil source text remains in English mode: " + result);
+    }
+    if (!result.includes("Job ID is missing") || !result.includes("This job could not be found")) {
+      throw new Error("Expected English translations were not applied: " + result);
+    }
+  } finally {
+    await languagePage.close();
+  }
+});
+
 await check("Job seeker and employer registration validate account details before submission", async () => {
   await open("login.html");
   await page.locator("#seeker").click();
