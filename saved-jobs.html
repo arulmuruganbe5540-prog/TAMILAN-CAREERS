@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ta"><head>
-<meta name="robots" content="noindex,follow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>சேமித்த வேலைகள் | TAMILAN CAREERS</title><meta name="description" content="நீங்கள் சேமித்த வேலைவாய்ப்புகளைப் பார்க்கவும் நிர்வகிக்கவும்.">
+<html lang="en"><head>
+<meta name="robots" content="noindex,follow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Saved Jobs | TAMILAN CAREERS</title><meta name="description" content="View and manage the jobs you have saved.">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:21px;font-weight:800;color:#54c8ff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:950px;margin:28px auto;padding:0 15px}h1{font-size:25px;color:#173e70}.intro{color:#62728a;line-height:1.7}.job{background:white;border:1px solid #e3eaf3;border-radius:13px;padding:18px;margin:14px 0}.job h2{font-size:18px;color:#173e70;margin:0 0 8px}.meta{color:#63738a;font-size:14px;line-height:1.8}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.btn{display:inline-block;border:0;border-radius:8px;padding:10px 14px;text-decoration:none;font-weight:bold;font-size:13px;cursor:pointer}.apply{background:#1688ed;color:white}.remove{background:#fff0f0;color:#a12b2b}.empty{background:white;padding:25px;border-radius:12px;line-height:1.8;color:#63738a;margin-top:18px}.note{font-size:12px;color:#778397;line-height:1.7;margin-top:18px}
 </style>  <link rel="stylesheet" href="assets/site-protection.css">
@@ -9,14 +9,14 @@
 .tc-domain-brand{display:inline-block!important;color:#eaf8ff!important;font-size:clamp(13px,2vw,19px)!important;font-weight:900!important;letter-spacing:.8px!important;line-height:1.2!important;white-space:nowrap!important;text-decoration:none!important;text-shadow:0 1px 10px rgba(72,190,255,.16)}
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head><body>
-<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="index.html">முகப்பு</a><a href="jobs.html">வேலை தேடுங்கள்</a><a href="dashboard.html">Dashboard</a></nav></header>
-<main><h1>☆ சேமித்த வேலைவாய்ப்புகள்</h1><p class="intro">பின்னர் பார்க்க விரும்பும் வேலைகளை இங்கே வைத்துக்கொள்ளலாம்.</p><section id="list" aria-live="polite"></section><p class="note">குறிப்பு: சேமித்த வேலைகள் இந்த மொபைல் / உலாவியின் local storage-ல் மட்டுமே இருக்கும். வேறு சாதனத்தில் தானாக ஒத்திசைக்கப்படாது. வேலை அறிவிப்பு இன்னும் திறந்திருப்பதையும் கடைசி நாளையும் நிறுவனத்திடம் சரிபார்க்கவும்.</p></main>
+<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="dashboard.html">Dashboard</a></nav></header>
+<main><h1>☆ Saved Jobs</h1><p class="intro">Keep jobs here to review later.</p><section id="list" aria-live="polite"></section><p class="note">குறிப்பு: Saved Jobs இந்த மொபைல் / உலாவியின் local storage-ல் மட்டுமே இருக்கும். வேறு சாதனத்தில் தானாக ஒத்திசைக்கப்படாது. வேலை அறிவிப்பு இன்னும் திறந்திருப்பதையும் கடைசி நாளையும் நிறுவனத்திடம் சரிபார்க்கவும்.</p></main>
 <script>
 const KEY="tc_saved_jobs_v1",list=document.getElementById("list");
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(x)?x:[]}catch(e){return []}}
-function render(){const items=read();if(!items.length){list.innerHTML='<div class="empty">நீங்கள் இன்னும் எந்த வேலையையும் சேமிக்கவில்லை.<br><a href="jobs.html">வேலை தேடத் தொடங்குங்கள்</a></div>';return;}
-list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"வேலை விவரம்")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="login.html?next='+encodeURIComponent("apply.html?job="+j.id)+'">விண்ணப்பிக்க Login செய்யவும்</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">நீக்கவும்</button></div></article>').join("");}
+function render(){const items=read();if(!items.length){list.innerHTML='<div class="empty">You have not saved any jobs yet.<br><a href="jobs.html">Start searching for jobs</a></div>';return;}
+list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"Job Details")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="login.html?next='+encodeURIComponent("apply.html?job="+j.id)+'">Log in to apply</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">நீக்கவும்</button></div></article>').join("");}
 list.addEventListener("click",e=>{const b=e.target.closest("[data-remove]");if(!b)return;const id=b.getAttribute("data-remove");localStorage.setItem(KEY,JSON.stringify(read().filter(j=>String(j.id)!==String(id))));render();});render();
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
