@@ -1,3 +1,15 @@
+## TAMILAN AI Supabase data-access audit — 19 November 2026
+
+- Added `TAMILAN-AI-INTEGRATION-PLAN-TA.md` and linked it from README. This documents a fail-closed, feature-flagged, server-side model adapter design. It does not deploy or enable an AI model.
+- Added `TAMILAN-AI-DATA-ACCESS-AUDIT-TA.md` and linked it from README after a live read-only Supabase audit.
+- Live database inspection confirmed `public.jobs` has RLS enabled and a public SELECT policy restricted to `status='published'`, admin-managed records, or jobs belonging to verified companies. The policy is present for anon and authenticated.
+- Read-only role simulation with `SET LOCAL ROLE anon` returned 0 visible published jobs. Current `public.jobs` row count is 0, so no verified live vacancy can currently be supplied to an AI assistant. Do not fabricate job counts or recommendations.
+- `public.job_sources` has RLS enabled and no policies; keep it default-deny. Do not expose this table just to support AI citations.
+- Security Advisor reported 2 RLS-enabled/no-policy tables (`company_invitations`, `job_sources`) and 15 authenticated-callable SECURITY DEFINER RPC warnings. Catalog review showed anon cannot execute those functions; the 15 authenticated-callable RPCs must be reviewed individually for role/ownership checks. Do not blanket-revoke grants: some are legitimate application workflows and the recent Super Admin MFA guard is already in place.
+- No database schema, grants, policies, functions, secrets, or Edge Function deployments were changed during this audit.
+- Next steps: populate and verify published jobs through existing Admin workflows; then build a new read-only AI retrieval endpoint using only public RLS-visible fields, with authentication/rate limits, strict output source-ID validation, and model-disabled fail-closed behavior. Keep legacy AI endpoints disabled until separately reviewed.
+- Current Supabase changelog note: from 2026-10-30, new public-schema tables are not automatically exposed to the Data API; any future AI rate-limit/usage tables require deliberate exposure and RLS/grant review.
+ 
 ## Super Admin backend MFA enforcement — 19 November 2026
 
 - Added and applied `20261119040657_require_mfa_for_super_admin_rpc_actions.sql`.
