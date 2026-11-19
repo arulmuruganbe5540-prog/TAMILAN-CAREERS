@@ -148,6 +148,13 @@ Repository-இல் `supabase/functions/tamilan-ai-job-context/index.ts` என
 
 **முக்கிய வரம்பு:** இந்த commit-இல் Edge Function source மட்டும் சேர்க்கப்பட்டுள்ளது. Deploy, runtime test, rate limiter, usage monitoring, model adapter, assistant UI எதுவும் இல்லை. Rate limiting மற்றும் authenticated integration tests சேர்க்கப்படும் வரை feature flag OFF-ஆகவே இருக்க வேண்டும். Job table தற்போது காலியாக இருப்பதால் vacancy பதில்கள் உருவாக்கப்படக்கூடாது.
 
+## 12. Durable per-user rate limit — privilege boundary revised, source not applied
+
+- Public Data API wrapper `public.tamilan_ai_consume_job_context_quota()` is `SECURITY INVOKER`, not SECURITY DEFINER.
+- Privileged implementation `private.tamilan_ai_consume_job_context_quota()` stays in the non-exposed `private` schema. This private helper is SECURITY DEFINER with empty search_path; it checks `auth.uid()`, rejects anonymous Auth users, and can update only the caller's row.
+- Both functions revoke PUBLIC/anon execute and grant execute only to authenticated. The wrapper can call the helper because authenticated already has USAGE on the private schema; the helper's own execute grant is narrow.
+- A CI static guard now asserts the public wrapper never becomes SECURITY DEFINER and the private helper retains an empty search_path.
+
 ## 12. Durable per-user rate limit — source prepared, not applied
 
 - புதிய migration source: `supabase/migrations/20261119080000_tamilan_ai_job_context_rate_limit.sql`.
