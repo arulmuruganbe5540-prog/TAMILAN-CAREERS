@@ -278,11 +278,6 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
 
   e.preventDefault();
 
-  if (!supabaseClient) {
-    showMessage("Supabase இணைப்பு கிடைக்கவில்லை. Publishable Key-ஐ சரிபார்க்கவும்.");
-    return;
-  }
-
   const email = document.getElementById("email").value.trim().toLowerCase();
   const password = document.getElementById("password").value;
   const fullName = document.getElementById("fullName").value.trim();
@@ -290,6 +285,11 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
   if (isRegister && password !== confirmPassword) { showMessage("இரண்டு Password-களும் ஒன்றாக இருக்க வேண்டும்."); return; }
   if (isRegister && (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password))) { showMessage("Password-ல் குறைந்தது ஒரு பெரிய எழுத்து, ஒரு சிறிய எழுத்து, ஒரு எண் இருக்க வேண்டும்."); return; }
   if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("தொடர்வதற்கு விதிமுறைகள் மற்றும் தனியுரிமைக் கொள்கையை ஏற்கவும்."); return; }
+
+  if (!supabaseClient) {
+    showMessage("Supabase இணைப்பு கிடைக்கவில்லை. Publishable Key-ஐ சரிபார்க்கவும்.");
+    return;
+  }
 
   const button = document.getElementById("submitBtn");
 
