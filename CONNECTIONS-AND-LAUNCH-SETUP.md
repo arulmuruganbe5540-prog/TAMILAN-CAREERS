@@ -9,7 +9,7 @@ Supabase project: https://supabase.com/dashboard/project/qkmljuuusfjowexvybvy
 ## Already connected and verified
 - GitHub repository and GitHub Pages deployment are connected.
 - Supabase project is connected to the website using its project URL and browser-safe public/anon key. Never place a Supabase service-role/secret key in website HTML or JavaScript.
-- The Supabase Edge Functions are deployed and active: company-members, company-resume-access, scan-external-job-sources, ingest-government-notices, bilingual-job-search, ai-resume-match, and legacy manage-hiring.
+- The operational Supabase Edge Functions include company-members, company-resume-access, scan-external-job-sources, and ingest-government-notices. Legacy AI-related functions are disabled and must remain unused.
 - Latest GitHub Pages deployment run `44095184723` succeeded for commit `cd607324586ab899ecf154442dc123ed3fd44831`.
 - Latest full Health Audit run `44094931772` succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388`. Deno type-check, SQL delimiter lint, privacy guards, website structure, JavaScript checks, and browser smoke tests all passed.
 
@@ -17,17 +17,8 @@ Supabase project: https://supabase.com/dashboard/project/qkmljuuusfjowexvybvy
 
 Add secrets only in the provider dashboards listed below. Do not send secret values in ChatGPT, email, screenshots, GitHub source files, or public issues.
 
-### 1. OpenAI — AI resume matching and Tamil/English job search
-Create/use an OpenAI API key with API billing/usage enabled, then add this Supabase Edge Function secret:
-- `OPENAI_API_KEY`
-
-Supabase Dashboard → Project Settings → Edge Functions → Secrets.
-
-Used by:
-- `ai-resume-match`
-- `bilingual-job-search`
-
-Important current status: the deployed `ai-resume-match` and `bilingual-job-search` Edge Functions are intentionally disabled and currently return HTTP 410. Adding the secret alone will not enable them; their implementation must first be replaced with the real Responses API integration, then tested. Keep `OPENAI_API_KEY` only in Supabase Edge Function Secrets (never in browser code or GitHub). Before sending resume/profile content to an AI provider, show candidates a clear disclosure and obtain their consent. Apply request-size limits, rate limits, and usage caps. The existing `resume-job-search.html` is a separate local, rule-based matcher and does not send resume text to AI.
+### 1. AI features — intentionally excluded
+AI Job Matching, AI Resume Matching, AI-powered bilingual search, and AI notice extraction are outside the approved product scope. Do not add an OpenAI API key or enable the legacy AI Edge Functions. Resume search remains local and rule-based; Government and job notices require human Admin review.
 
 ### 2. Resend — company invitation emails
 Create a Resend account, verify a sender/domain if possible, and add these Supabase Edge Function secrets:
