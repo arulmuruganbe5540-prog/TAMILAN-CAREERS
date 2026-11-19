@@ -5,17 +5,18 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 FUNCTION = ROOT / 'supabase/functions/tamilan-ai-job-context/index.ts'
 LOGIC = ROOT / 'supabase/functions/tamilan-ai-job-context/logic.ts'
+HANDLER = ROOT / 'supabase/functions/tamilan-ai-job-context/handler.ts'
 CONFIG = ROOT / 'supabase/config.toml'
 MIGRATION = ROOT / 'supabase/migrations/20261119065045_tamilan_ai_job_context_rate_limit.sql'
 errors = []
-if not FUNCTION.is_file() or not LOGIC.is_file():
+if not FUNCTION.is_file() or not LOGIC.is_file() or not HANDLER.is_file():
     errors.append('Missing TAMILAN AI retrieval function or pure logic module')
 else:
     source = FUNCTION.read_text(encoding='utf-8')
     logic = LOGIC.read_text(encoding='utf-8')
     combined = source + "\n" + logic
     required = {
-        'default-off feature flag': 'Deno.env.get("TAMILAN_AI_RETRIEVAL_ENABLED") !== "true"',
+        'default-off feature flag': 'env("TAMILAN_AI_RETRIEVAL_ENABLED") !== "true"',
         'JWT bearer requirement': 'authorization?.startsWith("Bearer ")',
         'anon key only': 'SUPABASE_ANON_KEY',
         'published-only query': '.eq("status", "published")',
