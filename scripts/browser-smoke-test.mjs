@@ -341,6 +341,17 @@ await check("All 16 government exam categories have a dedicated practice track",
   if (coverage.missing.length) throw new Error("Missing category question tracks: " + coverage.missing.join(", "));
 });
 
+await check("Empty job board clearly explains that no verified vacancies are published yet", async () => {
+  const emptyPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await emptyPage.route("**/rest/v1/jobs**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+    await emptyPage.goto(base + "/jobs.html", {waitUntil:"domcontentloaded"});
+    await emptyPage.locator("#results .empty").waitFor({state:"visible",timeout:10000});
+    const message=await emptyPage.locator("#results .empty").innerText();
+    if(!message.includes("No verified job vacancies have been published yet")) throw new Error("Empty job board message is unclear: "+message);
+  } finally { await emptyPage.close(); }
+});
+
 await check("Rule-based job search filters work without AI controls", async () => {
   await open("jobs.html");
   if (!(await page.locator("#q").isVisible())) throw new Error("Job keyword search is missing");
