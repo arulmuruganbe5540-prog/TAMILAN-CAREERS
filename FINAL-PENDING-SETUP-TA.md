@@ -26,15 +26,9 @@ Supabase இயல்பான SMTP சேவை பொதுப் பயனர
 
 Company Members பக்கத்தில் அழைப்பை உருவாக்கும்போது Email அனுப்ப முடியாவிட்டால், பாதுகாப்பான 7 நாள் அழைப்பு இணைப்பு Clipboard-ல் நகலெடுக்கப்படும். அதை அழைக்கப்பட்டவருக்கு WhatsApp / SMS மூலம் அனுப்பலாம். அவர் அழைப்பில் குறிப்பிடப்பட்ட அதே Email முகவரியால் Login செய்து ஏற்க வேண்டும்.
 
-## 3. OpenAI API Credits
+## 3. AI வசதிகள் — திட்டத்தில் பயன்படுத்தப்படாது
 
-Government notice AI extraction-ஐச் சோதித்தபோது OpenAI API பதில்: `429 — You have no credits remaining`.
-
-1. OpenAI Platform Billing பக்கத்தில் API credits / payment method சேர்க்கவும்.
-2. ஏற்கெனவே Supabase Function Secret-ஆக அமைக்கப்பட்டுள்ள `OPENAI_API_KEY`-ஐ இங்கே பகிர வேண்டாம்.
-3. Credits சேர்த்த பிறகு TAMILAN CAREERS → Admin Login → அரசு அறிவிப்பு ஆய்வு பக்கத்தில் ஒவ்வொரு நிலுவை அறிவிப்புக்கும் **AI விவரங்களை மீண்டும் முயற்சி** பொத்தானைப் பயன்படுத்தலாம்.
-
-Billing: https://platform.openai.com/settings/organization/billing/overview
+திட்ட உரிமையாளரின் முடிவின்படி AI Job Matching, AI Resume Matching, AI job search மற்றும் AI notice extraction பயன்படுத்தப்படாது. OpenAI API credits அல்லது `OPENAI_API_KEY` அமைக்க வேண்டாம். அரசு அறிவிப்புகள் மற்றும் வேலை விவரங்கள் மனித Admin சரிபார்ப்பின் மூலமே வெளியிடப்பட வேண்டும்.
 
 ## 4. Leaked Password Protection
 
