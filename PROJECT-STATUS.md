@@ -1,3 +1,14 @@
+## TAMILAN AI quota migration applied and initial live checks — 19 November 2026
+
+- Owner explicitly authorized applying the quota migration to the live Supabase project. Applied successfully to project `qkmljuuusfjowexvybvy`; migration history version is `20261119065045`, name `tamilan_ai_job_context_rate_limit`.
+- Repository migration filename was aligned to `supabase/migrations/20261119065045_tamilan_ai_job_context_rate_limit.sql` so its version matches live migration history.
+- Post-apply catalog verification passed: quota table exists, RLS is enabled, API roles have no direct table SELECT privilege, anon cannot execute either RPC, authenticated can execute both, private implementation is SECURITY DEFINER with empty search_path, and public wrapper is SECURITY INVOKER with empty search_path.
+- A transaction-scoped authenticated-role test with a registered account claim returned allowed=true and expected initial counters. An 11-call test returned exactly 10 allowed / 1 denied with Retry-After. A daily-cap test returned allowed=false, day_remaining=0 and a positive Retry-After.
+- The runtime checks used database role/claim simulation, not a real browser JWT session. Test counter writes were rolled back; verified persistent quota rows = 0. Cross-account isolation, actual anonymous Auth session rejection, actual no-JWT HTTP denial and concurrent-call stress remain outstanding.
+- Security Advisor shows the existing 15 authenticated-callable SECURITY DEFINER warnings unchanged. It now also reports the private quota table as RLS-enabled/no-policy (INFO); this is intentional default-deny because API roles have no direct table grants. No new public SECURITY DEFINER warning was introduced.
+- Live jobs remain 0 total / 0 published. `tamilan-ai-job-context` is still not deployed; feature flag remains OFF. No model, secrets, public UI, or production job data were changed.
+- The quota runbook was updated with verified live test results and the remaining test gates. Do not deploy or enable the retrieval endpoint until the remaining real-session, cross-account, anonymous and concurrency checks pass and a separate rollout decision is made.
+
 ## TAMILAN AI quota regression guard verification — 19 November 2026
 
 - Strengthened `scripts/tamilan-ai-retrieval-guard.py` to verify caller identity binding, rejection of anonymous Auth accounts, fixed UTC minute/day buckets, both quota ceilings, no direct private-table RLS policies, and PUBLIC/anon execute revocations on both quota functions.
