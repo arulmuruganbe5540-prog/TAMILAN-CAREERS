@@ -5,13 +5,16 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 FUNCTION = ROOT / 'supabase/functions/tamilan-ai-job-context/index.ts'
+LOGIC = ROOT / 'supabase/functions/tamilan-ai-job-context/logic.ts'
 CONFIG = ROOT / 'supabase/config.toml'
 errors = []
 
-if not FUNCTION.is_file():
-    errors.append('Missing TAMILAN AI job-context Edge Function source')
+if not FUNCTION.is_file() or not LOGIC.is_file():
+    errors.append('Missing TAMILAN AI retrieval function or pure logic module')
 else:
     source = FUNCTION.read_text(encoding='utf-8')
+    logic = LOGIC.read_text(encoding='utf-8')
+    combined = source + "\n" + logic
     required = {
         'default-off feature flag': 'Deno.env.get("TAMILAN_AI_RETRIEVAL_ENABLED") !== "true"',
         'JWT bearer requirement': 'authorization?.startsWith("Bearer ")',
@@ -24,18 +27,19 @@ else:
         'untrusted job content marker': 'content_is_untrusted: true',
         'no-private candidate data claim': 'private_candidate_data_used: false',
         'no-vacancy fabrication guard': 'Do not invent vacancies, counts, salaries or employers.',
+        'safe country whitespace normalization': 'replace(/\\s+/g, " ")',
     }
     for label, token in required.items():
-        if token not in source:
-            errors.append(f'Function missing {label}')
+        if token not in combined:
+            errors.append(f'Function/logic missing {label}')
     for forbidden in ('SUPABASE_SERVICE_ROLE_KEY', 'TAMILAN_AI_MODEL_TOKEN', 'TAMILAN_AI_MODEL_URL', 'fetch(row.', '.from("job_sources")'):
-        if forbidden.lower() in source.lower():
+        if forbidden.lower() in combined.lower():
             errors.append(f'Forbidden privileged/model/source-registry access: {forbidden}')
-    if 'application_url' in source:
+    if 'application_url' in combined:
         errors.append('Employer application URLs must not be used as citation sources')
-    if 'MAX_RESULTS = 5' not in source:
+    if 'MAX_RESULTS = 5' not in logic:
         errors.append('Result cap must remain five or fewer')
-    if 'MAX_DESCRIPTION_LENGTH = 6000' not in source:
+    if 'MAX_DESCRIPTION_LENGTH = 6000' not in logic:
         errors.append('Description context cap must remain bounded')
 
 if not CONFIG.is_file():
@@ -52,4 +56,4 @@ if errors:
     raise SystemExit(1)
 
 print('PASS: TAMILAN AI retrieval remains JWT-protected, feature-flagged OFF, read-only, RLS-respecting and source-grounded.')
-print('NOTE: static checks only; this does not prove deployed runtime security or replace authenticated integration tests.')
+print('NOTE: static checks only; Deno unit tests separately exercise pure input and citation logic.')
