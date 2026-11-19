@@ -12,9 +12,8 @@ if not FUNCTION.is_file():
     errors.append('Missing TAMILAN AI job-context Edge Function source')
 else:
     source = FUNCTION.read_text(encoding='utf-8')
-    compact = re.sub(r'\\s+', '', source)
     required = {
-        'default-off feature flag': 'TAMILAN_AI_RETRIEVAL_ENABLED') !== "true"',
+        'default-off feature flag': 'Deno.env.get("TAMILAN_AI_RETRIEVAL_ENABLED") !== "true"',
         'JWT bearer requirement': 'authorization?.startsWith("Bearer ")',
         'anon/publishable key only': 'SUPABASE_ANON_KEY',
         'published-only query': '.eq("status", "published")',
@@ -40,8 +39,8 @@ if not CONFIG.is_file():
     errors.append('Missing Supabase config.toml')
 else:
     config = CONFIG.read_text(encoding='utf-8')
-    section = re.search(r'(?ms)^\\[functions\\.tamilan-ai-job-context\\]\\s*\\n([^\\[]*)', config)
-    if not section or not re.search(r'(?m)^verify_jwt\\s*=\\s*true\\s*$', section.group(1)):
+    section = re.search(r'(?ms)^\[functions\.tamilan-ai-job-context\]\s*\n([^\[]*)', config)
+    if not section or not re.search(r'(?m)^verify_jwt\s*=\s*true\s*$', section.group(1)):
         errors.append('Edge Function must retain verify_jwt = true')
 
 if errors:
