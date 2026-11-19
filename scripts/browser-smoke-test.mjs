@@ -882,6 +882,7 @@ await check("Every public page loads in English without visible Tamil or mobile 
         visibleText: document.body?.innerText || "",
         width: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
+        overflowElements: [...document.querySelectorAll("body *")].map(el => { const rect = el.getBoundingClientRect(); return {tag:el.tagName,id:el.id,className:typeof el.className==="string"?el.className:"",left:Math.round(rect.left),right:Math.round(rect.right),width:Math.round(rect.width)}; }).filter(el => el.right > document.documentElement.clientWidth + 1 || el.left < -1).slice(0,15),
         languageControls: document.querySelectorAll("#tc-language-select,[data-language-selector]").length,
         clippedControls: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
           const style = getComputedStyle(el);
