@@ -67,6 +67,8 @@ jobs:
         run: node --check government-notices-public.js
       - name: Guard Super Admin MFA enrollment, sign-in and page access
         run: python scripts/admin-mfa-guard.py
+      - name: Guard Super Admin external job candidate review
+        run: python scripts/external-job-review-guard.py
       - name: Check internal website structure
         run: python scripts/website-health-check.py
       - name: Install browser test dependency
