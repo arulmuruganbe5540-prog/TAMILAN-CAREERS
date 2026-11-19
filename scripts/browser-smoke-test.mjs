@@ -31,7 +31,7 @@ await check("Homepage loads, career categories navigate and job search works", a
     organization: JSON.parse(document.querySelector("#tc-organization-jsonld")?.textContent || "null")
   }));
   if (structuredData.website?.["@type"] !== "WebSite" || structuredData.organization?.["@type"] !== "Organization" ||
-      structuredData.organization?.email !== "arulmuruganbe5540@gmail.com" || structuredData.organization?.url !== location.origin + "/") {
+      structuredData.organization?.email !== "arulmuruganbe5540@gmail.com" || structuredData.organization?.url !== new URL(base).origin + "/") {
     throw new Error("Homepage structured data is missing or inconsistent: " + JSON.stringify(structuredData));
   }
   const categoryCard = page.locator('.category-card[href*="category=IT"]').first();
@@ -742,7 +742,7 @@ await check("Company team management page requires login", async () => {
 
 await check("Invitation acceptance page rejects a missing token safely", async () => {
   await open("accept-invitation.html");
-  await page.waitForFunction(() => document.getElementById("status")?.textContent.includes("Token"), { timeout: 8000 });
+  await page.waitForFunction(() => document.getElementById("status")?.textContent.toLowerCase().includes("token"), { timeout: 8000 });
   if (!(await page.locator("#acceptBtn").isDisabled())) throw new Error("Invitation button should be disabled without a token");
 });
 
@@ -893,7 +893,7 @@ await check("Every public page loads in English without visible Tamil or mobile 
       if (!state.title.trim()) throw new Error(path + " has no page title");
       if (state.lang !== "en") throw new Error(path + " does not declare lang=en");
       if (/[\u0B80-\u0BFF]/.test(state.visibleText)) throw new Error(path + " displays Tamil text");
-      if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + ")");
+      if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + "): " + JSON.stringify(state.overflowElements));
       if (state.languageControls) throw new Error(path + " still displays a language selector");
       if (state.clippedControls.length) throw new Error(path + " has clipped controls or headings: " + JSON.stringify(state.clippedControls));
       await auditPage.setViewportSize({ width: 1280, height: 900 });
@@ -943,7 +943,7 @@ await check("Login, forgot-password and reset-password flows show clear English 
     if (!forgotRequested) throw new Error("Forgot-password request was not sent");
     await authPage.locator("#password").fill("Candidate123");
     await authPage.locator("#submitBtn").click();
-    await authPage.waitForURL(/jobs\\.html$/, { timeout: 10000 });
+    await authPage.waitForURL(/jobs\.html$/, { timeout: 10000 });
     if (loginBody?.email !== "candidate@example.test" || loginBody?.password !== "Candidate123") {
       throw new Error("Login request did not send the entered credentials");
     }
