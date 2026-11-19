@@ -1,3 +1,8 @@
+## External candidate review input hardening — 19 November 2026
+
+- Added follow-up migration `supabase/migrations/20261119060000_harden_external_candidate_review_validation.sql` and applied it to live Supabase. The RPC now rejects null/unknown decisions and non-object verification payloads before any update.
+- The candidate queue remains unchanged: six items are still pending; no candidate was automatically verified, rejected, or published.
+
 ## 19 November 2026 — secure external job candidate review
 
 - Added Super Admin-only RPC `tc_review_external_job_candidate` in Supabase and committed its migration at `supabase/migrations/20261119050000_secure_external_job_candidate_review.sql`.
