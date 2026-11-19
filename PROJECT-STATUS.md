@@ -1,3 +1,12 @@
+## TAMILAN AI quota regression guard verification — 19 November 2026
+
+- Strengthened `scripts/tamilan-ai-retrieval-guard.py` to verify caller identity binding, rejection of anonymous Auth accounts, fixed UTC minute/day buckets, both quota ceilings, no direct private-table RLS policies, and PUBLIC/anon execute revocations on both quota functions.
+- The first run exposed a Python syntax error in the guard itself; corrected the line separation and reran the workflow.
+- Health Audit run `44473919299` **passed** (commit `a4f54c86dc9e37832fb382e16878ba15b616ea51`).
+- GitHub Pages build/deployment run `44473940810` **passed**, including build and deploy jobs (commit `dd7bacff738fc8a5a0f3fb1b557035df2815e50a`).
+- These are repository static/unit/browser checks only. They do not prove live authenticated quota behavior, concurrent-call atomicity, or cross-account denial in production.
+- The quota migration remains unapplied; `tamilan-ai-job-context` remains undeployed and its feature flag remains OFF. No live Supabase schema, grants, policies, secrets, production data, or Edge Functions were changed.
+
 ## TAMILAN AI rate-limit privilege-boundary hardening — 19 November 2026
 
 - Reviewed the first quota migration design and improved its privilege boundary before applying it.
