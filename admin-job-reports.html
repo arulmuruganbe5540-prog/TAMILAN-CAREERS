@@ -7,7 +7,7 @@
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head><body>
 <header><b>🛡 <span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span> — Job Reports</b><a href="admin-control.html">← Admin Control</a></header>
-<main><section class="panel"><h1 style="margin:0">Job Reports</h1><p class="muted">Review user reports and record the action taken. A job is not automatically removed just because a report is received.</p><div class="row"><span id="summary" class="tag">Checking…</span><button id="refresh" class="btn secondary">Refresh</button></div></section><div id="message" class="panel">Admin அனுமதி Checking…</div><div id="reports"></div></main>
+<main><section class="panel"><h1 style="margin:0">Job Reports</h1><p class="muted">Review user reports and record the action taken. A job is not automatically removed just because a report is received.</p><div class="row"><span id="summary" class="tag">Checking…</span><button id="refresh" class="btn secondary">Refresh</button></div></section><div id="message" class="panel">Checking Admin permissions…</div><div id="reports"></div></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -24,16 +24,16 @@ async function load(){
  if(!allowed)return;
  $("reports").textContent="Loading reports…";
  const {data:rows,error}=await db.from("job_reports").select("id,job_id,reporter_user_id,reason,details,status,admin_note,created_at,reviewed_at,jobs(job_title,job_code,job_kind,company_id,companies(company_name))").order("created_at",{ascending:false}).limit(150);
- if(error){$("reports").textContent="ஏற்ற முடியவில்லை: "+error.message;return}
+ if(error){$("reports").textContent="Unable to load: "+error.message;return}
  const items=rows||[],pending=items.filter(x=>x.status==="pending").length;
- $("summary").textContent="மொத்தம் "+items.length+" · நிலுவை "+pending;
- if(!items.length){$("reports").innerHTML='<div class="empty">இதுவரை புகார்கள் இல்லை.</div>';return}
+ $("summary").textContent="Total "+items.length+" · Pending "+pending;
+ if(!items.length){$("reports").innerHTML='<div class="empty">There are no reports yet.</div>';return}
  $("reports").innerHTML=items.map(x=>{
   const j=Array.isArray(x.jobs)?x.jobs[0]:x.jobs,c=Array.isArray(j?.companies)?j.companies[0]:j?.companies;
-  return '<article class="report"><div class="row"><h2>'+esc(j?.job_title||"வேலை நீக்கப்பட்டது")+'</h2><span class="tag">'+esc(x.status)+'</span><span class="tag">'+esc(reasonNames[x.reason]||x.reason)+'</span></div><p class="muted">Job Code: '+esc(j?.job_code||x.job_id)+' · புகார் தேதி: '+new Date(x.created_at).toLocaleString("ta-IN")+' · Reporter ID: '+esc(x.reporter_user_id)+'</p><p><b>நிறுவனம்:</b> '+esc(c?.company_name||"—")+' · <b>வகை:</b> '+esc(j?.job_kind||"—")+'</p><p><b>விவரம்:</b> '+esc(x.details||"கூடுதல் விவரம் இல்லை")+'</p><p><a href="job-details.html?id='+encodeURIComponent(x.job_id)+'" target="_blank" rel="noopener">வேலைப் பக்கத்தைப் பார்க்க</a></p><label>Admin குறிப்பு</label><textarea id="note-'+x.id+'" maxlength="2000" rows="2">'+esc(x.admin_note||"")+'</textarea><div class="row"><button class="btn secondary" data-id="'+x.id+'" data-status="reviewing">ஆய்வில்</button><button class="btn" data-id="'+x.id+'" data-status="actioned">நடவடிக்கை முடிந்தது</button><button class="btn secondary" data-id="'+x.id+'" data-status="dismissed">புகார் நிராகரி</button></div></article>';
+  return '<article class="report"><div class="row"><h2>'+esc(j?.job_title||"Job removed")+'</h2><span class="tag">'+esc(x.status)+'</span><span class="tag">'+esc(reasonNames[x.reason]||x.reason)+'</span></div><p class="muted">Job Code: '+esc(j?.job_code||x.job_id)+' · Report Date: '+new Date(x.created_at).toLocaleString("ta-IN")+' · Reporter ID: '+esc(x.reporter_user_id)+'</p><p><b>Company:</b> '+esc(c?.company_name||"—")+' · <b>Type:</b> '+esc(j?.job_kind||"—")+'</p><p><b>Details:</b> '+esc(x.details||"No additional details")+'</p><p><a href="job-details.html?id='+encodeURIComponent(x.job_id)+'" target="_blank" rel="noopener">View Job Page</a></p><label>Admin Note</label><textarea id="note-'+x.id+'" maxlength="2000" rows="2">'+esc(x.admin_note||"")+'</textarea><div class="row"><button class="btn secondary" data-id="'+x.id+'" data-status="reviewing">ஆய்வில்</button><button class="btn" data-id="'+x.id+'" data-status="actioned">நடவடிக்கை முடிந்தது</button><button class="btn secondary" data-id="'+x.id+'" data-status="dismissed">புகார் நிராகரி</button></div></article>';
  }).join("");
  $("reports").querySelectorAll("button[data-id]").forEach(b=>b.addEventListener("click",async()=>{
-  b.disabled=true;try{const {error}=await db.rpc("tc_review_job_report",{p_report_id:b.dataset.id,p_status:b.dataset.status,p_admin_note:$("note-"+b.dataset.id).value});if(error)throw error;await load()}catch(e){alert("Refresh முடியவில்லை: "+e.message);b.disabled=false}
+  b.disabled=true;try{const {error}=await db.rpc("tc_review_job_report",{p_report_id:b.dataset.id,p_status:b.dataset.status,p_admin_note:$("note-"+b.dataset.id).value});if(error)throw error;await load()}catch(e){alert("Unable to refresh: "+e.message);b.disabled=false}
  }));
 }
 $("refresh").addEventListener("click",load);init().catch(e=>$("message").textContent=e.message||String(e));
