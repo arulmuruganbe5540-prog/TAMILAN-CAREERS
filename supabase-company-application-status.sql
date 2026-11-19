@@ -107,16 +107,16 @@ begin
   -- has not been installed yet. When notifications exist, alert the candidate.
   if pg_catalog.to_regclass('public.tc_notifications') is not null then
     v_notification_title := case p_new_status
-      when 'under_review' then 'உங்கள் விண்ணப்பம் பரிசீலனையில் உள்ளது'
-      when 'shortlisted' then 'நீங்கள் Shortlist செய்யப்பட்டுள்ளீர்கள்'
-      when 'rejected' then 'விண்ணப்ப நிலை புதுப்பிக்கப்பட்டது'
-      else 'விண்ணப்ப நிலை புதுப்பிக்கப்பட்டது'
+      when 'under_review' then 'Your application is under review'
+      when 'shortlisted' then 'You have been shortlisted'
+      when 'rejected' then 'Application status updated'
+      else 'Application status updated'
     end;
-    v_notification_body := coalesce(v_job_title, 'வேலை') || ' பணிக்கான உங்கள் விண்ணப்ப நிலை: ' ||
+    v_notification_body := coalesce(v_job_title, 'Job') || ' application status: ' ||
       case p_new_status
-        when 'under_review' then 'பரிசீலனையில்'
+        when 'under_review' then 'Under review'
         when 'shortlisted' then 'Shortlist'
-        when 'rejected' then 'நிராகரிக்கப்பட்டது'
+        when 'rejected' then 'Rejected'
         else p_new_status
       end;
     insert into public.tc_notifications(

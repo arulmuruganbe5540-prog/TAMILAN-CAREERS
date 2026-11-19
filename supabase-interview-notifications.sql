@@ -140,9 +140,9 @@ begin
 
     if v_company_id is not null then
       insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
-      select cm.user_id,'application_status','Candidate விண்ணப்பத்தைத் திரும்பப் பெற்றுள்ளார்',
-        coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
-        ' பணிக்கான விண்ணப்பத்தை Candidate திரும்பப் பெற்றுள்ளார்.',
+      select cm.user_id,'application_status','Candidate withdrew an application',
+        coalesce(v_company_name,'Company')||' — '||coalesce(v_job_title,'Job')||
+        ' — the candidate withdrew this application.',
         new.id
       from public.company_members cm
       where cm.company_id=v_company_id
@@ -150,9 +150,9 @@ begin
         and cm.member_role in ('owner','hr_manager','recruiter');
 
       insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
-      select c.owner_user_id,'application_status','Candidate விண்ணப்பத்தைத் திரும்பப் பெற்றுள்ளார்',
-        coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
-        ' பணிக்கான விண்ணப்பத்தை Candidate திரும்பப் பெற்றுள்ளார்.',
+      select c.owner_user_id,'application_status','Candidate withdrew an application',
+        coalesce(v_company_name,'Company')||' — '||coalesce(v_job_title,'Job')||
+        ' — the candidate withdrew this application.',
         new.id
       from public.companies c
       where c.id=v_company_id and c.owner_user_id is not null
@@ -241,9 +241,9 @@ begin
   insert into public.tc_notifications(
     user_id,notification_type,title,body,related_application_id,related_interview_id
   ) values (
-    v_candidate_id,'interview_invitation','புதிய Interview அழைப்பு',
-    coalesce(v_company_name,'நிறுவனம்') || ' நிறுவனம் ' ||
-    coalesce(v_job_title,'வேலை') || ' பணிக்கான நேர்காணலுக்கு அழைத்துள்ளது. தேதி: ' ||
+    v_candidate_id,'interview_invitation','New interview invitation',
+    coalesce(v_company_name,'Company') || ' Company ' ||
+    coalesce(v_job_title,'Job') || ' has invited you to interview. Date: ' ||
     to_char(p_scheduled_at at time zone 'Asia/Kolkata','DD-MM-YYYY HH12:MI AM'),
     p_application_id,v_interview_id
   );
@@ -296,9 +296,9 @@ begin
     user_id,notification_type,title,body,related_application_id,related_interview_id
   )
   select cm.user_id,'interview_response',
-    case when p_response='accepted' then 'Candidate Interview-ஐ ஏற்றுக்கொண்டார்' else 'Candidate Interview-ஐ மறுத்துள்ளார்' end,
-    'வேலை: '||coalesce(v_job_title,'')||' — Candidate பதில்: '||
-      case when p_response='accepted' then 'ஏற்றுக்கொண்டார்' else 'மறுத்துள்ளார்' end,
+    case when p_response='accepted' then 'Candidate accepted the interview invitation' else 'Candidate declined the interview invitation' end,
+    'Job: '||coalesce(v_job_title,'')||' — Candidate response: '||
+      case when p_response='accepted' then 'Accepted' else 'Declined' end,
     v_application_id,p_interview_id
   from public.company_members cm
   where cm.company_id=v_company_id and cm.member_status='active'
@@ -306,9 +306,9 @@ begin
 
   insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id,related_interview_id)
   select c.owner_user_id,'interview_response',
-    case when p_response='accepted' then 'Candidate Interview-ஐ ஏற்றுக்கொண்டார்' else 'Candidate Interview-ஐ மறுத்துள்ளார்' end,
-    'வேலை: '||coalesce(v_job_title,'')||' — Candidate பதில்: '||
-      case when p_response='accepted' then 'ஏற்றுக்கொண்டார்' else 'மறுத்துள்ளார்' end,
+    case when p_response='accepted' then 'Candidate accepted the interview invitation' else 'Candidate declined the interview invitation' end,
+    'Job: '||coalesce(v_job_title,'')||' — Candidate response: '||
+      case when p_response='accepted' then 'Accepted' else 'Declined' end,
     v_application_id,p_interview_id
   from public.companies c where c.id=v_company_id
     and c.owner_user_id is not null
@@ -376,9 +376,9 @@ begin
   if v_company_id is null then return new; end if;
 
   insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
-  select cm.user_id,'application_status','புதிய வேலை விண்ணப்பம் வந்துள்ளது',
-    coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
-    ' பணிக்கு புதிய விண்ணப்பம் வந்துள்ளது.',
+  select cm.user_id,'application_status','New job application received',
+    coalesce(v_company_name,'Company')||' — '||coalesce(v_job_title,'Job')||
+    ' has received a new application.',
     new.id
   from public.company_members cm
   where cm.company_id=v_company_id
@@ -386,9 +386,9 @@ begin
     and cm.member_role in ('owner','hr_manager','recruiter');
 
   insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
-  select c.owner_user_id,'application_status','புதிய வேலை விண்ணப்பம் வந்துள்ளது',
-    coalesce(v_company_name,'நிறுவனம்')||' — '||coalesce(v_job_title,'வேலை')||
-    ' பணிக்கு புதிய விண்ணப்பம் வந்துள்ளது.',
+  select c.owner_user_id,'application_status','New job application received',
+    coalesce(v_company_name,'Company')||' — '||coalesce(v_job_title,'Job')||
+    ' has received a new application.',
     new.id
   from public.companies c
   where c.id=v_company_id and c.owner_user_id is not null
@@ -419,8 +419,8 @@ declare v_count integer := 0; v_rows integer := 0;
 begin
   -- Candidate reminder approximately 24 hours before the interview.
   insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id,related_interview_id)
-  select i.candidate_id,'interview_reminder','நாளை உங்கள் Interview',
-    'உங்கள் Interview 24 மணி நேரத்தில் உள்ளது. தேதி: '||
+  select i.candidate_id,'interview_reminder','Your interview is tomorrow',
+    'Your interview is in 24 hours. Date: '||
     to_char(i.scheduled_at at time zone 'Asia/Kolkata','DD-MM-YYYY HH12:MI AM'),
     i.application_id,i.id
   from public.tc_interview_invitations i
@@ -432,14 +432,14 @@ begin
       select 1 from public.tc_notifications n
       where n.user_id=i.candidate_id and n.related_interview_id=i.id
         and n.notification_type='interview_reminder'
-        and n.body like 'உங்கள் Interview 24 மணி நேரத்தில் உள்ளது.%'
+        and n.body like 'Your interview is in 24 hours.%'
     );
   get diagnostics v_rows = row_count; v_count := v_count + v_rows;
 
   -- Candidate reminder approximately 1 hour before the interview.
   insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id,related_interview_id)
-  select i.candidate_id,'interview_reminder','ஒரு மணி நேரத்தில் Interview',
-    'உங்கள் Interview ஒரு மணி நேரத்தில் தொடங்கும். தேதி: '||
+  select i.candidate_id,'interview_reminder','Your interview starts in one hour',
+    'Your interview starts in one hour. Date: '||
     to_char(i.scheduled_at at time zone 'Asia/Kolkata','DD-MM-YYYY HH12:MI AM'),
     i.application_id,i.id
   from public.tc_interview_invitations i
@@ -451,7 +451,7 @@ begin
       select 1 from public.tc_notifications n
       where n.user_id=i.candidate_id and n.related_interview_id=i.id
         and n.notification_type='interview_reminder'
-        and n.body like 'உங்கள் Interview ஒரு மணி நேரத்தில் தொடங்கும்.%'
+        and n.body like 'Your interview starts in one hour.%'
     );
   get diagnostics v_rows = row_count; v_count := v_count + v_rows;
   return v_count;
@@ -508,9 +508,9 @@ begin
   if v_current_status is distinct from p_new_status then
     insert into public.tc_notifications(user_id,notification_type,title,body,related_application_id)
     values (
-      v_candidate_id,'application_status','உங்கள் விண்ணப்ப நிலை புதுப்பிக்கப்பட்டது',
-      'வேலை: '||coalesce(v_job_title,'')||' — புதிய நிலை: '||
-      case p_new_status when 'under_review' then 'பரிசீலனையில்' when 'shortlisted' then 'Shortlist' else 'நிராகரிக்கப்பட்டது' end,
+      v_candidate_id,'application_status','Your application status has been updated',
+      'Job: '||coalesce(v_job_title,'')||' — New status: '||
+      case p_new_status when 'under_review' then 'Under review' when 'shortlisted' then 'Shortlist' else 'Rejected' end,
       p_application_id
     );
   end if;

@@ -604,6 +604,33 @@ await check("Employer job draft validates salary range, saves and submits for ad
 });
 
 
+await check("Legacy Tamil notification content is presented in English", async () => {
+  const notificationPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const user = { id: "smoke-notification-user", aud: "authenticated", role: "authenticated", email: "candidate@example.test", app_metadata: {}, user_metadata: {} };
+  try {
+    await notificationPage.addInitScript(sessionUser => {
+      localStorage.setItem("sb-qkmljuuusfjowexvybvy-auth-token", JSON.stringify({
+        access_token: "smoke-notification-access", refresh_token: "smoke-notification-refresh",
+        token_type: "bearer", expires_in: 3600, expires_at: Math.floor(Date.now()/1000)+3600, user: sessionUser
+      }));
+    }, user);
+    await notificationPage.route("**/rest/v1/tc_notifications**", route => route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify([{ id:"legacy-notice-1", notification_type:"application_status",
+        title:"\u0baa\u0bc1\u0ba4\u0bbf\u0baf \u0bb5\u0bc7\u0bb2\u0bc8 \u0bb5\u0bbf\u0ba3\u0bcd\u0ba3\u0baa\u0bcd\u0baa\u0bae\u0bcd \u0bb5\u0ba8\u0bcd\u0ba4\u0bc1\u0bb3\u0bcd\u0bb3\u0ba4\u0bc1", body:"Example Company \u2014 Software Engineer \u0baa\u0ba3\u0bbf\u0b95\u0bcd\u0b95\u0bc1 \u0baa\u0bc1\u0ba4\u0bbf\u0baf \u0bb5\u0bbf\u0ba3\u0bcd\u0ba3\u0baa\u0bcd\u0baa\u0bae\u0bcd \u0bb5\u0ba8\u0bcd\u0ba4\u0bc1\u0bb3\u0bcd\u0bb3\u0ba4\u0bc1.", is_read:false, created_at:new Date().toISOString() }])
+    }));
+    await notificationPage.route("**/rest/v1/tc_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+    await notificationPage.route("**/rest/v1/user_roles**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({role:"job_seeker"})}));
+    await notificationPage.goto(base + "/notifications.html", { waitUntil:"domcontentloaded" });
+    await notificationPage.locator("#notifications .item h3").waitFor({state:"visible",timeout:10000});
+    const visible = await notificationPage.locator("#notifications").innerText();
+    if (/[\u0B80-\u0BFF]/.test(visible)) throw new Error("Tamil text is visible in the notification center");
+    if (!visible.includes("New job application received") || !visible.includes("Example Company")) {
+      throw new Error("Legacy notification was not translated correctly: " + visible);
+    }
+  } finally { await notificationPage.close(); }
+});
+
 await check("Notifications mark-read, mark-all and interview responses call each RPC once", async () => {
   const p = await createMockSignedInPage();
   let isRead = false, markAllCalls = 0, interviewResponses = 0, interviewAccepted = false;
