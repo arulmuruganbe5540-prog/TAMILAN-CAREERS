@@ -1,3 +1,10 @@
+## 19 November 2026 — site settings foreign-key index
+
+- The live Supabase Performance Advisor identified one missing foreign-key index on `public.site_settings.updated_by`.
+- Applied migration `add_site_settings_updated_by_index` to project `qkmljuuusfjowexvybvy` and committed the reproducible migration as `supabase/migrations/20261119040000_add_site_settings_updated_by_index.sql`.
+- Verified the index `idx_site_settings_updated_by` exists in `pg_indexes`. A fresh Performance Advisor check no longer reports unindexed foreign keys; remaining notices concern unused indexes in this low-traffic project and multiple permissive RLS policies, which were not changed.
+- Supabase Health Advisor returned no findings. GitHub Health Audit and Pages deployment for this migration commit must be confirmed before marking the repository deployment verified.
+
 ## 19 November 2026 — MFA regression guard
 
 - Added `scripts/admin-mfa-guard.py` and wired it into the GitHub Actions website health-check workflow.
