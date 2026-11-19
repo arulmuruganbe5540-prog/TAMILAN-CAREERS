@@ -873,45 +873,52 @@ await check("Every public page loads in English without visible Tamil or mobile 
     return requestUrl.origin === new URL(base).origin ? route.continue() : route.abort();
   });
   try {
+    const pageFailures = [];
     for (const path of paths) {
-      const response = await auditPage.goto(base + "/" + path, { waitUntil: "domcontentloaded" });
-      if (!response || !response.ok()) throw new Error(path + " returned " + (response?.status() ?? "no response"));
-      const state = await auditPage.evaluate(() => ({
-        title: document.title,
-        lang: document.documentElement.getAttribute("lang"),
-        visibleText: document.body?.innerText || "",
-        width: document.documentElement.clientWidth,
-        scrollWidth: document.documentElement.scrollWidth,
-        overflowElements: [...document.querySelectorAll("body *")].map(el => { const rect = el.getBoundingClientRect(); return {tag:el.tagName,id:el.id,className:typeof el.className==="string"?el.className:"",left:Math.round(rect.left),right:Math.round(rect.right),width:Math.round(rect.width)}; }).filter(el => el.right > document.documentElement.clientWidth + 1 || el.left < -1).slice(0,15),
-        languageControls: document.querySelectorAll("#tc-language-select,[data-language-selector]").length,
-        clippedControls: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
-          const style = getComputedStyle(el);
-          const rect = el.getBoundingClientRect();
-          return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 &&
-            (rect.left < -1 || rect.right > document.documentElement.clientWidth + 1);
-        }).slice(0, 8).map(el => ({ tag: el.tagName, id: el.id, text: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 60) }))
-      }));
-      if (!state.title.trim()) throw new Error(path + " has no page title");
-      if (state.lang !== "en") throw new Error(path + " does not declare lang=en");
-      if (/[\u0B80-\u0BFF]/.test(state.visibleText)) throw new Error(path + " displays Tamil text");
-      if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + "): " + JSON.stringify(state.overflowElements));
-      if (state.languageControls) throw new Error(path + " still displays a language selector");
-      if (state.clippedControls.length) throw new Error(path + " has clipped controls or headings: " + JSON.stringify(state.clippedControls));
-      await auditPage.setViewportSize({ width: 1280, height: 900 });
-      const desktop = await auditPage.evaluate(() => ({
-        width: document.documentElement.clientWidth,
-        scrollWidth: document.documentElement.scrollWidth,
-        clipped: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
-          const style = getComputedStyle(el);
-          const rect = el.getBoundingClientRect();
-          return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 &&
-            (rect.left < -1 || rect.right > document.documentElement.clientWidth + 1);
-        }).slice(0, 8).map(el => ({ tag: el.tagName, id: el.id, text: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 60) }))
-      }));
-      if (desktop.scrollWidth > desktop.width + 1) throw new Error(path + " overflows at 1280px");
-      if (desktop.clipped.length) throw new Error(path + " has clipped desktop controls or headings: " + JSON.stringify(desktop.clipped));
-      await auditPage.setViewportSize({ width: 360, height: 800 });
+      try {
+        const response = await auditPage.goto(base + "/" + path, { waitUntil: "domcontentloaded" });
+        if (!response || !response.ok()) throw new Error(path + " returned " + (response?.status() ?? "no response"));
+        const state = await auditPage.evaluate(() => ({
+          title: document.title,
+          lang: document.documentElement.getAttribute("lang"),
+          visibleText: document.body?.innerText || "",
+          width: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          overflowElements: [...document.querySelectorAll("body *")].map(el => { const rect = el.getBoundingClientRect(); return {tag:el.tagName,id:el.id,className:typeof el.className==="string"?el.className:"",left:Math.round(rect.left),right:Math.round(rect.right),width:Math.round(rect.width)}; }).filter(el => el.right > document.documentElement.clientWidth + 1 || el.left < -1).slice(0,15),
+          languageControls: document.querySelectorAll("#tc-language-select,[data-language-selector]").length,
+          clippedControls: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
+            const style = getComputedStyle(el);
+            const rect = el.getBoundingClientRect();
+            return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 &&
+              (rect.left < -1 || rect.right > document.documentElement.clientWidth + 1);
+          }).slice(0, 8).map(el => ({ tag: el.tagName, id: el.id, text: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 60) }))
+        }));
+        if (!state.title.trim()) throw new Error(path + " has no page title");
+        if (state.lang !== "en") throw new Error(path + " does not declare lang=en");
+        if (/[\u0B80-\u0BFF]/.test(state.visibleText)) throw new Error(path + " displays Tamil text");
+        if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + "): " + JSON.stringify(state.overflowElements));
+        if (state.languageControls) throw new Error(path + " still displays a language selector");
+        if (state.clippedControls.length) throw new Error(path + " has clipped controls or headings: " + JSON.stringify(state.clippedControls));
+        await auditPage.setViewportSize({ width: 1280, height: 900 });
+        const desktop = await auditPage.evaluate(() => ({
+          width: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          clipped: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
+            const style = getComputedStyle(el);
+            const rect = el.getBoundingClientRect();
+            return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 &&
+              (rect.left < -1 || rect.right > document.documentElement.clientWidth + 1);
+          }).slice(0, 8).map(el => ({ tag: el.tagName, id: el.id, text: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 60) }))
+        }));
+        if (desktop.scrollWidth > desktop.width + 1) throw new Error(path + " overflows at 1280px");
+        if (desktop.clipped.length) throw new Error(path + " has clipped desktop controls or headings: " + JSON.stringify(desktop.clipped));
+        await auditPage.setViewportSize({ width: 360, height: 800 });
+      } catch (error) {
+        pageFailures.push(path + ": " + String(error.message || error));
+      }
     }
+    if (pageFailures.length) throw new Error("Page audit found " + pageFailures.length + " issue(s):\n" + pageFailures.join("\n"));
+
   } finally {
     await auditPage.close();
   }
