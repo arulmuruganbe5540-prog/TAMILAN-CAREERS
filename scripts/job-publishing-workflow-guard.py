@@ -40,7 +40,7 @@ checks = {
     "Approval is a separate step and does not publish immediately":
         'status==="pending_review"' in admin and 'status==="approved"' in admin and 'update.reviewed_by=user.id' in admin,
     "Publishing requires a separate confirmation and protected RPC":
-        'confirm("இந்த Approved வேலைவாய்ப்பை' in admin and 'db.rpc("tc_admin_publish_job"' in admin,
+        'confirm("Publish this approved job to the public jobs list?' in admin and 'db.rpc("tc_admin_publish_job"' in admin,
     "Company jobs cannot be published until the company is verified":
         "c.verification_status='verified'" in migration and "v_review.status <> 'approved'" in migration,
     "Admin rejects require a non-empty reason":
