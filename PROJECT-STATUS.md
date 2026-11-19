@@ -1,3 +1,12 @@
+## TAMILAN AI rate-limit privilege-boundary hardening — 19 November 2026
+
+- Reviewed the first quota migration design and improved its privilege boundary before applying it.
+- The exposed `public.tamilan_ai_consume_job_context_quota()` API wrapper is now explicitly `SECURITY INVOKER`; the actual privileged counter implementation lives in the non-exposed `private` schema as a narrowly scoped `SECURITY DEFINER` helper.
+- Both functions use an empty `search_path`; execute is revoked from PUBLIC/anon and granted only to authenticated. The private quota table has RLS enabled and no direct API-role table grants.
+- Strengthened the static guard to fail if the public wrapper ever becomes SECURITY DEFINER or the private helper loses its empty `search_path`.
+- Live catalog check confirms the private schema exists, authenticated already has schema USAGE, the required `auth.users.is_anonymous` column exists, and the quota table/function have not yet been created. Live jobs remain 0 total / 0 published.
+- **Migration still not applied.** No live database schema, grants, functions, secrets, or deployments were changed.
+
 ## TAMILAN AI durable rate-limit source prepared — 19 November 2026
 
 - Added migration source `supabase/migrations/20261119080000_tamilan_ai_job_context_rate_limit.sql`; it creates a private per-user quota table and an authenticated-only RPC.
