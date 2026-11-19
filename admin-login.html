@@ -37,7 +37,9 @@ input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-s
 <div class="msg" id="message" role="status" aria-live="polite"></div>
 <div class="msg" id="mfaPanel" style="display:none;background:#eef5ff;color:#234d7e">
 <b>கூடுதல் பாதுகாப்பு சரிபார்ப்பு</b>
-<p style="margin:8px 0">உங்கள் Authenticator App உருவாக்கிய 6 இலக்கக் குறியீட்டை உள்ளிடவும்.</p>
+<p style="margin:8px 0">உங்கள் Authenticator App உருவாக்கிய 6 இலக்கக் குறியீட்டை உள்ளிடவும். ஒன்றுக்கு மேற்பட்ட சாதனங்கள் இருந்தால் பயன்படுத்த வேண்டிய சாதனத்தைத் தேர்ந்தெடுக்கவும்.</p>
+<label for="mfaFactorSelect" id="mfaFactorLabel" style="display:none">Authenticator சாதனம்</label>
+<select id="mfaFactorSelect" style="display:none;width:100%;padding:12px;border:1px solid #cbd8e9;border-radius:9px;margin:8px 0;background:#fff"></select>
 <input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="width:100%;padding:13px;border:1px solid #cbd8e9;border-radius:9px;font-size:18px;letter-spacing:4px">
 <button type="button" class="submit" id="mfaVerify">குறியீட்டைச் சரிபார்க்கவும்</button>
 </div>
@@ -49,6 +51,22 @@ const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase
 const form=document.getElementById("adminForm"),button=document.getElementById("submit"),box=document.getElementById("message");
 function message(t,ok=false){box.textContent=t;box.style.display=t?"block":"none";box.style.background=ok?"#e8f8ee":"#fff0f0";box.style.color=ok?"#176b3a":"#ad2525"}
 let pendingMfaFactorId="",pendingMfaChallengeId="";
+async function startMfaChallenge(factorId){
+ const verifyButton=document.getElementById("mfaVerify");
+ verifyButton.disabled=true;
+ try{
+  const {data:challenge,error}=await client.auth.mfa.challenge({factorId});
+  if(error)throw error;
+  pendingMfaFactorId=factorId;
+  pendingMfaChallengeId=challenge.id;
+  document.getElementById("mfaCode").value="";
+  message("இந்த Authenticator சாதனத்தின் புதிய 6 இலக்கக் குறியீட்டை உள்ளிடவும்.",true);
+ }finally{verifyButton.disabled=false;}
+}
+document.getElementById("mfaFactorSelect").addEventListener("change",async e=>{
+ try{await startMfaChallenge(e.target.value);}
+ catch(err){message(err.message||"Authenticator challenge உருவாக்க முடியவில்லை.");}
+});
 async function finishAdminAccess(user){
  const {data,error}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
  if(error)throw new Error("Super Admin அனுமதியை சரிபார்க்க முடியவில்லை.");
@@ -58,15 +76,22 @@ async function finishAdminAccess(user){
  if(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2"){
   const {data:factors,error:factorError}=await client.auth.mfa.listFactors();
   if(factorError)throw factorError;
-  const factor=(factors.totp||[]).find(x=>x.status==="verified");
-  if(!factor)throw new Error("MFA அமைப்பு உள்ளது; சரிபார்க்கப்பட்ட Authenticator சாதனம் கிடைக்கவில்லை. Supabase Auth settings-ஐ சரிபார்க்கவும்.");
-  pendingMfaFactorId=factor.id;
-  const {data:challenge,error:challengeError}=await client.auth.mfa.challenge({factorId:pendingMfaFactorId});
-  if(challengeError)throw challengeError;
-  pendingMfaChallengeId=challenge.id;
+  const verifiedFactors=(factors.totp||[]).filter(x=>x.status==="verified");
+  if(!verifiedFactors.length)throw new Error("MFA அமைப்பு உள்ளது; சரிபார்க்கப்பட்ட Authenticator சாதனம் கிடைக்கவில்லை. Supabase Auth settings-ஐ சரிபார்க்கவும்.");
+  const factorSelect=document.getElementById("mfaFactorSelect");
+  factorSelect.replaceChildren();
+  verifiedFactors.forEach((factor,index)=>{
+   const option=document.createElement("option");
+   option.value=factor.id;
+   option.textContent=factor.friendly_name||("Authenticator "+(index+1));
+   factorSelect.appendChild(option);
+  });
+  const hasMultipleFactors=verifiedFactors.length>1;
+  factorSelect.style.display=hasMultipleFactors?"block":"none";
+  document.getElementById("mfaFactorLabel").style.display=hasMultipleFactors?"block":"none";
   document.getElementById("mfaPanel").style.display="block";
+  await startMfaChallenge(verifiedFactors[0].id);
   document.getElementById("mfaCode").focus();
-  message("Password சரிபார்க்கப்பட்டது. இப்போது Authenticator குறியீடு தேவை.",true);
   return;
  }
  message("Super Admin Login வெற்றி. Admin Control திறக்கப்படுகிறது...",true);
