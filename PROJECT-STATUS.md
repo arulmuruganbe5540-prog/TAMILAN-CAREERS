@@ -1,12 +1,13 @@
 ## 19 November 2026 — AI Job Context HTTP contract testability
 
 - Refactored `supabase/functions/tamilan-ai-job-context/index.ts` to delegate request handling to `handler.ts`. The handler accepts an environment reader and Supabase client factory, allowing deterministic HTTP contract tests without deploying the Edge Function or contacting production data.
-- Added `handler_test.ts` with seven Deno tests covering approved CORS preflight, unsupported methods/origins, default-OFF feature flag, bearer authentication, malformed/oversized request bodies, missing public configuration, fail-closed quota RPC errors/malformed results, 429 Retry-After, published-only bounded queries, source IDs/citations, and query errors.
-- Updated Health Audit to type-check the extracted handler and run both `logic_test.ts` and `handler_test.ts`. Static retrieval guard now inspects the handler source.
-- The first CI attempts exposed and corrected two test/guard issues: the guard needed to load the extracted handler source, and the fake query builder needed an explicit test-only type cast. Do not mark the new test suite passed until the latest Health Audit run completes successfully.
-- GitHub Pages deployment run `44476056274` succeeded for commit `c30d2789777cc24df11f51d5d59186182d1b8fbe`; this is a docs/static-site deployment and does not deploy the Supabase Edge Function.
+- Added `handler_test.ts` with nine Deno HTTP contract tests covering approved CORS preflight, unsupported methods/origins, default-OFF feature flag, bearer authentication, malformed/oversized request bodies, missing public configuration, quota RPC errors/malformed results/throws, 429 Retry-After, published-only bounded queries, source IDs/citations, and database query errors/throws.
+- Updated Health Audit to type-check the extracted handler and run both `logic_test.ts` and `handler_test.ts`. Static retrieval guard inspects the handler source.
+- The first CI attempts exposed and corrected test/guard issues: loading the extracted handler in the static guard and explicitly typing the fake query builder. Additional tests verify that thrown quota and query dependencies return controlled failures.
+- Health Audit run `44476744809` **passed** on commit `2eac4d4abf3974388e9a55cccb531acb9d46e2a5`. Confirmed successful steps include all Edge Function type checks, AI retrieval static guard, both Deno test files, website structure validation and browser smoke tests.
+- GitHub Pages deployment run `44476744787` **passed** for the same commit. This is a static-site deployment and does not deploy the Supabase Edge Function.
 - Live quota migration remains applied and quota RPC security checks remain verified. No Edge Function deployment, feature-flag enablement, model configuration, or production job-data changes were made.
-- Next gates remain: complete the new HTTP contract CI; then owner-controlled real JWT, cross-account, anonymous Auth and concurrency tests. Only after those pass should a separate Edge Function rollout decision be considered.
+- Next gates: owner-controlled real JWT, cross-account, anonymous Auth and concurrency tests, plus authenticated HTTP integration testing. These require owner-controlled test sessions; never share JWTs/passwords in chat or source. Only after those pass should a separate Edge Function rollout decision be considered.
 
 ## TAMILAN AI quota migration applied and initial live checks — 19 November 2026
 
