@@ -17,38 +17,38 @@
     catch { return ""; }
   };
   const dateText = value => {
-    if (!value) return "அறிவிப்பில் பார்க்கவும்";
+    if (!value) return "See official notice";
     const d = new Date(value + (String(value).length === 10 ? "T00:00:00" : ""));
-    return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString("ta-IN");
+    return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString("en-IN");
   };
-  const categoryLabels = {recruitment:"வேலைவாய்ப்பு அறிவிப்பு",result:"தேர்வு முடிவு",admit_card:"Hall Ticket / Admit Card",answer_key:"Answer Key",exam_update:"தேர்வு தேதி / புதுப்பிப்பு",other:"அரசு அறிவிப்பு"};
+  const categoryLabels = {recruitment:"Recruitment Notice",result:"Exam Result",admit_card:"Hall Ticket / Admit Card",answer_key:"Answer Key",exam_update:"Exam Date / Update",other:"Government Notice"};
   const detailLabels = {
-    post_names:"பதவிகள்", qualification:"கல்வித் தகுதி", education:"கல்வித் தகுதி",
-    age_limit:"வயது வரம்பு", salary:"சம்பளம்", pay_scale:"ஊதிய நிலை",
-    application_fee:"விண்ணப்பக் கட்டணம்", selection_process:"தேர்வு முறை",
-    location:"பணியிடம்", department:"துறை", vacancies_breakdown:"காலியிட விவரம்",
-    notification_pdf_url:"அறிவிப்பு PDF", application_url:"விண்ணப்ப இணைப்பு", syllabus:"பாடத்திட்டம்", exam_date:"தேர்வு தேதி", exam_name:"தேர்வு / ஆட்சேர்ப்பு"
+    post_names:"Posts", qualification:"Educational Qualification", education:"Educational Qualification",
+    age_limit:"Age Limit", salary:"Salary", pay_scale:"Pay Scale",
+    application_fee:"Application Fee", selection_process:"Selection Process",
+    location:"Location", department:"Department", vacancies_breakdown:"Vacancy Details",
+    notification_pdf_url:"Notice PDF", application_url:"Application Link", syllabus:"Syllabus", exam_date:"Exam Date", exam_name:"Exam / Recruitment"
   };
   function card(row) {
     const d = row.details && typeof row.details === "object" ? row.details : {};
     const article = el("article", "tc-gov-card");
-    const state = d.state || (d.scope === "central" ? "மத்திய அரசு" : "மாநில அரசு");
+    const state = d.state || (d.scope === "central" ? "Central Government" : "State Government");
     const head = el("div", "tc-gov-head");
-    head.append(el("span","tc-gov-tag", categoryLabels[row.category] || "அதிகாரப்பூர்வ அறிவிப்பு"));
+    head.append(el("span","tc-gov-tag", categoryLabels[row.category] || "Official Notice"));
     const endValue = row.application_end ? String(row.application_end).slice(0,10) : "";
     const end = endValue ? new Date(endValue + "T23:59:59") : null;
     const expired = end && !Number.isNaN(end.getTime()) && end < new Date();
-    head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "விண்ணப்பக் காலம் முடிந்தது" : (row.application_end ? "விண்ணப்பம் நடைபெறுகிறது" : "அறிவிப்பு பதிவு")));
+    head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "Application Period Closed" : (row.application_end ? "Applications Open" : "Notice Posted")));
     article.append(head);
     article.append(el("h3","tc-gov-title",row.title));
-    const detailLink=el("a","tc-gov-link","தமிழில் முழு விவரம் பார்க்க →");detailLink.href="government-notice-details.html?id="+encodeURIComponent(row.id);article.append(detailLink);
-    article.append(el("p","tc-gov-meta",[d.authority,state,row.notice_reference ? "அறிவிப்பு எண்: "+row.notice_reference : ""].filter(Boolean).join(" · ")));
+    const detailLink=el("a","tc-gov-link","View Full Details →");detailLink.href="government-notice-details.html?id="+encodeURIComponent(row.id);article.append(detailLink);
+    article.append(el("p","tc-gov-meta",[d.authority,state,row.notice_reference ? "Notice No.: "+row.notice_reference : ""].filter(Boolean).join(" · ")));
     const facts = el("div","tc-gov-facts");
     const pairs = [
-      ["அறிவிப்பு தேதி",dateText(row.notice_date)],
-      ["காலியிடங்கள்",row.vacancies === null || row.vacancies === undefined ? "அதிகாரப்பூர்வ PDF-ல் பார்க்கவும்" : Number(row.vacancies).toLocaleString("en-IN")],
-      ["விண்ணப்ப தொடக்கம்",dateText(row.application_start)],
-      ["கடைசி தேதி",dateText(row.application_end)]
+      ["Notice Date",dateText(row.notice_date)],
+      ["காலியிடங்கள்",row.vacancies === null || row.vacancies === undefined ? "See Official PDF" : Number(row.vacancies).toLocaleString("en-IN")],
+      ["Application Start",dateText(row.application_start)],
+      ["Last Date",dateText(row.application_end)]
     ];
     pairs.forEach(([k,v]) => { const item=el("div","tc-gov-fact"); item.append(el("span","tc-gov-label",k),el("strong","",v)); facts.append(item); });
     article.append(facts);
@@ -61,11 +61,11 @@
     }
     const links=el("div","tc-gov-links");
     const noticeUrl=safeUrl(d.notification_pdf_url)||safeUrl(row.official_url);
-    if (noticeUrl) { const a=el("a","tc-gov-link",d.notification_pdf_url?"அசல் அரசு PDF ↗":"அதிகாரப்பூர்வ மூல அறிவிப்பு ↗");a.href=noticeUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
+    if (noticeUrl) { const a=el("a","tc-gov-link",d.notification_pdf_url?"Original Government PDF ↗":"Official Source Notice ↗");a.href=noticeUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
     const applyUrl=safeUrl(d.application_url)||safeUrl(d.apply_url);
-    if (applyUrl) { const a=el("a","tc-gov-link apply","அதிகாரப்பூர்வ விண்ணப்பம் ↗");a.href=applyUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
+    if (applyUrl) { const a=el("a","tc-gov-link apply","Official Application ↗");a.href=applyUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
     article.append(links);
-    article.append(el("p","tc-gov-source","மூலம்: "+(d.authority||"அதிகாரப்பூர்வ அரசு இணையதளம்")+" · தகவல் மூல இணைப்பில் சரிபார்க்கவும்."));
+    article.append(el("p","tc-gov-source","Source: "+(d.authority||"Official Government Website")+" · Verify details using the source link."));
     return article;
   }
   const style=el("style","");
@@ -98,19 +98,19 @@
   `;
   document.head.append(style);
   const toolbar=el("div","tc-gov-toolbar");
-  const title=el("h2","","சரிபார்க்கப்பட்ட அரசு அறிவிப்புகள் மற்றும் தேர்வு புதுப்பிப்புகள்");
+  const title=el("h2","","சரிபார்க்கப்பட்ட Government Noticeகள் மற்றும் தேர்வு புதுப்பிப்புகள்");
   const period=el("select","tc-gov-period");
-  period.innerHTML='<option value="12" selected>கடந்த 1 வருடம்</option><option value="6">கடந்த 6 மாதங்கள்</option>';
+  period.innerHTML='<option value="12" selected>Last 12 Months</option><option value="6">Last 6 Months</option>';
   const category=el("select","tc-gov-period");
-  category.innerHTML='<option value="all">அனைத்து வகைகளும்</option><option value="recruitment">வேலை அறிவிப்புகள்</option><option value="admit_card">Hall Ticket / Admit Card</option><option value="result">தேர்வு முடிவுகள்</option><option value="answer_key">Answer Key</option><option value="exam_update">தேர்வு தேதி / பிற புதுப்பிப்புகள்</option><option value="other">மற்ற அறிவிப்புகள்</option>';
+  category.innerHTML='<option value="all">All Categories</option><option value="recruitment">Recruitment Notices</option><option value="admit_card">Hall Ticket / Admit Card</option><option value="result">Exam Resultகள்</option><option value="answer_key">Answer Key</option><option value="exam_update">Exam Date / பிற புதுப்பிப்புகள்</option><option value="other">Other Notices</option>';
   toolbar.append(title,period,category);host.append(toolbar);
-  host.append(el("p","tc-gov-note","அதிகாரப்பூர்வ அரசு மூலத்தில் சரிபார்க்கப்பட்ட வேலை அறிவிப்புகள், Hall Ticket, Result, Answer Key மற்றும் தேர்வு புதுப்பிப்புகள். பழைய பதிவுகள் அவற்றின் உண்மையான அறிவிப்பு தேதியுடன் காட்டப்படும்."));
-  const status=el("p","tc-gov-note","அறிவிப்புகள் ஏற்றப்படுகின்றன…");host.append(status);
+  host.append(el("p","tc-gov-note","அதிகாரப்பூர்வ அரசு மூலத்தில் சரிபார்க்கப்பட்ட Recruitment Notices, Hall Ticket, Result, Answer Key மற்றும் தேர்வு புதுப்பிப்புகள். பழைய பதிவுகள் அவற்றின் உண்மையான Notice Dateயுடன் காட்டப்படும்."));
+  const status=el("p","tc-gov-note","Loading notices…");host.append(status);
   const grid=el("div","tc-gov-grid");host.append(grid);
   async function load(){
-    status.textContent="அறிவிப்புகள் ஏற்றப்படுகின்றன…";grid.replaceChildren();
+    status.textContent="Loading notices…";grid.replaceChildren();
     try{
-      if(!window.supabase?.createClient) throw new Error("தகவல் சேவை தற்போது கிடைக்கவில்லை.");
+      if(!window.supabase?.createClient) throw new Error("The information service is currently unavailable.");
       const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
       const [noticeResult,jobResult]=await Promise.all([
         client.from("government_notices")
@@ -129,12 +129,12 @@
         const details={
           scope:isTamilNadu?"state":"central",
           state:isTamilNadu?"Tamil Nadu":"India",
-          authority:j.recruitment_authority||j.company_name||"அரசுத் துறை",
+          authority:j.recruitment_authority||j.company_name||"அரசுத் Department",
           department:j.recruitment_authority||"",
           qualification:j.education_level||"",
-          syllabus:extra("பாடத்திட்டம்"),
-          exam_date:extra("தேர்வு தேதி"),
-          exam_name:extra("தேர்வு / ஆட்சேர்ப்பு"),
+          syllabus:extra("Syllabus"),
+          exam_date:extra("Exam Date"),
+          exam_name:extra("Exam / Recruitment"),
           vacancies_breakdown:extra("பதவி வாரியான காலியிடங்கள்"),
           age_limit:j.age_limit,
           salary,
@@ -144,10 +144,10 @@
           notification_pdf_url:j.official_notification_url
         };
         return {
-          id:j.id,title:j.job_title||j.title||"அரசு வேலைவாய்ப்பு",category:"recruitment",
+          id:j.id,title:j.job_title||j.title||"Government Recruitment",category:"recruitment",
           official_url:j.official_notification_url||j.official_website_url||j.application_url,
           notice_reference:j.notification_number,notice_date:j.notification_date||j.published_at||j.created_at,
-          application_start:extra("விண்ணப்பம் தொடங்கும் தேதி")||null,application_end:j.application_deadline,
+          application_start:extra("Application Start Date")||null,application_end:j.application_deadline,
           vacancies:j.vacancies??j.vacancy_count??j.openings??null,
           eligibility_summary:j.education_level||j.experience_min||"",
           details,is_active:true
@@ -170,10 +170,10 @@
         return true;
       });
       rows.sort((a,b)=>new Date(String(b.notice_date).slice(0,10))-new Date(String(a.notice_date).slice(0,10)));
-      if(!rows.length){status.textContent="இந்த காலவரம்பில் இன்னும் அதிகாரப்பூர்வமாகச் சரிபார்த்து வெளியிடப்பட்ட வேலை அறிவிப்புகள் இல்லை.";grid.append(el("div","tc-gov-empty","புதிய அறிவிப்புகள் சரிபார்க்கப்பட்டதும் இங்கே தானாகத் தோன்றும். தற்போது காலியிட எண்ணிக்கை அல்லது தகுதி விவரங்கள் ஊகித்து காட்டப்படவில்லை."));return;}
+      if(!rows.length){status.textContent="இந்த காலவரம்பில் இன்னும் அதிகாரப்பூர்வமாகச் சரிபார்த்து வெளியிடப்பட்ட Recruitment Notices இல்லை.";grid.append(el("div","tc-gov-empty","New notices will appear here after verification. Vacancy counts and eligibility details are not estimated."));return;}
       rows.forEach(r=>grid.append(card(r)));
       status.textContent=rows.length+" சரிபார்க்கப்பட்ட அரசு பதிவுகள் · கடந்த "+months+" மாதங்கள்";
-    }catch(e){status.textContent="அறிவிப்புகளை இப்போது ஏற்ற முடியவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.";grid.append(el("div","tc-gov-empty","தகவல் சேவை / அனுமதி சரிபார்ப்பு தேவை."));}
+    }catch(e){status.textContent="Notices could not be loaded. Please try again later.";grid.append(el("div","tc-gov-empty","Information service or permission verification is required."));}
   }
   period.addEventListener("change",load);
   category.addEventListener("change",load);
