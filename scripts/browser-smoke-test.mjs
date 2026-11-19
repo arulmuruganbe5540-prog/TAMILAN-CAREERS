@@ -119,7 +119,7 @@ await check("Login page role, mode and password controls work", async () => {
   await page.locator("#company").click();
   if (!(await page.locator("#company").getAttribute("class")).includes("active")) throw new Error("Company role did not become active");
   await page.locator("#switchLink").click();
-  if (!(await page.locator("#heading").innerText()).includes("புதிய கணக்கு")) throw new Error("Register mode did not open");
+  if (!(await page.locator("#heading").innerText()).includes("Create a new account")) throw new Error("Register mode did not open");
   if (!(await page.locator("#nameField").isVisible())) throw new Error("Registration name field did not appear");
   await page.locator("#password").fill("TestPass123");
   await page.locator("#passwordToggle").click();
