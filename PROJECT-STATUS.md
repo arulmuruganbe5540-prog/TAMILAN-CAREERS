@@ -1,3 +1,13 @@
+## TAMILAN AI durable rate-limit source prepared — 19 November 2026
+
+- Added migration source `supabase/migrations/20261119080000_tamilan_ai_job_context_rate_limit.sql`; it creates a private per-user quota table and an authenticated-only RPC.
+- Quotas are 10 requests per fixed UTC minute and 100 per fixed UTC day. The table stores only one counter row per registered account; no prompts, searches, resumes, or job text are stored. Account deletion cascades the quota row.
+- The RPC requires `auth.uid()`, rejects anonymous Auth accounts, uses an empty search_path, atomically upserts the caller's own counter, and denies direct table access. It is callable only by authenticated users; direct RPC calls can consume only the caller's own quota.
+- Updated the source-only Edge Function to consume quota before reading jobs, fail closed if quota checking errors or returns an invalid shape, and return HTTP 429 with `Retry-After` when limits are reached.
+- Added Deno tests for valid/invalid quota decisions and extended the static guard to check the migration and endpoint wiring.
+- **Not applied to live Supabase.** The private table/RPC do not yet exist in production; this migration is source-only pending validation. The endpoint remains undeployed and feature flag OFF.
+- No database schema, grants, policies, secrets, production data, or Edge Function deployments were changed.
+
 ## TAMILAN AI retrieval unit tests added and CI passed — 19 November 2026
 
 - Extracted side-effect-free validation and public job-source formatting into `supabase/functions/tamilan-ai-job-context/logic.ts`, so it can be tested without starting the Edge Function server.
@@ -6,7 +16,7 @@
 - Added the Deno unit-test step to the existing Health Audit workflow and extended the static retrieval guard to cover the extracted logic.
 - Verified Health Audit run `44471041734` **passed**, including all Edge Function type checks, existing security guards, retrieval static guard, the new Deno unit tests, website structure checks and browser smoke tests.
 - Verified GitHub Pages deployment run `44471042329` **passed** for the same latest commit.
-- No Supabase database, RLS, secrets, deployed functions or live AI feature flags were changed. The retrieval endpoint remains source-only and OFF. Authenticated live integration tests and durable rate limiting remain outstanding.
+- No Supabase database, RLS, secrets, deployed functions or live AI feature flags were changed. The retrieval endpoint remains source-only and OFF. Authenticated live integration tests remain outstanding. A durable rate-limit migration and endpoint wiring have since been committed as source only; the migration is not yet applied.
 
 ## SECURITY DEFINER மறுஆய்வு — 19 நவம்பர் 2026
 
