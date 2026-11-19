@@ -297,7 +297,7 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
   const confirmPassword = document.getElementById("confirmPassword").value;
   if (isRegister && password !== confirmPassword) { showMessage("Both passwords must match."); return; }
   if (isRegister && (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password))) { showMessage("Your password must include at least one uppercase letter, one lowercase letter and one number."); return; }
-  if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("Please accept the Privacy Policy to continue."); return; }
+  if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("Please accept the Terms of Use and Privacy Policy to continue."); return; }
 
   if (!supabaseClient) {
     showMessage("Unable to connect to the authentication service. Check the publishable key.");
