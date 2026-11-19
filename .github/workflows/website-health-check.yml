@@ -75,7 +75,7 @@ jobs:
       - name: Guard read-only TAMILAN AI job retrieval contract
         run: python scripts/tamilan-ai-retrieval-guard.py
       - name: Unit-test TAMILAN AI retrieval input and citation logic
-        run: deno test supabase/functions/tamilan-ai-job-context/logic_test.ts
+        run: deno test supabase/functions/tamilan-ai-job-context/logic_test.ts supabase/functions/tamilan-ai-job-context/handler_test.ts
       - name: Check internal website structure
         run: python scripts/website-health-check.py
       - name: Install browser test dependency
