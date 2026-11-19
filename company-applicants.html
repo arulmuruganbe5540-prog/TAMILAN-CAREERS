@@ -20,13 +20,13 @@ main{max-width:1050px;margin:25px auto;padding:0 15px}.hero{background:linear-gr
 <body>
 <header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a><a href="notifications.html">🔔 Notifications</a><a href="job-posting.html">Post a Job</a><a href="company-jobs.html">My Jobs</a><a href="company-members.html">Team Members</a></nav></header>
 <main>
-<section class="hero"><h1>👥 வேலை Applicants</h1><p>Securely review applications received for your company's job postings.</p></section>
+<section class="hero"><h1>👥 Job Applicants</h1><p>Securely review applications received for your company's job postings.</p></section>
 <div id="message" class="panel">Checking account and company permissions...</div>
 <section id="workspace" hidden>
 <div class="panel"><label for="company">Select Company</label><select id="company" class="select"></select></div>
 <div class="grid"><div class="stat">Selected Company Jobs<b id="jobCount">—</b></div><div class="stat">Visible Applications<b id="appCount">—</b></div></div>
 <div id="jobs"></div><div id="applications"></div>
-<div class="notice"><b>தனியுரிமை பாதுகாப்பு:</b> விண்ணப்பதாரரின் சுயவிவர விவரங்களை அவர்களிடம் விண்ணப்பித்த நிறுவன உரிமையாளர் அல்லது Active HR / Recruiter மட்டும் பார்க்க முடியும்; இதற்கான RLS மற்றும் API அனுமதிகள் அமைக்கப்பட்டுள்ளன. விண்ணப்பத்துடன் இணைக்கப்பட்ட Resume-ஐ மட்டும் 60 விநாடி காலாவதியாகும் பாதுகாப்பான signed link மூலம் பார்க்கலாம்; <code>company-resume-access</code> Edge Function deploy செய்யப்பட்டுள்ளது. விண்ணப்ப நிலை மாற்றம் மற்றும் Interview அழைப்பு / Candidate பதில் அறிவிப்புகளுக்கான Supabase functions அமைக்கப்பட்டுள்ளன. உண்மையான Candidate–Employer விண்ணப்பத்துடன் இறுதிச் சோதனை இன்னும் நிலுவையில் உள்ளது; Interview நினைவூட்டல் ஒவ்வொரு 15 நிமிடத்திற்கும் தானாகச் சரிபார்க்கும் வகையில் அமைக்கப்பட்டுள்ளது.</div>
+<div class="notice"><b>Privacy Protection:</b> Only the company owner or an active HR / Recruiter of the company the candidate applied to can view applicant profile details. RLS and API permissions enforce this. Attached resumes are available only through secure signed links that expire after 60 seconds. <code>company-resume-access</code> Edge Function deploy செய்யப்பட்டுள்ளது. Supabase functions are configured for application status changes, interview invitations and candidate response notifications. Final end-to-end testing with a real candidate and employer application is still pending. Interview reminders are checked automatically every 15 minutes.</div>
 </section>
 </main>
 <script>
@@ -34,14 +34,14 @@ const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co"
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let memberships=[];
 const allowedRoles=["owner","hr_manager","recruiter"];
-const statusLabels={applied:"விண்ணப்பித்துள்ளார்",under_review:"பரிசீலனையில்",shortlisted:"தேர்வு பட்டியலில்",rejected:"நிராகரிக்கப்பட்டது",withdrawn:"விண்ணப்பம் திரும்பப் பெறப்பட்டது"};
+const statusLabels={applied:"Applied",under_review:"Under Review",shortlisted:"Shortlisted",rejected:"Rejected",withdrawn:"Withdrawn"};
 function message(t,kind){$("message").hidden=false;$("message").className=kind==="error"?"error":"panel";$("message").textContent=t}
-function dateText(v){if(!v)return "தேதி இல்லை";const d=new Date(v);return Number.isNaN(d.getTime())?"தேதி இல்லை":d.toLocaleString("ta-IN")}
+function dateText(v){if(!v)return "Date unavailable";const d=new Date(v);return Number.isNaN(d.getTime())?"Date unavailable":d.toLocaleString("en-IN")}
 async function init(){
  const {data:s,error:se}=await db.auth.getSession(),user=s.session?.user;
  if(se||!user){location.replace("login.html?next="+encodeURIComponent("company-applicants.html"));return}
  const {data:rows,error}=await db.from("company_members").select("company_id,member_role,member_status,companies(company_name)").eq("user_id",user.id).eq("member_status","active");
- if(error){message("நிறுவன அனுமதியைச் சரிபார்க்க முடியவில்லை: "+error.message,"error");return}
+ if(error){message("Unable to verify company permissions: "+error.message,"error");return}
  memberships=(rows||[]).filter(m=>allowedRoles.includes(m.member_role));
  if(!memberships.length){message("இந்தக் கணக்கிற்கு விண்ணப்பங்களை நிர்வகிக்கும் அனுமதி இல்லை. Owner, HR Manager அல்லது Recruiter அனுமதி தேவை.");return}
  const select=$("company");
@@ -87,7 +87,7 @@ async function loadCompany(){
    const salaryPref=pref.minimum_salary||pref.maximum_salary?((pref.salary_currency||"₹")+" "+(pref.minimum_salary??"")+(pref.minimum_salary&&pref.maximum_salary?" – ":"")+(pref.maximum_salary??"")):"";
    const detailErrors=[p.error,profile.error,edu.error,exp.error,skills.error,certs.error,languages.error,prefs.error].filter(Boolean);
    const canChange=["applied","under_review","shortlisted"].includes(a.status);
-   const statusControl='<div class="status-actions"><select class="app-status" data-app-id="'+esc(a.id)+'" data-company-id="'+esc(x.job.company_id)+'" '+(!canChange?'disabled':'')+'><option value="under_review" '+(a.status==="under_review"?'selected':'')+'>பரிசீலனையில்</option><option value="shortlisted" '+(a.status==="shortlisted"?'selected':'')+'>Shortlist</option><option value="rejected" '+(a.status==="rejected"?'selected':'')+'>நிராகரிப்பு</option></select><button type="button" class="save-app-status" data-app-id="'+esc(a.id)+'" '+(!canChange?'disabled':'')+'>நிலையைச் சேமிக்கவும்</button></div>';
+   const statusControl='<div class="status-actions"><select class="app-status" data-app-id="'+esc(a.id)+'" data-company-id="'+esc(x.job.company_id)+'" '+(!canChange?'disabled':'')+'><option value="under_review" '+(a.status==="under_review"?'selected':'')+'>Under Review</option><option value="shortlisted" '+(a.status==="shortlisted"?'selected':'')+'>Shortlist</option><option value="rejected" '+(a.status==="rejected"?'selected':'')+'>நிராகரிப்பு</option></select><button type="button" class="save-app-status" data-app-id="'+esc(a.id)+'" '+(!canChange?'disabled':'')+'>நிலையைச் சேமிக்கவும்</button></div>';
    const resumeAction=a.resume_id&&canChange?'<div class="status-actions"><button type="button" class="view-resume" data-app-id="'+esc(a.id)+'">📄 பாதுகாப்பாக Resume பார்க்கவும்</button></div>':(a.resume_id?'<p class="muted">இந்த விண்ணப்ப நிலைக்கு Resume அணுகல் கிடைக்கவில்லை.</p>':'<p class="muted">இந்த விண்ணப்பத்துடன் Resume இணைக்கப்படவில்லை.</p>');
    const interviewAction=canChange?'<details class="panel"><summary><b>📅 Interview அழைப்பு அனுப்பவும்</b></summary><div class="field"><label>Interview தேதி மற்றும் நேரம்</label><input type="datetime-local" class="interview-date" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview வகை</label><select class="interview-mode" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"><option value="in_person">நேரில்</option><option value="online">Online</option><option value="phone">தொலைபேசி</option></select></div><div class="field"><label>இடம் / Online இணைப்பு</label><input class="interview-location" data-app-id="'+esc(a.id)+'" maxlength="1000" placeholder="முகவரி அல்லது Meeting link" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview Letter / கூடுதல் தகவல்</label><textarea class="interview-letter" data-app-id="'+esc(a.id)+'" maxlength="8000" rows="4" placeholder="நேர்காணல் கடித விவரங்கள்" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></textarea></div><button type="button" class="send-interview" data-app-id="'+esc(a.id)+'">அழைப்பை அனுப்பவும்</button><p class="muted interview-msg" data-app-id="'+esc(a.id)+'"></p></details>':'';
 
