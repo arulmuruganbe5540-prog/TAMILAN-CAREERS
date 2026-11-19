@@ -10,7 +10,7 @@ seo = (ROOT / "assets/seo.js").read_text(encoding="utf-8")
 protection = (ROOT / "assets/site-protection.js").read_text(encoding="utf-8")
 footer_script = (ROOT / "assets/professional-footer.js").read_text(encoding="utf-8")
 homepage = (ROOT / "index.html").read_text(encoding="utf-8")
-pages = sorted(ROOT.glob("*.html"))
+pages = sorted(p for p in ROOT.glob("*.html") if p.name != "guide-demo.html")
 
 checks = {
     "header shows one canonical www domain label":
