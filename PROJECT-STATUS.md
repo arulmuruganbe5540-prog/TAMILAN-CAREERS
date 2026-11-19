@@ -345,3 +345,12 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Added a browser smoke assertion that verifies the dynamically inserted `Admin Control Center` label translates into Malayalam.
 - Latest full Health Audit run `44387382862` passed for commit `3cfce7f8c7f2f5e5a835a379b7c2ffb1ac360632`; the Pages build and deployment run `44387382517` also succeeded.
 - Translation remains dictionary-based. Pages and dynamic strings not yet included in the curated dictionaries may still show English; no machine-translation API is configured.
+
+
+## 19 November 2026 — government exam practice question-bank expansion
+
+- Added 45 original Tamil practice questions across nine named exam tracks: TNPSC VAO, TNUSRB Police Constable, TNTET Paper I, UPSC Civil Services, SSC CGL, RRB NTPC, IBPS PO, LIC AAO, and Indian Army Agniveer.
+- Questions cover Tamil, Indian polity, general knowledge, quantitative aptitude, reasoning, teaching/child development, banking, insurance, science, geography, economy, and environment as appropriate to each track.
+- Each question includes four answer options, a keyed answer, and a short explanation. Existing questions and the existing exam-specific filtering flow were preserved.
+- These are TAMILAN CAREERS-authored practice questions, not official previous-year questions or a complete syllabus bank. Some listed exam options still have no dedicated question set; the page should continue to show its existing unavailable notice for those options.
+- Browser/automated Health Audit and Pages deployment for this commit must be checked before claiming the change is live.
