@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
 <meta name="robots" content="noindex,follow">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>வேலை வெளியீட்டு வரைவு | TAMILAN CAREERS</title>
+<title>Job Posting Draft | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:800;color:#54c8ff;font-size:21px}.brand span{color:white}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:920px;margin:25px auto;padding:0 15px}.hero,.panel{background:#fff;border:1px solid #e2eaf3;border-radius:15px;padding:22px;margin-bottom:16px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 8px}.hero p{margin:0;line-height:1.7;color:#e1efff}.notice{background:#fff7e8;border:1px solid #f3d49b;color:#7c4a08;padding:13px;border-radius:10px;line-height:1.7;margin:14px 0}.info{background:#edf6ff;border:1px solid #cfe5fa;color:#24527a;padding:12px;border-radius:9px;line-height:1.6;margin:12px 0}form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.wide{grid-column:1/-1}label{font-weight:bold;font-size:14px;color:#34445b}input,select,textarea{width:100%;padding:12px;border:1px solid #d5dfeb;border-radius:8px;font:inherit;background:white}textarea{min-height:110px;resize:vertical}.hint{font-size:12px;color:#738197;line-height:1.5}.edu-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.edu-option{display:flex;align-items:center;gap:7px;padding:9px;border:1px solid #dce5f0;border-radius:9px;background:#f8faff;font-size:12px;cursor:pointer}.edu-option input{width:auto;margin:0;accent-color:#1688ed}@media(max-width:620px){.edu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:8px;padding:12px 17px;background:#1688ed;color:white;font-weight:bold;cursor:pointer}.btn.secondary{background:#eaf2fb;color:#175b99}.btn:disabled{opacity:.6;cursor:wait}.status{margin-top:14px;padding:12px;border-radius:9px;display:none;line-height:1.6}.status.ok{display:block;background:#e7f8ed;color:#16743b}.status.err{display:block;background:#fff0f0;color:#b42318}.hidden{display:none!important}.empty{background:#fff;border:1px solid #e2eaf3;padding:22px;border-radius:12px;line-height:1.8}@media(max-width:620px){form{grid-template-columns:1fr}.wide{grid-column:auto}}
@@ -13,34 +13,34 @@
 .tc-domain-brand{display:inline-block!important;color:#eaf8ff!important;font-size:clamp(13px,2vw,19px)!important;font-weight:900!important;letter-spacing:.8px!important;line-height:1.2!important;white-space:nowrap!important;text-decoration:none!important;text-shadow:0 1px 10px rgba(72,190,255,.16)}
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head><body>
-<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="dashboard.html">Dashboard</a><a href="company-profile.html">நிறுவன விவரம்</a><a href="company-jobs.html">எனது வேலைகள்</a><a href="company-applicants.html">விண்ணப்பதாரர்கள்</a></nav></header>
+<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="dashboard.html">Dashboard</a><a href="company-profile.html">Company Profile</a><a href="company-jobs.html">My Jobs</a><a href="company-applicants.html">Applicants</a></nav></header>
 <main>
-<section class="hero"><h1>📢 தனியார் வேலை வெளியீடு</h1><p>சரிபார்க்கப்பட்ட தனியார் நிறுவனங்கள் மட்டுமே தங்களுக்கான தனியார் வேலை அறிவிப்புகளை Admin Review-க்கு அனுப்பலாம்.</p></section>
-<div id="loading" class="info">உங்கள் Login மற்றும் நிறுவன அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section class="hero"><h1>📢 Private Job Posting</h1><p>Only verified private companies can submit their job postings for Admin review.</p></section>
+<div id="loading" class="info">Checking your login and company permissions...</div>
 <section id="blocked" class="empty hidden"></section>
 <section id="editor" class="panel hidden">
-<div class="notice"><b>முக்கியம்:</b> இங்கு சேமிப்பது உங்கள் கணக்கில் உள்ள தனிப்பட்ட வரைவு மட்டுமே. இது பொதுவான வேலை அறிவிப்பாக வெளியிடப்படாது; விண்ணப்பங்கள் பெறப்படாது. நிறுவன அனுமதி, வேலைப் பதிவு அட்டவணை, பாதுகாப்பான backend மற்றும் நிர்வாகச் சரிபார்ப்பு இணைக்கப்பட்ட பிறகே உண்மையான Job Posting செயல்படும்.</div>
+<div class="notice"><b>Important:</b> Saving here stores only a private draft in your account. It will not be published as a public job posting and will not accept applications. Live job posting will be enabled only after company permissions, the job-posting table, secure backend and admin review are connected.</div>
 <div class="info" id="companyInfo"></div>
 <form id="jobForm">
-<div class="field wide"><label for="companyChoice">நிறுவனம் *</label><select id="companyChoice" required></select></div>
-<div class="field wide"><label for="jobTitle">வேலைப் பதவி / Job Title *</label><input id="jobTitle" required maxlength="160" placeholder="உதா: Sales Executive"></div>
-<div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">தேர்வு செய்யவும்</option><option>IT / Software</option><option>Manufacturing</option><option>Sales / Marketing</option><option>Accounts / Finance</option><option>Healthcare</option><option>Education</option><option>Construction</option><option>Logistics / Transport</option><option>Customer Support</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
-<div class="field"><label for="employmentType">வேலை வகை *</label><select id="employmentType" required><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
-<div class="field"><label for="workplaceType">பணியிடம் வகை</label><select id="workplaceType"><option value="">தேர்வு செய்யவும்</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
+<div class="field wide"><label for="companyChoice">Company *</label><select id="companyChoice" required></select></div>
+<div class="field wide"><label for="jobTitle">Job Title *</label><input id="jobTitle" required maxlength="160" placeholder="உதா: Sales Executive"></div>
+<div class="field"><label for="category">Job Category *</label><select id="category" required><option value="">Select</option><option>IT / Software</option><option>Manufacturing</option><option>Sales / Marketing</option><option>Accounts / Finance</option><option>Healthcare</option><option>Education</option><option>Construction</option><option>Logistics / Transport</option><option>Customer Support</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
+<div class="field"><label for="employmentType">Employment Type *</label><select id="employmentType" required><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="workplaceType">பணியிடம் வகை</label><select id="workplaceType"><option value="">Select</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
 <div class="field"><label for="openings">காலியிடங்கள் எண்ணிக்கை</label><input id="openings" type="number" min="1" max="10000" step="1" value="1"></div>
 <div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" required maxlength="160" placeholder="உதா: ஓமலூர், சேலம்"></div>
-<div class="field"><label for="countryName">வேலை இருக்கும் நாடு *</label><select id="countryName" required><option value="">நாடுகளை ஏற்றுகிறது...</option></select><span class="hint">Dubai வேலைகளுக்கு United Arab Emirates தேர்வு செய்யவும்.</span></div>
-<div class="field"><label for="experience">தேவையான அனுபவம்</label><input id="experience" maxlength="100" placeholder="உதா: Fresher / 2 years"></div>
-<div class="field wide"><label>கல்வித் தகுதி (ஒன்றுக்கு மேற்பட்டவற்றைத் தேர்வு செய்யலாம்)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல கல்வித் தகுதிகளைத் தேர்வு செய்யலாம்.</span></div>
+<div class="field"><label for="countryName">வேலை இருக்கும் நாடு *</label><select id="countryName" required><option value="">நாடுகளை ஏற்றுகிறது...</option></select><span class="hint">Dubai வேலைகளுக்கு United Arab Emirates Select.</span></div>
+<div class="field"><label for="experience">தேவையான Experience</label><input id="experience" maxlength="100" placeholder="உதா: Fresher / 2 years"></div>
+<div class="field wide"><label>Education (ஒன்றுக்கு மேற்பட்டவற்றைத் தேர்வு செய்யலாம்)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல Educationகளைத் தேர்வு செய்யலாம்.</span></div>
 <div class="field"><label for="salaryMin">குறைந்தபட்ச சம்பளத் தொகை</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="உதா: 12000"></div>
 <div class="field"><label for="salaryMax">அதிகபட்ச சம்பளத் தொகை</label><input id="salaryMax" type="number" min="0" max="100000000" step="1" placeholder="உதா: 18000"></div>
 <div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option></select></div>
-<div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="800" placeholder="உதா: Communication, MS Excel, Driving"></div>
-<div class="field wide"><label for="description">வேலை விவரம் மற்றும் பொறுப்புகள் *</label><textarea id="description" required maxlength="5000" placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், தேவையான திறன்கள் போன்றவற்றை எழுதவும்."></textarea></div>
+<div class="field wide"><label for="skills">Required Skills</label><input id="skills" maxlength="800" placeholder="உதா: Communication, MS Excel, Driving"></div>
+<div class="field wide"><label for="description">வேலை விவரம் மற்றும் பொறுப்புகள் *</label><textarea id="description" required maxlength="5000" placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், Required Skills போன்றவற்றை எழுதவும்."></textarea></div>
 <div class="field"><label for="deadline">விண்ணப்பிக்க கடைசி தேதி</label><input id="deadline" type="date"></div>
 <div class="field"><label for="contactEmail">விண்ணப்பத் தொடர்பு Email</label><input id="contactEmail" type="email" maxlength="180" placeholder="hr@company.com"></div>
 </form>
-<div class="actions"><button class="btn" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn" id="submitReviewBtn" type="button">Admin Review-க்கு அனுப்பு</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த வரைவை மீண்டும் ஏற்றவும்</button><button class="btn secondary" id="clearBtn" type="button">படிவத்தை காலி செய்</button></div><p class="hint">Review-க்கு அனுப்பிய பிறகு Super Admin சரிபார்ப்பார். நிறுவனம் Verified ஆன பிறகே வேலை பொதுவில் வெளியிடப்படும்.</p>
+<div class="actions"><button class="btn" id="saveBtn" type="button">Save Draft</button><button class="btn" id="submitReviewBtn" type="button">Admin Review-க்கு அனுப்பு</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த வரைவை மீண்டும் ஏற்றவும்</button><button class="btn secondary" id="clearBtn" type="button">படிவத்தை காலி செய்</button></div><p class="hint">Review-க்கு அனுப்பிய பிறகு Super Admin சரிபார்ப்பார். நிறுவனம் Verified ஆன பிறகே வேலை பொதுவில் வெளியிடப்படும்.</p>
 <div id="status" class="status" role="status" aria-live="polite"></div>
 </section>
 </main>
@@ -55,7 +55,7 @@ async function loadCountries(){
  if(error)throw new Error("நாட்டு பட்டியலை ஏற்ற முடியவில்லை: "+error.message);
  activeCountries=(data||[]).map(x=>x.country_name);
  const el=document.getElementById("countryName");
- el.innerHTML='<option value="">நாட்டைத் தேர்வு செய்யவும்</option>'+activeCountries.map(n=>'<option value="'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")+'">'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</option>').join("");
+ el.innerHTML='<option value="">நாட்டைத் Select</option>'+activeCountries.map(n=>'<option value="'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")+'">'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</option>').join("");
 }
 function formData(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());d.education=Array.from(document.querySelectorAll(".education-choice:checked")).map(x=>x.value).join(", ");return d}
 function setReviewLock(locked){
@@ -113,8 +113,8 @@ async function loadDraftForCompany(){
 async function save(silent=false){
  const form=document.getElementById("jobForm");if(!form.reportValidity())return null;
  const d=formData();
- if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("அதிகபட்ச சம்பளம் குறைந்தபட்ச சம்பளத்தைவிட குறைவாக இருக்கக்கூடாது.",false);return null}
- if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return null}const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;if(d.deadline<today){message("விண்ணப்பக் கடைசி தேதி கடந்த தேதியாக இருக்கக்கூடாது.",false);return null}}
+ if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("அதிகபட்ச Salary குறைந்தபட்ச சம்பளத்தைவிட குறைவாக இருக்கக்கூடாது.",false);return null}
+ if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return null}const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;if(d.deadline<today){message("Application Deadline கடந்த தேதியாக இருக்கக்கூடாது.",false);return null}}
  const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return null}
  const previousStatus=currentDraft?.draft_status;
  const sameContent=ids.every(id=>String(currentDraft?.[id]??"")===String(d[id]??""));
@@ -133,7 +133,7 @@ async function save(silent=false){
   if(!silent)message(preserveReview?"வரைவு சேமிக்கப்பட்டது. தற்போதைய Admin Review நிலை மாற்றப்படவில்லை.":preservePublished?"இந்த வேலை ஏற்கனவே பொதுவில் வெளியிடப்பட்டுள்ளது; புதிய மாற்றம் எதுவும் செய்யப்படவில்லை.":"வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
   return data.id;
  }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false);return null}
- finally{btn.disabled=false;btn.textContent="வரைவைச் சேமிக்கவும்"}
+ finally{btn.disabled=false;btn.textContent="Save Draft"}
 }
 async function submitForReview(){
  const btn=document.getElementById("submitReviewBtn");btn.disabled=true;btn.textContent="Review-க்கு அனுப்பப்படுகிறது...";
