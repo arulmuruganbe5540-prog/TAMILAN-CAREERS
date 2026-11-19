@@ -74,8 +74,8 @@ async function init(){
  document.getElementById("companyInfo").textContent="Admin மூலம் Verified செய்யப்பட்ட தனியார் நிறுவனங்கள்: "+memberships.length+". இங்கு தனியார் வேலைகளை மட்டுமே சமர்ப்பிக்கலாம்.";
  const saved=currentUser.user_metadata?.job_posting_draft||{};
  if(saved.company_id&&memberships.some(m=>m.company_id===saved.company_id))select.value=saved.company_id;
- document.getElementById("loading").classList.add("hidden");document.getElementById("editor").classList.remove("hidden");
  await loadDraftForCompany();
+ document.getElementById("loading").classList.add("hidden");document.getElementById("editor").classList.remove("hidden");
 }
 async function loadDraftForCompany(){
  const companyId=document.getElementById("companyChoice").value;
