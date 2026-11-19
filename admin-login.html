@@ -74,7 +74,7 @@ async function finishAdminAccess(user){
 }
 document.getElementById("mfaVerify").addEventListener("click",async()=>{
  const code=document.getElementById("mfaCode").value.trim();
- if(!/^\\d{6}$/.test(code)){message("6 இலக்க Authenticator குறியீட்டை உள்ளிடவும்.");return;}
+ if(!/^\d{6}$/.test(code)){message("6 இலக்க Authenticator குறியீட்டை உள்ளிடவும்.");return;}
  const verifyButton=document.getElementById("mfaVerify");verifyButton.disabled=true;
  try{const {error}=await client.auth.mfa.verify({factorId:pendingMfaFactorId,challengeId:pendingMfaChallengeId,code});if(error)throw error;message("MFA சரிபார்ப்பு வெற்றி. Admin Control திறக்கப்படுகிறது...",true);location.replace("admin-control.html")}
  catch(err){message(err.message||"MFA சரிபார்ப்பு தோல்வியடைந்தது.");}
