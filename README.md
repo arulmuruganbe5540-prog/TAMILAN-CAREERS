@@ -42,6 +42,7 @@
 - TAMILAN AI model evaluation plan (Tamil; model candidates, multilingual test criteria, licensing and hosting checks): `TAMILAN-AI-MODEL-EVALUATION-TA.md`.
 - TAMILAN AI multilingual evaluation prompts: `tests/tamilan-ai-evaluation-prompts.json`; zero-cost data validator: `scripts/validate-tamilan-ai-evaluation.py` (validates the test set only; does not run an AI model).
 - TAMILAN AI model shortlist and licence review: `TAMILAN-AI-MODEL-SHORTLIST-TA.md` (Qwen3-1.7B is a prototype candidate only; no model is deployed).
+- [TAMILAN AI பாதுகாப்பான Website Integration திட்டம்](TAMILAN-AI-INTEGRATION-PLAN-TA.md)
 - Free Colab prototype notebook: `notebooks/TAMILAN_AI_Free_Model_Test.ipynb` (manual run only; requires a free GPU session if available; not a production host).
 - Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
 - Tamil / English responsive public homepage, job search and individual job details pages.
