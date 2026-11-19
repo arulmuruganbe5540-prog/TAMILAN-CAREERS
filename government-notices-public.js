@@ -46,7 +46,7 @@
     const facts = el("div","tc-gov-facts");
     const pairs = [
       ["Notice Date",dateText(row.notice_date)],
-      ["காலியிடங்கள்",row.vacancies === null || row.vacancies === undefined ? "See Official PDF" : Number(row.vacancies).toLocaleString("en-IN")],
+      ["Vacancies",row.vacancies === null || row.vacancies === undefined ? "See Official PDF" : Number(row.vacancies).toLocaleString("en-IN")],
       ["Application Start",dateText(row.application_start)],
       ["Last Date",dateText(row.application_end)]
     ];
@@ -98,13 +98,13 @@
   `;
   document.head.append(style);
   const toolbar=el("div","tc-gov-toolbar");
-  const title=el("h2","","சரிபார்க்கப்பட்ட Government Noticeகள் மற்றும் தேர்வு புதுப்பிப்புகள்");
+  const title=el("h2","","Verified Government Notices and Exam Updates");
   const period=el("select","tc-gov-period");
   period.innerHTML='<option value="12" selected>Last 12 Months</option><option value="6">Last 6 Months</option>';
   const category=el("select","tc-gov-period");
-  category.innerHTML='<option value="all">All Categories</option><option value="recruitment">Recruitment Notices</option><option value="admit_card">Hall Ticket / Admit Card</option><option value="result">Exam Resultகள்</option><option value="answer_key">Answer Key</option><option value="exam_update">Exam Date / பிற புதுப்பிப்புகள்</option><option value="other">Other Notices</option>';
+  category.innerHTML='<option value="all">All Categories</option><option value="recruitment">Recruitment Notices</option><option value="admit_card">Hall Ticket / Admit Card</option><option value="result">Exam Results</option><option value="answer_key">Answer Key</option><option value="exam_update">Exam Dates / Other Updates</option><option value="other">Other Notices</option>';
   toolbar.append(title,period,category);host.append(toolbar);
-  host.append(el("p","tc-gov-note","அதிகாரப்பூர்வ அரசு மூலத்தில் சரிபார்க்கப்பட்ட Recruitment Notices, Hall Ticket, Result, Answer Key மற்றும் தேர்வு புதுப்பிப்புகள். பழைய பதிவுகள் அவற்றின் உண்மையான Notice Dateயுடன் காட்டப்படும்."));
+  host.append(el("p","tc-gov-note","Recruitment notices, hall tickets, results, answer keys and exam updates verified against official government sources. Older records are displayed with their actual notice dates."));
   const status=el("p","tc-gov-note","Loading notices…");host.append(status);
   const grid=el("div","tc-gov-grid");host.append(grid);
   async function load(){
@@ -129,13 +129,13 @@
         const details={
           scope:isTamilNadu?"state":"central",
           state:isTamilNadu?"Tamil Nadu":"India",
-          authority:j.recruitment_authority||j.company_name||"அரசுத் Department",
+          authority:j.recruitment_authority||j.company_name||"Government Department",
           department:j.recruitment_authority||"",
           qualification:j.education_level||"",
           syllabus:extra("Syllabus"),
           exam_date:extra("Exam Date"),
           exam_name:extra("Exam / Recruitment"),
-          vacancies_breakdown:extra("பதவி வாரியான காலியிடங்கள்"),
+          vacancies_breakdown:extra("Post-wise Vacancies"),
           age_limit:j.age_limit,
           salary,
           selection_process:j.selection_process,
@@ -170,9 +170,9 @@
         return true;
       });
       rows.sort((a,b)=>new Date(String(b.notice_date).slice(0,10))-new Date(String(a.notice_date).slice(0,10)));
-      if(!rows.length){status.textContent="இந்த காலவரம்பில் இன்னும் அதிகாரப்பூர்வமாகச் சரிபார்த்து வெளியிடப்பட்ட Recruitment Notices இல்லை.";grid.append(el("div","tc-gov-empty","New notices will appear here after verification. Vacancy counts and eligibility details are not estimated."));return;}
+      if(!rows.length){status.textContent="No officially verified and published recruitment notices are available for this period.";grid.append(el("div","tc-gov-empty","New notices will appear here after verification. Vacancy counts and eligibility details are not estimated."));return;}
       rows.forEach(r=>grid.append(card(r)));
-      status.textContent=rows.length+" சரிபார்க்கப்பட்ட அரசு பதிவுகள் · கடந்த "+months+" மாதங்கள்";
+      status.textContent=rows.length+" verified government records · last "+months+" months";
     }catch(e){status.textContent="Notices could not be loaded. Please try again later.";grid.append(el("div","tc-gov-empty","Information service or permission verification is required."));}
   }
   period.addEventListener("change",load);
