@@ -273,7 +273,7 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
    if(!response.ok)throw new Error("Country lookup unavailable");
    const geo=await response.json(),code=String(geo.country_code||"").toUpperCase();
    if(!/^[A-Z]{2}$/.test(code))throw new Error("Country code unavailable");
-   const {data,error}=await db.from("countries").select("country_code,country_name,is_active,default_language_code,currency_code,homepage_sections").eq("country_code",code).eq("is_active",true).maybeSingle();
+   const {data,error}=await db.from("countries").select("country_code,country_name,is_active,currency_code,homepage_sections").eq("country_code",code).eq("is_active",true).maybeSingle();
    if(error)throw error;
    return data;
   }catch(e){return null}
