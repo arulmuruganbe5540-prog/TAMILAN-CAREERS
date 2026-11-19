@@ -32,7 +32,7 @@
 <header><a class="brand" href="index.html"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></a><nav><a href="indian-government-jobs.html">Central Government</a> · <a href="tamil-nadu-government-jobs.html">Tamil Nadu Government</a></nav></header>
 <main>
 <div class="hero"><h1 id="heading">Government Jobs by Qualification</h1><p id="intro">Browse verified government job notifications matching your education.</p></div>
-<section class="edu-current" aria-live="polite"><img id="eduHeroImage" src="assets/education-studying.svg" alt="Education qualification illustration"><div><small>SELECTED EDUCATION CATEGORY</small><b id="eduHeroTitle">Jobs by Education</b><p id="eduHeroText">Job notifications matching your selected qualification will appear here.</p></div></section><section class="filter" style="display:none" aria-hidden="true"><select id="qualification"><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Studying</option><option>Diploma Studying</option><option>Any Qualification</option></select><input id="search" type="search" placeholder="வேலை / துறை / அறிவிப்பு தேடுங்கள்"></section>
+<section class="edu-current" aria-live="polite"><img id="eduHeroImage" src="assets/education-studying.svg" alt="Education qualification illustration"><div><small>SELECTED EDUCATION CATEGORY</small><b id="eduHeroTitle">Jobs by Education</b><p id="eduHeroText">Job notifications matching your selected qualification will appear here.</p></div></section><section class="filter" style="display:none" aria-hidden="true"><select id="qualification"><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Studying</option><option>Diploma Studying</option><option>Any Qualification</option></select><input id="search" type="search" placeholder="Search jobs, departments or notices"></section>
 <p class="muted" id="summary">Loading notifications...</p><section id="results"></section>
 </main>
 <script>
@@ -41,9 +41,9 @@ const params=new URLSearchParams(location.search),scope=params.get("scope")==="t
 const q=params.get("qualification")||"Any Qualification", $=id=>document.getElementById(id);
 $("qualification").value=q;
 $("heading").textContent=(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" · "+q+" Jobs";
-$("intro").textContent=q+" qualification jobs available in "+(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" வேலை அறிவிப்புகள்.";
+$("intro").textContent=q+" qualification jobs available in "+(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" job notifications.";
 
-const eduArt={"10th Pass":["10th","10th Pass"],"12th Pass":["12th","12th Pass"],"ITI":["iti","ITI graduates"],"Diploma":["diploma","Diploma graduates"],"Diploma Studying":["diploma-studying","Students pursuing a Diploma"],"Degree":["degree","Degree graduates"],"Postgraduate":["postgraduate","முதுநிலைப் பட்டதாரிகள்"],"Studying":["studying","தற்போது படித்துக்கொண்டிருக்கும் மாணவர்கள்"],"Any Qualification":["studying","அனைத்து கல்வித் தகுதிகளும்"]};
+const eduArt={"10th Pass":["10th","10th Pass"],"12th Pass":["12th","12th Pass"],"ITI":["iti","ITI graduates"],"Diploma":["diploma","Diploma graduates"],"Diploma Studying":["diploma-studying","Students pursuing a Diploma"],"Degree":["degree","Degree graduates"],"Postgraduate":["postgraduate","Postgraduate graduates"],"Studying":["studying","Students currently studying"],"Any Qualification":["studying","All education levels"]};
 function updateEducationBanner(){const selected=$("qualification").value,info=eduArt[selected]||eduArt["Any Qualification"];const img=$("eduHeroImage");img.src="assets/education-"+info[0]+".svg";img.alt=selected+" education illustration";$("eduHeroTitle").textContent=selected;$("eduHeroText").textContent=info[1]+" jobs and qualification details."}
 updateEducationBanner();
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -52,8 +52,8 @@ function render(){
  const term=$("search").value.trim().toLowerCase();
  const list=items.filter(x=>(!term||x.search.toLowerCase().includes(term)));
  $("summary").textContent=list.length+" notices";
- if(!list.length){$("results").innerHTML='<div class="empty">இந்தக் கல்வித் தகுதிக்கான வெளியிடப்பட்ட அறிவிப்புகள் தற்போது இல்லை. வேறு கல்வித் தகுதியைத் தேர்ந்தெடுக்கலாம்.</div>';return;}
- $("results").innerHTML=list.map(x=>'<article class="job"><h2>'+esc(x.title)+'</h2><div class="meta">'+(x.vacancies?'<span class="tag">காலியிடங்கள்: '+esc(x.vacancies)+'</span>':'')+(x.deadline?'<span class="tag">கடைசி தேதி: '+esc(x.deadline)+'</span>':'')+(x.qualification?'<span class="tag">கல்வி: '+esc(x.qualification)+'</span>':'')+'</div>'+(x.summary?'<p>'+esc(x.summary)+'</p>':'')+'<div class="actions"><a class="btn" href="'+esc(x.detail)+'">முழு விவரம் பார்க்க</a>'+(x.apply?'<a class="btn alt" href="'+esc(x.apply)+'" target="_blank" rel="noopener">அதிகாரப்பூர்வ இணைப்பு ↗</a>':'')+'</div></article>').join("");
+ if(!list.length){$("results").innerHTML='<div class="empty">There are currently no published notices for this qualification. You can select another education level.</div>';return;}
+ $("results").innerHTML=list.map(x=>'<article class="job"><h2>'+esc(x.title)+'</h2><div class="meta">'+(x.vacancies?'<span class="tag">Vacancies: '+esc(x.vacancies)+'</span>':'')+(x.deadline?'<span class="tag">Deadline: '+esc(x.deadline)+'</span>':'')+(x.qualification?'<span class="tag">Education: '+esc(x.qualification)+'</span>':'')+'</div>'+(x.summary?'<p>'+esc(x.summary)+'</p>':'')+'<div class="actions"><a class="btn" href="'+esc(x.detail)+'">View Full Details</a>'+(x.apply?'<a class="btn alt" href="'+esc(x.apply)+'" target="_blank" rel="noopener">Official Link ↗</a>':'')+'</div></article>').join("");
 }
 function isScopeMatch(j){
  const a=String(j.recruitment_authority||j.authority||"").toLowerCase(),l=String(j.location||"").toLowerCase(),d=String(j.department||"").toLowerCase();
@@ -78,7 +78,7 @@ async function load(){
   if(!isScopeMatch(j))return;
   const qual=j.education_level||"",text=[j.job_title,j.title,j.description,j.recruitment_authority,j.department,qual].join(" ");
   if(!isQualificationMatch(text))return;
-  out.push({title:j.job_title||j.title||"அரசு வேலைவாய்ப்பு",qualification:qual,summary:j.description,vacancies:j.vacancies||j.vacancy_count,deadline:j.application_deadline,detail:"job-details.html?id="+encodeURIComponent(j.id),apply:j.application_url||j.official_notification_url,search:text});
+  out.push({title:j.job_title||j.title||"Government Job",qualification:qual,summary:j.description,vacancies:j.vacancies||j.vacancy_count,deadline:j.application_deadline,detail:"job-details.html?id="+encodeURIComponent(j.id),apply:j.application_url||j.official_notification_url,search:text});
  });
  (nr.data||[]).forEach(n=>{
   const d=n.details||{},st=String(d.state||"").toLowerCase();
@@ -89,9 +89,9 @@ async function load(){
   out.push({title:n.title,qualification:qual,summary:n.eligibility_summary,vacancies:n.vacancies,deadline:n.application_end,detail:"government-notice-details.html?id="+encodeURIComponent(n.id),apply:n.official_url,search:text});
  });
  items=out;render();
- }catch(e){$("summary").textContent="அறிவிப்புகளைப் பெற முடியவில்லை";$("results").innerHTML='<div class="empty">தகவல் சேவையில் சிக்கல். பின்னர் மீண்டும் முயற்சிக்கவும்.</div>';}
+ }catch(e){$("summary").textContent="Unable to load notices";$("results").innerHTML='<div class="empty">There is a problem with the information service. Please try again later.</div>';}
 }
-$("qualification").addEventListener("change",()=>{updateEducationBanner();const p=new URLSearchParams(location.search);p.set("scope",scope);p.set("qualification",$("qualification").value);history.replaceState(null,"","?"+p.toString());$("heading").textContent=(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" · "+$("qualification").value+" வேலைவாய்ப்புகள்";load();});
+$("qualification").addEventListener("change",()=>{updateEducationBanner();const p=new URLSearchParams(location.search);p.set("scope",scope);p.set("qualification",$("qualification").value);history.replaceState(null,"","?"+p.toString());$("heading").textContent=(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" · "+$("qualification").value+" Jobs";load();});
 $("search").addEventListener("input",render);
 load();
 </script>
