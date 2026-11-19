@@ -74,7 +74,7 @@ function render(){
   const skillMatch=getSkillMatch(j);
   return visible&&(!kind||jobKind===kind)&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase().replace(/_/g," ")===type)&&(!place||String(loc).toLowerCase().includes(place))&&(!workplace||jobWorkplace===workplace)&&(!education||jobEducation.includes(education))&&(!skillMode||skillMatch.score>0);
  });
- $("count").textContent=list.length+" jobs found";
+ $("count").textContent=list.length+(list.length===1?" job found":" jobs found");
  if(!list.length){$("results").innerHTML='<div class="empty">No jobs match your search right now. Try a different keyword or location.</div>';return;}
  $("results").innerHTML=list.map(j=>{
   const bi=j._bilingual||null;
