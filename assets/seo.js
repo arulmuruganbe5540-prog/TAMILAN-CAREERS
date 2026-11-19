@@ -17,7 +17,7 @@
       "name": "TAMILAN CAREERS",
       "alternateName": "Tamilan Careers",
       "url": origin + path,
-      "inLanguage": ["ta-IN", "en-IN"],
+      "inLanguage": "en",
       "potentialAction": {
         "@type": "SearchAction",
         "target": origin + path.replace(/index\.html$/, "") + "jobs.html?q={search_term_string}",
@@ -40,7 +40,7 @@
         "@type": "ContactPoint",
         "contactType": "customer support",
         "email": "arulmuruganbe5540@gmail.com",
-        "availableLanguage": ["English", "Tamil"]
+        "availableLanguage": ["English"]
       }]
     };
     var organizationScript = document.getElementById("tc-organization-jsonld");
