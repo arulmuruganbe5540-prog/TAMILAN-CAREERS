@@ -278,11 +278,15 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
    return data;
   }catch(e){return null}
  }
+ function englishText(value){
+  const text=String(value??"").trim();
+  return Array.from(text).some(ch=>/\p{L}/u.test(ch)&&!/\p{Script=Latin}/u.test(ch))?"":text;
+ }
  function jobCard(j){
-  const id=pick(j,["id","job_id"]),title=pick(j,["job_title","title"])||"Job opportunity",company=pick(j,["employer_name","company_name"]),loc=pick(j,["location","job_location","work_location"]),jobCountry=pick(j,["country_name"]),type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"]),scope=pick(j,["government_scope"]);
+  const id=pick(j,["id","job_id"]),title=englishText(pick(j,["job_title","title"]))||"Job title not available in English",company=pick(j,["employer_name","company_name"]),loc=englishText(pick(j,["location","job_location","work_location"])),jobCountry=englishText(pick(j,["country_name"])),type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"]),scope=pick(j,["government_scope"]);
   const salary=min||max?((currency?currency+" ":"")+(min||"")+(min&&max?" – ":"")+(max||"")):"Salary not specified";
   const scopeLabel=scope==="central"?"Central Government":scope==="tamil-nadu"?"Tamil Nadu Government":scope==="national"?"National Government":"";
-  return '<article class="job-card"><span class="job-label">'+esc(scopeLabel||jobCountry||"JOB")+'</span><h3>'+esc(title)+'</h3><p class="job-company">'+esc(company)+'</p><div class="job-meta"><span>📍 '+esc(loc||"Location not specified")+'</span>'+(type?'<span>'+esc(type)+'</span>':"")+'</div><div class="job-bottom"><b>'+esc(salary)+'</b><a class="apply-link" href="job-details.html?id='+encodeURIComponent(id)+'">View details →</a></div></article>';
+  return '<article class="job-card"><span class="job-label">'+esc(scopeLabel||jobCountry||"JOB")+'</span><h3>'+esc(title)+'</h3><p class="job-company">'+esc(company)+'</p><div class="job-meta"><span>📍 '+esc(loc||"Location not available in English")+'</span>'+(type?'<span>'+esc(type)+'</span>':"")+'</div><div class="job-bottom"><b>'+esc(salary)+'</b><a class="apply-link" href="job-details.html?id='+encodeURIComponent(id)+'">View details →</a></div></article>';
  }
  function showList(id,jobs,empty){
   const el=document.getElementById(id);
