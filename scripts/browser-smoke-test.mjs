@@ -138,6 +138,31 @@ await check("Login page role, mode and password controls work", async () => {
   if (redirectChecks.duplicated !== "https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/dashboard.html") throw new Error("Duplicated repository path was not rejected: " + redirectChecks.duplicated);
 });
 
+await check("Job seeker and employer registration validate account details before submission", async () => {
+  await open("login.html");
+  await page.locator("#seeker").click();
+  if (!(await page.locator("#seeker").getAttribute("class")).includes("active")) throw new Error("Job seeker role did not become active");
+  await page.locator("#switchLink").click();
+  await page.locator("#fullName").fill("Test Candidate");
+  await page.locator("#email").fill("candidate@example.test");
+  await page.locator("#password").fill("Candidate123");
+  await page.locator("#confirmPassword").fill("Different123");
+  await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+  if (!(await page.locator("#message").innerText()).includes("ஒன்றாக இருக்க")) throw new Error("Password mismatch was not rejected");
+  await page.locator("#confirmPassword").fill("candidate123");
+  await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+  if (!(await page.locator("#message").innerText()).includes("பெரிய எழுத்து")) throw new Error("Weak password was not rejected");
+  await page.locator("#password").fill("Candidate123");
+  await page.locator("#confirmPassword").fill("Candidate123");
+  await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+  if (!(await page.locator("#message").innerText()).includes("விதிமுறைகள்")) throw new Error("Unaccepted terms were not rejected");
+  await page.locator("#company").click();
+  if (!(await page.locator("#company").getAttribute("class")).includes("active")) throw new Error("Employer role did not become active");
+  await page.setViewportSize({ width: 320, height: 800 });
+  const width = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, page: document.documentElement.scrollWidth }));
+  if (width.page > width.viewport + 1) throw new Error("Login/register page overflows at 320px: " + JSON.stringify(width));
+});
+
 await check("State government jobs render and filter", async () => {
   await open("state-government-jobs.html");
   const initial = await page.locator("#stateList article").count();
