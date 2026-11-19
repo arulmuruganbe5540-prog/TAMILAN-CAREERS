@@ -80,7 +80,7 @@ function render(){
   const bi=j._bilingual||null;
   const englishText=value=>{
    const text=String(value??"").trim();
-   return Array.from(text).some(ch=>/\\p{L}/u.test(ch)&&! /\\p{Script=Latin}/u.test(ch))?"":text;
+   return Array.from(text).some(ch=>/\p{L}/u.test(ch)&&! /\p{Script=Latin}/u.test(ch))?"":text;
   };
   const title=englishText(bi?.title_en)||englishText(pick(j,["job_title","title"]))||"Job title not available in English";
   const desc=englishText(bi?.description_en)||englishText(pick(j,["description","job_description"]))||"The employer has not provided an English description.";
