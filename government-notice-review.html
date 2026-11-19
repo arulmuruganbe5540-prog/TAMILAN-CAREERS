@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
 <meta name="robots" content="noindex,follow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>அரசு அறிவிப்பு ஆய்வு | TAMILAN CAREERS</title>
+<title>Government Notice Review | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#172033;font-family:Arial,"Noto Sans Tamil",sans-serif}
@@ -36,14 +36,14 @@ a.link{display:inline-block;margin-top:8px;background:#126fd0;color:white;text-d
 <body>
 <header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><button id="logout">Logout</button></header>
 <main>
-<section class="hero"><h1>அரசு வேலை அறிவிப்பு ஆய்வு மையம்</h1><p>அதிகாரப்பூர்வ அரசு இணையதளங்களில் கண்டறியப்பட்ட அறிவிப்புகளை ஆய்வு செய்யும் தனிப்பட்ட நிர்வாகப் பகுதி.</p></section>
-<div class="warning">⚠️ இங்கு காட்டப்படும் இணைப்புகள் தானாகச் சரிபார்க்கப்பட்ட வேலை அறிவிப்புகள் அல்ல. அதிகாரப்பூர்வ அறிவிப்பு PDF, தேதிகள், காலியிடங்கள், தகுதி மற்றும் விண்ணப்ப இணைப்பைச் சரிபார்க்காமல் வெளியிட வேண்டாம்.</div>
-<div id="state" class="state">உங்கள் நிர்வாக அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section class="hero"><h1>Government Job Notice Review Centre</h1><p>Private admin area for reviewing notices discovered on official government websites.</p></section>
+<div class="warning">⚠️ Links shown here are not automatically verified job notices. Do not publish until you have checked the official notice PDF, dates, vacancies, eligibility and application link.</div>
+<div id="state" class="state">Checking your administrator permissions...</div>
 <section id="panel" class="hidden">
 <div class="filters">
-<input id="search" type="search" placeholder="பதவி / நிறுவனம் / இணைப்பு தேடுங்கள்">
-<select id="status"><option value="pending">நிலுவையில் உள்ளவை</option><option value="verified">சரிபார்க்கப்பட்டவை</option><option value="rejected">நிராகரிக்கப்பட்டவை</option><option value="published">வெளியிடப்பட்டவை</option><option value="all">அனைத்து நிலைகளும்</option></select>
-<select id="category"><option value="">அனைத்து வகைகளும்</option><option value="recruitment">வேலைவாய்ப்பு</option><option value="result">தேர்வு முடிவு</option><option value="admit_card">ஹால் டிக்கெட்</option><option value="answer_key">விடைக்குறிப்பு</option><option value="exam_update">தேர்வு அறிவிப்பு</option><option value="other">மற்றவை</option></select>
+<input id="search" type="search" placeholder="Search title, company or link">
+<select id="status"><option value="pending">Pending</option><option value="verified">Verified</option><option value="rejected">Rejected</option><option value="published">Published</option><option value="all">All Statuses</option></select>
+<select id="category"><option value="">All Categories</option><option value="recruitment">Recruitment</option><option value="result">Exam Result</option><option value="admit_card">Hall Ticket</option><option value="answer_key">Answer Key</option><option value="exam_update">Exam Update</option><option value="other">Other</option></select>
 </div>
 <div class="stats"><div class="stat" id="total">மொத்தம்: —</div><div class="stat" id="pending">நிலுவை: —</div><div class="stat" id="shown">காண்பிக்கப்படுவது: —</div></div>
 <div id="list"></div>
@@ -52,7 +52,7 @@ a.link{display:inline-block;margin-top:8px;background:#126fd0;color:white;text-d
 <script>
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id);let rows=[];
-const labels={recruitment:"வேலைவாய்ப்பு",result:"தேர்வு முடிவு",admit_card:"ஹால் டிக்கெட்",answer_key:"விடைக்குறிப்பு",exam_update:"தேர்வு அறிவிப்பு",other:"மற்றவை"};
+const labels={recruitment:"Recruitment",result:"Exam Result",admit_card:"Hall Ticket",answer_key:"Answer Key",exam_update:"Exam Update",other:"Other"};
 const checks=[["registered_source_host","பதிவுசெய்த அரசு தளம்"],["notice_document_opened","அறிவிப்பு PDF / ஆவணம்"],["dates_verified","தேதிகள்"],["vacancies_verified","காலியிட எண்ணிக்கை"],["eligibility_verified","கல்வி / வயது தகுதி"],["application_link_verified","விண்ணப்ப இணைப்பு"],["duplicate_checked","மீள்பதிவு சோதனை"]];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function render(){
