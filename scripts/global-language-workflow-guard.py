@@ -48,7 +48,7 @@ checks = {
         and "career_tools:\"career-tools\"" in homepage
         and homepage.index('data-home-section="country-government"') < homepage.index('data-home-section="qualification_pathways"')
         and homepage.index('data-home-section="qualification_pathways"') < homepage.index('data-home-section="career_tools"')
-        and "configured.concat(defaults.filter(key=>!configured.includes(key)))" in homepage,
+        and "const order=defaults;" in homepage,
 }
 for page in pages:
     content = page.read_text(encoding="utf-8")
