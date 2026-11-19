@@ -165,8 +165,9 @@ Deno.serve(async (request: Request) => {
     return json({ error: "Verified public job retrieval failed" }, 502, origin);
   }
 
-  const sources = (data ?? [])
-    .map((row) => publicJobSource(row as Record<string, unknown>))
+  const rows = (data ?? []) as unknown as Array<Record<string, unknown>>;
+  const sources = rows
+    .map((row) => publicJobSource(row))
     .filter((row): row is NonNullable<typeof row> => row !== null);
 
   return json({
