@@ -8,7 +8,7 @@
 - Updated `admin-design-studio.html`: loads persisted settings, previews selected banners, saves the homepage design to Supabase, uploads banners to Storage, and removes replaced assets after successful save.
 - Updated `index.html`: added a configurable homepage hero and loader for the saved name, headline, description, primary color and public banner.
 - Added reproducible SQL setup at `supabase-homepage-design-studio.sql`.
-- Verified the live table policies and bucket configuration through SQL inspection. No design row or banner has been saved yet; that first save must be performed from an authenticated Super Admin browser session. Real browser upload/save and public rendering smoke tests are still pending.
+- Verified the live table policies and bucket configuration through SQL inspection, and seeded the initial default homepage settings without overwriting future Admin edits. No banner has been uploaded yet; Admin changes require an authenticated Super Admin browser session. Real browser upload/save and public rendering smoke tests are still pending.
 
 Last live audit: 19 November 2026 (India time)  
 Repository: `arulmuruganbe5540-prog/TAMILAN-CAREERS`  
