@@ -73,7 +73,7 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
   <form id="authForm">
 
     <div id="nameField" style="display:none">
-      <label>முழு பெயர் / Full Name</label>
+      <label>Full Name</label>
       <input id="fullName" type="text" placeholder="உங்கள் பெயர்">
     </div>
 
@@ -99,8 +99,8 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
   </form>
 
   <div class="switch">
-    <span id="switchText">கணக்கு இல்லையா?</span>
-    <a id="switchLink" onclick="toggleMode()">Register செய்யுங்கள்</a>
+    <span id="switchText">Don't have an account?</span>
+    <a id="switchLink" onclick="toggleMode()">Register</a>
   </div>
 
   <div class="message" id="message"></div>
@@ -168,15 +168,15 @@ function passwordStrength(value) {
   if (/[^A-Za-z0-9]/.test(value)) score++;
   document.getElementById("strengthBar").style.width = (score * 25) + "%";
   document.getElementById("strengthBar").style.background = score <= 1 ? "#d94848" : score <= 2 ? "#d98b22" : "#16834a";
-  document.getElementById("strengthLabel").textContent = value ? ["மிகவும் பலவீனம்","பலவீனம்","சராசரி","நல்லது","மிகவும் வலிமையானது"][score] : "Password வலிமை";
+  document.getElementById("strengthLabel").textContent = value ? ["Very weak","Weak","Average","Good","Very strong"][score] : "Password strength";
 }
 document.getElementById("password").addEventListener("input", e => passwordStrength(e.target.value));
 document.getElementById("confirmPassword").addEventListener("input", e => {
-  e.target.setCustomValidity(e.target.value && e.target.value !== document.getElementById("password").value ? "Password பொருந்தவில்லை" : "");
+  e.target.setCustomValidity(e.target.value && e.target.value !== document.getElementById("password").value ? "Password does not match" : "");
 });
 document.getElementById("password").addEventListener("input", () => {
   const confirm = document.getElementById("confirmPassword");
-  confirm.setCustomValidity(confirm.value && confirm.value !== document.getElementById("password").value ? "Password பொருந்தவில்லை" : "");
+  confirm.setCustomValidity(confirm.value && confirm.value !== document.getElementById("password").value ? "Password does not match" : "");
 });
 document.getElementById("forgotLink").addEventListener("click", async e => {
   e.preventDefault();
@@ -191,7 +191,7 @@ document.getElementById("forgotLink").addEventListener("click", async e => {
     if (error) throw error;
     showMessage("Password மாற்றுவதற்கான பாதுகாப்பான இணைப்பு உங்கள் Email-க்கு அனுப்பப்பட்டது. Inbox மற்றும் Spam folder பார்க்கவும்.", true);
   } catch(error) { showMessage(error.message || "Reset email அனுப்ப முடியவில்லை."); }
-  finally { link.style.pointerEvents = ""; link.textContent = "Password மறந்துவிட்டதா?"; }
+  finally { link.style.pointerEvents = ""; link.textContent = "Forgot Password?"; }
 });
 
 function chooseRole(role) {
