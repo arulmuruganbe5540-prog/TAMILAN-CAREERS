@@ -1,3 +1,12 @@
+## 19 November 2026 — Super Admin MFA implementation (initial)
+
+- Added `admin-security.html`, a Super Admin-only account security page that supports Supabase Auth TOTP enrollment using an authenticator app, QR setup, manual secret entry, and six-digit verification.
+- Added an Admin Control Center link to the new security page.
+- Updated `admin-login.html`: when a verified TOTP factor exists, password login now requires a Supabase MFA challenge and successful verification before redirecting to Admin Control.
+- Updated `admin-control.html` to check the Authenticator Assurance Level and prevent direct access with an unverified `aal1` session when MFA is enrolled; it directs the Admin back through the MFA login flow.
+- MFA is not globally enforced and no database-wide AAL2 RLS policy was added. Existing Admin access remains unchanged until the Super Admin voluntarily enrolls a factor. This avoids locking out the existing owner account.
+- Implementation follows current Supabase Auth MFA TOTP guidance. Browser-based enrollment, challenge, and real-account recovery tests are still pending; do not mark MFA fully verified or mandatory until the owner completes setup and confirms a second-factor recovery path.
+
 ## 19 November 2026 — Government exam categories and education pathways
 
 - Expanded `exam-preparation.html` from four broad groups to 16 distinct government exam categories: TNPSC, Police/TNUSRB, TRB/Teacher, TANGEDCO/Power, Forest, Health, UPSC, SSC, Railways/RRB, Banking, Defence, Postal, Insurance, Judiciary, PSU, and Other State PSC.
