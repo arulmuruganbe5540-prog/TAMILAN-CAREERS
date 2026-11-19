@@ -40,18 +40,18 @@ const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co"
 const params=new URLSearchParams(location.search),scope=params.get("scope")==="tamil-nadu"?"tamil-nadu":"central";
 const q=params.get("qualification")||"Any Qualification", $=id=>document.getElementById(id);
 $("qualification").value=q;
-$("heading").textContent=(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" · "+q+" வேலைவாய்ப்புகள்";
-$("intro").textContent=q+" கல்வித் தகுதியுடன் விண்ணப்பிக்கக்கூடிய "+(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" வேலை அறிவிப்புகள்.";
+$("heading").textContent=(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" · "+q+" Jobs";
+$("intro").textContent=q+" qualification jobs available in "+(scope==="tamil-nadu"?"Tamil Nadu Government":"Central Government")+" வேலை அறிவிப்புகள்.";
 
-const eduArt={"10th Pass":["10th","10ம் வகுப்பு முடித்தவர்கள்"],"12th Pass":["12th","12ம் வகுப்பு முடித்தவர்கள்"],"ITI":["iti","ITI தொழிற்பயிற்சி முடித்தவர்கள்"],"Diploma":["diploma","டிப்ளமோ முடித்தவர்கள்"],"Diploma Studying":["diploma-studying","டிப்ளமோ படித்துக்கொண்டிருப்பவர்கள்"],"Degree":["degree","பட்டப்படிப்பு முடித்தவர்கள்"],"Postgraduate":["postgraduate","முதுநிலைப் பட்டதாரிகள்"],"Studying":["studying","தற்போது படித்துக்கொண்டிருக்கும் மாணவர்கள்"],"Any Qualification":["studying","அனைத்து கல்வித் தகுதிகளும்"]};
-function updateEducationBanner(){const selected=$("qualification").value,info=eduArt[selected]||eduArt["Any Qualification"];const img=$("eduHeroImage");img.src="assets/education-"+info[0]+".svg";img.alt=selected+" தொடர்பான கல்விப் படம்";$("eduHeroTitle").textContent=selected;$("eduHeroText").textContent=info[1]+" தொடர்பான வேலைவாய்ப்புகள் மற்றும் தகுதி விவரங்கள்."}
+const eduArt={"10th Pass":["10th","10th Pass"],"12th Pass":["12th","12th Pass"],"ITI":["iti","ITI graduates"],"Diploma":["diploma","Diploma graduates"],"Diploma Studying":["diploma-studying","Students pursuing a Diploma"],"Degree":["degree","Degree graduates"],"Postgraduate":["postgraduate","முதுநிலைப் பட்டதாரிகள்"],"Studying":["studying","தற்போது படித்துக்கொண்டிருக்கும் மாணவர்கள்"],"Any Qualification":["studying","அனைத்து கல்வித் தகுதிகளும்"]};
+function updateEducationBanner(){const selected=$("qualification").value,info=eduArt[selected]||eduArt["Any Qualification"];const img=$("eduHeroImage");img.src="assets/education-"+info[0]+".svg";img.alt=selected+" education illustration";$("eduHeroTitle").textContent=selected;$("eduHeroText").textContent=info[1]+" jobs and qualification details."}
 updateEducationBanner();
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let items=[];
 function render(){
  const term=$("search").value.trim().toLowerCase();
  const list=items.filter(x=>(!term||x.search.toLowerCase().includes(term)));
- $("summary").textContent=list.length+" அறிவிப்புகள்";
+ $("summary").textContent=list.length+" notices";
  if(!list.length){$("results").innerHTML='<div class="empty">இந்தக் கல்வித் தகுதிக்கான வெளியிடப்பட்ட அறிவிப்புகள் தற்போது இல்லை. வேறு கல்வித் தகுதியைத் தேர்ந்தெடுக்கலாம்.</div>';return;}
  $("results").innerHTML=list.map(x=>'<article class="job"><h2>'+esc(x.title)+'</h2><div class="meta">'+(x.vacancies?'<span class="tag">காலியிடங்கள்: '+esc(x.vacancies)+'</span>':'')+(x.deadline?'<span class="tag">கடைசி தேதி: '+esc(x.deadline)+'</span>':'')+(x.qualification?'<span class="tag">கல்வி: '+esc(x.qualification)+'</span>':'')+'</div>'+(x.summary?'<p>'+esc(x.summary)+'</p>':'')+'<div class="actions"><a class="btn" href="'+esc(x.detail)+'">முழு விவரம் பார்க்க</a>'+(x.apply?'<a class="btn alt" href="'+esc(x.apply)+'" target="_blank" rel="noopener">அதிகாரப்பூர்வ இணைப்பு ↗</a>':'')+'</div></article>').join("");
 }
