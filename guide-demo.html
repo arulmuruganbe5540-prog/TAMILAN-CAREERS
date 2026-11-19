@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TAMILAN CAREERS | Guide Style Demo</title>
-<meta name="robots" content="noindex,nofollow">
+<meta name="robots" content="noindex,nofollow">\n<meta name="description" content="TAMILAN CAREERS bilingual demo page">
 <style>
 :root{--navy:#102b50;--blue:#174d83;--gold:#d7b65f;--ink:#18283d;--muted:#65758a;--line:#dce4ed;--bg:#f3f6fa;--green:#198754}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Arial,"Noto Sans Tamil",sans-serif}
 header{background:var(--navy);color:white;padding:15px max(16px,calc((100% - 1120px)/2));border-bottom:4px solid var(--gold)}
-.brand{font-size:23px;font-weight:800;letter-spacing:.4px}.domain{font-size:11px;color:var(--gold);font-weight:700}
+.language{margin-top:8px;font-size:12px}.language select{padding:5px 9px;border-radius:4px;border:1px solid var(--gold);background:#fff;color:var(--navy);font-weight:700}.brand{font-size:23px;font-weight:800;letter-spacing:.4px}.domain{font-size:11px;color:var(--gold);font-weight:700}
 nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}nav a{color:#fff;text-decoration:none;background:#1b416c;padding:7px 10px;border-radius:4px;font-size:13px}
 .wrap{max-width:1120px;margin:18px auto;padding:0 14px}.notice{background:#fff6db;border:1px solid #ecd99d;padding:10px 12px;border-radius:5px;color:#684f12;font-size:13px;margin-bottom:14px}
 .search{background:white;border:1px solid var(--line);padding:14px;border-radius:6px;display:flex;gap:8px;margin-bottom:16px}.search input{flex:1;min-width:0;padding:11px;border:1px solid var(--line);border-radius:4px;font-size:14px}.search button{background:var(--navy);color:white;border:0;border-radius:4px;padding:0 20px;font-weight:700}
@@ -21,7 +21,7 @@ footer{background:var(--navy);color:#dce7f4;text-align:center;padding:22px 12px;
 </style>
 </head>
 <body>
-<header><div class="brand">TAMILAN CAREERS</div><div class="domain">WWW.TAMILANCAREERS.IN</div><nav>
+<header><div class="brand">TAMILAN CAREERS</div><div class="domain">WWW.TAMILANCAREERS.IN</div><div class="language"><label for="languageSelect">Language / மொழி</label> <select id="languageSelect" aria-label="Language"><option value="en">English</option><option value="ta">தமிழ்</option></select></div><nav>
 <a href="#jobs">Latest Jobs</a><a href="#results">Results</a><a href="#hall">Hall Ticket</a><a href="#answer">Answer Key</a><a href="#admission">Admission</a><a href="#scholarship">Scholarship</a>
 </nav></header>
 <main class="wrap">
@@ -46,4 +46,37 @@ footer{background:var(--navy);color:#dce7f4;text-align:center;padding:22px 12px;
 </main>
 <footer><strong>TAMILAN CAREERS</strong><br>WWW.TAMILANCAREERS.IN<br>Demo layout · DREAM • APPLY • ACHIEVE</footer>
 <script>function filterRows(){const q=document.getElementById('q').value.trim().toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}</script>
-</body></html>
+
+<script>
+(function(){
+const pairs = {
+"Latest Jobs":"சமீபத்திய வேலைவாய்ப்புகள்","Results":"தேர்வு முடிவுகள்","Hall Ticket":"ஹால் டிக்கெட்","Answer Key":"விடைக்குறிப்பு","Admission":"கல்லூரி சேர்க்கை","Scholarship":"கல்வி உதவித்தொகை",
+"Search Jobs, Results, Exams, Hall Ticket...":"வேலைகள், தேர்வு முடிவுகள், தேர்வுகள், ஹால் டிக்கெட் தேடுங்கள்...",
+"SEARCH":"தேடு","அரசு வேலைகள்":"அரசு வேலைவாய்ப்புகள்","TN & Central Govt":"தமிழ்நாடு மற்றும் மத்திய அரசு","தேர்வு முடிவுகள்":"தேர்வு முடிவுகள்","Latest Results":"சமீபத்திய தேர்வு முடிவுகள்","ஹால் டிக்கெட்":"ஹால் டிக்கெட்","Admit Card":"நுழைவுச்சீட்டு","Answer Key":"விடைக்குறிப்பு","Exam Keys":"தேர்வு விடைகள்","கல்லூரி சேர்க்கை":"கல்லூரி சேர்க்கை","உதவித்தொகை":"கல்வி உதவித்தொகை","Syllabus":"பாடத்திட்டம்","பாடத்திட்டம்":"பாடத்திட்டம்","Private Jobs":"தனியார் வேலைவாய்ப்புகள்","தனியார் வேலைகள்":"தனியார் வேலைவாய்ப்புகள்",
+"டெமோ பக்கம்:":"மாதிரிப் பக்கம்:","கீழே உள்ள பதிவுகள் அட்டவணை வடிவத்தைக் காட்டுவதற்கான மாதிரி வரிகள் மட்டுமே. இவை உண்மையான வேலை அறிவிப்புகள் அல்ல; Apply / View இணைப்புகள் செயல்படுத்தப்படவில்லை.":"கீழே உள்ள பதிவுகள் அட்டவணை வடிவத்தைக் காட்டுவதற்கான மாதிரி வரிகள் மட்டுமே. இவை உண்மையான வேலை அறிவிப்புகள் அல்ல; விண்ணப்பம் / விவரங்கள் இணைப்புகள் செயல்படுத்தப்படவில்லை.",
+"Latest Government Jobs / அரசு வேலைவாய்ப்புகள்":"சமீபத்திய அரசு வேலைவாய்ப்புகள்","Exam · Post Name · Qualification · Last Date · Status · Notification":"தேர்வு · பணியின் பெயர் · கல்வித்தகுதி · கடைசி தேதி · நிலை · அறிவிப்பு",
+"S.No":"வ.எண்","Exam / Post Name":"தேர்வு / பணியின் பெயர்","Qualification":"கல்வித்தகுதி","Last Date":"கடைசி தேதி","Status":"நிலை","Details":"விவரங்கள்","TNPSC Group IV":"TNPSC தொகுதி IV","10th Pass":"10ஆம் வகுப்பு","Sample":"மாதிரி","View Details":"விவரங்களைப் பார்க்க","Railway Recruitment":"ரயில்வே பணியாளர் தேர்வு","10th / ITI":"10ஆம் வகுப்பு / ஐ.டி.ஐ","Notification":"அறிவிப்பு","SSC Recruitment":"SSC பணியாளர் தேர்வு","Degree":"பட்டப்படிப்பு",
+"Private Jobs / தனியார் வேலைவாய்ப்புகள்":"தனியார் வேலைவாய்ப்புகள்","Company / Post":"நிறுவனம் / பணி","Location":"இடம்","12th Pass":"12ஆம் வகுப்பு","Tamil Nadu":"தமிழ்நாடு","Apply":"விண்ணப்பிக்க",
+"Latest Results / தேர்வு முடிவுகள்":"சமீபத்திய தேர்வு முடிவுகள்","Exam Name":"தேர்வின் பெயர்","Result Date":"முடிவு வெளியான தேதி","Result Link":"முடிவு இணைப்பு","TNPSC Result":"TNPSC தேர்வு முடிவு","SSC Result":"SSC தேர்வு முடிவு","Check Result":"முடிவைப் பார்க்க",
+"Hall Ticket / Admit Card":"ஹால் டிக்கெட் / நுழைவுச்சீட்டு","Exam Date":"தேர்வு தேதி","Download":"பதிவிறக்கம்","TNPSC Hall Ticket":"TNPSC ஹால் டிக்கெட்",
+"Answer Key / விடைக்குறிப்பு":"விடைக்குறிப்பு","Exam":"தேர்வு","Key Type":"விடைக்குறிப்பு வகை","Release Date":"வெளியீட்டு தேதி","Provisional":"தற்காலிகம்","View Key":"விடைக்குறிப்பைப் பார்க்க","TNPSC Answer Key":"TNPSC விடைக்குறிப்பு",
+"Syllabus / பாடத்திட்டம்":"பாடத்திட்டம்","TNPSC Group IV Syllabus":"TNPSC தொகுதி IV பாடத்திட்டம்","View Syllabus":"பாடத்திட்டத்தைப் பார்க்க",
+"Admission / சேர்க்கை அறிவிப்புகள்":"சேர்க்கை அறிவிப்புகள்","Institution / Course":"கல்வி நிறுவனம் / பாடப்பிரிவு","Eligibility":"தகுதி","College Admission":"கல்லூரி சேர்க்கை","View":"பார்க்க",
+"Scholarship / கல்வி உதவித்தொகை":"கல்வி உதவித்தொகை","Scholarship":"உதவித்தொகை","Eligible Students":"தகுதியுள்ள மாணவர்கள்","Details":"விவரங்கள்",
+"Demo layout · DREAM • APPLY • ACHIEVE":"மாதிரி வடிவமைப்பு · கனவு காண் • விண்ணப்பி • சாதனை படை"
+};
+const reverse = Object.fromEntries(Object.entries(pairs).map(([en,ta])=>[ta,en]));
+const nodes = [];
+function setLanguage(lang){
+ const dict = lang==="ta" ? pairs : reverse;
+ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+ let n; while(n=walker.nextNode()){const key=n.nodeValue.trim();if(dict[key]){if(!n.__tcOriginal)n.__tcOriginal=n.nodeValue;const lead=n.nodeValue.match(/^\s*/)[0],trail=n.nodeValue.match(/\s*$/)[0];n.nodeValue=lead+dict[key]+trail;}}
+ const q=document.getElementById("q");q.placeholder=lang==="ta"?"வேலைகள், தேர்வு முடிவுகள், தேர்வுகள், ஹால் டிக்கெட் தேடுங்கள்...":"Search Jobs, Results, Exams, Hall Ticket...";
+ document.documentElement.lang=lang;document.title=lang==="ta"?"தமிழன் கேரியர்ஸ் | மாதிரி பக்கம்":"TAMILAN CAREERS | Guide Style Demo";
+ document.getElementById("languageSelect").value=lang;localStorage.setItem("tc-guide-demo-language",lang);
+}
+const select=document.getElementById("languageSelect");
+select.addEventListener("change",()=>setLanguage(select.value));
+setLanguage(localStorage.getItem("tc-guide-demo-language")==="ta"?"ta":"en");
+})();
+</script>\n</body></html>
