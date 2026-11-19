@@ -119,6 +119,21 @@ button{cursor:pointer}
 @media(max-width:1000px){.main-nav{gap:11px}.main-nav a{font-size:12px}.header-inner{gap:12px}.category-grid{grid-template-columns:repeat(2,1fr)}.job-grid{grid-template-columns:repeat(2,1fr)}.trust-strip{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.header-inner{min-height:68px;padding:10px 16px;flex-wrap:wrap}.main-nav{order:3;width:100%;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:7px 0 5px;scrollbar-width:none}.main-nav::-webkit-scrollbar{display:none}.main-nav a{white-space:nowrap;font-size:12px}.brand-name{font-size:17px}.brand-mark{width:37px;height:37px}.header-actions .btn{padding:9px 11px;font-size:12px}.hero{padding:52px 18px 65px}.hero-grid{grid-template-columns:1fr;gap:15px}.hero h1{font-size:39px}.hero-art{min-height:230px}.opportunity-card{max-width:340px}.glow-orb{width:220px;height:220px}.chip-one{right:2%}.chip-two{left:3%}.search-panel{margin-top:-25px;padding:0 14px}.search-card{padding:14px;border-radius:17px}.search-fields{grid-template-columns:1fr 1fr}.search-submit{grid-column:1/-1}.search-title span{display:none}.trust-strip{padding:0 14px;gap:8px}.trust-item{padding:11px}.container{padding:48px 16px}.section-head{align-items:flex-start}.category-grid{gap:10px}.category-card{padding:15px;min-height:130px;gap:10px}.category-icon{width:40px;height:40px;flex-basis:40px;font-size:20px}.category-card h3{font-size:13px}.category-card p{font-size:11px}.feature-band{grid-template-columns:1fr;padding:22px}.feature-band h2{font-size:23px}.job-section .container{padding:45px 16px}.employer-banner{padding:0 16px;margin-bottom:45px}.employer-inner{padding:28px;display:block}.employer-inner h2{font-size:23px}.employer-inner .btn{margin-top:18px}.footer-top{grid-template-columns:1fr 1fr;gap:25px}.footer-brand{grid-column:1/-1}}
 @media(max-width:420px){.hero h1{font-size:33px}.hero-copy{font-size:14px}.hero-points{gap:10px;font-size:11px}.search-fields{grid-template-columns:1fr}.search-submit{grid-column:auto}.trust-strip{grid-template-columns:1fr 1fr}.trust-item{gap:8px}.trust-icon{width:32px;height:32px;flex-basis:32px}.category-grid{grid-template-columns:1fr 1fr}.job-grid{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr 1fr}}
+
+.qualification-section{padding-top:12px;padding-bottom:38px}
+.qualification-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.qualification-card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:white;box-shadow:0 8px 25px rgba(12,35,75,.055);transition:transform .2s,box-shadow .2s}
+.qualification-card:hover{transform:translateY(-4px);box-shadow:0 15px 34px rgba(12,35,75,.12)}
+.qualification-card img{width:100%;aspect-ratio:640/300;object-fit:cover;background:#101d3a}
+.qualification-card>span{display:flex;flex-direction:column;align-items:flex-start;padding:14px;gap:4px}
+.qualification-card strong{font-size:15px;color:var(--ink)}
+.qualification-card b{font-size:13px;color:#287bff}
+.qualification-card small{font-size:12px;color:var(--muted);line-height:1.55;min-height:38px}
+.qualification-card em{font-size:12px;font-style:normal;font-weight:800;color:#1677b8;margin-top:6px}
+.qualification-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.7}
+@media(max-width:800px){.qualification-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.qualification-grid{gap:10px}.qualification-card>span{padding:11px}.qualification-card strong{font-size:14px}}
+
 </style>
 </head>
 <body>
@@ -178,6 +193,19 @@ button{cursor:pointer}
   <a class="category-card" href="jobs.html"><span class="category-icon tone-slate">🧰</span><div><h3>More opportunities</h3><p>Discover jobs across other industries</p></div></a>
  </div>
 </main>
+
+<section class="container qualification-section" id="qualification-pathways" aria-label="Jobs by education qualification">
+ <div class="section-head"><div><div class="section-kicker">YOUR EDUCATION · YOUR NEXT STEP</div><h2>கல்வித் தகுதி அடிப்படையில் வேலைகள்</h2><p>10th முதல் Postgraduate வரை, படித்துக் கொண்டிருப்பவர்களுக்கும் தகுதிக்கேற்ற வாய்ப்புகளைத் தேடுங்கள்.</p></div><a class="text-link" href="jobs.html">அனைத்து வேலைகளும் →</a></div>
+ <div class="qualification-grid"><a class="qualification-card" href="jobs.html?education=10th%20Pass"><img src="assets/education-pathways/10th-pass.svg" alt="10th படித்தவர்கள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>10th Pass</strong><b>10th படித்தவர்கள்</b><small>பள்ளிப் படிப்புக்குப் பிறகு தொடக்கநிலை வேலைகள்</small><em>வேலைகளைப் பார் →</em></span></a>
+<a class="qualification-card" href="jobs.html?education=12th%20Pass"><img src="assets/education-pathways/12th-pass.svg" alt="12th படித்தவர்கள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>12th Pass</strong><b>12th படித்தவர்கள்</b><small>அலுவலகம், விற்பனை மற்றும் நுழைவு நிலைப் பணிகள்</small><em>வேலைகளைப் பார் →</em></span></a>
+<a class="qualification-card" href="jobs.html?education=ITI"><img src="assets/education-pathways/iti.svg" alt="ITI முடித்தவர்கள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>ITI</strong><b>ITI முடித்தவர்கள்</b><small>தொழிற்பயிற்சி மற்றும் திறன் சார்ந்த பணிகள்</small><em>வேலைகளைப் பார் →</em></span></a>
+<a class="qualification-card" href="jobs.html?education=Diploma"><img src="assets/education-pathways/diploma.svg" alt="டிப்ளமோ முடித்தவர்கள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>Diploma</strong><b>டிப்ளமோ முடித்தவர்கள்</b><small>டெக்னிக்கல் மற்றும் சூப்பர்வைசர் வாய்ப்புகள்</small><em>வேலைகளைப் பார் →</em></span></a>
+<a class="qualification-card" href="jobs.html?education=Diploma%20Studying"><img src="assets/education-pathways/diploma-studying.svg" alt="டிப்ளமோ படிப்பவர்கள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>Diploma Studying</strong><b>டிப்ளமோ படிப்பவர்கள்</b><small>படிப்புடன் Internship மற்றும் Trainee வாய்ப்புகள்</small><em>வேலைகளைப் பார் →</em></span></a>
+<a class="qualification-card" href="jobs.html?education=Degree"><img src="assets/education-pathways/degree.svg" alt="பட்டதாரிகள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>Degree</strong><b>பட்டதாரிகள்</b><small>Graduate மற்றும் Fresher வேலைவாய்ப்புகள்</small><em>வேலைகளைப் பார் →</em></span></a>
+<a class="qualification-card" href="jobs.html?education=Postgraduate"><img src="assets/education-pathways/postgraduate.svg" alt="முதுநிலை பட்டதாரிகள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>Postgraduate</strong><b>முதுநிலை பட்டதாரிகள்</b><small>சிறப்பு அறிவு தேவைப்படும் பணிகள்</small><em>வேலைகளைப் பார் →</em></span></a>
+<a class="qualification-card" href="jobs.html?education=Studying"><img src="assets/education-pathways/studying.svg" alt="தற்போது படிப்பவர்கள் வேலைவாய்ப்பு விளக்கம்" loading="lazy"><span><strong>Studying</strong><b>தற்போது படிப்பவர்கள்</b><small>Part-time, Internship மற்றும் Trainee வாய்ப்புகள்</small><em>வேலைகளைப் பார் →</em></span></a></div>
+ <p class="qualification-note">குறிப்பு: வேலைகள் கிடைப்பது நிறுவனங்கள் வெளியிடும் கல்வித் தகுதி விவரங்களைப் பொறுத்தது. காலியிடங்கள் இல்லாத பிரிவுகளில் புதிய வேலைகள் வெளியிடப்படும் போது இங்கே தேடலாம்.</p>
+</section>
 
 <section class="container" aria-label="Career tools">
  <div class="feature-band">
