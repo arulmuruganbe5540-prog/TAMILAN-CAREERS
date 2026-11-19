@@ -70,7 +70,11 @@ export function createJobContextHandler(env: EnvironmentReader, makeClient: Clie
       return json({ error: "TAMILAN AI job context is not enabled", code: "FEATURE_DISABLED" }, 503, origin);
     }
     const authorization = request.headers.get("authorization");
-    if (!authorization?.startsWith("Bearer ")) return json({ error: "Login required" }, 401, origin);
+    if (!authorization?.startsWith("Bearer ") || !authorization.slice(7).trim()) {
+      return json({ error: "Login required" }, 401, origin);
+    }
+    const contentType = request.headers.get("content-type")?.split(";")[0].trim().toLowerCase();
+    if (contentType !== "application/json") return json({ error: "Content-Type must be application/json" }, 415, origin);
     const declaredLength = Number(request.headers.get("content-length") ?? "0");
     if (declaredLength > 2048) return json({ error: "Request body too large" }, 413, origin);
     let body: unknown;
