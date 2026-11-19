@@ -51,8 +51,8 @@ checks = {
         "const sections={country_government_jobs:" in homepage
         and "qualification_pathways:\"qualification-pathways\"" in homepage
         and "career_tools:\"career-tools\"" in homepage
-        and homepage.index('data-home-section="country-government"') < homepage.index('data-home-section="qualification_pathways"')
-        and homepage.index('data-home-section="qualification_pathways"') < homepage.index('data-home-section="career_tools"')
+        and homepage.split("const sections={",1)[1].split("};",1)[0].index('country_government_jobs:') < homepage.split("const sections={",1)[1].split("};",1)[0].index('qualification_pathways:')
+        and homepage.split("const sections={",1)[1].split("};",1)[0].index('qualification_pathways:') < homepage.split("const sections={",1)[1].split("};",1)[0].index('career_tools:')
         and "const order=defaults;" in homepage,
     "main navigation links directly to private jobs and career tools":
         '<a href="jobs.html?job_kind=private">Private Jobs</a>' in homepage
