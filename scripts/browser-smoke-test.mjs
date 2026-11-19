@@ -79,9 +79,19 @@ await check("Employer registration page fits mobile widths without horizontal sc
     await employerPage.route("**/rest/v1/company_profile_drafts**", route => route.fulfill({
       status: 200, contentType: "application/json", body: "[]"
     }));
+    await employerPage.addInitScript(() => {
+      localStorage.setItem("sb-qkmljuuusfjowexvybvy-auth-token", JSON.stringify({
+        access_token: "test-access-token",
+        refresh_token: "test-refresh-token",
+        token_type: "bearer",
+        expires_in: 3600,
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
+        user: { id: "employer-layout-smoke", aud: "authenticated", role: "authenticated", email: "employer@example.test" }
+      }));
+    });
     const response = await employerPage.goto(base + "/company-profile.html", { waitUntil: "domcontentloaded" });
     if (!response || !response.ok()) throw new Error("Employer registration page failed to load");
-    await employerPage.locator(".doc-grid").waitFor({ state: "visible", timeout: 10000 });
+    await employerPage.locator("#docRegistration").waitFor({ state: "visible", timeout: 10000 });
     for (const width of [320, 360, 390, 430]) {
       await employerPage.setViewportSize({ width, height: 800 });
       const layout = await employerPage.evaluate(() => ({
