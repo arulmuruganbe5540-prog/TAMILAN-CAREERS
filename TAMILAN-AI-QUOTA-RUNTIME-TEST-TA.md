@@ -3,6 +3,17 @@
 **தயாரிப்பு தேதி:** 19-11-2026  
 **நிலை:** Live quota migration apply செய்யப்பட்டது; ஆரம்ப database-level சோதனைகள் முடிந்தன. மீதமுள்ள real-session / cross-account / concurrency சோதனைகள் இன்னும் தேவை. இந்த ஆவணம் Edge Function-ஐ deploy/enable செய்யாது.
 
+## HTTP contract / request-size regression tests — 19-11-2026
+
+GitHub Health Audit run `44477126602` PASS; commit `69dced1091ab147e5f3834c0ced1c9e362cd1411`.
+
+- `handler_test.ts` contains 10 Deno HTTP contract tests, including default-OFF behavior, Bearer token checks, JSON content type, CORS, malformed/oversized input, quota failure/429, published-only result bounds, citations, and query failures.
+- Request bodies are read as a stream with a hard 2,048-byte limit; an oversized stream is cancelled before the Supabase client is created.
+- The static guard checks that the stream limit, cancellation, non-empty Bearer token, and JSON content type remain enforced.
+- The workflow passed all tracked Edge Function type checks, retrieval and rollout guards, logic + HTTP contract tests, website structure validation, and Playwright browser smoke tests.
+- GitHub Pages deployment for the subsequent status documentation commit `127eb6649893de64cd2d19472deb6cf8293db927` also passed (run `44477582709`).
+- These tests use a fake Supabase client and do not establish real JWT validity, live RLS behavior, cross-account isolation, Anonymous Auth rejection, or production concurrency behavior. The AI Edge Function remains undeployed and OFF.
+
 ## 1. சோதனைக்கு முன் கட்டாய நிபந்தனைகள்
 
 இந்த சோதனைகளைத் தொடங்குவதற்கு முன்:
