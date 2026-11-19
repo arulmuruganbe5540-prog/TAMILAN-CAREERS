@@ -1,3 +1,13 @@
+## 19 November 2026 — AI Job Context HTTP contract testability
+
+- Refactored `supabase/functions/tamilan-ai-job-context/index.ts` to delegate request handling to `handler.ts`. The handler accepts an environment reader and Supabase client factory, allowing deterministic HTTP contract tests without deploying the Edge Function or contacting production data.
+- Added `handler_test.ts` with seven Deno tests covering approved CORS preflight, unsupported methods/origins, default-OFF feature flag, bearer authentication, malformed/oversized request bodies, missing public configuration, fail-closed quota RPC errors/malformed results, 429 Retry-After, published-only bounded queries, source IDs/citations, and query errors.
+- Updated Health Audit to type-check the extracted handler and run both `logic_test.ts` and `handler_test.ts`. Static retrieval guard now inspects the handler source.
+- The first CI attempts exposed and corrected two test/guard issues: the guard needed to load the extracted handler source, and the fake query builder needed an explicit test-only type cast. Do not mark the new test suite passed until the latest Health Audit run completes successfully.
+- GitHub Pages deployment run `44476056274` succeeded for commit `c30d2789777cc24df11f51d5d59186182d1b8fbe`; this is a docs/static-site deployment and does not deploy the Supabase Edge Function.
+- Live quota migration remains applied and quota RPC security checks remain verified. No Edge Function deployment, feature-flag enablement, model configuration, or production job-data changes were made.
+- Next gates remain: complete the new HTTP contract CI; then owner-controlled real JWT, cross-account, anonymous Auth and concurrency tests. Only after those pass should a separate Edge Function rollout decision be considered.
+
 ## TAMILAN AI quota migration applied and initial live checks — 19 November 2026
 
 - Owner explicitly authorized applying the quota migration to the live Supabase project. Applied successfully to project `qkmljuuusfjowexvybvy`; migration history version is `20261119065045`, name `tamilan_ai_job_context_rate_limit`.
