@@ -364,6 +364,115 @@ await check("Private admin controls require authentication", async () => {
   }
 });
 
+
+async function createMockSignedInPage(role = "job_seeker", viewport = { width: 390, height: 844 }) {
+  const p = await browser.newPage({ viewport });
+  const user = { id: "tc-flow-smoke-user", aud: "authenticated", role: "authenticated", email: "flow-smoke@example.test", app_metadata: {}, user_metadata: {} };
+  await p.addInitScript(({ user }) => {
+    localStorage.setItem("sb-qkmljuuusfjowexvybvy-auth-token", JSON.stringify({
+      access_token: "mock-access-token", refresh_token: "mock-refresh-token", token_type: "bearer",
+      expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600, user
+    }));
+    window.confirm = () => true;
+  }, { user });
+  await p.route("**/auth/v1/user**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ ...user, user_metadata: {} })
+  }));
+  await p.route("**/rest/v1/**", async route => {
+    const url = new URL(route.request().url());
+    const table = url.pathname.split("/").pop();
+    const method = route.request().method();
+    if (table === "user_roles") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ role }) });
+    if (table === "profiles") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ id: user.id, full_name: "Test Candidate", email: user.email, phone: "" }) });
+    if (table === "job_seeker_profiles") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ user_id: user.id, headline: "Test Profile", bio: "", current_city: "Salem", total_experience_months: 0 }) });
+    if (table === "candidate_preferences") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ user_id: user.id, preferred_city: "Salem", preferred_employment_type: "Full Time" }) });
+    if (table === "candidate_skills" || table === "candidate_languages" || table === "candidate_education" || table === "candidate_experience" || table === "candidate_certifications" || table === "candidate_resumes") {
+      return route.fulfill({ status: 200, contentType: "application/json", body: "[]" });
+    }
+    if (table === "countries") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ country_name: "India", is_active: true }]) });
+    if (table === "company_members") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ company_id: "smoke-company", member_role: "owner", member_status: "active", companies: { company_name: "Smoke Test Ltd", verification_status: "verified" } }]) });
+    if (table === "job_posting_drafts" && method === "GET") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ draft: null }) });
+    if (table === "job_posting_drafts" && method !== "GET") return route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: "smoke-draft" }) });
+    if (method === "GET") return route.fulfill({ status: 200, contentType: "application/json", body: "[]" });
+    return route.fulfill({ status: 204, body: "" });
+  });
+  await p.route("**/auth/v1/user", route => {
+    if (route.request().method() === "PATCH") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ...user, user_metadata: { full_name: "Smoke Candidate" } }) });
+    return route.continue();
+  });
+  await p.route("**/storage/v1/object/list/**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
+  await p.route("**/storage/v1/object/candidate-resumes/**", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ Key: "mock-upload" }) }));
+  await p.route("**/rest/v1/rpc/**", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, id: "smoke-rpc" }) }));
+  return p;
+}
+
+await check("Job Seeker profile loads and saves through mocked authenticated data", async () => {
+  const p = await createMockSignedInPage();
+  const mutations = [];
+  p.on("request", request => {
+    if (request.url().includes("/rest/v1/") && !["GET", "HEAD"].includes(request.method())) mutations.push({ path: new URL(request.url()).pathname, method: request.method() });
+  });
+  try {
+    await p.goto(base + "/job-seeker-profile.html", { waitUntil: "domcontentloaded" });
+    await p.locator("#profileForm").waitFor({ state: "visible" });
+    await p.locator("#fullName").fill("Smoke Candidate");
+    await p.locator("#skills").fill("MS Excel, Tally");
+    await p.locator("#languages").fill("Tamil, English");
+    await p.locator("#saveBtn").click();
+    await p.waitForFunction(() => document.getElementById("notice")?.textContent.includes("Database-ல் சேமிக்கப்பட்டது"));
+    for (const table of ["profiles", "job_seeker_profiles", "candidate_skills", "candidate_languages", "candidate_preferences"]) {
+      if (!mutations.some(x => x.path.endsWith("/" + table))) throw new Error("Profile save did not write expected table: " + table);
+    }
+  } finally { await p.close(); }
+});
+
+await check("Resume upload rejects unsupported files and accepts a mocked PDF upload", async () => {
+  const p = await createMockSignedInPage();
+  const uploads = [];
+  p.on("request", request => { if (request.url().includes("/storage/v1/object/candidate-resumes/") && request.method() === "POST") uploads.push(request.url()); });
+  try {
+    await p.goto(base + "/resume-documents.html", { waitUntil: "domcontentloaded" });
+    await p.locator("#uploadBtn").waitFor({ state: "visible" });
+    await p.locator("#document").setInputFiles({ name: "not-a-resume.txt", mimeType: "text/plain", buffer: Buffer.from("test") });
+    await p.locator("#uploadBtn").click();
+    if (!(await p.locator("#notice").innerText()).includes("PDF, DOC")) throw new Error("Unsupported file type was not rejected");
+    if (uploads.length) throw new Error("Unsupported file unexpectedly reached Storage");
+    await p.locator("#document").setInputFiles({ name: "candidate-resume.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4 mock resume") });
+    await p.locator("#uploadBtn").click();
+    await p.waitForFunction(() => document.getElementById("notice")?.textContent.includes("பாதுகாப்பாகப் பதிவேற்றப்பட்டு"));
+    if (uploads.length !== 1) throw new Error("Valid PDF was not uploaded exactly once");
+  } finally { await p.close(); }
+});
+
+await check("Employer job draft validates salary range, saves and submits for admin review", async () => {
+  const p = await createMockSignedInPage("employer");
+  const calls = [];
+  p.on("request", request => { if (request.url().includes("/rest/v1/rpc/")) calls.push(new URL(request.url()).pathname.split("/").pop()); });
+  try {
+    await p.goto(base + "/job-posting.html", { waitUntil: "domcontentloaded" });
+    await p.locator("#editor").waitFor({ state: "visible" });
+    await p.locator("#companyChoice").selectOption("smoke-company");
+    await p.locator("#jobTitle").fill("Smoke Test Accountant");
+    await p.locator("#category").selectOption({ label: "Accounts / Finance" });
+    await p.locator("#employmentType").selectOption({ label: "Full Time" });
+    await p.locator("#location").fill("Salem");
+    await p.locator("#countryName").selectOption("India");
+    await p.locator("#description").fill("Mocked test vacancy; no real job is created.");
+    await p.locator("#salaryMin").fill("20000");
+    await p.locator("#salaryMax").fill("10000");
+    await p.locator("#saveBtn").click();
+    if (!(await p.locator("#status").innerText()).includes("அதிகபட்ச சம்பளம்")) throw new Error("Invalid salary range was not rejected");
+    await p.locator("#salaryMin").fill("10000");
+    await p.locator("#salaryMax").fill("20000");
+    await p.locator("#saveBtn").click();
+    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது"));
+    await p.locator("#submitReviewBtn").click();
+    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("Admin Review-க்கு அனுப்பப்பட்டது"));
+    if (!calls.includes("tc_submit_company_job_draft_for_review")) throw new Error("Job draft was not sent to the review RPC");
+  } finally { await p.close(); }
+});
+
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
