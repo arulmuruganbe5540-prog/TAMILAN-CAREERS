@@ -124,9 +124,9 @@ async function load(){
  const {data:authData}=await client.auth.getUser();
  if(authData?.user){const {data:skillRows,error:skillError}=await client.from("candidate_skills").select("skill_name").eq("user_id",authData.user.id);if(!skillError)candidateSkills=(skillRows||[]).map(row=>normalizeSkill(row.skill_name)).filter(Boolean);}
  $("skillNotice").textContent=candidateSkills.length?"We are matching job requirements with your profile skills.":"Log in and add skills to your profile to see matching jobs.";
- $("results").innerHTML='<div class="empty">வேலை விவரங்கள் ஏற்றப்படுகின்றன...</div>';
+ $("results").innerHTML='<div class="empty">Loading job listings...</div>';
  const {data,error}=await client.from("jobs").select("*");
- if(error){$("count").textContent="Unable to load job listings";$("results").innerHTML='<div class="empty">Database அனுமதி அல்லது இணைப்பில் சிக்கல் உள்ளது. '+safe(error.message)+'<br>நிர்வாகி jobs அட்டவணை மற்றும் அதன் வாசிப்பு அனுமதியைச் சரிபார்க்க வேண்டும்.</div>';return;}
+ if(error){$("count").textContent="Unable to load job listings";$("results").innerHTML='<div class="empty">There is a database permission or connection issue. '+safe(error.message)+'<br>An administrator should check the jobs table and its read permissions.</div>';return;}
  allJobs=data||[];
  const companyIds=[...new Set(allJobs.map(j=>j.company_id).filter(Boolean))];
  companyNames={};
