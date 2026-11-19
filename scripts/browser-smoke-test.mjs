@@ -147,128 +147,65 @@ await check("Login page role, mode and password controls work", async () => {
 });
 
 
-await check("Login page language switch translates static and dynamic authentication text", async () => {
-  const languagePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+await check("English-only registration validates and submits employer signup", async () => {
+  const registrationPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  let signupBody = null;
   try {
-    await languagePage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200, contentType: "application/json",
-      body: JSON.stringify({ country_code: "US", region: "Test", timezone: "UTC" })
-    }));
-    await languagePage.addInitScript(() => { if (!localStorage.getItem("tc_language_preference_v1")) localStorage.setItem("tc_language_preference_v1", "en"); });
-    await languagePage.goto(base + "/login.html", { waitUntil: "domcontentloaded" });
-    await languagePage.waitForFunction(() => !!window.TC_TRANSLATE);
-    await languagePage.waitForTimeout(100);
-    const english = await languagePage.evaluate(() => ({
-      hint: document.querySelector("#passwordHint")?.textContent.trim(),
-      forgot: document.querySelector("#forgotLink")?.textContent.trim(),
-      toggle: document.querySelector("#passwordToggle")?.textContent.trim(),
-      adminLoginLinkCount: document.querySelectorAll("#adminLoginLink").length
-    }));
-    if (english.hint !== "At least 8 characters" || english.forgot !== "Forgot Password?" ||
-        english.toggle !== "Show" || english.adminLoginLinkCount !== 0) {
-      throw new Error("English login text remains untranslated: " + JSON.stringify(english));
+    await registrationPage.route("**/auth/v1/signup*", async route => {
+      signupBody = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          id: "smoke-employer-user",
+          aud: "authenticated",
+          role: "authenticated",
+          email: "employer@example.test",
+          app_metadata: { provider: "email", providers: ["email"] },
+          user_metadata: signupBody?.data || {},
+          identities: [{ id: "smoke-employer-user", user_id: "smoke-employer-user", identity_data: { email: "employer@example.test" }, provider: "email" }],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      });
+    });
+    await registrationPage.goto(base + "/login.html", { waitUntil: "domcontentloaded" });
+    await registrationPage.locator("#company").click();
+    if (!(await registrationPage.locator("#company").getAttribute("class")).includes("active")) throw new Error("Company role did not become active");
+    await registrationPage.locator("#switchLink").click();
+    if (!(await registrationPage.locator("#heading").innerText()).includes("Create a new account")) throw new Error("Registration mode did not open");
+    for (const selector of ["#fullName", "#email", "#password", "#confirmPassword", "#termsAgree"]) {
+      if (!(await registrationPage.locator(selector).isVisible())) throw new Error("Registration field is missing: " + selector);
     }
-    await languagePage.evaluate(() => localStorage.setItem("tc_language_preference_v1", "ta"));
-    await languagePage.reload({ waitUntil: "domcontentloaded" });
-    await languagePage.waitForFunction(() => !!window.TC_TRANSLATE && window.TC_TRANSLATE.language === "ta");
-    await languagePage.waitForTimeout(100);
-    const tamil = await languagePage.evaluate(() => ({
-      hint: document.querySelector("#passwordHint")?.textContent.trim(),
-      forgot: document.querySelector("#forgotLink")?.textContent.trim(),
-      adminLoginLinkCount: document.querySelectorAll("#adminLoginLink").length
-    }));
-    if (!tamil.hint.includes("குறைந்தது 8") || !tamil.forgot.includes("கடவுச்சொல்") ||
-        tamil.adminLoginLinkCount !== 0) {
-      throw new Error("Tamil login text did not translate: " + JSON.stringify(tamil));
-    }
-    await languagePage.locator("#switchLink").click();
-    await languagePage.waitForTimeout(100);
-    if (!(await languagePage.locator("#heading").innerText()).includes("புதிய கணக்கு")) {
-      throw new Error("Dynamically updated registration heading did not translate");
-    }
+    await registrationPage.locator("#fullName").fill("Test Employer");
+    await registrationPage.locator("#email").fill("employer@example.test");
+    await registrationPage.locator("#password").fill("Employer123");
+    await registrationPage.locator("#confirmPassword").fill("Different123");
+    await registrationPage.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    if (!(await registrationPage.locator("#message").innerText()).includes("Both passwords must match")) throw new Error("Password mismatch validation failed");
+    await registrationPage.locator("#confirmPassword").fill("Employer123");
+    await registrationPage.locator("#password").fill("employer123");
+    await registrationPage.locator("#confirmPassword").fill("employer123");
+    await registrationPage.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    if (!(await registrationPage.locator("#message").innerText()).includes("uppercase letter")) throw new Error("Password complexity validation failed");
+    await registrationPage.locator("#password").fill("Employer123");
+    await registrationPage.locator("#confirmPassword").fill("Employer123");
+    await registrationPage.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    if (!(await registrationPage.locator("#message").innerText()).includes("Terms of Use and Privacy Policy")) throw new Error("Terms and privacy acceptance validation failed");
+    await registrationPage.locator("#termsAgree").check();
+    await registrationPage.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    await registrationPage.waitForFunction(() => document.querySelector("#message")?.textContent.includes("Registration submitted successfully"), { timeout: 10000 });
+    if (signupBody?.data?.requested_account_type !== "company") throw new Error("Employer account type was not sent correctly: " + JSON.stringify(signupBody));
+    if (signupBody?.data?.full_name !== "Test Employer") throw new Error("Full name was not sent correctly");
+    const visible = await registrationPage.locator("body").innerText();
+    if (/[\\u0B80-\\u0BFF]/.test(visible)) throw new Error("Registration page displayed Tamil text");
+    await registrationPage.setViewportSize({ width: 320, height: 800 });
+    const size = await registrationPage.evaluate(() => ({ viewport: document.documentElement.clientWidth, page: document.documentElement.scrollWidth }));
+    if (size.page > size.viewport + 1) throw new Error("Registration page overflows at 320px: " + JSON.stringify(size));
   } finally {
-    await languagePage.close();
+    await registrationPage.close();
   }
 });
-
-
-await check("Core job workflow Tamil source messages translate to English", async () => {
-  const languagePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await languagePage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200, contentType: "application/json",
-      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
-    }));
-    await languagePage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
-    await languagePage.goto(base + "/jobs.html", { waitUntil: "domcontentloaded" });
-    await languagePage.waitForFunction(() => !!window.TC_TRANSLATE && window.TC_TRANSLATE.language === "en");
-    const samples = [
-      "வேலை ID கிடைக்கவில்லை. வேலை தேடல் பக்கத்திலிருந்து ஒரு வேலையைத் தேர்ந்தெடுக்கவும்.",
-      "இந்த வேலை விவரம் கிடைக்கவில்லை.",
-      "வேலை விவரங்களை ஏற்ற முடியவில்லை",
-      "சமர்ப்பிக்க",
-      "மாற்றத்தைச் சேமிக்கவும்",
-      "உங்கள் கணக்கு அனுமதிகள் சரிபார்க்கப்பட்டுள்ளன. கீழே கிடைக்கும் வசதிகளைப் பார்க்கலாம்.",
-      "நிறுவனப் பதிவு மற்றும் சரிபார்ப்பு",
-      "வேலைப் பதவி / Job Title *",
-      "சுயவிவரத்தைச் சேமிக்கவும்",
-      "நிறுவனச் சரிபார்ப்பு நிலை",
-      "உங்கள் Dashboard-க்கு வரவேற்கிறோம்"
-    ];
-    await languagePage.evaluate(values => {
-      const host = document.createElement("div");
-      host.id = "translation-fixture";
-      values.forEach(value => { const p = document.createElement("p"); p.textContent = value; host.appendChild(p); });
-      document.body.appendChild(host);
-    }, samples);
-    await languagePage.waitForTimeout(150);
-    const result = await languagePage.locator("#translation-fixture").innerText();
-    if (/வேலை ID கிடைக்கவில்லை|இந்த வேலை விவரம் கிடைக்கவில்லை|வேலை விவரங்களை ஏற்ற முடியவில்லை|விண்ணப்பத்தைச் சமர்ப்பிக்கவும்|மாற்றத்தைச் சேமிக்கவும்|உங்கள் கணக்கு அனுமதிகள்/.test(result)) {
-      throw new Error("Tamil source text remains in English mode: " + result);
-    }
-    if (!result.includes("Job ID is missing") || !result.includes("This job could not be found") || !result.includes("Submit") ||
-        !result.includes("Company Registration & Verification") || !result.includes("Job Title *") ||
-        !result.includes("Save Profile") || !result.includes("Company Verification Status") ||
-        !result.includes("Welcome to your Dashboard")) {
-      throw new Error("Expected English translations were not applied: " + result);
-    }
-  } finally {
-    await languagePage.close();
-  }
-});
-
-await check("Job seeker and employer registration validate account details before submission", async () => {
-  await page.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ta"));
-  await open("login.html");
-  await page.waitForFunction(() => window.TC_TRANSLATE?.language === "ta");
-  await page.locator("#seeker").click();
-  if (!(await page.locator("#seeker").getAttribute("class")).includes("active")) throw new Error("Job seeker role did not become active");
-  await page.locator("#switchLink").click();
-  await page.locator("#fullName").fill("Test Candidate");
-  await page.locator("#email").fill("candidate@example.test");
-  await page.locator("#password").fill("Candidate123");
-  await page.locator("#confirmPassword").fill("Different123");
-  const submitAndReadMessage = async () => {
-    await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-    return (await page.locator("#message").innerText()).trim();
-  };
-  const mismatchMessage = await submitAndReadMessage();
-  if (!mismatchMessage.includes("ஒன்றாக இருக்க")) throw new Error("Password mismatch validation failed: " + mismatchMessage);
-  await page.locator("#password").fill("candidate123");
-  await page.locator("#confirmPassword").fill("candidate123");
-  const weakPasswordMessage = await submitAndReadMessage();
-  if (!weakPasswordMessage.includes("பெரிய எழுத்து")) throw new Error("Password strength validation failed: " + weakPasswordMessage);
-  await page.locator("#password").fill("Candidate123");
-  await page.locator("#confirmPassword").fill("Candidate123");
-  const termsMessage = await submitAndReadMessage();
-  if (!termsMessage.includes("விதிமுறைகள்")) throw new Error("Terms acceptance validation failed: " + termsMessage);
-  await page.locator("#company").click();
-  if (!(await page.locator("#company").getAttribute("class")).includes("active")) throw new Error("Employer role did not become active");
-  await page.setViewportSize({ width: 320, height: 800 });
-  const width = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, page: document.documentElement.scrollWidth }));
-  if (width.page > width.viewport + 1) throw new Error("Login/register page overflows at 320px: " + JSON.stringify(width));
-});
-
 await check("State government jobs render and filter", async () => {
   await open("state-government-jobs.html");
   const initial = await page.locator("#stateList article").count();
@@ -804,244 +741,84 @@ await check("Tamil Nadu government jobs page loads and filters", async () => {
 });
 
 
-await check("Manual Malayalam language preference and dynamic translation work in India", async () => {
-  await page.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ml"));
-  await page.route("https://ipapi.co/json/", route => route.fulfill({
-    status: 200,
-    contentType: "application/json",
-    body: JSON.stringify({ country_code: "IN", region: "Kerala", timezone: "Asia/Kolkata" })
-  }));
-  await open("index.html");
-  await page.waitForFunction(() => window.TC_LOCALE?.language === "ml", null, { timeout: 10000 });
-  await page.waitForFunction(() => window.TC_TRANSLATE?.language === "ml", null, { timeout: 10000 });
-  if (await page.evaluate(() => window.TC_TRANSLATE.translatedTerms) < 300) throw new Error("Active Malayalam dictionary size was reported incorrectly");
-  if (!(await page.getByText("ഹോം", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Malayalam");
-  await page.evaluate(() => {
-    const el = document.createElement("span");
-    el.id = "tc-translation-dynamic-test";
-    el.textContent = "Find Jobs";
-    document.body.appendChild(el);
-  });
-  await page.waitForFunction(() => document.getElementById("tc-translation-dynamic-test")?.textContent === "ജോലി കണ്ടെത്തുക", null, { timeout: 5000 }).catch(async () => {
-    const actual = await page.locator("#tc-translation-dynamic-test").textContent();
-    throw new Error("Dynamic Malayalam text was not translated; actual=" + actual);
-  });
-  await page.evaluate(() => {
-    const input = document.createElement("input");
-    input.id = "tc-translation-attribute-test";
-    input.placeholder = "Search Jobs";
-    document.body.appendChild(input);
-    input.placeholder = "Login";
-    const button = document.createElement("button");
-    button.id = "tc-translation-title-test";
-    button.title = "Home";
-    button.setAttribute("aria-label", "Find Jobs");
-    document.body.appendChild(button);
-  });
-  await page.waitForFunction(() =>
-    document.getElementById("tc-translation-attribute-test")?.placeholder === "ലോഗിൻ" &&
-    document.getElementById("tc-translation-title-test")?.title === "ഹോം" &&
-    document.getElementById("tc-translation-title-test")?.getAttribute("aria-label") === "ജോലി കണ്ടെത്തുക", null, { timeout: 5000 }).catch(async () => {
-    const actual = await page.evaluate(() => ({
-      placeholder: document.getElementById("tc-translation-attribute-test")?.placeholder,
-      title: document.getElementById("tc-translation-title-test")?.title,
-      ariaLabel: document.getElementById("tc-translation-title-test")?.getAttribute("aria-label"),
-      language: window.TC_TRANSLATE?.language
-    }));
-    throw new Error("Dynamic Malayalam attributes were not translated: " + JSON.stringify(actual));
-  });
-  await page.evaluate(() => {
-    const el = document.createElement("span");
-    el.id = "tc-translation-education-test";
-    el.textContent = "Degree";
-    document.body.appendChild(el);
-  });
-  await page.waitForFunction(() => document.getElementById("tc-translation-education-test")?.textContent === "ബിരുദം", null, { timeout: 5000 });
-  await page.evaluate(() => {
-    const el = document.createElement("span");
-    el.id = "tc-translation-admin-test";
-    el.textContent = "Admin Control Center";
-    document.body.appendChild(el);
-  });
-  await page.waitForFunction(() => document.getElementById("tc-translation-admin-test")?.textContent === "അഡ്മിൻ നിയന്ത്രണ കേന്ദ്രം", null, { timeout: 5000 });
-  const clock = await page.locator("#tc-world-clock").innerText();
-  if (!clock.includes("Asia/Kolkata")) throw new Error("Detected country timezone was not applied to the clock: " + clock);
-  await page.unroute("https://ipapi.co/json/");
-});
 
-
-await check("India defaults to English unless a language preference is saved", async () => {
-  const indiaPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+await check("Every public page loads in English without visible Tamil or mobile horizontal overflow", async () => {
+  const paths = [
+    "about.html",
+    "accept-invitation.html",
+    "admin-community-posts.html",
+    "admin-company-verification.html",
+    "admin-control.html",
+    "admin-design-studio.html",
+    "admin-exam-resources.html",
+    "admin-global-control.html",
+    "admin-job-post.html",
+    "admin-job-reports.html",
+    "admin-login.html",
+    "admin-security.html",
+    "apply.html",
+    "career-updates.html",
+    "community.html",
+    "company-applicants.html",
+    "company-jobs.html",
+    "company-members.html",
+    "company-profile.html",
+    "company-verification-status.html",
+    "cookie-policy.html",
+    "dashboard.html",
+    "department-jobs.html",
+    "education-government-jobs.html",
+    "exam-preparation.html",
+    "external-job-review.html",
+    "government-exam-category.html",
+    "government-exam-resource.html",
+    "government-job-application-guide.html",
+    "government-notice-details.html",
+    "government-notice-publish.html",
+    "government-notice-review.html",
+    "guide-demo.html",
+    "guide-style-demo.html",
+    "help.html",
+    "home-page-demo.html",
+    "index.html",
+    "indian-government-jobs.html",
+    "job-details.html",
+    "job-exam-center.html",
+    "job-posting.html",
+    "job-search-guide.html",
+    "job-seeker-profile.html",
+    "jobs.html",
+    "login.html",
+    "my-applications.html",
+    "notifications.html",
+    "privacy.html",
+    "reset-password.html",
+    "resume-documents.html",
+    "resume-job-search.html",
+    "saved-jobs.html",
+    "state-government-jobs.html",
+    "tamil-nadu-government-jobs.html",
+    "terms.html"
+  ];
+  const auditPage = await browser.newPage({ viewport: { width: 360, height: 800 } });
   try {
-    await indiaPage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
-    }));
-    const response = await indiaPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("India homepage failed to load");
-    await indiaPage.waitForFunction(() => window.TC_LOCALE?.language === "en" && window.TC_TRANSLATE?.language === "en", { timeout: 10000 });
-    if (await indiaPage.locator("#tc-language-select").inputValue() !== "en") throw new Error("India default language selector is not English");
-    if (await indiaPage.locator("#tc-language-select").count() !== 1) throw new Error("Expected exactly one language selector");
-    if (await indiaPage.locator(".tc-site-domain").count() !== 1 || (await indiaPage.locator(".tc-site-domain").innerText()).trim().toUpperCase() !== "WWW.TAMILANCAREERS.IN") {
-      throw new Error("Expected one canonical website domain label");
+    for (const path of paths) {
+      const response = await auditPage.goto(base + "/" + path, { waitUntil: "domcontentloaded" });
+      if (!response || !response.ok()) throw new Error(path + " returned " + (response?.status() ?? "no response"));
+      const state = await auditPage.evaluate(() => ({
+        title: document.title,
+        lang: document.documentElement.getAttribute("lang"),
+        visibleText: document.body?.innerText || "",
+        width: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth
+      }));
+      if (!state.title.trim()) throw new Error(path + " has no page title");
+      if (state.lang !== "en") throw new Error(path + " does not declare lang=en");
+      if (/[\\u0B80-\\u0BFF]/.test(state.visibleText)) throw new Error(path + " displays Tamil text");
+      if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + ")");
     }
-    if (!(await indiaPage.getByText("Explore opportunities by country", { exact: true }).count())) throw new Error("English homepage text is missing");
-    await indiaPage.locator("#tc-language-select").selectOption("ta");
-    await indiaPage.waitForFunction(() => window.TC_LOCALE?.language === "ta" && window.TC_TRANSLATE?.language === "ta", { timeout: 10000 });
-    if (await indiaPage.evaluate(() => localStorage.getItem("tc_language_preference_v1")) !== "ta") throw new Error("Language selector did not save the Tamil preference");
-    if (!(await indiaPage.getByText("முகப்பு", { exact: true }).count())) throw new Error("Selecting Tamil did not translate homepage navigation");
   } finally {
-    await indiaPage.close();
-  }
-});
-
-await check("Manual Kannada language preference and navigation work in India", async () => {
-  const kannadaPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await kannadaPage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "kn"));
-    await kannadaPage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ country_code: "IN", region: "Karnataka", timezone: "Asia/Kolkata" })
-    }));
-    const response = await kannadaPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("Karnataka homepage failed to load");
-    await kannadaPage.waitForFunction(() => window.TC_LOCALE?.language === "kn" && window.TC_TRANSLATE?.language === "kn", { timeout: 10000 });
-    if (!(await kannadaPage.getByText("ಮುಖಪುಟ", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Kannada");
-    await kannadaPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-kn-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
-    await kannadaPage.waitForFunction(() => document.getElementById("tc-kn-job-title")?.textContent === "ಹುದ್ದೆಯ ಹೆಸರು", { timeout: 5000 });
-  } finally {
-    await kannadaPage.close();
-  }
-});
-
-await check("Automatic Saudi Arabia Arabic translation enables right-to-left layout", async () => {
-  const arabicPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await arabicPage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ country_code: "SA", region: "Riyadh", timezone: "Asia/Riyadh" })
-    }));
-    const response = await arabicPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("Arabic homepage failed to load");
-    await arabicPage.waitForFunction(() => window.TC_LOCALE?.language === "ar" && window.TC_TRANSLATE?.language === "ar", { timeout: 10000 });
-    if (await arabicPage.locator("html").getAttribute("dir") !== "rtl") throw new Error("Arabic page direction is not right-to-left");
-    if (!(await arabicPage.getByText("الرئيسية", { exact: true }).count())) throw new Error("Homepage navigation was not translated to Arabic");
-    await arabicPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ar-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
-    await arabicPage.waitForFunction(() => document.getElementById("tc-ar-job-title")?.textContent === "المسمى الوظيفي", { timeout: 5000 });
-  } finally {
-    await arabicPage.close();
-  }
-});
-
-
-await check("Saved language preference overrides automatic country language and persists", async () => {
-  const preferencePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await preferencePage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ta"));
-    await preferencePage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ country_code: "SA", region: "Riyadh", timezone: "Asia/Riyadh" })
-    }));
-    const response = await preferencePage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("Language preference homepage failed to load");
-    await preferencePage.waitForFunction(() => window.TC_LOCALE?.language === "ta" && window.TC_TRANSLATE?.language === "ta", { timeout: 10000 });
-    if (await preferencePage.locator("#tc-language-select").inputValue() !== "ta") throw new Error("Saved language is not selected in the language menu");
-    if (!(await preferencePage.getByText("முகப்பு", { exact: true }).count())) throw new Error("Saved Tamil preference was not applied to navigation");
-  } finally {
-    await preferencePage.close();
-  }
-});
-
-
-await check("Homepage Tamil and English preferences, removed hero block and AdSense script", async () => {
-  const tamilPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await tamilPage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ta"));
-    await tamilPage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200, contentType: "application/json",
-      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
-    }));
-    const response = await tamilPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("Tamil homepage failed to load");
-    await tamilPage.waitForFunction(() => window.TC_TRANSLATE?.language === "ta", { timeout: 10000 });
-    if (await tamilPage.locator(".hero-wrap").count()) throw new Error("Removed homepage hero block has returned");
-    if (!(await tamilPage.getByText("வேலைவாய்ப்புகளை ஆராயுங்கள்", { exact: true }).count())) throw new Error("Homepage section heading did not translate to Tamil");
-    if (!(await tamilPage.locator('script[src*="pagead2.googlesyndication.com"]').count())) throw new Error("AdSense script is missing from homepage");
-  } finally { await tamilPage.close(); }
-  const englishPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await englishPage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
-    await englishPage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200, contentType: "application/json",
-      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
-    }));
-    const response = await englishPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("English homepage failed to load");
-    await englishPage.waitForFunction(() => window.TC_TRANSLATE?.language === "en", { timeout: 10000 });
-    if (!(await englishPage.getByText("Explore opportunities by country", { exact: true }).count())) throw new Error("English homepage copy is missing");
-    if (!(await englishPage.getByText("Build your team with the right talent.", { exact: true }).count())) {
-      throw new Error("Homepage employer heading did not return to English");
-    }
-  } finally { await englishPage.close(); }
-});
-
-await check("Automatic Spain locale translates newly expanded Spanish job vocabulary", async () => {
-  const spanishPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await spanishPage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ country_code: "ES", region: "Madrid", timezone: "Europe/Madrid" })
-    }));
-    const response = await spanishPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("Spain homepage failed to load");
-    await spanishPage.waitForFunction(() => window.TC_LOCALE?.language === "es" && window.TC_TRANSLATE?.language === "es", { timeout: 10000 });
-    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
-    await spanishPage.waitForFunction(() => document.getElementById("tc-es-job-title")?.textContent === "Puesto de trabajo", { timeout: 5000 });
-    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-employer"; e.textContent="Employer"; document.body.appendChild(e); });
-    await spanishPage.waitForFunction(() => document.getElementById("tc-es-employer")?.textContent === "Empleador", { timeout: 5000 });
-    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-tamil-source"; e.textContent="வேலை தேடுபவர்"; document.body.appendChild(e); });
-    await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-source")?.textContent === "Persona que busca empleo", { timeout: 5000 });
-    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-tamil-profile"; e.textContent="உங்கள் பெயர்"; document.body.appendChild(e); });
-    await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-profile")?.textContent === "Tu nombre", { timeout: 5000 });
-    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-tamil-admin"; e.textContent="அனைத்து வகைகளும்"; document.body.appendChild(e); });
-    await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-admin")?.textContent === "Todas las categorías", { timeout: 5000 });
-    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-tamil-company"; e.textContent="குழு உறுப்பினர்கள்"; document.body.appendChild(e); });
-    await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-company")?.textContent === "Miembros del equipo", { timeout: 5000 });
-  } finally {
-    await spanishPage.close();
-  }
-});
-
-await check("Automatic Malaysia locale translates newly expanded Malay job vocabulary", async () => {
-  const malayPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  try {
-    await malayPage.route("https://ipapi.co/json/", route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ country_code: "MY", region: "Kuala Lumpur", timezone: "Asia/Kuala_Lumpur" })
-    }));
-    const response = await malayPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
-    if (!response || !response.ok()) throw new Error("Malaysia homepage failed to load");
-    await malayPage.waitForFunction(() => window.TC_LOCALE?.language === "ms" && window.TC_TRANSLATE?.language === "ms", { timeout: 10000 });
-    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-job-title"; e.textContent="Job Title"; document.body.appendChild(e); });
-    await malayPage.waitForFunction(() => document.getElementById("tc-ms-job-title")?.textContent === "Jawatan", { timeout: 5000 });
-    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-employer"; e.textContent="Employer"; document.body.appendChild(e); });
-    await malayPage.waitForFunction(() => document.getElementById("tc-ms-employer")?.textContent === "Majikan", { timeout: 5000 });
-    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-tamil-source"; e.textContent="வேலை தேடுபவர்"; document.body.appendChild(e); });
-    await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-source")?.textContent === "Pencari Kerja", { timeout: 5000 });
-    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-tamil-profile"; e.textContent="உங்கள் பெயர்"; document.body.appendChild(e); });
-    await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-profile")?.textContent === "Nama Anda", { timeout: 5000 });
-    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-tamil-admin"; e.textContent="அனைத்து வகைகளும்"; document.body.appendChild(e); });
-    await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-admin")?.textContent === "Semua Kategori", { timeout: 5000 });
-    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-tamil-company"; e.textContent="குழு உறுப்பினர்கள்"; document.body.appendChild(e); });
-    await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-company")?.textContent === "Ahli Pasukan", { timeout: 5000 });
-  } finally {
-    await malayPage.close();
+    await auditPage.close();
   }
 });
 
