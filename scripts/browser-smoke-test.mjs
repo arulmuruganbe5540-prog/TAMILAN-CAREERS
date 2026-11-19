@@ -928,6 +928,7 @@ await check("Login, forgot-password and reset-password flows show clear English 
     if (loginBody?.email !== "candidate@example.test" || loginBody?.password !== "Candidate123") {
       throw new Error("Login request did not send the entered credentials");
     }
+    await authPage.evaluate(() => localStorage.clear());
     await authPage.goto(base + "/reset-password.html", { waitUntil: "domcontentloaded" });
     if (!(await authPage.locator("#newPassword").isVisible()) || !(await authPage.locator("#confirmPassword").isVisible())) {
       throw new Error("Reset-password form fields are missing");
