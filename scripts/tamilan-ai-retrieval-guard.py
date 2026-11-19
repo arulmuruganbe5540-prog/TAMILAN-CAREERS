@@ -62,6 +62,12 @@ else:
     for label, token in checks.items():
         if token not in sql:
             errors.append('Rate-limit migration missing ' + label)
+    public_fn = re.search(r'create\\s+or\\s+replace\\s+function\\s+public\\.tamilan_ai_consume_job_context_quota\\s*\\(\\s*\\)([\\s\\S]*?)\\$function\\$', sql, re.I)
+    private_fn = re.search(r'create\\s+or\\s+replace\\s+function\\s+private\\.tamilan_ai_consume_job_context_quota\\s*\\(\\s*\\)([\\s\\S]*?)\\$function\\$', sql, re.I)
+    if not public_fn or not re.search(r'\\bsecurity\\s+invoker\\b', public_fn.group(1), re.I) or re.search(r'\\bsecurity\\s+definer\\b', public_fn.group(1), re.I):
+        errors.append('Public Data API wrapper must be SECURITY INVOKER, never DEFINER')
+    if not private_fn or not re.search(r'\\bsecurity\\s+definer\\b', private_fn.group(1), re.I) or not re.search(r"set\\s+search_path\\s*=\\s*''", private_fn.group(1), re.I):
+        errors.append('Private quota helper must be SECURITY DEFINER with empty search_path')
     if re.search(r'grant\s+.*on\s+table\s+private\.tamilan_ai_job_context_rate_limits', sql, re.I):
         errors.append('Private quota table must not be granted directly')
 if not CONFIG.is_file():
