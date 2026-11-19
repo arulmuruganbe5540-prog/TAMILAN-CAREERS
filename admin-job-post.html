@@ -230,6 +230,7 @@ async function init(){
  const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
  $("loading").classList.add("hidden");
  if(roleError||!roles?.length){$("gateText").textContent="இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.";$("gate").classList.remove("hidden");return}
+ const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){$("gateText").textContent="Authenticator MFA சரிபார்ப்பு தேவை. Admin Login வழியாக மீண்டும் உள்நுழையவும்.";$("gate").classList.remove("hidden");return}
  $("app").classList.remove("hidden");await loadCountryOptions();await loadCategories();await loadQueue();
 }
 $("saveDraft").addEventListener("click",()=>save("draft"));
