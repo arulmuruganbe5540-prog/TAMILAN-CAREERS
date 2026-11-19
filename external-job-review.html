@@ -1,14 +1,90 @@
-<!doctype html><html lang="ta"><head>
-<meta name="robots" content="noindex,follow"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>International Job Source Review | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
-*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#172033;font-family:Arial,"Noto Sans Tamil",sans-serif}header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}a{color:#176bc2}main{max-width:1100px;margin:24px auto;padding:0 15px}.hero,.card,.state{background:#fff;border:1px solid #e0e7f0;border-radius:13px;padding:18px;margin:13px 0}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 8px}.hero p{line-height:1.7;color:#e0edff;margin:0}.warning{background:#fff4df;color:#80510b;padding:13px;border-radius:9px;line-height:1.7;margin:14px 0}.filters{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin:16px 0}input,select{padding:12px;border:1px solid #d8e0ec;border-radius:8px;font-size:14px;width:100%}.top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.meta{color:#64748b;font-size:13px;line-height:1.8}.pill{background:#edf4ff;color:#175da0;border-radius:20px;padding:5px 9px;font-size:12px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.btn{display:inline-block;background:#126fd0;color:#fff;text-decoration:none;padding:9px 12px;border-radius:8px;font-size:13px;font-weight:bold}.empty{text-align:center;padding:24px;color:#64748b}@media(max-width:700px){.filters{grid-template-columns:1fr}}
-</style>  <link rel="stylesheet" href="assets/site-protection.css">
-</head><body><header><strong>TAMILAN CAREERS · ADMIN</strong><a href="admin-control.html" style="color:white">← Admin Dashboard</a></header><main><section class="hero"><h1>இந்தியா & வெளிநாட்டு வேலைவாய்ப்பு Source Review</h1><p>அரசு மற்றும் நிறுவனங்களின் அதிகாரப்பூர்வ Career பக்கங்களில் கண்டறியப்பட்ட இணைப்புகள். இவை இன்னும் சரிபார்க்கப்பட்ட வேலைகள் அல்ல.</p></section><div class="warning">⚠️ இங்கே உள்ள இணைப்புகள் தனிப்பட்ட Admin ஆய்வுக்கானவை. அசல் அறிவிப்பு, காலியிடங்கள், தகுதி, கடைசி தேதி மற்றும் Apply URL ஆகியவற்றைச் சரிபார்க்காமல் பொதுமக்களுக்கு வெளியிட வேண்டாம். நிறுவனம் கூட்டாளி எனக் காட்ட வேண்டாம்.</div><div id="state" class="state">Admin அனுமதி சரிபார்க்கப்படுகிறது...</div><section id="panel" hidden><div class="filters"><input id="q" placeholder="வேலை / நிறுவனம் / நாடு தேடுக"><select id="type"><option value="">அனைத்து வகைகளும்</option><option value="india_government">இந்திய அரசு</option><option value="foreign_government">வெளிநாட்டு அரசு</option><option value="india_company">இந்திய நிறுவனம்</option><option value="foreign_company">வெளிநாட்டு நிறுவனம்</option></select><select id="status"><option value="pending">நிலுவை</option><option value="verified">சரிபார்க்கப்பட்டது</option><option value="published">வெளியிடப்பட்டது</option><option value="rejected">நிராகரிக்கப்பட்டது</option><option value="all">அனைத்தும்</option></select></div><div id="count" class="meta"></div><div id="list"></div></section></main><script>
-const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2"),$=id=>document.getElementById(id);let rows=[];
+<!doctype html>
+<html lang="ta"><head>
+<meta name="robots" content="noindex,nofollow"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>வெளிநாட்டு வேலை Source Review | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/site-protection.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#172033;font-family:Arial,"Noto Sans Tamil",sans-serif}
+header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header a{color:#fff}main{max-width:1100px;margin:24px auto;padding:0 15px}
+.hero,.card,.state{background:#fff;border:1px solid #e0e7f0;border-radius:13px;padding:18px;margin:13px 0}
+.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 8px}.hero p{line-height:1.7;color:#e0edff;margin:0}
+.warning{background:#fff4df;color:#80510b;padding:13px;border-radius:9px;line-height:1.7;margin:14px 0}
+.filters{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin:16px 0}
+input,select,textarea{padding:12px;border:1px solid #d8e0ec;border-radius:8px;font-size:14px;width:100%;background:#fff}
+.top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.meta{color:#64748b;font-size:13px;line-height:1.8}
+.pill{background:#edf4ff;color:#175da0;border-radius:20px;padding:5px 9px;font-size:12px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin:14px 0}
+.check{display:flex;align-items:flex-start;gap:8px;background:#f5f7fa;padding:10px;border-radius:8px;font-size:13px;line-height:1.5}
+.check input{width:auto;margin-top:3px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+button,.btn{border:0;border-radius:8px;padding:10px 14px;font-weight:bold;background:#126fd0;color:white;text-decoration:none;cursor:pointer}
+button.secondary{background:#59677c}button.danger{background:#a83d32}button:disabled{opacity:.45;cursor:not-allowed}
+.reason{margin-top:10px}.empty{text-align:center;padding:24px;color:#64748b;background:#fff;border-radius:10px}
+@media(max-width:700px){.filters{grid-template-columns:1fr}}
+</style></head>
+<body><header><strong>TAMILAN CAREERS · ADMIN</strong><div><a href="admin-control.html">Admin Dashboard</a> · <button id="logout" class="secondary">Logout</button></div></header>
+<main>
+<section class="hero"><h1>இந்தியா & வெளிநாட்டு வேலைவாய்ப்பு Source Review</h1><p>அரசு மற்றும் நிறுவனங்களின் அதிகாரப்பூர்வ Career பக்கங்களில் கண்டறியப்பட்ட இணைப்புகளை ஆய்வு செய்யும் பகுதி.</p></section>
+<div class="warning">⚠️ இவை தானாகச் சரிபார்க்கப்பட்ட வேலைகள் அல்ல. அசல் அறிவிப்பு, தேதிகள், தகுதி, விண்ணப்ப இணைப்பு மற்றும் duplicate நிலையை உறுதிப்படுத்திய பிறகே Verified செய்யவும். Verified என்பது பொதுவெளியீடு அல்ல; வெளியீடு தனி நிர்வாக முடிவு.</div>
+<div id="state" class="state">Super Admin மற்றும் MFA அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section id="panel" hidden>
+<div class="filters"><input id="q" placeholder="வேலை / நிறுவனம் / நாடு தேடுக"><select id="type"><option value="">அனைத்து வகைகளும்</option><option value="india_government">இந்திய அரசு</option><option value="foreign_government">வெளிநாட்டு அரசு</option><option value="india_company">இந்திய நிறுவனம்</option><option value="foreign_company">வெளிநாட்டு நிறுவனம்</option></select><select id="status"><option value="pending">நிலுவை</option><option value="verified">சரிபார்க்கப்பட்டது</option><option value="published">வெளியிடப்பட்டது</option><option value="rejected">நிராகரிக்கப்பட்டது</option><option value="all">அனைத்தும்</option></select></div>
+<div id="count" class="meta"></div><div id="list"></div></section></main>
+<script>
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2"),$=id=>document.getElementById(id);
+let rows=[];
 const typeNames={india_government:"இந்திய அரசு",foreign_government:"வெளிநாட்டு அரசு",india_company:"இந்திய நிறுவனம்",foreign_company:"வெளிநாட்டு நிறுவனம்"};
+const checks=[["source_domain_matched","அதிகாரப்பூர்வ domain உறுதி"],["original_notice_opened","அசல் அறிவிப்பு / வேலைப் பக்கம் திறந்து பார்த்தது"],["dates_verified","தேதி / கடைசி தேதி சரிபார்த்தது"],["eligibility_verified","தகுதி சரிபார்த்தது"],["application_link_verified","Apply இணைப்பு சரிபார்த்தது"],["duplicate_checked","Duplicate சோதனை முடிந்தது"]];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function render(){const q=$("q").value.toLowerCase(),t=$("type").value,s=$("status").value;const list=rows.filter(r=>(!t||r.source_type===t)&&(s==="all"||r.status===s)&&(!q||[r.title,r.country,r.region,r.official_url,r.source?.source_name].join(" ").toLowerCase().includes(q)));$("count").textContent="மொத்தம் "+list.length+" பதிவுகள்";$("list").innerHTML=list.length?list.map(r=>'<article class="card"><div class="top"><div><h3>'+esc(r.title)+'</h3><div class="meta">'+esc(r.source?.source_name||r.source_id)+' · '+esc(r.country)+(r.region?" · "+esc(r.region):"")+'</div></div><span class="pill">'+esc(typeNames[r.source_type]||r.source_type)+' · '+esc(r.status)+'</span></div><p class="meta">கண்டறிந்த தேதி: '+esc(new Date(r.discovered_at).toLocaleString("ta-IN"))+'<br>சரிபார்ப்பு நிலை: மூல domain மட்டும் கண்டறியப்பட்டது; அறிவிப்பு/தேதி/தகுதி இன்னும் சரிபார்க்கப்படவில்லை.</p><div class="actions"><a class="btn" href="'+esc(r.official_url)+'" target="_blank" rel="noopener noreferrer">அதிகாரப்பூர்வ இணைப்பைத் திறக்க ↗</a><a href="'+esc(r.source?.base_url||"#")+'" target="_blank" rel="noopener noreferrer">Source homepage</a></div></article>').join(""):'<div class="empty">இந்தத் தேர்வில் பதிவுகள் இல்லை.</div>';}
-async function requireAdmin(){const {data:{user},error}=await db.auth.getUser();if(error||!user){location.replace("admin-login.html");return false;}const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);if(roleError||!roles?.length){location.replace("admin-login.html");return false;}return true;}
-async function start(){if(!(await requireAdmin()))return;const {data,error}=await db.from("external_job_candidates").select("*,source:external_job_sources(source_name,base_url)").order("discovered_at",{ascending:false}).limit(500);if(error){$("state").textContent="தரவுத்தள அணுகல் தோல்வி: "+error.message+" — external-job-sources SQL இயக்கப்பட்டதா, உங்கள் கணக்கிற்கு Super Admin அனுமதி உள்ளதா எனச் சரிபார்க்கவும்.";return;}rows=data||[];$("state").hidden=true;$("panel").hidden=false;render();}
-["q","type","status"].forEach(id=>$(id).addEventListener("input",render));start().catch(e=>$("state").textContent="பிழை: "+e.message);
-</script>  <script src="assets/site-protection.js" defer></script>
-</body></html>
+async function requireAdmin(){
+ const {data:{user},error}=await db.auth.getUser();
+ if(error||!user){location.replace("admin-login.html");return false;}
+ const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
+ if(roleError||!roles?.length){location.replace("admin-login.html");return false;}
+ const {data:aal,error:aalError}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalError){$("state").textContent="MFA நிலையைச் சரிபார்க்க முடியவில்லை. மீண்டும் Admin Login செய்யவும்.";return false;}
+ if(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2"){location.replace("admin-login.html");return false;}
+ return true;
+}
+function render(){
+ const q=$("q").value.toLowerCase(),t=$("type").value,s=$("status").value;
+ const list=rows.filter(r=>(!t||r.source_type===t)&&(s==="all"||r.status===s)&&(!q||[r.title,r.country,r.region,r.official_url,r.source?.source_name].join(" ").toLowerCase().includes(q)));
+ $("count").textContent="மொத்தம் "+list.length+" பதிவுகள்";
+ if(!list.length){$("list").innerHTML='<div class="empty">இந்தத் தேர்வில் பதிவுகள் இல்லை.</div>';return;}
+ $("list").innerHTML=list.map(r=>{
+  const v=r.verification||{},pending=r.status==="pending";
+  const checksHtml=checks.map(([key,label])=>'<label class="check"><input type="checkbox" data-candidate="'+esc(r.id)+'" data-check="'+key+'" '+(v[key]?'checked ':'')+(pending?'':'disabled')+'><span>'+esc(label)+'</span></label>').join("");
+  const actions=pending?'<div class="actions"><button data-verify="'+esc(r.id)+'">அனைத்தும் சரி — Verified</button><button class="danger" data-reject="'+esc(r.id)+'">Reject</button></div><textarea class="reason" rows="2" id="reason-'+esc(r.id)+'" placeholder="Reject செய்தால் காரணம் கட்டாயம் (குறைந்தது 10 எழுத்துகள்)"></textarea>':'<div class="meta">Review: '+esc(r.rejection_reason||r.status)+'</div>';
+  return '<article class="card"><div class="top"><div><h3>'+esc(r.title)+'</h3><div class="meta">'+esc(r.source?.source_name||r.source_id)+' · '+esc(r.country)+(r.region?' · '+esc(r.region):'')+'<br>கண்டறிந்த தேதி: '+esc(new Date(r.discovered_at).toLocaleString("ta-IN"))+'</div></div><span class="pill">'+esc(typeNames[r.source_type]||r.source_type)+' · '+esc(r.status)+'</span></div><p class="meta">Discovery context: '+esc(r.discovery_context||"—")+'</p><div class="actions"><a class="btn" href="'+esc(r.official_url)+'" target="_blank" rel="noopener noreferrer">அதிகாரப்பூர்வ இணைப்பைத் திறக்க ↗</a></div><div class="checks">'+checksHtml+'</div>'+actions+'</article>';
+ }).join("");
+}
+async function review(id,decision){
+ const row=rows.find(x=>x.id===id);if(!row)return;
+ let payload={p_candidate_id:id,p_decision:decision,p_reason:"",p_verification:{}};
+ if(decision==="rejected"){
+  payload.p_reason=$("reason-"+id)?.value||"";
+  if(payload.p_reason.trim().length<10){alert("Reject காரணத்தை குறைந்தது 10 எழுத்துகளில் எழுதவும்.");return;}
+ }else{
+  for(const [key] of checks){
+   const box=document.querySelector('input[data-candidate="'+id+'"][data-check="'+key+'"]');
+   payload.p_verification[key]=!!box?.checked;
+  }
+  if(checks.some(([key])=>payload.p_verification[key]!==true)){alert("Verified செய்ய ஆறு சரிபார்ப்புகளையும் முடிக்க வேண்டும்.");return;}
+ }
+ const buttons=[...document.querySelectorAll('[data-verify="'+id+'"],[data-reject="'+id+'"]')];buttons.forEach(b=>b.disabled=true);
+ const {data,error}=await db.rpc("tc_review_external_job_candidate",payload);
+ if(error){buttons.forEach(b=>b.disabled=false);alert("Review சேமிக்கப்படவில்லை: "+error.message);return;}
+ await start();
+}
+async function start(){
+ if(!(await requireAdmin()))return;
+ const {data,error}=await db.from("external_job_candidates").select("*,source:external_job_sources(source_name,base_url)").order("discovered_at",{ascending:false}).limit(500);
+ if(error){$("state").textContent="தரவுத்தள அணுகல் தோல்வி: "+error.message;return;}
+ rows=data||[];$("state").hidden=true;$("panel").hidden=false;render();
+}
+$("list").addEventListener("click",e=>{const verify=e.target.closest("[data-verify]"),reject=e.target.closest("[data-reject]");if(verify)review(verify.dataset.verify,"verified");if(reject)review(reject.dataset.reject,"rejected");});
+["q","type","status"].forEach(id=>$(id).addEventListener("input",render));
+$("logout").addEventListener("click",async()=>{await db.auth.signOut();location.replace("admin-login.html");});
+start().catch(e=>$("state").textContent="பிழை: "+e.message);
+</script><script src="assets/site-protection.js" defer></script></body></html>
