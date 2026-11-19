@@ -25,6 +25,7 @@ else:
         'citation URL': 'citation_url: sourceUrl',
         'untrusted job marker': 'content_is_untrusted: true',
         'durable quota RPC': 'rpc("tamilan_ai_consume_job_context_quota")',
+        'centralized request parser': 'parseRetrievalInput(body)',
         '429 response': 'RATE_LIMITED',
         'Retry-After header': 'headers.set("Retry-After", String(retryAfter))',
         'fail-closed quota failure': 'RATE_LIMIT_CHECK_FAILED',
