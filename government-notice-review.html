@@ -45,7 +45,7 @@ a.link{display:inline-block;margin-top:8px;background:#126fd0;color:white;text-d
 <select id="status"><option value="pending">Pending</option><option value="verified">Verified</option><option value="rejected">Rejected</option><option value="published">Published</option><option value="all">All Statuses</option></select>
 <select id="category"><option value="">All Categories</option><option value="recruitment">Recruitment</option><option value="result">Exam Result</option><option value="admit_card">Hall Ticket</option><option value="answer_key">Answer Key</option><option value="exam_update">Exam Update</option><option value="other">Other</option></select>
 </div>
-<div class="stats"><div class="stat" id="total">மொத்தம்: —</div><div class="stat" id="pending">நிலுவை: —</div><div class="stat" id="shown">காண்பிக்கப்படுவது: —</div></div>
+<div class="stats"><div class="stat" id="total">Total: —</div><div class="stat" id="pending">Pending: —</div><div class="stat" id="shown">Showing: —</div></div>
 <div id="list"></div>
 </section>
 </main>
@@ -53,21 +53,21 @@ a.link{display:inline-block;margin-top:8px;background:#126fd0;color:white;text-d
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id);let rows=[];
 const labels={recruitment:"Recruitment",result:"Exam Result",admit_card:"Hall Ticket",answer_key:"Answer Key",exam_update:"Exam Update",other:"Other"};
-const checks=[["registered_source_host","பதிவுசெய்த அரசு தளம்"],["notice_document_opened","அறிவிப்பு PDF / ஆவணம்"],["dates_verified","தேதிகள்"],["vacancies_verified","காலியிட எண்ணிக்கை"],["eligibility_verified","கல்வி / வயது தகுதி"],["application_link_verified","விண்ணப்ப இணைப்பு"],["duplicate_checked","மீள்பதிவு சோதனை"]];
+const checks=[["registered_source_host","Registered Government Website"],["notice_document_opened","Notice PDF / Document"],["dates_verified","Dates"],["vacancies_verified","Vacancy Count"],["eligibility_verified","Education / Age Eligibility"],["application_link_verified","Application Link"],["duplicate_checked","Duplicate Check"]];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function render(){
  const q=$("search").value.trim().toLowerCase(),s=$("status").value,c=$("category").value;
  const filtered=rows.filter(r=>(s==="all"||r.status===s)&&(!c||r.category===c)&&(!q||[r.title,r.official_url,r.notice_reference,r.eligibility_summary,r.details?.authority,r.details?.state].join(" ").toLowerCase().includes(q)));
- $("shown").textContent="காண்பிக்கப்படுவது: "+filtered.length;
- if(!filtered.length){$("list").innerHTML='<div class="empty">இந்த வடிகட்டலில் அறிவிப்புகள் இல்லை.</div>';return;}
+ $("shown").textContent="Showing: "+filtered.length;
+ if(!filtered.length){$("list").innerHTML='<div class="empty">No notices match this filter.</div>';return;}
  $("list").innerHTML=filtered.map(r=>{
  const v=r.verification||{};
  const titleYears=[...String(r.title||"").matchAll(/\b(20\d{2})\b/g)].map(m=>Number(m[1]));
  const oldYear=titleYears.length>0&&Math.min(...titleYears)<new Date().getFullYear();
  const deadlinePassed=!!r.application_end&&Number.isFinite(Date.parse(r.application_end))&&Date.parse(r.application_end+"T23:59:59")<Date.now();
  const reviewWarnings=[];
- if(oldYear)reviewWarnings.push("தலைப்பில் பழைய ஆண்டு ("+Math.min(...titleYears)+") உள்ளது. இது இன்னும் செல்லுபடியாகும் அறிவிப்பா என்பதை அதிகாரப்பூர்வ ஆவணத்தில் சரிபார்க்கவும்.");
- if(deadlinePassed)reviewWarnings.push("பதிவில் உள்ள விண்ணப்ப முடிவு தேதி கடந்துவிட்டது. தற்போதைய நிலையை உறுதிப்படுத்தாமல் வெளியிட வேண்டாம்.");
+ if(oldYear)reviewWarnings.push("The title contains an older year ("+Math.min(...titleYears)+") ). Check the official document to confirm whether this notice is still valid.");
+ if(deadlinePassed)reviewWarnings.push("The application deadline in this record has passed. Do not publish without confirming the current status.");
  const warningHtml=reviewWarnings.length?'<div class="review-warning">⚠️ '+reviewWarnings.map(esc).join("<br>")+'</div>':"";
  const checklist=checks.map(([key,label])=>'<div class="check">'+(v[key]?'<span class="yes">✓</span> ':'<span class="no">○</span> ')+esc(label)+'</div>').join("");
  return '<article class="card"><div class="top"><div><h2>'+esc(r.title)+'</h2><div class="meta">'+esc(r.details?.authority||r.source_id)+' · '+esc(r.details?.state||"இந்தியா")+' · '+esc(new Date(r.created_at).toLocaleString("ta-IN"))+'</div></div><span class="pill">'+esc(labels[r.category]||r.category)+' · '+esc(r.status)+'</span></div>'+warningHtml+'<div class="checks">'+checklist+'</div><div class="meta">குறிப்பு எண்: '+esc(r.notice_reference||"இன்னும் நிரப்பப்படவில்லை")+'<br>விண்ணப்ப முடிவு: '+esc(r.application_end||"சரிபார்க்கப்படவில்லை")+'<br>காலியிடங்கள்: '+esc(r.vacancies??"சரிபார்க்கப்படவில்லை")+'</div><a class="link" href="'+esc(r.official_url)+'" target="_blank" rel="noopener noreferrer">அதிகாரப்பூர்வ இணைப்பைத் திறக்க ↗</a><a class="link" href="government-notice-publish.html?id='+encodeURIComponent(r.id)+'">சரிபார்த்து வெளியிட / நிராகரிக்க</a></article>';
@@ -80,7 +80,7 @@ async function start(){
  const {data,error:readError}=await client.from("government_notice_reviews").select("id,source_id,title,official_url,category,notice_reference,notice_date,application_start,application_end,vacancies,eligibility_summary,details,verification,status,created_at").order("created_at",{ascending:false}).limit(500);
  if(readError){$("state").textContent="இந்தப் பகுதியைப் பார்க்க நிர்வாக அனுமதி தேவை. உங்கள் கணக்கிற்கு is_super_admin() அனுமதி உள்ளதா என்பதைச் சரிபார்க்கவும். விவரம்: "+readError.message;return;}
  rows=data||[];$("state").classList.add("hidden");$("panel").classList.remove("hidden");
- $("total").textContent="மொத்தம்: "+rows.length;$("pending").textContent="நிலுவை: "+rows.filter(r=>r.status==="pending").length;render();
+ $("total").textContent="Total: "+rows.length;$("pending").textContent="Pending: "+rows.filter(r=>r.status==="pending").length;render();
 }
 ["search","status","category"].forEach(id=>$(id).addEventListener("input",render));
 $("logout").addEventListener("click",async()=>{await client.auth.signOut();location.replace("login.html");});
