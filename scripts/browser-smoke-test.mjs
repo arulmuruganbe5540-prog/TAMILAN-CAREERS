@@ -65,6 +65,45 @@ await check("Redesigned homepage is mobile-friendly and hides country-detection 
   await page.setViewportSize({ width: 390, height: 844 });
 });
 
+await check("Employer registration page fits mobile widths without horizontal scrolling", async () => {
+  const employerPage = await browser.newPage({ viewport: { width: 320, height: 800 } });
+  try {
+    await employerPage.route("**/auth/v1/user**", route => route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify({ id: "employer-layout-smoke", aud: "authenticated", role: "authenticated", email: "employer@example.test", app_metadata: {}, user_metadata: {} })
+    }));
+    await employerPage.route("**/rest/v1/countries**", route => route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify([{ country_code: "IN", country_name: "India" }, { country_code: "AE", country_name: "United Arab Emirates" }])
+    }));
+    await employerPage.route("**/rest/v1/company_profile_drafts**", route => route.fulfill({
+      status: 200, contentType: "application/json", body: "[]"
+    }));
+    const response = await employerPage.goto(base + "/company-profile.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("Employer registration page failed to load");
+    await employerPage.locator(".doc-grid").waitFor({ state: "visible", timeout: 10000 });
+    for (const width of [320, 360, 390, 430]) {
+      await employerPage.setViewportSize({ width, height: 800 });
+      const layout = await employerPage.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+        overflow: [...document.querySelectorAll("body *")].map(el => {
+          const r = el.getBoundingClientRect();
+          return { tag: el.tagName, id: el.id, cls: typeof el.className === "string" ? el.className : "", left: Math.round(r.left), right: Math.round(r.right) };
+        }).filter(x => x.right > document.documentElement.clientWidth + 1 || x.left < -1).slice(0, 12)
+      }));
+      if (layout.document > layout.viewport + 1) {
+        throw new Error("Horizontal overflow at " + width + "px: " + JSON.stringify(layout));
+      }
+    }
+    await employerPage.setViewportSize({ width: 768, height: 900 });
+    const desktopColumns = await employerPage.locator("#companyForm").evaluate(el => getComputedStyle(el).gridTemplateColumns);
+    if (desktopColumns.split(" ").length < 2) throw new Error("Desktop form should retain its two-column layout");
+  } finally {
+    await employerPage.close();
+  }
+});
+
 await check("Login page role, mode and password controls work", async () => {
   await open("login.html");
   await page.locator("#company").click();
