@@ -46,7 +46,7 @@ btn.disabled=true;$("resubmitMessage").textContent="Submitting...";
 try{if(file){const ext={"application/pdf":"pdf","image/jpeg":"jpg","image/png":"png","image/webp":"webp"}[file.type],type=$("docType").value,path=request.company_id+"/"+user.id+"/"+request.id+"/additional-"+Date.now()+"."+ext;
 const {error:up}=await db.storage.from("company-verification").upload(path,file,{contentType:file.type,upsert:false});if(up)throw up;
 const {error:ins}=await db.from("company_verification_documents").insert({request_id:request.id,company_id:request.company_id,uploaded_by:user.id,document_type:type,storage_path:path,original_file_name:file.name,mime_type:file.type,file_size_bytes:file.size});if(ins){await db.storage.from("company-verification").remove([path]);throw ins}}
-const {data,error}=await db.rpc("tc_company_resubmit_verification",{p_request_id:request.id,p_company_response:note});if(error)throw error;$("resubmitMessage").textContent="உங்கள் பதில் Admin-க்கு அனுப்பப்பட்டது. நிலை மீண்டும் Pending ஆக மாற்றப்பட்டது.";await load();
-}catch(e){$("resubmitMessage").textContent="சமர்ப்பிக்க முடியவில்லை: "+(e.message||e)}finally{btn.disabled=false}}
-$("resubmitBtn").addEventListener("click",resubmit);load().catch(e=>showMessage("தகவலை ஏற்ற முடியவில்லை: "+(e.message||e),true));
+const {data,error}=await db.rpc("tc_company_resubmit_verification",{p_request_id:request.id,p_company_response:note});if(error)throw error;$("resubmitMessage").textContent="Your response has been sent to the Admin. The status has been changed back to Pending.";await load();
+}catch(e){$("resubmitMessage").textContent="Unable to submit: "+(e.message||e)}finally{btn.disabled=false}}
+$("resubmitBtn").addEventListener("click",resubmit);load().catch(e=>showMessage("Unable to load information: "+(e.message||e),true));
 </script><script src="assets/site-protection.js" defer></script></body></html>
