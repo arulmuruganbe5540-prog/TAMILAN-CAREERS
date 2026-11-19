@@ -4,36 +4,39 @@ import {
   normalizeSearchQuery,
   publicJobSource,
   safeHttpsUrl,
-} from "../supabase/functions/tamilan-ai-job-context/logic.ts";
-import { assertEquals, assertNotEquals } from "jsr:@std/assert@1";
+} from "./logic.ts";
+
+function equal(actual: unknown, expected: unknown, label: string) {
+  if (actual !== expected) throw new Error(`${label}: expected ${String(expected)}, got ${String(actual)}`);
+}
 
 Deno.test("search query accepts plain text and normalizes whitespace", () => {
-  assertEquals(normalizeSearchQuery("  software   engineer "), "software engineer");
-  assertEquals(normalizeSearchQuery("a%b_c(d)"), "a b c d ");
+  equal(normalizeSearchQuery("  software   engineer "), "software engineer", "whitespace");
+  equal(normalizeSearchQuery("a%b_c(d)"), "a b c d", "filter characters");
 });
 Deno.test("search query rejects non-string and overlong values", () => {
-  assertEquals(normalizeSearchQuery(42), null);
-  assertEquals(normalizeSearchQuery("x".repeat(81)), null);
+  equal(normalizeSearchQuery(42), null, "non-string");
+  equal(normalizeSearchQuery("x".repeat(81)), null, "overlong");
 });
 Deno.test("country normalization collapses whitespace and rejects unsafe types/length", () => {
-  assertEquals(normalizeCountry("  India   "), "India");
-  assertEquals(normalizeCountry(7), null);
-  assertEquals(normalizeCountry("x".repeat(101)), null);
+  equal(normalizeCountry("  India   "), "India", "country whitespace");
+  equal(normalizeCountry(7), null, "country type");
+  equal(normalizeCountry("x".repeat(101)), null, "country length");
 });
 Deno.test("citation URLs allow HTTPS only and reject malformed or oversized input", () => {
-  assertEquals(safeHttpsUrl("https://example.gov.in/notice"), "https://example.gov.in/notice");
-  assertEquals(safeHttpsUrl("javascript:alert(1)"), null);
-  assertEquals(safeHttpsUrl("http://example.com"), null);
-  assertEquals(safeHttpsUrl("x".repeat(2049)), null);
+  equal(safeHttpsUrl("https://example.gov.in/notice"), "https://example.gov.in/notice", "https URL");
+  equal(safeHttpsUrl("javascript:alert(1)"), null, "javascript URL");
+  equal(safeHttpsUrl("http://example.com"), null, "http URL");
+  equal(safeHttpsUrl("x".repeat(2049)), null, "oversized URL");
 });
 Deno.test("job source requires a real ID and uses canonical internal citation as fallback", () => {
-  assertEquals(publicJobSource({ job_title: "No ID" }), null);
+  equal(publicJobSource({ job_title: "No ID" }), null, "missing source ID");
   const source = publicJobSource({ id: "job/123", job_title: "Engineer", official_notification_url: "javascript:bad" });
-  assertEquals(source?.source_id, "job/123");
-  assertEquals(source?.citation_url, "https://tamilancareers.in/job-details.html?id=job%2F123");
-  assertEquals(source?.content_is_untrusted, true);
+  equal(source?.source_id, "job/123", "source ID");
+  equal(source?.citation_url, "https://tamilancareers.in/job-details.html?id=job%2F123", "fallback citation");
+  equal(source?.content_is_untrusted, true, "untrusted marker");
 });
-Deno.test("job source prefers verified HTTPS notification URL and bounds untrusted description", () => {
+Deno.test("job source prefers HTTPS notification URL and bounds untrusted description", () => {
   const source = publicJobSource({
     id: "abc",
     official_notification_url: "https://example.gov.in/notice",
@@ -41,7 +44,7 @@ Deno.test("job source prefers verified HTTPS notification URL and bounds untrust
     description: "x".repeat(MAX_DESCRIPTION_LENGTH + 10),
     application_url: "https://apply.example.com",
   });
-  assertEquals(source?.citation_url, "https://example.gov.in/notice");
-  assertEquals(source?.description.length, MAX_DESCRIPTION_LENGTH);
-  assertNotEquals(source?.citation_url, "https://apply.example.com");
+  equal(source?.citation_url, "https://example.gov.in/notice", "official citation");
+  equal(source?.description.length, MAX_DESCRIPTION_LENGTH, "description bound");
+  if (source?.citation_url === "https://apply.example.com") throw new Error("application URL must not become citation");
 });
