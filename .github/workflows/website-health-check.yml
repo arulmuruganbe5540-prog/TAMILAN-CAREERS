@@ -65,6 +65,8 @@ jobs:
         run: python scripts/resume-security-workflow-guard.py
       - name: Validate public government feed JavaScript
         run: node --check government-notices-public.js
+      - name: Guard Super Admin MFA enrollment, sign-in and page access
+        run: python scripts/admin-mfa-guard.py
       - name: Check internal website structure
         run: python scripts/website-health-check.py
       - name: Install browser test dependency
