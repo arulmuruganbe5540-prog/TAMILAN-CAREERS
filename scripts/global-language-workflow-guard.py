@@ -7,9 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 global_js = (ROOT / "assets/global-experience.js").read_text(encoding="utf-8")
 translator = (ROOT / "assets/auto-translate.js").read_text(encoding="utf-8")
 protection = (ROOT / "assets/site-protection.js").read_text(encoding="utf-8")
-pages = ["index.html", "jobs.html", "job-posting.html", "company-profile.html",
-         "dashboard.html", "login.html", "admin-job-post.html",
-         "company-verification-status.html"]
+pages = sorted(ROOT.glob("*.html"))
 
 checks = {
     "header shows one canonical www domain label":
@@ -32,9 +30,9 @@ checks = {
     "shared site script loads global language experience":
         "assets/global-experience.js" in protection,
 }
-for name in pages:
-    content = (ROOT / name).read_text(encoding="utf-8")
-    checks[f"{name} loads the shared site experience"] = 'assets/site-protection.js' in content
+for page in pages:
+    content = page.read_text(encoding="utf-8")
+    checks[f"{page.name} loads the shared site experience"] = 'assets/site-protection.js' in content
 
 failed = [name for name, ok in checks.items() if not ok]
 for name, ok in checks.items():
