@@ -63,54 +63,50 @@ This is an operational checklist based on the project changes and user-confirmed
 
 - [ ] Company job draft submission and Admin publication workflow has been strengthened in repository SQL/UI: India-timezone deadline validation, exact company ID preservation, verified-company-only publication, duplicate submission protection, Admin status sync, and monthly/daily salary period. This remains **not live** until schema audit is checked, SQL is run, and real Company → Admin → public-job flow is tested.
 
-## Must finish before enabling external source scanning
+## Current live setup and remaining launch work — checked 19 November 2026
 
-- [ ] Create a unique random `GOVERNMENT_MONITOR_SECRET` of at least 32 characters. Do not paste it into chat or commit it.
-- [ ] Redeploy the latest scanner source from GitHub after the recent bounded-response, non-HTML response rejection, and per-source status fixes. The user-confirmed deployment was the earlier version; repository changes are not live until redeployed.
-- [ ] Add the exact same secret in Supabase Edge Function Secrets and GitHub repository Actions Secrets.
-- [ ] Check the scanner Edge Function's **Verify JWT with legacy secret** setting. Because the function uses its own `x-monitor-secret` header, the gateway must not block the request by requiring a Supabase JWT; turn legacy JWT verification off if it is on.
-- [ ] Run the GitHub workflow manually and inspect the private candidate queue.
-- [ ] Verify the Admin review page with a Super Admin account.
-- [ ] Confirm that only reviewed, verified notices can enter the public jobs/notice feed.
+### Verified in the live Supabase project
+- [x] Supabase project is ACTIVE_HEALTHY.
+- [x] All 55 public tables have Row Level Security enabled.
+- [x] Live roles: 1 Super Admin and 1 Job Seeker; the first Super Admin bootstrap has already been completed. Do not run it again or grant another privileged role.
+- [x] Company profile, company membership, job draft, Admin review, government review, and external candidate tables exist.
+- [x] The government notice review queue contains 165 pending records; the external job candidate queue contains 6 pending records. These remain private until manually checked and approved.
+- [x] AI-related Edge Functions (ai-resume-match, bilingual-job-search, extract-government-notice-details, generate-job-mock-exam) were inspected in the live project and return HTTP 410 disabled responses. TAMILAN CAREERS must remain a no-AI platform. Do not configure OpenAI keys or enable these functions.
+- [x] Health Advisor returned no findings. Security Advisor warnings are documented in PROJECT-STATUS.md; do not remove required authenticated RPC grants without reviewing their caller/ownership checks.
+- [x] GitHub Pages deployment and full Health Audit passed for homepage repair commit 9a4d2949476efab54c241c9ec9fd5892b3d68ef6. The subsequent exam-bank expansion also passed the full Health Audit on f81cc6c7e81783e9dfbea18286a1ff4a7a5fb808; the latest Pages deployment after documentation updates must be checked in Actions.
 
-## Supabase setup and deployment still needing confirmation
+### Real-account tests still required
+- [ ] Test Company Draft → Admin Review → Approve → Publish using the existing verified Super Admin and a real authorized Company account.
+- [ ] Test Candidate registration/login, profile, search, job details, application, application history, and withdrawal.
+- [ ] Test Employer applicant access, application status updates, interview invitations, candidate responses, notifications, and authorized Resume viewing.
+- [ ] Test company verification submission, private document upload/download, Admin decision, and cross-account denial.
+- [ ] Test the Government notice review page with a Super Admin account; manually verify official notice, dates, eligibility, vacancies, and source links before publishing.
+- [ ] Test Android and desktop layouts using real devices/browsers.
 
-- [ ] Run `supabase-setup-pending.sql` for private resume storage, candidate resume metadata, private employer job drafts, candidate education/experience/certifications, and restricted applicant-profile access. Verify the Storage bucket remains private.
-- [ ] Resolve the Resume Storage bucket-name mismatch before running setup: existing Storage policy output references `candidate-resumes`, while the current website, Edge Function, and setup SQL use `resumes`. Run the updated bucket audit and preserve any existing files; do not delete or rename buckets blindly.
-- [ ] Deploy `company-resume-access` Edge Function and test a legitimate employer access plus a denied cross-company access. Secure resume viewing is not live until this is tested.
-- [ ] Run `supabase-interview-notifications.sql`; test invitation, candidate response, and notifications for both parties. Automated reminders additionally need a secure scheduler/Cron.
-- [ ] Run `supabase-candidate-profile-education-experience.sql`; test saving and editing education, experience, and certifications. (The consolidated `supabase-setup-pending.sql` also includes these records.)
-- [ ] Run `supabase-company-application-status.sql`; test permitted and denied employer status updates.
-- [ ] Run `supabase-admin-job-publish-setup.sql` after `supabase-setup-pending.sql`; test Company Draft → Admin Review → Approve → Publish with a verified company. The submission RPC validates active company role, preserves the exact company ID, syncs Admin decisions back to the private draft, and rejects past deadlines.
-- [ ] For Government Jobs archive, run `supabase-government-archive-install.sql`, deploy `ingest-government-notices`, configure its protected monitor secret, and test the private review queue. Do not auto-publish scraped links.
-- [ ] For AI resume matching, redeploy the latest `ai-resume-match` source (Bearer token parsing was corrected in GitHub), add `OPENAI_API_KEY` as a Supabase Function Secret, and test with explicit candidate consent. Rule-based matching and AI matching must be described separately.
-- [ ] Review the deployed `manage-hiring` function and exact company/member schema before replacing the current minimal login/status handler with member-management actions. Do not deploy schema-dependent changes without the schema audit.
+### Owner-controlled service settings
+- [ ] Enable Supabase Auth Leaked Password Protection.
+- [ ] Configure custom SMTP for signup/password-reset email delivery.
+- [ ] Configure Resend secrets if Company invitation email delivery is required; otherwise continue using the supported invitation-link sharing flow.
+- [ ] Configure the same protected GOVERNMENT_MONITOR_SECRET in Supabase and GitHub Actions only if scheduled source ingestion is to be enabled. Keep automated publishing disabled.
+- [ ] Enroll and verify a Super Admin MFA factor before enforcing MFA on Admin access.
 
-## Final launch checks
-
-- [ ] Test candidate registration, login, profile, job search, job details, application, and application history on Android.
-- [ ] Test company registration/login, company profile, job draft, job publishing approval, applicant list, and resume authorization.
-- [ ] Test Government Jobs and Private Jobs as separate sections.
-- [ ] Confirm that no unverified vacancy, fake company partnership, or unauthorized logo is displayed.
-- [ ] Confirm email delivery, password reset, and notification behavior using real test accounts.
-- [ ] Check latest GitHub Pages deployment and latest health workflow after the final commit.
-- [ ] Perform a final mobile browser review and fix launch-blocking issues.
+### Current production data boundary
+- Live snapshot: 2 Auth users, 1 Job Seeker role, 1 Super Admin role, 1 company, 1 company membership, 0 jobs, and 0 applications.
+- Public job lists are expected to remain empty until genuine jobs are submitted and approved. Do not insert fabricated vacancies or test applications into production.
+- 48 government sources and 30 external job sources are registered. Pending review candidates are not verified vacancies.
 
 ## Safety and release rules
 
 - Discovery is not verification. Candidate links must remain private until the original notice, eligibility, dates, vacancy details, and application link are checked.
-- Never expose Supabase service-role keys, OpenAI keys, monitor secrets, passwords, or OTPs in frontend code, GitHub commits, or chat.
+- Never expose Supabase service-role keys, monitor secrets, passwords, or OTPs in frontend code, GitHub commits, or chat. No OpenAI API key is part of the approved product.
 - Do not claim a feature is live until its database setup, function deployment, permissions, and real-user test have all passed.
 - Prioritize launch blockers over optional enhancements.
 
 
-## 17 November 2026 — Admin authorization follow-up
+## 17 November 2026 — historical Admin authorization note (superseded)
 
-- Admin Control Center and Admin Job Post no longer call the revoked public `is_super_admin()` SECURITY DEFINER RPC. Both check the signed-in user's own `user_roles` row under the existing owner-only SELECT RLS policy.
-- Admin Control Center now displays the authenticated account identity instead of a hard-coded name.
-- A guarded first-admin SQL bootstrap is available at `supabase-first-super-admin-bootstrap.sql`. It requires the project owner to insert their own exact login email into the placeholder and run the script manually.
-- Live role audit found one `job_seeker` role and zero `super_admin` assignments. Admin pages therefore remain correctly gated until the owner explicitly bootstraps the first Super Admin. This is an intentional privilege boundary, not a frontend error.
-- The Pages deployment succeeded for the Admin repair commit `02997b8ce3045e7e865a428030dbd19d69538d5f` (run `44090939571`). Subsequent documentation-only commits trigger fresh builds/audits; check the latest workflow run before calling the newest repository state verified.
+- Admin Control Center and Admin Job Post check the signed-in user's own user_roles row under RLS.
+- The first Super Admin was subsequently assigned; the live audit on 19 November confirms one Super Admin. Follow the current status section above and do not rerun the bootstrap SQL.
 
 - Final verification after the Admin authorization repair: Pages deployment run `44091403705` succeeded for commit `2ac0f9cf236147c30047118351f14918f49786be`; Health Audit run `44091331004` succeeded for code commit `6a1ac636aa6c4420a128ef3fcc643eb83f338013`. All health workflow steps, including browser smoke tests, passed.
 
@@ -122,8 +118,6 @@ This is an operational checklist based on the project changes and user-confirmed
 - [x] Browser smoke tests cover the redirect helper and key protected-page return targets.
 - [x] Latest Pages deployment succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388` (run `44094932098`).
 - [x] Latest full Health Audit succeeded for the same commit (run `44094931772`), including Deno checks, SQL lint, privacy/security guards, structural checks, and Chromium browser smoke tests.
-- [ ] First Super Admin must still be granted explicitly by the project owner using the guarded bootstrap SQL.
-- [ ] Configure deferred OpenAI, Resend, and Government Monitor secrets.
-- [ ] Enable Supabase Auth leaked-password protection.
-- [ ] Create separate Candidate and Employer accounts and complete all real-user end-to-end tests. Current live data has only one Auth user, one company, zero jobs, and zero applications; production data must not be fabricated for testing.
-- [ ] Final release approval after all owner actions and real-account tests. The website is deployed and code-side CI is green, but it is not yet launch-ready.
+- [ ] Enable Supabase Auth leaked-password protection and configure the required email/monitor providers as described in the current section.
+- [ ] Complete real-account Candidate, Employer, and Super Admin end-to-end tests. Current live data has two Auth users, one company, zero jobs, and zero applications; production data must not be fabricated for testing.
+- [ ] Final release approval after owner actions and real-account tests. A green code-side CI run alone does not make the platform launch-ready.
