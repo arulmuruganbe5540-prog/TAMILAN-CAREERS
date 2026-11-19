@@ -5,7 +5,7 @@ import { MAX_RESULTS, parseRetrievalInput, publicJobSource, rateLimitDecision } 
 const ALLOWED_ORIGINS = new Set(["https://tamilancareers.in", "https://www.tamilancareers.in"]);
 
 type QueryResult = { data: Array<Record<string, unknown>> | null; error: unknown };
-interface JobQuery extends PromiseLike<QueryResult> {
+export interface JobQuery extends PromiseLike<QueryResult> {
   eq(column: string, value: string): JobQuery;
   order(column: string, options: { ascending: boolean; nullsFirst: boolean }): JobQuery;
   limit(count: number): JobQuery;
