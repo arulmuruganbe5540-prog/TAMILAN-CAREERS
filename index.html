@@ -132,7 +132,19 @@ button{cursor:pointer}
  </div>
 </header>
 
-
+<section class="hero-wrap" id="tc-custom-hero">
+ <div class="hero">
+  <div class="hero-grid">
+   <div>
+    <span class="eyebrow"><i></i> TAMILAN CAREERS · GLOBAL OPPORTUNITIES</span>
+    <h1 id="tc-home-headline">உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!</h1>
+    <p class="hero-copy" id="tc-home-subtitle">இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</p>
+    <div class="hero-points"><span><b>✓</b> Verified employer process</span><span><b>✓</b> India & worldwide careers</span></div>
+   </div>
+   <div class="hero-art"><div class="glow-orb"></div><div class="opportunity-card"><div class="opportunity-top"><span>CAREER OPPORTUNITIES</span><span><i class="live-dot"></i>Explore</span></div><h3>Your next step starts here.</h3><p>Discover jobs by skills, education and location.</p><div class="mini-stat-grid"><div class="mini-stat"><strong>India</strong><small>Government & private</small></div><div class="mini-stat"><strong>Global</strong><small>Overseas careers</small></div></div></div></div>
+  </div>
+ </div>
+</section>
 
 <div class="search-panel" id="home">
  <div class="search-card">
@@ -290,6 +302,37 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
   showList("jobList",latest.error?[]:(latest.data||[]),"New verified opportunities will appear here when published.");
  }
  load().catch(()=>{applyLayout(null);showList("jobList",[],"Jobs could not be loaded. Please try again later.");});
+})();
+</script>
+<script>
+(async function applySavedHomepageDesign(){
+ try{
+  const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+  const {data,error}=await db.from("site_settings").select("site_name,headline,subtitle,primary_color,banner_path").eq("setting_key","homepage").maybeSingle();
+  if(error||!data)return;
+  const siteName=data.site_name||"TAMILAN CAREERS";
+  document.querySelectorAll(".brand-name").forEach(el=>{el.textContent=siteName});
+  document.querySelectorAll(".footer-bottom strong").forEach(el=>{el.textContent=siteName});
+  const title=document.getElementById("tc-home-headline");
+  const subtitle=document.getElementById("tc-home-subtitle");
+  if(title&&data.headline)title.textContent=data.headline;
+  if(subtitle&&data.subtitle)subtitle.textContent=data.subtitle;
+  const color=/^#[0-9a-f]{6}$/i.test(data.primary_color||"")?data.primary_color:"#101d3a";
+  const hero=document.getElementById("tc-custom-hero");
+  if(hero){
+   hero.style.backgroundImage="linear-gradient(120deg,"+color+"ee,"+color+"bb)";
+   if(data.banner_path){
+    const {data:asset}=db.storage.from("site-assets").getPublicUrl(data.banner_path);
+    if(asset?.publicUrl)hero.style.backgroundImage="linear-gradient(120deg,"+color+"cc,"+color+"99),url("+JSON.stringify(asset.publicUrl)+")";
+    hero.style.backgroundSize="cover";hero.style.backgroundPosition="center";
+   }
+  }
+  document.documentElement.style.setProperty("--blue",color);
+  document.querySelectorAll(".brand-name span").forEach(el=>{el.style.color="var(--cyan)"});
+  document.title=siteName+" | Global Jobs, Government Jobs & Overseas Careers";
+  const description=document.querySelector('meta[name="description"]');
+  if(description&&data.subtitle)description.setAttribute("content",data.subtitle);
+ }catch(e){/* Keep the default homepage available if design settings cannot load. */}
 })();
 </script>
 <script src="assets/site-protection.js" defer></script>
