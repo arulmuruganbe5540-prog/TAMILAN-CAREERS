@@ -35,6 +35,12 @@ input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-s
 </form>
 
 <div class="msg" id="message" role="status" aria-live="polite"></div>
+<div class="msg" id="mfaPanel" style="display:none;background:#eef5ff;color:#234d7e">
+<b>கூடுதல் பாதுகாப்பு சரிபார்ப்பு</b>
+<p style="margin:8px 0">உங்கள் Authenticator App உருவாக்கிய 6 இலக்கக் குறியீட்டை உள்ளிடவும்.</p>
+<input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="width:100%;padding:13px;border:1px solid #cbd8e9;border-radius:9px;font-size:18px;letter-spacing:4px">
+<button type="button" class="submit" id="mfaVerify">குறியீட்டைச் சரிபார்க்கவும்</button>
+</div>
 <div class="safe">🛡️ Password Login மற்றும் Database-ல் உள்ள <b>super_admin</b> அனுமதி சரிபார்க்கப்பட்ட பிறகே Admin Control திறக்கும்.</div>
 <div class="back"><a href="index.html">← Website முகப்புக்குச் செல்ல</a></div>
 </main>
@@ -42,7 +48,38 @@ input{width:100%;padding:14px;border:1px solid #dbe2ed;border-radius:10px;font-s
 const client=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const form=document.getElementById("adminForm"),button=document.getElementById("submit"),box=document.getElementById("message");
 function message(t,ok=false){box.textContent=t;box.style.display=t?"block":"none";box.style.background=ok?"#e8f8ee":"#fff0f0";box.style.color=ok?"#176b3a":"#ad2525"}
-async function finishAdminAccess(user){const {data,error}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);if(error)throw new Error("Super Admin அனுமதியை சரிபார்க்க முடியவில்லை.");if(!data?.length){await client.auth.signOut();throw new Error("இந்த கணக்கிற்கு Super Admin அனுமதி இல்லை.");}message("Super Admin Login வெற்றி. Admin Control திறக்கப்படுகிறது...",true);location.replace("admin-control.html")}
+let pendingMfaFactorId="",pendingMfaChallengeId="";
+async function finishAdminAccess(user){
+ const {data,error}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
+ if(error)throw new Error("Super Admin அனுமதியை சரிபார்க்க முடியவில்லை.");
+ if(!data?.length){await client.auth.signOut();throw new Error("இந்த கணக்கிற்கு Super Admin அனுமதி இல்லை.");}
+ const {data:aal,error:aalError}=await client.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalError)throw new Error("MFA பாதுகாப்பு நிலையைச் சரிபார்க்க முடியவில்லை.");
+ if(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2"){
+  const {data:factors,error:factorError}=await client.auth.mfa.listFactors();
+  if(factorError)throw factorError;
+  const factor=(factors.totp||[]).find(x=>x.status==="verified");
+  if(!factor)throw new Error("MFA அமைப்பு உள்ளது; சரிபார்க்கப்பட்ட Authenticator சாதனம் கிடைக்கவில்லை. Supabase Auth settings-ஐ சரிபார்க்கவும்.");
+  pendingMfaFactorId=factor.id;
+  const {data:challenge,error:challengeError}=await client.auth.mfa.challenge({factorId:pendingMfaFactorId});
+  if(challengeError)throw challengeError;
+  pendingMfaChallengeId=challenge.id;
+  document.getElementById("mfaPanel").style.display="block";
+  document.getElementById("mfaCode").focus();
+  message("Password சரிபார்க்கப்பட்டது. இப்போது Authenticator குறியீடு தேவை.",true);
+  return;
+ }
+ message("Super Admin Login வெற்றி. Admin Control திறக்கப்படுகிறது...",true);
+ location.replace("admin-control.html");
+}
+document.getElementById("mfaVerify").addEventListener("click",async()=>{
+ const code=document.getElementById("mfaCode").value.trim();
+ if(!/^\\d{6}$/.test(code)){message("6 இலக்க Authenticator குறியீட்டை உள்ளிடவும்.");return;}
+ const verifyButton=document.getElementById("mfaVerify");verifyButton.disabled=true;
+ try{const {error}=await client.auth.mfa.verify({factorId:pendingMfaFactorId,challengeId:pendingMfaChallengeId,code});if(error)throw error;message("MFA சரிபார்ப்பு வெற்றி. Admin Control திறக்கப்படுகிறது...",true);location.replace("admin-control.html")}
+ catch(err){message(err.message||"MFA சரிபார்ப்பு தோல்வியடைந்தது.");}
+ finally{verifyButton.disabled=false;}
+});
 document.getElementById("toggle").addEventListener("click",()=>{const p=document.getElementById("password"),v=p.type==="password";p.type=v?"text":"password";document.getElementById("toggle").textContent=v?"மறை":"காட்டு"});
 form.addEventListener("submit",async e=>{e.preventDefault();button.disabled=true;button.textContent="சரிபார்க்கப்படுகிறது...";message("");try{const email=document.getElementById("email").value.trim().toLowerCase(),password=document.getElementById("password").value;const {data,error}=await client.auth.signInWithPassword({email,password});if(error)throw error;if(!data.user)throw new Error("Login சரிபார்க்க முடியவில்லை.");await finishAdminAccess(data.user)}catch(err){message(err.message||"Login செய்ய முடியவில்லை.")}finally{button.disabled=false;button.textContent="Admin Login"}});
 (async()=>{try{const {data,error}=await client.auth.getUser();if(!error&&data?.user)await finishAdminAccess(data.user)}catch(e){message(e.message||"Login சரிபார்ப்பு தோல்வியடைந்தது.")}})();
