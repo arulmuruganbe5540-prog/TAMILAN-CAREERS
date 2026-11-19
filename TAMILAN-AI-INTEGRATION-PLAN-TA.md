@@ -131,6 +131,23 @@ AI advisory assistant மட்டுமே. அது:
 - [ ] Owner-ன் authenticated browser test.
 - [ ] Public pilot enable செய்வதற்கு முன் owner-ன் வெளிப்படையான rollout ஒப்புதல்.
 
+
+## 11. புதிய read-only job context அடித்தளம் — 19-11-2026
+
+Repository-இல் `supabase/functions/tamilan-ai-job-context/index.ts` என்ற புதிய Edge Function source சேர்க்கப்பட்டுள்ளது. இது model inference செய்யாது; வெளியிடப்பட்ட வேலைவாய்ப்பு பதிவுகளை பாதுகாப்பாக context ஆக வழங்குவதற்கான தனி அடித்தளம் மட்டுமே.
+
+- `supabase/config.toml`-இல் `verify_jwt = true` கட்டாயமாக அமைக்கப்பட்டுள்ளது.
+- `TAMILAN_AI_RETRIEVAL_ENABLED` server-side flag `true` இல்லையெனில் HTTP 503 `FEATURE_DISABLED` கிடைக்கும். Secret உருவாக்கப்படவில்லை; function deploy செய்யப்படவில்லை.
+- Supabase anon/publishable key + பயனரின் Bearer JWT மட்டுமே பயன்படுத்தப்படுகிறது. Service-role key பயன்படுத்தப்படவில்லை; எனவே jobs RLS policy தொடர்ந்து அமலில் இருக்கும்.
+- `jobs.status = 'published'` மட்டும் query செய்யப்படுகிறது; அதிகபட்சம் 5 முடிவுகள்; job title / country search மட்டும்.
+- Candidate/application/private company தகவல்கள் select செய்யப்படவில்லை. `job_sources` அட்டவணையும் அணுகப்படவில்லை.
+- ஒவ்வொரு context item-க்கும் உண்மையான `source_id`, citation URL, `content_is_untrusted` குறி சேர்க்கப்படுகிறது.
+- Query மற்றும் country filter-களில் PostgREST wildcard/filter punctuation நீக்கப்படுகிறது; request-ல் அனுமதிக்கப்பட்ட `query`, `country` keys மட்டுமே.
+- CORS production domain-களுக்கு மட்டும். இந்த prototype login தேவைப்படுத்துகிறது; anonymous public use இன்னும் இல்லை.
+- புதிய static guard `scripts/tamilan-ai-retrieval-guard.py` மற்றும் GitHub Actions Deno type-check சேர்க்கப்பட்டுள்ளன.
+
+**முக்கிய வரம்பு:** இந்த commit-இல் Edge Function source மட்டும் சேர்க்கப்பட்டுள்ளது. Deploy, runtime test, rate limiter, usage monitoring, model adapter, assistant UI எதுவும் இல்லை. Rate limiting மற்றும் authenticated integration tests சேர்க்கப்படும் வரை feature flag OFF-ஆகவே இருக்க வேண்டும். Job table தற்போது காலியாக இருப்பதால் vacancy பதில்கள் உருவாக்கப்படக்கூடாது.
+
 ## 10. தற்போதைய முடிவு
 
 **இப்போது செய்தவை:** repository-யில் homepage-க்கு AI widget இல்லை என்றும் இரண்டு பழைய AI endpoints disabled என்றும் code-ஐப் பார்த்து உறுதிப்படுத்தப்பட்டது. இந்த ஆவணம் பாதுகாப்பான புதிய integration-க்கான ஒப்பந்தத்தை வரையறுக்கிறது.
