@@ -147,15 +147,19 @@ await check("Job seeker and employer registration validate account details befor
   await page.locator("#email").fill("candidate@example.test");
   await page.locator("#password").fill("Candidate123");
   await page.locator("#confirmPassword").fill("Different123");
-  await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-  await page.waitForFunction(() => document.querySelector("#message")?.textContent.includes("ஒன்றாக இருக்க"), null, { timeout: 3000 });
+  const submitAndReadMessage = async () => {
+    await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    return (await page.locator("#message").innerText()).trim();
+  };
+  const mismatchMessage = await submitAndReadMessage();
+  if (!mismatchMessage.includes("ஒன்றாக இருக்க")) throw new Error("Password mismatch validation failed: " + mismatchMessage);
   await page.locator("#confirmPassword").fill("candidate123");
-  await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-  await page.waitForFunction(() => document.querySelector("#message")?.textContent.includes("பெரிய எழுத்து"), null, { timeout: 3000 });
+  const weakPasswordMessage = await submitAndReadMessage();
+  if (!weakPasswordMessage.includes("பெரிய எழுத்து")) throw new Error("Password strength validation failed: " + weakPasswordMessage);
   await page.locator("#password").fill("Candidate123");
   await page.locator("#confirmPassword").fill("Candidate123");
-  await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-  await page.waitForFunction(() => document.querySelector("#message")?.textContent.includes("விதிமுறைகள்"), null, { timeout: 3000 });
+  const termsMessage = await submitAndReadMessage();
+  if (!termsMessage.includes("விதிமுறைகள்")) throw new Error("Terms acceptance validation failed: " + termsMessage);
   await page.locator("#company").click();
   if (!(await page.locator("#company").getAttribute("class")).includes("active")) throw new Error("Employer role did not become active");
   await page.setViewportSize({ width: 320, height: 800 });
