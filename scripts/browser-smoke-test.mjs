@@ -821,6 +821,52 @@ await check("Every public page loads in English without visible Tamil or mobile 
   }
 });
 
+
+
+await check("Login, forgot-password and reset-password flows show clear English feedback", async () => {
+  const authPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  let forgotRequested = false;
+  let loginBody = null;
+  try {
+    await authPage.route("**/auth/v1/token*", async route => {
+      loginBody = route.request().postDataJSON();
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({
+        access_token: "smoke-access-token", token_type: "bearer", expires_in: 3600, refresh_token: "smoke-refresh-token",
+        user: { id: "smoke-login-user", aud: "authenticated", role: "authenticated", email: "candidate@example.test",
+          app_metadata: { provider: "email", providers: ["email"] }, user_metadata: {}, identities: [],
+          created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+      }) });
+    });
+    await authPage.route("**/auth/v1/recover*", async route => {
+      forgotRequested = true;
+      await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
+    });
+    await authPage.goto(base + "/login.html?next=jobs.html", { waitUntil: "domcontentloaded" });
+    await authPage.locator("#email").fill("candidate@example.test");
+    await authPage.locator("#forgotLink").click();
+    await authPage.waitForFunction(() => document.querySelector("#message")?.textContent.includes("password reset link has been sent"));
+    if (!forgotRequested) throw new Error("Forgot-password request was not sent");
+    await authPage.locator("#password").fill("Candidate123");
+    await authPage.locator("#submitBtn").click();
+    await authPage.waitForURL(/jobs\\.html$/, { timeout: 10000 });
+    if (loginBody?.email !== "candidate@example.test" || loginBody?.password !== "Candidate123") {
+      throw new Error("Login request did not send the entered credentials");
+    }
+    await authPage.goto(base + "/reset-password.html", { waitUntil: "domcontentloaded" });
+    if (!(await authPage.locator("#newPassword").isVisible()) || !(await authPage.locator("#confirmPassword").isVisible())) {
+      throw new Error("Reset-password form fields are missing");
+    }
+    await authPage.locator("#newPassword").fill("candidate123");
+    await authPage.locator("#confirmPassword").fill("candidate123");
+    await authPage.locator("#resetForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    await authPage.waitForFunction(() => document.querySelector("#msg")?.textContent.includes("invalid or has expired"));
+    const visible = await authPage.locator("body").innerText();
+    if (/[\\u0B80-\\u0BFF]/.test(visible)) throw new Error("Authentication page displayed Tamil text");
+  } finally {
+    await authPage.close();
+  }
+});
+
 if (pageErrors.length) failures.push({ name: "Uncaught browser JavaScript errors", error: pageErrors.join(" | ") });
 await browser.close();
 console.log(JSON.stringify({ status: failures.length ? "failed" : "passed", checks: results, browser_errors: pageErrors, failures }, null, 2));
