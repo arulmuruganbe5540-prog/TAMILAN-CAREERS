@@ -16,7 +16,7 @@ const KEY="tc_saved_jobs_v1",list=document.getElementById("list");
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(x)?x:[]}catch(e){return []}}
 function render(){const items=read();if(!items.length){list.innerHTML='<div class="empty">You have not saved any jobs yet.<br><a href="jobs.html">Start searching for jobs</a></div>';return;}
-list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"Job Details")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="login.html?next='+encodeURIComponent("apply.html?job="+j.id)+'">Log in to apply</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">நீக்கவும்</button></div></article>').join("");}
+list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"Job Details")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="login.html?next='+encodeURIComponent("apply.html?job="+j.id)+'">Log in to apply</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">Remove</button></div></article>').join("");}
 list.addEventListener("click",e=>{const b=e.target.closest("[data-remove]");if(!b)return;const id=b.getAttribute("data-remove");localStorage.setItem(KEY,JSON.stringify(read().filter(j=>String(j.id)!==String(id))));render();});render();
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
