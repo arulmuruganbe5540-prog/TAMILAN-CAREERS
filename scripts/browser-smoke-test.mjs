@@ -867,6 +867,11 @@ await check("Every public page loads in English without visible Tamil or mobile 
     "terms.html"
   ];
   const auditPage = await browser.newPage({ viewport: { width: 360, height: 800 } });
+  auditPage.setDefaultNavigationTimeout(10000);
+  await auditPage.route("**/*", route => {
+    const requestUrl = new URL(route.request().url());
+    return requestUrl.origin === new URL(base).origin ? route.continue() : route.abort();
+  });
   try {
     for (const path of paths) {
       const response = await auditPage.goto(base + "/" + path, { waitUntil: "domcontentloaded" });
@@ -877,7 +882,7 @@ await check("Every public page loads in English without visible Tamil or mobile 
         visibleText: document.body?.innerText || "",
         width: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
-        languageControls: document.querySelectorAll("#tc-language-select,[data-language-selector],select[name='language']").length,
+        languageControls: document.querySelectorAll("#tc-language-select,[data-language-selector]").length,
         clippedControls: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
           const style = getComputedStyle(el);
           const rect = el.getBoundingClientRect();
