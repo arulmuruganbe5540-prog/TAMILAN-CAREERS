@@ -33,7 +33,9 @@ checks = {
         '["நிறுவனப் பதிவு மற்றும் சரிபார்ப்பு","Company Registration & Verification"]' in translator
         and '["வேலைப் பதவி / Job Title *","Job Title *"]' in translator
         and '["சுயவிவரத்தைச் சேமிக்கவும்","Save Profile"]' in translator
-        and '["உங்கள் Dashboard-க்கு வரவேற்கிறோம்","Welcome to your Dashboard"]' in translator,
+        and '["உங்கள் Dashboard-க்கு வரவேற்கிறோம்","Welcome to your Dashboard"]' in translator
+        and '["நிறுவனச் சரிபார்ப்பு நிலை","Company Verification Status"]' in translator
+        and '["Email உறுதிப்படுத்தலை மீண்டும் அனுப்பு","Resend email confirmation"]' in translator,
     "shared site script loads global language experience":
         "assets/global-experience.js" in protection,
     "premium banner replaces the logo in place instead of creating a second header row":
