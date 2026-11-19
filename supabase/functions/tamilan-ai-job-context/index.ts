@@ -103,9 +103,17 @@ Deno.serve(async (request: Request) => {
     return json({ error: "Login required" }, 401, origin);
   }
 
+  const declaredLength = Number(request.headers.get("content-length") ?? "0");
+  if (declaredLength > 2048) {
+    return json({ error: "Request body too large" }, 413, origin);
+  }
   let body: unknown;
   try {
-    body = await request.json();
+    const rawBody = await request.text();
+    if (rawBody.length > 2048) {
+      return json({ error: "Request body too large" }, 413, origin);
+    }
+    body = JSON.parse(rawBody);
   } catch {
     return json({ error: "Invalid JSON body" }, 400, origin);
   }
