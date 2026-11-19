@@ -23,24 +23,24 @@
 <div class="info" id="companyInfo"></div>
 <form id="jobForm">
 <div class="field wide"><label for="companyChoice">Company *</label><select id="companyChoice" required></select></div>
-<div class="field wide"><label for="jobTitle">Job Title *</label><input id="jobTitle" required maxlength="160" placeholder="உதா: Sales Executive"></div>
+<div class="field wide"><label for="jobTitle">Job Title *</label><input id="jobTitle" required maxlength="160" placeholder="e.g. Sales Executive"></div>
 <div class="field"><label for="category">Job Category *</label><select id="category" required><option value="">Select</option><option>IT / Software</option><option>Manufacturing</option><option>Sales / Marketing</option><option>Accounts / Finance</option><option>Healthcare</option><option>Education</option><option>Construction</option><option>Logistics / Transport</option><option>Customer Support</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
 <div class="field"><label for="employmentType">Employment Type *</label><select id="employmentType" required><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
-<div class="field"><label for="workplaceType">பணியிடம் வகை</label><select id="workplaceType"><option value="">Select</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
-<div class="field"><label for="openings">காலியிடங்கள் எண்ணிக்கை</label><input id="openings" type="number" min="1" max="10000" step="1" value="1"></div>
-<div class="field"><label for="location">வேலை இடம் / மாவட்டம் *</label><input id="location" required maxlength="160" placeholder="உதா: ஓமலூர், சேலம்"></div>
-<div class="field"><label for="countryName">வேலை இருக்கும் நாடு *</label><select id="countryName" required><option value="">நாடுகளை ஏற்றுகிறது...</option></select><span class="hint">Dubai வேலைகளுக்கு United Arab Emirates Select.</span></div>
-<div class="field"><label for="experience">தேவையான Experience</label><input id="experience" maxlength="100" placeholder="உதா: Fresher / 2 years"></div>
-<div class="field wide"><label>Education (ஒன்றுக்கு மேற்பட்டவற்றைத் தேர்வு செய்யலாம்)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல Educationகளைத் தேர்வு செய்யலாம்.</span></div>
-<div class="field"><label for="salaryMin">குறைந்தபட்ச சம்பளத் தொகை</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="உதா: 12000"></div>
-<div class="field"><label for="salaryMax">அதிகபட்ச சம்பளத் தொகை</label><input id="salaryMax" type="number" min="0" max="100000000" step="1" placeholder="உதா: 18000"></div>
-<div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option></select></div>
-<div class="field wide"><label for="skills">Required Skills</label><input id="skills" maxlength="800" placeholder="உதா: Communication, MS Excel, Driving"></div>
-<div class="field wide"><label for="description">வேலை விவரம் மற்றும் பொறுப்புகள் *</label><textarea id="description" required maxlength="5000" placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், Required Skills போன்றவற்றை எழுதவும்."></textarea></div>
-<div class="field"><label for="deadline">விண்ணப்பிக்க கடைசி தேதி</label><input id="deadline" type="date"></div>
-<div class="field"><label for="contactEmail">விண்ணப்பத் தொடர்பு Email</label><input id="contactEmail" type="email" maxlength="180" placeholder="hr@company.com"></div>
+<div class="field"><label for="workplaceType">Workplace Type</label><select id="workplaceType"><option value="">Select</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
+<div class="field"><label for="openings">Number of Vacancies</label><input id="openings" type="number" min="1" max="10000" step="1" value="1"></div>
+<div class="field"><label for="location">Job Location / District *</label><input id="location" required maxlength="160" placeholder="e.g. Omalur, Salem"></div>
+<div class="field"><label for="countryName">Country of Employment *</label><select id="countryName" required><option value="">Loading countries...</option></select><span class="hint">For jobs in Dubai, select United Arab Emirates.</span></div>
+<div class="field"><label for="experience">Required Experience</label><input id="experience" maxlength="100" placeholder="e.g. Fresher / 2 years"></div>
+<div class="field wide"><label>Education (you may select more than one)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல Educationகளைத் தேர்வு செய்யலாம்.</span></div>
+<div class="field"><label for="salaryMin">Minimum Salary</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="e.g. 12000"></div>
+<div class="field"><label for="salaryMax">Maximum Salary</label><input id="salaryMax" type="number" min="0" max="100000000" step="1" placeholder="e.g. 18000"></div>
+<div class="field"><label for="salaryPeriod">Salary Period</label><select id="salaryPeriod"><option value="monthly">Monthly</option><option value="daily">Daily</option></select></div>
+<div class="field wide"><label for="skills">Required Skills</label><input id="skills" maxlength="800" placeholder="e.g. Communication, MS Excel, Driving"></div>
+<div class="field wide"><label for="description">Job Description and Responsibilities *</label><textarea id="description" required maxlength="5000" placeholder="Describe the job responsibilities, working hours, required skills and other details."></textarea></div>
+<div class="field"><label for="deadline">Application Deadline</label><input id="deadline" type="date"></div>
+<div class="field"><label for="contactEmail">Application Contact Email</label><input id="contactEmail" type="email" maxlength="180" placeholder="hr@company.com"></div>
 </form>
-<div class="actions"><button class="btn" id="saveBtn" type="button">Save Draft</button><button class="btn" id="submitReviewBtn" type="button">Admin Review-க்கு அனுப்பு</button><button class="btn secondary" id="reloadBtn" type="button">சேமித்த வரைவை மீண்டும் ஏற்றவும்</button><button class="btn secondary" id="clearBtn" type="button">படிவத்தை காலி செய்</button></div><p class="hint">Review-க்கு அனுப்பிய பிறகு Super Admin சரிபார்ப்பார். நிறுவனம் Verified ஆன பிறகே வேலை பொதுவில் வெளியிடப்படும்.</p>
+<div class="actions"><button class="btn" id="saveBtn" type="button">Save Draft</button><button class="btn" id="submitReviewBtn" type="button">Submit for Admin Review</button><button class="btn secondary" id="reloadBtn" type="button">Reload Saved Draft</button><button class="btn secondary" id="clearBtn" type="button">Clear Form</button></div><p class="hint">Review-க்கு அனுப்பிய பிறகு Super Admin சரிபார்ப்பார். Company Verified ஆன பிறகே வேலை பொதுவில் வெளியிடப்படும்.</p>
 <div id="status" class="status" role="status" aria-live="polite"></div>
 </section>
 </main>
@@ -52,10 +52,10 @@ let activeCountries=[];
 function message(t,ok){const e=document.getElementById("status");e.textContent=t;e.className="status "+(ok?"ok":"err")}
 async function loadCountries(){
  const {data,error}=await client.from("countries").select("country_name,is_active").eq("is_active",true).order("country_name");
- if(error)throw new Error("நாட்டு பட்டியலை ஏற்ற முடியவில்லை: "+error.message);
+ if(error)throw new Error("Unable to load country list: "+error.message);
  activeCountries=(data||[]).map(x=>x.country_name);
  const el=document.getElementById("countryName");
- el.innerHTML='<option value="">நாட்டைத் Select</option>'+activeCountries.map(n=>'<option value="'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")+'">'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</option>').join("");
+ el.innerHTML='<option value="">Select a Country</option>'+activeCountries.map(n=>'<option value="'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")+'">'+n.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</option>').join("");
 }
 function formData(){const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());d.education=Array.from(document.querySelectorAll(".education-choice:checked")).map(x=>x.value).join(", ");return d}
 function setReviewLock(locked){
@@ -69,12 +69,12 @@ async function init(){
  if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("job-posting.html"));return}
  currentUser=data.user;
  const {data:rows,error:memberError}=await client.from("company_members").select("company_id,member_role,member_status,companies(company_name,verification_status)").eq("user_id",currentUser.id).eq("member_status","active").in("member_role",["owner","hr_manager","recruiter"]);
- if(memberError){showBlocked("நிறுவன உறுப்பினர் அனுமதியைச் சரிபார்க்க முடியவில்லை. Dashboard-இல் உள்ள நிறுவன நிர்வாகியைத் தொடர்புகொள்ளவும். விவரம்: "+memberError.message);return}
+ if(memberError){showBlocked("Unable to verify company member permissions. Contact your company administrator through the dashboard. Details: "+memberError.message);return}
  memberships=(rows||[]).filter(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;return c?.verification_status==="verified"});
- if(!memberships.length){showBlocked("இந்தக் கணக்கில் சரிபார்க்கப்பட்ட (Verified) நிறுவனத்திற்கான Owner / HR Manager / Recruiter அனுமதி இல்லை. முதலில் நிறுவனச் சரிபார்ப்பை Admin மூலம் முடிக்கவும்.");return}
+ if(!memberships.length){showBlocked("This account does not have Owner / HR Manager / Recruiter permissions for a verified company. Complete company verification through an Admin first.");return}
  await loadCountries();
  const select=document.getElementById("companyChoice");
- memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"நிறுவனம்")+" — "+(m.member_role||"உறுப்பினர்");select.appendChild(o)});
+ memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"Company")+" — "+(m.member_role||"Member");select.appendChild(o)});
  document.getElementById("companyInfo").textContent="Admin மூலம் Verified செய்யப்பட்ட தனியார் நிறுவனங்கள்: "+memberships.length+". இங்கு தனியார் வேலைகளை மட்டுமே சமர்ப்பிக்கலாம்.";
  const saved=currentUser.user_metadata?.job_posting_draft||{};
  if(saved.company_id&&memberships.some(m=>m.company_id===saved.company_id))select.value=saved.company_id;
@@ -87,7 +87,7 @@ async function loadDraftForCompany(){
  const {data,error}=await client.from("job_posting_drafts").select("draft").eq("company_id",companyId).eq("user_id",currentUser.id).maybeSingle();
  if(error){
   currentDraft=null;setReviewLock(false);
-  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது உங்கள் உறுப்பினர் அனுமதி இல்லை. முதலில் supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
+  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது உங்கள் Member அனுமதி இல்லை. முதலில் supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
   const old=currentUser.user_metadata?.job_posting_draft||{};
   if(old.company_id===companyId)fill(old);
   return;
@@ -141,10 +141,10 @@ async function submitForReview(){
   const draftId=await save(true);if(!draftId)return;
   const {data,error}=await client.rpc("tc_submit_company_job_draft_for_review",{p_draft_id:draftId});
   if(error)throw error;
-  message("உங்கள் வேலை வரைவு Admin Review-க்கு அனுப்பப்பட்டது. நிறுவனம் Verified செய்யப்பட்டு Admin வெளியிட்ட பிறகே பொதுவில் தெரியும்.",true);
+  message("உங்கள் வேலை வரைவு Admin Review-க்கு அனுப்பப்பட்டது. Company Verified செய்யப்பட்டு Admin வெளியிட்ட பிறகே பொதுவில் தெரியும்.",true);
   await loadDraftForCompany();
  }catch(e){message("Review-க்கு அனுப்ப முடியவில்லை: "+(e.message||e)+". supabase-admin-job-publish-setup.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.",false)}
- finally{btn.textContent="Admin Review-க்கு அனுப்பு";btn.disabled=["pending_review","approved"].includes(currentDraft?.draft_status)}
+ finally{btn.textContent="Submit for Admin Review";btn.disabled=["pending_review","approved"].includes(currentDraft?.draft_status)}
 }
 document.getElementById("saveBtn").addEventListener("click",()=>save(false));
 document.getElementById("submitReviewBtn").addEventListener("click",submitForReview);
