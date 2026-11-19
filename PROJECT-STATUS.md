@@ -1,3 +1,10 @@
+## 19 November 2026 — MFA recovery-factor support
+
+- Updated the Admin security page to permit enrollment of more than one verified TOTP authenticator factor. This supports a second authenticator device as a recovery path if the primary device is lost.
+- The page displays enrolled factors and verified/pending status. It does not expose or log the TOTP secret beyond the one-time enrollment view.
+- Supabase's current Authenticator Assurance Level flow is used for sign-in challenges; see the official Supabase TOTP and MFA guidance.
+- Recovery still depends on the owner safely enrolling and testing a second device before relying on MFA. The site does not claim to provide Supabase recovery codes (the current Supabase Auth MFA documentation does not describe recovery codes as supported).
+
 ## 19 November 2026 — Admin MFA coverage expansion
 
 - Extended the Supabase Auth Assurance Level check to the Super Admin pages: community posts, company verification, design studio, global control, job posting, job reports, and exam resources.
