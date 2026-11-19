@@ -397,10 +397,10 @@ async function createMockSignedInPage(role = "job_seeker", viewport = { width: 3
     if (method === "GET") return route.fulfill({ status: 200, contentType: "application/json", body: "[]" });
     return route.fulfill({ status: 204, body: "" });
   });
-  await p.route("**/auth/v1/user", route => {
-    if (route.request().method() === "PATCH") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ...user, user_metadata: { full_name: "Smoke Candidate" } }) });
-    return route.continue();
-  });
+  await p.route("**/auth/v1/user", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ ...user, user_metadata: route.request().method() === "PATCH" ? { full_name: "Smoke Candidate" } : {} })
+  }));
   await p.route("**/storage/v1/object/list/**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
   await p.route("**/storage/v1/object/candidate-resumes/**", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ Key: "mock-upload" }) }));
   await p.route("**/rest/v1/rpc/**", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, id: "smoke-rpc" }) }));
