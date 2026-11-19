@@ -26,7 +26,7 @@ main{max-width:1050px;margin:25px auto;padding:0 15px}.hero{background:linear-gr
 <div class="panel"><label for="company">Select Company</label><select id="company" class="select"></select></div>
 <div class="grid"><div class="stat">Selected Company Jobs<b id="jobCount">—</b></div><div class="stat">Visible Applications<b id="appCount">—</b></div></div>
 <div id="jobs"></div><div id="applications"></div>
-<div class="notice"><b>Privacy Protection:</b> Only the company owner or an active HR / Recruiter of the company the candidate applied to can view applicant profile details. RLS and API permissions enforce this. Attached resumes are available only through secure signed links that expire after 60 seconds. <code>company-resume-access</code> Edge Function deploy செய்யப்பட்டுள்ளது. Supabase functions are configured for application status changes, interview invitations and candidate response notifications. Final end-to-end testing with a real candidate and employer application is still pending. Interview reminders are checked automatically every 15 minutes.</div>
+<div class="notice"><b>Privacy Protection:</b> Only the company owner or an active HR / Recruiter of the company the candidate applied to can view applicant profile details. RLS and API permissions enforce this. Attached resumes are available only through secure signed links that expire after 60 seconds. <code>company-resume-access</code> Edge Function has been deployed. Supabase functions are configured for application status changes, interview invitations and candidate response notifications. Final end-to-end testing with a real candidate and employer application is still pending. Interview reminders are checked automatically every 15 minutes.</div>
 </section>
 </main>
 <script>
@@ -43,28 +43,28 @@ async function init(){
  const {data:rows,error}=await db.from("company_members").select("company_id,member_role,member_status,companies(company_name)").eq("user_id",user.id).eq("member_status","active");
  if(error){message("Unable to verify company permissions: "+error.message,"error");return}
  memberships=(rows||[]).filter(m=>allowedRoles.includes(m.member_role));
- if(!memberships.length){message("இந்தக் கணக்கிற்கு விண்ணப்பங்களை நிர்வகிக்கும் அனுமதி இல்லை. Owner, HR Manager அல்லது Recruiter அனுமதி தேவை.");return}
+ if(!memberships.length){message("This account cannot manage applications. Owner, HR Manager or Recruiter access is required.");return}
  const select=$("company");
- memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"நிறுவனம்")+" — "+m.member_role;select.appendChild(o)});
+ memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"Company")+" — "+m.member_role;select.appendChild(o)});
  $("message").hidden=true;$("workspace").hidden=false;await loadCompany();
 }
 async function loadCompany(){
  const companyId=$("company").value;if(!companyId)return;
- $("jobs").innerHTML='<div class="panel">நிறுவன வேலைகள் ஏற்றப்படுகின்றன...</div>';$("applications").innerHTML="";
+ $("jobs").innerHTML='<div class="panel">Loading company jobs...</div>';$("applications").innerHTML="";
  const {data:jobs,error}=await db.from("jobs").select("id,job_title,company_id,status,created_at").eq("company_id",companyId).order("created_at",{ascending:false});
- if(error){$("jobs").innerHTML='<div class="error">வேலைகளை ஏற்ற முடியவில்லை: '+esc(error.message)+'</div>';$("jobCount").textContent="—";$("appCount").textContent="—";return}
+ if(error){$("jobs").innerHTML='<div class="error">Unable to load jobs: '+esc(error.message)+'</div>';$("jobCount").textContent="—";$("appCount").textContent="—";return}
  const list=jobs||[];$("jobCount").textContent=String(list.length);
- if(!list.length){$("jobs").innerHTML='<div class="empty">இந்த நிறுவனத்துடன் இணைக்கப்பட்ட வேலை Notifications இல்லை.</div>';$("appCount").textContent="0";return}
+ if(!list.length){$("jobs").innerHTML='<div class="empty">There are no job notifications linked to this company.</div>';$("appCount").textContent="0";return}
  const results=await Promise.all(list.map(async j=>{
   const {data:apps,error:appError}=await db.from("job_applications").select("id,job_id,candidate_id,resume_id,cover_letter,status,applied_at,updated_at").eq("job_id",j.id).order("applied_at",{ascending:false});
   return {job:j,apps:apps||[],error:appError};
  }));
  let total=0;results.forEach(x=>{if(!x.error)total+=x.apps.length});$("appCount").textContent=String(total);
- $("jobs").innerHTML=results.map(x=>'<article class="job"><h2>'+esc(x.job.job_title||"வேலை அறிவிப்பு")+'</h2><div class="muted">வேலை நிலை: '+esc(x.job.status||"குறிப்பிடப்படவில்லை")+'</div>'+ (x.error?'<p class="error">விண்ணப்பங்களை ஏற்ற முடியவில்லை: '+esc(x.error.message)+'</p>':'<p class="muted">இந்த வேலைக்கான விண்ணப்பங்கள்: <b>'+x.apps.length+'</b></p>')+'</article>').join("");
+ $("jobs").innerHTML=results.map(x=>'<article class="job"><h2>'+esc(x.job.job_title||"Job Posting")+'</h2><div class="muted">வேலை நிலை: '+esc(x.job.status||"Not specified")+'</div>'+ (x.error?'<p class="error">Unable to load applications: '+esc(x.error.message)+'</p>':'<p class="muted">Applications for this job: <b>'+x.apps.length+'</b></p>')+'</article>').join("");
  const cards=[];
  for(const x of results){
   if(x.error)continue;
-  if(!x.apps.length){cards.push('<div class="empty">'+esc(x.job.job_title)+': இன்னும் விண்ணப்பங்கள் வரவில்லை.</div>');continue}
+  if(!x.apps.length){cards.push('<div class="empty">'+esc(x.job.job_title)+': No applications have been received yet.</div>');continue}
   for(const a of x.apps){
    const uid=a.candidate_id;
    const [p,profile,edu,exp,skills,certs,languages,prefs]=await Promise.all([
@@ -78,8 +78,8 @@ async function loadCompany(){
     db.from("candidate_preferences").select("preferred_job_title,preferred_city,preferred_work_mode,preferred_employment_type,minimum_salary,maximum_salary,salary_currency,willing_to_relocate").eq("user_id",uid).maybeSingle()
    ]);
    const person=p.data||{},pr=profile.data||{};
-   const eduHtml=(edu.data||[]).map(z=>'<li>'+esc(z.qualification||"கல்வி")+' — '+esc(z.institution_name||"")+(z.field_of_study?' · '+esc(z.field_of_study):"")+'</li>').join("");
-   const expHtml=(exp.data||[]).map(z=>'<li><b>'+esc(z.job_title||"பணி")+'</b> — '+esc(z.company_name||"")+(z.city?' · '+esc(z.city):"")+'</li>').join("");
+   const eduHtml=(edu.data||[]).map(z=>'<li>'+esc(z.qualification||"Education")+' — '+esc(z.institution_name||"")+(z.field_of_study?' · '+esc(z.field_of_study):"")+'</li>').join("");
+   const expHtml=(exp.data||[]).map(z=>'<li><b>'+esc(z.job_title||"Position")+'</b> — '+esc(z.company_name||"")+(z.city?' · '+esc(z.city):"")+'</li>').join("");
    const skillHtml=(skills.data||[]).map(z=>'<span class="status">'+esc(z.skill_name)+(z.proficiency_level?' · '+esc(z.proficiency_level):"")+'</span>').join(" ");
    const certHtml=(certs.data||[]).map(z=>'<li><b>'+esc(z.certificate_name||"சான்றிதழ்")+'</b>'+(z.issuing_organization?' — '+esc(z.issuing_organization):"")+(z.issue_date?' · '+esc(z.issue_date):"")+(z.expiry_date?' · முடிவு: '+esc(z.expiry_date):"")+'</li>').join("");
    const languageHtml=(languages.data||[]).map(z=>'<li>'+esc(z.language_code||"மொழி")+(z.proficiency_level?' — '+esc(z.proficiency_level):"")+(z.can_read||z.can_write||z.can_speak?' · '+[z.can_read?"படிக்க":null,z.can_write?"எழுத":null,z.can_speak?"பேச":null].filter(Boolean).join(", "):"")+'</li>').join("");
@@ -91,7 +91,7 @@ async function loadCompany(){
    const resumeAction=a.resume_id&&canChange?'<div class="status-actions"><button type="button" class="view-resume" data-app-id="'+esc(a.id)+'">📄 பாதுகாப்பாக Resume பார்க்கவும்</button></div>':(a.resume_id?'<p class="muted">இந்த விண்ணப்ப நிலைக்கு Resume அணுகல் கிடைக்கவில்லை.</p>':'<p class="muted">இந்த விண்ணப்பத்துடன் Resume இணைக்கப்படவில்லை.</p>');
    const interviewAction=canChange?'<details class="panel"><summary><b>📅 Interview அழைப்பு அனுப்பவும்</b></summary><div class="field"><label>Interview தேதி மற்றும் நேரம்</label><input type="datetime-local" class="interview-date" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview வகை</label><select class="interview-mode" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"><option value="in_person">நேரில்</option><option value="online">Online</option><option value="phone">தொலைபேசி</option></select></div><div class="field"><label>இடம் / Online இணைப்பு</label><input class="interview-location" data-app-id="'+esc(a.id)+'" maxlength="1000" placeholder="முகவரி அல்லது Meeting link" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview Letter / கூடுதல் தகவல்</label><textarea class="interview-letter" data-app-id="'+esc(a.id)+'" maxlength="8000" rows="4" placeholder="நேர்காணல் கடித விவரங்கள்" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></textarea></div><button type="button" class="send-interview" data-app-id="'+esc(a.id)+'">அழைப்பை அனுப்பவும்</button><p class="muted interview-msg" data-app-id="'+esc(a.id)+'"></p></details>':'';
 
-   cards.push('<article class="app"><h3>'+esc(x.job.job_title)+'</h3><span class="status">'+esc(statusLabels[a.status]||a.status||"நிலை குறிப்பிடப்படவில்லை")+'</span>'+statusControl+resumeAction+interviewAction+'<p><b>விண்ணப்பித்த நாள்:</b> '+esc(dateText(a.applied_at))+'</p><h3>'+esc(person.full_name||"விண்ணப்பதாரர்")+'</h3>'+(pr.headline?'<p>'+esc(pr.headline)+'</p>':"")+(person.email?'<p>மின்னஞ்சல்: '+esc(person.email)+'</p>':"")+(person.phone?'<p>தொலைபேசி: '+esc(person.phone)+'</p>':"")+(pr.current_city?'<p>இடம்: '+esc(pr.current_city)+'</p>':"")+(pr.total_experience_months!=null?'<p>மொத்த அனுபவம்: '+esc((pr.total_experience_months/12).toFixed(1))+' ஆண்டுகள்</p>':"")+(eduHtml?'<p><b>கல்வி</b></p><ul>'+eduHtml+'</ul>':"")+(expHtml?'<p><b>வேலை அனுபவம்</b></p><ul>'+expHtml+'</ul>':"")+(skillHtml?'<p><b>திறன்கள்</b></p>'+skillHtml:"")+(certHtml?'<p><b>சான்றிதழ்கள்</b></p><ul>'+certHtml+'</ul>':"")+(languageHtml?'<p><b>மொழித் திறன்</b></p><ul>'+languageHtml+'</ul>':"")+(pref.preferred_job_title||pref.preferred_city||pref.preferred_work_mode||pref.preferred_employment_type||salaryPref?'<p><b>வேலை விருப்பங்கள்</b></p><p>'+[pref.preferred_job_title,pref.preferred_city,pref.preferred_work_mode,pref.preferred_employment_type,salaryPref,pref.willing_to_relocate===true?"இடமாற்றத்திற்குத் தயார்":null].filter(Boolean).map(esc).join(" · ")+'</p>':"")+(a.cover_letter?'<p><b>விண்ணப்பக் கடிதம்:</b><br>'+esc(a.cover_letter).replace(/\\n/g,"<br>")+'</p>':"")+(detailErrors.length?'<p class="muted">சில சுயவிவர விவரங்கள் இன்னும் கிடைக்கவில்லை. தேவையான RLS அனுமதி SQL இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.</p>':"")+'<div class="small">விண்ணப்ப எண்: '+esc(a.id)+'</div></article>');
+   cards.push('<article class="app"><h3>'+esc(x.job.job_title)+'</h3><span class="status">'+esc(statusLabels[a.status]||a.status||"நிலை Not specified")+'</span>'+statusControl+resumeAction+interviewAction+'<p><b>விண்ணப்பித்த நாள்:</b> '+esc(dateText(a.applied_at))+'</p><h3>'+esc(person.full_name||"Applicant")+'</h3>'+(pr.headline?'<p>'+esc(pr.headline)+'</p>':"")+(person.email?'<p>மின்னஞ்சல்: '+esc(person.email)+'</p>':"")+(person.phone?'<p>தொலைபேசி: '+esc(person.phone)+'</p>':"")+(pr.current_city?'<p>இடம்: '+esc(pr.current_city)+'</p>':"")+(pr.total_experience_months!=null?'<p>மொத்த அனுபவம்: '+esc((pr.total_experience_months/12).toFixed(1))+' ஆண்டுகள்</p>':"")+(eduHtml?'<p><b>Education</b></p><ul>'+eduHtml+'</ul>':"")+(expHtml?'<p><b>வேலை அனுபவம்</b></p><ul>'+expHtml+'</ul>':"")+(skillHtml?'<p><b>திறன்கள்</b></p>'+skillHtml:"")+(certHtml?'<p><b>சான்றிதழ்கள்</b></p><ul>'+certHtml+'</ul>':"")+(languageHtml?'<p><b>மொழித் திறன்</b></p><ul>'+languageHtml+'</ul>':"")+(pref.preferred_job_title||pref.preferred_city||pref.preferred_work_mode||pref.preferred_employment_type||salaryPref?'<p><b>வேலை விருப்பங்கள்</b></p><p>'+[pref.preferred_job_title,pref.preferred_city,pref.preferred_work_mode,pref.preferred_employment_type,salaryPref,pref.willing_to_relocate===true?"இடமாற்றத்திற்குத் தயார்":null].filter(Boolean).map(esc).join(" · ")+'</p>':"")+(a.cover_letter?'<p><b>விண்ணப்பக் கடிதம்:</b><br>'+esc(a.cover_letter).replace(/\\n/g,"<br>")+'</p>':"")+(detailErrors.length?'<p class="muted">சில சுயவிவர விவரங்கள் இன்னும் கிடைக்கவில்லை. தேவையான RLS அனுமதி SQL இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.</p>':"")+'<div class="small">விண்ணப்ப எண்: '+esc(a.id)+'</div></article>');
   }
  }
  $("applications").innerHTML='<h2>வந்த விண்ணப்பங்கள்</h2>'+(cards.length?cards.join(""):'<div class="empty">விண்ணப்பங்கள் எதுவும் இல்லை.</div>');
