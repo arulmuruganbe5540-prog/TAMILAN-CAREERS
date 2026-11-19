@@ -1,0 +1,30 @@
+name: TAMILAN AI Evaluation Data Check
+
+on:
+  push:
+    paths:
+      - "tests/tamilan-ai-evaluation-prompts.json"
+      - "scripts/validate-tamilan-ai-evaluation.py"
+      - ".github/workflows/tamilan-ai-evaluation-data.yml"
+  pull_request:
+    paths:
+      - "tests/tamilan-ai-evaluation-prompts.json"
+      - "scripts/validate-tamilan-ai-evaluation.py"
+      - ".github/workflows/tamilan-ai-evaluation-data.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-evaluation-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate multilingual evaluation prompts
+        run: python scripts/validate-tamilan-ai-evaluation.py
