@@ -61,3 +61,27 @@ export function publicJobSource(row: Record<string, unknown>) {
     content_is_untrusted: true,
   };
 }
+
+export type RetrievalInput = { query: string; country: string };
+export type RetrievalInputResult =
+  | { ok: true; value: RetrievalInput }
+  | { ok: false; error: string };
+
+export function parseRetrievalInput(value: unknown): RetrievalInputResult {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return { ok: false, error: "JSON object required" };
+  }
+  const input = value as Record<string, unknown>;
+  if (Object.keys(input).some((key) => key !== "query" && key !== "country")) {
+    return { ok: false, error: "Unsupported request field" };
+  }
+  const query = normalizeSearchQuery(input.query);
+  if (query === null) {
+    return { ok: false, error: "query must be plain text up to 80 characters" };
+  }
+  const country = normalizeCountry(input.country);
+  if (country === null) {
+    return { ok: false, error: "country must be plain text up to 100 characters" };
+  }
+  return { ok: true, value: { query, country } };
+}
