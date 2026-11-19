@@ -146,7 +146,7 @@ await check("Login page language switch translates static and dynamic authentica
       status: 200, contentType: "application/json",
       body: JSON.stringify({ country_code: "US", region: "Test", timezone: "UTC" })
     }));
-    await languagePage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
+    await languagePage.addInitScript(() => { if (!localStorage.getItem("tc_language_preference_v1")) localStorage.setItem("tc_language_preference_v1", "en"); });
     await languagePage.goto(base + "/login.html", { waitUntil: "domcontentloaded" });
     await languagePage.waitForFunction(() => !!window.TC_TRANSLATE);
     await languagePage.waitForTimeout(100);
