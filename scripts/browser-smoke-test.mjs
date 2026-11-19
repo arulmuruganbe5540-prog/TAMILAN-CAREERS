@@ -597,7 +597,7 @@ await check("Employer applicant management updates status and sends an interview
 
 await check("Super Admin approves and publishes a mocked job review", async () => {
   const p = await createMockSignedInPage("super_admin");
-  let reviewStatus = "pending_review", publishedJobId = null, publishCalls = 0, roleRequests = 0;
+  let reviewStatus = "pending_review", publishedJobId = null, publishCalls = 0, roleRequests = 0, roleMethods = [];
   await p.addInitScript(() => {
     const key = "sb-qkmljuuusfjowexvybvy-auth-token";
     const session = JSON.parse(localStorage.getItem(key) || "{}");
@@ -610,15 +610,17 @@ await check("Super Admin approves and publishes a mocked job review", async () =
   }));
   await p.route(/\/rest\/v1\/user_roles(?:\?.*)?$/, route => {
     roleRequests++;
+    roleMethods.push(route.request().method());
+    const headers = {
+      "access-control-allow-origin": base,
+      "access-control-allow-methods": "GET,POST,PATCH,DELETE,OPTIONS",
+      "access-control-allow-headers": "apikey,authorization,content-type,prefer,range,x-client-info",
+      "access-control-expose-headers": "content-range"
+    };
+    if (route.request().method() === "OPTIONS") return route.fulfill({ status: 204, headers, body: "" });
     return route.fulfill({
       status: 200, contentType: "application/json",
-      headers: {
-        "content-range": "0-0/1",
-        "access-control-allow-origin": base,
-        "access-control-allow-methods": "GET,POST,PATCH,DELETE,OPTIONS",
-        "access-control-allow-headers": "apikey,authorization,content-type,prefer,range,x-client-info",
-        "access-control-expose-headers": "content-range"
-      },
+      headers: { ...headers, "content-range": "0-0/1" },
       body: JSON.stringify([{ user_id: "tc-flow-smoke-user", role: "super_admin" }])
     });
   });
@@ -651,7 +653,7 @@ await check("Super Admin approves and publishes a mocked job review", async () =
     await p.waitForTimeout(500);
     if (await p.locator("#app").isHidden()) {
       const gateMessage = await p.locator("#gateText").innerText().catch(() => "No gate message");
-      throw new Error("Super Admin test account was blocked: " + gateMessage + "; roleRequests=" + roleRequests);
+      throw new Error("Super Admin test account was blocked: " + gateMessage + "; roleRequests=" + roleRequests + "; roleMethods=" + roleMethods.join(","));
     }
     await p.locator('[data-action="approve"][data-id="review-smoke"]').click();
     await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("Approved"));
