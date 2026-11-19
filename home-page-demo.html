@@ -22,7 +22,7 @@ header{background:var(--navy);color:white;border-bottom:4px solid var(--gold)}.h
 </style>
 </head>
 <body>
-<div class="top"><span>Government Jobs • Exam Updates • Admissions • Career News</span><label>Language <select id="language"><option>English</option><option>English</option></select></label></div>
+<div class="top"><span>Government Jobs • Exam Updates • Admissions • Career News</span><span>Language: English</span></div>
 <header><div class="head"><div class="brand tc-domain-brand">WWW.TAMILANCAREERS.IN</div></div><div class="nav"><div class="navin"><a href="#latest">Latest Jobs</a><a href="#closing">Closing Soon</a><a href="#exam">Exam Dates</a><a href="#hall">Admit Card</a><a href="#results">Results</a><a href="#answer">Answer Key</a><a href="#admission">Admission</a><a href="#scholarship">Scholarship</a></div></div></header>
 <main class="wrap">
 <div class="demo"><b>DEMO HOMEPAGE – SAMPLE CONTENT ONLY.</b> All job notices, vacancies, dates, companies and exam details on this page are sample content for demonstrating the website design. They are not real notifications.</div>
@@ -67,6 +67,6 @@ header{background:var(--navy);color:white;border-bottom:4px solid var(--gold)}.h
 <script>
 function filterContent(){const q=document.getElementById('search').value.toLowerCase().trim();document.querySelectorAll('.filterrows tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
 function sideFilter(){document.getElementById('search').value=document.getElementById('sideSearch').value;filterContent();document.getElementById('latest').scrollIntoView({behavior:'smooth'})}
-document.getElementById('language').addEventListener('change',e=>{if(e.target.selectedIndex===1)alert('This demo is English-only and is intended to review the homepage layout.');});
+
 </script>
 </body></html>
