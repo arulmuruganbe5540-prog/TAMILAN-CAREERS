@@ -81,7 +81,7 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 
-const dashboardTranslations={"welcome":["Welcome to your Dashboard","உங்கள் Dashboard-க்கு வரவேற்கிறோம்"],"checking":["Checking your account details...","உங்கள் கணக்கு விவரங்கள் சரிபார்க்கப்படுகின்றன..."],"findJobs":["🔎 Find Jobs","🔎 வேலை தேடுங்கள்"],"findJobsDesc":["Search opportunities by job title, skills, job type and location.","பதவி, திறன், வேலை வகை மற்றும் ஊர் மூலம் வேலைவாய்ப்புகளைத் தேடுங்கள்."],"findJobsLink":["Search Jobs →","வேலைகளைத் தேடுங்கள் →"],"myProfile":["👤 My Profile","👤 எனது சுயவிவரம்"],"myProfileDesc":["Add and update your name, contact details, education, skills and job preferences.","பெயர், தொடர்பு விவரம், கல்வி, திறன்கள் மற்றும் வேலை விருப்பங்களை நிரப்பி புதுப்பிக்கவும்."],"manageProfile":["Manage Profile →","சுயவிவரத்தை நிர்வகிக்கவும் →"],"resumeDocs":["📄 Resume & Documents","📄 Resume & ஆவணங்கள்"],"resumeDocsDesc":["Manage your resume and education or experience certificates in private storage.","உங்கள் Resume மற்றும் கல்வி / அனுபவச் சான்றிதழ்களை தனிப்பட்ட Storage-ல் நிர்வகிக்கவும்."],"manageDocs":["Manage Documents →","ஆவணங்களை நிர்வகிக்கவும் →"],"applications":["📨 Applications","📨 விண்ணப்பங்கள்"],"applicationsDesc":["View the jobs you have applied for and their current status.","நீங்கள் விண்ணப்பித்த வேலைகளையும் அவற்றின் தற்போதைய நிலையையும் பார்க்கலாம்."],"viewApplications":["View My Applications →","எனது விண்ணப்பங்களைப் பார்க்க →"],"notifications":["🔔 Notifications & Interviews","🔔 அறிவிப்புகள் & Interview"],"notificationDesc":["View application status changes, interview invitations and replies.","விண்ணப்ப நிலை மாற்றங்கள், Interview அழைப்புகள் மற்றும் பதில்களைப் பாருங்கள்."],"openNotifications":["Open Notifications →","அறிவிப்புகளைத் திறக்க →"],"resumeSearch":["📄 Resume-Based Job Search","📄 Resume / சுயவிவர வேலை தேடல்"],"resumeSearchDesc":["Find jobs based on your education, skills, experience and preferred location.","உங்கள் கல்வி, திறன், அனுபவம் மற்றும் விரும்பும் இடத்தின் அடிப்படையில் வேலைகளைத் தேடுங்கள்."],"searchWithResume":["Search with Resume →","Resume மூலம் வேலை தேட →"],"companyDetails":["🏢 Company Details","🏢 நிறுவன விவரங்கள்"],"loadingCompany":["Loading your company details...","உங்கள் நிறுவன விவரங்கள் ஏற்றப்படுகின்றன..."],"editCompany":["Add / Edit Company Details →","நிறுவன விவரங்களை நிரப்ப / திருத்த →"],"verification":["🛡️ Company Verification","🛡️ நிறுவனச் சரிபார்ப்பு நிலை"],"verificationDesc":["View your application status, admin notes and requests for additional documents.","உங்கள் விண்ணப்ப நிலை, Admin குறிப்புகள் மற்றும் கூடுதல் ஆவணக் கோரிக்கைகளைப் பார்க்கவும்."],"viewVerification":["View Verification Status →","சரிபார்ப்பு நிலையைப் பார்க்க →"],"postJob":["📢 Post a Job","📢 வேலை வெளியிடுங்கள்"],"postJobDesc":["Authorized company members can create and save job listings as drafts.","நிறுவன உறுப்பினர் அனுமதி உள்ளவர்கள் வேலை விவரங்களை வரைவு வடிவில் உருவாக்கி சேமிக்கலாம்."],"createDraft":["Create Job Draft →","வேலை வெளியீட்டு வரைவை உருவாக்க →"],"manageJobs":["💼 Manage Company Jobs","💼 நிறுவன வேலை நிர்வாகம்"],"manageJobsDesc":["Manage published jobs, application counts and open or closed status.","வெளியிடப்பட்ட வேலைகள், விண்ணப்ப எண்ணிக்கை மற்றும் வேலை திறப்பு / மூடல் நிலையை நிர்வகிக்கவும்."],"manageCompanyJobs":["Manage Company Jobs →","நிறுவன வேலைகளை நிர்வகிக்க →"],"teamMembers":["👥 Team Members","👥 குழு உறுப்பினர்கள்"],"teamMembersDesc":["Invite HR Managers, Recruiters and Viewers, and manage their permissions.","உங்கள் நிறுவனத்தில் HR Manager, Recruiter, Viewer ஆகியோருக்கு அழைப்பு அனுப்பி அனுமதிகளை நிர்வகிக்கலாம்."],"manageMembers":["Manage Team Members →","குழு உறுப்பினர்களை நிர்வகிக்க →"],"applicants":["📨 Applicants","📨 விண்ணப்பதாரர்கள்"],"applicantsDesc":["Review applicants for your company jobs and manage application access securely.","உங்கள் நிறுவன வேலைகளையும் விண்ணப்ப நிர்வாகத்திற்கான பாதுகாப்பு நிலையும் பார்க்கவும்."],"openApplicants":["Open Applicants →","விண்ணப்பதாரர் பகுதியைத் திறக்க →"],"companyNotifications":["🔔 Company Notifications","🔔 நிறுவன அறிவிப்புகள்"],"companyNotificationDesc":["New applications, interview replies and company updates.","புதிய விண்ணப்பங்கள், Interview பதில்கள் மற்றும் நிறுவனத்திற்கான அறிவிப்புகள்."],"footer":["TAMILAN CAREERS – One platform for job seekers and employers.","TAMILAN CAREERS – வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்."]};
+const dashboardTranslations={"welcome":["Welcome to your Dashboard","Welcome to your Dashboard"],"checking":["Checking your account details...","Checking your account details..."],"findJobs":["🔎 Find Jobs","🔎 Find Jobs"],"findJobsDesc":["Search opportunities by job title, skills, job type and location.","Search opportunities by job title, skills, job type and location."],"findJobsLink":["Search Jobs →","Search Jobs →"],"myProfile":["👤 My Profile","👤 எனது சுயவிவரம்"],"myProfileDesc":["Add and update your name, contact details, education, skills and job preferences.","பெயர், தொடர்பு விவரம், கல்வி, திறன்கள் மற்றும் வேலை விருப்பங்களை நிரப்பி புதுப்பிக்கவும்."],"manageProfile":["Manage Profile →","சுயவிவரத்தை நிர்வகிக்கவும் →"],"resumeDocs":["📄 Resume & Documents","📄 Resume & ஆவணங்கள்"],"resumeDocsDesc":["Manage your resume and education or experience certificates in private storage.","உங்கள் Resume மற்றும் கல்வி / அனுபவச் சான்றிதழ்களை தனிப்பட்ட Storage-ல் நிர்வகிக்கவும்."],"manageDocs":["Manage Documents →","ஆவணங்களை நிர்வகிக்கவும் →"],"applications":["📨 Applications","📨 விண்ணப்பங்கள்"],"applicationsDesc":["View the jobs you have applied for and their current status.","நீங்கள் விண்ணப்பித்த வேலைகளையும் அவற்றின் தற்போதைய நிலையையும் பார்க்கலாம்."],"viewApplications":["View My Applications →","எனது விண்ணப்பங்களைப் பார்க்க →"],"notifications":["🔔 Notifications & Interviews","🔔 அறிவிப்புகள் & Interview"],"notificationDesc":["View application status changes, interview invitations and replies.","விண்ணப்ப நிலை மாற்றங்கள், Interview அழைப்புகள் மற்றும் பதில்களைப் பாருங்கள்."],"openNotifications":["Open Notifications →","அறிவிப்புகளைத் திறக்க →"],"resumeSearch":["📄 Resume-Based Job Search","📄 Resume / சுயவிவர வேலை தேடல்"],"resumeSearchDesc":["Find jobs based on your education, skills, experience and preferred location.","உங்கள் கல்வி, திறன், அனுபவம் மற்றும் விரும்பும் இடத்தின் அடிப்படையில் வேலைகளைத் தேடுங்கள்."],"searchWithResume":["Search with Resume →","Resume மூலம் வேலை தேட →"],"companyDetails":["🏢 Company Details","🏢 நிறுவன விவரங்கள்"],"loadingCompany":["Loading your company details...","உங்கள் நிறுவன விவரங்கள் ஏற்றப்படுகின்றன..."],"editCompany":["Add / Edit Company Details →","நிறுவன விவரங்களை நிரப்ப / திருத்த →"],"verification":["🛡️ Company Verification","🛡️ நிறுவனச் சரிபார்ப்பு நிலை"],"verificationDesc":["View your application status, admin notes and requests for additional documents.","உங்கள் விண்ணப்ப நிலை, Admin குறிப்புகள் மற்றும் கூடுதல் ஆவணக் கோரிக்கைகளைப் பார்க்கவும்."],"viewVerification":["View Verification Status →","சரிபார்ப்பு நிலையைப் பார்க்க →"],"postJob":["📢 Post a Job","📢 வேலை வெளியிடுங்கள்"],"postJobDesc":["Authorized company members can create and save job listings as drafts.","நிறுவன உறுப்பினர் அனுமதி உள்ளவர்கள் வேலை விவரங்களை வரைவு வடிவில் உருவாக்கி சேமிக்கலாம்."],"createDraft":["Create Job Draft →","வேலை வெளியீட்டு வரைவை உருவாக்க →"],"manageJobs":["💼 Manage Company Jobs","💼 நிறுவன வேலை நிர்வாகம்"],"manageJobsDesc":["Manage published jobs, application counts and open or closed status.","வெளியிடப்பட்ட வேலைகள், விண்ணப்ப எண்ணிக்கை மற்றும் வேலை திறப்பு / மூடல் நிலையை நிர்வகிக்கவும்."],"manageCompanyJobs":["Manage Company Jobs →","நிறுவன வேலைகளை நிர்வகிக்க →"],"teamMembers":["👥 Team Members","👥 குழு உறுப்பினர்கள்"],"teamMembersDesc":["Invite HR Managers, Recruiters and Viewers, and manage their permissions.","உங்கள் நிறுவனத்தில் HR Manager, Recruiter, Viewer ஆகியோருக்கு அழைப்பு அனுப்பி அனுமதிகளை நிர்வகிக்கலாம்."],"manageMembers":["Manage Team Members →","குழு உறுப்பினர்களை நிர்வகிக்க →"],"applicants":["📨 Applicants","📨 விண்ணப்பதாரர்கள்"],"applicantsDesc":["Review applicants for your company jobs and manage application access securely.","உங்கள் நிறுவன வேலைகளையும் விண்ணப்ப நிர்வாகத்திற்கான பாதுகாப்பு நிலையும் பார்க்கவும்."],"openApplicants":["Open Applicants →","விண்ணப்பதாரர் பகுதியைத் திறக்க →"],"companyNotifications":["🔔 Company Notifications","🔔 நிறுவன அறிவிப்புகள்"],"companyNotificationDesc":["New applications, interview replies and company updates.","புதிய விண்ணப்பங்கள், Interview பதில்கள் மற்றும் நிறுவனத்திற்கான அறிவிப்புகள்."],"footer":["TAMILAN CAREERS – One platform for job seekers and employers.","TAMILAN CAREERS – வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்."]};
 function dashboardLanguage(){return "en"}
 function tr(key){const item=dashboardTranslations[key];return item?item[dashboardLanguage()==="ta"?1:0]:key}
 function applyDashboardLanguage(){document.documentElement.lang="en";document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;el.textContent=tr(key)});document.getElementById("logoutBtn").textContent="Logout";}
@@ -107,10 +107,10 @@ async function loadDashboard() {
   const user = sessionData.session.user;
 
   document.getElementById("welcomeTitle").textContent =
-    (dashboardLanguage()==="ta"?"வணக்கம், ":"Hello, ") + (user.user_metadata?.full_name || (dashboardLanguage()==="ta"?"பயனரே":"there"));
+    (dashboardLanguage()==="ta"?"Hello, ":"Hello, ") + (user.user_metadata?.full_name || (dashboardLanguage()==="ta"?"there":"there"));
 
   document.getElementById("welcomeText").textContent =
-    dashboardLanguage()==="ta"?"உங்கள் கணக்கு அனுமதிகள் சரிபார்க்கப்பட்டுள்ளன. கீழே கிடைக்கும் வசதிகளைப் பார்க்கலாம்.":"Your account permissions are verified. Available tools are shown below.";
+    dashboardLanguage()==="ta"?"Your account permissions are verified. Available tools are shown below.":"Your account permissions are verified. Available tools are shown below.";
 
   const [roleResult, membershipResult] = await Promise.all([
     supabaseClient.from("user_roles")
@@ -139,7 +139,7 @@ async function loadDashboard() {
     if (isCompanyMember) types.push("Company");
 
     document.getElementById("welcomeText").textContent =
-      (dashboardLanguage()==="ta"?"கணக்கு வகை: ":"Account type: ") + types.join(" / ") + (dashboardLanguage()==="ta"?" — உங்கள் அனுமதிக்கு ஏற்ற பகுதி காட்டப்படுகிறது.":" — Your permitted workspace is shown below.");
+      (dashboardLanguage()==="ta"?"Account type: ":"Account type: ") + types.join(" / ") + (dashboardLanguage()==="ta"?" — Your permitted workspace is shown below.":" — Your permitted workspace is shown below.");
   }
 
   if (isCompanyMember) {
@@ -149,7 +149,7 @@ async function loadDashboard() {
         ? item.companies[0]
         : item.companies;
 
-      return (company?.company_name || "நிறுவனம்") +
+      return (company?.company_name || "Company") +
         " (" + item.member_role + ")";
     });
 
@@ -163,14 +163,14 @@ async function loadDashboard() {
 
   document.querySelectorAll("#notificationSummary,#companyNotificationSummary").forEach(notificationSummary => {
     if (notificationResult.error) {
-      notificationSummary.textContent = dashboardLanguage()==="ta"?"அறிவிப்புகள் அமைக்கப்பட்ட பிறகு புதிய விண்ணப்பங்கள் மற்றும் Interview தகவல்கள் இங்கே காட்டப்படும்.":"Notifications will appear here once they are configured.";
+      notificationSummary.textContent = dashboardLanguage()==="ta"?"Notifications will appear here once configured.":"Notifications will appear here once they are configured.";
     } else {
-      notificationSummary.textContent = (dashboardLanguage()==="ta"?"படிக்காத புதிய அறிவிப்புகள்: ":"Unread notifications: ") + (notificationResult.count || 0) + (dashboardLanguage()==="ta"?" · புதிய விண்ணப்பம் / Interview தகவல்களைத் திறக்கவும்.":" · Open to review new applications and interview updates.");
+      notificationSummary.textContent = (dashboardLanguage()==="ta"?"Unread notifications: ":"Unread notifications: ") + (notificationResult.count || 0) + (dashboardLanguage()==="ta"?" · Open to review new applications and interview updates.":" · Open to review new applications and interview updates.");
     }
   });
 
   const statusLines = [
-    "Account role: " + (role || "user_roles அட்டவணையில் role இல்லை"),
+    "Account role: " + (role || "No role is assigned in user_roles"),
     "Active company memberships: " + memberships.length
   ];
 
@@ -185,7 +185,7 @@ async function loadDashboard() {
   accountStatus.textContent = statusLines.join("\n");
 
   if (!isSeeker && !isCompanyMember) {
-    showNotice(dashboardLanguage()==="ta"?"இந்தக் கணக்கிற்கு Dashboard அனுமதி இன்னும் ஒதுக்கப்படவில்லை. நிர்வாகி அனுமதி வழங்கிய பிறகு இங்கே வசதிகள் தோன்றும்.":"This account does not have Dashboard access yet. Available tools will appear after an administrator grants access.");
+    showNotice(dashboardLanguage()==="ta"?"This account does not have Dashboard access yet. Available tools will appear after an administrator grants access.":"This account does not have Dashboard access yet. Available tools will appear after an administrator grants access.");
   }
 }
 
@@ -193,7 +193,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   const { error } = await supabaseClient.auth.signOut();
 
   if (error) {
-    showNotice((dashboardLanguage()==="ta"?"Logout செய்ய முடியவில்லை: ":"Could not log out: ") + error.message);
+    showNotice((dashboardLanguage()==="ta"?"Could not log out: ":"Could not log out: ") + error.message);
     return;
   }
 
@@ -201,7 +201,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 });
 
 loadDashboard().catch(error => {
-  showNotice((dashboardLanguage()==="ta"?"Dashboard ஏற்றும்போது பிழை: ":"Dashboard loading error: ") + (error.message || error));
+  showNotice((dashboardLanguage()==="ta"?"Dashboard loading error: ":"Dashboard loading error: ") + (error.message || error));
 });
 </script>
   <script src="assets/site-protection.js" defer></script>
