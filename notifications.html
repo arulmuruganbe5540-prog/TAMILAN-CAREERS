@@ -22,29 +22,29 @@ async function init(){
   db.from("tc_notifications").select("id,notification_type,title,body,related_application_id,related_interview_id,is_read,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(100),
   db.from("tc_interview_invitations").select("id,application_id,scheduled_at,interview_mode,location_or_link,letter_text,status,candidate_response_at,created_at,jobs:job_applications(job_id,jobs(job_title)),companies(company_name)").order("scheduled_at",{ascending:true})
  ]);
- if(nr.error){$("summary").className="error";$("summary").textContent="Notificationகளை ஏற்ற முடியவில்லை. முதலில் supabase-interview-notifications.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும். "+nr.error.message;return}
+ if(nr.error){$("summary").className="error";$("summary").textContent="Unable to load notifications. Check whether supabase-interview-notifications.sql has been run. "+nr.error.message;return}
  const notes=nr.data||[],invs=ir.data||[];
- $("summary").textContent="மொத்த Notificationகள்: "+notes.length+" · Unread: "+notes.filter(n=>!n.is_read).length+(ir.error?" · Unable to load interview list: "+ir.error.message:"");
+ $("summary").textContent="Total notifications: "+notes.length+" · Unread: "+notes.filter(n=>!n.is_read).length+(ir.error?" · Unable to load interview list: "+ir.error.message:"");
  const candidateRole=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  const isCandidate=candidateRole.data?.role==="job_seeker";
  const active=invs.filter(i=>i.status==="pending"||i.status==="accepted");
  $("interviews").innerHTML=active.length?'<h2>Interview Invitations</h2>'+active.map(i=>{
   const rel=Array.isArray(i.jobs)?i.jobs[0]:i.jobs,job=Array.isArray(rel?.jobs)?rel.jobs[0]:rel?.jobs,co=Array.isArray(i.companies)?i.companies[0]:i.companies;
-  return '<article class="item"><h3>'+esc(job?.job_title||"வேலை")+'</h3><div><b>நிறுவனம்:</b> '+esc(co?.company_name||"நிறுவனம்")+'</div><div><b>தேதி:</b> '+esc(new Date(i.scheduled_at).toLocaleString("ta-IN"))+'</div><div><b>வகை:</b> '+esc(modeText[i.interview_mode]||i.interview_mode)+'</div>'+(i.location_or_link?'<div><b>இடம் / இணைப்பு:</b> '+esc(i.location_or_link)+'</div>':"")+(i.letter_text?'<div class="letter">'+esc(i.letter_text)+'</div>':"")+'<span class="pill">'+esc(i.status==="pending"?"பதில் அளிக்க வேண்டும்":i.status==="accepted"?"ஏற்றுக்கொள்ளப்பட்டது":i.status)+'</span>'+(isCandidate&&i.status==="pending"?'<div><button class="btn" data-response="accepted" data-id="'+esc(i.id)+'">ஏற்றுக்கொள்கிறேன்</button><button class="btn alt" data-response="declined" data-id="'+esc(i.id)+'">வர முடியாது</button></div>':"")+'</article>';
- }).join(""):'<h2>Interview Invitations</h2><div class="empty">தற்போது நிலுவையில் உள்ள Interview Invitationகள் இல்லை.</div>';
- $("notifications").innerHTML='<h2>அனைத்து Notificationகள்</h2><div class="panel"><button class="btn alt" id="markAll">அனைத்தையும் படித்ததாகக் குறிக்கவும்</button></div>'+(notes.length?notes.map(n=>'<article class="item '+(!n.is_read?'unread':'')+'"><span class="pill">'+esc(typeText[n.notification_type]||"Notification")+'</span> <span class="muted">'+esc(new Date(n.created_at).toLocaleString("ta-IN"))+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p>'+(!n.is_read?'<button class="btn alt" data-read="'+esc(n.id)+'">படித்ததாகக் குறிக்கவும்</button>': '<span class="muted">படிக்கப்பட்டது</span>')+(n.related_application_id?'<a class="btn alt" href="my-applications.html">விண்ணப்பத்தைப் பார்க்க</a>':"")+'</article>').join(""):'<div class="empty">இன்னும் Notificationகள் இல்லை.</div>');
+  return '<article class="item"><h3>'+esc(job?.job_title||"Job")+'</h3><div><b>Company:</b> '+esc(co?.company_name||"Company")+'</div><div><b>Date:</b> '+esc(new Date(i.scheduled_at).toLocaleString("en-IN"))+'</div><div><b>Type:</b> '+esc(modeText[i.interview_mode]||i.interview_mode)+'</div>'+(i.location_or_link?'<div><b>Location / Link:</b> '+esc(i.location_or_link)+'</div>':"")+(i.letter_text?'<div class="letter">'+esc(i.letter_text)+'</div>':"")+'<span class="pill">'+esc(i.status==="pending"?"Response required":i.status==="accepted"?"Accepted":i.status)+'</span>'+(isCandidate&&i.status==="pending"?'<div><button class="btn" data-response="accepted" data-id="'+esc(i.id)+'">ஏற்றுக்கொள்கிறேன்</button><button class="btn alt" data-response="declined" data-id="'+esc(i.id)+'">வர முடியாது</button></div>':"")+'</article>';
+ }).join(""):'<h2>Interview Invitations</h2><div class="empty">There are no pending interview invitations.</div>';
+ $("notifications").innerHTML='<h2>All Notifications</h2><div class="panel"><button class="btn alt" id="markAll">Mark All as Read</button></div>'+(notes.length?notes.map(n=>'<article class="item '+(!n.is_read?'unread':'')+'"><span class="pill">'+esc(typeText[n.notification_type]||"Notification")+'</span> <span class="muted">'+esc(new Date(n.created_at).toLocaleString("en-IN"))+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p>'+(!n.is_read?'<button class="btn alt" data-read="'+esc(n.id)+'">Mark as Read</button>': '<span class="muted">Read</span>')+(n.related_application_id?'<a class="btn alt" href="my-applications.html">விண்ணப்பத்தைப் பார்க்க</a>':"")+'</article>').join(""):'<div class="empty">இன்னும் Notificationகள் இல்லை.</div>');
 
 }
  $("notifications").addEventListener("click",async e=>{
   const read=e.target.closest("[data-read]"),all=e.target.closest("#markAll");
-  if(read){read.disabled=true;const {error}=await db.rpc("tc_mark_notification_read",{p_notification_id:read.dataset.read});if(error){read.disabled=false;alert("பிழை: "+error.message);return}await init()}
-  if(all){all.disabled=true;const {error}=await db.rpc("tc_mark_all_notifications_read");if(error){all.disabled=false;alert("பிழை: "+error.message);return}await init()}
+  if(read){read.disabled=true;const {error}=await db.rpc("tc_mark_notification_read",{p_notification_id:read.dataset.read});if(error){read.disabled=false;alert("Error: "+error.message);return}await init()}
+  if(all){all.disabled=true;const {error}=await db.rpc("tc_mark_all_notifications_read");if(error){all.disabled=false;alert("Error: "+error.message);return}await init()}
  });
  $("interviews").addEventListener("click",async e=>{
   const b=e.target.closest("[data-response]");if(!b)return;
-  const label=b.textContent;b.disabled=true;b.textContent="சேமிக்கப்படுகிறது...";
+  const label=b.textContent;b.disabled=true;b.textContent="Saving...";
   const {error}=await db.rpc("tc_respond_interview_invitation",{p_interview_id:b.dataset.id,p_response:b.dataset.response});
-  if(error){b.disabled=false;b.textContent=label;alert("பதில் சேமிக்க முடியவில்லை: "+error.message);return}
+  if(error){b.disabled=false;b.textContent=label;alert("Unable to save response: "+error.message);return}
   await init();
  });
 init();
