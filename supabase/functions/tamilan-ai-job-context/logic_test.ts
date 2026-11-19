@@ -1,4 +1,4 @@
-import { MAX_DESCRIPTION_LENGTH, normalizeCountry, normalizeSearchQuery, publicJobSource, rateLimitDecision, safeHttpsUrl } from "./logic.ts";
+import { MAX_DESCRIPTION_LENGTH, normalizeCountry, normalizeSearchQuery, parseRetrievalInput, publicJobSource, rateLimitDecision, safeHttpsUrl } from "./logic.ts";
 function equal(actual: unknown, expected: unknown, label: string) {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error(label + ": expected " + JSON.stringify(expected) + ", got " + JSON.stringify(actual));
 }
@@ -45,4 +45,33 @@ Deno.test("job source prefers official HTTPS notice and bounds description", () 
   equal(source?.citation_url, "https://example.gov.in/notice", "official citation");
   equal(source?.description.length, MAX_DESCRIPTION_LENGTH, "description bound");
   if (source?.citation_url === "https://apply.example.com") throw new Error("application URL must not become citation");
+});
+
+Deno.test("request body parser rejects non-object JSON and arrays", () => {
+  equal(parseRetrievalInput(null).ok, false, "null body");
+  equal(parseRetrievalInput([]).ok, false, "array body");
+  equal(parseRetrievalInput("query").ok, false, "string body");
+});
+Deno.test("request body parser rejects unexpected keys", () => {
+  const result = parseRetrievalInput({ query: "engineer", admin: true });
+  equal(result.ok, false, "extra key");
+  if (!result.ok) equal(result.error, "Unsupported request field", "extra key message");
+});
+Deno.test("request body parser returns normalized query and country", () => {
+  const result = parseRetrievalInput({ query: "  data   analyst ", country: "  India " });
+  equal(result.ok, true, "valid body");
+  if (result.ok) {
+    equal(result.value.query, "data analyst", "normalized query");
+    equal(result.value.country, "India", "normalized country");
+  }
+});
+Deno.test("request body parser defaults missing fields and rejects invalid field values", () => {
+  const empty = parseRetrievalInput({});
+  equal(empty.ok, true, "empty object");
+  if (empty.ok) {
+    equal(empty.value.query, "", "missing query default");
+    equal(empty.value.country, "", "missing country default");
+  }
+  equal(parseRetrievalInput({ query: 123 }).ok, false, "query type");
+  equal(parseRetrievalInput({ country: "x".repeat(101) }).ok, false, "country length");
 });
