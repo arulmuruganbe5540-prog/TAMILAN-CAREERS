@@ -383,7 +383,7 @@ async function createMockSignedInPage(role = "job_seeker", viewport = { width: 3
     const url = new URL(route.request().url());
     const table = url.pathname.split("/").pop();
     const method = route.request().method();
-    if (table === "user_roles") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ role }) });
+    if (table === "user_roles") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(role === "super_admin" ? [{ role }] : { role }) });
     if (table === "profiles") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ id: user.id, full_name: "Test Candidate", email: user.email, phone: "" }) });
     if (table === "job_seeker_profiles") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ user_id: user.id, headline: "Test Profile", bio: "", current_city: "Salem", total_experience_months: 0 }) });
     if (table === "candidate_preferences") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ user_id: user.id, preferred_city: "Salem", preferred_employment_type: "Full Time" }) });
