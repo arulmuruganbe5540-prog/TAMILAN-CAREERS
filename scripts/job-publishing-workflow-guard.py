@@ -31,6 +31,26 @@ checks = {
         "tc_admin_publish_job" in admin,
     "Admin UI restricts access using the signed-in user role row under RLS":
         'from("user_roles")' in admin and '"super_admin"' in admin,
+    "Admin review requires an authenticated Super Admin":
+        'from("user_roles")' in admin and '"super_admin"' in admin and 'db.auth.getUser()' in admin,
+    "Admin review enforces MFA assurance before showing controls":
+        'getAuthenticatorAssuranceLevel()' in admin and 'currentLevel!=="aal2"' in admin,
+    "Admin queue offers explicit approve and reject decisions":
+        'data-action="approve"' in admin and 'data-action="reject"' in admin,
+    "Approval is a separate step and does not publish immediately":
+        'status==="pending_review"' in admin and 'status==="approved"' in admin and 'update.reviewed_by=user.id' in admin,
+    "Publishing requires a separate confirmation and protected RPC":
+        'confirm("இந்த Approved வேலைவாய்ப்பை' in admin and 'db.rpc("tc_admin_publish_job"' in admin,
+    "Company jobs cannot be published until the company is verified":
+        "c.verification_status='verified'" in migration and "v_review.status <> 'approved'" in migration,
+    "Admin rejects require a non-empty reason":
+        'if(!note.trim())' in admin and 'update.review_note=note.trim()' in admin,
+    "Government duplicate detection runs before review save":
+        "checkGovernmentDuplicate(p,id)" in admin and "govDuplicateMatch" in admin,
+    "Admin form validates required job details and salary bounds":
+        '!p.title||!p.category||!p.type||!p.location||!p.description' in admin and 'Number(p.salaryMin)>Number(p.salaryMax)' in admin,
+    "Admin queue errors are shown instead of silently ignored":
+        'if(error){$("queue").innerHTML' in admin,
     "Admin UI captures salary period":
         'id="salaryPeriod"' in admin and '"salaryPeriod"' in admin,
     "public listing labels salary period":
