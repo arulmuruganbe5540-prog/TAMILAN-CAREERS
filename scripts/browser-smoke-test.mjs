@@ -473,6 +473,45 @@ await check("Employer job draft validates salary range, saves and submits for ad
   } finally { await p.close(); }
 });
 
+
+await check("Notifications mark-read, mark-all and interview responses call each RPC once", async () => {
+  const p = await createMockSignedInPage();
+  let isRead = false, markAllCalls = 0, interviewResponses = 0;
+  await p.route("**/rest/v1/tc_notifications**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify([{ id: "notification-smoke", notification_type: "application_status", title: "Application update", body: "Your application is under review", related_application_id: "application-smoke", related_interview_id: null, is_read: isRead, created_at: "2026-11-18T10:00:00Z" }])
+  }));
+  await p.route("**/rest/v1/tc_interview_invitations**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify([{ id: "interview-smoke", application_id: "application-smoke", scheduled_at: "2030-01-01T10:00:00Z", interview_mode: "online", location_or_link: "https://example.test/meeting", letter_text: "Mock interview invitation", status: "pending", jobs: { job_id: "job-smoke", jobs: { job_title: "Accountant" } }, companies: { company_name: "Smoke Test Ltd" } }])
+  }));
+  await p.route("**/rest/v1/rpc/tc_mark_notification_read", route => {
+    isRead = true;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
+  });
+  await p.route("**/rest/v1/rpc/tc_mark_all_notifications_read", route => {
+    markAllCalls++;
+    isRead = true;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
+  });
+  await p.route("**/rest/v1/rpc/tc_respond_interview_invitation", route => {
+    interviewResponses++;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
+  });
+  try {
+    await p.goto(base + "/notifications.html", { waitUntil: "domcontentloaded" });
+    await p.locator("[data-read='notification-smoke']").waitFor({ state: "visible" });
+    await p.locator("[data-read='notification-smoke']").click();
+    await p.waitForFunction(() => document.getElementById("summary")?.textContent.includes("படிக்காதவை: 0"));
+    await p.locator("#markAll").click();
+    await p.waitForTimeout(100);
+    if (markAllCalls !== 1) throw new Error("Mark-all action called " + markAllCalls + " times; expected exactly once");
+    await p.locator("[data-response='accepted']").click();
+    await p.waitForFunction(() => document.getElementById("interviews")?.textContent.includes("ஏற்றுக்கொள்ளப்பட்டது"));
+    if (interviewResponses !== 1) throw new Error("Interview response RPC called " + interviewResponses + " times; expected exactly once");
+  } finally { await p.close(); }
+});
+
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
