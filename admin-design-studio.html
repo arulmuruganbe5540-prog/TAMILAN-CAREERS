@@ -3,7 +3,7 @@
 <head>
 <meta name="robots" content="noindex,follow">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Website Design Studio | TAMILAN CAREERS</title>
+<title>Website Design Studio | <span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="assets/site-protection.css">
 <style>
@@ -15,18 +15,22 @@
 #loading,#gate{max-width:540px;margin:12vh auto;background:#fff;padding:25px;border-radius:16px;text-align:center;line-height:1.8}#gate{display:none}.hidden{display:none!important}
 @media(max-width:850px){.shell{display:block}.side{padding:14px}.side p{display:none}.side nav{display:flex;gap:5px;overflow:auto}.side a{white-space:nowrap}.main{padding:15px}.grid{grid-template-columns:1fr}}
 </style>
-</head>
+<style>
+/* Consistent premium text-only site identity */
+.tc-domain-brand{display:inline-block!important;color:#eaf8ff!important;font-size:clamp(13px,2vw,19px)!important;font-weight:900!important;letter-spacing:.8px!important;line-height:1.2!important;white-space:nowrap!important;text-decoration:none!important;text-shadow:0 1px 10px rgba(72,190,255,.16)}
+@media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
+</style></head>
 <body>
 <div id="loading">Super Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
 <div id="gate"><h2>🔐 Super Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதியைத் திறக்க Super Admin கணக்கில் Login செய்யவும்.</p><a href="admin-login.html">Admin Login</a></div>
 <div id="app" class="shell hidden">
-<aside class="side"><div class="brand">TAMILAN <span>CAREERS</span></div><p>ADVANCED SUPER ADMIN<br>Website Design Studio</p><nav><a href="admin-control.html">▦ Admin Dashboard</a><a class="active" href="admin-design-studio.html">🎨 Design Studio</a><a href="admin-job-post.html">✚ Job Management</a><a href="index.html">🌐 Live Website</a><a href="#" id="logout">↪ Logout</a></nav></aside>
+<aside class="side"><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><p>ADVANCED SUPER ADMIN<br>Website Design Studio</p><nav><a href="admin-control.html">▦ Admin Dashboard</a><a class="active" href="admin-design-studio.html">🎨 Design Studio</a><a href="admin-job-post.html">✚ Job Management</a><a href="index.html">🌐 Live Website</a><a href="#" id="logout">↪ Logout</a></nav></aside>
 <main class="main">
 <div class="top"><div><div class="muted">SUPER ADMIN / WEBSITE MANAGEMENT</div><h1>Website Design Studio</h1><div class="muted">முகப்புப் பக்கத்தின் தோற்றத்தை மாற்றுவதற்கான கட்டுப்பாட்டு மையம்</div></div><a class="btn light" href="index.html" target="_blank" rel="noopener">Website பார்க்க ↗</a></div>
 <div class="notice"><b>முதல் கட்டம் — Live Preview:</b> இங்கு மாற்றும் நிறம், தலைப்பு, விளக்கம் மற்றும் படம் இந்த preview-வில் மட்டும் தெரியும். நிரந்தரமாக Website-ல் சேமிப்பதும் படங்களை Storage-க்கு Upload செய்வதும் அடுத்த பாதுகாப்பான Database + Storage இணைப்புக் கட்டத்தில் சேர்க்கப்படும். இப்போது எந்த மாற்றமும் நேரடியாக Public Website-ஐ மாற்றாது.</div>
 <div class="grid">
 <section class="panel"><h2>🎨 Design Settings</h2>
-<div class="field"><label for="brand">Website பெயர்</label><input id="brand" value="TAMILAN CAREERS" maxlength="60"></div>
+<div class="field"><label for="brand">Website பெயர்</label><input id="brand" value="<span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span>" maxlength="60"></div>
 <div class="field"><label for="headline">முகப்புப் பக்க தலைப்பு</label><input id="headline" value="உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!" maxlength="120"></div>
 <div class="field"><label for="subtitle">துணை விளக்கம்</label><textarea id="subtitle" maxlength="300">இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</textarea></div>
 <div class="field"><label>முதன்மை நிறம்</label><div class="colorline"><input type="color" id="primary" value="#101d3a"><span class="muted" id="colorValue">#101D3A</span></div></div>
@@ -35,10 +39,10 @@
 <div class="hint" id="status" role="status">Preview மாற்றங்கள் தானாகவே வலப்புறம் தெரியும்.</div>
 </section>
 <section class="panel"><h2>👁️ Live Website Preview</h2><div class="preview">
-<div class="preview-head"><div class="preview-brand" id="pvBrand">TAMILAN CAREERS</div><div class="preview-nav">முகப்பு　 வேலைகள்　 துறைகள்　 உதவி</div></div>
+<div class="preview-head"><div class="preview-brand" id="pvBrand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><div class="preview-nav">முகப்பு　 வேலைகள்　 துறைகள்　 உதவி</div></div>
 <div class="preview-hero" id="pvHero"><h2 id="pvHeadline">உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!</h2><p id="pvSubtitle">இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</p><div class="preview-search">வேலை / திறமை தேடுங்கள்　　இடம்　　தேடுக</div></div>
 <div class="preview-cards"><div class="preview-card"><b>🏛️</b>அரசு வேலைகள்</div><div class="preview-card"><b>🏢</b>தனியார் வேலைகள்</div><div class="preview-card"><b>🌍</b>வெளிநாட்டு வேலைகள்</div></div>
-<div class="preview-foot">TAMILAN CAREERS · வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்</div>
+<div class="preview-foot"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span> · வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்</div>
 </div></section>
 </div>
 </main>
@@ -61,7 +65,7 @@ async function init(){
   const {data:settings,error:settingsError}=await client.from("site_settings").select("site_name,headline,subtitle,primary_color,banner_path").eq("setting_key","homepage").maybeSingle();
   if(settingsError)throw settingsError;
   if(settings){
-   $("brand").value=settings.site_name||"TAMILAN CAREERS";
+   $("brand").value=settings.site_name||"<span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span>";
    $("headline").value=settings.headline||$("headline").value;
    $("subtitle").value=settings.subtitle||$("subtitle").value;
    $("primary").value=settings.primary_color||"#101d3a";
@@ -73,7 +77,7 @@ async function init(){
  }catch(e){gate("Design Settings ஏற்ற முடியவில்லை: "+(e.message||"Database connection error"))}
 }
 function update(){
- $("pvBrand").textContent=$("brand").value||"TAMILAN CAREERS";
+ $("pvBrand").textContent=$("brand").value||"<span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span>";
  $("pvHeadline").textContent=$("headline").value;
  $("pvSubtitle").textContent=$("subtitle").value;
  $("pvHero").style.backgroundColor=$("primary").value;
@@ -108,7 +112,7 @@ $("save").addEventListener("click",async()=>{
    if(uploadError)throw uploadError;
   }
   const nextPath=file?uploadedPath:((window.__bannerPreview===null)?null:currentBannerPath);
-  const payload={setting_key:"homepage",site_name:$("brand").value.trim()||"TAMILAN CAREERS",headline:$("headline").value.trim(),subtitle:$("subtitle").value.trim(),primary_color:$("primary").value,banner_path:nextPath,updated_by:userData.user.id,updated_at:new Date().toISOString()};
+  const payload={setting_key:"homepage",site_name:$("brand").value.trim()||"<span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span>",headline:$("headline").value.trim(),subtitle:$("subtitle").value.trim(),primary_color:$("primary").value,banner_path:nextPath,updated_by:userData.user.id,updated_at:new Date().toISOString()};
   const {error:saveError}=await client.from("site_settings").upsert(payload,{onConflict:"setting_key"});
   if(saveError)throw saveError;
   if(currentBannerPath&&currentBannerPath!==nextPath)await client.storage.from("site-assets").remove([currentBannerPath]);
@@ -123,7 +127,7 @@ $("save").addEventListener("click",async()=>{
  }finally{button.disabled=false;button.textContent="💾 மாற்றங்களை Website-ல் சேமிக்க"}
 });
 $("reset").addEventListener("click",()=>{
- $("brand").value="TAMILAN CAREERS";$("headline").value="உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!";
+ $("brand").value="<span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span>";$("headline").value="உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!";
  $("subtitle").value="இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.";
  $("primary").value="#101d3a";$("clearImage").click();update();
 });
