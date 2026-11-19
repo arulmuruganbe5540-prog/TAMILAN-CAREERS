@@ -26,6 +26,14 @@ async function open(path) {
 await check("Homepage loads, career categories navigate and job search works", async () => {
   await open("index.html");
   if (!(await page.title()).includes("TAMILAN CAREERS")) throw new Error("Unexpected homepage title");
+  const structuredData = await page.evaluate(() => ({
+    website: JSON.parse(document.querySelector("#tc-website-jsonld")?.textContent || "null"),
+    organization: JSON.parse(document.querySelector("#tc-organization-jsonld")?.textContent || "null")
+  }));
+  if (structuredData.website?.["@type"] !== "WebSite" || structuredData.organization?.["@type"] !== "Organization" ||
+      structuredData.organization?.email !== "arulmuruganbe5540@gmail.com" || structuredData.organization?.url !== location.origin + "/") {
+    throw new Error("Homepage structured data is missing or inconsistent: " + JSON.stringify(structuredData));
+  }
   const categoryCard = page.locator('.category-card[href*="category=IT"]').first();
   await categoryCard.click();
   await page.waitForURL(/jobs\.html\?/);
