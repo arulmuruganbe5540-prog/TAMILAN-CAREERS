@@ -10,7 +10,7 @@
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head><body><header><div class="logo"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="dashboard.html">Dashboard</a><a href="job-seeker-profile.html">Profile</a><a href="jobs.html">Find Jobs</a></nav></header>
 <main><section class="hero"><h1>📄 Resume & Documents</h1><p>Securely store your resume and certificates in private storage belonging to your account.</p></section>
-<section class="panel"><h2>Upload a Document</h2><p class="muted">PDF, DOC அல்லது DOCX மட்டும். Each file can be up to 5 MB. You can upload up to 5 documents. Do not upload Aadhaar, bank details, OTPs or unnecessary sensitive information.</p>
+<section class="panel"><h2>Upload a Document</h2><p class="muted">PDF, DOC or DOCX files only. Each file can be up to 5 MB. You can upload up to 5 documents. Do not upload Aadhaar, bank details, OTPs or unnecessary sensitive information.</p>
 <div class="drop"><label for="document">Resume / Education Certificate / Experience Certificate</label><br><input id="document" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><br><button class="btn" id="uploadBtn">Upload Securely</button></div><div id="notice" class="notice" role="status" aria-live="polite"></div></section>
 <section class="panel"><h2>My Documents</h2><p class="muted">You can view, download or delete only the files you have uploaded.</p><div id="fileList"><div class="empty">Loading documents...</div></div><div style="margin-top:14px"><button class="btn secondary" id="refreshBtn">Refresh</button></div></section>
 <div class="warning"><strong>Privacy:</strong> This page does not create public URLs. Each file is stored in your User ID folder. A private <code>candidate-resumes</code> bucket and owner-based Storage Policies must be configured in Supabase. Uploads will fail if they are not configured; security will not be weakened to allow uploads.</div></main>
@@ -35,31 +35,31 @@ async function initialise(){
  await loadFiles();
 }
 async function loadFiles(){
- $("fileList").innerHTML='<div class="empty">ஏற்றப்படுகிறது...</div>';
+ $("fileList").innerHTML='<div class="empty">Loading...</div>';
  const {data,error}=await client.storage.from(BUCKET).list(currentUser.id,{limit:100,sortBy:{column:"created_at",order:"desc"}});
  if(error)throw error;
  const files=(data||[]).filter(x=>x.name&&!x.name.startsWith("."));
- if(!files.length){$("fileList").innerHTML='<div class="empty">இன்னும் ஆவணங்கள் பதிவேற்றப்படவில்லை.</div>';return}
+ if(!files.length){$("fileList").innerHTML='<div class="empty">No documents uploaded yet.</div>';return}
  $("fileList").innerHTML=files.map(f=>{
  const meta=f.metadata||{};const label=f.name.replace(/^\d+_[a-f0-9-]+_/i,"");
- return '<article class="file"><div><strong>📎 '+safe(label)+'</strong><small>'+safe(prettySize(meta.size||0))+' · '+safe(meta.mimetype||"ஆவணம்")+'</small></div><div class="actions"><button class="btn secondary" data-download="'+safe(f.name)+'">பதிவிறக்கம்</button><button class="btn" style="background:#b42318" data-delete="'+safe(f.name)+'">நீக்கு</button></div></article>'
+ return '<article class="file"><div><strong>📎 '+safe(label)+'</strong><small>'+safe(prettySize(meta.size||0))+' · '+safe(meta.mimetype||"ஆவணம்")+'</small></div><div class="actions"><button class="btn secondary" data-download="'+safe(f.name)+'">Download</button><button class="btn" style="background:#b42318" data-delete="'+safe(f.name)+'">Delete</button></div></article>'
  }).join("");
  document.querySelectorAll("[data-download]").forEach(b=>b.addEventListener("click",()=>downloadFile(b.dataset.download)));
  document.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>deleteFile(b.dataset.delete)));
 }
 async function uploadFile(){
- const file=$("document").files[0];if(!file){message("முதலில் ஒரு கோப்பைத் தேர்ந்தெடுக்கவும்.",false);return}
+ const file=$("document").files[0];if(!file){message("Please select a file first.",false);return}
  const ext=(file.name.split(".").pop()||"").toLowerCase();
  const mimeByExt={pdf:"application/pdf",doc:"application/msword",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
  const contentType=mimeByExt[ext];
- if(!contentType||(file.type&&file.type!=="application/octet-stream"&&file.type!==contentType)){message("PDF, DOC அல்லது DOCX கோப்புகள் மட்டுமே அனுமதி. கோப்பின் வகையைச் சரிபார்க்கவும்.",false);return}
- if(!file.size){message("காலியான கோப்பை பதிவேற்ற முடியாது.",false);return}
- if(file.size>MAX){message("கோப்பு 5 MB-ஐ விட அதிகமாக உள்ளது.",false);return}
+ if(!contentType||(file.type&&file.type!=="application/octet-stream"&&file.type!==contentType)){message("Only PDF, DOC or DOCX files are allowed. Check the file type.",false);return}
+ if(!file.size){message("Empty files cannot be uploaded.",false);return}
+ if(file.size>MAX){message("The file exceeds 5 MB.",false);return}
  const {data:existing,error:listErr}=await client.storage.from(BUCKET).list(currentUser.id,{limit:100});
- if(listErr)throw listErr;if((existing||[]).filter(x=>x.name&&!x.name.startsWith(".")).length>=5){message("அதிகபட்சம் 5 ஆவணங்கள் மட்டுமே பதிவேற்றலாம். புதிய கோப்புக்கு முன் ஒன்றை நீக்கவும்.",false);return}
+ if(listErr)throw listErr;if((existing||[]).filter(x=>x.name&&!x.name.startsWith(".")).length>=5){message("You can upload a maximum of 5 documents. Delete one before uploading another.",false);return}
  const clean=file.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g,"_").slice(-90)||("document."+ext);
  const path=currentUser.id+"/"+Date.now()+"_"+crypto.randomUUID()+"_"+clean;
- $("uploadBtn").disabled=true;$("uploadBtn").textContent="பதிவேற்றப்படுகிறது...";
+ $("uploadBtn").disabled=true;$("uploadBtn").textContent="Uploading...";
  try{
   const {error:uploadError}=await client.storage.from(BUCKET).upload(path,file,{cacheControl:"3600",upsert:false,contentType});
   if(uploadError)throw uploadError;
@@ -74,9 +74,9 @@ async function uploadFile(){
   });
   if(recordError){
    const {error:cleanupError}=await client.storage.from(BUCKET).remove([path]);
-   throw new Error("Resume பதிவைச் சேமிக்க முடியவில்லை. "+recordError.message+(cleanupError?" கோப்பை தானாக நீக்கவும் முடியவில்லை; ஆதரவைத் தொடர்புகொள்ளவும்.":" பதிவேற்றிய கோப்பு நீக்கப்பட்டது."));
+   throw new Error("Unable to save the resume record. "+recordError.message+(cleanupError?" The file could not be deleted automatically; please contact support.":" The uploaded file was deleted."));
   }
-  $("document").value="";message("ஆவணம் பாதுகாப்பாகப் பதிவேற்றப்பட்டு உங்கள் Resume பதிவிலும் சேர்க்கப்பட்டது.",true);await loadFiles()
+  $("document").value="";message("The document was securely uploaded and added to your resume records.",true);await loadFiles()
  }
  finally{$("uploadBtn").disabled=false;$("uploadBtn").textContent="Upload Securely"}
 }
@@ -85,17 +85,17 @@ async function downloadFile(name){
  if(error)throw error;window.location.href=data.signedUrl;
 }
 async function deleteFile(name){
- if(!confirm("இந்த ஆவணத்தை நிரந்தரமாக நீக்கவா?"))return;
+ if(!confirm("Permanently delete this document?"))return;
  const path=currentUser.id+"/"+name;
   // Delete the private Storage object first; retain metadata if Storage rejects the request.
   const {error:storageError}=await client.storage.from(BUCKET).remove([path]);
-  if(storageError)throw new Error("Storage கோப்பை நீக்க முடியவில்லை; Resume பதிவு பாதுகாப்பாகவே உள்ளது. மீண்டும் முயற்சிக்கவும்: "+storageError.message);
+  if(storageError)throw new Error("Unable to delete the storage file; the resume record remains safe. Please try again: "+storageError.message);
   const {error:recordError}=await client.from("candidate_resumes").delete().eq("user_id",currentUser.id).eq("file_path",path);
-  if(recordError)throw new Error("Storage கோப்பு நீக்கப்பட்டது; ஆனால் Resume பதிவை நீக்க முடியவில்லை. பக்கத்தைப் புதுப்பித்து மீண்டும் முயற்சிக்கவும்: "+recordError.message);
-  message("ஆவணமும் அதன் Resume பதிவும் நீக்கப்பட்டன.",true);await loadFiles();
+  if(recordError)throw new Error("The storage file was deleted, but the resume record could not be deleted. Refresh the page and try again: "+recordError.message);
+  message("The document and its resume record were deleted.",true);await loadFiles();
 }
-$("uploadBtn").addEventListener("click",()=>uploadFile().catch(e=>message("பதிவேற்ற முடியவில்லை: "+(e.message||e)+" — Storage bucket / Policies அமைப்பைச் சரிபார்க்கவும்.",false)));
+$("uploadBtn").addEventListener("click",()=>uploadFile().catch(e=>message("Upload failed: "+(e.message||e)+" — Check the storage bucket and policies.",false)));
 $("refreshBtn").addEventListener("click",()=>loadFiles().catch(e=>message(e.message||String(e),false)));
-initialise().catch(e=>message("பக்கத்தைத் தொடங்க முடியவில்லை: "+(e.message||e),false));
+initialise().catch(e=>message("Unable to initialise the page: "+(e.message||e),false));
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
