@@ -15,3 +15,7 @@ document.addEventListener('keydown',e=>{if(editable(e.target))return;const k=Str
 
 /* Render one consistent, responsive information footer on all protected pages. */
 (function(){var s=document.createElement('script');s.src='assets/professional-footer.js';s.defer=true;document.head.appendChild(s);})();
+
+
+/* Load the existing AdSense publisher script once on every protected page. */
+(function(){var src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418';if(!document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')){var ad=document.createElement('script');ad.async=true;ad.src=src;ad.crossOrigin='anonymous';document.head.appendChild(ad);}})();
