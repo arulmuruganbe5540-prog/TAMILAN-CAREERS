@@ -49,6 +49,10 @@ checks = {
         and homepage.index('data-home-section="country-government"') < homepage.index('data-home-section="qualification_pathways"')
         and homepage.index('data-home-section="qualification_pathways"') < homepage.index('data-home-section="career_tools"')
         and "const order=defaults;" in homepage,
+    "main navigation links directly to private jobs and career tools":
+        '<a href="jobs.html?job_kind=private">Private Jobs</a>' in homepage
+        and '<a href="#career-tools">Career Tools</a>' in homepage
+        and '<a href="indian-government-jobs.html">Government Jobs</a>' in homepage,
 }
 for page in pages:
     content = page.read_text(encoding="utf-8")
