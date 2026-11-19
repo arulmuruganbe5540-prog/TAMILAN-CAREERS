@@ -11,7 +11,7 @@ pages = sorted(ROOT.glob("*.html"))
 
 checks = {
     "header shows one canonical www domain label":
-        'tc-site-domain">www.tamilancareers.in</span>' in global_js
+        global_js.lower().count('tc-site-domain">www.tamilancareers.in</span>') == 1
         and 'querySelectorAll(".brand,.footer-brand")' not in global_js,
     "duplicate static language list is removed":
         'class="tc-langs"' not in global_js and 'மொழிகள் / Languages:' not in global_js,
