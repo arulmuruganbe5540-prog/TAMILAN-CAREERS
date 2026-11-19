@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
 <meta name="robots" content="noindex,follow">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101d3a">
-<title>விண்ணப்பதாரர்கள் | TAMILAN CAREERS</title>
+<title>Applicants | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#18243a;font-family:Arial,"Noto Sans Tamil",sans-serif;line-height:1.65}
@@ -18,13 +18,13 @@ main{max-width:1050px;margin:25px auto;padding:0 15px}.hero{background:linear-gr
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head>
 <body>
-<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="index.html">முகப்பு</a><a href="dashboard.html">Dashboard</a><a href="notifications.html">🔔 அறிவிப்புகள்</a><a href="job-posting.html">வேலை வெளியீடு</a><a href="company-jobs.html">எனது வேலைகள்</a><a href="company-members.html">குழு உறுப்பினர்கள்</a></nav></header>
+<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a><a href="notifications.html">🔔 Notifications</a><a href="job-posting.html">Post a Job</a><a href="company-jobs.html">My Jobs</a><a href="company-members.html">Team Members</a></nav></header>
 <main>
-<section class="hero"><h1>👥 வேலை விண்ணப்பதாரர்கள்</h1><p>உங்கள் நிறுவன வேலைகளுக்கு வந்த விண்ணப்பங்களைப் பாதுகாப்பாகப் பாருங்கள்.</p></section>
-<div id="message" class="panel">கணக்கு மற்றும் நிறுவன அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section class="hero"><h1>👥 வேலை Applicants</h1><p>Securely review applications received for your company's job postings.</p></section>
+<div id="message" class="panel">Checking account and company permissions...</div>
 <section id="workspace" hidden>
-<div class="panel"><label for="company">நிறுவனம் தேர்வு</label><select id="company" class="select"></select></div>
-<div class="grid"><div class="stat">தேர்ந்தெடுத்த நிறுவன வேலைகள்<b id="jobCount">—</b></div><div class="stat">காணக்கூடிய விண்ணப்பங்கள்<b id="appCount">—</b></div></div>
+<div class="panel"><label for="company">Select Company</label><select id="company" class="select"></select></div>
+<div class="grid"><div class="stat">Selected Company Jobs<b id="jobCount">—</b></div><div class="stat">Visible Applications<b id="appCount">—</b></div></div>
 <div id="jobs"></div><div id="applications"></div>
 <div class="notice"><b>தனியுரிமை பாதுகாப்பு:</b> விண்ணப்பதாரரின் சுயவிவர விவரங்களை அவர்களிடம் விண்ணப்பித்த நிறுவன உரிமையாளர் அல்லது Active HR / Recruiter மட்டும் பார்க்க முடியும்; இதற்கான RLS மற்றும் API அனுமதிகள் அமைக்கப்பட்டுள்ளன. விண்ணப்பத்துடன் இணைக்கப்பட்ட Resume-ஐ மட்டும் 60 விநாடி காலாவதியாகும் பாதுகாப்பான signed link மூலம் பார்க்கலாம்; <code>company-resume-access</code> Edge Function deploy செய்யப்பட்டுள்ளது. விண்ணப்ப நிலை மாற்றம் மற்றும் Interview அழைப்பு / Candidate பதில் அறிவிப்புகளுக்கான Supabase functions அமைக்கப்பட்டுள்ளன. உண்மையான Candidate–Employer விண்ணப்பத்துடன் இறுதிச் சோதனை இன்னும் நிலுவையில் உள்ளது; Interview நினைவூட்டல் ஒவ்வொரு 15 நிமிடத்திற்கும் தானாகச் சரிபார்க்கும் வகையில் அமைக்கப்பட்டுள்ளது.</div>
 </section>
@@ -54,7 +54,7 @@ async function loadCompany(){
  const {data:jobs,error}=await db.from("jobs").select("id,job_title,company_id,status,created_at").eq("company_id",companyId).order("created_at",{ascending:false});
  if(error){$("jobs").innerHTML='<div class="error">வேலைகளை ஏற்ற முடியவில்லை: '+esc(error.message)+'</div>';$("jobCount").textContent="—";$("appCount").textContent="—";return}
  const list=jobs||[];$("jobCount").textContent=String(list.length);
- if(!list.length){$("jobs").innerHTML='<div class="empty">இந்த நிறுவனத்துடன் இணைக்கப்பட்ட வேலை அறிவிப்புகள் இல்லை.</div>';$("appCount").textContent="0";return}
+ if(!list.length){$("jobs").innerHTML='<div class="empty">இந்த நிறுவனத்துடன் இணைக்கப்பட்ட வேலை Notifications இல்லை.</div>';$("appCount").textContent="0";return}
  const results=await Promise.all(list.map(async j=>{
   const {data:apps,error:appError}=await db.from("job_applications").select("id,job_id,candidate_id,resume_id,cover_letter,status,applied_at,updated_at").eq("job_id",j.id).order("applied_at",{ascending:false});
   return {job:j,apps:apps||[],error:appError};
