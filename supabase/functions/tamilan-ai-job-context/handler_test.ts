@@ -83,6 +83,8 @@ Deno.test("HTTP contract: feature flag defaults closed and requires a bearer tok
   equal(disabled.calls.length, 0, "disabled does not create client");
   const enabled = harness();
   equal((await enabled.handler(new Request("https://example.test", { method: "POST", body: "{}" }))).status, 401, "missing bearer");
+  equal((await enabled.handler(post("{}", { authorization: "Bearer   " }))).status, 401, "empty bearer");
+  equal((await enabled.handler(post("{}", { "content-type": "text/plain" }))).status, 415, "non-JSON content type");
 });
 Deno.test("HTTP contract: invalid JSON, extra fields, oversized body and missing public config fail closed", async () => {
   const h = harness();
