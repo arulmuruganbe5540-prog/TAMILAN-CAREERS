@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ta"><head>
-<meta name="robots" content="noindex,follow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101d3a"><title>எனது விண்ணப்பங்கள் | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta name="robots" content="noindex,follow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101d3a"><title>My Applications | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#18243a;font-family:Arial,"Noto Sans Tamil",sans-serif;line-height:1.65}header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:21px;font-weight:800;color:#55caff}.brand span{color:white}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:white;text-decoration:none;background:#ffffff18;padding:8px 11px;border-radius:8px;font-size:13px}main{max-width:950px;margin:25px auto;padding:0 15px}.hero,.card,.state{background:#fff;border:1px solid #e1e9f2;border-radius:14px;padding:20px;margin-bottom:15px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 7px;font-size:24px}.hero p{margin:0;color:#e2efff}.item h2{font-size:18px;margin:0 0 5px;color:#173e70}.muted{font-size:13px;color:#68788d}.row{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:12px}.pill{background:#edf5fc;color:#245781;border-radius:30px;padding:5px 10px;font-size:12px}.link{color:#126cc1;text-decoration:none;font-weight:bold}.empty{padding:22px;text-align:center;color:#617087;background:white;border-radius:12px}.error{background:#fff0ef;color:#9b302b;padding:14px;border-radius:10px}.hint{font-size:13px;color:#718096}.withdraw{border:0;border-radius:8px;padding:9px 12px;background:#fff0f0;color:#a12b2b;font-weight:bold;cursor:pointer}.withdraw:disabled{opacity:.55;cursor:wait}.actionmsg{font-size:13px;color:#16743b}
 </style>  <link rel="stylesheet" href="assets/site-protection.css">
@@ -8,37 +8,37 @@
 /* Consistent premium text-only site identity */
 .tc-domain-brand{display:inline-block!important;color:#eaf8ff!important;font-size:clamp(13px,2vw,19px)!important;font-weight:900!important;letter-spacing:.8px!important;line-height:1.2!important;white-space:nowrap!important;text-decoration:none!important;text-shadow:0 1px 10px rgba(72,190,255,.16)}
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
-</style></head><body><header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="dashboard.html">Dashboard</a><a href="jobs.html">வேலை தேடல்</a><a href="notifications.html">🔔 அறிவிப்புகள்</a></nav></header>
-<main><section class="hero"><h1>📨 எனது வேலை விண்ணப்பங்கள்</h1><p>நீங்கள் சமர்ப்பித்த விண்ணப்பங்களையும் அவற்றின் தற்போதைய நிலையையும் பார்க்கலாம்.</p></section><div id="summary" class="hint">விண்ணப்பங்கள் ஏற்றப்படுகின்றன...</div><section id="list" aria-live="polite"></section></main>
+</style></head><body><header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="dashboard.html">Dashboard</a><a href="jobs.html">Find Jobs</a><a href="notifications.html">🔔 Notifications</a></nav></header>
+<main><section class="hero"><h1>📨 My Job Applications</h1><p>View the applications you have submitted and their current status.</p></section><div id="summary" class="hint">Loading applications...</div><section id="list" aria-live="polite"></section></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const statusText={applied:"விண்ணப்பம் பெறப்பட்டது",under_review:"பரிசீலனையில்",shortlisted:"Shortlist செய்யப்பட்டது",rejected:"தேர்வு செய்யப்படவில்லை",withdrawn:"திரும்பப் பெறப்பட்டது"};
+const statusText={applied:"Application received",under_review:"Under review",shortlisted:"Shortlist செய்யப்பட்டது",rejected:"Not selected",withdrawn:"Withdrawn"};
 const canWithdraw=status=>["applied","under_review","shortlisted"].includes(String(status||"").toLowerCase());
 async function init(){
  const {data,error}=await db.auth.getSession();const user=data.session?.user;
  if(error||!user){location.replace("login.html?next="+encodeURIComponent("my-applications.html"));return}
  const {data:role,error:roleErr}=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
- if(roleErr||role?.role!=="job_seeker"){$("summary").textContent="Job Seeker கணக்கில் உள்நுழைந்தால் மட்டுமே உங்கள் விண்ணப்பங்களைப் பார்க்க முடியும்.";return}
+ if(roleErr||role?.role!=="job_seeker"){$("summary").textContent="Sign in with a Job Seeker account to view your applications.";return}
  const {data:rows,error:appErr}=await db.from("job_applications").select("id,job_id,status,applied_at,jobs(job_title)").eq("candidate_id",user.id).order("applied_at",{ascending:false});
- if(appErr){$("summary").className="error";$("summary").textContent="விண்ணப்பங்களை ஏற்ற முடியவில்லை. Database அட்டவணை / RLS இன்னும் அமைக்கப்படாமல் இருக்கலாம். "+appErr.message;return}
- const items=rows||[];$("summary").textContent="மொத்த விண்ணப்பங்கள்: "+items.length;
- if(!items.length){$("list").innerHTML='<div class="empty">இன்னும் எந்த வேலைக்கும் விண்ணப்பிக்கவில்லை. <br><a class="link" href="jobs.html">வேலைகளைத் தேடுங்கள் →</a></div>';return}
+ if(appErr){$("summary").className="error";$("summary").textContent="Unable to load applications. The database table or RLS setup may be incomplete. "+appErr.message;return}
+ const items=rows||[];$("summary").textContent="Total applications: "+items.length;
+ if(!items.length){$("list").innerHTML='<div class="empty">You have not applied for any jobs yet. <br><a class="link" href="jobs.html">Browse Jobs →</a></div>';return}
  $("list").innerHTML=items.map(a=>{
   const j=Array.isArray(a.jobs)?a.jobs[0]:a.jobs;
-  const withdrawButton=canWithdraw(a.status)?'<button class="withdraw" type="button" data-withdraw="'+esc(a.id)+'">விண்ணப்பத்தைத் திரும்பப் பெறுக</button>':'';
-  return '<article class="card item"><h2>'+esc(j?.job_title||"வேலை அறிவிப்பு")+'</h2><div class="row"><span class="pill">'+esc(statusText[a.status]||a.status||"நிலை தெரியவில்லை")+'</span><span class="muted">விண்ணப்பித்த தேதி: '+esc(a.applied_at?new Date(a.applied_at).toLocaleDateString("ta-IN"):"—")+'</span><a class="link" href="job-details.html?id='+encodeURIComponent(a.job_id)+'">வேலை விவரம் →</a>'+withdrawButton+'</div><div class="actionmsg" id="msg-'+esc(a.id)+'"></div></article>';
+  const withdrawButton=canWithdraw(a.status)?'<button class="withdraw" type="button" data-withdraw="'+esc(a.id)+'">Withdraw Application</button>':'';
+  return '<article class="card item"><h2>'+esc(j?.job_title||"வேலை அறிவிப்பு")+'</h2><div class="row"><span class="pill">'+esc(statusText[a.status]||a.status||"நிலை தெரியவில்லை")+'</span><span class="muted">Applied on: '+esc(a.applied_at?new Date(a.applied_at).toLocaleDateString("en-US"):"—")+'</span><a class="link" href="job-details.html?id='+encodeURIComponent(a.job_id)+'">Job Details →</a>'+withdrawButton+'</div><div class="actionmsg" id="msg-'+esc(a.id)+'"></div></article>';
  }).join("");
  $("list").addEventListener("click",async event=>{
   const button=event.target.closest("[data-withdraw]");
   if(!button)return;
   const id=button.dataset.withdraw;
-  if(!confirm("இந்த வேலை விண்ணப்பத்தைத் திரும்பப் பெற விரும்புகிறீர்களா? இதை மீண்டும் மாற்ற முடியாது."))return;
-  button.disabled=true;button.textContent="செயல்படுத்தப்படுகிறது...";
+  if(!confirm("Do you want to withdraw this application? This action cannot be undone."))return;
+  button.disabled=true;button.textContent="Processing...";
   const {error}=await db.rpc("tc_candidate_withdraw_application",{p_application_id:id});
   if(error){
-   button.disabled=false;button.textContent="விண்ணப்பத்தைத் திரும்பப் பெறுக";
-   const msg=document.getElementById("msg-"+id);if(msg)msg.textContent="செயல்படுத்த முடியவில்லை: "+error.message;
+   button.disabled=false;button.textContent="Withdraw Application";
+   const msg=document.getElementById("msg-"+id);if(msg)msg.textContent="Unable to process: "+error.message;
    return;
   }
   await init();
