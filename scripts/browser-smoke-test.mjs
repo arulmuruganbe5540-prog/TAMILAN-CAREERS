@@ -362,6 +362,13 @@ await check("Private admin controls require authentication", async () => {
   if (!(await page.locator('#gate a[href*="login.html"]').count())) {
     throw new Error("Admin job-post login link is missing");
   }
+  await open("admin-company-verification.html");
+  await page.waitForSelector("#gate:not(.hidden)", { timeout: 8000 });
+  if (!(await page.locator('#gate a[href="admin-login.html"]').count())) {
+    throw new Error("Company verification Admin Login link is missing");
+  }
+  await open("company-verification-status.html");
+  await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
 });
 
 
