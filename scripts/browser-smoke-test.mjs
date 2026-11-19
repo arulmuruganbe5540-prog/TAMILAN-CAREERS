@@ -153,6 +153,7 @@ await check("Job seeker and employer registration validate account details befor
   };
   const mismatchMessage = await submitAndReadMessage();
   if (!mismatchMessage.includes("ஒன்றாக இருக்க")) throw new Error("Password mismatch validation failed: " + mismatchMessage);
+  await page.locator("#password").fill("candidate123");
   await page.locator("#confirmPassword").fill("candidate123");
   const weakPasswordMessage = await submitAndReadMessage();
   if (!weakPasswordMessage.includes("பெரிய எழுத்து")) throw new Error("Password strength validation failed: " + weakPasswordMessage);
