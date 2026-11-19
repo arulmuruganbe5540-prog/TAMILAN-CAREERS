@@ -43,6 +43,7 @@
 - TAMILAN AI multilingual evaluation prompts: `tests/tamilan-ai-evaluation-prompts.json`; zero-cost data validator: `scripts/validate-tamilan-ai-evaluation.py` (validates the test set only; does not run an AI model).
 - TAMILAN AI model shortlist and licence review: `TAMILAN-AI-MODEL-SHORTLIST-TA.md` (Qwen3-1.7B is a prototype candidate only; no model is deployed).
 - [TAMILAN AI பாதுகாப்பான Website Integration திட்டம்](TAMILAN-AI-INTEGRATION-PLAN-TA.md)
+- [SECURITY DEFINER விரிவான பாதுகாப்பு மறுஆய்வு (Tamil)](TAMILAN-SECURITY-DEFINER-AUDIT-TA.md)
 - [TAMILAN AI — Supabase Data Access & Security Audit (Tamil)](TAMILAN-AI-DATA-ACCESS-AUDIT-TA.md)
 - [TAMILAN AI — readiness & latest verification report (Tamil)](TAMILAN-AI-READINESS-CHECK-TA.md)
 - Read-only AI job context Edge Function (source only, JWT protected, feature OFF): `supabase/functions/tamilan-ai-job-context/index.ts`; static guard: `scripts/tamilan-ai-retrieval-guard.py`
