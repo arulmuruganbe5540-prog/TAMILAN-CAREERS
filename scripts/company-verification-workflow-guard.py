@@ -37,6 +37,6 @@ checks = {
 failed = [name for name, ok in checks.items() if not ok]
 for name, ok in checks.items():
     print(("PASS" if ok else "FAIL") + ": " + name)
-print(f"\\n{len(checks)-len(failed)}/{len(checks)} company verification checks passed")
+print(f"\n{len(checks)-len(failed)}/{len(checks)} company verification checks passed")
 if failed:
     sys.exit(1)
