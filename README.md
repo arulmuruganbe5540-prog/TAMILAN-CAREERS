@@ -45,6 +45,7 @@
 - [TAMILAN AI பாதுகாப்பான Website Integration திட்டம்](TAMILAN-AI-INTEGRATION-PLAN-TA.md)
 - [TAMILAN AI — Supabase Data Access & Security Audit (Tamil)](TAMILAN-AI-DATA-ACCESS-AUDIT-TA.md)
 - [TAMILAN AI — readiness & latest verification report (Tamil)](TAMILAN-AI-READINESS-CHECK-TA.md)
+- Read-only AI job context Edge Function (source only, JWT protected, feature OFF): `supabase/functions/tamilan-ai-job-context/index.ts`; static guard: `scripts/tamilan-ai-retrieval-guard.py`
 - Free Colab prototype notebook: `notebooks/TAMILAN_AI_Free_Model_Test.ipynb` (manual run only; requires a free GPU session if available; not a production host).
 - Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
 - Tamil / English responsive public homepage, job search and individual job details pages.
