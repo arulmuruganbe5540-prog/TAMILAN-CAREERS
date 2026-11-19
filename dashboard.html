@@ -60,13 +60,13 @@ footer{text-align:center;color:#778397;font-size:13px;padding:28px}
 
   <section id="companyArea" class="hidden">
     <div class="grid">
-      <article class="card"><h2 data-i18n="companyDetails">🏢 Company Details</h2><p id="companyNames" data-i18n="loadingCompany">Loading your company details...</p><a href="company-profile.html" data-i18n="editCompany">Add / Edit Company Details →</a></article>
+      <article class="card" id="companyDetailsCard"><h2>🏢 Company Details</h2><p id="companyNames" data-i18n="loadingCompany">Loading your company details...</p><a href="company-profile.html" data-i18n="editCompany">Add / Edit Company Details →</a></article>
       <article class="card hidden" id="companyVerificationCard"><h2 data-i18n="verification">🛡️ Company Verification</h2><p data-i18n="verificationDesc">View your application status, admin notes and requests for additional documents.</p><a href="company-verification-status.html" data-i18n="viewVerification">View Verification Status →</a></article>
-      <article class="card"><h2 data-i18n="postJob">📢 Post a Job</h2><p data-i18n="postJobDesc">Authorized company members can create and save job listings as drafts.</p><a href="job-posting.html" data-i18n="createDraft">Create Job Draft →</a></article>
-      <article class="card"><h2 data-i18n="manageJobs">💼 Manage Company Jobs</h2><p data-i18n="manageJobsDesc">Manage published jobs, application counts and open or closed status.</p><a href="company-jobs.html" data-i18n="manageCompanyJobs">Manage Company Jobs →</a></article>
-      <article class="card"><h2 data-i18n="teamMembers">👥 Team Members</h2><p data-i18n="teamMembersDesc">Invite HR Managers, Recruiters and Viewers, and manage their permissions.</p><a href="company-members.html" data-i18n="manageMembers">Manage Team Members →</a></article>
-      <article class="card"><h2 data-i18n="applicants">📨 Applicants</h2><p data-i18n="applicantsDesc">Review applicants for your company jobs and manage application access securely.</p><a href="company-applicants.html" data-i18n="openApplicants">Open Applicants →</a></article>
-      <article class="card"><h2 data-i18n="companyNotifications">🔔 Company Notifications</h2><p id="companyNotificationSummary" data-i18n="companyNotificationDesc">New applications, interview replies and company updates.</p><a href="notifications.html" data-i18n="openNotifications">Open Notifications →</a></article>
+      <article class="card hidden" id="companyPostJobCard"><h2>📢 Post a Job</h2><p data-i18n="postJobDesc">Authorized company members can create and save job listings as drafts.</p><a href="job-posting.html" data-i18n="createDraft">Create Job Draft →</a></article>
+      <article class="card hidden" id="companyManageJobsCard"><h2>💼 Manage Company Jobs</h2><p data-i18n="manageJobsDesc">Manage published jobs, application counts and open or closed status.</p><a href="company-jobs.html" data-i18n="manageCompanyJobs">Manage Company Jobs →</a></article>
+      <article class="card hidden" id="companyTeamCard"><h2>👥 Team Members</h2><p data-i18n="teamMembersDesc">Invite HR Managers, Recruiters and Viewers, and manage their permissions.</p><a href="company-members.html" data-i18n="manageMembers">Manage Team Members →</a></article>
+      <article class="card hidden" id="companyApplicantsCard"><h2>📨 Applicants</h2><p data-i18n="applicantsDesc">Review applicants for your company jobs and manage application access securely.</p><a href="company-applicants.html" data-i18n="openApplicants">Open Applicants →</a></article>
+      <article class="card hidden" id="companyNotificationsCard"><h2>🔔 Company Notifications</h2><p id="companyNotificationSummary" data-i18n="companyNotificationDesc">New applications, interview replies and company updates.</p><a href="notifications.html" data-i18n="openNotifications">Open Notifications →</a></article>
     </div>
   </section>
 
@@ -80,12 +80,6 @@ const SUPABASE_URL = "https://qkmljuuusfjowexvybvy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-
-const dashboardTranslations={"welcome":["Welcome to your Dashboard","Welcome to your Dashboard"],"checking":["Checking your account details...","Checking your account details..."],"findJobs":["🔎 Find Jobs","🔎 Find Jobs"],"findJobsDesc":["Search opportunities by job title, skills, job type and location.","Search opportunities by job title, skills, job type and location."],"findJobsLink":["Search Jobs →","Search Jobs →"],"myProfile":["👤 My Profile","👤 My Profile"],"myProfileDesc":["Add and update your name, contact details, education, skills and job preferences.","Add and update your name, contact details, education, skills and job preferences."],"manageProfile":["Manage Profile →","Manage Profile →"],"resumeDocs":["📄 Resume & Documents","📄 Resume & Documents"],"resumeDocsDesc":["Manage your resume and education or experience certificates in private storage.","Manage your resume and education or experience certificates in private storage."],"manageDocs":["Manage Documents →","Manage Documents →"],"applications":["📨 Applications","📨 Applications"],"applicationsDesc":["View the jobs you have applied for and their current status.","View the jobs you have applied for and their current status."],"viewApplications":["View My Applications →","View My Applications →"],"notifications":["🔔 Notifications & Interviews","🔔 Notifications & Interviews"],"notificationDesc":["View application status changes, interview invitations and replies.","View application status changes, interview invitations and replies."],"openNotifications":["Open Notifications →","Open Notifications →"],"resumeSearch":["📄 Resume-Based Job Search","📄 Resume-Based Job Search"],"resumeSearchDesc":["Find jobs based on your education, skills, experience and preferred location.","Find jobs based on your education, skills, experience and preferred location."],"searchWithResume":["Search with Resume →","Search with Resume →"],"companyDetails":["🏢 Company Details","🏢 Company Details"],"loadingCompany":["Loading your company details...","Loading your company details..."],"editCompany":["Add / Edit Company Details →","Add / Edit Company Details →"],"verification":["🛡️ Company Verification","🛡️ Company Verification"],"verificationDesc":["View your application status, admin notes and requests for additional documents.","View your application status, admin notes and requests for additional documents."],"viewVerification":["View Verification Status →","View Verification Status →"],"postJob":["📢 Post a Job","📢 Post a Job"],"postJobDesc":["Authorized company members can create and save job listings as drafts.","Authorized company members can create and save job listings as drafts."],"createDraft":["Create Job Draft →","Create Job Draft →"],"manageJobs":["💼 Manage Company Jobs","💼 Manage Company Jobs"],"manageJobsDesc":["Manage published jobs, application counts and open or closed status.","Manage published jobs, application counts and open or closed status."],"manageCompanyJobs":["Manage Company Jobs →","Manage Company Jobs →"],"teamMembers":["👥 Team Members","👥 Team Members"],"teamMembersDesc":["Invite HR Managers, Recruiters and Viewers, and manage their permissions.","Invite HR Managers, Recruiters and Viewers, and manage their permissions."],"manageMembers":["Manage Team Members →","Manage Team Members →"],"applicants":["📨 Applicants","📨 Applicants"],"applicantsDesc":["Review applicants for your company jobs and manage application access securely.","Review applicants for your company jobs and manage application access securely."],"openApplicants":["Open Applicants →","Open Applicants →"],"companyNotifications":["🔔 Company Notifications","🔔 Company Notifications"],"companyNotificationDesc":["New applications, interview replies and company updates.","New applications, interview replies and company updates."],"footer":["TAMILAN CAREERS – One platform for job seekers and employers.","TAMILAN CAREERS – One platform for job seekers and employers."]};function dashboardLanguage(){return "en"; /* English-only website */ return "en"}
-function tr(key){const item=dashboardTranslations[key];return item?item[dashboardLanguage()==="ta"?1:0]:key}
-function applyDashboardLanguage(){document.documentElement.lang="en";document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;el.textContent=tr(key)});document.getElementById("logoutBtn").textContent="Logout";}
-
-applyDashboardLanguage();
 
 const notice = document.getElementById("notice");
 const accountStatus = document.getElementById("accountStatus");
@@ -128,17 +122,24 @@ async function loadDashboard() {
 
   const isSeeker = role === "job_seeker";
   const isCompanyMember = memberships.length > 0;
+  const isCompanyAccount = role === "company_member" || isCompanyMember;
 
   document.getElementById("seekerArea").classList.toggle("hidden", !isSeeker);
-  document.getElementById("companyArea").classList.toggle("hidden", !isCompanyMember);
+  document.getElementById("companyArea").classList.toggle("hidden", !isCompanyAccount);
+  for (const id of ["companyPostJobCard","companyManageJobsCard","companyTeamCard","companyApplicantsCard","companyNotificationsCard"]) {
+    document.getElementById(id).classList.toggle("hidden", !isCompanyMember);
+  }
+  if (isCompanyAccount && !isCompanyMember) {
+    document.getElementById("companyNames").textContent = "No company profile is linked to this account yet. Register your company and submit its documents for verification.";
+  }
 
   if (isSeeker || isCompanyMember) {
     const types = [];
     if (isSeeker) types.push("Job Seeker");
-    if (isCompanyMember) types.push("Company");
+    if (isCompanyAccount) types.push("Company");
 
     document.getElementById("welcomeText").textContent =
-      (dashboardLanguage()==="ta"?"Account type: ":"Account type: ") + types.join(" / ") + (dashboardLanguage()==="ta"?" — Your permitted workspace is shown below.":" — Your permitted workspace is shown below.");
+      "Account type: " + types.join(" / ") + " — Your permitted workspace is shown below.";
   }
 
   if (isCompanyMember) {
@@ -162,9 +163,9 @@ async function loadDashboard() {
 
   document.querySelectorAll("#notificationSummary,#companyNotificationSummary").forEach(notificationSummary => {
     if (notificationResult.error) {
-      notificationSummary.textContent = dashboardLanguage()==="ta"?"Notifications will appear here once configured.":"Notifications will appear here once they are configured.";
+      notificationSummary.textContent = "Notifications will appear here once they are configured.";
     } else {
-      notificationSummary.textContent = (dashboardLanguage()==="ta"?"Unread notifications: ":"Unread notifications: ") + (notificationResult.count || 0) + (dashboardLanguage()==="ta"?" · Open to review new applications and interview updates.":" · Open to review new applications and interview updates.");
+      notificationSummary.textContent = "Unread notifications: " + (notificationResult.count || 0) + " · Open to review new applications and interview updates.";
     }
   });
 
@@ -184,7 +185,7 @@ async function loadDashboard() {
   accountStatus.textContent = statusLines.join("\n");
 
   if (!isSeeker && !isCompanyMember) {
-    showNotice(dashboardLanguage()==="ta"?"This account does not have Dashboard access yet. Available tools will appear after an administrator grants access.":"This account does not have Dashboard access yet. Available tools will appear after an administrator grants access.");
+    showNotice("This account does not have Dashboard access yet. Available tools will appear after an administrator grants access.");
   }
 }
 
@@ -192,7 +193,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   const { error } = await supabaseClient.auth.signOut();
 
   if (error) {
-    showNotice((dashboardLanguage()==="ta"?"Could not log out: ":"Could not log out: ") + error.message);
+    showNotice("Could not log out: " + error.message);
     return;
   }
 
@@ -200,7 +201,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 });
 
 loadDashboard().catch(error => {
-  showNotice((dashboardLanguage()==="ta"?"Dashboard loading error: ":"Dashboard loading error: ") + (error.message || error));
+  showNotice("Dashboard loading error: " + (error.message || error));
 });
 </script>
   <script src="assets/site-protection.js" defer></script>
