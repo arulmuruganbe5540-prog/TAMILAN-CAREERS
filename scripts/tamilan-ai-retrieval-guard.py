@@ -31,6 +31,8 @@ else:
     for forbidden in ('SUPABASE_SERVICE_ROLE_KEY', 'TAMILAN_AI_MODEL_TOKEN', 'TAMILAN_AI_MODEL_URL', 'fetch(row.', '.from("job_sources")'):
         if forbidden.lower() in source.lower():
             errors.append(f'Forbidden privileged/model/source-registry access: {forbidden}')
+    if 'application_url' in source:
+        errors.append('Employer application URLs must not be used as citation sources')
     if 'MAX_RESULTS = 5' not in source:
         errors.append('Result cap must remain five or fewer')
     if 'MAX_DESCRIPTION_LENGTH = 6000' not in source:
