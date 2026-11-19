@@ -45,40 +45,40 @@ textarea{min-height:105px;resize:vertical}.hint{font-size:10px;color:#7b879a;lin
 <input type="hidden" id="recordId">
 <input type="hidden" id="companyId"><input type="hidden" id="sourceDraftId">
 <div class="field wide"><label for="jobKind">Job Category *</label><select id="jobKind" required><option value="government">Government Job</option><option value="private" selected>Private Job</option><option value="foreign">Overseas Job</option></select><span class="hint">Super Admin can add jobs directly in all three categories.</span></div>
-<div class="field wide gov-only"><label for="governmentScope">Government Job வகை *</label><select id="governmentScope"><option value="">Select</option><option value="central">மத்திய Government Job</option><option value="tamil-nadu">தமிழ்Country Government Job</option><option value="national">இந்த நாட்டின் தேசிய Government Job (UAE / Singapore / Sri Lanka / USA)</option></select><span class="hint">Select either Central Government or Tamil Nadu Government.</span></div>
+<div class="field wide gov-only"><label for="governmentScope">Government Job Type *</label><select id="governmentScope"><option value="">Select</option><option value="central">Central Government Job</option><option value="tamil-nadu">Tamil Nadu Government Job</option><option value="national">National Government Job in This Country (UAE / Singapore / Sri Lanka / USA)</option></select><span class="hint">Select either Central Government or Tamil Nadu Government.</span></div>
 <div class="field gov-only"><label for="governmentDepartment">Government Department / Recruiting Agency</label><select id="governmentDepartment"><option value="">Select</option><option>UPSC</option><option>SSC</option><option>Railway</option><option>Banking</option><option>Defence</option><option>Central Police</option><option>Postal</option><option>PSU</option><option>Teaching</option><option>Medical</option><option>TNPSC</option><option>Police</option><option>TRB</option><option>MRB</option><option>Forest</option><option>Health</option><option>Transport</option><option>TANGEDCO</option><option>Revenue</option><option>Courts</option><option>Agriculture</option><option>Municipal Administration</option><option>Universities</option><option>Other</option></select></div>
 <div class="field gov-only"><label for="examName">Exam / Recruitment Name</label><input id="examName" maxlength="180" placeholder="e.g. TNPSC Group IV / SSC CGL"></div>
-<div class="field gov-only"><label for="applicationStartDate">விண்ணப்பம் தொடங்கும் தேதி</label><input id="applicationStartDate" type="date"></div>
-<div class="field gov-only"><label for="examDate">தேர்வு தேதி</label><input id="examDate" type="date"></div>
-<div class="field wide gov-only"><label for="vacancyBreakdown">பதவி வாரியான காலியிடங்கள்</label><textarea id="vacancyBreakdown" maxlength="3000" placeholder="பதவி பெயர், காலியிட எண்ணிக்கை, இடஒதுக்கீடு விவரம்..."></textarea></div>
-<div class="field wide gov-only"><label for="syllabus">தேர்வு பாடத்திட்டம் / Syllabus</label><textarea id="syllabus" maxlength="5000" placeholder="பாடங்கள், மதிப்பெண்கள், தேர்வு நிலைகள்..."></textarea></div>
-<div class="field foreign-only"><label for="visaType">விசா / Work Permit வகை</label><input id="visaType" maxlength="180" placeholder="Employment Visa / Work Permit"></div>
-<div class="field foreign-only"><label for="contractDuration">ஒப்பந்த காலம்</label><input id="contractDuration" maxlength="120" placeholder="2 ஆண்டுகள்"></div>
-<div class="field foreign-only"><label for="accommodation">தங்குமிடம் / உணவு</label><input id="accommodation" maxlength="300" placeholder="Company வழங்கும் விவரம்"></div>
-<div class="field foreign-only"><label for="flightSupport">விமான டிக்கெட் / பயண உதவி</label><input id="flightSupport" maxlength="300" placeholder="Company வழங்குமா?"></div><div class="field wide"><label for="title">வேலைப் பதவி / Job Title *</label><input id="title" maxlength="180" required placeholder="உதா: Office Assistant"></div>
-<div class="field"><label for="company">நிறுவனப் பெயர் *</label><input id="company" maxlength="180" placeholder="Company / அரசு துறை / Company"><span class="hint">Super Admin நேரடியாகச் சேர்க்கும்போது விருப்பத்தேர்வு. Company submission என்றால் Verified Company கட்டாயம்.</span></div>
-<div class="field"><label for="category">வேலைத் துறை *</label><select id="category" required><option value="">Select</option><option>Accounting &amp; Finance</option><option>Construction</option><option>Customer Support</option><option>Driver &amp; Delivery</option><option>Education</option><option>Engineering</option><option>Government Jobs</option><option>Healthcare</option><option>Hotel &amp; Restaurant</option><option>IT &amp; Software</option><option>Manufacturing</option><option>Office &amp; Administration</option><option>Other Jobs</option><option>Sales &amp; Marketing</option></select></div>
-<div class="field"><label for="authority">அரசு ஆணையம் / துறை</label><input id="authority" maxlength="180" placeholder="TNPSC / UPSC / SSC / RRB..."></div><div class="field"><label for="countryName">வேலை இருக்கும் Country *</label><select id="countryName" required><option value="">Countryகளை ஏற்றுகிறது...</option></select><span class="hint">அரசு, தனியார், வெளிநாட்டு — எல்லா வேலைகளுக்கும் சரியான நாட்டைத் தேர்ந்தெடுக்கவும். Dubai வேலைகளுக்கு United Arab Emirates Select.</span></div><div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
-<div class="field"><label for="workplace">பணிமுறை</label><select id="workplace"><option value="">Select</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
-<div class="field"><label for="location">Job Location / மாவட்டம் *</label><input id="location" maxlength="180" required placeholder="உதா: ஓமலூர், சேலம்"></div>
-<div class="field"><label for="openings">காலியிடங்கள்</label><input id="openings" type="number" min="1" max="100000" value="1"></div>
-<div class="field"><label for="experience">அனுபவம்</label><input id="experience" maxlength="120" placeholder="Fresher / 2 years"></div>
-<div class="field wide"><label>Education (ஒன்றுக்கு மேற்பட்டவற்றைத் தேர்வு செய்யலாம்)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல Educationகளைத் தேர்வு செய்யலாம்.</span></div>
-<div class="field"><label id="salaryMinLabel" for="salaryMin">குறைந்தபட்ச Salary (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" placeholder="12000"></div>
-<div class="field"><label id="salaryMaxLabel" for="salaryMax">அதிகபட்ச Salary (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" placeholder="18000"></div>
-<div class="field"><label for="salaryPeriod">சம்பள கால அளவு</label><select id="salaryPeriod"><option value="monthly">மாதம்</option><option value="daily">நாள்</option></select></div><div class="field"><label for="salaryCurrency">சம்பள நாணயம்</label><select id="salaryCurrency"><option value="INR">INR — Indian Rupee</option><option value="LKR">LKR — Sri Lankan Rupee</option><option value="USD">USD — US Dollar</option><option value="AED">AED — UAE Dirham</option><option value="SAR">SAR — Saudi Riyal</option><option value="QAR">QAR — Qatari Riyal</option><option value="OMR">OMR — Omani Rial</option><option value="KWD">KWD — Kuwaiti Dinar</option><option value="BHD">BHD — Bahraini Dinar</option><option value="SGD">SGD — Singapore Dollar</option><option value="MYR">MYR — Malaysian Ringgit</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — Pound Sterling</option><option value="CAD">CAD — Canadian Dollar</option><option value="AUD">AUD — Australian Dollar</option></select></div>
-<div class="field"><label for="examYear">தேர்வு ஆண்டு</label><input id="examYear" type="number" min="1950" max="2100" placeholder="2026"></div><div class="field"><label for="notificationDate">அறிவிப்பு வெளியான தேதி</label><input id="notificationDate" type="date"></div><div class="field"><label for="notificationNumber">அறிவிப்பு எண்</label><input id="notificationNumber" maxlength="120"></div><div class="field"><label for="ageLimit">வயது வரம்பு</label><input id="ageLimit" maxlength="180" placeholder="18–30"></div><div class="field"><label for="applicationFee">விண்ணப்பக் கட்டணம்</label><input id="applicationFee" maxlength="180"></div><div class="field wide"><label for="officialUrl">அதிகாரப்பூர்வ இணையதள URL</label><input id="officialUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="notificationPdfUrl">அதிகாரப்பூர்வ அறிவிப்பு PDF URL</label><input id="notificationPdfUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="applicationUrl">நேரடி விண்ணப்ப இணைப்பு</label><input id="applicationUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="selectionProcess">தேர்வு முறை / Selection Process</label><textarea id="selectionProcess" maxlength="3000"></textarea></div><div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="1200" placeholder="Communication, MS Excel, Driving"></div>
-<div class="field wide"><label for="description">வேலை விவரம் *</label><textarea id="description" maxlength="8000" required placeholder="வேலைப் பொறுப்புகள், வேலை நேரம், நிபந்தனைகள்..."></textarea></div>
-<div class="field"><label for="deadline">விண்ணப்ப கடைசி தேதி</label><input id="deadline" type="date"></div>
-<div class="field"><label for="email">தொடர்பு மின்னஞ்சல்</label><input id="email" type="email" maxlength="180" placeholder="hr@company.com"></div>
+<div class="field gov-only"><label for="applicationStartDate">Application Start Date</label><input id="applicationStartDate" type="date"></div>
+<div class="field gov-only"><label for="examDate">Exam Date</label><input id="examDate" type="date"></div>
+<div class="field wide gov-only"><label for="vacancyBreakdown">Vacancies by Position</label><textarea id="vacancyBreakdown" maxlength="3000" placeholder="Position title, number of vacancies and reservation details..."></textarea></div>
+<div class="field wide gov-only"><label for="syllabus">Exam Syllabus</label><textarea id="syllabus" maxlength="5000" placeholder="Subjects, marks and exam stages..."></textarea></div>
+<div class="field foreign-only"><label for="visaType">Visa / Work Permit Type</label><input id="visaType" maxlength="180" placeholder="Employment Visa / Work Permit"></div>
+<div class="field foreign-only"><label for="contractDuration">Contract Duration</label><input id="contractDuration" maxlength="120" placeholder="2 years"></div>
+<div class="field foreign-only"><label for="accommodation">Accommodation / Meals</label><input id="accommodation" maxlength="300" placeholder="Details provided by the company"></div>
+<div class="field foreign-only"><label for="flightSupport">Flight Ticket / Travel Assistance</label><input id="flightSupport" maxlength="300" placeholder="Is this provided by the company?"></div><div class="field wide"><label for="title">Job Title *</label><input id="title" maxlength="180" required placeholder="e.g. Office Assistant"></div>
+<div class="field"><label for="company">Company Name *</label><input id="company" maxlength="180" placeholder="Company / Government Department / Company"><span class="hint">Optional when added directly by Super Admin. Company submissions require a verified company.</span></div>
+<div class="field"><label for="category">Job Category *</label><select id="category" required><option value="">Select</option><option>Accounting &amp; Finance</option><option>Construction</option><option>Customer Support</option><option>Driver &amp; Delivery</option><option>Education</option><option>Engineering</option><option>Government Jobs</option><option>Healthcare</option><option>Hotel &amp; Restaurant</option><option>IT &amp; Software</option><option>Manufacturing</option><option>Office &amp; Administration</option><option>Other Jobs</option><option>Sales &amp; Marketing</option></select></div>
+<div class="field"><label for="authority">Government Authority / Department</label><input id="authority" maxlength="180" placeholder="TNPSC / UPSC / SSC / RRB..."></div><div class="field"><label for="countryName">Job Country *</label><select id="countryName" required><option value="">Loading countries...</option></select><span class="hint">Select the correct country for government, private and overseas jobs. For jobs in Dubai, select United Arab Emirates.</span></div><div class="field"><label for="type">வேலை வகை *</label><select id="type" required><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="workplace">Work Arrangement</label><select id="workplace"><option value="">Select</option><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
+<div class="field"><label for="location">Job Location / District *</label><input id="location" maxlength="180" required placeholder="e.g. Omalur, Salem"></div>
+<div class="field"><label for="openings">Vacancies</label><input id="openings" type="number" min="1" max="100000" value="1"></div>
+<div class="field"><label for="experience">Experience</label><input id="experience" maxlength="120" placeholder="Fresher / 2 years"></div>
+<div class="field wide"><label>Education (Select one or more)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல Educationகளைத் தேர்வு செய்யலாம்.</span></div>
+<div class="field"><label id="salaryMinLabel" for="salaryMin">Minimum Salary (₹)</label><input id="salaryMin" type="number" min="0" max="100000000" placeholder="12000"></div>
+<div class="field"><label id="salaryMaxLabel" for="salaryMax">Maximum Salary (₹)</label><input id="salaryMax" type="number" min="0" max="100000000" placeholder="18000"></div>
+<div class="field"><label for="salaryPeriod">Salary Period</label><select id="salaryPeriod"><option value="monthly">Month</option><option value="daily">Day</option></select></div><div class="field"><label for="salaryCurrency">Salary Currency</label><select id="salaryCurrency"><option value="INR">INR — Indian Rupee</option><option value="LKR">LKR — Sri Lankan Rupee</option><option value="USD">USD — US Dollar</option><option value="AED">AED — UAE Dirham</option><option value="SAR">SAR — Saudi Riyal</option><option value="QAR">QAR — Qatari Riyal</option><option value="OMR">OMR — Omani Rial</option><option value="KWD">KWD — Kuwaiti Dinar</option><option value="BHD">BHD — Bahraini Dinar</option><option value="SGD">SGD — Singapore Dollar</option><option value="MYR">MYR — Malaysian Ringgit</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — Pound Sterling</option><option value="CAD">CAD — Canadian Dollar</option><option value="AUD">AUD — Australian Dollar</option></select></div>
+<div class="field"><label for="examYear">Exam Year</label><input id="examYear" type="number" min="1950" max="2100" placeholder="2026"></div><div class="field"><label for="notificationDate">Notice Publication Date</label><input id="notificationDate" type="date"></div><div class="field"><label for="notificationNumber">Notice Number</label><input id="notificationNumber" maxlength="120"></div><div class="field"><label for="ageLimit">Age Limit</label><input id="ageLimit" maxlength="180" placeholder="18–30"></div><div class="field"><label for="applicationFee">Application Fee</label><input id="applicationFee" maxlength="180"></div><div class="field wide"><label for="officialUrl">அதிகாரப்பூர்வ இணையதள URL</label><input id="officialUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="notificationPdfUrl">அதிகாரப்பூர்வ அறிவிப்பு PDF URL</label><input id="notificationPdfUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="applicationUrl">நேரடி விண்ணப்ப இணைப்பு</label><input id="applicationUrl" type="url" maxlength="1000" placeholder="https://..."></div><div class="field wide"><label for="selectionProcess">தேர்வு முறை / Selection Process</label><textarea id="selectionProcess" maxlength="3000"></textarea></div><div class="field wide"><label for="skills">தேவையான திறன்கள்</label><input id="skills" maxlength="1200" placeholder="Communication, MS Excel, Driving"></div>
+<div class="field wide"><label for="description">Job Description *</label><textarea id="description" maxlength="8000" required placeholder="Job responsibilities, working hours and conditions..."></textarea></div>
+<div class="field"><label for="deadline">Application Deadline</label><input id="deadline" type="date"></div>
+<div class="field"><label for="email">Contact Email</label><input id="email" type="email" maxlength="180" placeholder="hr@company.com"></div>
 </form>
-<div class="actions"><button class="btn primary" id="saveDraft">Draft சேமி</button><button class="btn green" id="sendReview">Review-க்கு அனுப்பு</button><button class="btn soft" id="reset">புதிய படிவம்</button></div>
+<div class="actions"><button class="btn primary" id="saveDraft">Save Draft</button><button class="btn green" id="sendReview">Send for Review</button><button class="btn soft" id="reset">New Form</button></div>
 <div id="status" class="status" role="status" aria-live="polite"></div>
 </section>
 <section class="panel">
 <h2>📋 Admin Review Queue</h2>
-<div class="field" style="margin-bottom:12px"><label for="filter">நிலை வடிகட்டி</label><select id="filter"><option value="">அனைத்து நிலைகளும்</option><option value="draft">Draft</option><option value="pending_review">Review காத்திருக்கிறது</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
-<div id="queue" class="queue"><div class="empty">Review பட்டியல் ஏற்றப்படுகிறது...</div></div>
+<div class="field" style="margin-bottom:12px"><label for="filter">Filter by Status</label><select id="filter"><option value="">All Statuses</option><option value="draft">Draft</option><option value="pending_review">Pending Review</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+<div id="queue" class="queue"><div class="empty">Loading review queue...</div></div>
 </section></div></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
@@ -96,9 +96,9 @@ function govDuplicateMatch(a,b){
  const at=norm(a.job_title||a.title),bt=norm(b.job_title||b.title);
  const ay=String(a.exam_year||a.examYear||"").trim(),by=String(b.exam_year||b.examYear||"").trim();
  const ad=String(a.notification_date||a.notificationDate||"").trim(),bd=String(b.notification_date||b.notificationDate||"").trim();
- if(an&&bn&&an===bn&&aa&&ba&&aa===ba)return "அறிவிப்பு எண் + துறை பொருந்துகிறது";
- if(au&&bu&&au===bu)return "Official Notification URL பொருந்துகிறது";
- if(at&&bt&&at===bt&&aa&&ba&&aa===ba&&ay&&by&&ay===by&&ad===bd)return "பதவி + துறை + ஆண்டு + அறிவிப்பு தேதி பொருந்துகிறது";
+ if(an&&bn&&an===bn&&aa&&ba&&aa===ba)return "Notice Number + துறை பொருந்துகிறது";
+ if(au&&bu&&au===bu)return "Official notification URL matches";
+ if(at&&bt&&at===bt&&aa&&ba&&aa===ba&&ay&&by&&ay===by&&ad===bd)return "Position, department, year and notice date match";
  return "";
 }
 async function checkGovernmentDuplicate(p,currentReviewId){
@@ -107,16 +107,16 @@ async function checkGovernmentDuplicate(p,currentReviewId){
   db.from("jobs").select("id,job_title,recruitment_authority,notification_number,official_notification_url,exam_year,notification_date,status").eq("job_kind","government").eq("status","published").limit(1000),
   db.from("admin_job_post_reviews").select("id,title,status,payload,published_job_id").in("status",["draft","pending_review","approved"]).limit(1000)
  ]);
- if(jobsRes.error)throw new Error("ஏற்கெனவே வெளியிட்ட Government Jobகளைச் சரிபார்க்க முடியவில்லை: "+jobsRes.error.message);
- if(reviewsRes.error)throw new Error("Admin Review பதிவுகளைச் சரிபார்க்க முடியவில்லை: "+reviewsRes.error.message);
- for(const j of (jobsRes.data||[])){const reason=govDuplicateMatch(p,j);if(reason)return {title:j.job_title,id:j.id,reason,where:"ஏற்கெனவே வெளியிடப்பட்டது"}}
+ if(jobsRes.error)throw new Error("Unable to check previously published government jobs: "+jobsRes.error.message);
+ if(reviewsRes.error)throw new Error("Unable to check Admin Review records: "+reviewsRes.error.message);
+ for(const j of (jobsRes.data||[])){const reason=govDuplicateMatch(p,j);if(reason)return {title:j.job_title,id:j.id,reason,where:"Already Published"}}
  for(const r of (reviewsRes.data||[])){if(r.id===currentReviewId||r.published_job_id)continue;const payload=r.payload||{};if((payload.job_kind||payload.jobKind)!=="government")continue;const reason=govDuplicateMatch(p,payload);if(reason)return {title:r.title,id:r.id,reason,where:r.status==="draft"?"Admin Draft":"Review Queue"}}
  return null;
 }
 function payload(){const p={};fields.forEach(k=>p[k]=$(k).value.trim());p.education=Array.from(document.querySelectorAll(".education-choice:checked")).map(x=>x.value).join(", ");p.job_kind=p.jobKind||"private";p.authority=p.authority||"";p.country_name=p.countryName||"";p.exam_year=p.examYear||"";p.notification_date=p.notificationDate||"";p.notification_number=p.notificationNumber||"";p.age_limit=p.ageLimit||"";p.application_fee=p.applicationFee||"";p.official_url=p.officialUrl||"";p.notification_pdf_url=p.notificationPdfUrl||"";p.application_url=p.applicationUrl||"";p.selection_process=p.selectionProcess||"";p.company_id=$("companyId").value||null;p.source_draft_id=$("sourceDraftId").value||null;return p}
 function fill(p={}){const aliases={jobKind:"job_kind",countryName:"country_name",examYear:"exam_year",notificationDate:"notification_date",notificationNumber:"notification_number",ageLimit:"age_limit",applicationFee:"application_fee",officialUrl:"official_url",notificationPdfUrl:"notification_pdf_url",applicationUrl:"application_url",selectionProcess:"selection_process",authority:"authority"};fields.forEach(k=>{if(k!=="education")$(k).value=p[k]??p[aliases[k]]??(k==="openings"?"1":k==="jobKind"?"private":k==="salaryCurrency"?"USD":"")});const chosen=Array.isArray(p.education)?p.education:String(p.education||"").split(/[,;|]/).map(x=>x.trim()).filter(Boolean);document.querySelectorAll(".education-choice").forEach(x=>x.checked=chosen.includes(x.value));$("education").value=chosen.join(", ");$("salaryCurrency").value=p.salaryCurrency||"USD";$("salaryPeriod").value=p.salaryPeriod||(p.type==="Daily Wage"?"daily":"monthly");$("recordId").value=p.id||"";$("companyId").value=p.company_id||"";$("sourceDraftId").value=p.source_draft_id||"";$("formTitle").textContent=p.id?"✏️ வேலை அறிவிப்பைத் திருத்தவும்":"✍️ Create a New Job Posting"}
 function resetForm(){$("jobForm").reset();fill({});$("recordId").value="";$("openings").value="1";$("formTitle").textContent="✍️ Create a New Job Posting";updateKindFields()}
-function statusLabel(s){return ({draft:"Draft",pending_review:"Review காத்திருக்கிறது",approved:"Approved",rejected:"Rejected"})[s]||s}
+function statusLabel(s){return ({draft:"Draft",pending_review:"Pending Review",approved:"Approved",rejected:"Rejected"})[s]||s}
 async function loadCategories(){
  const sel=$("category"),current=sel.value;
  const {data,error}=await db.from("job_categories").select("category_name").eq("is_active",true).order("category_name");
@@ -126,18 +126,18 @@ async function loadCategories(){
 }
 async function save(status){
  const p=payload();
- if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், வேலை விவரம் ஆகியவற்றை நிரப்பவும்.",false);return} if(p.jobKind==="government"&&(!p.officialUrl||!p.authority||!p.governmentScope)){say("Government Jobக்கு மத்திய / தமிழ்Country அரசு வகை, ஆட்சேர்ப்பு துறை மற்றும் அதிகாரப்பூர்வ இணையதள இணைப்பு கட்டாயம்.",false);return} if(p.jobKind!=="government"&&!p.company){say("தனியார் / Overseas Jobக்கு நிறுவனத்தின் பெயர் கட்டாயம்.",false);return} if(p.jobKind==="foreign"&&!p.countryName){say("Overseas Jobக்கு Country குறிப்பிட வேண்டும்.",false);return} if(p.jobKind!=="government"&&!p.applicationUrl&&!p.email){say("தனியார் / Overseas Jobக்கு விண்ணப்ப இணைப்பு அல்லது தொடர்பு மின்னஞ்சல் வழங்கவும்.",false);return}
- if(p.openings&&(!Number.isInteger(Number(p.openings))||Number(p.openings)<1)){say("காலியிடங்கள் குறைந்தது 1 ஆக இருக்க வேண்டும்.",false);return}
- if(p.salaryMin!==""&&p.salaryMax!==""&&Number(p.salaryMin)>Number(p.salaryMax)){say("குறைந்தபட்ச Salary அதிகபட்ச சம்பளத்தை விட அதிகமாக இருக்கக்கூடாது.",false);return}
+ if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், Job Description ஆகியவற்றை நிரப்பவும்.",false);return} if(p.jobKind==="government"&&(!p.officialUrl||!p.authority||!p.governmentScope)){say("For government jobs, select Central or Tamil Nadu Government, enter the recruiting department and provide the official website link.",false);return} if(p.jobKind!=="government"&&!p.company){say("A company name is required for private and overseas jobs.",false);return} if(p.jobKind==="foreign"&&!p.countryName){say("A country is required for overseas jobs.",false);return} if(p.jobKind!=="government"&&!p.applicationUrl&&!p.email){say("தனியார் / Overseas Jobக்கு விண்ணப்ப இணைப்பு அல்லது Contact Email வழங்கவும்.",false);return}
+ if(p.openings&&(!Number.isInteger(Number(p.openings))||Number(p.openings)<1)){say("Vacancies குறைந்தது 1 ஆக இருக்க வேண்டும்.",false);return}
+ if(p.salaryMin!==""&&p.salaryMax!==""&&Number(p.salaryMin)>Number(p.salaryMax)){say("Minimum salary cannot exceed maximum salary.",false);return}
  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
-  if(p.deadline&&p.deadline<today){say("கடைசி தேதி கடந்த தேதியாக இருக்கக்கூடாது.",false);return}
+  if(p.deadline&&p.deadline<today){say("The deadline cannot be in the past.",false);return}
  const id=$("recordId").value;
  if(p.jobKind==="government"){
   try{
-   say("ஏற்கெனவே உள்ள Government Job அறிவிப்புகளுடன் ஒப்பிட்டு சரிபார்க்கிறது...");
+   say("Checking against existing government job notices...");
    const duplicate=await checkGovernmentDuplicate(p,id);
-   if(duplicate){say("⚠️ இந்த Government Job ஏற்கெனவே உள்ளது! ("+duplicate.where+")\\nபதவி: "+duplicate.title+"\\nகாரணம்: "+duplicate.reason+"\\nபதிவை மீண்டும் வெளியிடாமல், ஏற்கெனவே உள்ள அறிவிப்பைத் திறந்து சரிபார்க்கவும்.",false);return}
-  }catch(e){say(e.message||"Duplicate சரிபார்ப்பு தோல்வியடைந்தது. Please try again..",false);return}
+   if(duplicate){say("⚠️ This government job already exists! ("+duplicate.where+")\\nTitle: "+duplicate.title+"\\nReason: "+duplicate.reason+"\\nDo not publish this record again. Open and review the existing notice.",false);return}
+  }catch(e){say(e.message||"Duplicate check failed. Please try again.",false);return}
  }
  if(p.jobKind==="government"){
  const prefix=p.governmentScope==="tamil-nadu"?"Tamil Nadu (TN) Government — ":"Central Government — ";
@@ -145,21 +145,21 @@ async function save(status){
  if(/^Tamil Nadu(?: \(TN\))? Government$/i.test(agency)||/^Central Government$/i.test(agency))agency="";
  const department=p.governmentDepartment?p.governmentDepartment+" — ":"";
  p.authority=prefix+department+agency;
- const extra=[["தேர்வு / ஆட்சேர்ப்பு",p.examName],["விண்ணப்பம் தொடங்கும் தேதி",p.applicationStartDate],["தேர்வு தேதி",p.examDate],["பதவி வாரியான காலியிடங்கள்",p.vacancyBreakdown],["பாடத்திட்டம்",p.syllabus]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
+ const extra=[["Exam / Recruitment",p.examName],["Application Start Date",p.applicationStartDate],["Exam Date",p.examDate],["Vacancies by Position",p.vacancyBreakdown],["Syllabus",p.syllabus]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
  if(extra.length)p.description+="\\n\\n"+extra.join("\\n");
- if(p.description.length>8000){say("வேலை விவரம் மற்றும் கூடுதல் தகவல்கள் 8,000 எழுத்துகளை மீறக்கூடாது. சுருக்கவும்.",false);return}
+ if(p.description.length>8000){say("Job Description மற்றும் கூடுதல் தகவல்கள் 8,000 எழுத்துகளை மீறக்கூடாது. சுருக்கவும்.",false);return}
 }
 if(p.jobKind==="foreign"){
- const extra=[["விசா / Work Permit",p.visaType],["ஒப்பந்த காலம்",p.contractDuration],["தங்குமிடம் / உணவு",p.accommodation],["விமான டிக்கெட் / பயண உதவி",p.flightSupport]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
+ const extra=[["Visa / Work Permit",p.visaType],["Contract Duration",p.contractDuration],["Accommodation / Meals",p.accommodation],["Flight Ticket / Travel Assistance",p.flightSupport]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
  if(extra.length)p.description+="\\n\\n"+extra.join("\\n");
 }
 const row={created_by:user.id,title:p.title,company_name:p.company||null,status,payload:p,review_note:null,reviewed_by:null,reviewed_at:null};
  let result;
  if(id)result=await db.from("admin_job_post_reviews").update({title:row.title,company_name:row.company_name,status:row.status,payload:row.payload,review_note:null,reviewed_by:null,reviewed_at:null}).eq("id",id).select("id").single();
  else result=await db.from("admin_job_post_reviews").insert(row).select("id").single();
- if(result.error){say("சேமிக்க முடியவில்லை. Supabase-ல் supabase-admin-job-publish-setup.sql இயக்கப்பட்டதா எனப் பார்க்கவும். "+result.error.message,false);return}
+ if(result.error){say("Unable to save. Check whether supabase-admin-job-publish-setup.sql has been run in Supabase. "+result.error.message,false);return}
  $("recordId").value=result.data.id;
- say(status==="draft"?"வேலை Draft ஆக பாதுகாப்பாகச் சேமிக்கப்பட்டது.": "வேலை Review Queue-க்கு அனுப்பப்பட்டது. பொதுப் பக்கத்தில் இன்னும் வெளியிடப்படவில்லை.");
+ say(status==="draft"?"Job draft saved securely.": "Job sent to the review queue. It has not been published publicly.");
  await loadQueue();
 }
 async function loadQueue(){
@@ -167,44 +167,44 @@ async function loadQueue(){
  let q=db.from("admin_job_post_reviews").select("id,title,company_name,status,payload,review_note,published_job_id,created_at,updated_at").order("created_at",{ascending:false}).limit(60);
  if(f)q=q.eq("status",f);
  const {data,error}=await q;
- if(error){$("queue").innerHTML='<div class="empty">Review பட்டியலைப் பெற முடியவில்லை. SQL migration இயக்கப்பட வேண்டியிருக்கலாம்.<br>'+esc(error.message)+'</div>';return}
- if(!data?.length){$("queue").innerHTML='<div class="empty">இந்த நிலையில் வேலை அறிவிப்புகள் இல்லை.</div>';return}
- $("queue").innerHTML=data.map(r=>'<article class="item"><h3>'+esc(r.title)+'</h3><div class="meta"><span class="pill '+esc(r.status)+'">'+esc(statusLabel(r.status))+'</span>'+(r.company_name?'<span class="pill">'+esc(r.company_name)+'</span>':'')+'<span class="pill">'+new Date(r.created_at).toLocaleDateString("ta-IN")+'</span>'+(r.payload?.source_draft_id?'<span class="pill">நிறுவனச் சமர்ப்பிப்பு</span>':'')+'</div>'+(r.published_job_id?'<p>✓ Public Job ID: '+esc(r.published_job_id)+'</p>':'')+(r.review_note?'<p>குறிப்பு: '+esc(r.review_note)+'</p>':'')+'<div class="item-actions">'+(!r.published_job_id?'<button class="btn soft" data-action="edit" data-id="'+r.id+'">திருத்து</button>':'')+(r.status==="pending_review"?'<button class="btn green" data-action="approve" data-id="'+r.id+'">Approve</button><button class="btn red" data-action="reject" data-id="'+r.id+'">Reject</button>':'')+(r.status==="approved"&&!r.published_job_id?'<button class="btn primary" data-action="publish" data-id="'+r.id+'">🌐 Publish</button>':'')+(r.status==="rejected"?'<button class="btn soft" data-action="draft" data-id="'+r.id+'">மீண்டும் Draft</button>':'')+'</div></article>').join("");
+ if(error){$("queue").innerHTML='<div class="empty">Unable to load the review queue. The SQL migration may need to be run.<br>'+esc(error.message)+'</div>';return}
+ if(!data?.length){$("queue").innerHTML='<div class="empty">There are no job postings in this status.</div>';return}
+ $("queue").innerHTML=data.map(r=>'<article class="item"><h3>'+esc(r.title)+'</h3><div class="meta"><span class="pill '+esc(r.status)+'">'+esc(statusLabel(r.status))+'</span>'+(r.company_name?'<span class="pill">'+esc(r.company_name)+'</span>':'')+'<span class="pill">'+new Date(r.created_at).toLocaleDateString("en-IN")+'</span>'+(r.payload?.source_draft_id?'<span class="pill">Company Submission</span>':'')+'</div>'+(r.published_job_id?'<p>✓ Public Job ID: '+esc(r.published_job_id)+'</p>':'')+(r.review_note?'<p>Note: '+esc(r.review_note)+'</p>':'')+'<div class="item-actions">'+(!r.published_job_id?'<button class="btn soft" data-action="edit" data-id="'+r.id+'">திருத்து</button>':'')+(r.status==="pending_review"?'<button class="btn green" data-action="approve" data-id="'+r.id+'">Approve</button><button class="btn red" data-action="reject" data-id="'+r.id+'">Reject</button>':'')+(r.status==="approved"&&!r.published_job_id?'<button class="btn primary" data-action="publish" data-id="'+r.id+'">🌐 Publish</button>':'')+(r.status==="rejected"?'<button class="btn soft" data-action="draft" data-id="'+r.id+'">மீண்டும் Draft</button>':'')+'</div></article>').join("");
  $("queue").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>act(b.dataset.action,b.dataset.id,data)));
 }
 async function act(action,id,rows){
  const r=rows.find(x=>x.id===id);if(!r)return;
  if(action==="publish"){
-  if(!confirm("இந்த Approved வேலைவாய்ப்பை பொதுமக்கள் பார்க்கும் jobs பட்டியலில் வெளியிடவா? Company சமர்ப்பித்த வேலைக்கு மட்டும் Verified Company கட்டாயம்."))return;
-  say("Database பாதுகாப்பு சரிபார்த்து வேலை வெளியிடப்படுகிறது...");
+  if(!confirm("Publish this approved job to the public jobs list? Company-submitted jobs require a verified company."))return;
+  say("Verifying database security and publishing the job...");
   const {data,error}=await db.rpc("tc_admin_publish_job",{p_review_id:id});
-  if(error){say("Publish செய்ய முடியவில்லை: "+error.message,false);return}
+  if(error){say("Unable to publish: "+error.message,false);return}
   const publishedJobId=String(data||"");
   const {data:indexData,error:indexError}=await db.functions.invoke("google-indexing-notify",{
    body:{job_id:publishedJobId,action:"URL_UPDATED"}
   });
   if(indexError||!indexData?.ok){
    const reason=indexData?.error||indexError?.message||"Indexing notification was not sent";
-   say("வேலை வெற்றிகரமாக வெளியிடப்பட்டது. Public Job ID: "+publishedJobId+" · Google Indexing அறிவிப்பு இப்போது அனுப்பப்படவில்லை: "+reason,true);
+   say("Job published successfully. Public Job ID: "+publishedJobId+" · Google Indexing notification was not sent: "+reason,true);
   }else{
-   say("வேலை வெற்றிகரமாக வெளியிடப்பட்டது; Google Indexing API-க்கும் அறிவிக்கப்பட்டது. Public Job ID: "+publishedJobId,true);
+   say("Job published successfully and Google Indexing API was notified. Public Job ID: "+publishedJobId,true);
   }
   await loadQueue();return;
  }
- if(action==="edit"){fill({...r.payload,id:r.id});await loadCountryOptions(r.payload?.country_name||r.payload?.countryName||"");say("தேர்ந்தெடுத்த அறிவிப்பு படிவத்தில் ஏற்றப்பட்டது.");window.scrollTo({top:0,behavior:"smooth"});return}
+ if(action==="edit"){fill({...r.payload,id:r.id});await loadCountryOptions(r.payload?.country_name||r.payload?.countryName||"");say("Selected notice loaded into the form.");window.scrollTo({top:0,behavior:"smooth"});return}
  let update={status:action==="approve"?"approved":action==="reject"?"rejected":"draft",review_note:null,reviewed_by:null,reviewed_at:null};
- if(action==="reject"){const note=prompt("Reject செய்வதற்கான காரணத்தை எழுதுங்கள்:");if(note===null)return;if(!note.trim()){alert("காரணத்தை எழுதவும்.");return}update.review_note=note.trim().slice(0,1000)}
- if(action==="approve"){if(!confirm("இந்த அறிவிப்பை Admin Review-ல் Approved எனக் குறிக்கவா? இது பொதுவில் வெளியிடாது."))return;update.reviewed_by=user.id;update.reviewed_at=new Date().toISOString()}
+ if(action==="reject"){const note=prompt("Enter a reason for rejection:");if(note===null)return;if(!note.trim()){alert("Please enter a reason.");return}update.review_note=note.trim().slice(0,1000)}
+ if(action==="approve"){if(!confirm("Mark this notice as Approved in Admin Review? This will not publish it publicly."))return;update.reviewed_by=user.id;update.reviewed_at=new Date().toISOString()}
  const {error}=await db.from("admin_job_post_reviews").update(update).eq("id",id);
- if(error){say("நிலை மாற்ற முடியவில்லை: "+error.message,false);return}
- say("நிலை மாற்றப்பட்டது: "+statusLabel(update.status));await loadQueue();
+ if(error){say("Unable to change status: "+error.message,false);return}
+ say("Status changed: "+statusLabel(update.status));await loadQueue();
 }
 async function loadCountryOptions(selected=""){
  const el=$("countryName"),{data,error}=await db.from("countries").select("country_name,is_active,currency_code").eq("is_active",true).order("country_name");
- if(error){el.innerHTML='<option value="">Countryகளை ஏற்ற முடியவில்லை</option>';return}
+ if(error){el.innerHTML='<option value="">Unable to load countries</option>';return}
  const names=(data||[]).map(x=>x.country_name);countryCurrencyMap=Object.fromEntries((data||[]).map(x=>[x.country_name,x.currency_code]));
  if(selected&&!names.includes(selected))names.unshift(selected);
- el.innerHTML='<option value="">நாட்டைத் Select</option>'+names.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("");
+ el.innerHTML='<option value="">Select a Country</option>'+names.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("");
  el.value=selected||"India";
  updateGovernmentScopeOptions();
 }
@@ -229,12 +229,12 @@ $("jobKind").addEventListener("change",updateKindFields);
 $("salaryCurrency").addEventListener("change",updateKindFields);
 async function init(){
  const {data,error}=await db.auth.getUser();
- if(error||!data.user){$("loading").classList.add("hidden");$("gateText").textContent="முதலில் Admin கணக்கில் Login செய்யவும்.";$("gate").classList.remove("hidden");return}
+ if(error||!data.user){$("loading").classList.add("hidden");$("gateText").textContent="Log in with an Admin account first.";$("gate").classList.remove("hidden");return}
  user=data.user;
  const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
  $("loading").classList.add("hidden");
- if(roleError||!roles?.length){$("gateText").textContent="இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.";$("gate").classList.remove("hidden");return}
- const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){$("gateText").textContent="Authenticator MFA சரிபார்ப்பு தேவை. Admin Login வழியாக மீண்டும் உள்நுழையவும்.";$("gate").classList.remove("hidden");return}
+ if(roleError||!roles?.length){$("gateText").textContent="This account does not have Super Admin access.";$("gate").classList.remove("hidden");return}
+ const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){$("gateText").textContent="Authenticator MFA verification is required. Please sign in again through Admin Login.";$("gate").classList.remove("hidden");return}
  $("app").classList.remove("hidden");await loadCountryOptions();await loadCategories();await loadQueue();
 }
 $("saveDraft").addEventListener("click",()=>save("draft"));
