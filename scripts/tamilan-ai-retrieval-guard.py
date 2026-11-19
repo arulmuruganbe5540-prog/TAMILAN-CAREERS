@@ -71,7 +71,27 @@ else:
         errors.append('Private quota helper must be SECURITY DEFINER with empty search_path')
     if re.search(r'grant\s+.*on\s+table\s+private\.tamilan_ai_job_context_rate_limits', sql, re.I):
         errors.append('Private quota table must not be granted directly')
-if not CONFIG.is_file():
+
+    # Keep the quota scoped to the authenticated, registered caller and UTC buckets.
+    ownership_checks = {
+        'caller identity from auth.uid()': r'v_user\\s+uuid\\s*:=\\s*\\(select\\s+auth\\.uid\\(\\)\\)',
+        'user row bound to caller ID': r'where\\s+u\\.id\\s*=\\s*v_user',
+        'anonymous account rejected': r'coalesce\\(v_is_anonymous,\\s*true\\)',
+        'minute bucket fixed to UTC epoch': r'extract\\(epoch\\s+from\\s+v_now\\)\\s*/\\s*60',
+        'daily bucket fixed to UTC epoch': r'extract\\(epoch\\s+from\\s+v_now\\)\\s*/\\s*86400',
+        'minute counter saturates at limit plus one': r'v_minute_limit\\s*\\+\\s*1',
+        'daily counter saturates at limit plus one': r'v_day_limit\\s*\\+\\s*1',
+        'quota decision checks both limits': r'v_minute_count\\s*<=\\s*v_minute_limit\\s+and\\s+v_day_count\\s*<=\\s*v_day_limit',
+    }
+    for label, pattern in ownership_checks.items():
+        if not re.search(pattern, sql, re.I):
+            errors.append('Rate-limit migration missing ' + label)
+    if re.search(r'create\\s+policy[\\s\\S]*?on\\s+private\\.tamilan_ai_job_context_rate_limits', sql, re.I):
+        errors.append('Private quota table must not expose direct RLS policies')
+    if not re.search(r'revoke\\s+all\\s+on\\s+function\\s+public\\.tamilan_ai_consume_job_context_quota\\(\\)\\s+from\\s+public,\\s*anon', sql, re.I):
+        errors.append('Public quota RPC must deny PUBLIC and anon execution')
+    if not re.search(r'revoke\\s+all\\s+on\\s+function\\s+private\\.tamilan_ai_consume_job_context_quota\\(\\)\\s+from\\s+public,\\s*anon', sql, re.I):
+        errors.append('Private quota helper must deny PUBLIC and anon execution')if not CONFIG.is_file():
     errors.append('Missing Supabase config.toml')
 else:
     config = CONFIG.read_text(encoding='utf-8')
