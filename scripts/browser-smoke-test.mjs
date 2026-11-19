@@ -614,14 +614,17 @@ await check("Saved jobs sync with the signed-in Job Seeker account", async () =>
         access_token: "smoke-saved-access", refresh_token: "smoke-saved-refresh",
         token_type: "bearer", expires_in: 3600, expires_at: Math.floor(Date.now()/1000)+3600, user: sessionUser
       }));
+      localStorage.setItem("tc_saved_jobs_v1", JSON.stringify([{id:"123e4567-e89b-12d3-a456-426614174000",title:"Guest Saved Role"}]));
     }, user);
     await savedPage.route("**/rest/v1/user_roles**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({role:"job_seeker"})}));
     await savedPage.route("**/rest/v1/job_seeker_profiles**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({user_id:user.id})}));
+    let upsertCalled=false;
     await savedPage.route("**/rest/v1/candidate_saved_jobs**", route => {
+      if(route.request().method()==="POST"){upsertCalled=true;return route.fulfill({status:201,contentType:"application/json",body:"[]"});}
       if(route.request().method()==="DELETE"){deleteCalled=true;return route.fulfill({status:204,body:""});}
-      return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{job_id:"saved-job-1",saved_at:new Date().toISOString()}])});
+      return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{job_id:"123e4567-e89b-12d3-a456-426614174000",saved_at:new Date().toISOString()}])});
     });
-    await savedPage.route("**/rest/v1/jobs**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"saved-job-1",job_title:"Frontend Developer",location:"Remote",employment_type:"Full Time",status:"published",application_deadline:"2099-12-31",company_id:"saved-company-1"}])}));
+    await savedPage.route("**/rest/v1/jobs**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"123e4567-e89b-12d3-a456-426614174000",job_title:"Frontend Developer",location:"Remote",employment_type:"Full Time",status:"published",application_deadline:"2099-12-31",company_id:"saved-company-1"}])}));
     await savedPage.route("**/rest/v1/companies**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"saved-company-1",company_name:"Example Company"}])}));
     await savedPage.goto(base + "/saved-jobs.html", {waitUntil:"domcontentloaded"});
     await savedPage.locator(".job h2").waitFor({state:"visible",timeout:10000});
@@ -629,6 +632,7 @@ await check("Saved jobs sync with the signed-in Job Seeker account", async () =>
     if(!visible.includes("Frontend Developer")||!visible.includes("Example Company")||!visible.includes("Apply now")) throw new Error("Account-saved job details or direct application link did not render");
     await savedPage.locator("[data-remove]").click();
     await savedPage.locator(".empty").waitFor({state:"visible",timeout:10000});
+    if(!upsertCalled) throw new Error("Guest saved jobs were not migrated into the account");
     if(!deleteCalled) throw new Error("Removing a saved job did not call the account storage delete endpoint");
   } finally { await savedPage.close(); }
 });

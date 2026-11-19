@@ -29,12 +29,12 @@ main{max-width:950px;margin:28px auto;padding:0 15px}h1{font-size:25px;color:#17
 const KEY="tc_saved_jobs_v1",list=document.getElementById("list"),note=document.getElementById("note");
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let currentUser=null,mode="local",accountRows=[];
+let currentUser=null,currentUserRole=null,mode="local",accountRows=[];
 function readLocal(){try{const x=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(x)?x:[]}catch(e){return []}}
 function renderLocal(){
  const items=readLocal();
  if(!items.length){list.innerHTML='<div class="empty">You have not saved any jobs yet.<br><a href="jobs.html">Start searching for jobs</a></div>';return;}
- list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"Job Details")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="'+(currentUser?'apply.html?job='+encodeURIComponent(j.id):'login.html?next='+encodeURIComponent("apply.html?job="+j.id))+'">'+(currentUser?'Apply now':'Log in to apply')+'</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">Remove</button></div></article>').join("");
+ list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"Job Details")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="'+(currentUserRole==='job_seeker'?'apply.html?job='+encodeURIComponent(j.id):'login.html?next='+encodeURIComponent("apply.html?job="+j.id))+'">'+(currentUserRole==='job_seeker'?'Apply now':'Log in to apply')+'</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">Remove</button></div></article>').join("");
 }
 function isExpired(value){if(!value)return false;const d=new Date(value);return !Number.isNaN(d.getTime())&&d.getTime()<Date.now()}
 function renderAccount(){
@@ -49,10 +49,19 @@ async function init(){
  currentUser=sessionData.session?.user||null;
  if(!currentUser){mode="local";renderLocal();note.textContent="These guest saves are stored only in this browser. Sign in as a Job Seeker and complete your profile to sync saved jobs across devices.";return;}
  const {data:role,error:roleError}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).maybeSingle();
- if(roleError||role?.role!=="job_seeker"){mode="local";renderLocal();note.textContent="Account-synced saved jobs are available for Job Seeker accounts. Any guest saves remain on this browser.";return;}
+ currentUserRole=role?.role||null;
+ if(roleError||currentUserRole!=="job_seeker"){mode="local";renderLocal();note.textContent="Account-synced saved jobs are available for Job Seeker accounts. Any guest saves remain on this browser.";return;}
  const {data:profile,error:profileError}=await db.from("job_seeker_profiles").select("user_id").eq("user_id",currentUser.id).maybeSingle();
  if(profileError||!profile){mode="local";renderLocal();note.textContent="Complete your Job Seeker Profile to enable account-synced saved jobs. Existing browser saves are kept.";return;}
  mode="account";
+ const guestItems=readLocal(),guestSaves=guestItems.filter(item=>/^[0-9a-f-]{36}$/i.test(String(item.id||"")));
+ let guestMigrationFailed=guestSaves.length!==guestItems.length;
+ for(const item of guestSaves){
+  const {error}=await db.from("candidate_saved_jobs").upsert({user_id:currentUser.id,job_id:item.id},{onConflict:"user_id,job_id",ignoreDuplicates:true});
+  if(error)guestMigrationFailed=true;
+ }
+ if(guestSaves.length&&!guestMigrationFailed)localStorage.removeItem(KEY);
+ else if(guestMigrationFailed&&guestItems.length)note.textContent="Some older browser-saved jobs could not be synced. They remain stored in this browser.";
  const {data:savedRows,error:savedError}=await db.from("candidate_saved_jobs").select("job_id,saved_at").eq("user_id",currentUser.id).order("saved_at",{ascending:false});
  if(savedError){list.innerHTML='<div class="error">Unable to load account-saved jobs. '+esc(savedError.message)+'</div>';note.textContent="Your saved jobs have not been changed.";return;}
  const rows=savedRows||[],ids=rows.map(r=>r.job_id);
