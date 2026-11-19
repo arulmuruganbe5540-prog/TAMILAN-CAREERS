@@ -44,22 +44,15 @@ Used by:
 
 Do not enable automated publishing. Discovered notices stay in the private Admin Review queue until a Super Admin verifies the official source and publishes them.
 
-## First Super Admin account (required for Admin Control Center)
+## Super Admin account
 
-The current database has zero `super_admin` assignments. The Admin pages now check the signed-in account's own `user_roles` row through RLS and will deny access until the project owner grants the first Admin role.
-
-- Open `supabase-first-super-admin-bootstrap.sql` in the repository.
-- Replace only the email placeholder with the exact email of the owner's existing, confirmed Supabase Auth account.
-- Run the SQL once in the Supabase SQL Editor as the project owner.
-- Verify the result reports one Super Admin assignment. Do not grant this role to an unknown or third-party account.
-
-This is deliberately a final owner-controlled privilege step; it is not automatically applied by deployment.
+A live read-only database check on 19 November 2026 confirms **one** `super_admin` role assignment. Do not run the first-admin bootstrap SQL again or grant another privileged role. Admin page access still requires the signed-in account to be that authorized Super Admin.
 
 ## Supabase Auth security setting
 In Supabase Dashboard → Authentication → Settings / Security (wording may vary), enable leaked-password protection. The current Supabase security advisor reports this as disabled. This is a dashboard setting, not a GitHub code change.
 
 ## Real-account testing required
-Current live database snapshot: 1 Auth user, 1 company, 1 company membership, 0 jobs. Before public launch, create/use separate confirmed accounts for:
+Live database snapshot checked 19 November 2026: 2 Auth users, 1 Job Seeker role, 1 Super Admin role, 1 company, 1 company membership, 0 jobs, and 0 applications. A separate real Employer and Candidate end-to-end test account/session is still needed before public launch. Current government review queue: 165 pending items; external-job review queue: 6 pending candidates. Do not bulk-publish these without manual source verification. Before public launch, use separate confirmed accounts for:
 1. Candidate / Job Seeker
 2. Employer / HR
 3. Super Admin (only grant this role through the secured Admin process)
