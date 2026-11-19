@@ -2,14 +2,17 @@
 // This is intentionally fail-closed and is NOT deployed or enabled by this commit.
 // Supabase platform JWT verification must remain enabled for this function.
 import { createClient } from "npm:@supabase/supabase-js@2";
+import {
+  MAX_RESULTS,
+  normalizeCountry,
+  normalizeSearchQuery,
+  publicJobSource,
+} from "./logic.ts";
 
 const ALLOWED_ORIGINS = new Set([
   "https://tamilancareers.in",
   "https://www.tamilancareers.in",
 ]);
-const MAX_QUERY_LENGTH = 80;
-const MAX_RESULTS = 5;
-const MAX_DESCRIPTION_LENGTH = 6000;
 
 function responseHeaders(origin: string | null): Headers {
   const headers = new Headers({
@@ -27,56 +30,6 @@ function responseHeaders(origin: string | null): Headers {
 
 function json(data: unknown, status: number, origin: string | null): Response {
   return new Response(JSON.stringify(data), { status, headers: responseHeaders(origin) });
-}
-
-export function normalizeSearchQuery(value: unknown): string | null {
-  if (value === undefined || value === null || value === "") return "";
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  if (trimmed.length > MAX_QUERY_LENGTH) return null;
-  // Treat user text as plain search text, not PostgREST filter syntax.
-  return trimmed.replace(/[%,_()]/g, " ").replace(/\s+/g, " ").trim();
-}
-
-function safeHttpsUrl(value: unknown): string | null {
-  if (typeof value !== "string" || value.length > 2048) return null;
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" ? url.toString() : null;
-  } catch {
-    return null;
-  }
-}
-
-export function publicJobSource(row: Record<string, unknown>) {
-  const id = typeof row.id === "string" ? row.id : "";
-  if (!id) return null;
-  const canonical = `https://tamilancareers.in/job-details.html?id=${encodeURIComponent(id)}`;
-  const sourceUrl =
-    safeHttpsUrl(row.official_notification_url) ??
-    safeHttpsUrl(row.official_website_url) ??
-    canonical;
-  return {
-    source_id: id,
-    title: String(row.job_title ?? "").slice(0, 300),
-    description: String(row.description ?? "").slice(0, MAX_DESCRIPTION_LENGTH),
-    location: typeof row.location === "string" ? row.location.slice(0, 300) : null,
-    country: typeof row.country_name === "string" ? row.country_name.slice(0, 100) : null,
-    employment_type: typeof row.employment_type === "string" ? row.employment_type.slice(0, 100) : null,
-    workplace_type: typeof row.workplace_type === "string" ? row.workplace_type.slice(0, 100) : null,
-    education_level: typeof row.education_level === "string" ? row.education_level.slice(0, 300) : null,
-    required_skills: typeof row.required_skills === "string" ? row.required_skills.slice(0, 1000) : null,
-    experience_min: typeof row.experience_min === "number" ? row.experience_min : null,
-    experience_max: typeof row.experience_max === "number" ? row.experience_max : null,
-    salary_min: typeof row.salary_min === "number" ? row.salary_min : null,
-    salary_max: typeof row.salary_max === "number" ? row.salary_max : null,
-    salary_currency: typeof row.salary_currency === "string" ? row.salary_currency.trim() : null,
-    salary_period: typeof row.salary_period === "string" ? row.salary_period.slice(0, 50) : null,
-    application_deadline: typeof row.application_deadline === "string" ? row.application_deadline : null,
-    published_at: typeof row.published_at === "string" ? row.published_at : null,
-    citation_url: sourceUrl,
-    content_is_untrusted: true,
-  };
 }
 
 Deno.serve(async (request: Request) => {
@@ -124,13 +77,8 @@ Deno.serve(async (request: Request) => {
   if (query === null) {
     return json({ error: "query must be plain text up to 80 characters" }, 400, origin);
   }
-  const countryInput = input.country === undefined || input.country === null || input.country === ""
-    ? ""
-    : input.country;
-  const country = typeof countryInput === "string" && countryInput.trim().length <= 100
-    ? countryInput.trim().replace(/[%,_()]/g, " ").replace(/\\s+/g, " ").trim()
-    : undefined;
-  if (country === undefined) {
+  const country = normalizeCountry(input.country);
+  if (country === null) {
     return json({ error: "country must be plain text up to 100 characters" }, 400, origin);
   }
   const allowedKeys = new Set(["query", "country"]);
