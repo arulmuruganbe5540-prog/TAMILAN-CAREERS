@@ -18,6 +18,7 @@ else:
         'anon/publishable key only': 'SUPABASE_ANON_KEY',
         'published-only query': '.eq("status", "published")',
         'bounded result count': '.limit(MAX_RESULTS)',
+        'request body size cap': 'rawBody.length > 2048',
         'source identifier': 'source_id: id',
         'citation URL': 'citation_url: sourceUrl',
         'untrusted job content marker': 'content_is_untrusted: true',
