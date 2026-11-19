@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><meta name="theme-color" content="#101d3a"><title>Job Reports | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><meta name="theme-color" content="#101d3a"><title>Job Reports | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17233d;font-family:Arial,"Noto Sans Tamil",sans-serif;line-height:1.6}header{background:#101d3a;color:white;padding:15px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}header a{color:#8edcff;text-decoration:none}main{max-width:1100px;margin:24px auto;padding:0 14px}.panel,.report{background:white;border:1px solid #e1e8f1;border-radius:13px;padding:17px;margin-bottom:13px}.muted{color:#718097;font-size:12px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.tag{background:#edf3fa;border-radius:20px;padding:4px 9px;font-size:12px}.btn{border:0;border-radius:8px;padding:9px 13px;background:#1688ed;color:white;font-weight:bold;cursor:pointer}.btn.secondary{background:#eaf2fb;color:#175b99}textarea,select{width:100%;padding:10px;border:1px solid #ccd8e6;border-radius:8px;font:inherit;margin:6px 0}.report h2{font-size:17px;margin:0}.report p{margin:6px 0}.empty{padding:28px;text-align:center;color:#718097;background:white;border-radius:12px}
 </style><link rel="stylesheet" href="assets/site-protection.css"><style>
 /* Consistent premium text-only site identity */
@@ -7,22 +7,22 @@
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head><body>
 <header><b>🛡 <span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span> — Job Reports</b><a href="admin-control.html">← Admin Control</a></header>
-<main><section class="panel"><h1 style="margin:0">வேலைவாய்ப்பு புகார்கள்</h1><p class="muted">பயனர்கள் அளித்த புகார்களை ஆய்வு செய்து நடவடிக்கை பதிவு செய்யுங்கள். புகார் வந்ததாலேயே வேலை தானாக நீக்கப்படாது.</p><div class="row"><span id="summary" class="tag">சரிபார்க்கப்படுகிறது…</span><button id="refresh" class="btn secondary">புதுப்பிக்க</button></div></section><div id="message" class="panel">Admin அனுமதி சரிபார்க்கப்படுகிறது…</div><div id="reports"></div></main>
+<main><section class="panel"><h1 style="margin:0">Job Reports</h1><p class="muted">Review user reports and record the action taken. A job is not automatically removed just because a report is received.</p><div class="row"><span id="summary" class="tag">Checking…</span><button id="refresh" class="btn secondary">Refresh</button></div></section><div id="message" class="panel">Admin அனுமதி Checking…</div><div id="reports"></div></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const reasonNames={upfront_payment:"முன்பணம் / பதிவு கட்டணம்",fake_or_misleading:"போலி / தவறான அறிவிப்பு",identity_impersonation:"ஆள்மாறாட்டம்",personal_data_request:"தனிப்பட்ட தகவல் தவறாகக் கேட்பது",expired_or_filled:"காலாவதி / நிரப்பப்பட்ட வேலை",other:"மற்ற காரணம்"};
+const reasonNames={upfront_payment:"Advance / Registration Fee",fake_or_misleading:"Fake / Misleading Notice",identity_impersonation:"Impersonation",personal_data_request:"Inappropriate Request for Personal Information",expired_or_filled:"Expired / Filled Job",other:"Other"};
 let allowed=false;
 async function init(){
  const {data:s}=await db.auth.getSession();if(!s.session){location.replace("login.html?next="+encodeURIComponent("admin-job-reports.html"));return}
  const {data:r,error}=await db.from("user_roles").select("role").eq("user_id",s.session.user.id).eq("role","super_admin").maybeSingle();
- if(error||!r){$("message").textContent="Super Admin அனுமதி தேவை.";return}
- const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){$("message").textContent="Authenticator MFA சரிபார்ப்பு தேவை. Admin Login வழியாக மீண்டும் உள்நுழையவும்.";return}
- allowed=true;$("message").textContent="Admin அனுமதி உறுதி செய்யப்பட்டது.";await load();
+ if(error||!r){$("message").textContent="Super Admin access required.";return}
+ const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){$("message").textContent="Authenticator MFA verification is required. Please sign in again through Admin Login.";return}
+ allowed=true;$("message").textContent="Administrator access confirmed.";await load();
 }
 async function load(){
  if(!allowed)return;
- $("reports").textContent="புகார்கள் ஏற்றப்படுகின்றன…";
+ $("reports").textContent="Loading reports…";
  const {data:rows,error}=await db.from("job_reports").select("id,job_id,reporter_user_id,reason,details,status,admin_note,created_at,reviewed_at,jobs(job_title,job_code,job_kind,company_id,companies(company_name))").order("created_at",{ascending:false}).limit(150);
  if(error){$("reports").textContent="ஏற்ற முடியவில்லை: "+error.message;return}
  const items=rows||[],pending=items.filter(x=>x.status==="pending").length;
@@ -33,7 +33,7 @@ async function load(){
   return '<article class="report"><div class="row"><h2>'+esc(j?.job_title||"வேலை நீக்கப்பட்டது")+'</h2><span class="tag">'+esc(x.status)+'</span><span class="tag">'+esc(reasonNames[x.reason]||x.reason)+'</span></div><p class="muted">Job Code: '+esc(j?.job_code||x.job_id)+' · புகார் தேதி: '+new Date(x.created_at).toLocaleString("ta-IN")+' · Reporter ID: '+esc(x.reporter_user_id)+'</p><p><b>நிறுவனம்:</b> '+esc(c?.company_name||"—")+' · <b>வகை:</b> '+esc(j?.job_kind||"—")+'</p><p><b>விவரம்:</b> '+esc(x.details||"கூடுதல் விவரம் இல்லை")+'</p><p><a href="job-details.html?id='+encodeURIComponent(x.job_id)+'" target="_blank" rel="noopener">வேலைப் பக்கத்தைப் பார்க்க</a></p><label>Admin குறிப்பு</label><textarea id="note-'+x.id+'" maxlength="2000" rows="2">'+esc(x.admin_note||"")+'</textarea><div class="row"><button class="btn secondary" data-id="'+x.id+'" data-status="reviewing">ஆய்வில்</button><button class="btn" data-id="'+x.id+'" data-status="actioned">நடவடிக்கை முடிந்தது</button><button class="btn secondary" data-id="'+x.id+'" data-status="dismissed">புகார் நிராகரி</button></div></article>';
  }).join("");
  $("reports").querySelectorAll("button[data-id]").forEach(b=>b.addEventListener("click",async()=>{
-  b.disabled=true;try{const {error}=await db.rpc("tc_review_job_report",{p_report_id:b.dataset.id,p_status:b.dataset.status,p_admin_note:$("note-"+b.dataset.id).value});if(error)throw error;await load()}catch(e){alert("புதுப்பிக்க முடியவில்லை: "+e.message);b.disabled=false}
+  b.disabled=true;try{const {error}=await db.rpc("tc_review_job_report",{p_report_id:b.dataset.id,p_status:b.dataset.status,p_admin_note:$("note-"+b.dataset.id).value});if(error)throw error;await load()}catch(e){alert("Refresh முடியவில்லை: "+e.message);b.disabled=false}
  }));
 }
 $("refresh").addEventListener("click",load);init().catch(e=>$("message").textContent=e.message||String(e));
