@@ -7,6 +7,8 @@ ROOT = Path(__file__).resolve().parents[1]
 global_js = (ROOT / "assets/global-experience.js").read_text(encoding="utf-8")
 translator = (ROOT / "assets/auto-translate.js").read_text(encoding="utf-8")
 protection = (ROOT / "assets/site-protection.js").read_text(encoding="utf-8")
+footer_script = (ROOT / "assets/professional-footer.js").read_text(encoding="utf-8")
+homepage = (ROOT / "index.html").read_text(encoding="utf-8")
 pages = sorted(ROOT.glob("*.html"))
 
 checks = {
@@ -29,6 +31,17 @@ checks = {
         'new MutationObserver' in translator and 'r.addedNodes' in translator,
     "shared site script loads global language experience":
         "assets/global-experience.js" in protection,
+    "premium banner replaces the logo in place instead of creating a second header row":
+        "brand.replaceWith(link)" in global_js
+        and "header.insertBefore(link,header.firstChild)" not in global_js
+        and ".tc-premium-header-shell .tc-premium-header-brand" in global_js,
+    "shared footer does not duplicate an existing page footer":
+        'if(document.querySelector("body footer"))return;' in footer_script,
+    "homepage latest jobs excludes jobs already featured above":
+        "const featuredSections=[" in homepage
+        and "const alreadyShownIds=new Set()" in homepage
+        and "return !id||!alreadyShownIds.has(id)" in homepage
+        and "const overseasJobs=foreignError?[]:(foreignData||[])" in homepage,
 }
 for page in pages:
     content = page.read_text(encoding="utf-8")
