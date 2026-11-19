@@ -35,19 +35,7 @@ select
   to_regprocedure('private.tamilan_ai_consume_job_context_quota()') as private_rpc,
   to_regprocedure('public.tamilan_ai_consume_job_context_quota()') as public_rpc;
 
-select
-  n.nspname as schema_name,
-  p.proname,
-  p.prosecdef as security_definer,
-  p.proconfig
-from pg_proc p
-join pg_namespace n on n.oid = p.pronamespace
-where (n.nspname, p.proname) in
-  ('private', 'tamilan_ai_consume_job_context_quota'),
-  ('public', 'tamilan_ai_consume_job_context_quota');
 ```
-
-**குறிப்பு:** மேலுள்ள catalog query-யில் function பட்டியலைத் தெளிவாகப் பார்க்க, தேவைப்பட்டால் இதைப் பயன்படுத்தவும்:
 
 ```sql
 select
