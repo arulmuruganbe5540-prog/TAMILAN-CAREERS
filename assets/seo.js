@@ -27,6 +27,25 @@
     var script = document.getElementById("tc-website-jsonld");
     if (!script) { script = document.createElement("script"); script.type = "application/ld+json"; script.id = "tc-website-jsonld"; document.head.appendChild(script); }
     script.textContent = JSON.stringify(schema);
+
+    var organization = {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "TAMILAN CAREERS",
+      "alternateName": "Tamilan Careers",
+      "url": origin + "/",
+      "description": "A job discovery platform for government, private-sector and international career opportunities.",
+      "email": "arulmuruganbe5540@gmail.com",
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "arulmuruganbe5540@gmail.com",
+        "availableLanguage": ["English", "Tamil"]
+      }]
+    };
+    var organizationScript = document.getElementById("tc-organization-jsonld");
+    if (!organizationScript) { organizationScript = document.createElement("script"); organizationScript.type = "application/ld+json"; organizationScript.id = "tc-organization-jsonld"; document.head.appendChild(organizationScript); }
+    organizationScript.textContent = JSON.stringify(organization);
   }
 })();
 (function(){var s=document.createElement('script');s.src='assets/global-experience.js';s.defer=true;document.head.appendChild(s);})();
