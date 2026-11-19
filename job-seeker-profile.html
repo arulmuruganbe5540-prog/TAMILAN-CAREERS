@@ -63,18 +63,18 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <div class="field"><label for="expCity">வேலை செய்த ஊர்</label><input id="expCity" maxlength="100"></div>
 <div class="field"><label for="expStart">Start Date</label><input id="expStart" type="date"></div>
 <div class="field"><label for="expEnd">End Date</label><input id="expEnd" type="date"></div>
-<div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> தற்போது இங்கு வேலை செய்கிறேன்</label></div>
+<div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> Present இங்கு வேலை செய்கிறேன்</label></div>
 <div class="field full"><label for="expDescription">Responsibilities / செய்த வேலைகள்</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் Save</button><button class="secondary" type="button" id="expCancel" hidden>Cancel Edit</button></div></form><div id="experienceList" class="hint">Work Experience ஏற்றப்படுகிறது...</div></section>
+<div class="actions"><button class="primary" type="submit" id="expSave">Save Experience</button><button class="secondary" type="button" id="expCancel" hidden>Cancel Edit</button></div></form><div id="experienceList" class="hint">Work Experience ஏற்றப்படுகிறது...</div></section>
 <section class="panel" id="certificationPanel"><h2>📜 சான்றிதழ்கள்</h2><p class="hint">உங்கள் தொழில்முறை / திறன் சான்றிதழ்களைச் சேர்க்கலாம்.</p>
 <form id="certificationForm"><input type="hidden" id="certificationId"><div class="grid">
 <div class="field"><label for="certName">சான்றிதழ் பெயர் *</label><input id="certName" maxlength="180" required placeholder="உதா: Tally Prime Certificate"></div>
 <div class="field"><label for="certIssuer">வழங்கிய நிறுவனம்</label><input id="certIssuer" maxlength="180"></div>
 <div class="field"><label for="certIssue">வழங்கிய தேதி</label><input id="certIssue" type="date"></div>
 <div class="field"><label for="certExpiry">காலாவதி தேதி</label><input id="certExpiry" type="date"></div>
-<div class="field full"><label for="certCredential">Credential ID (விருப்பம்)</label><input id="certCredential" maxlength="120"></div>
-</div><div class="actions"><button class="primary" type="submit" id="certSave">சான்றிதழைச் Save</button><button class="secondary" type="button" id="certCancel" hidden>Cancel Edit</button></div></form>
-<div id="certificationList" class="hint">சான்றிதழ்கள் ஏற்றப்படுகின்றன...</div></section></main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
+<div class="field full"><label for="certCredential">Credential ID (Optional)</label><input id="certCredential" maxlength="120"></div>
+</div><div class="actions"><button class="primary" type="submit" id="certSave">Save Certificate</button><button class="secondary" type="button" id="certCancel" hidden>Cancel Edit</button></div></form>
+<div id="certificationList" class="hint">Loading certificates...</div></section></main><footer>TAMILAN CAREERS – Moving you towards opportunities that match your skills.</footer>
 <script>
 const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
@@ -83,14 +83,14 @@ const ids=["fullName","phone","location","headline","about","education","experie
 const notice=document.getElementById("notice");
 function say(message,ok){notice.textContent=message;notice.className="notice "+(ok?"good":"bad");}
 function val(id){return document.getElementById(id).value.trim();}
-function updateProgress(){const count=ids.filter(id=>val(id)).length;const percent=Math.round(count/ids.length*100);document.getElementById("progressBar").style.width=percent+"%";document.getElementById("progressText").textContent=percent+"% நிறைவு – "+count+"/"+ids.length+" விவரங்கள் நிரப்பப்பட்டுள்ளன";}
+function updateProgress(){const count=ids.filter(id=>val(id)).length;const percent=Math.round(count/ids.length*100);document.getElementById("progressBar").style.width=percent+"%";document.getElementById("progressText").textContent=percent+"% complete – "+count+"/"+ids.length+" details completed";}
 async function loadProfile(){
  const {data,error}=await client.auth.getSession();
  if(error||!data.session){location.replace("login.html?next="+encodeURIComponent("job-seeker-profile.html"));return;}
  const user=data.session.user;currentUserId=user.id;
  const {data:roleData,error:roleError}=await client.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
- if(roleError){say("கணக்கு அனுமதியைச் சரிபார்க்க முடியவில்லை: "+roleError.message,false);return;}
- if(roleData?.role!=="job_seeker"){say("இந்தப் பக்கம் Job Seeker கணக்குகளுக்காக மட்டுமே. உங்கள் கணக்கு வகையைச் சரிபார்க்கவும்.",false);return;}
+ if(roleError){say("Unable to verify account permissions: "+roleError.message,false);return;}
+ if(roleData?.role!=="job_seeker"){say("This page is available only to Job Seeker accounts. Check your account type.",false);return;}
  const [profileResult,seekerResult,skillResult,languageResult,prefResult]=await Promise.all([
   client.from("profiles").select("full_name,email,phone").eq("id",user.id).maybeSingle(),
   client.from("job_seeker_profiles").select("headline,bio,current_city,total_experience_months").eq("user_id",user.id).maybeSingle(),
@@ -99,7 +99,7 @@ async function loadProfile(){
   client.from("candidate_preferences").select("preferred_city,preferred_employment_type").eq("user_id",user.id).maybeSingle()
  ]);
  const errors=[profileResult.error,seekerResult.error,skillResult.error,languageResult.error,prefResult.error].filter(Boolean);
- if(errors.length){say("சுயவிவர அட்டவணைகளைப் படிக்க முடியவில்லை. Supabase அட்டவணை / RLS அமைப்பைச் சரிபார்க்கவும்: "+errors[0].message,false);return;}
+ if(errors.length){say("Unable to read profile tables. Check the Supabase tables / RLS configuration: "+errors[0].message,false);return;}
  const m=user.user_metadata||{},p=profileResult.data||{},s=seekerResult.data||{},pref=prefResult.data||{};
  const months=s.total_experience_months;
  const experience=months===0?"Fresher":months==null?(m.experience||""):months<12?"Less than 1 year":months<24?"1–2 years":months<60?"3–5 years":months<120?"6–10 years":"10+ years";
@@ -119,7 +119,7 @@ function resetRecordForm(kind){
  const isEdu=kind==="edu",form=document.getElementById(isEdu?"educationForm":"experienceForm");
  form.reset();document.getElementById(isEdu?"educationId":"experienceId").value="";
  document.getElementById(isEdu?"eduCancel":"expCancel").hidden=true;
- document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"Save Education":"அனுபவத்தைச் Save";
+ document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"Save Education":"Save Experience";
 }
 async function loadRecords(){
  const [ed,ex,certs]=await Promise.all([
@@ -127,65 +127,65 @@ async function loadRecords(){
   client.from("candidate_experience").select("id,company_name,job_title,employment_type,city,start_date,end_date,is_current,description").eq("user_id",currentUserId).order("start_date",{ascending:false}),
   client.from("candidate_certifications").select("id,certificate_name,issuing_organization,issue_date,expiry_date,credential_id").eq("user_id",currentUserId).order("issue_date",{ascending:false})
  ]);
- if(ed.error)document.getElementById("educationList").textContent="கல்வி விவரங்களைப் படிக்க முடியவில்லை: "+ed.error.message;
- else document.getElementById("educationList").innerHTML=ed.data.length?ed.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.qualification)+'</strong><div>'+esc(x.institution_name)+'</div><div>'+esc(x.field_of_study||"")+' · '+esc(x.grade||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><div class="actions"><button class="secondary" type="button" data-edit-edu="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-edu="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் Education Details சேர்க்கப்படவில்லை.";
- if(ex.error)document.getElementById("experienceList").textContent="பணி அனுபவத்தைப் படிக்க முடியவில்லை: "+ex.error.message;
- else document.getElementById("experienceList").innerHTML=ex.data.length?ex.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.job_title)+'</strong><div>'+esc(x.company_name)+' · '+esc(x.city||"")+'</div><div>'+esc(x.employment_type||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><p>'+esc(x.description||"")+'</p><div class="actions"><button class="secondary" type="button" data-edit-exp="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-exp="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் Work Experience சேர்க்கப்படவில்லை.";
- if(certs.error)document.getElementById("certificationList").textContent="சான்றிதழ்களைப் படிக்க முடியவில்லை: "+certs.error.message;
- else document.getElementById("certificationList").innerHTML=certs.data.length?certs.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.certificate_name)+'</strong><div>'+esc(x.issuing_organization||"")+'</div><small>'+esc(x.issue_date||"")+' – '+esc(x.expiry_date||"")+'</small>'+(x.credential_id?'<div>Credential ID: '+esc(x.credential_id)+'</div>':"")+'<div class="actions"><button class="secondary" type="button" data-edit-cert="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-cert="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் சான்றிதழ்கள் சேர்க்கப்படவில்லை.";
+ if(ed.error)document.getElementById("educationList").textContent="Unable to load education details: "+ed.error.message;
+ else document.getElementById("educationList").innerHTML=ed.data.length?ed.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.qualification)+'</strong><div>'+esc(x.institution_name)+'</div><div>'+esc(x.field_of_study||"")+' · '+esc(x.grade||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"Present":esc(x.end_date||""))+'</small><div class="actions"><button class="secondary" type="button" data-edit-edu="'+esc(x.id)+'">Edit</button><button class="secondary" type="button" data-delete-edu="'+esc(x.id)+'">Delete</button></div></article>').join(""):"இன்னும் Education Details சேர்க்கப்படவில்லை.";
+ if(ex.error)document.getElementById("experienceList").textContent="Unable to load work experience: "+ex.error.message;
+ else document.getElementById("experienceList").innerHTML=ex.data.length?ex.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.job_title)+'</strong><div>'+esc(x.company_name)+' · '+esc(x.city||"")+'</div><div>'+esc(x.employment_type||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"Present":esc(x.end_date||""))+'</small><p>'+esc(x.description||"")+'</p><div class="actions"><button class="secondary" type="button" data-edit-exp="'+esc(x.id)+'">Edit</button><button class="secondary" type="button" data-delete-exp="'+esc(x.id)+'">Delete</button></div></article>').join(""):"இன்னும் Work Experience சேர்க்கப்படவில்லை.";
+ if(certs.error)document.getElementById("certificationList").textContent="Unable to load certificates: "+certs.error.message;
+ else document.getElementById("certificationList").innerHTML=certs.data.length?certs.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.certificate_name)+'</strong><div>'+esc(x.issuing_organization||"")+'</div><small>'+esc(x.issue_date||"")+' – '+esc(x.expiry_date||"")+'</small>'+(x.credential_id?'<div>Credential ID: '+esc(x.credential_id)+'</div>':"")+'<div class="actions"><button class="secondary" type="button" data-edit-cert="'+esc(x.id)+'">Edit</button><button class="secondary" type="button" data-delete-cert="'+esc(x.id)+'">Delete</button></div></article>').join(""):"இன்னும் சான்றிதழ்கள் சேர்க்கப்படவில்லை.";
 
 }
 document.getElementById("educationForm").addEventListener("submit",async e=>{
  e.preventDefault();const id=val("educationId"),payload={user_id:currentUserId,institution_name:val("eduInstitution"),qualification:val("eduQualification"),field_of_study:val("eduField")||null,grade:val("eduGrade")||null,start_date:val("eduStart")||null,end_date:document.getElementById("eduCurrent").checked?null:(val("eduEnd")||null),is_current:document.getElementById("eduCurrent").checked,description:val("eduDescription")||null};
- if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("கல்வி End Date, Start Dateக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("Education end date cannot be earlier than the start date.",false);return;}
  const q=id?client.from("candidate_education").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_education").insert(payload);
- const {error}=await q;if(error){say("கல்வியைச் Unable to save: "+error.message,false);return;}resetRecordForm("edu");await loadRecords();say("கல்வி விவரம் சேமிக்கப்பட்டது.",true);
+ const {error}=await q;if(error){say("Unable to save education: "+error.message,false);return;}resetRecordForm("edu");await loadRecords();say("Education details saved.",true);
 });
 document.getElementById("experienceForm").addEventListener("submit",async e=>{
  e.preventDefault();const id=val("experienceId"),payload={user_id:currentUserId,company_name:val("expCompany"),job_title:val("expTitle"),employment_type:val("expType")||null,city:val("expCity")||null,start_date:val("expStart")||null,end_date:document.getElementById("expCurrent").checked?null:(val("expEnd")||null),is_current:document.getElementById("expCurrent").checked,description:val("expDescription")||null};
- if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("வேலை End Date, Start Dateக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("Employment end date cannot be earlier than the start date.",false);return;}
  const q=id?client.from("candidate_experience").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_experience").insert(payload);
- const {error}=await q;if(error){say("பணி அனுபவத்தைச் Unable to save: "+error.message,false);return;}resetRecordForm("exp");await loadRecords();say("Work Experience சேமிக்கப்பட்டது.",true);
+ const {error}=await q;if(error){say("Unable to save work experience: "+error.message,false);return;}resetRecordForm("exp");await loadRecords();say("Work experience saved.",true);
 });
 document.getElementById("certificationForm").addEventListener("submit",async e=>{
  e.preventDefault();const id=val("certificationId"),payload={user_id:currentUserId,certificate_name:val("certName"),issuing_organization:val("certIssuer")||null,issue_date:val("certIssue")||null,expiry_date:val("certExpiry")||null,credential_id:val("certCredential")||null};
- if(payload.issue_date&&payload.expiry_date&&payload.expiry_date<payload.issue_date){say("காலாவதி தேதி, வழங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ if(payload.issue_date&&payload.expiry_date&&payload.expiry_date<payload.issue_date){say("Expiry date cannot be earlier than the issue date.",false);return;}
  const q=id?client.from("candidate_certifications").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_certifications").insert(payload);
- const {error}=await q;if(error){say("சான்றிதழைச் Unable to save: "+error.message,false);return;}
- document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் Save";
- await loadRecords();say("சான்றிதழ் சேமிக்கப்பட்டது.",true);
+ const {error}=await q;if(error){say("Unable to save certificate: "+error.message,false);return;}
+ document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="Save Certificate";
+ await loadRecords();say("Certificate saved.",true);
 });
-document.getElementById("certCancel").addEventListener("click",()=>{document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் Save";});
+document.getElementById("certCancel").addEventListener("click",()=>{document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="Save Certificate";});
 document.getElementById("certificationList").addEventListener("click",async e=>{
  const edit=e.target.closest("[data-edit-cert]"),del=e.target.closest("[data-delete-cert]");
  if(edit){const {data,error}=await client.from("candidate_certifications").select("*").eq("id",edit.dataset.editCert).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
   const map={certificationId:"id",certName:"certificate_name",certIssuer:"issuing_organization",certIssue:"issue_date",certExpiry:"expiry_date",certCredential:"credential_id"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";
-  document.getElementById("certCancel").hidden=false;document.getElementById("certSave").textContent="மாற்றத்தைச் Save";document.getElementById("certificationPanel").scrollIntoView({behavior:"smooth"});
+  document.getElementById("certCancel").hidden=false;document.getElementById("certSave").textContent="Save Changes";document.getElementById("certificationPanel").scrollIntoView({behavior:"smooth"});
  }
- if(del&&confirm("இந்தச் சான்றிதழை நீக்கவா?")){const {error}=await client.from("candidate_certifications").delete().eq("id",del.dataset.deleteCert).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("சான்றிதழ் நீக்கப்பட்டது.",true);}}
+ if(del&&confirm("Delete this certificate?")){const {error}=await client.from("candidate_certifications").delete().eq("id",del.dataset.deleteCert).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("Certificate deleted.",true);}}
 });
 document.getElementById("eduCancel").addEventListener("click",()=>resetRecordForm("edu"));
 document.getElementById("expCancel").addEventListener("click",()=>resetRecordForm("exp"));
 document.getElementById("educationList").addEventListener("click",async e=>{
  const edit=e.target.closest("[data-edit-edu]"),del=e.target.closest("[data-delete-edu]");
  if(edit){const {data,error}=await client.from("candidate_education").select("*").eq("id",edit.dataset.editEdu).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
- const map={educationId:"id",eduInstitution:"institution_name",eduQualification:"qualification",eduField:"field_of_study",eduGrade:"grade",eduStart:"start_date",eduEnd:"end_date",eduDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("eduCurrent").checked=!!data.is_current;document.getElementById("eduCancel").hidden=false;document.getElementById("eduSave").textContent="மாற்றத்தைச் Save";document.getElementById("educationPanel").scrollIntoView({behavior:"smooth"});}
- if(del&&confirm("இந்தக் கல்வி விவரத்தை நீக்கவா?")){const {error}=await client.from("candidate_education").delete().eq("id",del.dataset.deleteEdu).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("கல்வி விவரம் நீக்கப்பட்டது.",true);}}
+ const map={educationId:"id",eduInstitution:"institution_name",eduQualification:"qualification",eduField:"field_of_study",eduGrade:"grade",eduStart:"start_date",eduEnd:"end_date",eduDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("eduCurrent").checked=!!data.is_current;document.getElementById("eduCancel").hidden=false;document.getElementById("eduSave").textContent="Save Changes";document.getElementById("educationPanel").scrollIntoView({behavior:"smooth"});}
+ if(del&&confirm("Delete this education record?")){const {error}=await client.from("candidate_education").delete().eq("id",del.dataset.deleteEdu).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("Education record deleted.",true);}}
 });
 document.getElementById("experienceList").addEventListener("click",async e=>{
  const edit=e.target.closest("[data-edit-exp]"),del=e.target.closest("[data-delete-exp]");
  if(edit){const {data,error}=await client.from("candidate_experience").select("*").eq("id",edit.dataset.editExp).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
- const map={experienceId:"id",expCompany:"company_name",expTitle:"job_title",expType:"employment_type",expCity:"city",expStart:"start_date",expEnd:"end_date",expDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("expCurrent").checked=!!data.is_current;document.getElementById("expCancel").hidden=false;document.getElementById("expSave").textContent="மாற்றத்தைச் Save";document.getElementById("experiencePanel").scrollIntoView({behavior:"smooth"});}
- if(del&&confirm("இந்தப் பணி அனுபவத்தை நீக்கவா?")){const {error}=await client.from("candidate_experience").delete().eq("id",del.dataset.deleteExp).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("Work Experience நீக்கப்பட்டது.",true);}}
+ const map={experienceId:"id",expCompany:"company_name",expTitle:"job_title",expType:"employment_type",expCity:"city",expStart:"start_date",expEnd:"end_date",expDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("expCurrent").checked=!!data.is_current;document.getElementById("expCancel").hidden=false;document.getElementById("expSave").textContent="Save Changes";document.getElementById("experiencePanel").scrollIntoView({behavior:"smooth"});}
+ if(del&&confirm("Delete this work experience record?")){const {error}=await client.from("candidate_experience").delete().eq("id",del.dataset.deleteExp).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("Work experience deleted.",true);}}
 });
 
 for(const id of ids)document.getElementById(id).addEventListener("input",updateProgress);
 document.getElementById("reloadBtn").addEventListener("click",()=>loadProfile().catch(e=>say(e.message,false)));
 document.getElementById("profileForm").addEventListener("submit",async e=>{
- e.preventDefault();const button=document.getElementById("saveBtn");button.disabled=true;button.textContent="சேமிக்கப்படுகிறது...";
+ e.preventDefault();const button=document.getElementById("saveBtn");button.disabled=true;button.textContent="Saving...";
  try{
   const {data:sessionData,error:sessionError}=await client.auth.getSession();
-  if(sessionError||!sessionData.session)throw new Error("மீண்டும் Login செய்யவும்.");
+  if(sessionError||!sessionData.session)throw new Error("Please log in again.");
   const user=sessionData.session.user;
   const skills=[...new Set(val("skills").split(",").map(x=>x.trim()).filter(Boolean))];
   const langMap={"tamil":"ta","english":"en","hindi":"hi","telugu":"te","kannada":"kn","malayalam":"ml","bengali":"bn","french":"fr","arabic":"ar","spanish":"es"};
@@ -195,39 +195,39 @@ document.getElementById("profileForm").addEventListener("submit",async e=>{
   const {error:profileError}=await client.from("profiles").upsert({
    id:user.id,full_name:val("fullName"),email:user.email||null,phone:val("phone")||null,updated_at:new Date().toISOString()
   },{onConflict:"id"});
-  if(profileError)throw new Error("அடிப்படை விவரம்: "+profileError.message);
+  if(profileError)throw new Error("Basic details: "+profileError.message);
   const {error:seekerError}=await client.from("job_seeker_profiles").upsert({
    user_id:user.id,headline:val("headline")||null,bio:val("about")||null,current_city:val("location")||null,
    ...(months===null?{}:{total_experience_months:months}),updated_at:new Date().toISOString()
   },{onConflict:"user_id"});
-  if(seekerError)throw new Error("வேலை தேடுபவர் விவரம்: "+seekerError.message);
+  if(seekerError)throw new Error("Job seeker details: "+seekerError.message);
   const {error:skillDeleteError}=await client.from("candidate_skills").delete().eq("user_id",user.id);
-  if(skillDeleteError)throw new Error("திறன்களைப் புதுப்பிக்க முடியவில்லை: "+skillDeleteError.message);
+  if(skillDeleteError)throw new Error("Unable to update skills: "+skillDeleteError.message);
   if(skills.length){
    const {error}=await client.from("candidate_skills").insert(skills.map(skill_name=>({user_id:user.id,skill_name})));
-   if(error)throw new Error("திறன்களைச் Unable to save: "+error.message);
+   if(error)throw new Error("Unable to save skills: "+error.message);
   }
   const {error:langDeleteError}=await client.from("candidate_languages").delete().eq("user_id",user.id);
-  if(langDeleteError)throw new Error("மொழிகளைப் புதுப்பிக்க முடியவில்லை: "+langDeleteError.message);
+  if(langDeleteError)throw new Error("Unable to update languages: "+langDeleteError.message);
   if(languages.length){
    const {error}=await client.from("candidate_languages").insert(languages.map(language_code=>({user_id:user.id,language_code})));
-   if(error)throw new Error("மொழிகளைச் Unable to save: "+error.message);
+   if(error)throw new Error("Unable to save languages: "+error.message);
   }
   const {error:prefError}=await client.from("candidate_preferences").upsert({
    user_id:user.id,preferred_city:val("preferredLocation")||null,
    preferred_employment_type:val("jobType")||null,updated_at:new Date().toISOString()
   },{onConflict:"user_id"});
-  if(prefError)throw new Error("வேலை விருப்பங்களைச் Unable to save: "+prefError.message);
+  if(prefError)throw new Error("Unable to save job preferences: "+prefError.message);
   const {error:metaError}=await client.auth.updateUser({data:{
    full_name:val("fullName"),phone:val("phone"),location:val("location"),headline:val("headline"),
    about:val("about"),education:val("education"),experience:val("experience"),skills,
    languages:val("languages"),preferred_job_type:val("jobType"),preferred_location:val("preferredLocation")
   }});
-  if(metaError)throw new Error("Database-ல் சேமிக்கப்பட்டது; ஆனால் பழைய metadata ஒத்திசைவு தோல்வி: "+metaError.message);
-  say("உங்கள் சுயவிவரம் Database-ல் சேமிக்கப்பட்டது.",true);updateProgress();
+  if(metaError)throw new Error("Saved to the database, but legacy metadata sync failed: "+metaError.message);
+  say("Your profile has been saved to the database.",true);updateProgress();
  }catch(error){say("Unable to save: "+(error.message||error),false);}
  finally{button.disabled=false;button.textContent="Save Profile";}
 });
-loadProfile().catch(e=>say("சுயவிவரத்தை ஏற்ற முடியவில்லை: "+(e.message||e),false));
+loadProfile().catch(e=>say("Unable to load profile: "+(e.message||e),false));
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
