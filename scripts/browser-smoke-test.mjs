@@ -206,6 +206,73 @@ await check("English-only registration validates and submits employer signup", a
     await registrationPage.close();
   }
 });
+await check("Login rejects invalid credentials and opens the Job Seeker dashboard on success", async () => {
+  const authPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const testUser = {
+    id: "smoke-job-seeker-user", aud: "authenticated", role: "authenticated",
+    email: "candidate@example.test",
+    app_metadata: { provider: "email", providers: ["email"] },
+    user_metadata: { full_name: "Test Candidate" }, identities: [],
+    created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+  };
+  try {
+    await authPage.route("**/auth/v1/token*", async route => {
+      const body = route.request().postDataJSON();
+      if (body.password !== "Candidate123") {
+        await route.fulfill({ status: 400, contentType: "application/json", body: JSON.stringify({ code: "invalid_credentials", msg: "Invalid login credentials" }) });
+        return;
+      }
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({
+        access_token: "smoke-access-token", token_type: "bearer", expires_in: 3600,
+        expires_at: Math.floor(Date.now() / 1000) + 3600, refresh_token: "smoke-refresh-token", user: testUser
+      })});
+    });
+    await authPage.route("**/rest/v1/user_roles*", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ role: "job_seeker" }) }));
+    await authPage.route("**/rest/v1/company_members*", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
+    await authPage.route("**/rest/v1/tc_notifications*", route => route.fulfill({ status: 200, headers: { "content-range": "0-0/0" }, body: "" }));
+    await authPage.goto(base + "/login.html", { waitUntil: "domcontentloaded" });
+    await authPage.locator("#email").fill("candidate@example.test");
+    await authPage.locator("#password").fill("WrongPass123");
+    await authPage.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    await authPage.waitForFunction(() => document.querySelector("#message")?.textContent.includes("Invalid login credentials"), { timeout: 8000 });
+    await authPage.locator("#password").fill("Candidate123");
+    await authPage.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+    await authPage.waitForURL(/dashboard\.html$/, { timeout: 10000 });
+    await authPage.locator("#seekerArea:not(.hidden)").waitFor({ state: "visible", timeout: 8000 });
+    if (!(await authPage.locator("#welcomeText").innerText()).includes("Job Seeker")) throw new Error("Job Seeker account type is not shown on the dashboard");
+    if (await authPage.locator("#companyArea").isVisible()) throw new Error("Job Seeker was incorrectly shown the Company workspace");
+    if (/[\u0B80-\u0BFF]/.test(await authPage.locator("body").innerText())) throw new Error("Login or dashboard displayed Tamil text");
+  } finally { await authPage.close(); }
+});
+
+await check("Company signup accounts can reach company registration before membership approval", async () => {
+  const companyPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const user = {
+    id: "smoke-company-user", aud: "authenticated", role: "authenticated",
+    email: "company@example.test", app_metadata: { provider: "email", providers: ["email"] },
+    user_metadata: { full_name: "Test Company" }, identities: [],
+    created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+  };
+  try {
+    await companyPage.addInitScript(sessionUser => {
+      localStorage.setItem("sb-qkmljuuusfjowexvybvy-auth-token", JSON.stringify({
+        access_token: "smoke-company-access-token", token_type: "bearer", expires_in: 3600,
+        expires_at: Math.floor(Date.now() / 1000) + 3600, refresh_token: "smoke-company-refresh-token", user: sessionUser
+      }));
+    }, user);
+    await companyPage.route("**/rest/v1/user_roles*", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ role: "company_member" }) }));
+    await companyPage.route("**/rest/v1/company_members*", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
+    await companyPage.route("**/rest/v1/tc_notifications*", route => route.fulfill({ status: 200, headers: { "content-range": "0-0/0" }, body: "" }));
+    await companyPage.goto(base + "/dashboard.html", { waitUntil: "domcontentloaded" });
+    await companyPage.locator("#companyArea:not(.hidden)").waitFor({ state: "visible", timeout: 8000 });
+    if (!(await companyPage.locator("#companyDetailsCard a[href='company-profile.html']").isVisible())) throw new Error("Company registration link is not available to a new company account");
+    if (!(await companyPage.locator("#companyNames").innerText()).includes("Register your company")) throw new Error("Company setup instructions are missing");
+    for (const id of ["companyPostJobCard","companyManageJobsCard","companyTeamCard","companyApplicantsCard"]) {
+      if (await companyPage.locator("#" + id).isVisible()) throw new Error("Unapproved company account can access a member-only card: " + id);
+    }
+  } finally { await companyPage.close(); }
+});
+
 await check("State government jobs render and filter", async () => {
   await open("state-government-jobs.html");
   const initial = await page.locator("#stateList article").count();
@@ -809,12 +876,21 @@ await check("Every public page loads in English without visible Tamil or mobile 
         lang: document.documentElement.getAttribute("lang"),
         visibleText: document.body?.innerText || "",
         width: document.documentElement.clientWidth,
-        scrollWidth: document.documentElement.scrollWidth
+        scrollWidth: document.documentElement.scrollWidth,
+        languageControls: document.querySelectorAll("#tc-language-select,[data-language-selector],select[name='language']").length,
+        clippedControls: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
+          const style = getComputedStyle(el);
+          const rect = el.getBoundingClientRect();
+          return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 &&
+            (rect.left < -1 || rect.right > document.documentElement.clientWidth + 1);
+        }).slice(0, 8).map(el => ({ tag: el.tagName, id: el.id, text: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 60) }))
       }));
       if (!state.title.trim()) throw new Error(path + " has no page title");
       if (state.lang !== "en") throw new Error(path + " does not declare lang=en");
       if (/[\u0B80-\u0BFF]/.test(state.visibleText)) throw new Error(path + " displays Tamil text");
       if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + ")");
+      if (state.languageControls) throw new Error(path + " still displays a language selector");
+      if (state.clippedControls.length) throw new Error(path + " has clipped controls or headings: " + JSON.stringify(state.clippedControls));
     }
   } finally {
     await auditPage.close();
