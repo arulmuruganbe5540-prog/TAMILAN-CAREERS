@@ -27,41 +27,41 @@
 (()=>{const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");const p=new URLSearchParams(location.search),slug=p.get("category")||"job-notifications";
 const cats={
 "job-notifications":["Job Notifications","New government job notifications and application dates","0% 0%","recruitment"],
-"exam-results":["Exam Results","வெளியிடப்பட்ட Exam Results மற்றும் அடுத்த கட்டத் தகவல்கள்","33.333% 0%","result"],
+"exam-results":["Exam Results","Published exam results and next-step information","33.333% 0%","result"],
 "exam-timetable":["Exam Timetable","Exam dates, times and examination centre notices","66.666% 0%","exam_update"],
 "exam-notifications":["Exam Notifications","Official exam-related notices","100% 0%","exam_update"],
 "hall-ticket":["Hall Ticket / Admit Card","Admit card release and download links","0% 33.333%","admit_card"],
 "answer-key":["Answer Key","Provisional / final answer keys and objection period","33.333% 33.333%","answer_key"],
 "selection-merit-list":["Selection List","Selected candidates and merit lists","66.666% 33.333%","result"],
-"interview-date":["நேர்முகத் தேர்வு தேதி","Interview அழைப்பு மற்றும் அட்டவணை","100% 33.333%","exam_update"],
-"syllabus":["பாடத்திட்டம்","பாடவாரியான தேர்வு பாடத்திட்டம் மற்றும் தேர்வு முறை","0% 66.666%","other"],
-"previous-year-papers":["முந்தைய ஆண்டு வினாத்தாள்கள்","கிடைக்கும் அதிகாரப்பூர்வ பழைய வினாத்தாள்கள்","33.333% 66.666%","other"],
-"cut-off-marks":["Cut Off Marks","வெளியிடப்பட்ட தேர்வு கட்-ஆஃப் மதிப்பெண்கள்","66.666% 66.666%","result"],
-"study-materials":["படிப்புப் பொருட்கள்","தேர்வுக்கான வழிகாட்டி மற்றும் படிப்புப் பொருட்கள்","100% 66.666%","other"],
-"application-last-date":["விண்ணப்ப கடைசி தேதி","நடைபெறும் விண்ணப்பங்களின் கடைசி தேதிகள்","0% 100%","recruitment"],
-"document-verification":["சான்றிதழ் சரிபார்ப்பு","Document Verification தேதி மற்றும் தேவையான ஆவணங்கள்","33.333% 100%","exam_update"],
+"interview-date":["Interview Date","Interview Invitation and Schedule","100% 33.333%","exam_update"],
+"syllabus":["Syllabus","பாடவாரியான தேர்வு Syllabus மற்றும் தேர்வு முறை","0% 66.666%","other"],
+"previous-year-papers":["Previous Year Question Papers","Available official previous papers","33.333% 66.666%","other"],
+"cut-off-marks":["Cut Off Marks","Published exam cut-off marks","66.666% 66.666%","result"],
+"study-materials":["Study Materials","தேர்வுக்கான வழிகாட்டி மற்றும் Study Materials","100% 66.666%","other"],
+"application-last-date":["Application Deadline","நடைபெறும் விண்ணப்பங்களின் கடைசி தேதிகள்","0% 100%","recruitment"],
+"document-verification":["Certificate Verification","Document Verification தேதி மற்றும் தேவையான ஆவணங்கள்","33.333% 100%","exam_update"],
 "government-job-alerts":["அரசு வேலை Alert","புதிய அரசு வேலை அறிவிப்புகளின் தொகுப்பு","66.666% 100%","recruitment"],
-"guidance-faqs":["வழிகாட்டுதல் & FAQ","விண்ணப்பம், தேர்வு, தகுதி தொடர்பான வழிகாட்டுதல்","100% 100%","other"]};
+"guidance-faqs":["Guides & FAQs","விண்ணப்பம், தேர்வு, தகுதி தொடர்பான வழிகாட்டுதல்","100% 100%","other"]};
 const c=cats[slug]||cats["job-notifications"],esc=v=>String(v??"").replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));document.title=c[0]+" | TAMILAN CAREERS";document.getElementById("heading").textContent=c[0];document.getElementById("intro").textContent=c[1];document.getElementById("art").style.backgroundPosition=c[2];
 const resources=[["hall-ticket","Hall Ticket / Admit Card","நுழைவுச்சீட்டு பதிவிறக்கம்"],["exam-results","Exam Results","Exam Results"],["answer-key","Answer Key","விடைக்குறிப்புகள்"],["exam-timetable","Exam Date / Timetable","தேர்வு அட்டவணை"]];
 document.getElementById("resourceMenu").innerHTML=resources.map(x=>'<a href="government-exam-resource.html?category='+encodeURIComponent(slug)+'&type='+x[0]+'">'+x[1]+'<small>'+x[2]+' →</small></a>').join("");
 document.getElementById("allJobs").href="jobs.html?job_kind=government&q="+encodeURIComponent(c[0]);
 const guides={
 "job-notifications":["அறிவிப்பு எண் மற்றும் வெளியீட்டு தேதி","பதவி பெயர், காலியிடங்கள், தகுதி","வயது வரம்பு, சம்பளம், இடஒதுக்கீடு","விண்ணப்ப தொடக்கம், கடைசி தேதி, அதிகாரப்பூர்வ Apply இணைப்பு"],
-"exam-results":["தேர்வு பெயர் மற்றும் தேர்வு தேதி","Result PDF / மதிப்பெண் பட்டியல்","பதிவு எண் மூலம் முடிவு பார்க்கும் அதிகாரப்பூர்வ இணைப்பு","அடுத்த கட்டத் தேர்வு அல்லது சான்றிதழ் சரிபார்ப்பு"],
+"exam-results":["தேர்வு பெயர் மற்றும் தேர்வு தேதி","Result PDF / மதிப்பெண் பட்டியல்","பதிவு எண் மூலம் முடிவு பார்க்கும் அதிகாரப்பூர்வ இணைப்பு","அடுத்த கட்டத் தேர்வு அல்லது Certificate Verification"],
 "exam-timetable":["தேர்வு நாள் மற்றும் நேரம்","Paper / Subject வாரியான அட்டவணை","தேர்வு மையம் மற்றும் வழிமுறைகள்","மாற்றியமைக்கப்பட்ட அட்டவணை அறிவிப்புகள்"],
 "exam-notifications":["தேர்வு அறிவிப்பு மற்றும் தகுதி","விண்ணப்ப நடைமுறை மற்றும் கட்டண விவரம்","தேர்வு முறை மற்றும் முக்கிய தேதிகள்","அதிகாரப்பூர்வ அறிவிப்பு PDF"],
 "hall-ticket":["Hall Ticket வெளியீட்டு தேதி","பதிவிறக்க அதிகாரப்பூர்வ இணைப்பு","தேர்வு மையம், நாள், நேரம்","தேர்வுக்கு எடுத்துச் செல்ல வேண்டிய ஆவணங்கள்"],
 "answer-key":["Provisional / Final Answer Key","வினா எண் வாரியான விடைகள்","ஆட்சேபனை சமர்ப்பிக்கும் கடைசி தேதி","அதிகாரப்பூர்வ Answer Key PDF"],
 "selection-merit-list":["தேர்வு செய்யப்பட்டோர் பட்டியல்","Merit Rank / Selection List PDF","தேர்வு நிலை மற்றும் அடுத்தகட்ட அறிவிப்பு","இறுதி Selection List"],
 "interview-date":["Interview தேதி மற்றும் நேரம்","அழைப்புக் கடிதம் / Interview Memo","இடம் மற்றும் எடுத்துச் செல்ல வேண்டிய ஆவணங்கள்","நேர்முகத் தேர்வு வழிமுறைகள்"],
-"syllabus":["பாடவாரியான Syllabus","தேர்வு முறை மற்றும் மதிப்பெண் பகிர்வு","Paper / Subject விவரங்கள்","அதிகாரப்பூர்வ Syllabus PDF"],
+"syllabus":["பாடவாரியான Syllabus","தேர்வு முறை மற்றும் மதிப்பெண் பகிர்வு","Paper / Subject Details","அதிகாரப்பூர்வ Syllabus PDF"],
 "previous-year-papers":["ஆண்டு வாரியான பழைய வினாத்தாள்கள்","Paper / Subject வாரியான பதிவிறக்கம்","அதிகாரப்பூர்வ Model Question Papers","தேர்வு தயாரிப்பு பயிற்சி"],
-"cut-off-marks":["Category வாரியான Cut Off","முந்தைய ஆண்டு Cut Off விவரங்கள்","தேர்வு நிலை / கட்டம் வாரியான மதிப்பெண்கள்","அதிகாரப்பூர்வ Cut Off PDF"],
+"cut-off-marks":["Category வாரியான Cut Off","முந்தைய ஆண்டு Cut Off Details","தேர்வு நிலை / கட்டம் வாரியான மதிப்பெண்கள்","அதிகாரப்பூர்வ Cut Off PDF"],
 "study-materials":["பாடக்குறிப்புகள் மற்றும் Study Materials","Model Tests / Practice Questions","அதிகாரப்பூர்வ பாடத்திட்ட இணைப்புகள்","தேர்வு தயாரிப்பு வழிகாட்டி"],
-"application-last-date":["விண்ணப்ப கடைசி தேதி","கட்டணம் செலுத்தும் கடைசி தேதி","திருத்தம் செய்யும் கால அவகாசம்","விண்ணப்ப நிலை பார்க்கும் அதிகாரப்பூர்வ இணைப்பு"],
+"application-last-date":["Application Deadline","கட்டணம் செலுத்தும் கடைசி தேதி","திருத்தம் செய்யும் கால அவகாசம்","விண்ணப்ப நிலை பார்க்கும் அதிகாரப்பூர்வ இணைப்பு"],
 "document-verification":["Certificate Verification தேதி","தேவையான அசல் ஆவணங்கள்","சான்றிதழ் வடிவம் / சரிபார்ப்பு பட்டியல்","அடுத்தகட்டத் தேர்வு நிலை"],
-"government-job-alerts":["புதிய அரசு வேலை அறிவிப்புகள்","கல்வித் தகுதி மற்றும் வயது வரம்பு","விண்ணப்ப கடைசி தேதி நினைவூட்டல்","அதிகாரப்பூர்வ Apply / Notification இணைப்பு"],
+"government-job-alerts":["புதிய அரசு வேலை அறிவிப்புகள்","கல்வித் தகுதி மற்றும் வயது வரம்பு","Application Deadline நினைவூட்டல்","அதிகாரப்பூர்வ Apply / Notification இணைப்பு"],
 "guidance-faqs":["தகுதி மற்றும் வயது வரம்பு விளக்கம்","விண்ணப்பிக்கும் படிப்படியான வழிமுறை","தேவையான ஆவணங்கள் மற்றும் கட்டணம்","பொதுவான கேள்விகள் மற்றும் பதில்கள்"]};
 document.getElementById("categoryGuide").innerHTML='<h2>Information Available in This Category</h2><p>'+esc(c[1])+' தொடர்பான தகவல்களை இங்கே ஒழுங்காகப் பார்க்கலாம். அதிகாரப்பூர்வமாக உறுதிப்படுத்தப்பட்ட பதிவுகள் மட்டுமே வெளியிடப்படும்.</p><div class="guide-list">'+(guides[slug]||guides["job-notifications"]).map(x=>'<div class="guide-item">✓ '+esc(x)+'</div>').join("")+'</div>';
 const titleMatch=c[0].replace(/\s*\/.*$/,"").split(/[ /&]/)[0];
