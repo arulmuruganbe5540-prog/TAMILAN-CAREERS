@@ -103,7 +103,7 @@ async function loadDraftForCompany(){
  else{
   currentDraft=null;setReviewLock(false);
   const old=currentUser.user_metadata?.job_posting_draft||{};
-  fill(old.company_id===companyId?old:{});
+  if(old.company_id===companyId)fill(old);
  }
 }
 async function save(silent=false){
@@ -145,7 +145,7 @@ async function submitForReview(){
 document.getElementById("saveBtn").addEventListener("click",()=>save(false));
 document.getElementById("submitReviewBtn").addEventListener("click",submitForReview);
 document.getElementById("reloadBtn").addEventListener("click",loadDraftForCompany);
-document.getElementById("companyChoice").addEventListener("change",loadDraftForCompany);
+document.getElementById("companyChoice").addEventListener("change",()=>{currentDraft=null;setReviewLock(false);const selected=document.getElementById("companyChoice").value;const old=currentUser.user_metadata?.job_posting_draft||{};if(old.company_id===selected)fill(old);else fill({});loadDraftForCompany()});
 document.getElementById("employmentType").addEventListener("change",()=>{const p=document.getElementById("salaryPeriod");if(document.getElementById("employmentType").value==="Daily Wage"&&p.value==="monthly")p.value="daily";else if(document.getElementById("employmentType").value!=="Daily Wage"&&p.value==="daily")p.value="monthly"});
 document.getElementById("clearBtn").addEventListener("click",()=>{fill();message("படிவம் காலி செய்யப்பட்டது. முன்பு சேமித்த வரைவு மாற்றப்படவில்லை; மீண்டும் Save செய்தால் மட்டுமே புதுப்பிக்கப்படும்.",true)});
 init().catch(e=>showBlocked("பக்கத்தைத் திறக்கும்போது பிழை: "+(e.message||e)));
