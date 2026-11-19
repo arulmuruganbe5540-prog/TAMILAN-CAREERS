@@ -15,7 +15,8 @@ function applyPremiumHeaderBrand(){
   if(!brand)return;
   var link=brand.matches("a")?brand:document.createElement("a");
   if(!brand.matches("a")){link.href="index.html";brand.remove()}
-  header.classList.add("tc-premium-header-shell");\n  link.classList.add("tc-premium-header-brand");
+  header.classList.add("tc-premium-header-shell");
+  link.classList.add("tc-premium-header-brand");
   link.setAttribute("aria-label","TAMILAN CAREERS — WWW.TAMILANCAREERS.IN");
   link.innerHTML='<img src="'+src+'" alt="TAMILAN CAREERS — WWW.TAMILANCAREERS.IN — Your Career, Our Mission — Dream, Apply, Achieve" width="1600" height="450">';
   header.insertBefore(link,header.firstChild);
