@@ -1,3 +1,13 @@
+## TAMILAN AI readiness follow-up — 19 November 2026
+
+- Added `TAMILAN-AI-READINESS-CHECK-TA.md` with the latest GitHub Actions, Pages deployment, live job-count, and Supabase Security Advisor results.
+- Verified Health Audit run `44460389393` passed, including the TAMILAN AI staged-rollout safety guard and browser smoke tests. Verified Pages deployment run `44460786210` passed for commit `3d95e7df5916954f51674700acaa16e7a8c3678d`.
+- Rechecked the 15 authenticated-callable SECURITY DEFINER functions: all 15 have empty `search_path`; all 15 contain an `auth.uid()` or Super Admin authorization check; four Admin-sensitive functions contain MFA enforcement. This is a catalog/source-level review, not 15 completed browser integration tests.
+- Live job count remains 0 total / 0 published / 0 AI-eligible public published jobs. Do not generate job recommendations or counts until real published records exist.
+- Security Advisor still reports the 15 SECURITY DEFINER RPC warnings, two RLS-enabled/no-policy tables (`company_invitations`, `job_sources`), and Leaked Password Protection disabled. No blanket RPC revoke or broad RLS policy was applied.
+- No database changes, data edits, secrets, or Edge Function deployments were made. TAMILAN AI remains OFF; model benchmark remains unrun.
+- Owner tasks remain: enable Leaked Password Protection in Supabase Auth settings, perform real Admin MFA/browser tests, and later run the free Colab model benchmark when GPU is available.
+
 ## TAMILAN AI Supabase data-access audit — 19 November 2026
 
 - Added `TAMILAN-AI-INTEGRATION-PLAN-TA.md` and linked it from README. This documents a fail-closed, feature-flagged, server-side model adapter design. It does not deploy or enable an AI model.
