@@ -44,6 +44,7 @@
 - TAMILAN AI model shortlist and licence review: `TAMILAN-AI-MODEL-SHORTLIST-TA.md` (Qwen3-1.7B is a prototype candidate only; no model is deployed).
 - [TAMILAN AI பாதுகாப்பான Website Integration திட்டம்](TAMILAN-AI-INTEGRATION-PLAN-TA.md)
 - [TAMILAN AI — Supabase Data Access & Security Audit (Tamil)](TAMILAN-AI-DATA-ACCESS-AUDIT-TA.md)
+- [TAMILAN AI — readiness & latest verification report (Tamil)](TAMILAN-AI-READINESS-CHECK-TA.md)
 - Free Colab prototype notebook: `notebooks/TAMILAN_AI_Free_Model_Test.ipynb` (manual run only; requires a free GPU session if available; not a production host).
 - Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
 - Tamil / English responsive public homepage, job search and individual job details pages.
