@@ -139,7 +139,7 @@ Repository-இல் `supabase/functions/tamilan-ai-job-context/index.ts` என
 - `supabase/config.toml`-இல் `verify_jwt = true` கட்டாயமாக அமைக்கப்பட்டுள்ளது.
 - `TAMILAN_AI_RETRIEVAL_ENABLED` server-side flag `true` இல்லையெனில் HTTP 503 `FEATURE_DISABLED` கிடைக்கும். Secret உருவாக்கப்படவில்லை; function deploy செய்யப்படவில்லை.
 - Supabase anon/publishable key + பயனரின் Bearer JWT மட்டுமே பயன்படுத்தப்படுகிறது. Service-role key பயன்படுத்தப்படவில்லை; எனவே jobs RLS policy தொடர்ந்து அமலில் இருக்கும்.
-- `jobs.status = 'published'` மட்டும் query செய்யப்படுகிறது; அதிகபட்சம் 5 முடிவுகள்; job title / country search மட்டும்.
+- `jobs.status = 'published'` மட்டும் query செய்யப்படுகிறது; அதிகபட்சம் 5 முடிவுகள்; job title / country search மட்டும். Request body 2 KB-க்கு வரையறுக்கப்பட்டுள்ளது.
 - Candidate/application/private company தகவல்கள் select செய்யப்படவில்லை. `job_sources` அட்டவணையும் அணுகப்படவில்லை.
 - ஒவ்வொரு context item-க்கும் உண்மையான `source_id`, citation URL, `content_is_untrusted` குறி சேர்க்கப்படுகிறது.
 - Query மற்றும் country filter-களில் PostgREST wildcard/filter punctuation நீக்கப்படுகிறது; request-ல் அனுமதிக்கப்பட்ட `query`, `country` keys மட்டுமே.
