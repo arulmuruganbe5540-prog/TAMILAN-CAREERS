@@ -42,6 +42,13 @@ checks = {
         and "const alreadyShownIds=new Set()" in homepage
         and "return !id||!alreadyShownIds.has(id)" in homepage
         and "const overseasJobs=foreignError?[]:(foreignData||[])" in homepage,
+    "homepage prioritizes live jobs before career discovery and keeps education/tools later":
+        "const sections={country_government_jobs:" in homepage
+        and "qualification_pathways:\"qualification-pathways\"" in homepage
+        and "career_tools:\"career-tools\"" in homepage
+        and homepage.index('data-home-section="country-government"') < homepage.index('data-home-section="qualification_pathways"')
+        and homepage.index('data-home-section="qualification_pathways"') < homepage.index('data-home-section="career_tools"')
+        and "configured.concat(defaults.filter(key=>!configured.includes(key)))" in homepage,
 }
 for page in pages:
     content = page.read_text(encoding="utf-8")
