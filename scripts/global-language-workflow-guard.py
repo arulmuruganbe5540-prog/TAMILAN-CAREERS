@@ -32,9 +32,9 @@ checks = {
         and "MutationObserver" not in translator
         and "tc:locale-ready" not in translator,
     "all public HTML pages declare English":
-        all(re.search(r'<html\b[^>]*\blang=["\\']en["\\']', p.read_text(encoding="utf-8"), re.I) for p in pages),
+        all(re.search(r"<html[^>]*lang=.en.", p.read_text(encoding="utf-8"), re.I) for p in pages),
     "all public HTML pages contain no Tamil-script interface text":
-        all(not re.search(r'[\\u0B80-\\u0BFF]', p.read_text(encoding="utf-8")) for p in pages),
+        all(not re.search(r"[\u0B80-\u0BFF]", p.read_text(encoding="utf-8")) for p in pages),
     "shared site script loads global experience":
         "assets/global-experience.js" in protection,
     "premium banner replaces the logo in place instead of creating a second header row":
