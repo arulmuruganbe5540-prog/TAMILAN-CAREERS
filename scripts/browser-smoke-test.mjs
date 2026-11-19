@@ -138,6 +138,51 @@ await check("Login page role, mode and password controls work", async () => {
   if (redirectChecks.duplicated !== "https://arulmuruganbe5540-prog.github.io/TAMILAN-CAREERS/dashboard.html") throw new Error("Duplicated repository path was not rejected: " + redirectChecks.duplicated);
 });
 
+
+await check("Login page language switch translates static and dynamic authentication text", async () => {
+  const languagePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await languagePage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify({ country_code: "US", region: "Test", timezone: "UTC" })
+    }));
+    await languagePage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
+    await languagePage.goto(base + "/login.html", { waitUntil: "domcontentloaded" });
+    await languagePage.waitForFunction(() => !!window.TC_TRANSLATE);
+    await languagePage.waitForTimeout(100);
+    const english = await languagePage.evaluate(() => ({
+      hint: document.querySelector("#passwordHint")?.textContent.trim(),
+      forgot: document.querySelector("#forgotLink")?.textContent.trim(),
+      admin: document.querySelector("#adminLoginLink")?.textContent.trim(),
+      toggle: document.querySelector("#passwordToggle")?.textContent.trim()
+    }));
+    if (english.hint !== "At least 8 characters" || english.forgot !== "Forgot Password?" ||
+        english.admin !== "Super Admin Login" || english.toggle !== "Show") {
+      throw new Error("English login text remains untranslated: " + JSON.stringify(english));
+    }
+    await languagePage.evaluate(() => localStorage.setItem("tc_language_preference_v1", "ta"));
+    await languagePage.reload({ waitUntil: "domcontentloaded" });
+    await languagePage.waitForFunction(() => !!window.TC_TRANSLATE && window.TC_TRANSLATE.language === "ta");
+    await languagePage.waitForTimeout(100);
+    const tamil = await languagePage.evaluate(() => ({
+      hint: document.querySelector("#passwordHint")?.textContent.trim(),
+      admin: document.querySelector("#adminLoginLink")?.textContent.trim(),
+      forgot: document.querySelector("#forgotLink")?.textContent.trim()
+    }));
+    if (!tamil.hint.includes("குறைந்தது 8") || !tamil.admin.includes("சூப்பர்") ||
+        !tamil.forgot.includes("கடவுச்சொல்")) {
+      throw new Error("Tamil login text did not translate: " + JSON.stringify(tamil));
+    }
+    await languagePage.locator("#switchLink").click();
+    await languagePage.waitForTimeout(100);
+    if (!(await languagePage.locator("#heading").innerText()).includes("புதிய கணக்கு")) {
+      throw new Error("Dynamically updated registration heading did not translate");
+    }
+  } finally {
+    await languagePage.close();
+  }
+});
+
 await check("Job seeker and employer registration validate account details before submission", async () => {
   await open("login.html");
   await page.locator("#seeker").click();
