@@ -117,10 +117,11 @@ Deno.serve(async (request: Request) => {
   if (query === null) {
     return json({ error: "query must be plain text up to 80 characters" }, 400, origin);
   }
-  const country = input.country === undefined || input.country === null || input.country === ""
-    ? null
-    : typeof input.country === "string" && input.country.trim().length <= 100
-    ? input.country.trim()
+  const countryInput = input.country === undefined || input.country === null || input.country === ""
+    ? ""
+    : input.country;
+  const country = typeof countryInput === "string" && countryInput.trim().length <= 100
+    ? countryInput.trim().replace(/[%,_()]/g, " ").replace(/\\s+/g, " ").trim()
     : undefined;
   if (country === undefined) {
     return json({ error: "country must be plain text up to 100 characters" }, 400, origin);
