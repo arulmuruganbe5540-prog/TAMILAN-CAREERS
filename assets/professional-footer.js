@@ -4,7 +4,7 @@ if(window.__tcProfessionalFooterLoaded)return;
 window.__tcProfessionalFooterLoaded=true;
 function render(){
  if(!document.body)return;
- document.querySelectorAll("body footer").forEach(function(node){node.remove();});
+ if(document.querySelector("body footer.tc-footer"))return;
  var style=document.getElementById("tc-professional-footer-style");
  if(!style){
   style=document.createElement("style");style.id="tc-professional-footer-style";
