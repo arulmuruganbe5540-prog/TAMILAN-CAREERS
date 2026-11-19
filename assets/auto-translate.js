@@ -18,6 +18,15 @@ var extraLanguageRows={"es":[["Home","Inicio"],["Jobs","Empleos"],["Find Jobs","
 
 
 rows.push.apply(rows,[
+["Super Admin Login","சூப்பர் அட்மின் உள்நுழைவு","Inicio de superadministrador","Log Masuk Super Admin"],
+["Create a new account","புதிய கணக்கு உருவாக்குங்கள்","Crear una cuenta nueva","Buat akaun baharu"],
+["Very weak","மிகவும் பலவீனம்","Muy débil","Sangat lemah"],
+["Weak","பலவீனம்","Débil","Lemah"],
+["Average","சராசரி","Promedio","Sederhana"],
+["Good","நல்லது","Bueno","Baik"],
+["Very strong","மிகவும் வலிமையானது","Muy fuerte","Sangat kuat"],
+["Password strength","கடவுச்சொல் வலிமை","Seguridad de la contraseña","Kekuatan kata laluan"]]);
+rows.push.apply(rows,[
 ["Submit application","விண்ணப்பத்தைச் சமர்ப்பிக்கவும்","Enviar solicitud","Hantar permohonan"],
 ["Forgot Password?","கடவுச்சொல் மறந்துவிட்டதா?","¿Olvidaste tu contraseña?","Lupa Kata Laluan?"],
 ["Show password","கடவுச்சொல்லைக் காட்டு","Mostrar contraseña","Tunjukkan kata laluan"]]);
@@ -28,7 +37,7 @@ rows.push.apply(rows,[
 ["Enter your name","உங்கள் பெயர்","अपना नाम दर्ज करें","നിങ്ങളുടെ പേര് നൽകുക"],
 ["Show","காட்டு","दिखाएं","കാണിക്കുക"],
 ["Hide","மறை","छिपाएं","മറയ്ക്കുക"],
-["Forgot Password?","Password மறந்துவிட்டதா?","पासवर्ड भूल गए?","പാസ്‌വേഡ് മറന്നോ?"],
+["Forgot Password?","கடவுச்சொல் மறந்துவிட்டதா?","पासवर्ड भूल गए?","പാസ്‌വേഡ് മറന്നോ?"],
 ["Confirm your password","Password உறுதிப்படுத்தவும் / Confirm Password","अपने पासवर्ड की पुष्टि करें","നിങ്ങളുടെ പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക"],
 ["Enter your password again","Password-ஐ மீண்டும் உள்ளிடவும்","पासवर्ड फिर से दर्ज करें","പാസ്‌വേഡ് വീണ്ടും നൽകുക"],
 ["Password strength","Password வலிமை","पासवर्ड की मजबूती","പാസ്‌വേഡിന്റെ ശക്തി"],
