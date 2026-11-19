@@ -42,7 +42,7 @@ if "allowed=true" not in exam:
     failures.append("admin-exam-resources.html: submit authorization state missing")
 
 
-mfa_migration = ROOT / "supabase/migrations/20261119080000_require_mfa_for_super_admin_rpc_actions.sql"
+mfa_migration = ROOT / "supabase/migrations/20261119040657_require_mfa_for_super_admin_rpc_actions.sql"
 if not mfa_migration.is_file():
     failures.append("Super Admin RPC MFA migration: file missing")
 else:
