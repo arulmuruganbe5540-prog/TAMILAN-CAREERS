@@ -701,7 +701,8 @@ await check("Tamil Nadu government jobs page loads and filters", async () => {
 });
 
 
-await check("Automatic Kerala language detection and dynamic Malayalam translation work", async () => {
+await check("Manual Malayalam language preference and dynamic translation work in India", async () => {
+  await page.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "ml"));
   await page.route("https://ipapi.co/json/", route => route.fulfill({
     status: 200,
     contentType: "application/json",
@@ -766,9 +767,28 @@ await check("Automatic Kerala language detection and dynamic Malayalam translati
 });
 
 
-await check("Automatic Karnataka language detection and Kannada navigation work", async () => {
+await check("India defaults to English unless a language preference is saved", async () => {
+  const indiaPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await indiaPage.route("https://ipapi.co/json/", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ country_code: "IN", region: "Tamil Nadu", timezone: "Asia/Kolkata" })
+    }));
+    const response = await indiaPage.goto(base + "/index.html", { waitUntil: "domcontentloaded" });
+    if (!response || !response.ok()) throw new Error("India homepage failed to load");
+    await indiaPage.waitForFunction(() => window.TC_LOCALE?.language === "en" && window.TC_TRANSLATE?.language === "en", { timeout: 10000 });
+    if (await indiaPage.locator("#tc-language-select").inputValue() !== "en") throw new Error("India default language selector is not English");
+    if (!(await indiaPage.getByText("Explore opportunities by country", { exact: true }).count())) throw new Error("English homepage text is missing");
+  } finally {
+    await indiaPage.close();
+  }
+});
+
+await check("Manual Kannada language preference and navigation work in India", async () => {
   const kannadaPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
+    await kannadaPage.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "kn"));
     await kannadaPage.route("https://ipapi.co/json/", route => route.fulfill({
       status: 200,
       contentType: "application/json",
