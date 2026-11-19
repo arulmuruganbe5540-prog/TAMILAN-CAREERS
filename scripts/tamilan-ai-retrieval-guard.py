@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FUNCTION = ROOT / 'supabase/functions/tamilan-ai-job-context/index.ts'
 LOGIC = ROOT / 'supabase/functions/tamilan-ai-job-context/logic.ts'
 CONFIG = ROOT / 'supabase/config.toml'
-MIGRATION = ROOT / 'supabase/migrations/20261119080000_tamilan_ai_job_context_rate_limit.sql'
+MIGRATION = ROOT / 'supabase/migrations/20261119065045_tamilan_ai_job_context_rate_limit.sql'
 errors = []
 if not FUNCTION.is_file() or not LOGIC.is_file():
     errors.append('Missing TAMILAN AI retrieval function or pure logic module')
@@ -47,6 +47,8 @@ else:
     sql = MIGRATION.read_text(encoding='utf-8').lower()
     checks = {
         'private quota table': 'private.tamilan_ai_job_context_rate_limits',
+        'private quota RLS enabled': 'enable row level security',
+        'private quota direct grants revoked': 'revoke all on table private.tamilan_ai_job_context_rate_limits from public, anon, authenticated',
         'registered-user check': 'u.is_anonymous',
         'atomic per-user upsert': 'on conflict (user_id) do update',
         'empty search_path': "set search_path = ''",
