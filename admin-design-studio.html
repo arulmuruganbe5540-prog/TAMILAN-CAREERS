@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
 <meta name="robots" content="noindex,follow">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -21,17 +21,17 @@
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head>
 <body>
-<div id="loading">Super Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
-<div id="gate"><h2>🔐 Super Admin அனுமதி தேவை</h2><p id="gateText">இந்தப் பகுதியைத் திறக்க Super Admin கணக்கில் Login செய்யவும்.</p><a href="admin-login.html">Admin Login</a></div>
+<div id="loading">Checking Super Admin permissions...</div>
+<div id="gate"><h2>🔐 Super Admin Access Required</h2><p id="gateText">Log in with a Super Admin account to open this section.</p><a href="admin-login.html">Admin Login</a></div>
 <div id="app" class="shell hidden">
 <aside class="side"><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><p>ADVANCED SUPER ADMIN<br>Website Design Studio</p><nav><a href="admin-control.html">▦ Admin Dashboard</a><a class="active" href="admin-design-studio.html">🎨 Design Studio</a><a href="admin-job-post.html">✚ Job Management</a><a href="index.html">🌐 Live Website</a><a href="#" id="logout">↪ Logout</a></nav></aside>
 <main class="main">
-<div class="top"><div><div class="muted">SUPER ADMIN / WEBSITE MANAGEMENT</div><h1>Website Design Studio</h1><div class="muted">முகப்புப் பக்கத்தின் தோற்றத்தை மாற்றுவதற்கான கட்டுப்பாட்டு மையம்</div></div><a class="btn light" href="index.html" target="_blank" rel="noopener">Website பார்க்க ↗</a></div>
-<div class="notice"><b>முதல் கட்டம் — Live Preview:</b> இங்கு மாற்றும் நிறம், தலைப்பு, விளக்கம் மற்றும் படம் இந்த preview-வில் மட்டும் தெரியும். நிரந்தரமாக Website-ல் சேமிப்பதும் படங்களை Storage-க்கு Upload செய்வதும் அடுத்த பாதுகாப்பான Database + Storage இணைப்புக் கட்டத்தில் சேர்க்கப்படும். இப்போது எந்த மாற்றமும் நேரடியாக Public Website-ஐ மாற்றாது.</div>
+<div class="top"><div><div class="muted">SUPER ADMIN / WEBSITE MANAGEMENT</div><h1>Website Design Studio</h1><div class="muted">Control centre for customising the homepage appearance</div></div><a class="btn light" href="index.html" target="_blank" rel="noopener">View Website ↗</a></div>
+<div class="notice"><b>Phase 1 — Live Preview:</b> Changes to colours, headings, descriptions and images are visible only in this preview. Permanent website saving and image uploads to storage will be added in a later secure Database + Storage integration phase. No changes made here currently affect the public website.</div>
 <div class="grid">
 <section class="panel"><h2>🎨 Design Settings</h2>
-<div class="field"><label for="brand">Website பெயர்</label><input id="brand" value="TAMILAN CAREERS" maxlength="60"></div>
-<div class="field"><label for="headline">முகப்புப் பக்க தலைப்பு</label><input id="headline" value="உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!" maxlength="120"></div>
+<div class="field"><label for="brand">Website Name</label><input id="brand" value="TAMILAN CAREERS" maxlength="60"></div>
+<div class="field"><label for="headline">Homepage Headline</label><input id="headline" value="Find a Job That Matches Your Skills!" maxlength="120"></div>
 <div class="field"><label for="subtitle">துணை விளக்கம்</label><textarea id="subtitle" maxlength="300">இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</textarea></div>
 <div class="field"><label>முதன்மை நிறம்</label><div class="colorline"><input type="color" id="primary" value="#101d3a"><span class="muted" id="colorValue">#101D3A</span></div></div>
 <div class="field"><label>Hero Banner படம் (Preview)</label><div class="upload"><input type="file" id="banner" accept="image/png,image/jpeg,image/webp"><div class="hint">PNG / JPG / WebP · அதிகபட்சம் 5 MB. இது இப்போது உங்கள் Browser-ல் மட்டும் Preview ஆகும்; Server-க்கு Upload ஆகாது.</div></div></div>
@@ -40,7 +40,7 @@
 </section>
 <section class="panel"><h2>👁️ Live Website Preview</h2><div class="preview">
 <div class="preview-head"><div class="preview-brand" id="pvBrand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><div class="preview-nav">முகப்பு　 வேலைகள்　 துறைகள்　 உதவி</div></div>
-<div class="preview-hero" id="pvHero"><h2 id="pvHeadline">உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!</h2><p id="pvSubtitle">இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</p><div class="preview-search">வேலை / திறமை தேடுங்கள்　　இடம்　　தேடுக</div></div>
+<div class="preview-hero" id="pvHero"><h2 id="pvHeadline">Find a Job That Matches Your Skills!</h2><p id="pvSubtitle">இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.</p><div class="preview-search">வேலை / திறமை தேடுங்கள்　　இடம்　　தேடுக</div></div>
 <div class="preview-cards"><div class="preview-card"><b>🏛️</b>அரசு வேலைகள்</div><div class="preview-card"><b>🏢</b>தனியார் வேலைகள்</div><div class="preview-card"><b>🌍</b>வெளிநாட்டு வேலைகள்</div></div>
 <div class="preview-foot">TAMILAN CAREERS · வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்</div>
 </div></section>
@@ -127,7 +127,7 @@ $("save").addEventListener("click",async()=>{
  }finally{button.disabled=false;button.textContent="💾 மாற்றங்களை Website-ல் சேமிக்க"}
 });
 $("reset").addEventListener("click",()=>{
- $("brand").value="TAMILAN CAREERS";$("headline").value="உங்கள் திறமைக்கு ஏற்ற வேலை இங்கே!";
+ $("brand").value="TAMILAN CAREERS";$("headline").value="Find a Job That Matches Your Skills!";
  $("subtitle").value="இந்தியா முழுவதும் அரசு மற்றும் தனியார் வேலைவாய்ப்புகளை ஒரே இடத்தில் தேடுங்கள். தமிழிலும் ஆங்கிலத்திலும் உங்கள் அடுத்த வாய்ப்பைத் தொடங்குங்கள்.";
  $("primary").value="#101d3a";$("clearImage").click();update();
 });
