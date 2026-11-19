@@ -63,7 +63,7 @@ function isScopeMatch(j){
 function isQualificationMatch(text){
  const s=String(text||"").toLowerCase(),q=$("qualification").value.toLowerCase();
  if(q==="any qualification")return true;
- const aliases={"10th pass":["10th","sslc","10ம்","பத்தாம்"],"12th pass":["12th","hsc","plus two","12ம்","பன்னிரண்டாம்"],"iti":["iti"],"diploma":["diploma"],"degree":["degree","graduate","b.e","b.sc","b.com","b.a"],"postgraduate":["postgraduate","post graduate","pg","master","முதுநிலை"],"studying":["studying","currently studying","pursuing","student","apprentice","internship","part-time","படித்து","படிக்கும்"],"diploma studying":["diploma studying","diploma pursuing","diploma student","diploma apprentice","படிக்கும் டிப்ளமோ"]};
+ const aliases={"10th pass":["10th","sslc"],"12th pass":["12th","hsc","plus two"],"iti":["iti"],"diploma":["diploma"],"degree":["degree","graduate","b.e","b.sc","b.com","b.a"],"postgraduate":["postgraduate","post graduate","pg","master"],"studying":["studying","currently studying","pursuing","student","apprentice","internship","part-time"],"diploma studying":["diploma studying","diploma pursuing","diploma student","diploma apprentice"]};
  return (aliases[q]||[q]).some(x=>s.includes(x));
 }
 async function load(){
