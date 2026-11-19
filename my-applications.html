@@ -13,7 +13,7 @@
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const statusText={applied:"Application received",under_review:"Under review",shortlisted:"Shortlist செய்யப்பட்டது",rejected:"Not selected",withdrawn:"Withdrawn"};
+const statusText={applied:"Application received",under_review:"Under review",shortlisted:"Shortlisted",rejected:"Not selected",withdrawn:"Withdrawn"};
 const canWithdraw=status=>["applied","under_review","shortlisted"].includes(String(status||"").toLowerCase());
 async function init(){
  const {data,error}=await db.auth.getSession();const user=data.session?.user;
@@ -27,7 +27,7 @@ async function init(){
  $("list").innerHTML=items.map(a=>{
   const j=Array.isArray(a.jobs)?a.jobs[0]:a.jobs;
   const withdrawButton=canWithdraw(a.status)?'<button class="withdraw" type="button" data-withdraw="'+esc(a.id)+'">Withdraw Application</button>':'';
-  return '<article class="card item"><h2>'+esc(j?.job_title||"வேலை அறிவிப்பு")+'</h2><div class="row"><span class="pill">'+esc(statusText[a.status]||a.status||"நிலை தெரியவில்லை")+'</span><span class="muted">Applied on: '+esc(a.applied_at?new Date(a.applied_at).toLocaleDateString("en-US"):"—")+'</span><a class="link" href="job-details.html?id='+encodeURIComponent(a.job_id)+'">Job Details →</a>'+withdrawButton+'</div><div class="actionmsg" id="msg-'+esc(a.id)+'"></div></article>';
+  return '<article class="card item"><h2>'+esc(j?.job_title||"Job posting")+'</h2><div class="row"><span class="pill">'+esc(statusText[a.status]||a.status||"Status unavailable")+'</span><span class="muted">Applied on: '+esc(a.applied_at?new Date(a.applied_at).toLocaleDateString("en-US"):"—")+'</span><a class="link" href="job-details.html?id='+encodeURIComponent(a.job_id)+'">Job Details →</a>'+withdrawButton+'</div><div class="actionmsg" id="msg-'+esc(a.id)+'"></div></article>';
  }).join("");
  $("list").addEventListener("click",async event=>{
   const button=event.target.closest("[data-withdraw]");
