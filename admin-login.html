@@ -66,24 +66,24 @@ async function startMfaChallenge(factorId){
   pendingMfaFactorId=factorId;
   pendingMfaChallengeId=challenge.id;
   document.getElementById("mfaCode").value="";
-  message("இந்த Authenticator சாதனத்தின் புதிய 6 இலக்கக் குறியீட்டை உள்ளிடவும்.",true);
+  message("Enter the new 6-digit code from this authenticator device.",true);
  }finally{verifyButton.disabled=!pendingMfaChallengeId;}
 }
 document.getElementById("mfaFactorSelect").addEventListener("change",async e=>{
  try{await startMfaChallenge(e.target.value);}
- catch(err){message(err.message||"Authenticator challenge உருவாக்க முடியவில்லை.");}
+ catch(err){message(err.message||"Unable to create the authenticator challenge.");}
 });
 async function finishAdminAccess(user){
  const {data,error}=await client.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
- if(error)throw new Error("Super Admin அனுமதியை சரிபார்க்க முடியவில்லை.");
- if(!data?.length){await client.auth.signOut();throw new Error("இந்த கணக்கிற்கு Super Admin அனுமதி இல்லை.");}
+ if(error)throw new Error("Unable to verify Super Admin access.");
+ if(!data?.length){await client.auth.signOut();throw new Error("This account does not have Super Admin access.");}
  const {data:aal,error:aalError}=await client.auth.mfa.getAuthenticatorAssuranceLevel();
- if(aalError)throw new Error("MFA பாதுகாப்பு நிலையைச் சரிபார்க்க முடியவில்லை.");
+ if(aalError)throw new Error("Unable to verify the MFA security level.");
  if(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2"){
   const {data:factors,error:factorError}=await client.auth.mfa.listFactors();
   if(factorError)throw factorError;
   const verifiedFactors=(factors.totp||[]).filter(x=>x.status==="verified");
-  if(!verifiedFactors.length)throw new Error("MFA அமைப்பு உள்ளது; சரிபார்க்கப்பட்ட Authenticator Device கிடைக்கவில்லை. Supabase Auth settings-ஐ சரிபார்க்கவும்.");
+  if(!verifiedFactors.length)throw new Error("MFA is configured, but no verified authenticator device was found. Check the Supabase Auth settings.");
   const factorSelect=document.getElementById("mfaFactorSelect");
   factorSelect.replaceChildren();
   verifiedFactors.forEach((factor,index)=>{
@@ -100,15 +100,15 @@ async function finishAdminAccess(user){
   document.getElementById("mfaCode").focus();
   return;
  }
- message("Super Admin Login வெற்றி. Admin Control திறக்கப்படுகிறது...",true);
+ message("Super Admin login successful. Opening Admin Control...",true);
  location.replace("admin-control.html");
 }
 document.getElementById("mfaVerify").addEventListener("click",async()=>{
- if(!pendingMfaFactorId||!pendingMfaChallengeId){message("முதலில் Authenticator challenge உருவாக வேண்டும்.");return;}
+ if(!pendingMfaFactorId||!pendingMfaChallengeId){message("Create an authenticator challenge first.");return;}
  const code=document.getElementById("mfaCode").value.trim();
- if(!/^\d{6}$/.test(code)){message("6 இலக்க Authenticator குறியீட்டை உள்ளிடவும்.");return;}
+ if(!/^\d{6}$/.test(code)){message("Enter the 6-digit authenticator code.");return;}
  const verifyButton=document.getElementById("mfaVerify");verifyButton.disabled=true;
- try{const {error}=await client.auth.mfa.verify({factorId:pendingMfaFactorId,challengeId:pendingMfaChallengeId,code});if(error)throw error;message("MFA சரிபார்ப்பு வெற்றி. Admin Control திறக்கப்படுகிறது...",true);location.replace("admin-control.html")}
+ try{const {error}=await client.auth.mfa.verify({factorId:pendingMfaFactorId,challengeId:pendingMfaChallengeId,code});if(error)throw error;message("MFA verification successful. Opening Admin Control...",true);location.replace("admin-control.html")}
  catch(err){message(err.message||"MFA சரிபார்ப்பு தோல்வியடைந்தது.");}
  finally{verifyButton.disabled=false;}
 });
