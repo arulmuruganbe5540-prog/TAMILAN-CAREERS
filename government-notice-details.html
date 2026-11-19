@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#10233f">
 <title>Government Job – Full Details | TAMILAN CAREERS</title>
-<meta name="description" content="Government Job – Full Details தமிழில் — தகுதி, வயது, Salary, காலியிடங்கள், முக்கிய தேதிகள் மற்றும் அதிகாரப்பூர்வ விண்ணப்ப இணைப்புகள்.">
+<meta name="description" content="Government Job – Full Details in English — eligibility, age limits, salary, vacancies, key dates and official application links.">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--navy:#10233f;--blue:#1677d2;--ink:#17263d;--muted:#65758b;--line:#e2e9f2;--soft:#f3f7fc;--green:#16804b}
@@ -40,24 +40,24 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:25px 15px;text-a
  const labels={post_names:"Positions",posts:"Positions",designation:"Job Title",qualification:"Educational Qualification",educational_qualification:"Educational Qualification",education:"Educational Qualification",age_limit:"Age Limit",age_relaxation:"Age Relaxation",salary:"Salary",pay_scale:"Pay Scale",application_fee:"Application Fee",selection_process:"Selection Process",exam_pattern:"Selection Process",location:"Work Location",job_location:"Work Location",department:"துறை",vacancies_breakdown:"காலியிட விவரம்",experience:"அனுபவம்",job_type:"வேலை வகை",important_dates:"முக்கிய தேதிகள்",how_to_apply:"விண்ணப்பிக்கும் முறை",documents_required:"தேவையான ஆவணங்கள்",official_website:"அதிகாரப்பூர்வ இணையதளம்",notification_pdf_url:"அறிவிப்பு PDF",application_url:"விண்ணப்ப இணைப்பு",apply_url:"விண்ணப்ப இணைப்பு",state:"மாநிலம்",authority:"அறிவிப்பு வெளியிட்ட நிறுவனம்",scope:"அறிவிப்பு வகை",last_date:"கடைசி தேதி",application_start:"விண்ணப்பத் தொடக்கம்",application_end:"விண்ணப்பக் கடைசி தேதி",description:"அறிவிப்பு விளக்கம்",job_description:"பணியின் விவரம்",application_mode:"விண்ணப்பிக்கும் வழி",reservation:"இடஒதுக்கீடு",fee_exemption:"கட்டணச் சலுகை",syllabus:"பாடத்திட்டம்",important_instructions:"முக்கிய வழிமுறைகள்"};
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const nice=k=>labels[String(k).toLowerCase()]||String(k).replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
- const date=v=>{if(!v)return "அதிகாரப்பூர்வ அறிவிப்பில் பார்க்கவும்";const d=new Date(String(v).length===10?v+"T00:00:00":v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("ta-IN",{day:"numeric",month:"long",year:"numeric"})};
+ const date=v=>{if(!v)return "See the official notification";const d=new Date(String(v).length===10?v+"T00:00:00":v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("ta-IN",{day:"numeric",month:"long",year:"numeric"})};
  const safe=v=>{try{const u=new URL(v);return u.protocol==="https:"?u.href:""}catch{return ""}};
  const val=v=>Array.isArray(v)?v.map(x=>typeof x==="object"&&x!==null?Object.entries(x).map(([k,y])=>nice(k)+": "+String(y??"—")).join(" · "):String(x)).join(" • "):(typeof v==="object"&&v!==null?Object.entries(v).map(([k,x])=>nice(k)+": "+String(x??"—")).join(" | "):String(v));
  const block=(k,v)=>'<div class="fact"><small>'+esc(k)+'</small><b>'+esc(val(v))+'</b></div>';
- const section=(title,items)=>!items.length?"":'<section class="panel"><div class="section-kicker">வேலைவாய்ப்பு விவரம்</div><h2>'+esc(title)+'</h2><dl class="detail-list">'+items.map(([k,v])=>'<dt>'+esc(nice(k))+'</dt><dd>'+esc(val(v))+'</dd>').join("")+'</dl></section>';
+ const section=(title,items)=>!items.length?"":'<section class="panel"><div class="section-kicker">Job Details</div><h2>'+esc(title)+'</h2><dl class="detail-list">'+items.map(([k,v])=>'<dt>'+esc(nice(k))+'</dt><dd>'+esc(val(v))+'</dd>').join("")+'</dl></section>';
  const link=(url,text,cls)=>url?'<a class="btn '+cls+'" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(text)+' ↗</a>':"";
  async function load(){
-  if(!id){root.textContent="அறிவிப்பு எண் கிடைக்கவில்லை. முந்தைய பக்கத்திற்குச் சென்று அறிவிப்பைத் தேர்ந்தெடுக்கவும்.";return}
+  if(!id){root.textContent="Notice ID is missing. Return to the previous page and select a notice.";return}
   const {data,error}=await client.from("government_notices").select("id,title,category,official_url,notice_reference,notice_date,application_start,application_end,vacancies,eligibility_summary,details,is_active").eq("id",id).eq("is_active",true).maybeSingle();
-  if(error||!data){root.textContent="இந்த அறிவிப்பு தற்போது வெளியிடப்பட்ட பட்டியலில் கிடைக்கவில்லை. மீண்டும் அரசு வேலைவாய்ப்பு பட்டியலைப் பார்க்கவும்.";return}
+  if(error||!data){root.textContent="This notice is not currently available in the published list. Return to the government jobs list.";return}
   const d=data.details&&typeof data.details==="object"?data.details:{};
   const pdf=safe(d.notification_pdf_url)||safe(d.pdf_url);
   const apply=safe(d.application_url)||safe(d.apply_url);
   const website=safe(d.official_website)||safe(d.website_url);
   const source=safe(data.official_url)||safe(d.source_url)||website;
   const expired=data.application_end&&new Date(data.application_end+"T23:59:59")<new Date();
-  const categoryNames={recruitment:"வேலைவாய்ப்பு அறிவிப்பு",result:"தேர்வு முடிவு",admit_card:"நுழைவுச்சீட்டு / Hall Ticket",answer_key:"விடைக்குறிப்பு",exam_update:"தேர்வு புதுப்பிப்பு",other:"அரசு அறிவிப்பு"};
-  const top=[["அறிவிப்பு வெளியான நாள்",date(data.notice_date)],["மொத்த காலியிடங்கள்",data.vacancies==null?"அதிகாரப்பூர்வ PDF-ல் பார்க்கவும்":Number(data.vacancies).toLocaleString("en-IN")],["விண்ணப்பத் தொடக்க நாள்",date(data.application_start)],["விண்ணப்பக் கடைசி நாள்",date(data.application_end)]];
+  const categoryNames={recruitment:"Recruitment Notice",result:"Exam Result",admit_card:"Admit Card / Hall Ticket",answer_key:"Answer Key",exam_update:"Exam Update",other:"Government Notice"};
+  const top=[["Notice Publication Date",date(data.notice_date)],["Total Vacancies",data.vacancies==null?"See the official PDF":Number(data.vacancies).toLocaleString("en-IN")],["Application Start Date",date(data.application_start)],["Application Deadline",date(data.application_end)]];
   const hidden=new Set(["scope","state","authority","notification_pdf_url","pdf_url","application_url","apply_url","official_website","website_url","source_url","ai_extraction","missing_fields","confidence"]);
   const entries=Object.entries(d).filter(([k,v])=>!hidden.has(k)&&v!==null&&v!==""&&typeof v!=="boolean"&&!String(k).toLowerCase().includes("url"));
   const groups=[
@@ -70,7 +70,7 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:25px 15px;text-a
   const actions=link(pdf,"அதிகாரப்பூர்வ அறிவிப்பு PDF","btn-light")+link(apply,"அதிகாரப்பூர்வமாக விண்ணப்பிக்க","btn-primary")+link(website,"அதிகாரப்பூர்வ இணையதளம்","btn-green")+link(!pdf&&!website?source:"","மூல அறிவிப்பைப் பார்க்க","btn-outline");
   const summary=data.eligibility_summary?'<section class="panel"><div class="section-kicker">தகுதி சுருக்கம்</div><h2>இந்த வேலைக்கு யார் விண்ணப்பிக்கலாம்?</h2><p class="intro">'+esc(data.eligibility_summary)+'</p></section>':"";
   root.className="";
-  root.innerHTML='<section class="hero"><div class="eyebrow">TAMILAN CAREERS · அரசு வேலைவாய்ப்பு வழிகாட்டி</div><h1>'+esc(data.title)+'</h1><p>'+esc(d.authority||"அதிகாரப்பூர்வ அறிவிப்பு")+(d.state?" · "+esc(d.state):"")+'</p><div class="chips"><span class="chip">'+esc(categoryNames[data.category]||"அரசு அறிவிப்பு")+'</span><span class="chip '+(expired?"":"status")+'">'+(expired?"விண்ணப்பக் காலம் முடிந்தது":data.application_end?"விண்ணப்ப காலம்":"அறிவிப்பு விவரம்")+'</span>'+(data.notice_reference?'<span class="chip">அறிவிப்பு எண்: '+esc(data.notice_reference)+'</span>':"")+'</div><div class="hero-actions">'+actions+'</div></section>'+
+  root.innerHTML='<section class="hero"><div class="eyebrow">TAMILAN CAREERS · அரசு வேலைவாய்ப்பு வழிகாட்டி</div><h1>'+esc(data.title)+'</h1><p>'+esc(d.authority||"அதிகாரப்பூர்வ அறிவிப்பு")+(d.state?" · "+esc(d.state):"")+'</p><div class="chips"><span class="chip">'+esc(categoryNames[data.category]||"Government Notice")+'</span><span class="chip '+(expired?"":"status")+'">'+(expired?"விண்ணப்பக் காலம் முடிந்தது":data.application_end?"விண்ணப்ப காலம்":"அறிவிப்பு விவரம்")+'</span>'+(data.notice_reference?'<span class="chip">அறிவிப்பு எண்: '+esc(data.notice_reference)+'</span>':"")+'</div><div class="hero-actions">'+actions+'</div></section>'+
   '<div class="stats">'+top.map(([k,v])=>'<div class="stat"><small>'+esc(k)+'</small><b>'+esc(v)+'</b></div>').join("")+'</div>'+
   '<div class="layout"><div><section class="panel"><div class="section-kicker">அறிவிப்பு அறிமுகம்</div><h2>வேலைவாய்ப்பு சுருக்கம்</h2><div class="facts">'+block("அறிவிப்பு வெளியிட்ட நிறுவனம்",d.authority||"அறிவிப்பில் பார்க்கவும்")+block("மாநிலம் / பகுதி",d.state||(d.scope==="central"?"Central Government":"அறிவிப்பின்படி"))+block("துறை",d.department||"அறிவிப்பில் பார்க்கவும்")+block("காலியிடங்கள்",data.vacancies==null?"அறிவிப்பில் பார்க்கவும்":data.vacancies)+'</div></section>'+summary+groups.map(([t,a])=>section(t,a)).join("")+
   '<section class="panel"><div class="section-kicker">முக்கிய தேதிகள்</div><h2>விண்ணப்ப அட்டவணை</h2><div class="facts">'+top.map(([k,v])=>block(k,v)).join("")+'</div></section>'+
