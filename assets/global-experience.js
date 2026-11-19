@@ -29,7 +29,7 @@ function applyPremiumHeaderBrand(){
  }
 }
 function addDomain(){document.querySelectorAll(".tc-brand-domain").forEach(function(el){el.remove()})}
-function setLanguage(countryCode,region,deviceLang,zone){var c=COUNTRY[countryCode]||{name:"Global",langs:["en"],primary:"en"};var lang="en";document.documentElement.setAttribute("lang","en");document.documentElement.setAttribute("dir","ltr");document.documentElement.dataset.tcLanguage="en";addBar(c,lang,zone||(Intl.DateTimeFormat().resolvedOptions().timeZone)||"UTC",region||"");addDomain();window.TC_LOCALE={country:countryCode,region:region,language:"en",languages:["en"],timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"};window.dispatchEvent(new CustomEvent("tc:locale-ready",{detail:window.TC_LOCALE}));}
+function setLanguage(countryCode,region,deviceLang,zone){var c=COUNTRY[countryCode]||{name:"Global",langs:["en"],primary:"en"};var lang="en";document.documentElement.setAttribute("lang","en");document.documentElement.setAttribute("dir","ltr");document.documentElement.dataset.tcLanguage="en";var localeMeta=document.querySelector('meta[property="og:locale"]');if(localeMeta)localeMeta.setAttribute("content","en_US");addBar(c,lang,zone||(Intl.DateTimeFormat().resolvedOptions().timeZone)||"UTC",region||"");addDomain();window.TC_LOCALE={country:countryCode,region:region,language:"en",languages:["en"],timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"};window.dispatchEvent(new CustomEvent("tc:locale-ready",{detail:window.TC_LOCALE}));}
 
 function loadTranslator(lang){
  if(window.__tcTranslatorRequested)return;window.__tcTranslatorRequested=true;
