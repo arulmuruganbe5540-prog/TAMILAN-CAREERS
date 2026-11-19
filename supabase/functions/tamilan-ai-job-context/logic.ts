@@ -1,5 +1,4 @@
 // Pure, side-effect-free helpers for TAMILAN AI job retrieval.
-// Kept separate so Deno unit tests can exercise the contract without starting Deno.serve.
 export const MAX_QUERY_LENGTH = 80;
 export const MAX_RESULTS = 5;
 export const MAX_DESCRIPTION_LENGTH = 6000;
@@ -11,13 +10,11 @@ export function normalizeSearchQuery(value: unknown): string | null {
   if (trimmed.length > MAX_QUERY_LENGTH) return null;
   return trimmed.replace(/[%,_()]/g, " ").replace(/\s+/g, " ").trim();
 }
-
 export function normalizeCountry(value: unknown): string | null {
   if (value === undefined || value === null || value === "") return "";
   if (typeof value !== "string" || value.trim().length > 100) return null;
   return value.trim().replace(/[%,_()]/g, " ").replace(/\s+/g, " ").trim();
 }
-
 export function safeHttpsUrl(value: unknown): string | null {
   if (typeof value !== "string" || value.length > 2048) return null;
   try {
@@ -27,15 +24,21 @@ export function safeHttpsUrl(value: unknown): string | null {
     return null;
   }
 }
-
+export function rateLimitDecision(value: unknown): { allowed: boolean; retryAfterSeconds: number } | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const result = value as Record<string, unknown>;
+  if (typeof result.allowed !== "boolean") return null;
+  if (result.allowed) return { allowed: true, retryAfterSeconds: 0 };
+  const retry = result.retry_after_seconds;
+  if (typeof retry !== "number" || !Number.isInteger(retry) || retry < 1 || retry > 86400) return null;
+  return { allowed: false, retryAfterSeconds: retry };
+}
 export function publicJobSource(row: Record<string, unknown>) {
   const id = typeof row.id === "string" ? row.id : "";
   if (!id) return null;
-  const canonical = `https://tamilancareers.in/job-details.html?id=${encodeURIComponent(id)}`;
-  const sourceUrl =
-    safeHttpsUrl(row.official_notification_url) ??
-    safeHttpsUrl(row.official_website_url) ??
-    canonical;
+  const canonical = "https://tamilancareers.in/job-details.html?id=" + encodeURIComponent(id);
+  const sourceUrl = safeHttpsUrl(row.official_notification_url) ??
+    safeHttpsUrl(row.official_website_url) ?? canonical;
   return {
     source_id: id,
     title: String(row.job_title ?? "").slice(0, 300),
