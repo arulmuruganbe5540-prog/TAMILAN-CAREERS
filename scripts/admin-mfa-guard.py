@@ -26,7 +26,8 @@ for name in ROLE_PAGES:
             failures.append(f"{name}: missing required access-control check: {token}")
 
 login = (ROOT / "admin-login.html").read_text(encoding="utf-8")
-for token in ("mfa.getAuthenticatorAssuranceLevel", "mfa.challenge", "mfa.verify"):
+for token in ("mfa.getAuthenticatorAssuranceLevel", "mfa.challenge", "mfa.verify",
+              "mfaFactorSelect", "verifiedFactors", "startMfaChallenge"):
     if token not in login:
         failures.append(f"admin-login.html: missing MFA sign-in step: {token}")
 
