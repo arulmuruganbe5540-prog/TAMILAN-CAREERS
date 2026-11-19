@@ -91,6 +91,28 @@ Deno.test("HTTP contract: invalid JSON, extra fields, oversized body and missing
   equal((await h.handler(post("x".repeat(2049)))).status, 413, "oversized body");
   equal((await harness({ missingConfig: true }).handler(post("{}"))).status, 503, "missing config");
 });
+Deno.test("HTTP contract: oversized streamed bodies are cancelled at the byte limit", async () => {
+  let cancelled = false;
+  const stream = new ReadableStream<Uint8Array>({
+    pull(controller) {
+      controller.enqueue(new Uint8Array(2049));
+    },
+    cancel() {
+      cancelled = true;
+    },
+  });
+  const request = new Request("https://example.test", {
+    method: "POST",
+    headers: { authorization: "Bearer test-user-jwt", "content-type": "application/json" },
+    body: stream,
+  });
+  const h = harness();
+  const response = await h.handler(request);
+  equal(response.status, 413, "streamed oversized body");
+  assert(cancelled, "oversized request stream should be cancelled");
+  equal(h.calls.length, 0, "oversized body must not create a client");
+});
+
 Deno.test("HTTP contract: quota errors and malformed quota data fail closed before jobs query", async () => {
   const failed = harness({ quotaError: new Error("rpc unavailable") });
   equal((await failed.handler(post("{}"))).status, 503, "quota RPC error");
