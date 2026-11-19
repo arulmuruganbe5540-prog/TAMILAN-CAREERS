@@ -91,7 +91,8 @@ else:
     if not re.search(r'revoke\s+all\s+on\s+function\s+public\.tamilan_ai_consume_job_context_quota\(\)\s+from\s+public,\s*anon', sql, re.I):
         errors.append('Public quota RPC must deny PUBLIC and anon execution')
     if not re.search(r'revoke\s+all\s+on\s+function\s+private\.tamilan_ai_consume_job_context_quota\(\)\s+from\s+public,\s*anon', sql, re.I):
-        errors.append('Private quota helper must deny PUBLIC and anon execution')if not CONFIG.is_file():
+        errors.append('Private quota helper must deny PUBLIC and anon execution')
+if not CONFIG.is_file():
     errors.append('Missing Supabase config.toml')
 else:
     config = CONFIG.read_text(encoding='utf-8')
