@@ -779,7 +779,15 @@ await check("India defaults to English unless a language preference is saved", a
     if (!response || !response.ok()) throw new Error("India homepage failed to load");
     await indiaPage.waitForFunction(() => window.TC_LOCALE?.language === "en" && window.TC_TRANSLATE?.language === "en", { timeout: 10000 });
     if (await indiaPage.locator("#tc-language-select").inputValue() !== "en") throw new Error("India default language selector is not English");
+    if (await indiaPage.locator("#tc-language-select").count() !== 1) throw new Error("Expected exactly one language selector");
+    if (await indiaPage.locator(".tc-site-domain").count() !== 1 || (await indiaPage.locator(".tc-site-domain").innerText()) !== "www.tamilancareers.in") {
+      throw new Error("Expected one canonical website domain label");
+    }
     if (!(await indiaPage.getByText("Explore opportunities by country", { exact: true }).count())) throw new Error("English homepage text is missing");
+    await indiaPage.locator("#tc-language-select").selectOption("ta");
+    await indiaPage.waitForFunction(() => window.TC_LOCALE?.language === "ta" && window.TC_TRANSLATE?.language === "ta", { timeout: 10000 });
+    if (await indiaPage.evaluate(() => localStorage.getItem("tc_language_preference_v1")) !== "ta") throw new Error("Language selector did not save the Tamil preference");
+    if (!(await indiaPage.getByText("முகப்பு", { exact: true }).count())) throw new Error("Selecting Tamil did not translate homepage navigation");
   } finally {
     await indiaPage.close();
   }
