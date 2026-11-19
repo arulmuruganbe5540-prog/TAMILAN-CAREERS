@@ -14,7 +14,8 @@ create table if not exists private.tamilan_ai_job_context_rate_limits (
 alter table private.tamilan_ai_job_context_rate_limits enable row level security;
 revoke all on table private.tamilan_ai_job_context_rate_limits from public, anon, authenticated;
 
-create or replace function public.tamilan_ai_consume_job_context_quota()
+-- The privileged implementation stays in the non-exposed private schema.
+create or replace function private.tamilan_ai_consume_job_context_quota()
 returns jsonb
 language plpgsql
 security definer
@@ -86,6 +87,19 @@ begin
     'retry_after_seconds', case when v_allowed then 0 else greatest(1, v_retry) end
   );
 end;
+$function$;
+
+revoke all on function private.tamilan_ai_consume_job_context_quota() from public, anon;
+grant execute on function private.tamilan_ai_consume_job_context_quota() to authenticated;
+
+-- Public Data API entry point is SECURITY INVOKER; it has no elevated privileges.
+create or replace function public.tamilan_ai_consume_job_context_quota()
+returns jsonb
+language sql
+security invoker
+set search_path = ''
+as $function$
+  select private.tamilan_ai_consume_job_context_quota();
 $function$;
 
 revoke all on function public.tamilan_ai_consume_job_context_quota() from public, anon;
