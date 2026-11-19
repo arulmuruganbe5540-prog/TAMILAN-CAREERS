@@ -261,8 +261,7 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
  const sections={country_government_jobs:"country-government",country_private_jobs:"country-private",overseas_jobs:"overseas-jobs",local_latest_jobs:"jobs",job_categories:"categories",qualification_pathways:"qualification-pathways",career_tools:"career-tools",employer_cta:"employer"};
  const defaults=Object.keys(sections);
  function applyLayout(country){
-  const configured=Array.isArray(country?.homepage_sections)?country.homepage_sections:[];
-  const order=country?configured.concat(defaults.filter(key=>!configured.includes(key))):defaults;
+  const order=defaults;
   const footer=document.querySelector("footer");
   order.forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el&&footer)document.body.insertBefore(el,footer)});
   Object.keys(sections).forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el&&!country&&(key==="country_government_jobs"||key==="country_private_jobs"))el.hidden=true});
