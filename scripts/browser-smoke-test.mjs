@@ -54,6 +54,7 @@ await check("Redesigned homepage is mobile-friendly and hides country-detection 
     document: document.documentElement.scrollWidth,
     search: document.querySelector(".search-panel")?.getBoundingClientRect().width || 0,
     nav: !!document.querySelector(".main-nav"),
+    overflowElements: [...document.querySelectorAll("body *")].map(el=>({tag:el.tagName,cls:typeof el.className==="string"?el.className:"",id:el.id,left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(x=>x.right>document.documentElement.clientWidth+1||x.left< -1).slice(0,20),
     visibleText: (document.body.innerText || "").toLowerCase()
   }));
   if (layout.document > layout.viewport + 1) throw new Error("Homepage has horizontal page overflow on mobile: " + JSON.stringify(layout));
