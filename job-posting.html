@@ -58,7 +58,7 @@ function setReviewLock(locked){
  ids.filter(id=>id!=="companyChoice").forEach(id=>{document.getElementById(id).disabled=locked});
  ["saveBtn","submitReviewBtn","clearBtn"].forEach(id=>{document.getElementById(id).disabled=locked});
 }
-function fill(d={}){ids.forEach(id=>{if(id!=="education")document.getElementById(id).value=d[id]??(id==="openings"?"1":"")});const chosen=Array.isArray(d.education)?d.education:String(d.education||"").split(/[,;|]/).map(x=>x.trim()).filter(Boolean);document.querySelectorAll(".education-choice").forEach(x=>x.checked=chosen.includes(x.value));document.getElementById("education").value=chosen.join(", ");document.getElementById("salaryPeriod").value=d.salaryPeriod||(d.employmentType==="Daily Wage"?"daily":"monthly")}
+function fill(d={}){const companySelect=document.getElementById("companyChoice"),selectedCompany=companySelect.value;ids.forEach(id=>{if(id!=="education"&&id!=="companyChoice")document.getElementById(id).value=d[id]??(id==="openings"?"1":"")});companySelect.value=d.companyChoice||selectedCompany;const chosen=Array.isArray(d.education)?d.education:String(d.education||"").split(/[,;|]/).map(x=>x.trim()).filter(Boolean);document.querySelectorAll(".education-choice").forEach(x=>x.checked=chosen.includes(x.value));document.getElementById("education").value=chosen.join(", ");document.getElementById("salaryPeriod").value=d.salaryPeriod||(d.employmentType==="Daily Wage"?"daily":"monthly")}
 function showBlocked(t){document.getElementById("loading").classList.add("hidden");const b=document.getElementById("blocked");b.textContent=t;b.classList.remove("hidden")}
 async function init(){
  const {data,error}=await client.auth.getUser();
