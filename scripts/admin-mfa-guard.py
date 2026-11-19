@@ -41,6 +41,25 @@ if 'id="form" style="display:none"' not in exam:
 if "allowed=true" not in exam:
     failures.append("admin-exam-resources.html: submit authorization state missing")
 
+
+mfa_migration = ROOT / "supabase/migrations/20261119080000_require_mfa_for_super_admin_rpc_actions.sql"
+if not mfa_migration.is_file():
+    failures.append("Super Admin RPC MFA migration: file missing")
+else:
+    migration_sql = mfa_migration.read_text(encoding="utf-8")
+    for token in (
+        "private.require_super_admin_mfa()",
+        "tc_admin_publish_job",
+        "tc_review_company_verification",
+        "tc_review_job_report",
+        "tc_guard_company_verification_status",
+        "auth.mfa_factors",
+        "auth.jwt()->>'aal'",
+        "MFA verification required",
+    ):
+        if token.lower() not in migration_sql.lower():
+            failures.append(f"Super Admin RPC MFA migration: missing {token}")
+
 if failures:
     print("\n".join(failures))
     sys.exit(1)
