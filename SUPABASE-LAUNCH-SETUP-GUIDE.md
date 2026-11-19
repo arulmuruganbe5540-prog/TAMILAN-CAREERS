@@ -26,14 +26,13 @@ Supabase Dashboard → Edge Functions → ஒவ்வொரு Function-ஐத�
 - `company-resume-access` — விண்ணப்பித்த Candidate-ன் Resume-ஐ உரிய Company உறுப்பினருக்கு மட்டும் 60 வினாடி பாதுகாப்பான இணைப்பாக வழங்கும்.
 - `scan-external-job-sources` — அனுமதிக்கப்பட்ட வெளிப்புற வேலை ஆதாரங்களில் இணைப்புகளைத் தேடும். `robots.txt` அனுமதி உள்ள பக்கங்களை மட்டுமே scan செய்யும்; கண்டுபிடிப்புகள் தனிப்பட்ட Admin Review-ல் மட்டுமே இருக்கும்.
 - `ingest-government-notices` — `robots.txt` அனுமதி உள்ள அரசு அறிவிப்பு / முடிவு / Hall Ticket பக்கங்களை மட்டுமே scan செய்து தனிப்பட்ட Admin Review-க்கு அனுப்பும்.
-- `ai-resume-match` — Candidate ஒப்புதல் அளித்த பிறகே Resume மற்றும் வேலைக்குத் தொடர்புடைய சுயவிவர விவரங்களை AI சேவைக்கு அனுப்பும். Edge Function-லும் `user_roles.role = job_seeker` என்று சரிபார்க்கப்படுகிறது; UI checkbox மட்டும் நம்பப்படாது.
+- AI சார்ந்த Edge Functions இந்தத் திட்டத்தில் பயன்படுத்தப்படாது; அவற்றை இயக்கவோ API key அமைக்கவோ வேண்டாம்.
 
 Deploy செய்த பிறகு Function-ன் Logs-ல் பிழை இல்லையா எனப் பார்க்கவும். Function Deploy ஆனது மட்டும் live workflow வெற்றியடைந்ததாக அர்த்தமில்லை.
 
 ## 3. பாதுகாப்பு Secret-கள்
 
 - `GOVERNMENT_MONITOR_SECRET` — Government மற்றும் external source monitor-க்கு Supabase Function Secrets மற்றும் GitHub Actions Secrets இரண்டிலும் ஒரே பாதுகாப்பான மதிப்பு தேவை. குறைந்தது 32 எழுத்துகள்; சீரற்ற தனித்துவமான மதிப்பை உருவாக்கவும். Chat-ல் பகிர வேண்டாம்.
-- `OPENAI_API_KEY` — AI Resume Matching Function-க்கு மட்டும் Supabase Function Secret ஆக சேர்க்க வேண்டும். Frontend அல்லது GitHub source code-ல் வைக்க வேண்டாம்.
 - Scanner Function-கள் custom `x-monitor-secret` header பயன்படுத்துகின்றன. Supabase Function Gateway-யின் legacy JWT verification ON ஆக இருந்தால், அந்த Gateway custom header-ஐ அடையும் முன்பே request-ஐ மறுக்கலாம். அமைப்பைச் சரிபார்த்து தேவையான இடத்தில் மட்டுமே OFF செய்யவும்.
 
 ## 4. உண்மையான கணக்குகளில் சோதனை
