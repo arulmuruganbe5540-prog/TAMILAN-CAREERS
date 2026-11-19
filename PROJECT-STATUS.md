@@ -1,3 +1,13 @@
+## TAMILAN AI retrieval unit tests added and CI passed — 19 November 2026
+
+- Extracted side-effect-free validation and public job-source formatting into `supabase/functions/tamilan-ai-job-context/logic.ts`, so it can be tested without starting the Edge Function server.
+- Added `logic_test.ts` covering query/country input normalization and length/type rejection, HTTPS-only citation URL handling, missing source IDs, canonical citation fallback, official-notification citation preference, untrusted description length bounds, and exclusion of employer application URLs from citations.
+- The tests exposed and fixed a country whitespace-normalization bug: the previous regular expression did not collapse repeated whitespace. Both query and country normalization now use the correct whitespace expression.
+- Added the Deno unit-test step to the existing Health Audit workflow and extended the static retrieval guard to cover the extracted logic.
+- Verified Health Audit run `44471041734` **passed**, including all Edge Function type checks, existing security guards, retrieval static guard, the new Deno unit tests, website structure checks and browser smoke tests.
+- Verified GitHub Pages deployment run `44471042329` **passed** for the same latest commit.
+- No Supabase database, RLS, secrets, deployed functions or live AI feature flags were changed. The retrieval endpoint remains source-only and OFF. Authenticated live integration tests and durable rate limiting remain outstanding.
+
 ## SECURITY DEFINER மறுஆய்வு — 19 நவம்பர் 2026
 
 - Added `TAMILAN-SECURITY-DEFINER-AUDIT-TA.md` after a fresh read-only Supabase catalog and Security Advisor review.
