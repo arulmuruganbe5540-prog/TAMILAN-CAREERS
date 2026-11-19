@@ -594,6 +594,59 @@ await check("Employer applicant management updates status and sends an interview
   } finally { await p.close(); }
 });
 
+
+await check("Super Admin approves and publishes a mocked job review", async () => {
+  const p = await createMockSignedInPage("super_admin");
+  let reviewStatus = "pending_review", publishedJobId = null, publishCalls = 0;
+  await p.addInitScript(() => {
+    const key = "sb-qkmljuuusfjowexvybvy-auth-token";
+    const session = JSON.parse(localStorage.getItem(key) || "{}");
+    const payload = { sub: session.user?.id || "tc-flow-smoke-user", aal: "aal1", exp: Math.floor(Date.now() / 1000) + 3600 };
+    session.access_token = "eyJhbGciOiJub25lIn0." + btoa(JSON.stringify(payload)) + ".mock";
+    localStorage.setItem(key, JSON.stringify(session));
+  });
+  await p.route("**/auth/v1/factors**", route => route.fulfill({
+    status: 200, contentType: "application/json", body: JSON.stringify({ all: [], totp: [] })
+  }));
+  await p.route("**/rest/v1/user_roles**", route => route.fulfill({
+    status: 200, contentType: "application/json", body: JSON.stringify([{ role: "super_admin" }])
+  }));
+  await p.route("**/rest/v1/admin_job_post_reviews**", route => {
+    if (route.request().method() === "GET") {
+      return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{
+        id: "review-smoke", title: "Mock Accountant Vacancy", company_name: "Smoke Test Ltd",
+        status: reviewStatus, payload: { job_kind: "private" }, review_note: null,
+        published_job_id: publishedJobId, created_at: "2026-11-18T10:00:00Z", updated_at: "2026-11-18T10:00:00Z"
+      }]) });
+    }
+    if (route.request().method() === "PATCH") {
+      const body = route.request().postDataJSON();
+      reviewStatus = body.status || reviewStatus;
+      return route.fulfill({ status: 204, body: "" });
+    }
+    return route.fulfill({ status: 204, body: "" });
+  });
+  await p.route("**/rest/v1/rpc/tc_admin_publish_job", route => {
+    publishCalls++;
+    reviewStatus = "approved";
+    publishedJobId = "public-job-smoke";
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(publishedJobId) });
+  });
+  await p.route("**/functions/v1/google-indexing-notify**", route => route.fulfill({
+    status: 200, contentType: "application/json", body: JSON.stringify({ ok: true })
+  }));
+  try {
+    await p.goto(base + "/admin-job-post.html", { waitUntil: "domcontentloaded" });
+    await p.locator("#app").waitFor({ state: "visible", timeout: 10000 });
+    await p.locator('[data-action="approve"][data-id="review-smoke"]').click();
+    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("Approved"));
+    await p.locator('[data-action="publish"][data-id="review-smoke"]').click();
+    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("வெற்றிகரமாக வெளியிடப்பட்டது"));
+    if (publishCalls !== 1) throw new Error("Admin publish RPC called " + publishCalls + " times");
+    if (!(await p.locator("#queue").innerText()).includes("public-job-smoke")) throw new Error("Published job ID was not shown in the Admin queue");
+  } finally { await p.close(); }
+});
+
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
