@@ -222,6 +222,28 @@ rows.push.apply(rows,[
 ]);
 
 
+rows.push.apply(rows,[
+["விதிமுறைகள் மற்றும்","Terms and"],
+["பயன்பாட்டு விதிகள்","Terms of Use"],
+["தனியுரிமைக் கொள்கை","Privacy Policy"],
+["ஆகியவற்றை ஏற்கிறேன்.","I agree to the above."],
+["Email உறுதிப்படுத்தலை மீண்டும் அனுப்பு","Resend email confirmation"],
+["← முகப்புப் பக்கத்திற்குச் செல்லுங்கள்","← Return to Home"],
+["நிறுவனச் சரிபார்ப்பு நிலை","Company Verification Status"],
+["உங்கள் நிறுவன விண்ணப்பம், Admin குறிப்புகள் மற்றும் ஆவணங்களின் நிலையை இங்கே பார்க்கலாம்.","View your company application, admin notes and document status here."],
+["உங்கள் விண்ணப்ப விவரங்கள் ஏற்றப்படுகின்றன...","Loading your application details..."],
+["சமர்ப்பித்த ஆவணங்கள்","Submitted Documents"],
+["ஆவணங்கள் ஏற்றப்படுகின்றன...","Loading documents..."],
+["கூடுதல் தகவல் / ஆவணங்களைச் சமர்ப்பிக்கவும்","Submit Additional Information / Documents"],
+["Admin கேட்ட விவரங்களைப் படித்து பதில் அளிக்கவும். தேவையான புதிய ஆவணங்களையும் இங்கே இணைக்கலாம்.","Read the information requested by the admin and respond. You can attach any required new documents here."],
+["உங்கள் பதில் / விளக்கம் *","Your Reply / Explanation *"],
+["ஆவண வகை","Document Type"],
+["புதிய ஆவணம் (விருப்பம்)","New Document (Optional)"],
+["மீண்டும் சரிபார்ப்புக்கு அனுப்பவும்","Resubmit for Verification"],
+["TAMILAN CAREERS – வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.","TAMILAN CAREERS – One platform for job seekers and companies."]
+]);
+
+
 if(cols[lang]===undefined&&!extraLanguageRows[lang])return;
 var map=Object.create(null),tamilTargets=Object.create(null),tamilAmbiguous=Object.create(null),extraTargets=Object.create(null);
 if(cols[lang]!==undefined)rows.forEach(function(r){if(!r[0])return;var target=lang==="en"?r[0]:r[cols[lang]];if(target){map[r[0]]=target;if(r[1]){if(tamilTargets[r[1]]&&tamilTargets[r[1]]!==target)tamilAmbiguous[r[1]]=true;else tamilTargets[r[1]]=target}}});
