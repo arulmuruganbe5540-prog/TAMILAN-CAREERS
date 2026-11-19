@@ -56,6 +56,8 @@ async function init(){
   if(error||!data.user){gate("முதலில் Super Admin Login செய்யவும்.");return}
   const {data:roles,error:roleError}=await client.from("user_roles").select("role").eq("user_id",data.user.id).eq("role","super_admin").limit(1);
   if(roleError||!roles?.length){gate("இந்தக் கணக்கிற்கு Super Admin அனுமதி இல்லை.");return}
+  const {data:aal,error:ae}=await client.auth.mfa.getAuthenticatorAssuranceLevel();
+  if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){gate("Authenticator MFA சரிபார்ப்பு தேவை. Admin Login வழியாக மீண்டும் உள்நுழையவும்.");return}
   const {data:settings,error:settingsError}=await client.from("site_settings").select("site_name,headline,subtitle,primary_color,banner_path").eq("setting_key","homepage").maybeSingle();
   if(settingsError)throw settingsError;
   if(settings){
