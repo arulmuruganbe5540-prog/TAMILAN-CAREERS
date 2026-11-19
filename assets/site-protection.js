@@ -11,3 +11,7 @@ document.addEventListener('keydown',e=>{if(editable(e.target))return;const k=Str
 
 /* Shared global locale, regional time and display preferences */
 (function(){var s=document.createElement('script');s.src='assets/global-experience.js';s.defer=true;document.head.appendChild(s);})();
+
+
+/* Render one consistent, responsive information footer on all protected pages. */
+(function(){var s=document.createElement('script');s.src='assets/professional-footer.js';s.defer=true;document.head.appendChild(s);})();
