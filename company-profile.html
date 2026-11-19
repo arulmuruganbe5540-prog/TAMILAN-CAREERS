@@ -36,30 +36,30 @@ img,svg,video,iframe{max-width:100%}
 <div class="notice"><b>Important Security:</b> Submitting documents does not automatically grant verified status. An administrator independently checks the relevant official registry in the company's country. Government registry integration is not currently automated; verification is performed manually.</div><div class="notice"><b>For Verified Companies:</b> நிறுவனத்தின் சட்டப்பூர்வப் பெயர், பதிவு எண், இணையதளம் அல்லது பிற அடையாள விவரங்களை மாற்றினால் பாதுகாப்புக்காக Verified நிலை தற்காலிகமாக நீக்கப்பட்டு மீண்டும் சரிபார்ப்புக்கு அனுப்பப்படும்.</div></section>
 <section class="panel"><h2 class="section-title">1. Basic Company Details</h2><p class="muted">Your private account draft is not saved automatically. Select Save Draft below if you want to keep a draft.</p>
 <form id="companyForm" class="form-grid">
-<div class="field wide"><label for="companyName">Public Company Name *</label><input id="companyName" required maxlength="160" placeholder="உதா: ABC Technologies"></div>
+<div class="field wide"><label for="companyName">Public Company Name *</label><input id="companyName" required maxlength="160" placeholder="e.g. ABC Technologies"></div>
 <div class="field"><label for="industry">Industry *</label><select id="industry" required><option value="">Select</option><option>IT / Software</option><option>Manufacturing</option><option>Healthcare</option><option>Education</option><option>Retail / Sales</option><option>Construction</option><option>Logistics / Transport</option><option>Finance / Banking</option><option>Hospitality</option><option>Agriculture</option><option>Other</option></select></div>
 <div class="field"><label for="size">Company Size</label><select id="size"><option value="">Select</option><option>1–10</option><option>11–50</option><option>51–200</option><option>201–500</option><option>501–1000</option><option>1000+</option></select></div>
 <div class="field"><label for="email">Official Email *</label><input id="email" type="email" required maxlength="180" placeholder="hr@company.com"></div>
 <div class="field"><label for="phone">Contact Phone *</label><input id="phone" type="tel" required inputmode="tel" maxlength="30" placeholder="+91..."></div>
-<div class="field"><label for="website">அதிகாரப்பூர்வ Website</label><input id="website" type="url" maxlength="240" placeholder="https://example.com"></div>
-<div class="field"><label for="city">நகரம் / மாவட்டம் *</label><input id="city" required maxlength="100" placeholder="உதா: சென்னை"></div>
-<div class="field wide"><label for="address">நிறுவன முகவரி / விளக்கம்</label><textarea id="address" maxlength="1200" placeholder="முகவரி மற்றும் நிறுவன செயல்பாடு"></textarea></div>
-<div class="field wide"><label for="about">நிறுவனத்தைப் பற்றி</label><textarea id="about" maxlength="1500" placeholder="சேவைகள், தயாரிப்புகள், செயல்பாடுகள்"></textarea></div>
+<div class="field"><label for="website">Official Website</label><input id="website" type="url" maxlength="240" placeholder="https://example.com"></div>
+<div class="field"><label for="city">City / District *</label><input id="city" required maxlength="100" placeholder="e.g. Chennai"></div>
+<div class="field wide"><label for="address">Company Address / Description</label><textarea id="address" maxlength="1200" placeholder="Address and company activities"></textarea></div>
+<div class="field wide"><label for="about">About the Company</label><textarea id="about" maxlength="1500" placeholder="Services, products and activities"></textarea></div>
 </form>
-<div class="actions"><button class="btn secondary" id="saveBtn" type="button">வரைவைச் சேமிக்கவும்</button><button class="btn secondary" id="reloadBtn" type="button">வரைவை மீண்டும் ஏற்றவும்</button></div>
+<div class="actions"><button class="btn secondary" id="saveBtn" type="button">Save Draft</button><button class="btn secondary" id="reloadBtn" type="button">Reload Draft</button></div>
 </section>
-<section class="panel"><h2 class="section-title">2. சட்டப்பூர்வ பதிவு விவரங்கள்</h2><div class="form-grid" id="legalForm">
-<div class="field"><label for="entityType">சட்டப்பூர்வ நிறுவன வகை *</label><select id="entityType" required><option value="">Select</option><option value="sole_proprietorship">Sole Proprietorship</option><option value="partnership">Partnership</option><option value="llp">LLP</option><option value="private_limited">Private Limited</option><option value="public_limited">Public Limited</option><option value="government">Government</option><option value="nonprofit">Non-profit</option><option value="foreign_company">Foreign Recruitment Company</option><option value="other">Other</option></select></div>
-<div class="field"><label for="countryCode">பதிவு செய்யப்பட்ட நாடு *</label><select id="countryCode" required><option value="">நாடுகளை ஏற்றுகிறது...</option></select></div>
-<div class="field wide"><label for="legalName">அரசுப் பதிவில் உள்ள முழு சட்டப்பூர்வப் பெயர் *</label><input id="legalName" required maxlength="180" placeholder="Certificate-ல் உள்ள பெயர்"></div>
+<section class="panel"><h2 class="section-title">2. Legal Registration Details</h2><div class="form-grid" id="legalForm">
+<div class="field"><label for="entityType">Legal Entity Type *</label><select id="entityType" required><option value="">Select</option><option value="sole_proprietorship">Sole Proprietorship</option><option value="partnership">Partnership</option><option value="llp">LLP</option><option value="private_limited">Private Limited</option><option value="public_limited">Public Limited</option><option value="government">Government</option><option value="nonprofit">Non-profit</option><option value="foreign_company">Foreign Recruitment Company</option><option value="other">Other</option></select></div>
+<div class="field"><label for="countryCode">Country of Registration *</label><select id="countryCode" required><option value="">Loading countries...</option></select></div>
+<div class="field wide"><label for="legalName">Full Legal Name as Registered *</label><input id="legalName" required maxlength="180" placeholder="Certificate-ல் உள்ள பெயர்"></div>
 <div class="field"><label for="registrationNumber">Company / Business Registration Number *</label><input id="registrationNumber" required maxlength="120" placeholder="பதிவு எண்"></div>
-<div class="field"><label for="contactPerson">அங்கீகரிக்கப்பட்ட தொடர்பு நபர் *</label><input id="contactPerson" required maxlength="120" placeholder="முழுப் பெயர்"></div>
-<div class="field wide"><label for="registeredAddress">முழுமையான பதிவு அலுவலக முகவரி *</label><textarea id="registeredAddress" required minlength="8" maxlength="1200" placeholder="அரசுப் பதிவில் உள்ள முகவரி"></textarea></div>
+<div class="field"><label for="contactPerson">Authorised Contact Person *</label><input id="contactPerson" required maxlength="120" placeholder="முழுப் பெயர்"></div>
+<div class="field wide"><label for="registeredAddress">முழுமையான பதிவு அலுவலக முகவரி *</label><textarea id="registeredAddress" required minlength="8" maxlength="1200" placeholder="அரசுப் Registered Address"></textarea></div>
 <div class="field wide hidden" id="authorizationField"><label for="authorization">Recruitment Licence / Sponsor / Work Authorization விவரங்கள் *</label><textarea id="authorization" maxlength="1500" placeholder="உரிம எண், வழங்கிய அதிகார அமைப்பு, செல்லுபடியாகும் தேதி, sponsor/work authorization விவரங்கள்; உரிமம் பொருந்தாவிட்டால் ஏன் பொருந்தாது என்பதையும் குறிப்பிடவும்"></textarea><span class="hint">இந்தியா அல்லாத நாட்டில் பதிவு செய்யப்பட்ட நிறுவனங்களுக்கும், Foreign Recruitment Company வகைக்கும் கட்டாயம். உரிய நாட்டின் சட்டப்படி தேவையான Recruitment Licence / Sponsor / Work Authorization விவரங்களை எழுதவும். உரிமம் பொருந்தாவிட்டால் காரணத்தைத் தெளிவாகக் குறிப்பிடவும்; Admin ஆதாரத்தை மதிப்பாய்வு செய்வார்.</span></div>
 </div></section>
-<section class="panel"><h2 class="section-title">3. சரிபார்ப்பு ஆவணங்கள்</h2><p class="muted">PDF, JPG, PNG அல்லது WEBP மட்டும். ஒவ்வொரு கோப்பும் அதிகபட்சம் 10 MB. தெளிவான, முழுமையான ஆவணங்களைப் பதிவேற்றவும்.</p>
+<section class="panel"><h2 class="section-title">3. Verification Documents</h2><p class="muted">PDF, JPG, PNG அல்லது WEBP மட்டும். ஒவ்வொரு கோப்பும் அதிகபட்சம் 10 MB. தெளிவான, முழுமையான ஆவணங்களைப் பதிவேற்றவும்.</p>
 <div class="doc-grid">
-<div class="doc"><label for="docRegistration">Business Registration Certificate * </label><input id="docRegistration" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp" required><div class="hint">அரசு / பதிவு அமைப்பு வழங்கிய சான்றிதழ்</div></div>
+<div class="doc"><label for="docRegistration">Business Registration Certificate * </label><input id="docRegistration" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp" required><div class="hint">Government / Registry-Issued Certificate</div></div>
 <div class="doc"><label for="docTax">Tax Registration / Tax ID</label><input id="docTax" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
 <div class="doc"><label for="docAddress">Registered Address Proof</label><input id="docAddress" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
 <div class="doc"><label for="docSignatory">Authorized Signatory Proof / ID</label><input id="docSignatory" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
@@ -67,7 +67,7 @@ img,svg,video,iframe{max-width:100%}
 <div class="doc"><label for="docWork">Work / Sponsor Authorization</label><input id="docWork" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"></div>
 </div>
 <div class="notice">உங்கள் ஆவணங்கள் பொதுமக்களுக்கு காட்டப்படாது. பாதுகாக்கப்பட்ட Private Storage-ல் சேமிக்கப்படும்; நிறுவன உரிமையாளர் மற்றும் அனுமதிக்கப்பட்ட Super Admin மட்டுமே அணுக முடியும்.</div>
-<div class="actions"><button class="btn" id="submitBtn" type="button">சரிபார்ப்புக்கு சமர்ப்பிக்கவும்</button></div>
+<div class="actions"><button class="btn" id="submitBtn" type="button">சரிபார்ப்புக்கு Submit</button></div>
 <div id="status" class="status" role="status" aria-live="polite"></div><div id="requestInfo" class="request-card hidden"></div>
 </section>
 </main>
@@ -99,13 +99,13 @@ try{
  let result,requestId,companyId;
  const {data,error}=await db.rpc("tc_submit_company_verification",args);
  if(error){if(!String(error.message||"").toLowerCase().includes("open verification request already exists"))throw error;const {data:rq,error:rqError}=await db.from("company_verification_requests").select("id,company_id,status").eq("submitted_by",user.id).eq("registration_number",d.registrationNumber).in("status",["pending","under_review","more_information"]).order("created_at",{ascending:false}).limit(1).maybeSingle();if(rqError||!rq)throw error;requestId=rq.id;companyId=rq.company_id;result={status:rq.status}}else{result=data;requestId=data.request_id;companyId=data.company_id}
- let count=0;try{count=await uploadDocuments(companyId,requestId)}catch(uploadErr){say("விண்ணப்பம் உருவாக்கப்பட்டது; ஆனால் சில ஆவணங்கள் பதிவேற்றப்படவில்லை. மீதமுள்ள கோப்புகளைத் தேர்வு செய்து மீண்டும் சமர்ப்பிக்கவும். விவரம்: "+uploadErr.message,false);$("requestInfo").classList.remove("hidden");$("requestInfo").textContent="விண்ணப்ப எண்: "+requestId+" · நிலை: "+result.status;return}
+ let count=0;try{count=await uploadDocuments(companyId,requestId)}catch(uploadErr){say("விண்ணப்பம் உருவாக்கப்பட்டது; ஆனால் சில ஆவணங்கள் பதிவேற்றப்படவில்லை. மீதமுள்ள கோப்புகளைத் தேர்வு செய்து மீண்டும் Submit. விவரம்: "+uploadErr.message,false);$("requestInfo").classList.remove("hidden");$("requestInfo").textContent="விண்ணப்ப எண்: "+requestId+" · நிலை: "+result.status;return}
  $("requestInfo").classList.remove("hidden");$("requestInfo").innerHTML="<b>விண்ணப்பம் பெறப்பட்டது</b><br>Request ID: "+requestId+"<br>பதிவேற்றிய ஆவணங்கள்: "+count+"<br>நிலை: <span class='pill'>"+(result.status||"pending")+"</span><br>Admin சரிபார்த்த பிறகு முடிவு தெரிவிக்கப்படும்.";
  say("நிறுவனச் சரிபார்ப்பு விண்ணப்பம் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது. இது இன்னும் Verified அல்ல.",true);
-}catch(e){say("சமர்ப்பிக்க முடியவில்லை: "+(e.message||e),false)}finally{btn.disabled=false;btn.textContent="சரிபார்ப்புக்கு சமர்ப்பிக்கவும்"}}
+}catch(e){say("சமர்ப்பிக்க முடியவில்லை: "+(e.message||e),false)}finally{btn.disabled=false;btn.textContent="சரிபார்ப்புக்கு Submit"}}
 $("entityType").addEventListener("change",toggleAuthorization);
 $("countryCode").addEventListener("change",toggleAuthorization);
-$("saveBtn").addEventListener("click",async()=>{try{await saveDraft();say("உங்கள் நிறுவன வரைவு பாதுகாப்பாகச் சேமிக்கப்பட்டது.",true)}catch(e){say("வரைவைச் சேமிக்க முடியவில்லை: "+e.message,false)}});
+$("saveBtn").addEventListener("click",async()=>{try{await saveDraft();say("உங்கள் நிறுவன வரைவு Securelyச் சேமிக்கப்பட்டது.",true)}catch(e){say("வரைவைச் சேமிக்க முடியவில்லை: "+e.message,false)}});
 $("reloadBtn").addEventListener("click",()=>loadDraft().catch(e=>say("மீண்டும் ஏற்ற முடியவில்லை: "+e.message,false)));
 $("submitBtn").addEventListener("click",submit);
 async function init(){const {data,error}=await db.auth.getUser();if(error||!data.user){location.replace("login.html?next="+encodeURIComponent("company-profile.html"));return}user=data.user;await loadCountries();await loadDraft();if(user.email){$("email").value=legacy.email||user.email}}
