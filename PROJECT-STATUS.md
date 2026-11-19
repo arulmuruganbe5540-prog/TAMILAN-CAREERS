@@ -1,3 +1,18 @@
+## External job candidate review — final verification, 19 November 2026
+
+- Added database-side MFA enforcement to `tc_review_external_job_candidate`: if the current Super Admin has any verified Auth MFA factor, the JWT must carry `aal2`. Accounts with no enrolled factor retain the existing password-only compatibility until owner enrollment, matching the current Admin MFA rollout policy.
+- Confirmed live function definition checks `auth.mfa_factors` and `auth.jwt()`; `anon` cannot execute the RPC and `authenticated` can execute it only through the function's Super Admin/conditional-AAL2 checks.
+- Added `scripts/external-job-review-guard.py` and a GitHub Actions step to protect the page, six-step verification, non-publishing behavior, RPC permissions and database MFA check.
+- Latest Health Audit run `44454901904` passed for code commit `22dd18100ee33b4707945f6b7713056e93fb4e50`, including Deno checks, SQL lint, the new external-review guard, site structure checks and key-page Browser Smoke Tests.
+- GitHub Pages deployment for the latest code/docs commit is queued and must be confirmed before calling the newest revision deployed.
+- No candidate records were changed; all 6 external candidates remain pending. Super Admin must use the page after login/MFA enrollment to make real review decisions. No fake jobs were published.
+
+## Security review notes — 19 November 2026
+
+- Reviewed all 14 previously flagged authenticated-callable SECURITY DEFINER RPCs: live query confirms all 14 use an empty `search_path`, deny `anon` execution, and contain an authenticated-user or Super Admin check. No blanket grant revocations were made because these are active application workflows.
+- The two RLS-enabled/no-policy findings (`company_invitations`, `job_sources`) were checked: `company_invitations` is granted to `service_role` only; `job_sources` has no anon/authenticated table access. They remain default-deny rather than receiving broad policies.
+- Owner-only tasks still pending: enroll and test primary + second TOTP device, enable Supabase Leaked Password Protection in Auth settings, and run real Employer/Candidate end-to-end workflows.
+
 ## External candidate review input hardening — 19 November 2026
 
 - Added follow-up migration `supabase/migrations/20261119060000_harden_external_candidate_review_validation.sql` and applied it to live Supabase. The RPC now rejects null/unknown decisions and non-object verification payloads before any update.
