@@ -364,7 +364,7 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
   document.querySelectorAll(".brand-name span").forEach(el=>{el.style.color="var(--cyan)"});
   document.title=siteName+" | Global Jobs, Government Jobs & Overseas Careers";
   const description=document.querySelector('meta[name="description"]');
-  if(description&&data.subtitle)description.setAttribute("content",data.subtitle);
+  if(description&&data.subtitle&&!/[\u0B80-\u0BFF]/.test(data.subtitle))description.setAttribute("content",data.subtitle);
  }catch(e){/* Keep the default homepage available if design settings cannot load. */}
 })();
 </script>
