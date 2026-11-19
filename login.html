@@ -38,7 +38,7 @@ input:focus{border-color:#1688ed}
 .mainbtn{width:100%;padding:14px;border:0;border-radius:8px;background:#1688ed;color:white;font-size:16px;font-weight:bold;margin-top:20px;cursor:pointer}
 .mainbtn:disabled{opacity:.6}
 .switch{text-align:center;margin-top:20px;color:#66758b;font-size:14px}
-.switch a{color:#147bd1;font-weight:bold;cursor:pointer}
+.switch a,.switch button{color:#147bd1;font-weight:bold;cursor:pointer}.switch button{border:0;background:transparent;font:inherit}
 .message{margin-top:15px;padding:12px;border-radius:8px;font-size:14px;display:none;line-height:1.6}
 .resend-btn{display:none;width:100%;padding:11px;border:1px solid #c9d8e9;border-radius:8px;background:#f4f8fd;color:#126cc1;font-weight:bold;margin-top:9px;cursor:pointer}
 .back{text-align:center;margin-top:22px}
@@ -102,7 +102,7 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
 
   <div class="switch">
     <span id="switchText">Don't have an account?</span>
-    <a id="switchLink" onclick="toggleMode()">Register</a>
+    <button type="button" id="switchLink" onclick="toggleMode()">Register</button>
   </div>
 
   <div class="message" id="message"></div>
