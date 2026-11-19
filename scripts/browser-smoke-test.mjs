@@ -525,6 +525,8 @@ await check("Automatic Spain locale translates newly expanded Spanish job vocabu
     await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-profile")?.textContent === "Tu nombre", { timeout: 5000 });
     await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-tamil-admin"; e.textContent="அனைத்து வகைகளும்"; document.body.appendChild(e); });
     await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-admin")?.textContent === "Todas las categorías", { timeout: 5000 });
+    await spanishPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-es-tamil-company"; e.textContent="குழு உறுப்பினர்கள்"; document.body.appendChild(e); });
+    await spanishPage.waitForFunction(() => document.getElementById("tc-es-tamil-company")?.textContent === "Miembros del equipo", { timeout: 5000 });
   } finally {
     await spanishPage.close();
   }
@@ -551,6 +553,8 @@ await check("Automatic Malaysia locale translates newly expanded Malay job vocab
     await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-profile")?.textContent === "Nama Anda", { timeout: 5000 });
     await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-tamil-admin"; e.textContent="அனைத்து வகைகளும்"; document.body.appendChild(e); });
     await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-admin")?.textContent === "Semua Kategori", { timeout: 5000 });
+    await malayPage.evaluate(() => { const e=document.createElement("span"); e.id="tc-ms-tamil-company"; e.textContent="குழு உறுப்பினர்கள்"; document.body.appendChild(e); });
+    await malayPage.waitForFunction(() => document.getElementById("tc-ms-tamil-company")?.textContent === "Ahli Pasukan", { timeout: 5000 });
   } finally {
     await malayPage.close();
   }
