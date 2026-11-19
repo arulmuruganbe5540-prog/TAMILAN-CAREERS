@@ -367,7 +367,7 @@ await check("Candidate skills match relevant jobs and filter the results", async
     })));
     const response = await skillPage.goto(base + "/jobs.html", { waitUntil: "domcontentloaded" });
     if (!response || !response.ok()) throw new Error("Jobs page failed to load");
-    await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("2 வேலைகள்"));
+    await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("2 jobs found"));
     await skillPage.locator("#skillMatch").selectOption("matched");
     await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 job found"));
     if (!(await skillPage.locator(".job").innerText()).includes("Your skills: 1/2 match")) {
