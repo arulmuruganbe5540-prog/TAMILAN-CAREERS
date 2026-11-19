@@ -537,3 +537,14 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Added `TAMILAN-AI-QUOTA-RUNTIME-TEST-TA.md`, a Tamil runbook for post-migration quota RPC checks: privilege boundaries, registered-user baseline, minute/day ceilings, retry-after, cross-account isolation, anonymous denial, direct private-table denial, and concurrent atomicity.
 - The runbook explicitly separates staging tests from production, requires owner-controlled test accounts, and prohibits placing JWTs/passwords in source code or chat.
 - No live Supabase changes were made. The quota migration remains unapplied; the retrieval Edge Function remains undeployed; the feature flag remains OFF. The runbook is a test plan, not evidence that runtime tests passed.
+
+
+## 19 November 2026 — Quota runbook and deployment verification
+
+- Added the Tamil quota runtime test runbook and linked it from README.
+- Corrected the SQL catalog preflight example in the runbook.
+- Latest GitHub Pages workflow for the README/runbook commit `ee2b6b29a1b9c68b11816067f3b6fe732dbb0739` completed successfully: build, deploy, and report-build-status all passed (run `44474493541`).
+- Read-only live Supabase check reconfirmed that the quota table and both quota RPC functions do not exist yet; total jobs = 0 and published jobs = 0.
+- Live Edge Function inventory does not contain `tamilan-ai-job-context`; it has not been deployed.
+- No live database schema, data, grants, policies, secrets, or Edge Function deployments were changed. Migration remains source-only and feature flag remains OFF.
+- Runtime quota tests cannot be truthfully marked complete until the owner authorizes the migration and provides/creates controlled test accounts in a safe test environment.
