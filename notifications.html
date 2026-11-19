@@ -29,6 +29,8 @@ async function init(){
   return '<article class="item"><h3>'+esc(job?.job_title||"வேலை")+'</h3><div><b>நிறுவனம்:</b> '+esc(co?.company_name||"நிறுவனம்")+'</div><div><b>தேதி:</b> '+esc(new Date(i.scheduled_at).toLocaleString("ta-IN"))+'</div><div><b>வகை:</b> '+esc(modeText[i.interview_mode]||i.interview_mode)+'</div>'+(i.location_or_link?'<div><b>இடம் / இணைப்பு:</b> '+esc(i.location_or_link)+'</div>':"")+(i.letter_text?'<div class="letter">'+esc(i.letter_text)+'</div>':"")+'<span class="pill">'+esc(i.status==="pending"?"பதில் அளிக்க வேண்டும்":i.status==="accepted"?"ஏற்றுக்கொள்ளப்பட்டது":i.status)+'</span>'+(isCandidate&&i.status==="pending"?'<div><button class="btn" data-response="accepted" data-id="'+esc(i.id)+'">ஏற்றுக்கொள்கிறேன்</button><button class="btn alt" data-response="declined" data-id="'+esc(i.id)+'">வர முடியாது</button></div>':"")+'</article>';
  }).join(""):'<h2>நேர்காணல் அழைப்புகள்</h2><div class="empty">தற்போது நிலுவையில் உள்ள Interview அழைப்புகள் இல்லை.</div>';
  $("notifications").innerHTML='<h2>அனைத்து அறிவிப்புகள்</h2><div class="panel"><button class="btn alt" id="markAll">அனைத்தையும் படித்ததாகக் குறிக்கவும்</button></div>'+(notes.length?notes.map(n=>'<article class="item '+(!n.is_read?'unread':'')+'"><span class="pill">'+esc(typeText[n.notification_type]||"அறிவிப்பு")+'</span> <span class="muted">'+esc(new Date(n.created_at).toLocaleString("ta-IN"))+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p>'+(!n.is_read?'<button class="btn alt" data-read="'+esc(n.id)+'">படித்ததாகக் குறிக்கவும்</button>': '<span class="muted">படிக்கப்பட்டது</span>')+(n.related_application_id?'<a class="btn alt" href="my-applications.html">விண்ணப்பத்தைப் பார்க்க</a>':"")+'</article>').join(""):'<div class="empty">இன்னும் அறிவிப்புகள் இல்லை.</div>');
+
+}
  $("notifications").addEventListener("click",async e=>{
   const read=e.target.closest("[data-read]"),all=e.target.closest("#markAll");
   if(read){read.disabled=true;const {error}=await db.rpc("tc_mark_notification_read",{p_notification_id:read.dataset.read});if(error){read.disabled=false;alert("பிழை: "+error.message);return}await init()}
@@ -41,7 +43,6 @@ async function init(){
   if(error){b.disabled=false;b.textContent=label;alert("பதில் சேமிக்க முடியவில்லை: "+error.message);return}
   await init();
  });
-}
 init();
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
