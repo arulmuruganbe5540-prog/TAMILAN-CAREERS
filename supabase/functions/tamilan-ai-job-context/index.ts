@@ -55,7 +55,6 @@ export function publicJobSource(row: Record<string, unknown>) {
   const sourceUrl =
     safeHttpsUrl(row.official_notification_url) ??
     safeHttpsUrl(row.official_website_url) ??
-    safeHttpsUrl(row.application_url) ??
     canonical;
   return {
     source_id: id,
@@ -159,7 +158,7 @@ Deno.serve(async (request: Request) => {
       "employment_type", "workplace_type", "education_level", "required_skills",
       "experience_min", "experience_max", "salary_min", "salary_max",
       "salary_currency", "salary_period", "application_deadline", "published_at",
-      "application_url", "official_website_url", "official_notification_url",
+      "official_website_url", "official_notification_url",
     ].join(","))
     .eq("status", "published")
     .order("published_at", { ascending: false, nullsFirst: false })
