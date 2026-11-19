@@ -122,6 +122,16 @@ await check("Employer registration page fits mobile widths without horizontal sc
   }
 });
 
+await check("Job search filters have accessible names", async () => {
+  await open("jobs.html");
+  const missing = await page.evaluate(() => ["#q", "#kind", "#type", "#place", "#workplace", "#education", "#skillMatch"]
+    .filter(selector => {
+      const el = document.querySelector(selector);
+      return !el || !(el.getAttribute("aria-label") || el.labels?.length || el.getAttribute("title"));
+    }));
+  if (missing.length) throw new Error("Job search controls are missing accessible labels: " + missing.join(", "));
+});
+
 await check("Login page role, mode and password controls work", async () => {
   await open("login.html");
   await page.locator("#company").click();
@@ -892,6 +902,9 @@ await check("Every public page loads in English without visible Tamil or mobile 
             if (style.display === "none" || style.visibility === "hidden" || rect.width <= 0) return false;
             for (let parent = el.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
               const ps = getComputedStyle(parent);
+              // A horizontal auto/scroll container is intentionally navigable (for example, a responsive data table).
+              // Do not treat its scrollable content as clipped by an outer decorative overflow-hidden card.
+              if (/(auto|scroll)/.test(ps.overflowX)) break;
               if (/(hidden|clip)/.test(ps.overflowX) && (rect.left < parent.getBoundingClientRect().left - 1 || rect.right > parent.getBoundingClientRect().right + 1)) return true;
             }
             return false;
