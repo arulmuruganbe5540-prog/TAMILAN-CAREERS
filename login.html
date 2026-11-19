@@ -63,7 +63,7 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
 <div class="card">
 
   <div class="logo"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div>
-  <p class="subtitle">உங்கள் எதிர்காலத்தை இன்றே தொடங்குங்கள்</p>
+  <p class="subtitle">Start building your future today</p>
 
   <h2 id="heading">Login to your account</h2>
 
@@ -94,7 +94,7 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
       <div class="password-wrap"><input id="confirmPassword" type="password" placeholder="Enter your password again" autocomplete="new-password"><button class="password-toggle" type="button" onclick="toggleFieldPassword('confirmPassword',this)">Show</button></div>
       <div class="strength"><span id="strengthBar"></span></div><div class="strength-label" id="strengthLabel">Password strength</div>
     </div>
-    <label class="terms" id="termsRow"><input id="termsAgree" type="checkbox"><span>விதிமுறைகள் மற்றும் <a class="text-link" href="terms.html" target="_blank" rel="noopener">பயன்பாட்டு விதிகள்</a>, <a class="text-link" href="privacy.html" target="_blank" rel="noopener">தனியுரிமைக் கொள்கை</a> ஆகியவற்றை ஏற்கிறேன்.</span></label>
+    <label class="terms" id="termsRow"><input id="termsAgree" type="checkbox"><span>I agree to the <a class="text-link" href="terms.html" target="_blank" rel="noopener">Terms of Use</a>, <a class="text-link" href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
 
     <button class="mainbtn" id="submitBtn" type="submit">Login</button>
 
@@ -106,13 +106,13 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
   </div>
 
   <div class="message" id="message"></div>
-  <button class="resend-btn" id="resendBtn" type="button">Email உறுதிப்படுத்தலை மீண்டும் அனுப்பு</button>
+  <button class="resend-btn" id="resendBtn" type="button">Resend email confirmation</button>
 
   <div class="back">
-    <a href="index.html">← முகப்புப் பக்கத்திற்குச் செல்லுங்கள்</a>
+    <a href="index.html">← Back to Home</a>
   </div>
 
-  <p class="note">TAMILAN CAREERS – வேலை தேடுவோருக்கும் நிறுவனங்களுக்கும் ஒரே தளம்.</p>
+  <p class="note">TAMILAN CAREERS – One platform for job seekers and employers.</p>
 
 </div>
 
@@ -183,16 +183,16 @@ document.getElementById("password").addEventListener("input", () => {
 document.getElementById("forgotLink").addEventListener("click", async e => {
   e.preventDefault();
   const email = document.getElementById("email").value.trim().toLowerCase();
-  if (!email) { showMessage("Password reset செய்ய முதலில் Email Address உள்ளிடுங்கள்."); document.getElementById("email").focus(); return; }
-  if (!supabaseClient) { showMessage("Supabase இணைப்பு கிடைக்கவில்லை."); return; }
+  if (!email) { showMessage("Enter your email address first to reset your password."); document.getElementById("email").focus(); return; }
+  if (!supabaseClient) { showMessage("Unable to connect to the authentication service."); return; }
   const link = document.getElementById("forgotLink");
-  link.style.pointerEvents = "none"; link.textContent = "அனுப்பப்படுகிறது...";
+  link.style.pointerEvents = "none"; link.textContent = "Sending...";
   try {
     const redirectTo = window.location.origin + window.location.pathname.replace(/login\.html$/, "reset-password.html");
     const {error} = await supabaseClient.auth.resetPasswordForEmail(email, {redirectTo});
     if (error) throw error;
-    showMessage("Password மாற்றுவதற்கான பாதுகாப்பான இணைப்பு உங்கள் Email-க்கு அனுப்பப்பட்டது. Inbox மற்றும் Spam folder பார்க்கவும்.", true);
-  } catch(error) { showMessage(error.message || "Reset email அனுப்ப முடியவில்லை."); }
+    showMessage("A secure password reset link has been sent to your email. Check your inbox and spam folder.", true);
+  } catch(error) { showMessage(error.message || "Unable to send the password reset email."); }
   finally { link.style.pointerEvents = ""; link.textContent = "Forgot Password?"; }
 });
 
@@ -252,7 +252,7 @@ function startResendCooldown(seconds = 60) {
   resendSecondsRemaining = seconds;
   button.style.display = "block";
   button.disabled = true;
-  button.textContent = `மீண்டும் அனுப்ப ${resendSecondsRemaining} விநாடிகள் காத்திருக்கவும்`;
+  button.textContent = `Wait ${resendSecondsRemaining} seconds before resending`;
 
   resendCooldownTimer = setInterval(() => {
     resendSecondsRemaining -= 1;
@@ -260,21 +260,21 @@ function startResendCooldown(seconds = 60) {
       clearInterval(resendCooldownTimer);
       resendCooldownTimer = null;
       button.disabled = false;
-      button.textContent = "Email வரவில்லையா? மீண்டும் அனுப்பு";
+      button.textContent = "Didn't receive the email? Resend";
       return;
     }
-    button.textContent = `மீண்டும் அனுப்ப ${resendSecondsRemaining} விநாடிகள் காத்திருக்கவும்`;
+    button.textContent = `Wait ${resendSecondsRemaining} seconds before resending`;
   }, 1000);
 }
 
 document.getElementById("resendBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim().toLowerCase();
   if (!email) { showMessage("முதலில் பதிவு செய்த Email Address உள்ளிடுங்கள்."); return; }
-  if (!supabaseClient) { showMessage("Supabase இணைப்பு கிடைக்கவில்லை."); return; }
+  if (!supabaseClient) { showMessage("Unable to connect to the authentication service."); return; }
 
   const button = document.getElementById("resendBtn");
   button.disabled = true;
-  button.textContent = "Email அனுப்பப்படுகிறது...";
+  button.textContent = "Email Sending...";
   try {
     const {error} = await supabaseClient.auth.resend({type:"signup", email});
     if (error) throw error;
@@ -283,7 +283,7 @@ document.getElementById("resendBtn").addEventListener("click", async () => {
   } catch(error) {
     showMessage(error.message || "Email அனுப்ப முடியவில்லை. சிறிது நேரம் கழித்து முயற்சிக்கவும்.");
     button.disabled = false;
-    button.textContent = "Email வரவில்லையா? மீண்டும் அனுப்பு";
+    button.textContent = "Didn't receive the email? Resend";
   }
 });
 
@@ -297,10 +297,10 @@ document.getElementById("authForm").addEventListener("submit",async function(e) 
   const confirmPassword = document.getElementById("confirmPassword").value;
   if (isRegister && password !== confirmPassword) { showMessage("இரண்டு Password-களும் ஒன்றாக இருக்க வேண்டும்."); return; }
   if (isRegister && (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password))) { showMessage("Password-ல் குறைந்தது ஒரு பெரிய எழுத்து, ஒரு சிறிய எழுத்து, ஒரு எண் இருக்க வேண்டும்."); return; }
-  if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("தொடர்வதற்கு விதிமுறைகள் மற்றும் தனியுரிமைக் கொள்கையை ஏற்கவும்."); return; }
+  if (isRegister && !document.getElementById("termsAgree").checked) { showMessage("தொடர்வதற்கு I agree to the Privacy Policyயை ஏற்கவும்."); return; }
 
   if (!supabaseClient) {
-    showMessage("Supabase இணைப்பு கிடைக்கவில்லை. Publishable Key-ஐ சரிபார்க்கவும்.");
+    showMessage("Unable to connect to the authentication service. Publishable Key-ஐ சரிபார்க்கவும்.");
     return;
   }
 
