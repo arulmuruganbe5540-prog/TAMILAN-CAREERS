@@ -1,3 +1,13 @@
+## 19 November 2026 — Government exam categories and education pathways
+
+- Expanded `exam-preparation.html` from four broad groups to 16 distinct government exam categories: TNPSC, Police/TNUSRB, TRB/Teacher, TANGEDCO/Power, Forest, Health, UPSC, SSC, Railways/RRB, Banking, Defence, Postal, Insurance, Judiciary, PSU, and Other State PSC.
+- Added 16 original locally hosted SVG illustrations under `assets/exam-categories/`; no external Unsplash image dependency for these exam category cards.
+- Each category card selects its matching exam group and updates the exam dropdown. Added responsive card layouts, keyboard focus styling, and an active selection state.
+- Updated the practice note to show how many question-bank items exist for the selected exam and to clearly indicate when a dedicated question bank is not yet available. This does not imply practice questions exist for all 16 categories; the current question bank remains limited.
+- Added eight education-based job discovery pathways to the public homepage: 10th Pass, 12th Pass, ITI, Diploma, Diploma Studying, Degree, Postgraduate, and Studying.
+- Added eight original locally hosted SVG illustrations under `assets/education-pathways/`. Each card links to the existing `jobs.html?education=...` filter using the exact education labels supported by the job-search page.
+- Verified the updated files and representative SVG assets are present on GitHub. End-to-end browser testing and confirmation against published job records remain pending; the qualification cards may correctly show no results while there are no matching published jobs.
+
 # TAMILAN CAREERS — Project Status & Handover
 
 ## 19 November 2026 — Website Design Studio persistence (first implementation)
