@@ -461,8 +461,15 @@ await check("Employer job draft validates salary range, saves and submits for ad
     await p.locator("#description").fill("Mocked test vacancy; no real job is created.");
     await p.locator("#salaryMin").fill("20000");
     await p.locator("#salaryMax").fill("10000");
+    const formState = await p.evaluate(() => ({
+      valid: document.getElementById("jobForm").checkValidity(),
+      invalid: [...document.querySelectorAll("#jobForm :invalid")].map(x => ({ id: x.id, value: x.value, required: x.required })),
+      countryOptions: [...document.getElementById("countryName").options].map(x => ({ value: x.value, text: x.textContent }))
+    }));
+    if (!formState.valid) throw new Error("Mock job form is incomplete before salary validation: " + JSON.stringify(formState));
     await p.locator("#saveBtn").click();
-    if (!(await p.locator("#status").innerText()).includes("அதிகபட்ச சம்பளம்")) throw new Error("Invalid salary range was not rejected");
+    const salaryMessage = await p.locator("#status").innerText();
+    if (!salaryMessage.includes("அதிகபட்ச சம்பளம்")) throw new Error("Invalid salary range was not rejected; status=" + salaryMessage + "; form=" + JSON.stringify(formState));
     await p.locator("#salaryMin").fill("10000");
     await p.locator("#salaryMax").fill("20000");
     await p.locator("#saveBtn").click();
