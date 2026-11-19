@@ -44,3 +44,16 @@ Supabase Security Advisor காட்டிய 15 authenticated-callable SECURI
 5. Owner Supabase Auth settings-இல் Leaked Password Protection-ஐ enable செய்ய வேண்டும்; Admin MFA-வின் உண்மையான browser test-ஐயும் owner account மூலம் முடிக்க வேண்டும்.
 
 நிலை: Website build/deployment verified. Health Audit verified on the stated code commit. Live jobs = 0. AI is not deployed or enabled. Owner-dependent security settings and real-account tests remain pending.
+## 19-11-2026 — Read-only job context implementation and CI verification
+
+- Added `supabase/functions/tamilan-ai-job-context/index.ts` to GitHub. It is a source-only, JWT-protected, feature-flagged OFF endpoint; it has not been deployed to Supabase.
+- Added `verify_jwt = true` for this function in `supabase/config.toml`.
+- Uses only `SUPABASE_ANON_KEY` plus the caller's Bearer JWT so existing `public.jobs` RLS applies. No service-role key, model key, candidate/application data or `job_sources` access.
+- Only `status='published'` rows, max 5, public job fields, max 2 KB request body, bounded query fields. Citation uses the official notification URL, official website URL, or the internal job details URL; employer application URLs are not treated as evidence citations.
+- Job descriptions are marked untrusted; response carries actual job source IDs and citation URLs. No model inference or generated job facts are performed by this function.
+- Added `scripts/tamilan-ai-retrieval-guard.py`, Deno type-check, and a dedicated GitHub Actions guard step.
+- Final Health Audit run for commit `8c85b75fa13a6293e4352b3d4dd00961d840eee8` passed: https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions/runs/44469643202. Deno type-check, retrieval safety guard, all existing guards, website structure and browser smoke tests passed.
+- GitHub Pages deployment for the same commit passed: https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions/runs/44469644291.
+- Live Supabase function inventory confirms `tamilan-ai-job-context` is NOT deployed. No Supabase function deployment, secrets, database schema/data/policy changes were made.
+- Remaining before any enablement: implement rate limiting and usage controls, runtime authenticated integration tests, validate deployed JWT/RLS behavior, add model adapter and human-reviewed pilot. Feature must remain OFF. Live job table still has 0 records.
+
