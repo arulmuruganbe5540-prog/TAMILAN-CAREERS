@@ -198,7 +198,7 @@ await check("English-only registration validates and submits employer signup", a
     if (signupBody?.data?.requested_account_type !== "company") throw new Error("Employer account type was not sent correctly: " + JSON.stringify(signupBody));
     if (signupBody?.data?.full_name !== "Test Employer") throw new Error("Full name was not sent correctly");
     const visible = await registrationPage.locator("body").innerText();
-    if (/[\\u0B80-\\u0BFF]/.test(visible)) throw new Error("Registration page displayed Tamil text");
+    if (/[\u0B80-\u0BFF]/.test(visible)) throw new Error("Registration page displayed Tamil text");
     await registrationPage.setViewportSize({ width: 320, height: 800 });
     const size = await registrationPage.evaluate(() => ({ viewport: document.documentElement.clientWidth, page: document.documentElement.scrollWidth }));
     if (size.page > size.viewport + 1) throw new Error("Registration page overflows at 320px: " + JSON.stringify(size));
@@ -814,7 +814,7 @@ await check("Every public page loads in English without visible Tamil or mobile 
       }));
       if (!state.title.trim()) throw new Error(path + " has no page title");
       if (state.lang !== "en") throw new Error(path + " does not declare lang=en");
-      if (/[\\u0B80-\\u0BFF]/.test(state.visibleText)) throw new Error(path + " displays Tamil text");
+      if (/[\u0B80-\u0BFF]/.test(state.visibleText)) throw new Error(path + " displays Tamil text");
       if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + ")");
     }
   } finally {
