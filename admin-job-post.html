@@ -96,7 +96,7 @@ function govDuplicateMatch(a,b){
  const at=norm(a.job_title||a.title),bt=norm(b.job_title||b.title);
  const ay=String(a.exam_year||a.examYear||"").trim(),by=String(b.exam_year||b.examYear||"").trim();
  const ad=String(a.notification_date||a.notificationDate||"").trim(),bd=String(b.notification_date||b.notificationDate||"").trim();
- if(an&&bn&&an===bn&&aa&&ba&&aa===ba)return "Notice Number + துறை பொருந்துகிறது";
+ if(an&&bn&&an===bn&&aa&&ba&&aa===ba)return "Notice number and department match";
  if(au&&bu&&au===bu)return "Official notification URL matches";
  if(at&&bt&&at===bt&&aa&&ba&&aa===ba&&ay&&by&&ay===by&&ad===bd)return "Position, department, year and notice date match";
  return "";
@@ -126,8 +126,8 @@ async function loadCategories(){
 }
 async function save(status){
  const p=payload();
- if(!p.title||!p.category||!p.type||!p.location||!p.description){say("வேலைப் பதவி, துறை, வேலை வகை, இடம், Job Description ஆகியவற்றை நிரப்பவும்.",false);return} if(p.jobKind==="government"&&(!p.officialUrl||!p.authority||!p.governmentScope)){say("For government jobs, select Central or Tamil Nadu Government, enter the recruiting department and provide the official website link.",false);return} if(p.jobKind!=="government"&&!p.company){say("A company name is required for private and overseas jobs.",false);return} if(p.jobKind==="foreign"&&!p.countryName){say("A country is required for overseas jobs.",false);return} if(p.jobKind!=="government"&&!p.applicationUrl&&!p.email){say("தனியார் / Overseas Jobக்கு விண்ணப்ப இணைப்பு அல்லது Contact Email வழங்கவும்.",false);return}
- if(p.openings&&(!Number.isInteger(Number(p.openings))||Number(p.openings)<1)){say("Vacancies குறைந்தது 1 ஆக இருக்க வேண்டும்.",false);return}
+ if(!p.title||!p.category||!p.type||!p.location||!p.description){say("Complete the job title, category, employment type, location and job description.",false);return} if(p.jobKind==="government"&&(!p.officialUrl||!p.authority||!p.governmentScope)){say("For government jobs, select Central or Tamil Nadu Government, enter the recruiting department and provide the official website link.",false);return} if(p.jobKind!=="government"&&!p.company){say("A company name is required for private and overseas jobs.",false);return} if(p.jobKind==="foreign"&&!p.countryName){say("A country is required for overseas jobs.",false);return} if(p.jobKind!=="government"&&!p.applicationUrl&&!p.email){say("தனியார் / Overseas Jobக்கு விண்ணப்ப இணைப்பு அல்லது Contact Email வழங்கவும்.",false);return}
+ if(p.openings&&(!Number.isInteger(Number(p.openings))||Number(p.openings)<1)){say("Vacancies must be at least 1.",false);return}
  if(p.salaryMin!==""&&p.salaryMax!==""&&Number(p.salaryMin)>Number(p.salaryMax)){say("Minimum salary cannot exceed maximum salary.",false);return}
  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
   if(p.deadline&&p.deadline<today){say("The deadline cannot be in the past.",false);return}
@@ -147,7 +147,7 @@ async function save(status){
  p.authority=prefix+department+agency;
  const extra=[["Exam / Recruitment",p.examName],["Application Start Date",p.applicationStartDate],["Exam Date",p.examDate],["Vacancies by Position",p.vacancyBreakdown],["Syllabus",p.syllabus]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
  if(extra.length)p.description+="\\n\\n"+extra.join("\\n");
- if(p.description.length>8000){say("Job Description மற்றும் கூடுதல் தகவல்கள் 8,000 எழுத்துகளை மீறக்கூடாது. சுருக்கவும்.",false);return}
+ if(p.description.length>8000){say("The job description and additional details cannot exceed 8,000 characters. Please shorten them.",false);return}
 }
 if(p.jobKind==="foreign"){
  const extra=[["Visa / Work Permit",p.visaType],["Contract Duration",p.contractDuration],["Accommodation / Meals",p.accommodation],["Flight Ticket / Travel Assistance",p.flightSupport]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]);
@@ -222,7 +222,7 @@ function updateKindFields(){
  const code=$( "salaryCurrency" ).value||"USD";
  const symbols={USD:"$",AED:"AED",SAR:"SAR",QAR:"QAR",OMR:"OMR",KWD:"KWD",BHD:"BHD",SGD:"SGD",MYR:"MYR",EUR:"€",GBP:"£",CAD:"C$",AUD:"A$"};
  const currency=kind==="foreign"?(symbols[code]||code):"₹";
- $("salaryMinLabel").textContent="குறைந்தபட்ச Salary ("+currency+")";
+ $("salaryMinLabel").textContent="Minimum Salary ("+currency+")";
  $("salaryMaxLabel").textContent="அதிகபட்ச Salary ("+currency+")";
 }
 $("jobKind").addEventListener("change",updateKindFields);
