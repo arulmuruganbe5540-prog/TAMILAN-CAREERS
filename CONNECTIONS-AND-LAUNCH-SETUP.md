@@ -10,8 +10,8 @@ Supabase project: https://supabase.com/dashboard/project/qkmljuuusfjowexvybvy
 - GitHub repository and GitHub Pages deployment are connected.
 - Supabase project is connected to the website using its project URL and browser-safe public/anon key. Never place a Supabase service-role/secret key in website HTML or JavaScript.
 - The operational Supabase Edge Functions include company-members, company-resume-access, scan-external-job-sources, and ingest-government-notices. Legacy AI-related functions are disabled and must remain unused.
-- Latest GitHub Pages deployment run `44095184723` succeeded for commit `cd607324586ab899ecf154442dc123ed3fd44831`.
-- Latest full Health Audit run `44094931772` succeeded for commit `a7c1fa6ce16b6686a2d490923ad37498a8aa7388`. Deno type-check, SQL delimiter lint, privacy guards, website structure, JavaScript checks, and browser smoke tests all passed.
+- Latest GitHub Pages deployment run `44451937018` succeeded for commit `06e8449485bfa4e3e6ada51e4f87b1bf84993488`.
+- Latest full Health Audit run `44451700508` succeeded for commit `f81cc6c7e81783e9dfbea18286a1ff4a7a5fb808`, including the 16-category exam question-bank coverage test. Deno type-check, SQL delimiter lint, privacy guards, website structure, JavaScript checks, and browser smoke tests all passed.
 
 ## External provider connections still needed
 
