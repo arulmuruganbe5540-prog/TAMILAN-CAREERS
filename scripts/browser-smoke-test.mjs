@@ -200,7 +200,12 @@ await check("Core job workflow Tamil source messages translate to English", asyn
       "வேலை விவரங்களை ஏற்ற முடியவில்லை",
       "சமர்ப்பிக்க",
       "மாற்றத்தைச் சேமிக்கவும்",
-      "உங்கள் கணக்கு அனுமதிகள் சரிபார்க்கப்பட்டுள்ளன. கீழே கிடைக்கும் வசதிகளைப் பார்க்கலாம்."
+      "உங்கள் கணக்கு அனுமதிகள் சரிபார்க்கப்பட்டுள்ளன. கீழே கிடைக்கும் வசதிகளைப் பார்க்கலாம்.",
+      "நிறுவனப் பதிவு மற்றும் சரிபார்ப்பு",
+      "வேலைப் பதவி / Job Title *",
+      "சுயவிவரத்தைச் சேமிக்கவும்",
+      "நிறுவனச் சரிபார்ப்பு நிலை",
+      "உங்கள் Dashboard-க்கு வரவேற்கிறோம்"
     ];
     await languagePage.evaluate(values => {
       const host = document.createElement("div");
@@ -213,7 +218,10 @@ await check("Core job workflow Tamil source messages translate to English", asyn
     if (/வேலை ID கிடைக்கவில்லை|இந்த வேலை விவரம் கிடைக்கவில்லை|வேலை விவரங்களை ஏற்ற முடியவில்லை|விண்ணப்பத்தைச் சமர்ப்பிக்கவும்|மாற்றத்தைச் சேமிக்கவும்|உங்கள் கணக்கு அனுமதிகள்/.test(result)) {
       throw new Error("Tamil source text remains in English mode: " + result);
     }
-    if (!result.includes("Job ID is missing") || !result.includes("This job could not be found") || !result.includes("Submit")) {
+    if (!result.includes("Job ID is missing") || !result.includes("This job could not be found") || !result.includes("Submit") ||
+        !result.includes("Company Registration & Verification") || !result.includes("Job Title *") ||
+        !result.includes("Save Profile") || !result.includes("Company Verification Status") ||
+        !result.includes("Welcome to your Dashboard")) {
       throw new Error("Expected English translations were not applied: " + result);
     }
   } finally {
