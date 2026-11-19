@@ -17,7 +17,8 @@ body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#101d3a,#176
 .logo{text-align:center;font-size:25px;font-weight:bold;color:#147bd1;margin-bottom:8px}
 .subtitle{text-align:center;color:#778397;font-size:14px;margin-bottom:25px}
 h2{text-align:center;color:#172b4d;font-size:23px;margin-bottom:20px}
-.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.admin-login-entry{text-align:center;margin:0 0 18px}.admin-login-entry a{display:inline-block;color:#126cc1;font-weight:800;text-decoration:none;border:1px solid #cbdcf0;background:#f4f8ff;padding:9px 16px;border-radius:9px}
 .role{padding:13px;border:1px solid #dce4ee;border-radius:9px;text-align:center;cursor:pointer;font-weight:bold;color:#40516a}
 .role.active{background:#eaf4ff;border:2px solid #1688ed;color:#126cc1}
 label{display:block;font-size:14px;font-weight:bold;margin:13px 0 7px;color:#34445b}
@@ -67,6 +68,7 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
     <div class="role active" id="seeker" onclick="chooseRole('job_seeker')">👤 Job Seeker</div>
     <div class="role" id="company" onclick="chooseRole('company')">🏢 Company</div>
   </div>
+  <div class="admin-login-entry"><a href="?next=admin-job-post.html" id="adminLoginLink">Super Admin Login</a></div>
 
   <form id="authForm">
 
@@ -80,11 +82,11 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
 
     <label>Password</label>
     <div class="password-wrap">
-      <input id="password" type="password" placeholder="குறைந்தது 8 எழுத்துகள்" minlength="8" autocomplete="current-password" required>
+      <input id="password" type="password" placeholder="At least 8 characters" minlength="8" autocomplete="current-password" required>
       <button class="password-toggle" id="passwordToggle" type="button" onclick="togglePassword()" aria-label="கடவுச்சொல்லைக் காட்டு" aria-pressed="false">காட்டு</button>
     </div>
 
-    <div class="form-help"><span id="passwordHint">குறைந்தது 8 எழுத்துகள்</span><a href="#" id="forgotLink">Password மறந்துவிட்டதா?</a></div>
+    <div class="form-help"><span id="passwordHint">At least 8 characters</span><a href="#" id="forgotLink">Password மறந்துவிட்டதா?</a></div>
     <div class="confirm-wrap" id="confirmWrap">
       <label for="confirmPassword">Password உறுதிப்படுத்தவும் / Confirm Password</label>
       <div class="password-wrap"><input id="confirmPassword" type="password" placeholder="Password-ஐ மீண்டும் உள்ளிடவும்" autocomplete="new-password"><button class="password-toggle" type="button" onclick="toggleFieldPassword('confirmPassword',this)">காட்டு</button></div>
@@ -215,7 +217,7 @@ function toggleMode() {
   document.getElementById("termsAgree").required = isRegister;
   document.getElementById("forgotLink").style.display = isRegister ? "none" : "inline";
   if (!isRegister) document.getElementById("resendBtn").style.display = "none";
-  document.getElementById("passwordHint").textContent = isRegister ? "குறைந்தது 8 எழுத்துகள்; பெரிய/சிறிய எழுத்து மற்றும் எண் பயன்படுத்தவும்" : "குறைந்தது 8 எழுத்துகள்";
+  document.getElementById("passwordHint").textContent = isRegister ? "குறைந்தது 8 எழுத்துகள்; பெரிய/சிறிய எழுத்து மற்றும் எண் பயன்படுத்தவும்" : "At least 8 characters";
 
   document.getElementById("submitBtn").textContent =
     isRegister ? "Register" : "Login";
