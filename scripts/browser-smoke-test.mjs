@@ -520,6 +520,80 @@ await check("Notifications mark-read, mark-all and interview responses call each
   } finally { await p.close(); }
 });
 
+
+await check("Job application submits a published vacancy with the selected resume", async () => {
+  const p = await createMockSignedInPage();
+  let submitted = null;
+  await p.route("**/rest/v1/jobs**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ id: "job-smoke", status: "published", job_title: "Mock Accountant", application_deadline: "2030-12-31" })
+  }));
+  await p.route("**/rest/v1/candidate_resumes**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify([{ id: "resume-smoke", resume_title: "Candidate CV", original_file_name: "candidate.pdf", file_type: "application/pdf", file_size_bytes: 1000, created_at: "2026-11-18T10:00:00Z" }])
+  }));
+  await p.route("**/rest/v1/job_applications**", route => {
+    if (route.request().method() === "POST") submitted = route.request().postDataJSON();
+    return route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: "application-smoke" }) });
+  });
+  try {
+    await p.goto(base + "/apply.html?job=job-smoke", { waitUntil: "domcontentloaded" });
+    await p.locator("#application").waitFor({ state: "visible" });
+    await p.locator("#resume").selectOption("resume-smoke");
+    await p.locator("#cover").fill("I am interested in this mock vacancy.");
+    await p.locator("#submit").click();
+    await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("வெற்றிகரமாகப் பெறப்பட்டது"));
+    if (!submitted || submitted.job_id !== "job-smoke" || submitted.candidate_id !== "tc-flow-smoke-user" || submitted.resume_id !== "resume-smoke") {
+      throw new Error("Application payload did not preserve the job, candidate and selected resume: " + JSON.stringify(submitted));
+    }
+  } finally { await p.close(); }
+});
+
+await check("Employer applicant management updates status and sends an interview invitation", async () => {
+  const p = await createMockSignedInPage("employer");
+  let statusUpdates = 0, interviewInvites = 0;
+  await p.route("**/rest/v1/jobs**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify([{ id: "job-smoke", job_title: "Mock Accountant", company_id: "smoke-company", status: "published" }])
+  }));
+  await p.route("**/rest/v1/job_applications**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify([{ id: "application-smoke", job_id: "job-smoke", candidate_id: "candidate-smoke", resume_id: null, cover_letter: "Mock application", status: "applied", applied_at: "2026-11-18T10:00:00Z" }])
+  }));
+  await p.route("**/rest/v1/profiles**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ id: "candidate-smoke", full_name: "Mock Candidate", email: "candidate@example.test", phone: "9000000000" })
+  }));
+  await p.route("**/rest/v1/job_seeker_profiles**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ user_id: "candidate-smoke", headline: "Accounts Assistant", current_city: "Salem", total_experience_months: 12 })
+  }));
+  await p.route("**/rest/v1/rpc/tc_company_update_application_status", route => {
+    statusUpdates++;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
+  });
+  await p.route("**/rest/v1/rpc/tc_send_interview_invitation", route => {
+    interviewInvites++;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
+  });
+  try {
+    await p.goto(base + "/company-applicants.html", { waitUntil: "domcontentloaded" });
+    await p.locator(".app-status").waitFor({ state: "visible" });
+    await p.locator(".app-status").selectOption("shortlisted");
+    await p.locator(".save-app-status").click();
+    await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("வெற்றிகரமாகப் புதுப்பிக்கப்பட்டது"));
+    if (statusUpdates !== 1) throw new Error("Application status RPC called " + statusUpdates + " times");
+    const details = p.locator("#applications details").first();
+    await details.locator("summary").click();
+    await details.locator(".interview-date").fill("2030-01-01T10:00");
+    await details.locator(".interview-mode").selectOption("online");
+    await details.locator(".interview-location").fill("https://example.test/interview");
+    await details.locator(".send-interview").click();
+    await p.waitForFunction(() => document.querySelector(".interview-msg")?.textContent.includes("அறிவிப்பாக அனுப்பப்பட்டது"));
+    if (interviewInvites !== 1) throw new Error("Interview invitation RPC called " + interviewInvites + " times");
+  } finally { await p.close(); }
+});
+
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
   await page.waitForFunction(() => location.pathname.endsWith("/login.html"), { timeout: 8000 });
