@@ -896,6 +896,20 @@ await check("Every public page loads in English without visible Tamil or mobile 
       if (state.scrollWidth > state.width + 1) throw new Error(path + " overflows at 360px (" + state.scrollWidth + " > " + state.width + ")");
       if (state.languageControls) throw new Error(path + " still displays a language selector");
       if (state.clippedControls.length) throw new Error(path + " has clipped controls or headings: " + JSON.stringify(state.clippedControls));
+      await auditPage.setViewportSize({ width: 1280, height: 900 });
+      const desktop = await auditPage.evaluate(() => ({
+        width: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+        clipped: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
+          const style = getComputedStyle(el);
+          const rect = el.getBoundingClientRect();
+          return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 &&
+            (rect.left < -1 || rect.right > document.documentElement.clientWidth + 1);
+        }).slice(0, 8).map(el => ({ tag: el.tagName, id: el.id, text: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 60) }))
+      }));
+      if (desktop.scrollWidth > desktop.width + 1) throw new Error(path + " overflows at 1280px");
+      if (desktop.clipped.length) throw new Error(path + " has clipped desktop controls or headings: " + JSON.stringify(desktop.clipped));
+      await auditPage.setViewportSize({ width: 360, height: 800 });
     }
   } finally {
     await auditPage.close();
