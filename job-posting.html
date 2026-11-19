@@ -68,6 +68,7 @@ async function init(){
  if(memberError){showBlocked("நிறுவன உறுப்பினர் அனுமதியைச் சரிபார்க்க முடியவில்லை. Dashboard-இல் உள்ள நிறுவன நிர்வாகியைத் தொடர்புகொள்ளவும். விவரம்: "+memberError.message);return}
  memberships=(rows||[]).filter(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;return c?.verification_status==="verified"});
  if(!memberships.length){showBlocked("இந்தக் கணக்கில் சரிபார்க்கப்பட்ட (Verified) நிறுவனத்திற்கான Owner / HR Manager / Recruiter அனுமதி இல்லை. முதலில் நிறுவனச் சரிபார்ப்பை Admin மூலம் முடிக்கவும்.");return}
+ await loadCountries();
  const select=document.getElementById("companyChoice");
  memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"நிறுவனம்")+" — "+(m.member_role||"உறுப்பினர்");select.appendChild(o)});
  document.getElementById("companyInfo").textContent="Admin மூலம் Verified செய்யப்பட்ட தனியார் நிறுவனங்கள்: "+memberships.length+". இங்கு தனியார் வேலைகளை மட்டுமே சமர்ப்பிக்கலாம்.";
