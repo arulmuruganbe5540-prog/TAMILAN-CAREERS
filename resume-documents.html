@@ -42,7 +42,7 @@ async function loadFiles(){
  if(!files.length){$("fileList").innerHTML='<div class="empty">No documents uploaded yet.</div>';return}
  $("fileList").innerHTML=files.map(f=>{
  const meta=f.metadata||{};const label=f.name.replace(/^\d+_[a-f0-9-]+_/i,"");
- return '<article class="file"><div><strong>📎 '+safe(label)+'</strong><small>'+safe(prettySize(meta.size||0))+' · '+safe(meta.mimetype||"ஆவணம்")+'</small></div><div class="actions"><button class="btn secondary" data-download="'+safe(f.name)+'">Download</button><button class="btn" style="background:#b42318" data-delete="'+safe(f.name)+'">Delete</button></div></article>'
+ return '<article class="file"><div><strong>📎 '+safe(label)+'</strong><small>'+safe(prettySize(meta.size||0))+' · '+safe(meta.mimetype||"Document")+'</small></div><div class="actions"><button class="btn secondary" data-download="'+safe(f.name)+'">Download</button><button class="btn" style="background:#b42318" data-delete="'+safe(f.name)+'">Delete</button></div></article>'
  }).join("");
  document.querySelectorAll("[data-download]").forEach(b=>b.addEventListener("click",()=>downloadFile(b.dataset.download)));
  document.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>deleteFile(b.dataset.delete)));
