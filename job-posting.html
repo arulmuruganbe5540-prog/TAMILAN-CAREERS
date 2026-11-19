@@ -31,7 +31,7 @@
 <div class="field"><label for="location">Job Location / District *</label><input id="location" required maxlength="160" placeholder="e.g. Omalur, Salem"></div>
 <div class="field"><label for="countryName">Country of Employment *</label><select id="countryName" required><option value="">Loading countries...</option></select><span class="hint">For jobs in Dubai, select United Arab Emirates.</span></div>
 <div class="field"><label for="experience">Required Experience</label><input id="experience" maxlength="100" placeholder="e.g. Fresher / 2 years"></div>
-<div class="field wide"><label>Education (you may select more than one)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">ஒரே வேலைக்கு பல Educationகளைத் தேர்வு செய்யலாம்.</span></div>
+<div class="field wide"><label>Education (you may select more than one)</label><input type="hidden" id="education"><div class="edu-grid"><label class="edu-option"><input type="checkbox" class="education-choice" value="10th Pass"><span>10th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="12th Pass"><span>12th Pass</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="ITI"><span>ITI</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma"><span>Diploma</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Diploma Studying"><span>Diploma Studying</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Degree"><span>Degree</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Postgraduate"><span>Postgraduate</span></label><label class="edu-option"><input type="checkbox" class="education-choice" value="Studying"><span>Studying</span></label></div><span class="hint">You can select multiple education levels for one job.</span></div>
 <div class="field"><label for="salaryMin">Minimum Salary</label><input id="salaryMin" type="number" min="0" max="100000000" step="1" placeholder="e.g. 12000"></div>
 <div class="field"><label for="salaryMax">Maximum Salary</label><input id="salaryMax" type="number" min="0" max="100000000" step="1" placeholder="e.g. 18000"></div>
 <div class="field"><label for="salaryPeriod">Salary Period</label><select id="salaryPeriod"><option value="monthly">Monthly</option><option value="daily">Daily</option></select></div>
@@ -98,11 +98,11 @@ async function loadDraftForCompany(){
   const messages={
    pending_review:"This job has been submitted for Admin Review. Do not submit it again until a decision is made.",
    approved:"This job has been approved by Admin and is awaiting publication.",
-   rejected:"இந்த வேலை Review-ல் நிராகரிக்கப்பட்டது. திருத்தி மீண்டும் அனுப்பலாம்.",
-   published:"இந்த வேலை பொதுவில் வெளியிடப்பட்டுள்ளது. புதிய மாற்றம் செய்தால் மீண்டும் Review தேவைப்படும்."
+   rejected:"This job was rejected during review. Edit it and submit again.",
+   published:"This job has been published publicly. Any new changes must be reviewed again."
   };
   setReviewLock(state==="pending_review"||state==="approved");
-  message((messages[state]||"இந்த நிறுவனத்திற்கான சேமித்த வரைவு ஏற்றப்பட்டது.")+(state==="rejected"&&data.draft.review_note?" Admin குறிப்பு: "+data.draft.review_note:""),state!=="rejected");
+  message((messages[state]||"The saved draft for this company has been loaded.")+(state==="rejected"&&data.draft.review_note?" Admin Note: "+data.draft.review_note:""),state!=="rejected");
  }
  else{
   currentDraft=null;setReviewLock(false);
@@ -113,8 +113,8 @@ async function loadDraftForCompany(){
 async function save(silent=false){
  const form=document.getElementById("jobForm");if(!form.reportValidity())return null;
  const d=formData();
- if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("அதிகபட்ச Salary குறைந்தபட்ச சம்பளத்தைவிட குறைவாக இருக்கக்கூடாது.",false);return null}
- if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("சரியான கடைசி தேதியைத் தேர்ந்தெடுக்கவும்.",false);return null}const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;if(d.deadline<today){message("Application Deadline கடந்த தேதியாக இருக்கக்கூடாது.",false);return null}}
+ if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("Maximum salary cannot be lower than minimum salary.",false);return null}
+ if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("Select a valid application deadline.",false);return null}const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;if(d.deadline<today){message("The application deadline cannot be in the past.",false);return null}}
  const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return null}
  const previousStatus=currentDraft?.draft_status;
  const sameContent=ids.every(id=>String(currentDraft?.[id]??"")===String(d[id]??""));
