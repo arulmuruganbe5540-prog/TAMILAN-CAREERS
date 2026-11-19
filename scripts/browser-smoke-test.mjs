@@ -148,14 +148,14 @@ await check("Job seeker and employer registration validate account details befor
   await page.locator("#password").fill("Candidate123");
   await page.locator("#confirmPassword").fill("Different123");
   await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-  if (!(await page.locator("#message").innerText()).includes("ஒன்றாக இருக்க")) throw new Error("Password mismatch was not rejected");
+  await page.waitForFunction(() => document.querySelector("#message")?.textContent.includes("ஒன்றாக இருக்க"), null, { timeout: 3000 });
   await page.locator("#confirmPassword").fill("candidate123");
   await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-  if (!(await page.locator("#message").innerText()).includes("பெரிய எழுத்து")) throw new Error("Weak password was not rejected");
+  await page.waitForFunction(() => document.querySelector("#message")?.textContent.includes("பெரிய எழுத்து"), null, { timeout: 3000 });
   await page.locator("#password").fill("Candidate123");
   await page.locator("#confirmPassword").fill("Candidate123");
   await page.locator("#authForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-  if (!(await page.locator("#message").innerText()).includes("விதிமுறைகள்")) throw new Error("Unaccepted terms were not rejected");
+  await page.waitForFunction(() => document.querySelector("#message")?.textContent.includes("விதிமுறைகள்"), null, { timeout: 3000 });
   await page.locator("#company").click();
   if (!(await page.locator("#company").getAttribute("class")).includes("active")) throw new Error("Employer role did not become active");
   await page.setViewportSize({ width: 320, height: 800 });
