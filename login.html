@@ -62,7 +62,7 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
   <div class="logo">TAMILAN CAREERS</div>
   <p class="subtitle">உங்கள் எதிர்காலத்தை இன்றே தொடங்குங்கள்</p>
 
-  <h2 id="heading">Login செய்யுங்கள்</h2>
+  <h2 id="heading">Login to your account</h2>
 
   <div class="roles">
     <div class="role active" id="seeker" onclick="chooseRole('job_seeker')">👤 Job Seeker</div>
@@ -83,14 +83,14 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
     <label>Password</label>
     <div class="password-wrap">
       <input id="password" type="password" placeholder="At least 8 characters" minlength="8" autocomplete="current-password" required>
-      <button class="password-toggle" id="passwordToggle" type="button" onclick="togglePassword()" aria-label="கடவுச்சொல்லைக் காட்டு" aria-pressed="false">காட்டு</button>
+      <button class="password-toggle" id="passwordToggle" type="button" onclick="togglePassword()" aria-label="Show password" aria-pressed="false">Show</button>
     </div>
 
-    <div class="form-help"><span id="passwordHint">At least 8 characters</span><a href="#" id="forgotLink">Password மறந்துவிட்டதா?</a></div>
+    <div class="form-help"><span id="passwordHint">At least 8 characters</span><a href="#" id="forgotLink">Forgot Password?</a></div>
     <div class="confirm-wrap" id="confirmWrap">
-      <label for="confirmPassword">Password உறுதிப்படுத்தவும் / Confirm Password</label>
-      <div class="password-wrap"><input id="confirmPassword" type="password" placeholder="Password-ஐ மீண்டும் உள்ளிடவும்" autocomplete="new-password"><button class="password-toggle" type="button" onclick="toggleFieldPassword('confirmPassword',this)">காட்டு</button></div>
-      <div class="strength"><span id="strengthBar"></span></div><div class="strength-label" id="strengthLabel">Password வலிமை</div>
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="password-wrap"><input id="confirmPassword" type="password" placeholder="Enter your password again" autocomplete="new-password"><button class="password-toggle" type="button" onclick="toggleFieldPassword('confirmPassword',this)">Show</button></div>
+      <div class="strength"><span id="strengthBar"></span></div><div class="strength-label" id="strengthLabel">Password strength</div>
     </div>
     <label class="terms" id="termsRow"><input id="termsAgree" type="checkbox"><span>விதிமுறைகள் மற்றும் <a class="text-link" href="terms.html" target="_blank" rel="noopener">பயன்பாட்டு விதிகள்</a>, <a class="text-link" href="privacy.html" target="_blank" rel="noopener">தனியுரிமைக் கொள்கை</a> ஆகியவற்றை ஏற்கிறேன்.</span></label>
 
@@ -157,7 +157,7 @@ function toggleFieldPassword(id, button) {
   const field = document.getElementById(id);
   const show = field.type === "password";
   field.type = show ? "text" : "password";
-  button.textContent = show ? "மறை" : "காட்டு";
+  button.textContent = show ? "Hide" : "Show";
   button.setAttribute("aria-pressed", String(show));
 }
 function passwordStrength(value) {
@@ -205,7 +205,7 @@ function toggleMode() {
   isRegister = !isRegister;
 
   document.getElementById("heading").textContent =
-    isRegister ? "புதிய கணக்கு உருவாக்குங்கள்" : "Login செய்யுங்கள்";
+    isRegister ? "Create a new account" : "Login to your account";
 
   document.getElementById("nameField").style.display =
     isRegister ? "block" : "none";
@@ -217,16 +217,16 @@ function toggleMode() {
   document.getElementById("termsAgree").required = isRegister;
   document.getElementById("forgotLink").style.display = isRegister ? "none" : "inline";
   if (!isRegister) document.getElementById("resendBtn").style.display = "none";
-  document.getElementById("passwordHint").textContent = isRegister ? "குறைந்தது 8 எழுத்துகள்; பெரிய/சிறிய எழுத்து மற்றும் எண் பயன்படுத்தவும்" : "At least 8 characters";
+  document.getElementById("passwordHint").textContent = isRegister ? "Use at least 8 characters, including uppercase, lowercase and a number" : "At least 8 characters";
 
   document.getElementById("submitBtn").textContent =
     isRegister ? "Register" : "Login";
 
   document.getElementById("switchText").textContent =
-    isRegister ? "ஏற்கனவே கணக்கு உள்ளதா?" : "கணக்கு இல்லையா?";
+    isRegister ? "Already have an account?" : "Don't have an account?";
 
   document.getElementById("switchLink").textContent =
-    isRegister ? "Login செய்யுங்கள்" : "Register செய்யுங்கள்";
+    isRegister ? "Login" : "Register";
 
   showMessage("");
 }
