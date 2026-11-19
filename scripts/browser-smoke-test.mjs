@@ -597,7 +597,7 @@ await check("Employer applicant management updates status and sends an interview
 
 await check("Super Admin approves and publishes a mocked job review", async () => {
   const p = await createMockSignedInPage("super_admin");
-  let reviewStatus = "pending_review", publishedJobId = null, publishCalls = 0;
+  let reviewStatus = "pending_review", publishedJobId = null, publishCalls = 0, roleRequests = 0;
   await p.addInitScript(() => {
     const key = "sb-qkmljuuusfjowexvybvy-auth-token";
     const session = JSON.parse(localStorage.getItem(key) || "{}");
@@ -608,9 +608,10 @@ await check("Super Admin approves and publishes a mocked job review", async () =
   await p.route("**/auth/v1/factors**", route => route.fulfill({
     status: 200, contentType: "application/json", body: JSON.stringify({ all: [], totp: [] })
   }));
-  await p.route("**/rest/v1/user_roles**", route => route.fulfill({
-    status: 200, contentType: "application/json", body: JSON.stringify([{ role: "super_admin" }])
-  }));
+  await p.route(/\/rest\/v1\/user_roles(?:\?.*)?$/, route => {
+    roleRequests++;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ user_id: "tc-flow-smoke-user", role: "super_admin" }]) });
+  });
   await p.route("**/rest/v1/admin_job_post_reviews**", route => {
     if (route.request().method() === "GET") {
       return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{
@@ -640,7 +641,7 @@ await check("Super Admin approves and publishes a mocked job review", async () =
     await p.waitForTimeout(500);
     if (await p.locator("#app").isHidden()) {
       const gateMessage = await p.locator("#gateText").innerText().catch(() => "No gate message");
-      throw new Error("Super Admin test account was blocked: " + gateMessage);
+      throw new Error("Super Admin test account was blocked: " + gateMessage + "; roleRequests=" + roleRequests);
     }
     await p.locator('[data-action="approve"][data-id="review-smoke"]').click();
     await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("Approved"));
