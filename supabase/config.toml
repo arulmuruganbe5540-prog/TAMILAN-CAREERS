@@ -9,3 +9,6 @@ verify_jwt = false
 
 [functions.google-indexing-notify]
 verify_jwt = true
+
+[functions.tamilan-ai-job-context]
+verify_jwt = true
