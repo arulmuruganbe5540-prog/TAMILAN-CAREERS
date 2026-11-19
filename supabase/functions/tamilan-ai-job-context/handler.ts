@@ -32,6 +32,34 @@ function json(data: unknown, status: number, origin: string | null, retryAfter?:
   return new Response(JSON.stringify(data), { status, headers: responseHeaders(origin, retryAfter) });
 }
 
+async function readBoundedBody(request: Request, maxBytes: number): Promise<{ ok: true; text: string } | { ok: false }> {
+  if (!request.body) return { ok: true, text: "" };
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        return { ok: false };
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return { ok: true, text: new TextDecoder().decode(bytes) };
+}
+
 export function createJobContextHandler(env: EnvironmentReader, makeClient: ClientFactory) {
   return async (request: Request): Promise<Response> => {
     const origin = request.headers.get("origin");
@@ -47,9 +75,9 @@ export function createJobContextHandler(env: EnvironmentReader, makeClient: Clie
     if (declaredLength > 2048) return json({ error: "Request body too large" }, 413, origin);
     let body: unknown;
     try {
-      const rawBody = await request.text();
-      if (rawBody.length > 2048) return json({ error: "Request body too large" }, 413, origin);
-      body = JSON.parse(rawBody);
+      const boundedBody = await readBoundedBody(request, 2048);
+      if (!boundedBody.ok) return json({ error: "Request body too large" }, 413, origin);
+      body = JSON.parse(boundedBody.text);
     } catch {
       return json({ error: "Invalid JSON body" }, 400, origin);
     }
