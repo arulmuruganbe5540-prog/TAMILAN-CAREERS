@@ -610,7 +610,17 @@ await check("Super Admin approves and publishes a mocked job review", async () =
   }));
   await p.route(/\/rest\/v1\/user_roles(?:\?.*)?$/, route => {
     roleRequests++;
-    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ user_id: "tc-flow-smoke-user", role: "super_admin" }]) });
+    return route.fulfill({
+      status: 200, contentType: "application/json",
+      headers: {
+        "content-range": "0-0/1",
+        "access-control-allow-origin": base,
+        "access-control-allow-methods": "GET,POST,PATCH,DELETE,OPTIONS",
+        "access-control-allow-headers": "apikey,authorization,content-type,prefer,range,x-client-info",
+        "access-control-expose-headers": "content-range"
+      },
+      body: JSON.stringify([{ user_id: "tc-flow-smoke-user", role: "super_admin" }])
+    });
   });
   await p.route("**/rest/v1/admin_job_post_reviews**", route => {
     if (route.request().method() === "GET") {
