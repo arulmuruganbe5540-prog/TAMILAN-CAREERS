@@ -1,3 +1,11 @@
+## 19 November 2026 — secure external job candidate review
+
+- Added Super Admin-only RPC `tc_review_external_job_candidate` in Supabase and committed its migration at `supabase/migrations/20261119050000_secure_external_job_candidate_review.sql`.
+- The RPC only allows `verified` or `rejected` decisions, locks the pending row, requires a reason for rejection, and requires all six verification flags before marking a candidate verified. Verification does not publish a job.
+- Execute privilege is denied to `anon` and granted to `authenticated`; the function is SECURITY DEFINER with an empty search_path and checks `private.is_super_admin()`.
+- Updated `external-job-review.html` with review controls, rejection reason validation, six verification checks, and MFA AAL2 gating when the account has an enrolled factor. Existing pending candidate records were not modified.
+- Live verification: RPC privilege check confirmed anon=false/authenticated=true; function config is `search_path=""`; 6 discovered candidates remain pending. Real Super Admin browser interaction still requires owner account test.
+
 ## 19 November 2026 — site settings foreign-key index
 
 - The live Supabase Performance Advisor identified one missing foreign-key index on `public.site_settings.updated_by`.
