@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
 <meta name="robots" content="noindex,follow">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -22,27 +22,27 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 @media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
 </style></head>
 <body>
-<header><div class="logo"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav class="headlinks"><a href="dashboard.html">Dashboard</a><a href="resume-documents.html">Resume & ஆவணங்கள்</a><a href="index.html">முகப்பு</a></nav></header>
+<header><div class="logo"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav class="headlinks"><a href="dashboard.html">Dashboard</a><a href="resume-documents.html">Resume & Documents</a><a href="index.html">Home</a></nav></header>
 <main>
-<section class="hero"><h1>உங்கள் வேலைவாய்ப்பு சுயவிவரம்</h1><p>உங்கள் திறமைகள் மற்றும் கல்வி விவரங்களை நிரப்புங்கள். முழுமையான சுயவிவரம் வேலை தேடுவதற்கும் நிறுவனங்கள் உங்களைப் புரிந்துகொள்வதற்கும் உதவும்.</p></section>
-<div class="panel"><h2>சுயவிவர நிறைவு</h2><div class="progress"><span id="progressBar"></span></div><div class="progressline" id="progressText">உங்கள் விவரங்கள் ஏற்றப்படுகின்றன...</div></div>
+<section class="hero"><h1>Your Employment Profile</h1><p>Complete your skills and education details. A complete profile helps you find jobs and helps employers understand your experience.</p></section>
+<div class="panel"><h2>Profile Completion</h2><div class="progress"><span id="progressBar"></span></div><div class="progressline" id="progressText">Loading your details...</div></div>
 <form id="profileForm">
-<section class="panel"><h2>👤 அடிப்படை விவரங்கள்</h2><div class="grid">
-<div class="field"><label for="fullName">முழுப் பெயர் *</label><input id="fullName" maxlength="100" autocomplete="name" required placeholder="உங்கள் பெயர்"></div>
-<div class="field"><label for="phone">மொபைல் எண்</label><input id="phone" type="tel" maxlength="16" autocomplete="tel" placeholder="10 இலக்க மொபைல் எண்"></div>
-<div class="field"><label for="location">வசிக்கும் ஊர் / மாவட்டம்</label><input id="location" maxlength="100" autocomplete="address-level2" placeholder="உதா: ஓமலூர், சேலம்"></div>
-<div class="field"><label for="headline">வேலைத் தலைப்பு</label><input id="headline" maxlength="120" placeholder="உதா: Junior Accountant"></div>
+<section class="panel"><h2>👤 Basic Details</h2><div class="grid">
+<div class="field"><label for="fullName">Full Name *</label><input id="fullName" maxlength="100" autocomplete="name" required placeholder="Your Name"></div>
+<div class="field"><label for="phone">Mobile Number</label><input id="phone" type="tel" maxlength="16" autocomplete="tel" placeholder="10 இலக்க Mobile Number"></div>
+<div class="field"><label for="location">City / District</label><input id="location" maxlength="100" autocomplete="address-level2" placeholder="e.g. Omalur, Salem"></div>
+<div class="field"><label for="headline">Job Title</label><input id="headline" maxlength="120" placeholder="உதா: Junior Accountant"></div>
 <div class="field full"><label for="about">உங்களைப் பற்றி</label><textarea id="about" maxlength="1200" placeholder="உங்கள் அனுபவம், இலக்கு, சிறப்பம்சங்கள்..."></textarea></div>
 </div></section>
 <section class="panel"><h2>🎓 கல்வி மற்றும் அனுபவம்</h2><div class="grid">
 <div class="field"><label for="education">கல்வித்தகுதி</label><select id="education"><option value="">தேர்வு செய்யவும்</option><option>No Formal Education</option><option>Read & Write</option><option>5th Pass</option><option>8th Pass</option><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Professional Courses</option><option>PhD / Research</option></select></div>
 <div class="field"><label for="experience">பணி அனுபவம்</label><select id="experience"><option value="">தேர்வு செய்யவும்</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>6–10 years</option><option>10+ years</option></select></div>
-<div class="field full"><label for="skills">திறன்கள் (கமா வைத்து பிரிக்கவும்)</label><textarea id="skills" maxlength="1000" placeholder="உதா: MS Excel, Tally, Customer Service, Driving"></textarea><div class="hint">பல திறன்களை கமா (,) வைத்து எழுதலாம்.</div></div>
+<div class="field full"><label for="skills">Skills (கமா வைத்து பிரிக்கவும்)</label><textarea id="skills" maxlength="1000" placeholder="உதா: MS Excel, Tally, Customer Service, Driving"></textarea><div class="hint">பல திறன்களை கமா (,) வைத்து எழுதலாம்.</div></div>
 <div class="field"><label for="languages">தெரிந்த மொழிகள்</label><input id="languages" maxlength="200" placeholder="Tamil, English"></div>
 <div class="field"><label for="jobType">விரும்பும் வேலை வகை</label><select id="jobType"><option value="">தேர்வு செய்யவும்</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
 <div class="field full"><label for="preferredLocation">வேலை தேடும் இடம்</label><input id="preferredLocation" maxlength="150" placeholder="உதா: Omalur, Salem, Edappadi"></div>
 </div><div class="hint">* குறியிட்டவை கட்டாயம். உங்கள் சுயவிவரம் உங்கள் கணக்கில் சேமிக்கப்படும்.</div>
-<div class="actions"><button class="primary" id="saveBtn" type="submit">சுயவிவரத்தைச் சேமிக்கவும்</button><button class="secondary" type="button" id="reloadBtn">மீண்டும் ஏற்றவும்</button></div><div class="notice" id="notice" role="status" aria-live="polite"></div>
+<div class="actions"><button class="primary" id="saveBtn" type="submit">சுயவிவரத்தைச் Save</button><button class="secondary" type="button" id="reloadBtn">மீண்டும் ஏற்றவும்</button></div><div class="notice" id="notice" role="status" aria-live="polite"></div>
 </section></form>
 <section class="panel" id="educationPanel"><h2>🎓 கல்வி விவரங்கள்</h2><p class="hint">ஒவ்வொரு படிப்பையும் தனித்தனியாகச் சேர்க்கலாம்.</p>
 <form id="educationForm"><input type="hidden" id="educationId"><div class="grid">
@@ -54,7 +54,7 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <div class="field"><label for="eduEnd">முடித்த தேதி</label><input id="eduEnd" type="date"></div>
 <div class="field full"><label><input id="eduCurrent" type="checkbox" style="width:auto"> தற்போது படித்துக்கொண்டிருக்கிறேன்</label></div>
 <div class="field full"><label for="eduDescription">கூடுதல் விவரம்</label><textarea id="eduDescription" maxlength="800"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="eduSave">கல்வியைச் சேமிக்கவும்</button><button class="secondary" type="button" id="eduCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="educationList" class="hint">கல்வி விவரங்கள் ஏற்றப்படுகின்றன...</div></section>
+<div class="actions"><button class="primary" type="submit" id="eduSave">கல்வியைச் Save</button><button class="secondary" type="button" id="eduCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="educationList" class="hint">கல்வி விவரங்கள் ஏற்றப்படுகின்றன...</div></section>
 <section class="panel" id="experiencePanel"><h2>💼 பணி அனுபவம்</h2><p class="hint">முன்பு செய்த வேலைகளையும் தற்போதைய வேலையையும் சேர்க்கலாம்.</p>
 <form id="experienceForm"><input type="hidden" id="experienceId"><div class="grid">
 <div class="field"><label for="expCompany">நிறுவனம் *</label><input id="expCompany" maxlength="180" required placeholder="நிறுவனத்தின் பெயர்"></div>
@@ -65,7 +65,7 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <div class="field"><label for="expEnd">முடித்த தேதி</label><input id="expEnd" type="date"></div>
 <div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> தற்போது இங்கு வேலை செய்கிறேன்</label></div>
 <div class="field full"><label for="expDescription">பொறுப்புகள் / செய்த வேலைகள்</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் சேமிக்கவும்</button><button class="secondary" type="button" id="expCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="experienceList" class="hint">பணி அனுபவம் ஏற்றப்படுகிறது...</div></section>
+<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் Save</button><button class="secondary" type="button" id="expCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="experienceList" class="hint">பணி அனுபவம் ஏற்றப்படுகிறது...</div></section>
 <section class="panel" id="certificationPanel"><h2>📜 சான்றிதழ்கள்</h2><p class="hint">உங்கள் தொழில்முறை / திறன் சான்றிதழ்களைச் சேர்க்கலாம்.</p>
 <form id="certificationForm"><input type="hidden" id="certificationId"><div class="grid">
 <div class="field"><label for="certName">சான்றிதழ் பெயர் *</label><input id="certName" maxlength="180" required placeholder="உதா: Tally Prime Certificate"></div>
@@ -73,7 +73,7 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <div class="field"><label for="certIssue">வழங்கிய தேதி</label><input id="certIssue" type="date"></div>
 <div class="field"><label for="certExpiry">காலாவதி தேதி</label><input id="certExpiry" type="date"></div>
 <div class="field full"><label for="certCredential">Credential ID (விருப்பம்)</label><input id="certCredential" maxlength="120"></div>
-</div><div class="actions"><button class="primary" type="submit" id="certSave">சான்றிதழைச் சேமிக்கவும்</button><button class="secondary" type="button" id="certCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form>
+</div><div class="actions"><button class="primary" type="submit" id="certSave">சான்றிதழைச் Save</button><button class="secondary" type="button" id="certCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form>
 <div id="certificationList" class="hint">சான்றிதழ்கள் ஏற்றப்படுகின்றன...</div></section></main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
 <script>
 const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
@@ -119,7 +119,7 @@ function resetRecordForm(kind){
  const isEdu=kind==="edu",form=document.getElementById(isEdu?"educationForm":"experienceForm");
  form.reset();document.getElementById(isEdu?"educationId":"experienceId").value="";
  document.getElementById(isEdu?"eduCancel":"expCancel").hidden=true;
- document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"கல்வியைச் சேமிக்கவும்":"அனுபவத்தைச் சேமிக்கவும்";
+ document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"கல்வியைச் Save":"அனுபவத்தைச் Save";
 }
 async function loadRecords(){
  const [ed,ex,certs]=await Promise.all([
@@ -152,15 +152,15 @@ document.getElementById("certificationForm").addEventListener("submit",async e=>
  if(payload.issue_date&&payload.expiry_date&&payload.expiry_date<payload.issue_date){say("காலாவதி தேதி, வழங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
  const q=id?client.from("candidate_certifications").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_certifications").insert(payload);
  const {error}=await q;if(error){say("சான்றிதழைச் சேமிக்க முடியவில்லை: "+error.message,false);return;}
- document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் சேமிக்கவும்";
+ document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் Save";
  await loadRecords();say("சான்றிதழ் சேமிக்கப்பட்டது.",true);
 });
-document.getElementById("certCancel").addEventListener("click",()=>{document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் சேமிக்கவும்";});
+document.getElementById("certCancel").addEventListener("click",()=>{document.getElementById("certificationForm").reset();document.getElementById("certificationId").value="";document.getElementById("certCancel").hidden=true;document.getElementById("certSave").textContent="சான்றிதழைச் Save";});
 document.getElementById("certificationList").addEventListener("click",async e=>{
  const edit=e.target.closest("[data-edit-cert]"),del=e.target.closest("[data-delete-cert]");
  if(edit){const {data,error}=await client.from("candidate_certifications").select("*").eq("id",edit.dataset.editCert).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
   const map={certificationId:"id",certName:"certificate_name",certIssuer:"issuing_organization",certIssue:"issue_date",certExpiry:"expiry_date",certCredential:"credential_id"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";
-  document.getElementById("certCancel").hidden=false;document.getElementById("certSave").textContent="மாற்றத்தைச் சேமிக்கவும்";document.getElementById("certificationPanel").scrollIntoView({behavior:"smooth"});
+  document.getElementById("certCancel").hidden=false;document.getElementById("certSave").textContent="மாற்றத்தைச் Save";document.getElementById("certificationPanel").scrollIntoView({behavior:"smooth"});
  }
  if(del&&confirm("இந்தச் சான்றிதழை நீக்கவா?")){const {error}=await client.from("candidate_certifications").delete().eq("id",del.dataset.deleteCert).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("சான்றிதழ் நீக்கப்பட்டது.",true);}}
 });
@@ -169,13 +169,13 @@ document.getElementById("expCancel").addEventListener("click",()=>resetRecordFor
 document.getElementById("educationList").addEventListener("click",async e=>{
  const edit=e.target.closest("[data-edit-edu]"),del=e.target.closest("[data-delete-edu]");
  if(edit){const {data,error}=await client.from("candidate_education").select("*").eq("id",edit.dataset.editEdu).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
- const map={educationId:"id",eduInstitution:"institution_name",eduQualification:"qualification",eduField:"field_of_study",eduGrade:"grade",eduStart:"start_date",eduEnd:"end_date",eduDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("eduCurrent").checked=!!data.is_current;document.getElementById("eduCancel").hidden=false;document.getElementById("eduSave").textContent="மாற்றத்தைச் சேமிக்கவும்";document.getElementById("educationPanel").scrollIntoView({behavior:"smooth"});}
+ const map={educationId:"id",eduInstitution:"institution_name",eduQualification:"qualification",eduField:"field_of_study",eduGrade:"grade",eduStart:"start_date",eduEnd:"end_date",eduDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("eduCurrent").checked=!!data.is_current;document.getElementById("eduCancel").hidden=false;document.getElementById("eduSave").textContent="மாற்றத்தைச் Save";document.getElementById("educationPanel").scrollIntoView({behavior:"smooth"});}
  if(del&&confirm("இந்தக் கல்வி விவரத்தை நீக்கவா?")){const {error}=await client.from("candidate_education").delete().eq("id",del.dataset.deleteEdu).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("கல்வி விவரம் நீக்கப்பட்டது.",true);}}
 });
 document.getElementById("experienceList").addEventListener("click",async e=>{
  const edit=e.target.closest("[data-edit-exp]"),del=e.target.closest("[data-delete-exp]");
  if(edit){const {data,error}=await client.from("candidate_experience").select("*").eq("id",edit.dataset.editExp).eq("user_id",currentUserId).single();if(error){say(error.message,false);return;}
- const map={experienceId:"id",expCompany:"company_name",expTitle:"job_title",expType:"employment_type",expCity:"city",expStart:"start_date",expEnd:"end_date",expDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("expCurrent").checked=!!data.is_current;document.getElementById("expCancel").hidden=false;document.getElementById("expSave").textContent="மாற்றத்தைச் சேமிக்கவும்";document.getElementById("experiencePanel").scrollIntoView({behavior:"smooth"});}
+ const map={experienceId:"id",expCompany:"company_name",expTitle:"job_title",expType:"employment_type",expCity:"city",expStart:"start_date",expEnd:"end_date",expDescription:"description"};for(const [a,b] of Object.entries(map))document.getElementById(a).value=data[b]||"";document.getElementById("expCurrent").checked=!!data.is_current;document.getElementById("expCancel").hidden=false;document.getElementById("expSave").textContent="மாற்றத்தைச் Save";document.getElementById("experiencePanel").scrollIntoView({behavior:"smooth"});}
  if(del&&confirm("இந்தப் பணி அனுபவத்தை நீக்கவா?")){const {error}=await client.from("candidate_experience").delete().eq("id",del.dataset.deleteExp).eq("user_id",currentUserId);if(error)say(error.message,false);else{await loadRecords();say("பணி அனுபவம் நீக்கப்பட்டது.",true);}}
 });
 
@@ -226,7 +226,7 @@ document.getElementById("profileForm").addEventListener("submit",async e=>{
   if(metaError)throw new Error("Database-ல் சேமிக்கப்பட்டது; ஆனால் பழைய metadata ஒத்திசைவு தோல்வி: "+metaError.message);
   say("உங்கள் சுயவிவரம் Database-ல் சேமிக்கப்பட்டது.",true);updateProgress();
  }catch(error){say("சேமிக்க முடியவில்லை: "+(error.message||error),false);}
- finally{button.disabled=false;button.textContent="சுயவிவரத்தைச் சேமிக்கவும்";}
+ finally{button.disabled=false;button.textContent="சுயவிவரத்தைச் Save";}
 });
 loadProfile().catch(e=>say("சுயவிவரத்தை ஏற்ற முடியவில்லை: "+(e.message||e),false));
 </script>  <script src="assets/site-protection.js" defer></script>
