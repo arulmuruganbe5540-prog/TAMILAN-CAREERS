@@ -529,3 +529,11 @@ The website is **not launch-ready yet**. The target launch date is 19 November 2
 - Confirmed live AI-related Edge Functions ai-resume-match, bilingual-job-search, extract-government-notice-details, and generate-job-mock-exam return HTTP 410 disabled responses. The built-in exam question bank and local rule-based Resume search remain non-AI features. Do not configure OpenAI API keys or re-enable these functions.
 - Supabase Health Advisor returned no findings. Security Advisor still reports 14 callable SECURITY DEFINER RPC warnings and two RLS-enabled/no-policy informational findings; reviewed public SECURITY DEFINER functions have an empty search_path, and authenticated RPCs contain user/role/ownership checks. Leaked Password Protection remains disabled and requires an owner-side Auth setting change.
 - Remaining owner-controlled launch tasks: configure SMTP and Resend secrets if email delivery is required; configure the government monitor secret before enabling scheduled ingestion; enable Leaked Password Protection; perform real Candidate/Employer/Super Admin end-to-end tests; manually review pending government/external records. Zero published jobs means public job lists correctly remain empty until genuine listings are approved.
+
+
+## 19 November 2026 — AI quota runtime test preparation
+
+- Confirmed the documentation-only Pages run `44474066290` completed successfully: build, deploy, and report-build-status all passed.
+- Added `TAMILAN-AI-QUOTA-RUNTIME-TEST-TA.md`, a Tamil runbook for post-migration quota RPC checks: privilege boundaries, registered-user baseline, minute/day ceilings, retry-after, cross-account isolation, anonymous denial, direct private-table denial, and concurrent atomicity.
+- The runbook explicitly separates staging tests from production, requires owner-controlled test accounts, and prohibits placing JWTs/passwords in source code or chat.
+- No live Supabase changes were made. The quota migration remains unapplied; the retrieval Edge Function remains undeployed; the feature flag remains OFF. The runbook is a test plan, not evidence that runtime tests passed.
