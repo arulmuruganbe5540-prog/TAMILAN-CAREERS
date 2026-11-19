@@ -39,6 +39,8 @@
 
 ## Main features currently in the repository
 - AI development roadmap (Tamil, owner-approved exploration; no live AI endpoint enabled yet): `TAMILAN-AI-ROADMAP-TA.md`.
+- TAMILAN AI model evaluation plan (Tamil; model candidates, multilingual test criteria, licensing and hosting checks): `TAMILAN-AI-MODEL-EVALUATION-TA.md`.
+- TAMILAN AI multilingual evaluation prompts: `tests/tamilan-ai-evaluation-prompts.json`; zero-cost data validator: `scripts/validate-tamilan-ai-evaluation.py` (validates the test set only; does not run an AI model).
 - Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
 - Tamil / English responsive public homepage, job search and individual job details pages.
 - Supabase email registration, login, password reset flow and account dashboard.
