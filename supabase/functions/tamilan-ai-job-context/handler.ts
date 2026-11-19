@@ -62,8 +62,17 @@ export function createJobContextHandler(env: EnvironmentReader, makeClient: Clie
     if (!supabaseUrl || !anonKey) return json({ error: "Public Supabase configuration is missing" }, 503, origin);
 
     // Caller JWT + anon key only. No service-role key is accepted by this boundary.
-    const supabase = makeClient(supabaseUrl, anonKey, authorization);
-    const { data: quotaData, error: quotaError } = await supabase.rpc("tamilan_ai_consume_job_context_quota");
+    let supabase: RetrievalClient;
+    let quotaData: unknown;
+    let quotaError: unknown;
+    try {
+      supabase = makeClient(supabaseUrl, anonKey, authorization);
+      const quotaResult = await supabase.rpc("tamilan_ai_consume_job_context_quota");
+      quotaData = quotaResult.data;
+      quotaError = quotaResult.error;
+    } catch {
+      return json({ error: "Usage control is temporarily unavailable", code: "RATE_LIMIT_CHECK_FAILED" }, 503, origin);
+    }
     const quota = rateLimitDecision(quotaData);
     if (quotaError || !quota) {
       return json({ error: "Usage control is temporarily unavailable", code: "RATE_LIMIT_CHECK_FAILED" }, 503, origin);
@@ -73,20 +82,24 @@ export function createJobContextHandler(env: EnvironmentReader, makeClient: Clie
         429, origin, quota.retryAfterSeconds);
     }
 
-    let builder = supabase.from("jobs").select([
-      "id", "job_title", "description", "location", "country_name",
-      "employment_type", "workplace_type", "education_level", "required_skills",
-      "experience_min", "experience_max", "salary_min", "salary_max",
-      "salary_currency", "salary_period", "application_deadline", "published_at",
-      "official_website_url", "official_notification_url",
-    ].join(",")).eq("status", "published")
-      .order("published_at", { ascending: false, nullsFirst: false }).limit(MAX_RESULTS);
-    if (query) builder = builder.ilike("job_title", "%" + query + "%");
-    if (country) builder = builder.ilike("country_name", country);
-    const { data, error } = await builder;
-    if (error) return json({ error: "Verified public job retrieval failed" }, 502, origin);
-
-    const rows = data ?? [];
+    let rows: Array<Record<string, unknown>>;
+    try {
+      let builder = supabase.from("jobs").select([
+        "id", "job_title", "description", "location", "country_name",
+        "employment_type", "workplace_type", "education_level", "required_skills",
+        "experience_min", "experience_max", "salary_min", "salary_max",
+        "salary_currency", "salary_period", "application_deadline", "published_at",
+        "official_website_url", "official_notification_url",
+      ].join(",")).eq("status", "published")
+        .order("published_at", { ascending: false, nullsFirst: false }).limit(MAX_RESULTS);
+      if (query) builder = builder.ilike("job_title", "%" + query + "%");
+      if (country) builder = builder.ilike("country_name", country);
+      const { data, error } = await builder;
+      if (error) return json({ error: "Verified public job retrieval failed" }, 502, origin);
+      rows = data ?? [];
+    } catch {
+      return json({ error: "Verified public job retrieval failed" }, 502, origin);
+    }
     const sources = rows.map((row) => publicJobSource(row))
       .filter((row): row is NonNullable<typeof row> => row !== null);
     return json({
