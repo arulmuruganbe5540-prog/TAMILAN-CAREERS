@@ -1,3 +1,12 @@
+## SECURITY DEFINER மறுஆய்வு — 19 நவம்பர் 2026
+
+- Added `TAMILAN-SECURITY-DEFINER-AUDIT-TA.md` after a fresh read-only Supabase catalog and Security Advisor review.
+- Catalog shows 29 public SECURITY DEFINER functions; 15 are executable by authenticated. All 15 have empty `search_path`, and their source includes caller identity/ownership or Super Admin authorization checks. `anon` cannot execute these 15 RPCs.
+- The conditional AAL2 check in `tc_review_external_job_candidate` matches the existing MFA helper policy: accounts with a verified MFA factor require AAL2; accounts without an enrolled factor retain the current compatibility behavior.
+- The remaining Advisor findings are 15 authenticated-callable SECURITY DEFINER warnings, two RLS-enabled/no-policy default-deny tables (`company_invitations`, `job_sources`), and Auth Leaked Password Protection disabled.
+- No grants, policies, functions, schema, data, secrets or deployments were changed. This was catalog/source-level review, not a replacement for end-to-end RPC tests.
+- Next: add positive/negative ownership tests for the RPC workflows; owner must enable Leaked Password Protection in Auth settings; run actual Admin MFA browser tests. Keep TAMILAN AI retrieval disabled until rate limiting and runtime tests are complete.
+
 ## TAMILAN AI retrieval CI verified — 19 November 2026
 
 - The new read-only job-context endpoint and static safety guard are committed. Final Health Audit run `44469643202` passed on commit `8c85b75fa13a6293e4352b3d4dd00961d840eee8`, including Deno type-check, retrieval guard, existing security guards, website structure and browser smoke tests.
