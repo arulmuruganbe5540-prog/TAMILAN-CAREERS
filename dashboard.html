@@ -100,10 +100,10 @@ async function loadDashboard() {
   const user = sessionData.session.user;
 
   document.getElementById("welcomeTitle").textContent =
-    (dashboardLanguage()==="ta"?"Hello, ":"Hello, ") + (user.user_metadata?.full_name || (dashboardLanguage()==="ta"?"there":"there"));
+    "Hello, " + (user.user_metadata?.full_name || "there");
 
   document.getElementById("welcomeText").textContent =
-    dashboardLanguage()==="ta"?"Your account permissions are verified. Available tools are shown below.":"Your account permissions are verified. Available tools are shown below.";
+    "Your account permissions are verified. Available tools are shown below.";
 
   const [roleResult, membershipResult] = await Promise.all([
     supabaseClient.from("user_roles")
@@ -133,7 +133,7 @@ async function loadDashboard() {
     document.getElementById("companyNames").textContent = "No company profile is linked to this account yet. Register your company and submit its documents for verification.";
   }
 
-  if (isSeeker || isCompanyMember) {
+  if (isSeeker || isCompanyAccount) {
     const types = [];
     if (isSeeker) types.push("Job Seeker");
     if (isCompanyAccount) types.push("Company");
