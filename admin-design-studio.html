@@ -54,6 +54,7 @@ let currentBannerPath=null;
 let bannerPreviewUrl=null;
 function gate(t){$("loading").classList.add("hidden");$("app").classList.add("hidden");$("gateText").textContent=t;$("gate").style.display="block"}
 function publicBanner(path){return path?client.storage.from("site-assets").getPublicUrl(path).data.publicUrl:null}
+function isEnglishText(value){return typeof value==="string"&&!/[\u0B80-\u0BFF]/.test(value)}
 async function init(){
  try{
   const {data,error}=await client.auth.getUser();
@@ -65,9 +66,9 @@ async function init(){
   const {data:settings,error:settingsError}=await client.from("site_settings").select("site_name,headline,subtitle,primary_color,banner_path").eq("setting_key","homepage").maybeSingle();
   if(settingsError)throw settingsError;
   if(settings){
-   $("brand").value=settings.site_name||"TAMILAN CAREERS";
-   $("headline").value=settings.headline||$("headline").value;
-   $("subtitle").value=settings.subtitle||$("subtitle").value;
+   $("brand").value=isEnglishText(settings.site_name)?settings.site_name:"TAMILAN CAREERS";
+   $("headline").value=isEnglishText(settings.headline)?settings.headline:"Find a Job That Matches Your Skills!";
+   $("subtitle").value=isEnglishText(settings.subtitle)?settings.subtitle:"Search government and private-sector jobs across India in one place. Discover your next opportunity with TAMILAN CAREERS.";
    $("primary").value=settings.primary_color||"#101d3a";
    currentBannerPath=settings.banner_path||null;
    if(currentBannerPath){const url=publicBanner(currentBannerPath);if(url)window.__bannerPreview=url}
