@@ -12,6 +12,8 @@ type FakeOptions = {
   quotaError?: unknown;
   rows?: Array<Record<string, unknown>>;
   queryError?: unknown;
+  throwQuota?: boolean;
+  throwQuery?: boolean;
   missingConfig?: boolean;
 };
 function harness(options: FakeOptions = {}) {
@@ -27,6 +29,7 @@ function harness(options: FakeOptions = {}) {
     return {
       rpc: async (name: string) => {
         calls.push("rpc:" + name);
+        if (options.throwQuota) throw new Error("rpc threw");
         return { data: options.quota ?? { allowed: true }, error: options.quotaError ?? null };
       },
       from: (table: string) => {
@@ -40,6 +43,7 @@ function harness(options: FakeOptions = {}) {
               limit(count: number) { calls.push("limit:" + count); return query; },
               ilike(column: string, value: string) { calls.push("ilike:" + column + "=" + value); return query; },
               then(resolve: (value: {data: Array<Record<string, unknown>> | null; error: unknown}) => unknown, reject?: (reason: unknown) => unknown) {
+                if (options.throwQuery) return Promise.reject(new Error("query threw")).then(resolve, reject);
                 return Promise.resolve({ data: options.rows ?? [], error: options.queryError ?? null }).then(resolve, reject);
               },
             };
@@ -95,6 +99,19 @@ Deno.test("HTTP contract: quota errors and malformed quota data fail closed befo
   equal((await malformed.handler(post("{}"))).status, 503, "malformed quota result");
   assert(!malformed.calls.some((call) => call.startsWith("from:")), "jobs query must not run after malformed quota");
 });
+Deno.test("HTTP contract: thrown quota and query dependencies return controlled failures", async () => {
+  const quota = harness({ throwQuota: true });
+  const quotaResponse = await quota.handler(post("{}"));
+  equal(quotaResponse.status, 503, "thrown quota dependency");
+  equal((await quotaResponse.json()).code, "RATE_LIMIT_CHECK_FAILED", "thrown quota code");
+  assert(!quota.calls.some((call) => call.startsWith("from:")), "jobs query must not run after thrown quota");
+
+  const query = harness({ throwQuery: true });
+  const queryResponse = await query.handler(post("{}"));
+  equal(queryResponse.status, 502, "thrown query dependency");
+  equal((await queryResponse.json()).error, "Verified public job retrieval failed", "thrown query error");
+});
+
 Deno.test("HTTP contract: quota denial returns 429 and Retry-After without querying jobs", async () => {
   const h = harness({ quota: { allowed: false, retry_after_seconds: 37 } });
   const response = await h.handler(post("{}"));
