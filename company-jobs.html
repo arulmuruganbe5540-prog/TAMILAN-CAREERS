@@ -18,7 +18,7 @@ const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co"
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let memberships=[],user=null;
 function msg(t,bad=false){$("message").textContent=t;$("message").className=bad?"panel notice":"panel";$("message").classList.remove("hidden")}
-function date(v){if(!v)return "—";const d=new Date(v);return Number.isNaN(d.getTime())?"—":d.toLocaleDateString("ta-IN")}
+function date(v){if(!v)return "—";const d=new Date(v);return Number.isNaN(d.getTime())?"—":d.toLocaleDateString("en-IN")}
 async function init(){
  const {data:s,error:se}=await db.auth.getSession();user=s.session?.user;
  if(se||!user){location.replace("login.html?next="+encodeURIComponent("company-jobs.html"));return}
@@ -26,25 +26,25 @@ async function init(){
  if(error)throw error;
  memberships=(rows||[]).filter(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;return c?.verification_status==="verified"});
  if(!memberships.length){msg("You need Owner, HR Manager or Recruiter access in a verified company. Complete company verification first.",true);return}
- $("company").innerHTML=memberships.map(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;return '<option value="'+esc(m.company_id)+'">'+esc(c?.company_name||"நிறுவனம்")+' — '+esc(m.member_role)+'</option>'}).join("");
+ $("company").innerHTML=memberships.map(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;return '<option value="'+esc(m.company_id)+'">'+esc(c?.company_name||"Company")+' — '+esc(m.member_role)+'</option>'}).join("");
  $("message").classList.add("hidden");$("workspace").classList.remove("hidden");await loadJobs();
 }
 async function loadJobs(){
  const id=$("company").value;if(!id)return;
- $("jobs").innerHTML='<div class="panel">வேலைகள் ஏற்றப்படுகின்றன...</div>';
+ $("jobs").innerHTML='<div class="panel">Loading jobs...</div>';
  const {data:rows,error}=await db.from("jobs").select("id,job_title,job_code,location,country_name,status,created_at,published_at,application_deadline,vacancies,job_kind").eq("company_id",id).order("created_at",{ascending:false});
- if(error){$("jobs").innerHTML='<div class="notice">வேலைகளை ஏற்ற முடியவில்லை: '+esc(error.message)+'</div>';return}
+ if(error){$("jobs").innerHTML='<div class="notice">Unable to load jobs: '+esc(error.message)+'</div>';return}
  const jobs=rows||[];let appTotal=0;
  const items=await Promise.all(jobs.map(async j=>{const {count,error:ce}=await db.from("job_applications").select("id",{count:"exact",head:true}).eq("job_id",j.id);return {job:j,count:ce?null:(count||0),error:ce}}));
  items.forEach(x=>{if(x.count!==null)appTotal+=x.count});
  $("total").textContent=jobs.length;$("published").textContent=jobs.filter(j=>j.status==="published").length;$("closed").textContent=jobs.filter(j=>j.status==="closed").length;$("applications").textContent=appTotal;
- if(!jobs.length){$("jobs").innerHTML='<div class="empty">இந்த நிறுவனத்திற்கான வேலை அறிவிப்புகள் இன்னும் இல்லை. புதிய வேலை உருவாக்கலாம்.</div>';return}
+ if(!jobs.length){$("jobs").innerHTML='<div class="empty">There are no job postings for this company yet. You can create a new job.</div>';return}
  const role=memberships.find(m=>m.company_id===id)?.member_role,canManage=["owner","hr_manager"].includes(role);
  $("jobs").innerHTML=items.map(x=>{const j=x.job,closed=j.status==="closed",manageable=["published","closed"].includes(j.status),expired=j.application_deadline&&new Date(j.application_deadline)<=new Date();
- return '<article class="job"><div class="jobtop"><h2>'+esc(j.job_title)+'</h2><span class="tag '+(j.status==="published"?"published":closed?"closed":"")+'">'+esc(j.status)+'</span></div><div class="meta">இடம்: '+esc(j.location||"—")+' · நாடு: '+esc(j.country_name||"—")+' · காலியிடங்கள்: '+esc(j.vacancies??"—")+'</div><div class="meta">உருவாக்கிய நாள்: '+date(j.created_at)+' · வெளியீட்டு நாள்: '+date(j.published_at)+' · விண்ணப்ப கடைசி நாள்: '+date(j.application_deadline)+'</div><div class="meta">Job ID: '+esc(j.job_code||j.id)+' · விண்ணப்பங்கள்: '+(x.count===null?"தகவல் கிடைக்கவில்லை":x.count)+'</div><div class="actions"><a class="btn secondary" href="company-applicants.html">விண்ணப்பங்களை நிர்வகிக்க</a>'+(canManage&&manageable?'<button class="btn '+(!closed?"danger":"")+'" data-job="'+esc(j.id)+'" data-next="'+(closed?"published":"closed")+'" '+(closed&&expired?"disabled":"")+'>'+(closed?"மீண்டும் வெளியிடு":"வேலை விண்ணப்பத்தை மூடு")+'</button>':"")+'</div>'+(closed&&expired?'<p class="muted">கடைசி தேதி முடிந்ததால் இந்த வேலை மீண்டும் திறக்கப்படாது.</p>':"")+'</article>'
+ return '<article class="job"><div class="jobtop"><h2>'+esc(j.job_title)+'</h2><span class="tag '+(j.status==="published"?"published":closed?"closed":"")+'">'+esc(j.status)+'</span></div><div class="meta">Location: '+esc(j.location||"—")+' · Country: '+esc(j.country_name||"—")+' · Vacancies: '+esc(j.vacancies??"—")+'</div><div class="meta">Created: '+date(j.created_at)+' · Published: '+date(j.published_at)+' · Application Deadline: '+date(j.application_deadline)+'</div><div class="meta">Job ID: '+esc(j.job_code||j.id)+' · Applications: '+(x.count===null?"Not available":x.count)+'</div><div class="actions"><a class="btn secondary" href="company-applicants.html">விண்ணப்பங்களை நிர்வகிக்க</a>'+(canManage&&manageable?'<button class="btn '+(!closed?"danger":"")+'" data-job="'+esc(j.id)+'" data-next="'+(closed?"published":"closed")+'" '+(closed&&expired?"disabled":"")+'>'+(closed?"republishு":"வேலை விண்ணப்பத்தை closeு")+'</button>':"")+'</div>'+(closed&&expired?'<p class="muted">கடைசி தேதி முடிந்ததால் இந்த வேலை மீண்டும் திறக்கப்படாது.</p>':"")+'</article>'
  }).join("");
- $("jobs").querySelectorAll("[data-job]").forEach(btn=>btn.addEventListener("click",async()=>{const next=btn.dataset.next,verb=next==="closed"?"மூட":"மீண்டும் வெளியிட";if(!confirm("இந்த வேலை அறிவிப்பை "+verb+" விரும்புகிறீர்களா?"))return;btn.disabled=true;btn.textContent="புதுப்பிக்கப்படுகிறது...";try{const {data,error}=await db.rpc("tc_company_manage_published_job",{p_job_id:btn.dataset.job,p_new_status:next});if(error)throw error;const {data:indexData,error:indexError}=await db.functions.invoke("google-indexing-notify",{body:{job_id:btn.dataset.job,action:next==="closed"?"URL_DELETED":"URL_UPDATED"}});const indexNote=indexData?.ok?" Google Search-க்கும் மாற்றம் அறிவிக்கப்பட்டது.": " Google Search அறிவிப்பு அனுப்பப்படவில்லை: "+(indexData?.error||indexError?.message||"அமைப்பு நிலுவையில் உள்ளது.");msg((next==="closed"?"வேலை அறிவிப்பு மூடப்பட்டது. புதிய விண்ணப்பங்கள் நிறுத்தப்படும்.":"வேலை அறிவிப்பு மீண்டும் வெளியிடப்பட்டது.")+indexNote);await loadJobs()}catch(e){alert("மாற்ற முடியவில்லை: "+(e.message||e));btn.disabled=false;btn.textContent=next==="closed"?"வேலை விண்ணப்பத்தை மூடு":"மீண்டும் வெளியிடு"}}));
+ $("jobs").querySelectorAll("[data-job]").forEach(btn=>btn.addEventListener("click",async()=>{const next=btn.dataset.next,verb=next==="closed"?"close":"republish";if(!confirm("Do you want to "+verb+" this job posting?"))return;btn.disabled=true;btn.textContent="Updating...";try{const {data,error}=await db.rpc("tc_company_manage_published_job",{p_job_id:btn.dataset.job,p_new_status:next});if(error)throw error;const {data:indexData,error:indexError}=await db.functions.invoke("google-indexing-notify",{body:{job_id:btn.dataset.job,action:next==="closed"?"URL_DELETED":"URL_UPDATED"}});const indexNote=indexData?.ok?" Google Search-க்கும் மாற்றம் அறிவிக்கப்பட்டது.": " Google Search அறிவிப்பு அனுப்பப்படவில்லை: "+(indexData?.error||indexError?.message||"அமைப்பு நிலுவையில் உள்ளது.");msg((next==="closed"?"வேலை அறிவிப்பு closeப்பட்டது. புதிய விண்ணப்பங்கள் நிறுத்தப்படும்.":"வேலை அறிவிப்பு republishப்பட்டது.")+indexNote);await loadJobs()}catch(e){alert("மாற்ற முடியவில்லை: "+(e.message||e));btn.disabled=false;btn.textContent=next==="closed"?"வேலை விண்ணப்பத்தை closeு":"republishு"}}));
 }
 $("company").addEventListener("change",()=>loadJobs().catch(e=>msg(e.message,true)));
-init().catch(e=>msg("பக்கத்தைத் திறக்க முடியவில்லை: "+(e.message||e),true));
+init().catch(e=>msg("Unable to open page: "+(e.message||e),true));
 </script><script src="assets/site-protection.js" defer></script></body></html>
