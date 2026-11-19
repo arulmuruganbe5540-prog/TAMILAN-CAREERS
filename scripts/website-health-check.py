@@ -178,9 +178,9 @@ translation_audit = {
 }
 for page in HTML_FILES:
     content = page.read_text(encoding="utf-8", errors="replace")
-    if not re.search(r'<html\\b[^>]*\\blang=["\\']en["\\']', content, re.I):
+    if not re.search('<html[^>]*lang="en"', content, re.I):
         translation_audit["pages_without_english_lang"].append(str(page.relative_to(ROOT)))
-    if re.search(r"[\\u0B80-\\u0BFF]", content):
+    if any(0x0B80 <= ord(ch) <= 0x0BFF for ch in content):
         translation_audit["pages_with_tamil_script"].append(str(page.relative_to(ROOT)))
 
 translator_source = (ROOT / "assets" / "auto-translate.js").read_text(encoding="utf-8")
