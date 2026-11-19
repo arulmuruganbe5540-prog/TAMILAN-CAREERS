@@ -189,8 +189,10 @@ for js_file in js_files:
     js_content = js_file.read_text(encoding="utf-8", errors="replace")
     if any(0x0B80 <= ord(ch) <= 0x0BFF for ch in js_content):
         translation_audit["javascript_files_with_tamil_script"].append(str(js_file.relative_to(ROOT)))
-    if re.search(r"tc-language-select|languageSelect|LANG_STORAGE|tc_language_preference|TC_TRANSLATE|navigator\\.language", js_content):
-        translation_audit["language_switching_references"].append(str(js_file.relative_to(ROOT)))
+for source_file in [*HTML_FILES, *js_files]:
+    source_content = source_file.read_text(encoding="utf-8", errors="replace")
+    if any(token in source_content for token in ("tc-language-select", "languageSelect", "LANG_STORAGE", "tc_language_preference", "TC_TRANSLATE", "navigator.language")):
+        translation_audit["language_switching_references"].append(str(source_file.relative_to(ROOT)))
 
 translator_source = (ROOT / "assets" / "auto-translate.js").read_text(encoding="utf-8")
 global_source = (ROOT / "assets" / "global-experience.js").read_text(encoding="utf-8")
