@@ -52,6 +52,12 @@ This status distinguishes committed website code from verified live Supabase con
 - Health Audit run `44426060611` passed with 0 errors and 0 warnings; Pages deployment run `44426060923` succeeded for commit `5c2f49cb5af9629410b22ac16531010cc4ce96f7`.
 - Full translation remains incomplete. A real translation provider/API with owner-approved privacy, cost limits, and caching—or continued manual curated translation—is needed to translate the remaining hundreds of Tamil strings and dynamic content reliably.
 
+## 19 November 2026 — privacy notice alignment
+
+- Updated `privacy.html` to state accurately that AI Resume Matching is not currently enabled and the existing resume-to-job matcher is rule-based, not AI-powered. The notice also commits to a clear disclosure and explicit candidate consent before any future AI provider receives resume/profile content.
+- Updated the privacy policy revision date to 19 November 2026.
+- Health Audit run `44426297043` passed with 0 errors and 0 warnings; Pages deployment run `44426296399` succeeded for commit `cf1622fdc0af6fd6a7458379957acbd1aa2c4bab`.
+
 ## 1. GitHub Pages and CI
 
 - GitHub Pages is enabled and deploying successfully. Latest confirmed Pages deployment: run `44085240569`, commit `ff17f5fbd1f3b39845d2c9bc03f40ba50f359960` (success). A newer build for the latest team-page permission refinement is running.
