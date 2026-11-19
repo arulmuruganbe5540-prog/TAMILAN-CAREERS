@@ -43,6 +43,15 @@ This status distinguishes committed website code from verified live Supabase con
 - Updated `CONNECTIONS-AND-LAUNCH-SETUP.md` to specify `APP_BASE_URL=https://tamilancareers.in`. If the Supabase secret `APP_BASE_URL` is already configured to the old URL, the project owner must update that secret in Supabase Dashboard; the function cannot read or change secret values through this workflow.
 - Real invitation email delivery remains unverified until the Resend secret and sender are confirmed and an authenticated end-to-end invite is sent.
 
+## 19 November 2026 — Tamil-source translation support and company workflow vocabulary
+
+- Updated `assets/auto-translate.js` so the curated dictionaries can translate exact Tamil source text nodes into English, Hindi, Malayalam, and the 18 additional locales. Ambiguous Tamil phrases that map to conflicting translations are deliberately excluded.
+- Added 40 Tamil-source labels for job search, job applications, candidate profiles, government/employer filters, company verification, and team/applicant workflows. The 18 additional locale dictionaries received 720 corresponding entries across these batches.
+- Added browser smoke assertions proving Tamil source labels such as `வேலை தேடுபவர்`, `உங்கள் பெயர்`, `அனைத்து வகைகளும்`, and `குழு உறுப்பினர்கள்` translate correctly in Spanish and Malay.
+- Latest translation audit scans 50 HTML pages and finds 796 unique pure-Tamil source strings plus 433 English source strings and 283 mixed Tamil-English strings. Tamil-source exact matches: English 73/796 (9.2%), Tamil 75/796 (9.4%), Hindi/Malayalam 71/796 (8.9%), Kannada/Telugu/Marathi/Bengali/Gujarati/Punjabi/Odia/Assamese 54/796 (6.8%), and Sinhala/Chinese/Malay/Spanish/Arabic/French/German/Japanese/Portuguese/Italian 56/796 (7.0%). These are dictionary-key coverage estimates, not translation-quality scores; most long Tamil paragraphs and mixed-language strings remain untranslated.
+- Health Audit run `44426060611` passed with 0 errors and 0 warnings; Pages deployment run `44426060923` succeeded for commit `5c2f49cb5af9629410b22ac16531010cc4ce96f7`.
+- Full translation remains incomplete. A real translation provider/API with owner-approved privacy, cost limits, and caching—or continued manual curated translation—is needed to translate the remaining hundreds of Tamil strings and dynamic content reliably.
+
 ## 1. GitHub Pages and CI
 
 - GitHub Pages is enabled and deploying successfully. Latest confirmed Pages deployment: run `44085240569`, commit `ff17f5fbd1f3b39845d2c9bc03f40ba50f359960` (success). A newer build for the latest team-page permission refinement is running.
