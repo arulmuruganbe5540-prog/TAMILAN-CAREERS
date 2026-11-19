@@ -6,6 +6,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 global_js = (ROOT / "assets/global-experience.js").read_text(encoding="utf-8")
 translator = (ROOT / "assets/auto-translate.js").read_text(encoding="utf-8")
+seo = (ROOT / "assets/seo.js").read_text(encoding="utf-8")
 protection = (ROOT / "assets/site-protection.js").read_text(encoding="utf-8")
 footer_script = (ROOT / "assets/professional-footer.js").read_text(encoding="utf-8")
 homepage = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -60,6 +61,11 @@ checks = {
         '<a href="jobs.html?job_kind=private">Private Jobs</a>' in homepage
         and '<a href="#career-tools">Career Tools</a>' in homepage
         and '<a href="indian-government-jobs.html">Government Jobs</a>' in homepage,
+    "homepage publishes accurate website and organization structured data":
+        '"@type": "WebSite"' in seo
+        and '"@type": "Organization"' in seo
+        and '"email": "arulmuruganbe5540@gmail.com"' in seo
+        and '"contactType": "customer support"' in seo,
 }
 for page in pages:
     content = page.read_text(encoding="utf-8")
