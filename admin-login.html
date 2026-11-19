@@ -54,6 +54,8 @@ let pendingMfaFactorId="",pendingMfaChallengeId="";
 async function startMfaChallenge(factorId){
  const verifyButton=document.getElementById("mfaVerify");
  verifyButton.disabled=true;
+ pendingMfaFactorId="";pendingMfaChallengeId="";
+ document.getElementById("mfaCode").value="";
  try{
   const {data:challenge,error}=await client.auth.mfa.challenge({factorId});
   if(error)throw error;
