@@ -32,6 +32,16 @@ else:
         if token.lower() not in sql.lower():
             failures.append(f"external candidate review migration: missing {token}")
 
+
+mfa_migration = ROOT / "supabase/migrations/20261119070000_require_mfa_for_external_candidate_review.sql"
+if not mfa_migration.is_file():
+    failures.append("external candidate MFA migration: file missing")
+else:
+    mfa_sql = mfa_migration.read_text(encoding="utf-8")
+    for token in ("auth.mfa_factors", "auth.jwt()->>'aal'", "MFA verification required", "set search_path = ''"):
+        if token.lower() not in mfa_sql.lower():
+            failures.append(f"external candidate MFA migration: missing {token}")
+
 if failures:
     print("\n".join(failures))
     sys.exit(1)
