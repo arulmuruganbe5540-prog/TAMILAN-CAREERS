@@ -148,6 +148,18 @@ Repository-இல் `supabase/functions/tamilan-ai-job-context/index.ts` என
 
 **முக்கிய வரம்பு:** இந்த commit-இல் Edge Function source மட்டும் சேர்க்கப்பட்டுள்ளது. Deploy, runtime test, rate limiter, usage monitoring, model adapter, assistant UI எதுவும் இல்லை. Rate limiting மற்றும் authenticated integration tests சேர்க்கப்படும் வரை feature flag OFF-ஆகவே இருக்க வேண்டும். Job table தற்போது காலியாக இருப்பதால் vacancy பதில்கள் உருவாக்கப்படக்கூடாது.
 
+## 12. Durable per-user rate limit — source prepared, not applied
+
+- புதிய migration source: `supabase/migrations/20261119080000_tamilan_ai_job_context_rate_limit.sql`.
+- தனிப்பட்ட `private` schema-இல் ஒரு user-க்கு ஒரு counter row மட்டுமே. User prompts, resumes, search text, job descriptions எதுவும் சேமிக்கப்படாது.
+- ஆரம்ப quota: ஒரு registered user-க்கு 10 requests / UTC minute, 100 requests / UTC day. Anonymous Auth users நிராகரிக்கப்படுவர்.
+- Public RPC `tamilan_ai_consume_job_context_quota()` caller-ன் `auth.uid()` அடிப்படையில் மட்டுமே கணக்கிடும்; caller user ID அல்லது quota key அனுப்ப முடியாது. SECURITY DEFINER, empty search_path; execute `authenticated`-க்கு மட்டும்; `anon` மற்றும் PUBLIC மறுக்கப்பட்டுள்ளன.
+- Counter atomic upsert மூலம் concurrent calls-ஐ serialize செய்கிறது. Quota table-க்கு API role direct grant இல்லை; RLS enabled, policy இல்லாமல் default deny.
+- Edge Function job query-க்கு முன் RPC-ஐ அழைக்கும். RPC error / malformed output ஏற்பட்டால் 503 fail-closed; limit முடிந்தால் 429 + Retry-After.
+- Deno unit tests மற்றும் static guard சேர்க்கப்பட்டுள்ளன.
+
+**நேரடி Supabase-இல் இன்னும் apply செய்யவில்லை.** Source migration மற்றும் function code மட்டும் repository-யில் உள்ளன. Database migration apply, RPC permission live test, authenticated runtime test, function deploy, usage monitoring மற்றும் owner approval முடியும் வரை retrieval feature flag OFF-ஆகவே இருக்க வேண்டும். Migration-ஐ live-இல் இயக்குவதற்கு முன் GitHub Health Audit SQL lint மற்றும் Deno tests வெற்றி பெற வேண்டும்.
+
 ## 10. தற்போதைய முடிவு
 
 **இப்போது செய்தவை:** repository-யில் homepage-க்கு AI widget இல்லை என்றும் இரண்டு பழைய AI endpoints disabled என்றும் code-ஐப் பார்த்து உறுதிப்படுத்தப்பட்டது. இந்த ஆவணம் பாதுகாப்பான புதிய integration-க்கான ஒப்பந்தத்தை வரையறுக்கிறது.
