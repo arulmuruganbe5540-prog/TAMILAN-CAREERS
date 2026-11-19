@@ -29,6 +29,11 @@ checks = {
         'window.TC_LOCALE&&window.TC_LOCALE.language' in translator,
     "translator covers dynamically inserted content":
         'new MutationObserver' in translator and 'r.addedNodes' in translator,
+    "English selection can translate core Tamil company and job forms":
+        '["நிறுவனப் பதிவு மற்றும் சரிபார்ப்பு","Company Registration & Verification"]' in translator
+        and '["வேலைப் பதவி / Job Title *","Job Title *"]' in translator
+        and '["சுயவிவரத்தைச் சேமிக்கவும்","Save Profile"]' in translator
+        and '["உங்கள் Dashboard-க்கு வரவேற்கிறோம்","Welcome to your Dashboard"]' in translator,
     "shared site script loads global language experience":
         "assets/global-experience.js" in protection,
     "premium banner replaces the logo in place instead of creating a second header row":
