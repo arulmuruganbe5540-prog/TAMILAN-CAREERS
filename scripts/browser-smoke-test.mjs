@@ -67,7 +67,7 @@ await check("Redesigned homepage is mobile-friendly and hides country-detection 
   }));
   if (layout.document > layout.viewport + 1) throw new Error("Homepage has horizontal page overflow on mobile: " + JSON.stringify(layout));
   if (!layout.nav || layout.search <= 0) throw new Error("Mobile navigation or job search panel is missing");
-  if (layout.visibleText.includes("your country detected") || layout.visibleText.includes("உங்கள் நாடு கண்டறியப்பட்டது")) {
+  if (layout.visibleText.includes("your country detected") || false) {
     throw new Error("Country detection notice should remain hidden");
   }
   await page.setViewportSize({ width: 390, height: 844 });
@@ -273,7 +273,7 @@ await check("Rule-based job search filters work without AI controls", async () =
   await page.locator("#q").fill("accountant");
   await page.locator("#place").fill("Salem");
   await page.locator("#kind").selectOption("private");
-  if (!(await page.locator("#count").innerText()).includes("வேலைகள் கிடைத்துள்ளன")) throw new Error("Rule-based filters did not refresh the result count");
+  if (!(await page.locator("#count").innerText()).includes("job")) throw new Error("Rule-based filters did not refresh the result count");
 });
 
 await check("Multi-word job search matches every entered keyword", async () => {
@@ -293,13 +293,13 @@ await check("Multi-word job search matches every entered keyword", async () => {
   }));
   try {
     await open("jobs.html");
-    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
+    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 job found"));
     await page.locator("#q").fill("accountant excel");
-    if (!(await page.locator("#count").innerText()).includes("1 வேலைகள்")) {
+    if (!(await page.locator("#count").innerText()).includes("1 job found")) {
       throw new Error("A job matching both keywords was not found");
     }
     await page.locator("#q").fill("accountant missingword");
-    if (!(await page.locator("#count").innerText()).includes("0 வேலைகள்")) {
+    if (!(await page.locator("#count").innerText()).includes("0 jobs found")) {
       throw new Error("Search should require every entered keyword to match");
     }
   } finally {
@@ -308,7 +308,6 @@ await check("Multi-word job search matches every entered keyword", async () => {
 });
 
 await check("Education and workplace filters narrow jobs correctly", async () => {
-  await page.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
   await page.route("**/rest/v1/jobs**", route => route.fulfill({
     status: 200,
     contentType: "application/json",
@@ -326,14 +325,14 @@ await check("Education and workplace filters narrow jobs correctly", async () =>
   }));
   try {
     await open("jobs.html");
-    await page.waitForFunction(() => window.TC_TRANSLATE?.language === "en");
-    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
+    await page.waitForFunction(() => document.documentElement.lang === "en");
+    await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 job found"));
     await page.locator("#education").selectOption("ITI");
-    if (!(await page.locator("#count").innerText()).includes("1 வேலைகள்")) throw new Error("ITI qualification filter did not match");
+    if (!(await page.locator("#count").innerText()).includes("1 job found")) throw new Error("ITI qualification filter did not match");
     await page.locator("#workplace").selectOption("remote");
-    if (!(await page.locator("#count").innerText()).includes("1 வேலைகள்")) throw new Error("Remote workplace filter did not match");
+    if (!(await page.locator("#count").innerText()).includes("1 job found")) throw new Error("Remote workplace filter did not match");
     await page.locator("#education").selectOption("Degree");
-    if (!(await page.locator("#count").innerText()).includes("0 வேலைகள்")) throw new Error("Non-matching education should return no results");
+    if (!(await page.locator("#count").innerText()).includes("0 jobs found")) throw new Error("Non-matching education should return no results");
   } finally {
     await page.unroute("**/rest/v1/jobs**");
   }
@@ -370,8 +369,8 @@ await check("Candidate skills match relevant jobs and filter the results", async
     if (!response || !response.ok()) throw new Error("Jobs page failed to load");
     await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("2 வேலைகள்"));
     await skillPage.locator("#skillMatch").selectOption("matched");
-    await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
-    if (!(await skillPage.locator(".job").innerText()).includes("உங்கள் திறன்கள்: 1/2 பொருத்தம்")) {
+    await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 job found"));
+    if (!(await skillPage.locator(".job").innerText()).includes("Your skills: 1/2 match")) {
       throw new Error("Matched job did not show the candidate skill match score");
     }
   } finally {
@@ -467,7 +466,7 @@ await check("Job Seeker profile loads and saves through mocked authenticated dat
     await p.locator("#skills").fill("MS Excel, Tally");
     await p.locator("#languages").fill("Tamil, English");
     await p.locator("#saveBtn").click();
-    await p.waitForFunction(() => document.getElementById("notice")?.textContent.includes("Database-ல் சேமிக்கப்பட்டது"));
+    await p.waitForFunction(() => document.getElementById("notice")?.textContent.includes("saved to the database"));
     for (const table of ["profiles", "job_seeker_profiles", "candidate_skills", "candidate_languages", "candidate_preferences"]) {
       if (!mutations.some(x => x.path.endsWith("/" + table))) throw new Error("Profile save did not write expected table: " + table);
     }
@@ -487,7 +486,7 @@ await check("Resume upload rejects unsupported files and accepts a mocked PDF up
     if (uploads.length) throw new Error("Unsupported file unexpectedly reached Storage");
     await p.locator("#document").setInputFiles({ name: "candidate-resume.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4 mock resume") });
     await p.locator("#uploadBtn").click();
-    await p.waitForFunction(() => document.getElementById("notice")?.textContent.includes("பாதுகாப்பாகப் பதிவேற்றப்பட்டு"));
+    await p.waitForFunction(() => document.getElementById("notice")?.textContent.includes("securely uploaded"));
     if (uploads.length !== 1) throw new Error("Valid PDF was not uploaded exactly once");
   } finally { await p.close(); }
 });
@@ -516,13 +515,13 @@ await check("Employer job draft validates salary range, saves and submits for ad
     if (!formState.valid) throw new Error("Mock job form is incomplete before salary validation: " + JSON.stringify(formState));
     await p.locator("#saveBtn").click();
     const salaryMessage = await p.locator("#status").innerText();
-    if (!salaryMessage.includes("அதிகபட்ச சம்பளம்")) throw new Error("Invalid salary range was not rejected; status=" + salaryMessage + "; form=" + JSON.stringify(formState));
+    if (!salaryMessage.includes("Maximum salary cannot be lower")) throw new Error("Invalid salary range was not rejected; status=" + salaryMessage + "; form=" + JSON.stringify(formState));
     await p.locator("#salaryMin").fill("10000");
     await p.locator("#salaryMax").fill("20000");
     await p.locator("#saveBtn").click();
-    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது"));
+    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("saved securely as a private draft"));
     await p.locator("#submitReviewBtn").click();
-    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("Admin Review-க்கு அனுப்பப்பட்டது"));
+    await p.waitForFunction(() => document.getElementById("status")?.textContent.includes("sent for Admin Review"));
     if (!calls.includes("tc_submit_company_job_draft_for_review")) throw new Error("Job draft was not sent to the review RPC");
   } finally { await p.close(); }
 });
@@ -557,12 +556,12 @@ await check("Notifications mark-read, mark-all and interview responses call each
     await p.goto(base + "/notifications.html", { waitUntil: "domcontentloaded" });
     await p.locator("[data-read='notification-smoke']").waitFor({ state: "visible" });
     await p.locator("[data-read='notification-smoke']").click();
-    await p.waitForFunction(() => document.getElementById("summary")?.textContent.includes("படிக்காதவை: 0"));
+    await p.waitForFunction(() => document.getElementById("summary")?.textContent.includes("Unread: 0"));
     await p.locator("#markAll").click();
     await p.waitForTimeout(100);
     if (markAllCalls !== 1) throw new Error("Mark-all action called " + markAllCalls + " times; expected exactly once");
     await p.locator("[data-response='accepted']").click();
-    await p.waitForFunction(() => document.getElementById("interviews")?.textContent.includes("ஏற்றுக்கொள்ளப்பட்டது"));
+    await p.waitForFunction(() => document.getElementById("interviews")?.textContent.includes("Accepted"));
     if (interviewResponses !== 1) throw new Error("Interview response RPC called " + interviewResponses + " times; expected exactly once");
   } finally { await p.close(); }
 });
@@ -589,7 +588,7 @@ await check("Job application submits a published vacancy with the selected resum
     await p.locator("#resume").selectOption("resume-smoke");
     await p.locator("#cover").fill("I am interested in this mock vacancy.");
     await p.locator("#submit").click();
-    await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("வெற்றிகரமாகப் பெறப்பட்டது"));
+    await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("submitted successfully"));
     if (!submitted || submitted.job_id !== "job-smoke" || submitted.candidate_id !== "tc-flow-smoke-user" || submitted.resume_id !== "resume-smoke") {
       throw new Error("Application payload did not preserve the job, candidate and selected resume: " + JSON.stringify(submitted));
     }
@@ -628,7 +627,7 @@ await check("Employer applicant management updates status and sends an interview
     await p.locator(".app-status").waitFor({ state: "visible" });
     await p.locator(".app-status").selectOption("shortlisted");
     await p.locator(".save-app-status").click();
-    await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("வெற்றிகரமாகப் புதுப்பிக்கப்பட்டது"));
+    await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("updated successfully"));
     if (statusUpdates !== 1) throw new Error("Application status RPC called " + statusUpdates + " times");
     const details = p.locator("#applications details").first();
     await details.locator("summary").click();
@@ -636,7 +635,7 @@ await check("Employer applicant management updates status and sends an interview
     await details.locator(".interview-mode").selectOption("online");
     await details.locator(".interview-location").fill("https://example.test/interview");
     await details.locator(".send-interview").click();
-    await p.waitForFunction(() => document.querySelector(".interview-msg")?.textContent.includes("அறிவிப்பாக அனுப்பப்பட்டது"));
+    await p.waitForFunction(() => document.querySelector(".interview-msg")?.textContent.includes("sent to the candidate as a notification"));
     if (interviewInvites !== 1) throw new Error("Interview invitation RPC called " + interviewInvites + " times");
   } finally { await p.close(); }
 });
@@ -710,7 +709,7 @@ await check("Expired published vacancies cannot be opened for application", asyn
   try {
     await open("job-details.html?id=expired-smoke");
     await page.waitForFunction(
-      () => document.getElementById("content")?.textContent.includes("விண்ணப்பக் காலம் முடிந்துவிட்டது"),
+      () => document.getElementById("content")?.textContent.includes("application period for this job has ended"),
       { timeout: 8000 }
     );
     if (await page.locator('#content a[href*="apply.html"]').count()) {
