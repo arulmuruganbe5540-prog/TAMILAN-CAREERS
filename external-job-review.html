@@ -33,7 +33,7 @@ button.secondary{background:#59677c}button.danger{background:#a83d32}button:disa
 <div class="warning">⚠️ These jobs are not automatically verified. Confirm the original notice, dates, eligibility, application link and duplicate status before marking a source as verified. Verification does not publish a job; publication requires a separate admin decision.</div>
 <div id="state" class="state">Checking Super Admin and MFA permissions...</div>
 <section id="panel" hidden>
-<div class="filters"><input id="q" placeholder="Search jobs, companies or countries"><select id="type"><option value="">All Types</option><option value="india_government">Indian Government</option><option value="foreign_government">Foreign Government</option><option value="india_company">Indian Company</option><option value="foreign_company">Foreign Company</option></select><select id="status"><option value="pending">நிலுவை</option><option value="verified">சரிபார்க்கப்பட்டது</option><option value="published">வெளியிடப்பட்டது</option><option value="rejected">நிராகரிக்கப்பட்டது</option><option value="all">அனைத்தும்</option></select></div>
+<div class="filters"><input id="q" placeholder="Search jobs, companies or countries"><select id="type"><option value="">All Types</option><option value="india_government">Indian Government</option><option value="foreign_government">Foreign Government</option><option value="india_company">Indian Company</option><option value="foreign_company">Foreign Company</option></select><select id="status"><option value="pending">Pending</option><option value="verified">Verified</option><option value="published">Published</option><option value="rejected">Rejected</option><option value="all">All</option></select></div>
 <div id="count" class="meta"></div><div id="list"></div></section></main>
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2"),$=id=>document.getElementById(id);
@@ -47,19 +47,19 @@ async function requireAdmin(){
  const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
  if(roleError||!roles?.length){location.replace("admin-login.html");return false;}
  const {data:aal,error:aalError}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
- if(aalError){$("state").textContent="MFA நிலையைச் சரிபார்க்க முடியவில்லை. மீண்டும் Admin Login செய்யவும்.";return false;}
+ if(aalError){$("state").textContent="Unable to verify MFA status. Please log in again through Admin Login.";return false;}
  if(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2"){location.replace("admin-login.html");return false;}
  return true;
 }
 function render(){
  const q=$("q").value.toLowerCase(),t=$("type").value,s=$("status").value;
  const list=rows.filter(r=>(!t||r.source_type===t)&&(s==="all"||r.status===s)&&(!q||[r.title,r.country,r.region,r.official_url,r.source?.source_name].join(" ").toLowerCase().includes(q)));
- $("count").textContent="மொத்தம் "+list.length+" பதிவுகள்";
- if(!list.length){$("list").innerHTML='<div class="empty">இந்தத் தேர்வில் பதிவுகள் இல்லை.</div>';return;}
+ $("count").textContent="Total "+list.length+" records";
+ if(!list.length){$("list").innerHTML='<div class="empty">இந்தத் தேர்வில் records இல்லை.</div>';return;}
  $("list").innerHTML=list.map(r=>{
   const v=r.verification||{},pending=r.status==="pending";
   const checksHtml=checks.map(([key,label])=>'<label class="check"><input type="checkbox" data-candidate="'+esc(r.id)+'" data-check="'+key+'" '+(v[key]?'checked ':'')+(pending?'':'disabled')+'><span>'+esc(label)+'</span></label>').join("");
-  const actions=pending?'<div class="actions"><button data-verify="'+esc(r.id)+'">அனைத்தும் சரி — Verified</button><button class="danger" data-reject="'+esc(r.id)+'">Reject</button></div><textarea class="reason" rows="2" id="reason-'+esc(r.id)+'" placeholder="Reject செய்தால் காரணம் கட்டாயம் (குறைந்தது 10 எழுத்துகள்)"></textarea>':'<div class="meta">Review: '+esc(r.rejection_reason||r.status)+'</div>';
+  const actions=pending?'<div class="actions"><button data-verify="'+esc(r.id)+'">All சரி — Verified</button><button class="danger" data-reject="'+esc(r.id)+'">Reject</button></div><textarea class="reason" rows="2" id="reason-'+esc(r.id)+'" placeholder="A rejection reason is required (at least 10 characters)."></textarea>':'<div class="meta">Review: '+esc(r.rejection_reason||r.status)+'</div>';
   return '<article class="card"><div class="top"><div><h3>'+esc(r.title)+'</h3><div class="meta">'+esc(r.source?.source_name||r.source_id)+' · '+esc(r.country)+(r.region?' · '+esc(r.region):'')+'<br>கண்டறிந்த தேதி: '+esc(new Date(r.discovered_at).toLocaleString("ta-IN"))+'</div></div><span class="pill">'+esc(typeNames[r.source_type]||r.source_type)+' · '+esc(r.status)+'</span></div><p class="meta">Discovery context: '+esc(r.discovery_context||"—")+'</p><div class="actions"><a class="btn" href="'+esc(r.official_url)+'" target="_blank" rel="noopener noreferrer">அதிகாரப்பூர்வ இணைப்பைத் திறக்க ↗</a></div><div class="checks">'+checksHtml+'</div>'+actions+'</article>';
  }).join("");
 }
