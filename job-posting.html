@@ -40,7 +40,7 @@
 <div class="field"><label for="deadline">Application Deadline</label><input id="deadline" type="date"></div>
 <div class="field"><label for="contactEmail">Application Contact Email</label><input id="contactEmail" type="email" maxlength="180" placeholder="hr@company.com"></div>
 </form>
-<div class="actions"><button class="btn" id="saveBtn" type="button">Save Draft</button><button class="btn" id="submitReviewBtn" type="button">Submit for Admin Review</button><button class="btn secondary" id="reloadBtn" type="button">Reload Saved Draft</button><button class="btn secondary" id="clearBtn" type="button">Clear Form</button></div><p class="hint">Review-க்கு அனுப்பிய பிறகு Super Admin சரிபார்ப்பார். Company Verified ஆன பிறகே வேலை பொதுவில் வெளியிடப்படும்.</p>
+<div class="actions"><button class="btn" id="saveBtn" type="button">Save Draft</button><button class="btn" id="submitReviewBtn" type="button">Submit for Admin Review</button><button class="btn secondary" id="reloadBtn" type="button">Reload Saved Draft</button><button class="btn secondary" id="clearBtn" type="button">Clear Form</button></div><p class="hint">After submission for review, a Super Admin will verify the job. It will be published publicly only after the company is verified.</p>
 <div id="status" class="status" role="status" aria-live="polite"></div>
 </section>
 </main>
@@ -75,7 +75,7 @@ async function init(){
  await loadCountries();
  const select=document.getElementById("companyChoice");
  memberships.forEach(m=>{const c=Array.isArray(m.companies)?m.companies[0]:m.companies;const o=document.createElement("option");o.value=m.company_id;o.textContent=(c?.company_name||"Company")+" — "+(m.member_role||"Member");select.appendChild(o)});
- document.getElementById("companyInfo").textContent="Admin மூலம் Verified செய்யப்பட்ட தனியார் நிறுவனங்கள்: "+memberships.length+". இங்கு தனியார் வேலைகளை மட்டுமே சமர்ப்பிக்கலாம்.";
+ document.getElementById("companyInfo").textContent="Private companies verified by Admin: "+memberships.length+". Only private-sector jobs can be submitted here.";
  const saved=currentUser.user_metadata?.job_posting_draft||{};
  if(saved.company_id&&memberships.some(m=>m.company_id===saved.company_id))select.value=saved.company_id;
  await loadDraftForCompany();
@@ -87,7 +87,7 @@ async function loadDraftForCompany(){
  const {data,error}=await client.from("job_posting_drafts").select("draft").eq("company_id",companyId).eq("user_id",currentUser.id).maybeSingle();
  if(error){
   currentDraft=null;setReviewLock(false);
-  message("தனிப்பட்ட Draft Database இன்னும் தயாராகவில்லை அல்லது உங்கள் Member அனுமதி இல்லை. முதலில் supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கவும். விவரம்: "+error.message,false);
+  message("The draft database is not ready or you do not have member permission. First run supabase-company-workflow.sql in the Supabase SQL Editor. Details: "+error.message,false);
   const old=currentUser.user_metadata?.job_posting_draft||{};
   if(old.company_id===companyId)fill(old);
   return;
@@ -96,8 +96,8 @@ async function loadDraftForCompany(){
   currentDraft=data.draft;fill(data.draft);
   const state=data.draft.draft_status||"draft";
   const messages={
-   pending_review:"இந்த வேலை Admin Review-க்காக அனுப்பப்பட்டுள்ளது. முடிவு வரும் வரை மீண்டும் சமர்ப்பிக்க வேண்டாம்.",
-   approved:"இந்த வேலை Admin மூலம் Approved செய்யப்பட்டுள்ளது. வெளியீடு காத்திருக்கிறது.",
+   pending_review:"This job has been submitted for Admin Review. Do not submit it again until a decision is made.",
+   approved:"This job has been approved by Admin and is awaiting publication.",
    rejected:"இந்த வேலை Review-ல் நிராகரிக்கப்பட்டது. திருத்தி மீண்டும் அனுப்பலாம்.",
    published:"இந்த வேலை பொதுவில் வெளியிடப்பட்டுள்ளது. புதிய மாற்றம் செய்தால் மீண்டும் Review தேவைப்படும்."
   };
