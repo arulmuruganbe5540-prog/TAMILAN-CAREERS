@@ -1,3 +1,12 @@
+## 19 November 2026 — Admin MFA coverage expansion
+
+- Extended the Supabase Auth Assurance Level check to the Super Admin pages: community posts, company verification, design studio, global control, job posting, job reports, and exam resources.
+- The exam-resources publishing page now hides the form until the current session is authenticated, the user has the `super_admin` role, and any enrolled TOTP factor has been verified at AAL2. The submit handler also checks the verified in-page authorization state.
+- Existing Admin pages continue to permit password-only sessions when no verified TOTP factor is enrolled. When a verified TOTP factor exists, they require an AAL2 session.
+- No database-wide AAL2 enforcement, destructive SQL, role changes, or changes to production job/application records were made.
+- GitHub Actions health-check run `44452909628` and Pages deployment run `44452909792` were triggered for the Admin MFA coverage changes. Their final outcomes must be checked before marking deployment verified.
+- Real-browser MFA enrollment/challenge/recovery testing remains pending and requires the owner's authenticated Super Admin account and chosen authenticator app.
+
 ## 19 November 2026 — Super Admin MFA implementation (initial)
 
 - Added `admin-security.html`, a Super Admin-only account security page that supports Supabase Auth TOTP enrollment using an authenticator app, QR setup, manual secret entry, and six-digit verification.
