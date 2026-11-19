@@ -889,8 +889,12 @@ await check("Every public page loads in English without visible Tamil or mobile 
           clippedControls: [...document.querySelectorAll("a,button,input,select,textarea,h1,h2")].filter(el => {
             const style = getComputedStyle(el);
             const rect = el.getBoundingClientRect();
-            return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 &&
-              (rect.left < -1 || rect.right > document.documentElement.clientWidth + 1);
+            if (style.display === "none" || style.visibility === "hidden" || rect.width <= 0) return false;
+            for (let parent = el.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
+              const ps = getComputedStyle(parent);
+              if (/(hidden|clip)/.test(ps.overflowX) && (rect.left < parent.getBoundingClientRect().left - 1 || rect.right > parent.getBoundingClientRect().right + 1)) return true;
+            }
+            return false;
           }).slice(0, 8).map(el => ({ tag: el.tagName, id: el.id, text: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 60) }))
         }));
         if (!state.title.trim()) throw new Error(path + " has no page title");
@@ -960,12 +964,12 @@ await check("Login, forgot-password and reset-password flows show clear English 
     if (!(await authPage.locator("#newPassword").isVisible()) || !(await authPage.locator("#confirmPassword").isVisible())) {
       throw new Error("Reset-password form fields are missing");
     }
-    await authPage.locator("#newPassword").fill("candidate123");
-    await authPage.locator("#confirmPassword").fill("candidate123");
+    await authPage.locator("#newPassword").fill("Candidate123");
+    await authPage.locator("#confirmPassword").fill("Candidate123");
     await authPage.locator("#resetForm").evaluate(form => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
     await authPage.waitForFunction(() => document.querySelector("#msg")?.textContent.includes("invalid or has expired"));
     const visible = await authPage.locator("body").innerText();
-    if (/[\\u0B80-\\u0BFF]/.test(visible)) throw new Error("Authentication page displayed Tamil text");
+    if (/[\u0B80-\u0BFF]/.test(visible)) throw new Error("Authentication page displayed Tamil text");
   } finally {
     await authPage.close();
   }
