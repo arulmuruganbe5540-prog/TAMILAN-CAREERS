@@ -1,14 +1,14 @@
 # TAMILAN AI — Quota RPC runtime test runbook (தமிழ்)
 
 **தயாரிப்பு தேதி:** 19-11-2026  
-**நிலை:** சோதனைத் திட்டம் மட்டும். இந்த ஆவணம் எந்த SQL-யும் இயக்காது; migration-ஐ apply செய்யாது; Edge Function-ஐ deploy/enable செய்யாது.
+**நிலை:** Live quota migration apply செய்யப்பட்டது; ஆரம்ப database-level சோதனைகள் முடிந்தன. மீதமுள்ள real-session / cross-account / concurrency சோதனைகள் இன்னும் தேவை. இந்த ஆவணம் Edge Function-ஐ deploy/enable செய்யாது.
 
 ## 1. சோதனைக்கு முன் கட்டாய நிபந்தனைகள்
 
 இந்த சோதனைகளைத் தொடங்குவதற்கு முன்:
 
 1. Project owner தனியாக அனுமதி அளித்திருக்க வேண்டும்.
-2. `20261119080000_tamilan_ai_job_context_rate_limit.sql` migration-ஐ owner அங்கீகரித்த முறையில் apply செய்திருக்க வேண்டும்.
+2. `20261119065045_tamilan_ai_job_context_rate_limit.sql` migration-ஐ owner அங்கீகரித்த முறையில் apply செய்திருக்க வேண்டும்.
 3. குறைந்தது இரண்டு உண்மையான, கட்டுப்பாட்டில் உள்ள registered test accounts (A, B) இருக்க வேண்டும். அவற்றின் Auth UUID-களை Supabase Dashboard-இல் இருந்து owner பாதுகாப்பாகப் பெற வேண்டும். UUID/JWT/password-ஐ GitHub issue, source code அல்லது ChatGPT உரையாடலில் இட வேண்டாம்.
 4. Anonymous Auth account சோதனை தேவையானால் தனி disposable anonymous account உருவாக்கி அதன் UUID-ஐ owner வைத்திருக்க வேண்டும்.
 5. முதலில் staging/test project-இல் சோதிப்பது சிறந்தது. Production-இல் quota counters-ஐ மாற்றும் சோதனைகள் செய்ய வேண்டாம்; production-இல் சோதிக்க owner தனியாக ஒப்புதல் அளிக்க வேண்டும்.
@@ -103,11 +103,36 @@ Authenticated client மூலம் `private.tamilan_ai_job_context_rate_limits
 
 Staging/test project-இல் account A-க்கு ஒரே UTC minute-இல் 15 அல்லது அதற்கு மேற்பட்ட இணைநேர RPC requests அனுப்பவும். எதிர்பார்ப்பு: அந்த minute-இல் அதிகபட்சம் 10 calls மட்டுமே `allowed: true`; மீதமுள்ளவை deny. ஒரே நேரத்தில் வந்த calls அனைத்தும் வெற்றி பெறுவது அல்லது count 10-ஐத் தாண்டுவது failure. சோதனையை மீண்டும் புதிய minute bucket-இல் இயக்கி உறுதிப்படுத்தவும்.
 
-## 10. முடிவு பதிவு
+## 10. Live Supabase-இல் செய்யப்பட்ட ஆரம்ப சோதனைகள் — 19-11-2026
+
+Project owner அனுமதிக்குப் பிறகு migration live project-இல் apply செய்யப்பட்டது. Migration history version: `20261119065045`.
+
+**PASS — Catalog / privilege boundary**
+- Quota table உள்ளது; RLS ON.
+- `anon` மற்றும் `authenticated` இரண்டிற்கும் quota table direct SELECT privilege இல்லை.
+- anon-க்கு private helper மற்றும் public RPC EXECUTE இல்லை.
+- authenticated-க்கு இரு functions EXECUTE உள்ளது.
+- private helper மட்டும் SECURITY DEFINER; public wrapper SECURITY INVOKER; இரண்டிற்கும் empty search_path.
+
+**PASS — Database-role simulation (உண்மையான browser JWT அல்ல)**
+- Registered account claim உடன் authenticated role-ல் அடிப்படை RPC: `allowed=true`, initial `minute_remaining=9`, `day_remaining=99`.
+- 11 calls ஒரே transaction-ல்: 10 allowed, 1 denied; denied call-க்கு positive Retry-After.
+- Daily counter 100 என transaction-க்குள் அமைத்து சோதித்தபோது: `allowed=false`, `day_remaining=0`, positive Retry-After.
+- எல்லா test writes-உம் ROLLBACK செய்யப்பட்டன; பின்னர் persistent quota row count = 0.
+
+**இன்னும் செய்ய வேண்டியவை**
+- இரண்டு உண்மையான owner-controlled accounts மூலம் cross-account isolation.
+- உண்மையான Anonymous Auth session மற்றும் no-JWT HTTP denial.
+- இணைநேர request stress test (குறைந்தது 15 requests).
+- உண்மையான browser/client JWT மூலம் Edge Function authenticated integration test.
+
+இந்த SQL role/claim simulation உண்மையான client JWT சோதனைக்கு மாற்றாகாது. Production quota rows-ஐ உருவாக்காமல், transaction rollback மூலம் boundary checks செய்யப்பட்டன.
+
+## 11. முடிவு பதிவு
 
 ஒவ்வொரு சோதனைக்கும் PASS / FAIL, தேதி (UTC), project (staging/production), test account label (A/B; UUID அல்ல), response fields மற்றும் பிழைச் சுருக்கம் மட்டும் பதிவு செய்யவும். JWT, password, resume, prompt, job description அல்லது தனிப்பட்ட தகவலை log செய்ய வேண்டாம்.
 
-## 11. Enable செய்யும் முன் இறுதி gate
+## 12. Enable செய்யும் முன் இறுதி gate
 
 இந்த quota tests வெற்றி பெற்றாலும் கீழ்கண்டவை தனித்தனியாக முடியும் வரை AI retrieval OFF-ஆகவே இருக்க வேண்டும்:
 
@@ -117,4 +142,4 @@ Staging/test project-இல் account A-க்கு ஒரே UTC minute-இ�
 - உண்மையான published jobs இல்லையெனில் vacancy assistant-ஐ “இயங்குகிறது” என்று காட்டக்கூடாது.
 - owner-ன் வெளிப்படையான rollout ஒப்புதல்.
 
-**தற்போதைய நிலை:** migration source மட்டும் repository-இல் உள்ளது; live Supabase-இல் apply செய்யப்படவில்லை. Edge Function deploy செய்யப்படவில்லை. Feature flag OFF.
+**தற்போதைய நிலை:** migration live Supabase-இல் apply செய்யப்பட்டுள்ளது. ஆரம்ப SQL catalog/privilege, minute limit மற்றும் daily limit சோதனைகள் PASS. உண்மையான JWT, cross-account, anonymous session, concurrency சோதனைகள் மீதமுள்ளன. Edge Function deploy செய்யப்படவில்லை; feature flag OFF.
