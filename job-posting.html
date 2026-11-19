@@ -115,35 +115,35 @@ async function save(silent=false){
  const d=formData();
  if(d.salaryMin&&d.salaryMax&&Number(d.salaryMin)>Number(d.salaryMax)){message("Maximum salary cannot be lower than minimum salary.",false);return null}
  if(d.deadline){const chosen=new Date(d.deadline+"T23:59:59");if(Number.isNaN(chosen.getTime())){message("Select a valid application deadline.",false);return null}const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),today=parts.find(x=>x.type==="year").value+"-"+parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;if(d.deadline<today){message("The application deadline cannot be in the past.",false);return null}}
- const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("சரியான நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",false);return null}
+ const company=memberships.find(m=>m.company_id===d.companyChoice);if(!company){message("Select a valid company.",false);return null}
  const previousStatus=currentDraft?.draft_status;
  const sameContent=ids.every(id=>String(currentDraft?.[id]??"")===String(d[id]??""));
  const preserveReview=["pending_review","approved"].includes(previousStatus);
  const preservePublished=previousStatus==="published"&&sameContent;
- if(preserveReview&&!sameContent){message("இந்த வேலை Admin Review-ல் உள்ளது. Admin முடிவு வரும் வரை விவரங்களை மாற்ற முடியாது.",false);return null}
+ if(preserveReview&&!sameContent){message("This job is under Admin Review. Details cannot be changed until the Admin makes a decision.",false);return null}
  const keepStatus=preserveReview||preservePublished;
  const draft={...d,company_id:d.companyChoice,company_name:(Array.isArray(company.companies)?company.companies[0]:company.companies)?.company_name||"",saved_at:new Date().toISOString(),draft_status:keepStatus?previousStatus:"draft"};
  if(keepStatus&&currentDraft?.submitted_review_id)draft.submitted_review_id=currentDraft.submitted_review_id;
  if(preservePublished&&currentDraft?.published_job_id)draft.published_job_id=currentDraft.published_job_id;
- const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="சேமிக்கப்படுகிறது...";
+ const btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="Saving...";
  try{
   const {data,error}=await client.from("job_posting_drafts").upsert({company_id:d.companyChoice,user_id:currentUser.id,draft},{onConflict:"company_id,user_id"}).select("id").single();
   if(error)throw error;
   currentDraft=draft;
-  if(!silent)message(preserveReview?"வரைவு சேமிக்கப்பட்டது. தற்போதைய Admin Review நிலை மாற்றப்படவில்லை.":preservePublished?"இந்த வேலை ஏற்கனவே பொதுவில் வெளியிடப்பட்டுள்ளது; புதிய மாற்றம் எதுவும் செய்யப்படவில்லை.":"வேலை விவர வரைவு பாதுகாப்பான தனிப்பட்ட Draft அட்டவணையில் சேமிக்கப்பட்டது. இது இன்னும் பொதுவாக வெளியிடப்படவில்லை.",true);
+  if(!silent)message(preserveReview?"Draft saved. The current Admin Review status has not changed.":preservePublished?"This job has already been published publicly; no new changes were made.":"The job details have been saved securely as a private draft. They have not been published publicly.",true);
   return data.id;
- }catch(e){message("Draft Database-ல் சேமிக்க முடியவில்லை. supabase-company-workflow.sql கோப்பை Supabase SQL Editor-ல் இயக்கியுள்ளீர்களா எனச் சரிபார்க்கவும். விவரம்: "+(e.message||e),false);return null}
+ }catch(e){message("Unable to save to the draft database. Check whether supabase-company-workflow.sql has been run in the Supabase SQL Editor. Details: "+(e.message||e),false);return null}
  finally{btn.disabled=false;btn.textContent="Save Draft"}
 }
 async function submitForReview(){
- const btn=document.getElementById("submitReviewBtn");btn.disabled=true;btn.textContent="Review-க்கு அனுப்பப்படுகிறது...";
+ const btn=document.getElementById("submitReviewBtn");btn.disabled=true;btn.textContent="Submitting for Review...";
  try{
   const draftId=await save(true);if(!draftId)return;
   const {data,error}=await client.rpc("tc_submit_company_job_draft_for_review",{p_draft_id:draftId});
   if(error)throw error;
-  message("உங்கள் வேலை வரைவு Admin Review-க்கு அனுப்பப்பட்டது. Company Verified செய்யப்பட்டு Admin வெளியிட்ட பிறகே பொதுவில் தெரியும்.",true);
+  message("Your job draft has been sent for Admin Review. It will appear publicly only after the company is verified and the Admin publishes it.",true);
   await loadDraftForCompany();
- }catch(e){message("Review-க்கு அனுப்ப முடியவில்லை: "+(e.message||e)+". supabase-admin-job-publish-setup.sql இயக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.",false)}
+ }catch(e){message("Unable to submit for Review: "+(e.message||e)+". Check whether supabase-admin-job-publish-setup.sql has been run.",false)}
  finally{btn.textContent="Submit for Admin Review";btn.disabled=["pending_review","approved"].includes(currentDraft?.draft_status)}
 }
 document.getElementById("saveBtn").addEventListener("click",()=>save(false));
@@ -151,7 +151,7 @@ document.getElementById("submitReviewBtn").addEventListener("click",submitForRev
 document.getElementById("reloadBtn").addEventListener("click",loadDraftForCompany);
 document.getElementById("companyChoice").addEventListener("change",()=>{currentDraft=null;setReviewLock(false);const selected=document.getElementById("companyChoice").value;const old=currentUser.user_metadata?.job_posting_draft||{};if(old.company_id===selected)fill(old);else fill({});loadDraftForCompany()});
 document.getElementById("employmentType").addEventListener("change",()=>{const p=document.getElementById("salaryPeriod");if(document.getElementById("employmentType").value==="Daily Wage"&&p.value==="monthly")p.value="daily";else if(document.getElementById("employmentType").value!=="Daily Wage"&&p.value==="daily")p.value="monthly"});
-document.getElementById("clearBtn").addEventListener("click",()=>{fill();message("படிவம் காலி செய்யப்பட்டது. முன்பு சேமித்த வரைவு மாற்றப்படவில்லை; மீண்டும் Save செய்தால் மட்டுமே புதுப்பிக்கப்படும்.",true)});
-init().catch(e=>showBlocked("பக்கத்தைத் திறக்கும்போது பிழை: "+(e.message||e)));
+document.getElementById("clearBtn").addEventListener("click",()=>{fill();message("The form has been cleared. The previously saved draft has not changed; it will be updated only if you save again.",true)});
+init().catch(e=>showBlocked("Error opening page: "+(e.message||e)));
 </script>  <script src="assets/site-protection.js" defer></script>
 </body></html>
