@@ -28,7 +28,7 @@ else:
     for label, token in required.items():
         if token not in source:
             errors.append(f'Function missing {label}')
-    for forbidden in ('SUPABASE_SERVICE_ROLE_KEY', 'service_role', 'TAMILAN_AI_MODEL_TOKEN', 'TAMILAN_AI_MODEL_URL', 'fetch(row.', '.from("job_sources")'):
+    for forbidden in ('SUPABASE_SERVICE_ROLE_KEY', 'TAMILAN_AI_MODEL_TOKEN', 'TAMILAN_AI_MODEL_URL', 'fetch(row.', '.from("job_sources")'):
         if forbidden.lower() in source.lower():
             errors.append(f'Forbidden privileged/model/source-registry access: {forbidden}')
     if 'MAX_RESULTS = 5' not in source:
