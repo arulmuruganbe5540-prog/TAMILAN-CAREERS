@@ -1,4 +1,4 @@
-import { createJobContextHandler, type RetrievalClient } from "./handler.ts";
+import { createJobContextHandler, type JobQuery, type RetrievalClient } from "./handler.ts";
 
 function assert(condition: unknown, message: string) {
   if (!condition) throw new Error(message);
@@ -43,7 +43,7 @@ function harness(options: FakeOptions = {}) {
                 return Promise.resolve({ data: options.rows ?? [], error: options.queryError ?? null }).then(resolve, reject);
               },
             };
-            return query;
+            return query as unknown as JobQuery;
           },
         };
       },
