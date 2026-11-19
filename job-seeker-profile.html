@@ -54,24 +54,24 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <div class="field"><label for="eduEnd">End Date</label><input id="eduEnd" type="date"></div>
 <div class="field full"><label><input id="eduCurrent" type="checkbox" style="width:auto"> Currently Studying</label></div>
 <div class="field full"><label for="eduDescription">Additional Details</label><textarea id="eduDescription" maxlength="800"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="eduSave">Save Education</button><button class="secondary" type="button" id="eduCancel" hidden>Cancel Edit</button></div></form><div id="educationList" class="hint">Education Details ஏற்றப்படுகின்றன...</div></section>
+<div class="actions"><button class="primary" type="submit" id="eduSave">Save Education</button><button class="secondary" type="button" id="eduCancel" hidden>Cancel Edit</button></div></form><div id="educationList" class="hint">Loading education details...</div></section>
 <section class="panel" id="experiencePanel"><h2>💼 Work Experience</h2><p class="hint">Add previous and current employment details.</p>
 <form id="experienceForm"><input type="hidden" id="experienceId"><div class="grid">
 <div class="field"><label for="expCompany">Company *</label><input id="expCompany" maxlength="180" required placeholder="Company Name"></div>
 <div class="field"><label for="expTitle">Job Title *</label><input id="expTitle" maxlength="140" required placeholder="e.g. Sales Executive"></div>
 <div class="field"><label for="expType">Employment Type</label><select id="expType"><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
-<div class="field"><label for="expCity">வேலை செய்த ஊர்</label><input id="expCity" maxlength="100"></div>
+<div class="field"><label for="expCity">Work City</label><input id="expCity" maxlength="100"></div>
 <div class="field"><label for="expStart">Start Date</label><input id="expStart" type="date"></div>
 <div class="field"><label for="expEnd">End Date</label><input id="expEnd" type="date"></div>
-<div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> Present இங்கு வேலை செய்கிறேன்</label></div>
-<div class="field full"><label for="expDescription">Responsibilities / செய்த வேலைகள்</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="expSave">Save Experience</button><button class="secondary" type="button" id="expCancel" hidden>Cancel Edit</button></div></form><div id="experienceList" class="hint">Work Experience ஏற்றப்படுகிறது...</div></section>
-<section class="panel" id="certificationPanel"><h2>📜 சான்றிதழ்கள்</h2><p class="hint">உங்கள் தொழில்முறை / திறன் சான்றிதழ்களைச் சேர்க்கலாம்.</p>
+<div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> Currently Working Here</label></div>
+<div class="field full"><label for="expDescription">Responsibilities / Work Performed</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
+<div class="actions"><button class="primary" type="submit" id="expSave">Save Experience</button><button class="secondary" type="button" id="expCancel" hidden>Cancel Edit</button></div></form><div id="experienceList" class="hint">Loading work experience...</div></section>
+<section class="panel" id="certificationPanel"><h2>📜 Certifications</h2><p class="hint">Add your professional or skills certificates.</p>
 <form id="certificationForm"><input type="hidden" id="certificationId"><div class="grid">
-<div class="field"><label for="certName">சான்றிதழ் பெயர் *</label><input id="certName" maxlength="180" required placeholder="உதா: Tally Prime Certificate"></div>
-<div class="field"><label for="certIssuer">வழங்கிய நிறுவனம்</label><input id="certIssuer" maxlength="180"></div>
-<div class="field"><label for="certIssue">வழங்கிய தேதி</label><input id="certIssue" type="date"></div>
-<div class="field"><label for="certExpiry">காலாவதி தேதி</label><input id="certExpiry" type="date"></div>
+<div class="field"><label for="certName">Certificate Name *</label><input id="certName" maxlength="180" required placeholder="e.g. Tally Prime Certificate"></div>
+<div class="field"><label for="certIssuer">Issuing Organisation</label><input id="certIssuer" maxlength="180"></div>
+<div class="field"><label for="certIssue">Issue Date</label><input id="certIssue" type="date"></div>
+<div class="field"><label for="certExpiry">Expiry Date</label><input id="certExpiry" type="date"></div>
 <div class="field full"><label for="certCredential">Credential ID (Optional)</label><input id="certCredential" maxlength="120"></div>
 </div><div class="actions"><button class="primary" type="submit" id="certSave">Save Certificate</button><button class="secondary" type="button" id="certCancel" hidden>Cancel Edit</button></div></form>
 <div id="certificationList" class="hint">Loading certificates...</div></section></main><footer>TAMILAN CAREERS – Moving you towards opportunities that match your skills.</footer>
@@ -132,7 +132,7 @@ async function loadRecords(){
  if(ex.error)document.getElementById("experienceList").textContent="Unable to load work experience: "+ex.error.message;
  else document.getElementById("experienceList").innerHTML=ex.data.length?ex.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.job_title)+'</strong><div>'+esc(x.company_name)+' · '+esc(x.city||"")+'</div><div>'+esc(x.employment_type||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"Present":esc(x.end_date||""))+'</small><p>'+esc(x.description||"")+'</p><div class="actions"><button class="secondary" type="button" data-edit-exp="'+esc(x.id)+'">Edit</button><button class="secondary" type="button" data-delete-exp="'+esc(x.id)+'">Delete</button></div></article>').join(""):"இன்னும் Work Experience சேர்க்கப்படவில்லை.";
  if(certs.error)document.getElementById("certificationList").textContent="Unable to load certificates: "+certs.error.message;
- else document.getElementById("certificationList").innerHTML=certs.data.length?certs.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.certificate_name)+'</strong><div>'+esc(x.issuing_organization||"")+'</div><small>'+esc(x.issue_date||"")+' – '+esc(x.expiry_date||"")+'</small>'+(x.credential_id?'<div>Credential ID: '+esc(x.credential_id)+'</div>':"")+'<div class="actions"><button class="secondary" type="button" data-edit-cert="'+esc(x.id)+'">Edit</button><button class="secondary" type="button" data-delete-cert="'+esc(x.id)+'">Delete</button></div></article>').join(""):"இன்னும் சான்றிதழ்கள் சேர்க்கப்படவில்லை.";
+ else document.getElementById("certificationList").innerHTML=certs.data.length?certs.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.certificate_name)+'</strong><div>'+esc(x.issuing_organization||"")+'</div><small>'+esc(x.issue_date||"")+' – '+esc(x.expiry_date||"")+'</small>'+(x.credential_id?'<div>Credential ID: '+esc(x.credential_id)+'</div>':"")+'<div class="actions"><button class="secondary" type="button" data-edit-cert="'+esc(x.id)+'">Edit</button><button class="secondary" type="button" data-delete-cert="'+esc(x.id)+'">Delete</button></div></article>').join(""):"இன்னும் Certifications சேர்க்கப்படவில்லை.";
 
 }
 document.getElementById("educationForm").addEventListener("submit",async e=>{
