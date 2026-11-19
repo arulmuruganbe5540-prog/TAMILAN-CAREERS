@@ -172,6 +172,8 @@ translation_audit = {
     "html_pages_scanned": len(HTML_FILES),
     "pages_without_english_lang": [],
     "pages_with_tamil_script": [],
+    "javascript_files_with_tamil_script": [],
+    "language_switching_references": [],
     "language_selector_detected": False,
     "automatic_translation_disabled": False,
     "country_based_language_switching_disabled": False,
@@ -182,6 +184,13 @@ for page in HTML_FILES:
         translation_audit["pages_without_english_lang"].append(str(page.relative_to(ROOT)))
     if any(0x0B80 <= ord(ch) <= 0x0BFF for ch in content):
         translation_audit["pages_with_tamil_script"].append(str(page.relative_to(ROOT)))
+
+for js_file in js_files:
+    js_content = js_file.read_text(encoding="utf-8", errors="replace")
+    if any(0x0B80 <= ord(ch) <= 0x0BFF for ch in js_content):
+        translation_audit["javascript_files_with_tamil_script"].append(str(js_file.relative_to(ROOT)))
+    if re.search(r"tc-language-select|languageSelect|LANG_STORAGE|tc_language_preference|TC_TRANSLATE|navigator\\.language", js_content):
+        translation_audit["language_switching_references"].append(str(js_file.relative_to(ROOT)))
 
 translator_source = (ROOT / "assets" / "auto-translate.js").read_text(encoding="utf-8")
 global_source = (ROOT / "assets" / "global-experience.js").read_text(encoding="utf-8")
@@ -200,6 +209,8 @@ translation_audit["country_based_language_switching_disabled"] = (
 translation_audit["status"] = "healthy" if (
     not translation_audit["pages_without_english_lang"]
     and not translation_audit["pages_with_tamil_script"]
+    and not translation_audit["javascript_files_with_tamil_script"]
+    and not translation_audit["language_switching_references"]
     and not translation_audit["language_selector_detected"]
     and translation_audit["automatic_translation_disabled"]
     and translation_audit["country_based_language_switching_disabled"]
@@ -217,13 +228,13 @@ result = {
     "javascript_blocks_checked": js_checked,
     "errors": len(issues),
     "warnings": len(warnings),
-    "status": "needs_attention" if issues else ("warnings" if warnings else "healthy"),
+    "status": "needs_attention" if issues or translation_audit["status"] != "healthy" else ("warnings" if warnings else "healthy"),
     "errors_detail": issues[:500],
     "warnings_detail": warnings[:500],
     "translation_audit": translation_audit,
     "scope_note": "Read-only structural and JavaScript syntax check. It does not prove browser runtime behavior, authenticated Supabase flows, live external government sites, email delivery, payment, or complete real-user journeys.",
 }
 REPORT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-print(json.dumps({k: result[k] for k in ("status", "html_pages_checked", "internal_links_and_assets_checked", "errors", "warnings", "errors_detail")}))
+print(json.dumps({k: result[k] for k in ("status", "html_pages_checked", "internal_links_and_assets_checked", "errors", "warnings", "translation_audit", "errors_detail")}))
 if issues:
     raise SystemExit(1)
