@@ -604,6 +604,35 @@ await check("Employer job draft validates salary range, saves and submits for ad
 });
 
 
+await check("Saved jobs sync with the signed-in Job Seeker account", async () => {
+  const savedPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const user = { id: "smoke-saved-jobs-user", aud: "authenticated", role: "authenticated", email: "candidate@example.test", app_metadata: {}, user_metadata: {} };
+  let deleteCalled = false;
+  try {
+    await savedPage.addInitScript(sessionUser => {
+      localStorage.setItem("sb-qkmljuuusfjowexvybvy-auth-token", JSON.stringify({
+        access_token: "smoke-saved-access", refresh_token: "smoke-saved-refresh",
+        token_type: "bearer", expires_in: 3600, expires_at: Math.floor(Date.now()/1000)+3600, user: sessionUser
+      }));
+    }, user);
+    await savedPage.route("**/rest/v1/user_roles**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({role:"job_seeker"})}));
+    await savedPage.route("**/rest/v1/job_seeker_profiles**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({user_id:user.id})}));
+    await savedPage.route("**/rest/v1/candidate_saved_jobs**", route => {
+      if(route.request().method()==="DELETE"){deleteCalled=true;return route.fulfill({status:204,body:""});}
+      return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{job_id:"saved-job-1",saved_at:new Date().toISOString()}])});
+    });
+    await savedPage.route("**/rest/v1/jobs**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"saved-job-1",job_title:"Frontend Developer",location:"Remote",employment_type:"Full Time",status:"published",application_deadline:"2099-12-31",company_id:"saved-company-1"}])}));
+    await savedPage.route("**/rest/v1/companies**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"saved-company-1",company_name:"Example Company"}])}));
+    await savedPage.goto(base + "/saved-jobs.html", {waitUntil:"domcontentloaded"});
+    await savedPage.locator(".job h2").waitFor({state:"visible",timeout:10000});
+    const visible=await savedPage.locator("main").innerText();
+    if(!visible.includes("Frontend Developer")||!visible.includes("Example Company")||!visible.includes("Apply now")) throw new Error("Account-saved job details or direct application link did not render");
+    await savedPage.locator("[data-remove]").click();
+    await savedPage.locator(".empty").waitFor({state:"visible",timeout:10000});
+    if(!deleteCalled) throw new Error("Removing a saved job did not call the account storage delete endpoint");
+  } finally { await savedPage.close(); }
+});
+
 await check("Legacy Tamil notification content is presented in English", async () => {
   const notificationPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const user = { id: "smoke-notification-user", aud: "authenticated", role: "authenticated", email: "candidate@example.test", app_metadata: {}, user_metadata: {} };

@@ -1,22 +1,83 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-<meta name="robots" content="noindex,follow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Saved Jobs | TAMILAN CAREERS</title><meta name="description" content="View and manage the jobs you have saved.">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<title>Saved Jobs | TAMILAN CAREERS</title>
+<meta name="description" content="View and manage jobs saved to your TAMILAN CAREERS account or this browser.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:#f3f6fb;color:#172033}header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:21px;font-weight:800;color:#54c8ff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}main{max-width:950px;margin:28px auto;padding:0 15px}h1{font-size:25px;color:#173e70}.intro{color:#62728a;line-height:1.7}.job{background:white;border:1px solid #e3eaf3;border-radius:13px;padding:18px;margin:14px 0}.job h2{font-size:18px;color:#173e70;margin:0 0 8px}.meta{color:#63738a;font-size:14px;line-height:1.8}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.btn{display:inline-block;border:0;border-radius:8px;padding:10px 14px;text-decoration:none;font-weight:bold;font-size:13px;cursor:pointer}.apply{background:#1688ed;color:white}.remove{background:#fff0f0;color:#a12b2b}.empty{background:white;padding:25px;border-radius:12px;line-height:1.8;color:#63738a;margin-top:18px}.note{font-size:12px;color:#778397;line-height:1.7;margin-top:18px}
-</style>  <link rel="stylesheet" href="assets/site-protection.css">
-<style>
-/* Consistent premium text-only site identity */
-.tc-domain-brand{display:inline-block!important;color:#eaf8ff!important;font-size:clamp(13px,2vw,19px)!important;font-weight:900!important;letter-spacing:.8px!important;line-height:1.2!important;white-space:nowrap!important;text-decoration:none!important;text-shadow:0 1px 10px rgba(72,190,255,.16)}
-@media(max-width:480px){.tc-domain-brand{font-size:12px!important;letter-spacing:.35px!important}}
-</style></head><body>
-<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="dashboard.html">Dashboard</a></nav></header>
-<main><h1>☆ Saved Jobs</h1><p class="intro">Keep jobs here to review later.</p><section id="list" aria-live="polite"></section><p class="note">Note: Saved Jobs are stored only in this mobile device's or browser's local storage. They do not sync automatically to other devices. Check with the employer that the job is still open and confirm the deadline.</p></main>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;color:#172033}
+header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-size:21px;font-weight:800;color:#54c8ff}.brand span{color:#fff}nav{display:flex;gap:8px;flex-wrap:wrap}
+nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:9px 12px;border-radius:8px;font-size:13px}
+main{max-width:950px;margin:28px auto;padding:0 15px}h1{font-size:25px;color:#173e70}
+.intro{color:#62728a;line-height:1.7}.job{background:#fff;border:1px solid #e3eaf3;border-radius:13px;padding:18px;margin:14px 0}
+.job h2{font-size:18px;color:#173e70;margin:0 0 8px}.meta{color:#63738a;font-size:14px;line-height:1.8}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.btn{display:inline-block;border:0;border-radius:8px;padding:10px 14px;text-decoration:none;font-weight:bold;font-size:13px;cursor:pointer}
+.apply{background:#1688ed;color:#fff}.remove{background:#fff0f0;color:#a12b2b}
+.empty,.error{background:#fff;padding:25px;border-radius:12px;line-height:1.8;color:#63738a;margin-top:18px}
+.error{color:#9b302b;background:#fff0ef}.note{font-size:12px;color:#778397;line-height:1.7;margin-top:18px}
+</style>
+<link rel="stylesheet" href="assets/site-protection.css">
+</head>
+<body>
+<header><div class="brand"><span class="tc-domain-brand">WWW.TAMILANCAREERS.IN</span></div><nav><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="job-seeker-profile.html">My Profile</a><a href="dashboard.html">Dashboard</a></nav></header>
+<main><h1>☆ Saved Jobs</h1><p class="intro">Keep jobs here to review later.</p><section id="list" aria-live="polite"><div class="empty">Loading saved jobs...</div></section><p class="note" id="note">Checking your saved jobs...</p></main>
 <script>
-const KEY="tc_saved_jobs_v1",list=document.getElementById("list");
+const KEY="tc_saved_jobs_v1",list=document.getElementById("list"),note=document.getElementById("note");
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(x)?x:[]}catch(e){return []}}
-function render(){const items=read();if(!items.length){list.innerHTML='<div class="empty">You have not saved any jobs yet.<br><a href="jobs.html">Start searching for jobs</a></div>';return;}
-list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"Job Details")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="login.html?next='+encodeURIComponent("apply.html?job="+j.id)+'">Log in to apply</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">Remove</button></div></article>').join("");}
-list.addEventListener("click",e=>{const b=e.target.closest("[data-remove]");if(!b)return;const id=b.getAttribute("data-remove");localStorage.setItem(KEY,JSON.stringify(read().filter(j=>String(j.id)!==String(id))));render();});render();
-</script>  <script src="assets/site-protection.js" defer></script>
-</body></html>
+let currentUser=null,mode="local",accountRows=[];
+function readLocal(){try{const x=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(x)?x:[]}catch(e){return []}}
+function renderLocal(){
+ const items=readLocal();
+ if(!items.length){list.innerHTML='<div class="empty">You have not saved any jobs yet.<br><a href="jobs.html">Start searching for jobs</a></div>';return;}
+ list.innerHTML=items.map(j=>'<article class="job"><h2>'+esc(j.title||"Job Details")+'</h2>'+(j.company?'<b>'+esc(j.company)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.type||"")+'</div><div class="actions"><a class="btn apply" href="'+(currentUser?'apply.html?job='+encodeURIComponent(j.id):'login.html?next='+encodeURIComponent("apply.html?job="+j.id))+'">'+(currentUser?'Apply now':'Log in to apply')+'</a><button class="btn remove" type="button" data-remove="'+esc(j.id)+'">Remove</button></div></article>').join("");
+}
+function isExpired(value){if(!value)return false;const d=new Date(value);return !Number.isNaN(d.getTime())&&d.getTime()<Date.now()}
+function renderAccount(){
+ if(!accountRows.length){list.innerHTML='<div class="empty">You have not saved any jobs to your account yet.<br><a href="jobs.html">Find jobs to save</a></div>';return;}
+ list.innerHTML=accountRows.map(row=>{
+  const j=row.job||{},id=row.job_id,open=String(j.status||"").toLowerCase()==="published"&&!isExpired(j.application_deadline);
+  return '<article class="job"><h2>'+esc(j.job_title||"Job no longer available")+'</h2>'+(j.company_name?'<b>'+esc(j.company_name)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.employment_type||"")+'</div><div class="actions">'+(open?'<a class="btn apply" href="apply.html?job='+encodeURIComponent(id)+'">Apply now</a>':'<span class="meta">This vacancy is closed or no longer accepting applications.</span>')+'<button class="btn remove" type="button" data-remove="'+esc(id)+'">Remove</button></div></article>';
+ }).join("");
+}
+async function init(){
+ const {data:sessionData}=await db.auth.getSession();
+ currentUser=sessionData.session?.user||null;
+ if(!currentUser){mode="local";renderLocal();note.textContent="These guest saves are stored only in this browser. Sign in as a Job Seeker and complete your profile to sync saved jobs across devices.";return;}
+ const {data:role,error:roleError}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).maybeSingle();
+ if(roleError||role?.role!=="job_seeker"){mode="local";renderLocal();note.textContent="Account-synced saved jobs are available for Job Seeker accounts. Any guest saves remain on this browser.";return;}
+ const {data:profile,error:profileError}=await db.from("job_seeker_profiles").select("user_id").eq("user_id",currentUser.id).maybeSingle();
+ if(profileError||!profile){mode="local";renderLocal();note.textContent="Complete your Job Seeker Profile to enable account-synced saved jobs. Existing browser saves are kept.";return;}
+ mode="account";
+ const {data:savedRows,error:savedError}=await db.from("candidate_saved_jobs").select("job_id,saved_at").eq("user_id",currentUser.id).order("saved_at",{ascending:false});
+ if(savedError){list.innerHTML='<div class="error">Unable to load account-saved jobs. '+esc(savedError.message)+'</div>';note.textContent="Your saved jobs have not been changed.";return;}
+ const rows=savedRows||[],ids=rows.map(r=>r.job_id);
+ if(!ids.length){accountRows=[];renderAccount();note.textContent="Your saved jobs are synced to your Job Seeker account and will be available on other devices.";return;}
+ const {data:jobs,error:jobsError}=await db.from("jobs").select("id,job_title,location,employment_type,status,application_deadline,company_id").in("id",ids);
+ if(jobsError){list.innerHTML='<div class="error">Unable to load saved job details. '+esc(jobsError.message)+'</div>';return;}
+ const jobMap=new Map((jobs||[]).map(j=>[String(j.id),j]));
+ const companyIds=[...new Set((jobs||[]).map(j=>j.company_id).filter(Boolean))],companyMap=new Map();
+ if(companyIds.length){const {data:companies}=await db.from("companies").select("id,company_name").in("id",companyIds);(companies||[]).forEach(c=>companyMap.set(String(c.id),c.company_name||""));}
+ accountRows=rows.map(r=>{const job=jobMap.get(String(r.job_id))||null;if(job)job.company_name=companyMap.get(String(job.company_id))||"";return {job_id:r.job_id,job};});
+ renderAccount();note.textContent="Your saved jobs are synced to your Job Seeker account and will be available on other devices.";
+}
+list.addEventListener("click",async e=>{
+ const b=e.target.closest("[data-remove]");if(!b)return;
+ const id=b.getAttribute("data-remove");b.disabled=true;b.textContent="Removing...";
+ if(mode==="account"){
+  const {error}=await db.from("candidate_saved_jobs").delete().eq("user_id",currentUser.id).eq("job_id",id);
+  if(error){b.disabled=false;b.textContent="Remove";note.textContent="Unable to remove this saved job: "+error.message;return;}
+  accountRows=accountRows.filter(r=>String(r.job_id)!==String(id));renderAccount();
+ }else{
+  localStorage.setItem(KEY,JSON.stringify(readLocal().filter(j=>String(j.id)!==String(id))));renderLocal();
+ }
+});
+init();
+</script>
+<script src="assets/site-protection.js" defer></script>
+</body>
+</html>
