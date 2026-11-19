@@ -18,7 +18,7 @@ body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#101d3a,#176
 .subtitle{text-align:center;color:#778397;font-size:14px;margin-bottom:25px}
 h2{text-align:center;color:#172b4d;font-size:23px;margin-bottom:20px}
 .roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.role{padding:13px;border:1px solid #dce4ee;border-radius:9px;text-align:center;cursor:pointer;font-weight:bold;color:#40516a}
+.role{appearance:none;width:100%;padding:13px;border:1px solid #dce4ee;border-radius:9px;text-align:center;cursor:pointer;font:700 14px Arial,sans-serif;background:#fff;color:#40516a}
 .role.active{background:#eaf4ff;border:2px solid #1688ed;color:#126cc1}
 label{display:block;font-size:14px;font-weight:bold;margin:13px 0 7px;color:#34445b}
 input{width:100%;padding:13px;border:1px solid #d7deea;border-radius:8px;font-size:15px;outline:none}
@@ -68,21 +68,21 @@ body>.card{display:block!important;order:1!important;width:100%!important;max-wi
   <h2 id="heading">Login to your account</h2>
 
   <div class="roles">
-    <div class="role active" id="seeker" onclick="chooseRole('job_seeker')">👤 Job Seeker</div>
-    <div class="role" id="company" onclick="chooseRole('company')">🏢 Company</div>
+    <button class="role active" id="seeker" type="button" onclick="chooseRole('job_seeker')" aria-pressed="true">👤 Job Seeker</button>
+    <button class="role" id="company" type="button" onclick="chooseRole('company')" aria-pressed="false">🏢 Company</button>
   </div>
 
   <form id="authForm">
 
     <div id="nameField" style="display:none">
-      <label>Full Name</label>
+      <label for="fullName">Full Name</label>
       <input id="fullName" type="text" placeholder="Enter your name">
     </div>
 
-    <label>Email Address</label>
+    <label for="email">Email Address</label>
     <input id="email" type="email" placeholder="example@gmail.com" autocomplete="email" required>
 
-    <label>Password</label>
+    <label for="password">Password</label>
     <div class="password-wrap">
       <input id="password" type="password" placeholder="At least 8 characters" minlength="8" autocomplete="current-password" required>
       <button class="password-toggle" id="passwordToggle" type="button" onclick="togglePassword()" aria-label="Show password" aria-pressed="false">Show</button>
@@ -201,6 +201,8 @@ function chooseRole(role) {
 
   document.getElementById("seeker").classList.toggle("active",role==="job_seeker");
   document.getElementById("company").classList.toggle("active",role==="company");
+  document.getElementById("seeker").setAttribute("aria-pressed",String(role==="job_seeker"));
+  document.getElementById("company").setAttribute("aria-pressed",String(role==="company"));
 }
 
 function toggleMode() {
@@ -213,6 +215,7 @@ function toggleMode() {
     isRegister ? "block" : "none";
 
   document.getElementById("fullName").required = isRegister;
+  document.getElementById("password").autocomplete = isRegister ? "new-password" : "current-password";
   document.getElementById("confirmWrap").style.display = isRegister ? "block" : "none";
   document.getElementById("confirmPassword").required = isRegister;
   document.getElementById("termsRow").style.display = isRegister ? "flex" : "none";
