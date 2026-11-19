@@ -1,6 +1,6 @@
 ## Super Admin backend MFA enforcement — 19 November 2026
 
-- Added and applied `20261119080000_require_mfa_for_super_admin_rpc_actions.sql`.
+- Added and applied `20261119040657_require_mfa_for_super_admin_rpc_actions.sql`.
 - Added private helper `private.require_super_admin_mfa()`: it requires an authenticated user and, when that account has any verified Auth MFA factor, requires the current JWT to have `aal2`. The helper uses an empty search path and has direct execution revoked from PUBLIC, anon and authenticated.
 - Enforced the helper inside `tc_admin_publish_job`, `tc_review_company_verification`, `tc_review_job_report`, and the `tc_guard_company_verification_status` trigger. The external candidate review RPC already had its own equivalent conditional AAL2 check.
 - Added the new migration to `scripts/admin-mfa-guard.py`, so CI checks that backend enforcement is not accidentally removed.
