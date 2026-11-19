@@ -13,11 +13,11 @@
 <div class="field"><label>Category</label><input id="category" disabled></div><div class="field"><label for="reference">Notice Number</label><input id="reference" maxlength="100"></div>
 <div class="field full"><label for="url">Official URL *</label><input id="url" type="url" required></div>
 <div class="field"><label for="date">Original Notice Date *</label><input id="date" type="date" required></div><div class="field"><label for="vacancies">Vacancies</label><input id="vacancies" type="number" min="0" step="1"></div>
-<div class="field"><label for="start">விண்ணப்ப தொடக்க தேதி</label><input id="start" type="date"></div><div class="field"><label for="end">விண்ணப்ப கடைசி தேதி</label><input id="end" type="date"></div>
-<div class="field full"><label for="eligibility">கல்வி / வயது / தகுதி விவரம்</label><textarea id="eligibility" maxlength="3000"></textarea></div>
-<div class="field full"><label for="details">கூடுதல் விவரங்கள் (JSON object)</label><textarea id="details" spellcheck="false"></textarea><p class="note">PDF மற்றும் விண்ணப்ப இணைப்புகள் போன்ற விவரங்களை இங்கே சேர்க்கலாம்.</p></div>
-</div></section><section class="panel"><h2>சரிபார்ப்பு பட்டியல்</h2><p class="note">வேலை அறிவிப்புக்கு ஆறு உறுதிப்படுத்தல்களும் கட்டாயம். Result / Hall Ticket / Answer Key / Exam Update-க்கு ஆவணம் திறக்கப்பட்டது மற்றும் Duplicate சரிபார்ப்பு கட்டாயம்.</p><div class="checks">
-<label><input type="checkbox" data-check="notice_document_opened"> அசல் அரசு அறிவிப்பு / PDF திறந்து பார்த்தேன்</label>
+<div class="field"><label for="start">Application Start Date</label><input id="start" type="date"></div><div class="field"><label for="end">Application Deadline</label><input id="end" type="date"></div>
+<div class="field full"><label for="eligibility">Education / Age / Eligibility Details</label><textarea id="eligibility" maxlength="3000"></textarea></div>
+<div class="field full"><label for="details">Additional Details (JSON object)</label><textarea id="details" spellcheck="false"></textarea><p class="note">Add details such as PDF and application links here.</p></div>
+</div></section><section class="panel"><h2>Verification Checklist</h2><p class="note">All six confirmations are mandatory for job notices. For results, hall tickets, answer keys and exam updates, opening the source document and checking for duplicates are mandatory.</p><div class="checks">
+<label><input type="checkbox" data-check="notice_document_opened"> I opened and reviewed the original government notice / PDF</label>
 <label><input type="checkbox" data-check="dates_verified"> தேதிகள் சரிபார்த்தேன்</label>
 <label><input type="checkbox" data-check="vacancies_verified"> காலியிட எண்ணிக்கை சரிபார்த்தேன்</label>
 <label><input type="checkbox" data-check="eligibility_verified"> கல்வி / வயது தகுதி சரிபார்த்தேன்</label>
