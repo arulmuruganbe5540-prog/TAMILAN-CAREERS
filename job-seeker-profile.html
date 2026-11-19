@@ -37,35 +37,35 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <section class="panel"><h2>🎓 Education and Experience</h2><div class="grid">
 <div class="field"><label for="education">Education</label><select id="education"><option value="">Select</option><option>No Formal Education</option><option>Read & Write</option><option>5th Pass</option><option>8th Pass</option><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Professional Courses</option><option>PhD / Research</option></select></div>
 <div class="field"><label for="experience">Work Experience</label><select id="experience"><option value="">Select</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>6–10 years</option><option>10+ years</option></select></div>
-<div class="field full"><label for="skills">Skills (comma-separated)</label><textarea id="skills" maxlength="1000" placeholder="உதா: MS Excel, Tally, Customer Service, Driving"></textarea><div class="hint">Enter multiple skills separated by commas.</div></div>
+<div class="field full"><label for="skills">Skills (comma-separated)</label><textarea id="skills" maxlength="1000" placeholder="e.g. MS Excel, Tally, Customer Service, Driving"></textarea><div class="hint">Enter multiple skills separated by commas.</div></div>
 <div class="field"><label for="languages">Languages</label><input id="languages" maxlength="200" placeholder="Tamil, English"></div>
 <div class="field"><label for="jobType">Preferred Employment Type</label><select id="jobType"><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
 <div class="field full"><label for="preferredLocation">Preferred Job Location</label><input id="preferredLocation" maxlength="150" placeholder="e.g. Omalur, Salem, Edappadi"></div>
 </div><div class="hint">Fields marked * are required. Your profile will be saved to your account.</div>
 <div class="actions"><button class="primary" id="saveBtn" type="submit">Save Profile</button><button class="secondary" type="button" id="reloadBtn">Reload</button></div><div class="notice" id="notice" role="status" aria-live="polite"></div>
 </section></form>
-<section class="panel" id="educationPanel"><h2>🎓 கல்வி விவரங்கள்</h2><p class="hint">ஒவ்வொரு படிப்பையும் தனித்தனியாகச் சேர்க்கலாம்.</p>
+<section class="panel" id="educationPanel"><h2>🎓 Education Details</h2><p class="hint">Add each qualification separately.</p>
 <form id="educationForm"><input type="hidden" id="educationId"><div class="grid">
-<div class="field"><label for="eduInstitution">கல்வி நிறுவனம் *</label><input id="eduInstitution" maxlength="180" required placeholder="பள்ளி / கல்லூரி பெயர்"></div>
-<div class="field"><label for="eduQualification">Education *</label><input id="eduQualification" maxlength="120" required placeholder="உதா: B.Com, Diploma, 12th"></div>
-<div class="field"><label for="eduField">படித்த பிரிவு</label><input id="eduField" maxlength="120" placeholder="உதா: Computer Science"></div>
-<div class="field"><label for="eduGrade">மதிப்பெண் / Grade</label><input id="eduGrade" maxlength="60" placeholder="உதா: 78% / First Class"></div>
-<div class="field"><label for="eduStart">தொடங்கிய தேதி</label><input id="eduStart" type="date"></div>
-<div class="field"><label for="eduEnd">முடித்த தேதி</label><input id="eduEnd" type="date"></div>
-<div class="field full"><label><input id="eduCurrent" type="checkbox" style="width:auto"> தற்போது படித்துக்கொண்டிருக்கிறேன்</label></div>
-<div class="field full"><label for="eduDescription">கூடுதல் விவரம்</label><textarea id="eduDescription" maxlength="800"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="eduSave">கல்வியைச் Save</button><button class="secondary" type="button" id="eduCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="educationList" class="hint">கல்வி விவரங்கள் ஏற்றப்படுகின்றன...</div></section>
-<section class="panel" id="experiencePanel"><h2>💼 Work Experience</h2><p class="hint">முன்பு செய்த வேலைகளையும் தற்போதைய வேலையையும் சேர்க்கலாம்.</p>
+<div class="field"><label for="eduInstitution">Educational Institution *</label><input id="eduInstitution" maxlength="180" required placeholder="School / College Name"></div>
+<div class="field"><label for="eduQualification">Education *</label><input id="eduQualification" maxlength="120" required placeholder="e.g. B.Com, Diploma, 12th"></div>
+<div class="field"><label for="eduField">Field of Study</label><input id="eduField" maxlength="120" placeholder="e.g. Computer Science"></div>
+<div class="field"><label for="eduGrade">Marks / Grade</label><input id="eduGrade" maxlength="60" placeholder="e.g. 78% / First Class"></div>
+<div class="field"><label for="eduStart">Start Date</label><input id="eduStart" type="date"></div>
+<div class="field"><label for="eduEnd">End Date</label><input id="eduEnd" type="date"></div>
+<div class="field full"><label><input id="eduCurrent" type="checkbox" style="width:auto"> Currently Studying</label></div>
+<div class="field full"><label for="eduDescription">Additional Details</label><textarea id="eduDescription" maxlength="800"></textarea></div></div>
+<div class="actions"><button class="primary" type="submit" id="eduSave">Save Education</button><button class="secondary" type="button" id="eduCancel" hidden>Cancel Edit</button></div></form><div id="educationList" class="hint">Education Details ஏற்றப்படுகின்றன...</div></section>
+<section class="panel" id="experiencePanel"><h2>💼 Work Experience</h2><p class="hint">Add previous and current employment details.</p>
 <form id="experienceForm"><input type="hidden" id="experienceId"><div class="grid">
-<div class="field"><label for="expCompany">நிறுவனம் *</label><input id="expCompany" maxlength="180" required placeholder="நிறுவனத்தின் பெயர்"></div>
-<div class="field"><label for="expTitle">பணி பெயர் *</label><input id="expTitle" maxlength="140" required placeholder="உதா: Sales Executive"></div>
-<div class="field"><label for="expType">வேலை வகை</label><select id="expType"><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
+<div class="field"><label for="expCompany">Company *</label><input id="expCompany" maxlength="180" required placeholder="Company Name"></div>
+<div class="field"><label for="expTitle">Job Title *</label><input id="expTitle" maxlength="140" required placeholder="e.g. Sales Executive"></div>
+<div class="field"><label for="expType">Employment Type</label><select id="expType"><option value="">Select</option><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option><option>Daily Wage</option></select></div>
 <div class="field"><label for="expCity">வேலை செய்த ஊர்</label><input id="expCity" maxlength="100"></div>
-<div class="field"><label for="expStart">தொடங்கிய தேதி</label><input id="expStart" type="date"></div>
-<div class="field"><label for="expEnd">முடித்த தேதி</label><input id="expEnd" type="date"></div>
+<div class="field"><label for="expStart">Start Date</label><input id="expStart" type="date"></div>
+<div class="field"><label for="expEnd">End Date</label><input id="expEnd" type="date"></div>
 <div class="field full"><label><input id="expCurrent" type="checkbox" style="width:auto"> தற்போது இங்கு வேலை செய்கிறேன்</label></div>
-<div class="field full"><label for="expDescription">பொறுப்புகள் / செய்த வேலைகள்</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
-<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் Save</button><button class="secondary" type="button" id="expCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form><div id="experienceList" class="hint">Work Experience ஏற்றப்படுகிறது...</div></section>
+<div class="field full"><label for="expDescription">Responsibilities / செய்த வேலைகள்</label><textarea id="expDescription" maxlength="1200"></textarea></div></div>
+<div class="actions"><button class="primary" type="submit" id="expSave">அனுபவத்தைச் Save</button><button class="secondary" type="button" id="expCancel" hidden>Cancel Edit</button></div></form><div id="experienceList" class="hint">Work Experience ஏற்றப்படுகிறது...</div></section>
 <section class="panel" id="certificationPanel"><h2>📜 சான்றிதழ்கள்</h2><p class="hint">உங்கள் தொழில்முறை / திறன் சான்றிதழ்களைச் சேர்க்கலாம்.</p>
 <form id="certificationForm"><input type="hidden" id="certificationId"><div class="grid">
 <div class="field"><label for="certName">சான்றிதழ் பெயர் *</label><input id="certName" maxlength="180" required placeholder="உதா: Tally Prime Certificate"></div>
@@ -73,7 +73,7 @@ footer{text-align:center;color:#778397;padding:28px;font-size:13px}
 <div class="field"><label for="certIssue">வழங்கிய தேதி</label><input id="certIssue" type="date"></div>
 <div class="field"><label for="certExpiry">காலாவதி தேதி</label><input id="certExpiry" type="date"></div>
 <div class="field full"><label for="certCredential">Credential ID (விருப்பம்)</label><input id="certCredential" maxlength="120"></div>
-</div><div class="actions"><button class="primary" type="submit" id="certSave">சான்றிதழைச் Save</button><button class="secondary" type="button" id="certCancel" hidden>திருத்தத்தை ரத்து செய்</button></div></form>
+</div><div class="actions"><button class="primary" type="submit" id="certSave">சான்றிதழைச் Save</button><button class="secondary" type="button" id="certCancel" hidden>Cancel Edit</button></div></form>
 <div id="certificationList" class="hint">சான்றிதழ்கள் ஏற்றப்படுகின்றன...</div></section></main><footer>TAMILAN CAREERS – உங்கள் திறமைக்கு ஏற்ற வேலைவாய்ப்பை நோக்கி.</footer>
 <script>
 const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
@@ -119,7 +119,7 @@ function resetRecordForm(kind){
  const isEdu=kind==="edu",form=document.getElementById(isEdu?"educationForm":"experienceForm");
  form.reset();document.getElementById(isEdu?"educationId":"experienceId").value="";
  document.getElementById(isEdu?"eduCancel":"expCancel").hidden=true;
- document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"கல்வியைச் Save":"அனுபவத்தைச் Save";
+ document.getElementById(isEdu?"eduSave":"expSave").textContent=isEdu?"Save Education":"அனுபவத்தைச் Save";
 }
 async function loadRecords(){
  const [ed,ex,certs]=await Promise.all([
@@ -128,7 +128,7 @@ async function loadRecords(){
   client.from("candidate_certifications").select("id,certificate_name,issuing_organization,issue_date,expiry_date,credential_id").eq("user_id",currentUserId).order("issue_date",{ascending:false})
  ]);
  if(ed.error)document.getElementById("educationList").textContent="கல்வி விவரங்களைப் படிக்க முடியவில்லை: "+ed.error.message;
- else document.getElementById("educationList").innerHTML=ed.data.length?ed.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.qualification)+'</strong><div>'+esc(x.institution_name)+'</div><div>'+esc(x.field_of_study||"")+' · '+esc(x.grade||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><div class="actions"><button class="secondary" type="button" data-edit-edu="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-edu="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் கல்வி விவரங்கள் சேர்க்கப்படவில்லை.";
+ else document.getElementById("educationList").innerHTML=ed.data.length?ed.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.qualification)+'</strong><div>'+esc(x.institution_name)+'</div><div>'+esc(x.field_of_study||"")+' · '+esc(x.grade||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><div class="actions"><button class="secondary" type="button" data-edit-edu="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-edu="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் Education Details சேர்க்கப்படவில்லை.";
  if(ex.error)document.getElementById("experienceList").textContent="பணி அனுபவத்தைப் படிக்க முடியவில்லை: "+ex.error.message;
  else document.getElementById("experienceList").innerHTML=ex.data.length?ex.data.map(x=>'<article class="panel" style="margin:10px 0;padding:14px"><strong>'+esc(x.job_title)+'</strong><div>'+esc(x.company_name)+' · '+esc(x.city||"")+'</div><div>'+esc(x.employment_type||"")+'</div><small>'+esc(x.start_date||"")+' – '+(x.is_current?"தற்போது":esc(x.end_date||""))+'</small><p>'+esc(x.description||"")+'</p><div class="actions"><button class="secondary" type="button" data-edit-exp="'+esc(x.id)+'">திருத்து</button><button class="secondary" type="button" data-delete-exp="'+esc(x.id)+'">நீக்கு</button></div></article>').join(""):"இன்னும் Work Experience சேர்க்கப்படவில்லை.";
  if(certs.error)document.getElementById("certificationList").textContent="சான்றிதழ்களைப் படிக்க முடியவில்லை: "+certs.error.message;
@@ -137,13 +137,13 @@ async function loadRecords(){
 }
 document.getElementById("educationForm").addEventListener("submit",async e=>{
  e.preventDefault();const id=val("educationId"),payload={user_id:currentUserId,institution_name:val("eduInstitution"),qualification:val("eduQualification"),field_of_study:val("eduField")||null,grade:val("eduGrade")||null,start_date:val("eduStart")||null,end_date:document.getElementById("eduCurrent").checked?null:(val("eduEnd")||null),is_current:document.getElementById("eduCurrent").checked,description:val("eduDescription")||null};
- if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("கல்வி முடித்த தேதி, தொடங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("கல்வி End Date, Start Dateக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
  const q=id?client.from("candidate_education").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_education").insert(payload);
  const {error}=await q;if(error){say("கல்வியைச் Unable to save: "+error.message,false);return;}resetRecordForm("edu");await loadRecords();say("கல்வி விவரம் சேமிக்கப்பட்டது.",true);
 });
 document.getElementById("experienceForm").addEventListener("submit",async e=>{
  e.preventDefault();const id=val("experienceId"),payload={user_id:currentUserId,company_name:val("expCompany"),job_title:val("expTitle"),employment_type:val("expType")||null,city:val("expCity")||null,start_date:val("expStart")||null,end_date:document.getElementById("expCurrent").checked?null:(val("expEnd")||null),is_current:document.getElementById("expCurrent").checked,description:val("expDescription")||null};
- if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("வேலை முடித்த தேதி, தொடங்கிய தேதிக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
+ if(payload.start_date&&payload.end_date&&payload.end_date<payload.start_date){say("வேலை End Date, Start Dateக்கு முன்பாக இருக்கக்கூடாது.",false);return;}
  const q=id?client.from("candidate_experience").update(payload).eq("id",id).eq("user_id",currentUserId):client.from("candidate_experience").insert(payload);
  const {error}=await q;if(error){say("பணி அனுபவத்தைச் Unable to save: "+error.message,false);return;}resetRecordForm("exp");await loadRecords();say("Work Experience சேமிக்கப்பட்டது.",true);
 });
