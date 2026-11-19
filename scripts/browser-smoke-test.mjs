@@ -476,14 +476,14 @@ await check("Employer job draft validates salary range, saves and submits for ad
 
 await check("Notifications mark-read, mark-all and interview responses call each RPC once", async () => {
   const p = await createMockSignedInPage();
-  let isRead = false, markAllCalls = 0, interviewResponses = 0;
+  let isRead = false, markAllCalls = 0, interviewResponses = 0, interviewAccepted = false;
   await p.route("**/rest/v1/tc_notifications**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ id: "notification-smoke", notification_type: "application_status", title: "Application update", body: "Your application is under review", related_application_id: "application-smoke", related_interview_id: null, is_read: isRead, created_at: "2026-11-18T10:00:00Z" }])
   }));
   await p.route("**/rest/v1/tc_interview_invitations**", route => route.fulfill({
     status: 200, contentType: "application/json",
-    body: JSON.stringify([{ id: "interview-smoke", application_id: "application-smoke", scheduled_at: "2030-01-01T10:00:00Z", interview_mode: "online", location_or_link: "https://example.test/meeting", letter_text: "Mock interview invitation", status: "pending", jobs: { job_id: "job-smoke", jobs: { job_title: "Accountant" } }, companies: { company_name: "Smoke Test Ltd" } }])
+    body: JSON.stringify([{ id: "interview-smoke", application_id: "application-smoke", scheduled_at: "2030-01-01T10:00:00Z", interview_mode: "online", location_or_link: "https://example.test/meeting", letter_text: "Mock interview invitation", status: interviewAccepted ? "accepted" : "pending", jobs: { job_id: "job-smoke", jobs: { job_title: "Accountant" } }, companies: { company_name: "Smoke Test Ltd" } }])
   }));
   await p.route("**/rest/v1/rpc/tc_mark_notification_read", route => {
     isRead = true;
@@ -496,6 +496,7 @@ await check("Notifications mark-read, mark-all and interview responses call each
   });
   await p.route("**/rest/v1/rpc/tc_respond_interview_invitation", route => {
     interviewResponses++;
+    interviewAccepted = true;
     return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
   });
   try {
