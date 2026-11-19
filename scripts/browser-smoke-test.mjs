@@ -355,6 +355,7 @@ await check("Multi-word job search matches every entered keyword", async () => {
 });
 
 await check("Education and workplace filters narrow jobs correctly", async () => {
+  await page.addInitScript(() => localStorage.setItem("tc_language_preference_v1", "en"));
   await page.route("**/rest/v1/jobs**", route => route.fulfill({
     status: 200,
     contentType: "application/json",
@@ -372,6 +373,7 @@ await check("Education and workplace filters narrow jobs correctly", async () =>
   }));
   try {
     await open("jobs.html");
+    await page.waitForFunction(() => window.TC_TRANSLATE?.language === "en");
     await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 வேலைகள்"));
     await page.locator("#education").selectOption("ITI");
     if (!(await page.locator("#count").innerText()).includes("1 வேலைகள்")) throw new Error("ITI qualification filter did not match");
