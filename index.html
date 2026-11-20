@@ -136,6 +136,22 @@ button{cursor:pointer}
 @media(max-width:800px){.qualification-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.qualification-grid{gap:10px}.qualification-card>span{padding:11px}.qualification-card strong{font-size:14px}}
 
+
+.home-government-feed{padding-top:24px;padding-bottom:10px}
+.home-jobs-board .job-grid{display:block;min-width:0}
+.home-job-table-wrap{width:100%;overflow-x:auto;border:1px solid #dfe7f2;border-radius:14px;background:#fff}
+.home-job-table{width:100%;min-width:790px;border-collapse:collapse;font-size:12px}
+.home-job-table th{padding:13px 12px;text-align:left;background:#10264a;color:#fff;white-space:nowrap}
+.home-job-table td{padding:12px;border-bottom:1px solid #e8edf4;vertical-align:top}
+.home-job-table tbody tr:hover{background:#f5f9ff}
+.home-job-table a{color:#216de0;font-weight:800}
+#tcGovernmentFeed .tc-gov-grid{display:block;overflow-x:auto}
+#tcGovernmentFeed table{width:100%;min-width:690px;border-collapse:collapse;font-size:12px}
+#tcGovernmentFeed th{padding:12px;text-align:left;background:#10264a;color:#fff;white-space:nowrap}
+#tcGovernmentFeed td{padding:11px;border-bottom:1px solid #e8edf4;vertical-align:top}
+#tcGovernmentFeed .tc-gov-link{padding:0;background:transparent;color:#216de0}
+@media(max-width:650px){.home-government-feed{padding-left:12px;padding-right:12px}}
+
 </style>
 </head>
 <body>
@@ -168,6 +184,14 @@ button{cursor:pointer}
  <div class="trust-item"><span class="trust-icon">🎓</span><div><strong>All qualifications</strong><small>From freshers to experienced</small></div></div>
  <div class="trust-item"><span class="trust-icon">📱</span><div><strong>Mobile friendly</strong><small>Search easily on any device</small></div></div>
 </div>
+
+<section class="container home-government-feed" aria-label="Latest government recruitment and exam notices">
+ <div id="tcGovernmentFeed" data-scope="all"></div>
+</section>
+<section class="job-section" id="jobs" data-home-section="local_latest_jobs">
+ <div class="container"><div class="section-head"><div><div class="section-kicker">RECENT OPPORTUNITIES</div><h2>Latest Jobs</h2><p id="jobInfo">Newly published opportunities will appear here.</p></div><a class="text-link" href="jobs.html">View all jobs →</a></div><div class="job-grid" id="jobList"><div class="empty-state" id="tcLatestJobs">Loading latest jobs...</div></div></div>
+</section>
+
 
 <main class="container" id="categories" data-home-section="job_categories">
  <div class="section-head"><div><div class="section-kicker">EXPLORE CAREERS</div><h2>Find jobs by career field</h2><p>Choose your preferred career field and explore relevant job opportunities.</p></div><a class="text-link" href="jobs.html">Browse all jobs →</a></div>
@@ -218,9 +242,7 @@ button{cursor:pointer}
 <section class="container country-job-section" id="overseas-jobs" data-home-section="overseas_jobs">
  <div class="section-head"><div><div class="section-kicker">CAREERS WITHOUT BORDERS</div><h2>Overseas Job Opportunities</h2><p>Explore international roles and opportunities beyond your home country.</p></div><a class="text-link" href="jobs.html?job_kind=foreign">Explore overseas jobs →</a></div><div class="job-grid" id="overseasJobList"><div class="empty-state">Loading overseas opportunities...</div></div>
 </section>
-<section class="job-section" id="jobs" data-home-section="local_latest_jobs">
- <div class="container"><div class="section-head"><div><div class="section-kicker">RECENT OPPORTUNITIES</div><h2>Latest Jobs</h2><p id="jobInfo">Newly published opportunities will appear here.</p></div><a class="text-link" href="jobs.html">View all jobs →</a></div><div class="job-grid" id="jobList"><div class="empty-state" id="tcLatestJobs">Loading latest jobs...</div></div></div>
-</section>
+
 
 <section class="employer-banner" id="employer" data-home-section="employer_cta">
  <div class="employer-inner"><div><div class="section-kicker" style="color:#77e6f3">FOR EMPLOYERS</div><h2>Build your team with the right talent.</h2><p>Post your company's vacancies and reach qualified candidates.</p></div><a class="btn" href="login.html">Post a Job →</a></div>
@@ -265,7 +287,7 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
   const order=defaults;
   const footer=document.querySelector("footer");
   order.forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el&&footer)document.body.insertBefore(el,footer)});
-  Object.keys(sections).forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el&&!country&&(key==="country_government_jobs"||key==="country_private_jobs"))el.hidden=true});
+  Object.keys(sections).forEach(key=>{const el=document.querySelector('[data-home-section="'+key+'"]');if(el&&(key==="country_government_jobs"||key==="country_private_jobs"))el.hidden=false});
  }
  async function detectCountry(db){
   try{
@@ -282,15 +304,18 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
   const text=String(value??"").trim();
   return Array.from(text).some(ch=>/\p{L}/u.test(ch)&&!/\p{Script=Latin}/u.test(ch))?"":text;
  }
- function jobCard(j){
-  const id=pick(j,["id","job_id"]),title=englishText(pick(j,["job_title","title"]))||"Job title not available in English",company=pick(j,["employer_name","company_name"]),loc=englishText(pick(j,["location","job_location","work_location"])),jobCountry=englishText(pick(j,["country_name"])),type=pick(j,["employment_type","job_type"]),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"]),scope=pick(j,["government_scope"]);
-  const salary=min||max?((currency?currency+" ":"")+(min||"")+(min&&max?" – ":"")+(max||"")):"Salary not specified";
-  const scopeLabel=scope==="central"?"Central Government":scope==="tamil-nadu"?"Tamil Nadu Government":scope==="national"?"National Government":"";
-  return '<article class="job-card"><span class="job-label">'+esc(scopeLabel||jobCountry||"JOB")+'</span><h3>'+esc(title)+'</h3><p class="job-company">'+esc(company)+'</p><div class="job-meta"><span>📍 '+esc(loc||"Location not available in English")+'</span>'+(type?'<span>'+esc(type)+'</span>':"")+'</div><div class="job-bottom"><b>'+esc(salary)+'</b><a class="apply-link" href="job-details.html?id='+encodeURIComponent(id)+'">View details →</a></div></article>';
+ function jobRow(j){
+  const id=pick(j,["id","job_id"]),title=englishText(pick(j,["job_title","title"]))||"Job title not available in English",company=pick(j,["employer_name","company_name"])||"Employer not specified",loc=englishText(pick(j,["location","job_location","work_location"]))||"Not specified",jobCountry=englishText(pick(j,["country_name"])),type=String(pick(j,["employment_type","job_type"])||pick(j,["job_kind"])||"Job").replace(/_/g," "),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹",period=String(pick(j,["salary_period"])||"monthly").replace(/_/g," "),education=pick(j,["education_level","education"])||"As per notification",deadline=pick(j,["application_deadline","deadline","last_date"])||"Not specified",scope=pick(j,["government_scope"]);
+  const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")+" / "+period):"Not specified";
+  const scopeLabel=scope==="central"?"Central Government":scope==="tamil-nadu"?"Tamil Nadu Government":scope==="national"?"National Government":jobCountry||type;
+  const summaryUrl="job-summary.html?type=job&id="+encodeURIComponent(id);
+  return '<tr><td><a href="'+summaryUrl+'">'+esc(title)+'</a><br><small>'+esc(company)+'</small></td><td>'+esc(loc)+'</td><td>'+esc(scopeLabel)+'</td><td>'+esc(salary)+'</td><td>'+esc(education)+'</td><td>'+esc(deadline)+'</td><td><a href="'+summaryUrl+'">View Summary →</a></td></tr>';
  }
  function showList(id,jobs,empty){
   const el=document.getElementById(id);
-  if(el)el.innerHTML=jobs.length?jobs.map(jobCard).join(""):'<div class="empty-state">'+esc(empty)+'</div>';
+  if(!el)return;
+  if(!jobs.length){el.innerHTML='<div class="empty-state">'+esc(empty)+'</div>';return;}
+  el.innerHTML='<div class="home-job-table-wrap"><table class="home-job-table"><thead><tr><th>Job Title / Employer</th><th>Location</th><th>Category</th><th>Salary / Period</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody>'+jobs.map(jobRow).join("")+'</tbody></table></div>';
  }
  async function load(){
   const db=window.supabase.createClient(url,key);
@@ -301,8 +326,8 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
     db.from("jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(6),
     db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign").order("published_at",{ascending:false,nullsFirst:false}).limit(6)
    ]);
-   showList("governmentJobList",[],"Government jobs are not available to display right now.");
-   showList("privateJobList",[],"Private jobs are not available to display right now.");
+   showList("governmentJobList",(data||[]).filter(j=>String(j.job_kind||"").toLowerCase()==="government"),"No published government job postings are available right now. See the verified government notices above.");
+   showList("privateJobList",(data||[]).filter(j=>String(j.job_kind||"").toLowerCase()==="private"),"No published private job postings are available right now.");
    const overseasJobs=foreignError?[]:(foreignData||[]);
    showList("overseasJobList",overseasJobs,"New overseas jobs will appear here when published.");
    const overseasSection=document.getElementById("overseas-jobs");
@@ -368,6 +393,7 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
  }catch(e){/* Keep the default homepage available if design settings cannot load. */}
 })();
 </script>
+<script src="government-notices-public.js"></script>
 <script src="assets/site-protection.js" defer></script>
 </body>
 </html>
