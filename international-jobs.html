@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>International Jobs | Overseas Careers – TAMILAN CAREERS</title>
+<meta name="description" content="Browse published international job opportunities by country, salary, qualification and application deadline.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#07152f">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/site-protection.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font:15px/1.6 Arial,sans-serif}header{background:#07152f;color:#fff;padding:14px 4%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:900;color:#eaf8ff;text-decoration:none;font-size:19px}nav{display:flex;gap:7px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;padding:7px 9px;background:#ffffff16;border-radius:7px;font-size:12px}
+main{max-width:1180px;margin:25px auto;padding:0 16px}.hero{padding:28px;border-radius:16px;background:linear-gradient(120deg,#07152f,#155b91);color:#fff}.hero h1{margin:0 0 8px;font-size:clamp(25px,4vw,36px)}.hero p{margin:0;color:#d9eaff;max-width:850px}.safety{margin-top:14px;padding:13px 15px;border:1px solid #f0dfb8;border-radius:10px;background:#fff9ec;color:#70531c;font-size:12px}.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin:17px 0}.filters input,.filters select{min-width:0;width:100%;padding:12px;border:1px solid #d7e1ee;border-radius:9px;background:#fff;font:inherit}.count{font-size:13px;font-weight:800;color:#34577c;margin:12px 2px}.table-wrap{width:100%;overflow-x:auto;border:1px solid #e1e8f1;border-radius:12px;background:#fff}table{width:100%;min-width:850px;border-collapse:collapse;font-size:12px}th{background:#10264a;color:white;text-align:left;padding:12px 10px;white-space:nowrap}td{padding:11px 10px;border-bottom:1px solid #edf1f6;vertical-align:top}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f7faff}.view{display:inline-block;padding:7px 10px;border-radius:7px;background:#eaf3fc;color:#17558d;font-weight:800;white-space:nowrap;text-decoration:none}.empty{padding:22px;margin-top:12px;border:1px dashed #d5dfec;border-radius:11px;background:#fff;color:#5d6d82;text-align:center;font-size:13px}.muted{font-size:11px;color:#718098}footer{margin-top:35px;background:#061229;color:#c9d7ec;padding:22px;text-align:center;font-size:12px}
+@media(max-width:650px){header{justify-content:center}nav{justify-content:flex-start;flex-wrap:nowrap;max-width:100%;overflow-x:auto}.filters{grid-template-columns:1fr}.hero{padding:22px}.hero h1{font-size:25px}}
+</style></head><body>
+<header><a class="brand" href="index.html">WWW.TAMILANCAREERS.IN</a><nav aria-label="Main navigation"><a href="career-updates.html#all-government">Latest Government Jobs</a><a href="indian-government-jobs.html">Central Government Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Government Jobs</a><a href="state-government-jobs.html">All State Government Jobs</a><a href="jobs.html?job_kind=private">Private Jobs</a><a href="international-jobs.html">International Jobs</a><a href="career-updates.html#results">Exam Results</a><a href="career-updates.html#admit-cards">Hall Ticket</a><a href="career-updates.html#answer-keys">Answer Key</a></nav></header>
+<main><section class="hero"><h1>International Jobs</h1><p>Explore published overseas job opportunities by country. Review the employer, salary, eligibility and official application information before applying.</p></section>
+<div class="safety"><b>Recruitment safety:</b> TAMILAN CAREERS displays published listings only. Verify the employer, visa terms and official application channel independently. Never pay an advance fee to an unverified agent or share sensitive documents with unknown contacts.</div>
+<section class="filters" aria-label="Search international jobs"><input id="search" type="search" placeholder="Search job title, employer or location" aria-label="Search jobs"><select id="country" aria-label="Filter by country"><option value="">All Countries</option><option>United Arab Emirates</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option><option>Oman</option><option>Singapore</option><option>Malaysia</option><option>Canada</option><option>Australia</option><option>United Kingdom</option><option>Germany</option><option>France</option><option>Japan</option><option>Other</option></select><select id="sort" aria-label="Sort jobs"><option value="newest">Newest First</option><option value="salary">Salary: High to Low</option><option value="deadline">Closing Date</option></select></section>
+<div id="count" class="count" aria-live="polite">Loading international jobs…</div><div id="results" class="table-wrap"><div class="empty">Loading published international job records…</div></div>
+<p class="muted">Listings appear here only after they are published through employer and Admin review. No sample or unverified vacancy is displayed.</p></main>
+<footer>© 2026 TAMILAN CAREERS · WWW.TAMILANCAREERS.IN</footer>
+<script>
+(function(){
+"use strict";
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pick=(o,keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&v!=="")return v}return ""};
+const english=v=>{const s=String(v??"").trim();return Array.from(s).some(c=>/\p{L}/u.test(c)&&!/\p{Script=Latin}/u.test(c))?"":s};
+let jobs=[];
+function date(v){if(!v)return "Not specified";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}
+function render(){
+ const q=$("search").value.trim().toLowerCase(),country=$("country").value.toLowerCase();
+ let rows=jobs.filter(j=>{
+  const title=english(pick(j,["job_title","title"])),company=english(pick(j,["company_name","employer_name"])),loc=english(pick(j,["location","job_location","work_location"])),cn=english(pick(j,["country_name","country"]));
+  const hay=[title,company,loc,cn].join(" ").toLowerCase();
+  return (!q||q.split(/\s+/).every(w=>hay.includes(w)))&&(!country||cn.toLowerCase()===country);
+ });
+ if($("sort").value==="salary")rows.sort((a,b)=>Number(pick(b,["salary_max","salary_min"])||0)-Number(pick(a,["salary_max","salary_min"])||0));
+ else if($("sort").value==="deadline")rows.sort((a,b)=>new Date(pick(a,["application_deadline","deadline"])||"2999-12-31")-new Date(pick(b,["application_deadline","deadline"])||"2999-12-31"));
+ else rows.sort((a,b)=>new Date(pick(b,["published_at","created_at"])||0)-new Date(pick(a,["published_at","created_at"])||0));
+ $("count").textContent=rows.length+(rows.length===1?" verified international job":" verified international jobs");
+ if(!rows.length){$("results").innerHTML='<div class="empty">No verified international jobs are available right now. Please check again later.</div>';return}
+ $("results").innerHTML='<table><thead><tr><th>Job Title / Employer</th><th>Country</th><th>Location</th><th>Salary</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody>'+rows.map(j=>{
+  const id=pick(j,["id","job_id"]),title=english(pick(j,["job_title","title"]))||"Job title not available in English"),company=english(pick(j,["company_name","employer_name"]))||"Employer not specified",country=english(pick(j,["country_name","country"]))||"Not specified",loc=english(pick(j,["location","job_location","work_location"]))||"Not specified",currency=pick(j,["salary_currency"])||"",lo=pick(j,["salary_min"]),hi=pick(j,["salary_max"]),period=pick(j,["salary_period"])||"monthly",salary=lo||hi?currency+" "+(lo||"")+(lo&&hi?" – ":"")+(hi||"")+" / "+period:"Not specified",edu=english(pick(j,["education_level","education"]))||"As specified by employer",deadline=pick(j,["application_deadline","deadline","last_date"]);
+  return '<tr><td><b>'+esc(title)+'</b><br><span class="muted">'+esc(company)+'</span></td><td>'+esc(country)+'</td><td>'+esc(loc)+'</td><td>'+esc(salary)+'</td><td>'+esc(edu)+'</td><td>'+esc(date(deadline))+'</td><td><a class="view" href="job-summary.html?type=job&id='+encodeURIComponent(id)+'">View Summary →</a></td></tr>';
+ }).join("")+'</tbody></table>';
+}
+async function init(){
+ try{
+  const {data,error}=await db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign");
+  if(error)throw error;
+  jobs=(data||[]).filter(j=>!j.application_deadline||new Date(j.application_deadline)>=new Date(new Date().toDateString()));
+  render();
+ }catch(e){$("count").textContent="International jobs could not be loaded";$("results").innerHTML='<div class="empty">The job service is temporarily unavailable. Please try again later.</div>'}
+}
+["search","country","sort"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",render));
+init();
+})();
+</script><script src="assets/site-protection.js" defer></script></body></html>
