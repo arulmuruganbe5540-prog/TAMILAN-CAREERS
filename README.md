@@ -2,7 +2,7 @@
 
 > **Current project status:** [PROJECT-STATUS.md](PROJECT-STATUS.md) is the authoritative handover for what is confirmed in GitHub, what is confirmed in Supabase, and what still requires setup/testing. Do not treat committed code as a live Supabase feature.
 
-தமிழ்நாடு மற்றும் இந்தியா முழுவதும் வேலை தேடுவோரையும் வேலைவாய்ப்பு வழங்கும் நிறுவனங்களையும் இணைக்கும் தமிழ்-முன்னுரிமை வேலைவாய்ப்பு தளம்.
+An English-language employment platform connecting job seekers and verified employers across India and international markets.
 
 ## Live website
 - Homepage: https://tamilancareers.in/
@@ -33,7 +33,7 @@
 - Launch readiness checklist: `LAUNCH-READINESS-CHECKLIST.md`.
 - Central Government Jobs: https://tamilancareers.in/indian-government-jobs.html
 - All 28 State Government Jobs (official State PSC directory + verified notification tracker): https://tamilancareers.in/state-government-jobs.html
-- Daily 28-state PSC source-monitor report: `state-job-monitor-report.json` (first scheduled run pending; source changes require manual vacancy verification).
+- Daily 28-state PSC source-monitor report: `state-job-monitor-report.json` (scheduled source-change monitoring is running; detected changes still require manual vacancy verification).
 - Tamil Nadu Government Jobs: https://tamilancareers.in/tamil-nadu-government-jobs.html
 - Government Exam Preparation: https://tamilancareers.in/exam-preparation.html
 
@@ -51,10 +51,10 @@
 - Read-only AI job context Edge Function (source only, JWT protected, feature OFF): `supabase/functions/tamilan-ai-job-context/index.ts`; static guard: `scripts/tamilan-ai-retrieval-guard.py`
 - Free Colab prototype notebook: `notebooks/TAMILAN_AI_Free_Model_Test.ipynb` (manual run only; requires a free GPU session if available; not a production host).
 - Resume-based job search: reads supported resume text locally in the browser and ranks published internal jobs using ordinary keyword, skills and location rules. No AI service is used.
-- Tamil / English responsive public homepage, job search and individual job details pages.
+- English-only responsive public homepage, job search and individual job details pages. The public interface does not auto-translate or switch languages based on country.
 - Supabase email registration, login, password reset flow and account dashboard.
 - Job seeker profile editor connected to `profiles`, `job_seeker_profiles`, `candidate_skills`, `candidate_languages`, `candidate_preferences`, `candidate_education` and `candidate_experience`; supports multiple education, work-history and certification records with add/edit/delete controls (requires matching RLS policies).
-- Saved jobs page with browser-local save/remove controls (not account-synced).
+- Saved jobs page with authenticated Job Seeker account sync and guest local-save migration.
 - Job application form frontend with Job Seeker role check and private application submission.
 - Applicant application-tracking page linked from the Job Seeker dashboard; candidates can request withdrawal of their own active applications through a server-side permission-checked RPC.
 - Government job information portals for India and Tamil Nadu.
