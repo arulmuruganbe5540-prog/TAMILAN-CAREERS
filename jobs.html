@@ -81,61 +81,41 @@ function render(){
  $("count").textContent=list.length+(list.length===1?" job found":" jobs found");
  if(!allJobs.length){$("results").innerHTML='<div class="empty">No verified job vacancies have been published yet. New opportunities will appear here after employer and Admin review.</div>';return;}
  if(!list.length){$("results").innerHTML='<div class="empty">No jobs match your search right now. Try a different keyword or location.</div>';return;}
- $("results").innerHTML=list.map(j=>{
+ $("results").innerHTML='<div class="table-wrap" style="width:100%;overflow-x:auto;border:1px solid #e2e8f1;border-radius:12px;background:#fff"><table style="width:100%;min-width:760px;border-collapse:collapse;font-size:12px"><thead><tr style="background:#10264a;color:#fff"><th style="padding:12px;text-align:left">Job Title / Employer</th><th style="padding:12px;text-align:left">Location</th><th style="padding:12px;text-align:left">Job Type</th><th style="padding:12px;text-align:left">Qualification</th><th style="padding:12px;text-align:left">Last Date</th><th style="padding:12px;text-align:left">Details</th><th style="padding:12px;text-align:left">Save</th></tr></thead><tbody>'+list.map(j=>{
   const bi=j._bilingual||null;
-  const englishText=value=>{
-   const text=String(value??"").trim();
-   return Array.from(text).some(ch=>/\p{L}/u.test(ch)&&! /\p{Script=Latin}/u.test(ch))?"":text;
-  };
+  const englishText=value=>{const text=String(value??"").trim();return Array.from(text).some(ch=>/\\p{L}/u.test(ch)&&!/\\p{Script=Latin}/u.test(ch))?"":text};
   const title=englishText(bi?.title_en)||englishText(pick(j,["job_title","title"]))||"Job title not available in English";
-  const desc=englishText(bi?.description_en)||englishText(pick(j,["description","job_description"]))||"The employer has not provided an English description.";
-  const loc=englishText(bi?.location_en)||englishText(pick(j,["location","job_location","work_location"]));
-  const rawType=pick(j,["employment_type","job_type"]);
-  const type=String(rawType).replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-  const workplace=pick(j,["workplace_type"]);
-  const min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹",salaryPeriod=pick(j,["salary_period"])||"monthly";
-  const salarySuffix=salaryPeriod==="daily"?" / day":salaryPeriod==="hourly"?" / hour":salaryPeriod==="yearly"?" / year":" / month";
-  const salary=min||max?(currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")+salarySuffix):"Salary not specified";
-  const deadline=pick(j,["application_deadline","deadline","last_date"]);
-  const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["employer_name","company_name"]);
+  const loc=englishText(bi?.location_en)||englishText(pick(j,["location","job_location","work_location"]))||"Not specified";
+  const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["employer_name","company_name"])||"Employer not specified";
+  const type=String(pick(j,["employment_type","job_type"])||pick(j,["job_kind"])||"Job").replace(/_/g," ");
+  const education=pick(j,["education_level","education"])||"As per notification";
+  const deadline=pick(j,["application_deadline","deadline","last_date"])||"Not specified";
   const id=pick(j,["id","job_id"]);
-  const skillMatch=getSkillMatch(j);
-  const skillBadge=skillMatch.score?'<span class="tag">⭐ Your skills: '+skillMatch.score+'/'+skillMatch.total+' match</span>':"";
-  const jobKind=pick(j,["job_kind"]); const kindLabel=jobKind==="government"?"Government Job":jobKind==="foreign"?"Overseas Job":jobKind==="private"?"Private Job":"";
-  const reason=englishText(bi?.match_reason_en);
-  const skills=englishText(bi?.skills_en)||englishText(pick(j,["required_skills","skills"]));
-  return '<article class="job"><h2><a style="color:inherit;text-decoration:none" href="job-details.html?id='+encodeURIComponent(id)+'">'+safe(title)+'</a></h2>'+(company?'<b>'+safe(company)+'</b>':'')+'<div class="meta">'+(loc?'<span class="tag">📍 '+safe(loc)+'</span>':'')+(type?'<span class="tag">'+safe(type)+'</span>':'')+(workplace?'<span class="tag">'+safe(workplace)+'</span>':'')+skillBadge+'</div><p>'+safe(String(desc).slice(0,300))+(String(desc).length>300?"…":"")+'</p>'+(skills?'<p><b>Skills:</b> '+safe(skills)+'</p>':'')+(reason?'<div class="match-reason">'+safe(reason)+'</div>':'')+'<div class="jobfoot"><div><b>'+safe(salary)+'</b>'+(deadline?'<div class="muted">Application deadline: '+safe(deadline)+'</div>':'')+'</div><a class="apply" href="'+(currentUserRole==="job_seeker"?"apply.html?job="+encodeURIComponent(id):"login.html?next="+encodeURIComponent("apply.html?job="+id))+'">'+(currentUserRole==="job_seeker"?"Apply now":"Log in to apply")+'</a></div></article>';
- }).join("");
+  const kind=String(pick(j,["job_kind"])||"job");
+  const savedLink="job-summary.html?type=job&id="+encodeURIComponent(id);
+  return '<tr class="job" style="border-bottom:1px solid #edf1f6"><td style="padding:11px"><b>'+safe(title)+'</b><br><span style="color:#718098">'+safe(company)+'</span></td><td style="padding:11px">'+safe(loc)+'</td><td style="padding:11px">'+safe(type)+'</td><td style="padding:11px">'+safe(education)+'</td><td style="padding:11px">'+safe(deadline)+'</td><td style="padding:11px"><a class="apply" style="display:inline-block;padding:7px 9px;background:#eaf3fc;color:#17558d;border-radius:7px;font-weight:800" href="'+savedLink+'">View Summary →</a></td><td class="save-cell" style="padding:11px"></td></tr>';
+ }).join("")+'</tbody></table></div>';
  list.forEach((job,index)=>{
   const id=pick(job,["id","job_id"]);
-  const card=$("results").querySelectorAll(".job")[index];
-  if(!card||id===undefined||id===null||id==="")return;
-  const button=document.createElement("button");
-  button.type="button";button.className="save";
+  const row=$("results").querySelectorAll("tr.job")[index];
+  if(!row||id===undefined||id===null||id==="")return;
+  const button=document.createElement("button");button.type="button";button.className="save";button.style.cssText="border:0;border-radius:7px;padding:7px 9px;background:#eef5ff;color:#1764b4;font-weight:800;font-size:11px";
   const exists=()=>profileSyncReady?accountSavedJobIds.has(String(id)):getSavedJobs().some(item=>String(item.id)===String(id));
-  button.textContent=exists()?"✓ Saved":"☆ Save";
-  button.disabled=exists();
+  button.textContent=exists()?"✓ Saved":"☆ Save";button.disabled=exists();
   button.addEventListener("click",async()=>{
    if(exists())return;
    if(profileSyncReady){
     button.disabled=true;button.textContent="Saving...";
     const {error}=await client.from("candidate_saved_jobs").insert({user_id:currentUserId,job_id:id});
-    if(error&&error.code!=="23505"){
-     button.disabled=false;button.textContent="☆ Save";
-     $("skillNotice").textContent="Unable to sync this saved job. "+error.message;
-     return;
-    }
+    if(error&&error.code!=="23505"){button.disabled=false;button.textContent="☆ Save";$("skillNotice").textContent="Unable to sync this saved job. "+error.message;return;}
     accountSavedJobIds.add(String(id));
    }else{
     const items=getSavedJobs();
-    if(!items.some(item=>String(item.id)===String(id))){
-     items.push({id,title:pick(job,["job_title","title"])||"Job Details",company:companyNames[String(pick(job,["company_id"]))]||pick(job,["company_name"]),location:pick(job,["location","job_location","work_location"]),type:pick(job,["employment_type","job_type"]),savedAt:new Date().toISOString()});
-     localStorage.setItem(SAVED_KEY,JSON.stringify(items));
-    }
+    if(!items.some(item=>String(item.id)===String(id))){items.push({id,title:pick(job,["job_title","title"])||"Job Details",company:companyNames[String(pick(job,["company_id"]))]||pick(job,["company_name"]),location:pick(job,["location","job_location","work_location"]),type:pick(job,["employment_type","job_type"]),savedAt:new Date().toISOString()});localStorage.setItem(SAVED_KEY,JSON.stringify(items));}
    }
    button.textContent="✓ Saved";button.disabled=true;
   });
-  card.querySelector(".jobfoot").appendChild(button);
+  row.querySelector(".save-cell").appendChild(button);
  });
 }
 async function load(){
