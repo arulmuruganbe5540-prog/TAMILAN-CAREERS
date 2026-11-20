@@ -176,19 +176,7 @@ button{cursor:pointer}
  </div>
 </section>
 
-<div class="search-panel" id="job-search">
- <div class="search-card">
-  <div class="search-title"><strong>🔎 Search your next opportunity</strong><span>Start with a role, skill or location</span></div>
-  <div class="search-fields">
-   <div class="field"><input id="keyword" type="search" placeholder="Job title or skill" aria-label="Job title or skill"></div>
-   <div class="field"><input id="location" type="text" placeholder="City or location" aria-label="City or location"></div>
-   <div class="field"><select id="category" aria-label="Career field"><option value="">All career fields</option><option>IT & Software</option><option>Sales & Marketing</option><option>Accounting</option><option>Manufacturing</option><option>Education</option><option>Healthcare</option><option>Logistics</option></select></div>
-   <button class="search-submit" onclick="searchJobs()">Search Jobs →</button>
-  </div>
- </div>
-</div>
-
-
+<section class="container home-simple-search-section" id="job-search"><div class="search-card"><div class="search-title"><strong>Search Jobs</strong><span>Search by job title or qualification</span></div><div class="search-fields"><div class="field"><input id="keyword" type="search" placeholder="Job title or qualification" aria-label="Job title or qualification"></div><button class="search-submit" onclick="searchJobs()">Search Jobs →</button></div></div></section>
 
 <section class="container home-government-feed" aria-label="Latest government recruitment and exam notices">
  <div id="tcGovernmentFeed" data-scope="all"></div>
@@ -250,16 +238,11 @@ button{cursor:pointer}
 <script>
 function searchJobs(){
  const keyword=document.getElementById("keyword").value.trim();
- const location=document.getElementById("location").value.trim();
- const category=document.getElementById("category").value;
  const params=new URLSearchParams();
  if(keyword)params.set("q",keyword);
- if(location)params.set("location",location);
- if(category)params.set("category",category);
  window.location.href="jobs.html"+(params.toString()?"?"+params.toString():"");
 }
-document.getElementById("keyword").addEventListener("keydown",e=>{if(e.key==="Enter")searchJobs()});
-document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="Enter")searchJobs()});
+document.getElementById("keyword")?.addEventListener("keydown",e=>{if(e.key==="Enter")searchJobs()});
 
 (function(){
  const url="https://qkmljuuusfjowexvybvy.supabase.co";
