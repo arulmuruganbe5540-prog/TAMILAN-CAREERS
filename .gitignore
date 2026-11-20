@@ -1,3 +1,37 @@
+# Local environment files and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.secrets/
+secrets/
+credentials/
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*service_role*
+*service-role*
+*secret-key*
+*private-key*
+
+# Local development and deployment artifacts
+.wrangler/
+.supabase/
+node_modules/
+dist/
+build/
+coverage/
+*.log
+*.bak
+*.backup
+*.dump
+*.sql.gz
+
 # Private, unverified government notice candidates — local workflow output only
 government-job-review-queue.json
 government-source-discovery-candidates.json
