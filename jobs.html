@@ -83,7 +83,7 @@ function render(){
  if(!list.length){$("results").innerHTML='<div class="empty">No jobs match your search right now. Try a different keyword or location.</div>';return;}
  $("results").innerHTML='<div class="table-wrap" style="width:100%;overflow-x:auto;border:1px solid #e2e8f1;border-radius:12px;background:#fff"><table style="width:100%;min-width:760px;border-collapse:collapse;font-size:12px"><thead><tr style="background:#10264a;color:#fff"><th style="padding:12px;text-align:left">Job Title / Employer</th><th style="padding:12px;text-align:left">Location</th><th style="padding:12px;text-align:left">Job Type</th><th style="padding:12px;text-align:left">Qualification</th><th style="padding:12px;text-align:left">Last Date</th><th style="padding:12px;text-align:left">Details</th><th style="padding:12px;text-align:left">Save</th></tr></thead><tbody>'+list.map(j=>{
   const bi=j._bilingual||null;
-  const englishText=value=>{const text=String(value??"").trim();return Array.from(text).some(ch=>/\\p{L}/u.test(ch)&&!/\\p{Script=Latin}/u.test(ch))?"":text};
+  const englishText=value=>{const text=String(value??"").trim();return Array.from(text).some(ch=>/\p{L}/u.test(ch)&&!/\p{Script=Latin}/u.test(ch))?"":text};
   const title=englishText(bi?.title_en)||englishText(pick(j,["job_title","title"]))||"Job title not available in English";
   const loc=englishText(bi?.location_en)||englishText(pick(j,["location","job_location","work_location"]))||"Not specified";
   const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["employer_name","company_name"])||"Employer not specified";
