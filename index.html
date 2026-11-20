@@ -137,6 +137,10 @@ button{cursor:pointer}
 @media(max-width:480px){.qualification-grid{gap:10px}.qualification-card>span{padding:11px}.qualification-card strong{font-size:14px}}
 
 
+.home-introduction{background:linear-gradient(180deg,#fff,#f4f8ff);border-bottom:1px solid #e5edf7}
+.home-introduction-inner{max-width:1196px;margin:auto;padding:38px 22px 26px}
+.home-introduction h1{font-size:clamp(26px,4vw,38px);line-height:1.2;letter-spacing:-.7px;margin:7px 0 13px;color:#10284c}
+.home-introduction p{max-width:1120px;font-size:14px;line-height:1.9;color:#52637b}
 .home-government-feed{padding-top:24px;padding-bottom:10px}
 .home-jobs-board .job-grid,.country-job-section .job-grid{display:block;min-width:0}
 .home-job-table-wrap{width:100%;overflow-x:auto;border:1px solid #dfe7f2;border-radius:14px;background:#fff}
@@ -150,7 +154,7 @@ button{cursor:pointer}
 #tcGovernmentFeed th{padding:12px;text-align:left;background:#10264a;color:#fff;white-space:nowrap}
 #tcGovernmentFeed td{padding:11px;border-bottom:1px solid #e8edf4;vertical-align:top}
 #tcGovernmentFeed .tc-gov-link{padding:0;background:transparent;color:#216de0}
-@media(max-width:650px){.home-government-feed{padding-left:12px;padding-right:12px}}
+@media(max-width:650px){.home-government-feed{padding-left:12px;padding-right:12px}.home-introduction-inner{padding:29px 16px 20px}.home-introduction p{font-size:13px;line-height:1.8}}
 
 </style>
 </head>
@@ -165,8 +169,15 @@ button{cursor:pointer}
  </div>
 </header>
 
+<section class="home-introduction" id="home" aria-labelledby="home-main-title">
+ <div class="home-introduction-inner">
+  <div class="section-kicker">YOUR CAREER INFORMATION DESTINATION</div>
+  <h1 id="home-main-title">Find Government, Private & International Jobs</h1>
+  <p>TAMILAN CAREERS brings job seekers together with the latest Government and Private recruitment notifications from Tamil Nadu, Central Government departments, other Indian States and international employers. Explore opportunities by educational qualification, job category and location. Each published opportunity can provide important information such as post names, vacancy details, educational qualifications, age limit, salary, application fee, selection process, important dates, official notification PDF and application links. We also bring together examination results, hall tickets, answer keys and career guidance to help candidates follow the recruitment process. Always review the official notification and eligibility conditions before applying.</p>
+ </div>
+</section>
 
-<div class="search-panel" id="home">
+<div class="search-panel" id="job-search">
  <div class="search-card">
   <div class="search-title"><strong>🔎 Search your next opportunity</strong><span>Start with a role, skill or location</span></div>
   <div class="search-fields">
@@ -220,6 +231,26 @@ button{cursor:pointer}
  <p class="qualification-note">Note: Job availability depends on the education requirements listed by employers. Check back here when new openings are published in categories with no current vacancies.</p>
 </section>
 
+<section class="container" id="government-categories" aria-label="Government job categories">
+ <div class="section-head"><div><div class="section-kicker">PUBLIC SECTOR OPPORTUNITIES</div><h2>Explore Government Job Categories</h2><p>Browse recruitment opportunities by government sector and location.</p></div><a class="text-link" href="career-updates.html#all-government">View all notifications →</a></div>
+ <div class="category-grid">
+  <a class="category-card" href="indian-government-jobs.html"><span class="category-icon tone-blue">🏛️</span><div><h3>Central Government Jobs</h3><p>Recruitment from central departments and national institutions</p></div></a>
+  <a class="category-card" href="tamil-nadu-government-jobs.html"><span class="category-icon tone-cyan">📍</span><div><h3>Tamil Nadu Government Jobs</h3><p>State government recruitment and public service opportunities</p></div></a>
+  <a class="category-card" href="state-government-jobs.html"><span class="category-icon tone-violet">🗺️</span><div><h3>All State Government Jobs</h3><p>Explore government vacancies across Indian States</p></div></a>
+  <a class="category-card" href="career-updates.html#all-government"><span class="category-icon tone-green">📢</span><div><h3>Latest Government Notifications</h3><p>Recruitment notices and official updates in one place</p></div></a>
+ </div>
+</section>
+
+<section class="container" id="exam-information" aria-label="Examination information">
+ <div class="section-head"><div><div class="section-kicker">EXAMINATION INFORMATION</div><h2>Results, Hall Tickets & Answer Keys</h2><p>Find important examination updates and recruitment-stage information.</p></div><a class="text-link" href="career-updates.html">All exam updates →</a></div>
+ <div class="feature-grid">
+  <a class="feature-link" href="career-updates.html#results"><span class="ficon">🏆</span><span><strong>Exam Results</strong><small>Published examination results and merit updates</small></span></a>
+  <a class="feature-link" href="career-updates.html#admit-cards"><span class="ficon">🎫</span><span><strong>Hall Ticket</strong><small>Admit cards and examination entry information</small></span></a>
+  <a class="feature-link" href="career-updates.html#answer-keys"><span class="ficon">🗝️</span><span><strong>Answer Key</strong><small>Provisional and final answer key updates</small></span></a>
+  <a class="feature-link" href="exam-preparation.html"><span class="ficon">📘</span><span><strong>Syllabus & Exam Preparation</strong><small>Preparation resources and exam guidance</small></span></a>
+ </div>
+</section>
+
 <section class="container" id="career-tools" data-home-section="career_tools" aria-label="Career tools">
  <div class="feature-band">
   <div><div class="section-kicker">TOOLS FOR YOUR NEXT STEP</div><h2>More than a job search.<br>A career companion.</h2><p>Useful tools to support your next step, from finding a job to preparing for exams.</p></div>
@@ -243,6 +274,18 @@ button{cursor:pointer}
  <div class="section-head"><div><div class="section-kicker">CAREERS WITHOUT BORDERS</div><h2>Overseas Job Opportunities</h2><p>Explore international roles and opportunities beyond your home country.</p></div><a class="text-link" href="jobs.html?job_kind=foreign">Explore overseas jobs →</a></div><div class="job-grid" id="overseasJobList"><div class="empty-state">Loading overseas opportunities...</div></div>
 </section>
 
+
+<section class="container" id="job-alerts" aria-label="Job alerts and career guidance">
+ <div class="feature-band">
+  <div><div class="section-kicker">STAY INFORMED</div><h2>Follow new job notifications and career updates.</h2><p>Visit our updates section regularly for newly published recruitment notices, examination results, hall tickets and answer keys. Check each official source before submitting an application.</p><a class="text-link" href="career-updates.html">Explore Job & Exam Updates →</a></div>
+  <div class="feature-grid">
+   <a class="feature-link" href="job-search-guide.html"><span class="ficon">🧭</span><span><strong>Job Search Guide</strong><small>Learn how to find suitable openings</small></span></a>
+   <a class="feature-link" href="government-job-application-guide.html"><span class="ficon">📝</span><span><strong>Application Guidance</strong><small>Understand the application process</small></span></a>
+   <a class="feature-link" href="exam-preparation.html"><span class="ficon">📚</span><span><strong>Exam Preparation</strong><small>Prepare for recruitment examinations</small></span></a>
+   <a class="feature-link" href="help.html"><span class="ficon">🛡️</span><span><strong>Job Safety Guidance</strong><small>Recognise suspicious offers and agents</small></span></a>
+  </div>
+ </div>
+</section>
 
 <section class="employer-banner" id="employer" data-home-section="employer_cta">
  <div class="employer-inner"><div><div class="section-kicker" style="color:#77e6f3">FOR EMPLOYERS</div><h2>Build your team with the right talent.</h2><p>Post your company's vacancies and reach qualified candidates.</p></div><a class="btn" href="login.html">Post a Job →</a></div>
@@ -281,7 +324,7 @@ document.getElementById("location").addEventListener("keydown",e=>{if(e.key==="E
  const info=document.getElementById("jobInfo");
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
- const sections={country_government_jobs:"country-government",country_private_jobs:"country-private",overseas_jobs:"overseas-jobs",local_latest_jobs:"jobs",job_categories:"categories",qualification_pathways:"qualification-pathways",career_tools:"career-tools",employer_cta:"employer"};
+ const sections={local_latest_jobs:"jobs",qualification_pathways:"qualification-pathways",job_categories:"categories",country_government_jobs:"country-government",country_private_jobs:"country-private",overseas_jobs:"overseas-jobs",career_tools:"career-tools",employer_cta:"employer"};
  const defaults=Object.keys(sections);
  function applyLayout(country){
   const order=defaults;
