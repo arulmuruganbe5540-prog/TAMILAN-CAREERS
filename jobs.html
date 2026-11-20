@@ -81,7 +81,7 @@ function render(){
  $("count").textContent=list.length+(list.length===1?" job found":" jobs found");
  if(!allJobs.length){$("results").innerHTML='<div class="empty">No verified job vacancies have been published yet. New opportunities will appear here after employer and Admin review.</div>';return;}
  if(!list.length){$("results").innerHTML='<div class="empty">No jobs match your search right now. Try a different keyword or location.</div>';return;}
- $("results").innerHTML='<div class="table-wrap" style="width:100%;overflow-x:auto;border:1px solid #e2e8f1;border-radius:12px;background:#fff"><table style="width:100%;min-width:760px;border-collapse:collapse;font-size:12px"><thead><tr style="background:#10264a;color:#fff"><th style="padding:12px;text-align:left">Job Title / Employer</th><th style="padding:12px;text-align:left">Location</th><th style="padding:12px;text-align:left">Job Type</th><th style="padding:12px;text-align:left">Qualification</th><th style="padding:12px;text-align:left">Last Date</th><th style="padding:12px;text-align:left">Details</th><th style="padding:12px;text-align:left">Save</th></tr></thead><tbody>'+list.map(j=>{
+ $("results").innerHTML='<div class="table-wrap" style="width:100%;overflow-x:auto;border:1px solid #e2e8f1;border-radius:12px;background:#fff"><table style="width:100%;min-width:760px;border-collapse:collapse;font-size:12px"><thead><tr style="background:#10264a;color:#fff"><th style="padding:12px;text-align:left">Job Title / Employer</th><th style="padding:12px;text-align:left">Location</th><th style="padding:12px;text-align:left">Job Type</th><th style="padding:12px;text-align:left">Salary / Period</th><th style="padding:12px;text-align:left">Qualification</th><th style="padding:12px;text-align:left">Last Date</th><th style="padding:12px;text-align:left">Details</th><th style="padding:12px;text-align:left">Save</th></tr></thead><tbody>'+list.map(j=>{
   const bi=j._bilingual||null;
   const englishText=value=>{const text=String(value??"").trim();return Array.from(text).some(ch=>/\p{L}/u.test(ch)&&!/\p{Script=Latin}/u.test(ch))?"":text};
   const title=englishText(bi?.title_en)||englishText(pick(j,["job_title","title"]))||"Job title not available in English";
@@ -89,11 +89,13 @@ function render(){
   const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["employer_name","company_name"])||"Employer not specified";
   const type=String(pick(j,["employment_type","job_type"])||pick(j,["job_kind"])||"Job").replace(/_/g," ");
   const education=pick(j,["education_level","education"])||"As per notification";
+  const salaryMin=pick(j,["salary_min"]),salaryMax=pick(j,["salary_max"]),salaryCurrency=pick(j,["salary_currency"])||"₹",salaryPeriod=pick(j,["salary_period"])||"monthly";
+  const salary=salaryMin||salaryMax?(salaryCurrency+" "+(salaryMin||"")+(salaryMin&&salaryMax?" – ":"")+(salaryMax||"")+" / "+String(salaryPeriod).replace(/_/g," ")):"Not specified";
   const deadline=pick(j,["application_deadline","deadline","last_date"])||"Not specified";
   const id=pick(j,["id","job_id"]);
   const kind=String(pick(j,["job_kind"])||"job");
   const savedLink="job-summary.html?type=job&id="+encodeURIComponent(id);
-  return '<tr class="job" style="border-bottom:1px solid #edf1f6"><td style="padding:11px"><b>'+safe(title)+'</b><br><span style="color:#718098">'+safe(company)+'</span></td><td style="padding:11px">'+safe(loc)+'</td><td style="padding:11px">'+safe(type)+'</td><td style="padding:11px">'+safe(education)+'</td><td style="padding:11px">'+safe(deadline)+'</td><td style="padding:11px"><a class="apply" style="display:inline-block;padding:7px 9px;background:#eaf3fc;color:#17558d;border-radius:7px;font-weight:800" href="'+savedLink+'">View Summary →</a></td><td class="save-cell" style="padding:11px"></td></tr>';
+  return '<tr class="job" style="border-bottom:1px solid #edf1f6"><td style="padding:11px"><b>'+safe(title)+'</b><br><span style="color:#718098">'+safe(company)+'</span></td><td style="padding:11px">'+safe(loc)+'</td><td style="padding:11px">'+safe(type)+'</td><td style="padding:11px">'+safe(salary)+'<br><span style="color:#718098">Salary period: '+safe(salaryPeriod)+'</span></td><td style="padding:11px">'+safe(education)+'</td><td style="padding:11px">'+safe(deadline)+'</td><td style="padding:11px"><a class="apply" style="display:inline-block;padding:7px 9px;background:#eaf3fc;color:#17558d;border-radius:7px;font-weight:800" href="'+savedLink+'">View Summary →</a></td><td class="save-cell" style="padding:11px"></td></tr>';
  }).join("")+'</tbody></table></div>';
  list.forEach((job,index)=>{
   const id=pick(job,["id","job_id"]);
