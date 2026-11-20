@@ -11,7 +11,7 @@ function applyCommonNavigation(){
  if(isAuth)return;
  document.querySelectorAll("header nav").forEach(function(nav){
   nav.setAttribute("aria-label","Main navigation");
-  nav.innerHTML='<a href="career-updates.html#all-government">Latest Government Jobs</a><a href="indian-government-jobs.html">Central Government Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Government Jobs</a><a href="state-government-jobs.html">All State Government Jobs</a><a href="jobs.html?job_kind=private">Private Jobs</a><a href="career-updates.html#results">Exam Results</a><a href="career-updates.html#admit-cards">Hall Ticket</a><a href="career-updates.html#answer-keys">Answer Key</a>';
+  nav.innerHTML='<a href="career-updates.html#all-government">Latest Government Jobs</a><a href="indian-government-jobs.html">Central Government Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Government Jobs</a><a href="state-government-jobs.html">All State Government Jobs</a><a href="jobs.html?job_kind=private">Private Jobs</a><a href="international-jobs.html">International Jobs</a><a href="career-updates.html#results">Exam Results</a><a href="career-updates.html#admit-cards">Hall Ticket</a><a href="career-updates.html#answer-keys">Answer Key</a>';
  });
 }
 function applyPremiumHeaderBrand(){
