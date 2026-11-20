@@ -4,6 +4,7 @@ if(window.__tcProfessionalFooterLoaded)return;
 window.__tcProfessionalFooterLoaded=true;
 function render(){
  if(!document.body)return;
+ if(/(?:^|\/)(?:login|register)(?:\.html)?$/i.test(window.location.pathname))return;
  if(document.querySelector("body footer"))return;
  var style=document.getElementById("tc-professional-footer-style");
  if(!style){
