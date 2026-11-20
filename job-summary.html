@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07152f">
+<title>Job Summary | TAMILAN CAREERS</title><meta name="description" content="Review verified recruitment summary and open the official full job details.">
+<link rel="stylesheet" href="assets/site-protection.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f7fc;color:#17243b;font-family:Arial,sans-serif;line-height:1.6}
+header{background:#07182f;color:white;padding:15px 4%;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:900;color:#eaf8ff}nav{display:flex;gap:7px;flex-wrap:wrap}nav a{font-size:12px;color:white;padding:7px 9px;background:#ffffff16;border-radius:7px}
+main{max-width:900px;margin:28px auto;padding:0 16px}.crumb{font-size:12px;color:#6b7b91;margin-bottom:14px}.hero{background:linear-gradient(120deg,#10264a,#17659a);color:#fff;border-radius:16px;padding:24px}.hero h1{font-size:clamp(23px,4vw,34px);margin:8px 0}.hero p{color:#dcecff;margin:4px 0}.panel{background:white;border:1px solid #e1e8f1;border-radius:14px;padding:20px;margin:16px 0}.panel h2{font-size:18px;margin:0 0 14px;color:#174777}.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fact{background:#f4f8fd;border-radius:9px;padding:12px;min-width:0}.fact small{display:block;color:#718098;font-size:11px}.fact b{display:block;font-size:14px;overflow-wrap:anywhere}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-flex;padding:11px 15px;border-radius:9px;background:#176bd1;color:white;font-weight:800;font-size:13px}.btn.secondary{background:#eaf3fc;color:#17558d}.muted{font-size:12px;color:#6b7b91}.empty{padding:18px;background:#fff8e8;border:1px solid #efdfba;border-radius:10px;color:#73551d}
+@media(max-width:520px){.facts{grid-template-columns:1fr}header{justify-content:center}nav{justify-content:center}}
+</style></head><body>
+<header><a class="brand" href="index.html">WWW.TAMILANCAREERS.IN</a><nav><a href="career-updates.html#all-government">Latest Government Jobs</a><a href="indian-government-jobs.html">Central Government Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Government Jobs</a><a href="state-government-jobs.html">All State Government Jobs</a><a href="jobs.html?job_kind=private">Private Jobs</a></nav></header>
+<main><div class="crumb"><a href="index.html">Home</a> / <a href="career-updates.html#all-government">Latest Government Jobs</a> / Job Summary</div>
+<section class="hero"><div class="muted" style="color:#a9dcff">PAGE 2 · JOB SUMMARY</div><h1 id="title">Loading job summary…</h1><p id="authority"></p></section>
+<section class="panel"><h2>Recruitment Overview</h2><div class="facts" id="facts"></div></section>
+<section class="panel"><h2>Next Step</h2><p class="muted">Read the complete eligibility rules, vacancy details, important dates and official documents before applying.</p><div class="actions"><a class="btn" id="fullDetails" href="#">View Full Details →</a><a class="btn secondary" href="javascript:history.back()">← Back to Job List</a></div></section>
+<div id="message" class="empty" hidden></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async function(){
+const params=new URLSearchParams(location.search),id=params.get("id"),type=params.get("type")||"job";
+const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pick=(o,keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&v!=="")return v}return ""};
+function fact(label,value){return '<div class="fact"><small>'+esc(label)+'</small><b>'+esc(value||"See official notification")+'</b></div>'}
+if(!id){$("title").textContent="Job not found";$("message").hidden=false;$("message").textContent="A valid job reference is required.";return}
+try{
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+let row,fullUrl;
+if(type==="notice"){
+const result=await db.from("government_notices").select("*").eq("id",id).eq("is_active",true).maybeSingle();if(result.error)throw result.error;row=result.data;
+if(row)fullUrl="government-notice-details.html?id="+encodeURIComponent(id);
+}else{
+const result=await db.from("jobs").select("*").eq("id",id).eq("status","published").maybeSingle();if(result.error)throw result.error;row=result.data;
+if(row)fullUrl="job-details.html?id="+encodeURIComponent(id);
+}
+if(!row)throw new Error("This published job or notice is no longer available.");
+const d=row.details&&typeof row.details==="object"?row.details:{};
+const title=pick(row,["title","job_title","post_name"])||"Recruitment Notice";
+const authority=pick(d,["authority","department"])||pick(row,["recruitment_authority","employer_name","company_name"])||"Government Department";
+$("title").textContent=title;$("authority").textContent=authority;
+const fields=[
+["Job Type",type==="notice"?"Verified Government Notice":pick(row,["job_kind"])||"Government Job"],
+["Location",pick(d,["state","location"])||pick(row,["location","job_location"])],
+["Vacancies",pick(row,["vacancies","vacancy_count","openings"])],
+["Qualification",pick(d,["qualification","education"])||pick(row,["education_level","qualification"])],
+["Application Start",pick(row,["application_start","application_start_date"])],
+["Last Date",pick(row,["application_end","application_deadline","deadline","last_date"])],
+["Notice Reference",pick(row,["notice_reference","notification_number"])],
+["Recruitment Authority",authority]
+];
+$("facts").innerHTML=fields.map(([k,v])=>fact(k,v)).join("");
+$("fullDetails").href=fullUrl||"#";
+document.title=title+" | Job Summary | TAMILAN CAREERS";
+}catch(e){$("title").textContent="Job summary unavailable";$("message").hidden=false;$("message").textContent=e.message||"Unable to load this published record."}
+})();
+</script><script src="assets/site-protection.js" defer></script></body></html>
