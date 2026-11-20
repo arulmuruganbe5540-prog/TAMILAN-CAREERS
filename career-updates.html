@@ -84,7 +84,7 @@ function qual(j){return pick(j,["education_level","education","qualification"])|
 function deadline(j){return pick(j,["deadline","application_deadline","last_date","closing_date"])}
 function published(j){return pick(j,["published_at","created_at","updated_at"])}
 function vacancies(j){return pick(j,["vacancies","number_of_vacancies","openings","vacancy_count"])||"See notification"}
-function details(j){const id=pick(j,["id","job_id"]);return id?"job-details.html?id="+encodeURIComponent(id):"indian-government-jobs.html"}
+function details(j){const id=pick(j,["id","job_id"]);return id?"job-summary.html?type=job&id="+encodeURIComponent(id):"indian-government-jobs.html"}
 function renderTable(target,list,compact){
 const el=document.getElementById(target);if(!list.length){el.innerHTML='<tr><td colspan="'+(compact?5:6)+'">No matching published government job records are available.</td></tr>';return}
 el.innerHTML=list.map(j=>'<tr><td><b>'+esc(org(j))+'</b></td><td>'+esc(title(j))+'</td>'+(compact?'':'<td>'+esc(vacancies(j))+'</td>')+'<td>'+esc(qual(j))+'</td><td>'+esc(fmt(deadline(j)))+'</td><td><a class="view" href="'+esc(details(j))+'">View Details →</a></td></tr>').join("");
