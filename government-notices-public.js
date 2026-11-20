@@ -99,7 +99,10 @@
       const postedJobs=(jobResult.data||[]).map(j=>{
         const authority=String(j.recruitment_authority||"").toLowerCase();
         const location=String(j.location||"").toLowerCase();
-        const isTamilNadu=authority.includes("tn")||authority.includes("tamil nadu")||location.includes("tamil nadu");
+        const scopeValue=String(j.government_scope||j.job_scope||"").toLowerCase();
+        const stateName=String(j.state_name||j.state||"").trim();
+        const isCentral=scopeValue==="central"||scopeValue==="national"||scopeValue==="india";
+        const isTamilNadu=scopeValue==="tamil-nadu"||scopeValue==="tamil_nadu"||authority.includes("tnpsc")||authority.includes("tnusrb")||authority.includes("tamil nadu")||location.includes("tamil nadu")||stateName.toLowerCase()==="tamil nadu";
         const salary=j.salary_min||j.salary_max?("₹ "+(j.salary_min||"")+(j.salary_min&&j.salary_max?" – ":"")+(j.salary_max||"")):"";
         const extra=(label)=>{const match=String(j.description||"").match(new RegExp(label+"\\s*:\\s*([^\\n]+)"));return match?match[1].trim():"";};
         const details={
