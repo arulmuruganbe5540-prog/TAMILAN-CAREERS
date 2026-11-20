@@ -2,10 +2,19 @@
 "use strict";
 if(window.__tcProfessionalFooterLoaded)return;
 window.__tcProfessionalFooterLoaded=true;
+function addSuperAdminLink(footer){
+ if(!footer||footer.querySelector("[data-tc-super-admin-link]"))return;
+ var style=document.getElementById("tc-super-admin-footer-style");
+ if(!style){style=document.createElement("style");style.id="tc-super-admin-footer-style";style.textContent=".tc-super-admin-footer-link{display:inline-flex!important;align-items:center;justify-content:center;margin:18px auto 0!important;padding:8px 13px;border:1px solid #ffffff35;border-radius:8px;color:#9fb5d2!important;font-size:11px!important;text-decoration:none!important}.tc-super-admin-footer-link:hover{color:#fff!important;border-color:#6bd8f0;background:#ffffff0b}";document.head.appendChild(style)}
+ var wrap=document.createElement("div");wrap.style.textAlign="center";wrap.style.borderTop="1px solid #ffffff18";wrap.style.marginTop="12px";wrap.style.paddingTop="8px";
+ var link=document.createElement("a");link.href="admin-login.html";link.className="tc-super-admin-footer-link";link.textContent="Super Admin Login";link.setAttribute("data-tc-super-admin-link","true");link.rel="nofollow";
+ wrap.appendChild(link);footer.appendChild(wrap);
+}
 function render(){
  if(!document.body)return;
- if(/(?:^|\/)(?:login|register)(?:\.html)?$/i.test(window.location.pathname))return;
- if(document.querySelector("body footer"))return;
+ if(/(?:^|\/)(?:login|register|admin-login|admin-control|admin-design-studio|admin-security|admin-job-post|admin-community-posts|admin-global-control)(?:\.html)?$/i.test(window.location.pathname))return;
+ var existingFooter=document.querySelector("body footer");
+ if(existingFooter){addSuperAdminLink(existingFooter);return;}
  var style=document.getElementById("tc-professional-footer-style");
  if(!style){
   style=document.createElement("style");style.id="tc-professional-footer-style";
@@ -19,7 +28,7 @@ function render(){
  '<section><h2>FOR CANDIDATES & EMPLOYERS</h2><a href="job-search-guide.html">Job Search Guide</a><a href="exam-preparation.html">Exam Preparation</a><a href="login.html">Job Seeker Login</a><a href="login.html">Employer Login</a><a href="help.html">Help Centre & FAQs</a></section>'+
  '<section><h2>ABOUT, SAFETY & POLICIES</h2><a href="about.html">About Us</a><a href="help.html">Job Safety Guidance</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a><a href="cookie-policy.html">Cookie Policy</a></section>'+
  '</div><div class="tc-footer-bottom"><span>© '+new Date().getFullYear()+' <strong>TAMILAN CAREERS</strong>. All rights reserved.</span><span>WWW.TAMILANCAREERS.IN · Discover opportunities. Build your future.</span></div></div>';
- document.body.appendChild(footer);
+ document.body.appendChild(footer);addSuperAdminLink(footer);
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",render,{once:true});else render();
 })();
