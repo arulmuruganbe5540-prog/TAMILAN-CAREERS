@@ -30,43 +30,19 @@
     notification_pdf_url:"Notice PDF", application_url:"Application Link", syllabus:"Syllabus", exam_date:"Exam Date", exam_name:"Exam / Recruitment"
   };
   function card(row) {
-    const d = row.details && typeof row.details === "object" ? row.details : {};
-    const article = el("article", "tc-gov-card");
-    const state = d.state || (d.scope === "central" ? "Central Government" : "State Government");
-    const head = el("div", "tc-gov-head");
-    head.append(el("span","tc-gov-tag", categoryLabels[row.category] || "Official Notice"));
-    const endValue = row.application_end ? String(row.application_end).slice(0,10) : "";
-    const end = endValue ? new Date(endValue + "T23:59:59") : null;
-    const expired = end && !Number.isNaN(end.getTime()) && end < new Date();
-    head.append(el("span", expired ? "tc-gov-status expired" : "tc-gov-status", expired ? "Application Period Closed" : (row.application_end ? "Applications Open" : "Notice Posted")));
-    article.append(head);
-    article.append(el("h3","tc-gov-title",row.title));
-    const detailLink=el("a","tc-gov-link","View Full Details →");detailLink.href="government-notice-details.html?id="+encodeURIComponent(row.id);article.append(detailLink);
-    article.append(el("p","tc-gov-meta",[d.authority,state,row.notice_reference ? "Notice No.: "+row.notice_reference : ""].filter(Boolean).join(" · ")));
-    const facts = el("div","tc-gov-facts");
-    const pairs = [
-      ["Notice Date",dateText(row.notice_date)],
-      ["Vacancies",row.vacancies === null || row.vacancies === undefined ? "See Official PDF" : Number(row.vacancies).toLocaleString("en-IN")],
-      ["Application Start",dateText(row.application_start)],
-      ["Last Date",dateText(row.application_end)]
-    ];
-    pairs.forEach(([k,v]) => { const item=el("div","tc-gov-fact"); item.append(el("span","tc-gov-label",k),el("strong","",v)); facts.append(item); });
-    article.append(facts);
-    if (row.eligibility_summary) article.append(el("p","tc-gov-eligibility",row.eligibility_summary));
-    const extras = Object.entries(d).filter(([k,v]) => detailLabels[k] && v && !String(v).startsWith("http"));
-    if (extras.length) {
-      const list=el("dl","tc-gov-details");
-      extras.forEach(([k,v])=>{list.append(el("dt","",detailLabels[k]));list.append(el("dd","",Array.isArray(v)?v.join(", "):(typeof v==="object"?JSON.stringify(v):v)));});
-      article.append(list);
-    }
-    const links=el("div","tc-gov-links");
-    const noticeUrl=safeUrl(d.notification_pdf_url)||safeUrl(row.official_url);
-    if (noticeUrl) { const a=el("a","tc-gov-link",d.notification_pdf_url?"Original Government PDF ↗":"Official Source Notice ↗");a.href=noticeUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
-    const applyUrl=safeUrl(d.application_url)||safeUrl(d.apply_url);
-    if (applyUrl) { const a=el("a","tc-gov-link apply","Official Application ↗");a.href=applyUrl;a.target="_blank";a.rel="noopener noreferrer";links.append(a); }
-    article.append(links);
-    article.append(el("p","tc-gov-source","Source: "+(d.authority||"Official Government Website")+" · Verify details using the source link."));
-    return article;
+    const d=row.details&&typeof row.details==="object"?row.details:{};
+    const tr=el("tr","");
+    const title=el("a","tc-gov-link",row.title||"Government Notice");
+    title.href="job-summary.html?type="+(row.source_type||"notice")+"&id="+encodeURIComponent(row.id);
+    const name=el("td","");name.append(title);
+    const authority=el("td","",d.authority||d.department||"Government Department");
+    const vacancies=el("td","",row.vacancies===null||row.vacancies===undefined?"See notice":Number(row.vacancies).toLocaleString("en-IN"));
+    const last=el("td","",dateText(row.application_end));
+    const view=el("a","tc-gov-link","View Summary →");
+    view.href=title.href;
+    const action=el("td","");action.append(view);
+    [name,authority,vacancies,last,action].forEach(td=>tr.append(td));
+    return tr;
   }
   const style=el("style","");
   style.textContent=`
@@ -144,7 +120,7 @@
           notification_pdf_url:j.official_notification_url
         };
         return {
-          id:j.id,title:j.job_title||j.title||"Government Recruitment",category:"recruitment",
+          id:j.id,title:j.job_title||j.title||"Government Recruitment",category:"recruitment",source_type:"job",
           official_url:j.official_notification_url||j.official_website_url||j.application_url,
           notice_reference:j.notification_number,notice_date:j.notification_date||j.published_at||j.created_at,
           application_start:extra("Application Start Date")||null,application_end:j.application_deadline,
@@ -153,7 +129,7 @@
           details,is_active:true
         };
       });
-      const data=[...(noticeResult.data||[]),...postedJobs];
+      const data=[...(noticeResult.data||[]).map(r=>({...r,source_type:"notice"})),...postedJobs];
       const months=Number(period.value);
       const cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-months);
       const selectedCategory=category.value;
@@ -171,7 +147,7 @@
       });
       rows.sort((a,b)=>new Date(String(b.notice_date).slice(0,10))-new Date(String(a.notice_date).slice(0,10)));
       if(!rows.length){status.textContent="No officially verified and published recruitment notices are available for this period.";grid.append(el("div","tc-gov-empty","New notices will appear here after verification. Vacancy counts and eligibility details are not estimated."));return;}
-      rows.forEach(r=>grid.append(card(r)));
+      grid.innerHTML="<table><thead><tr><th>Job / Notification</th><th>Department</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody></tbody></table>";\n      const tbody=grid.querySelector("tbody");rows.forEach(r=>tbody.append(card(r)));
       status.textContent=rows.length+" verified government records · last "+months+" months";
     }catch(e){status.textContent="Notices could not be loaded. Please try again later.";grid.append(el("div","tc-gov-empty","Information service or permission verification is required."));}
   }
