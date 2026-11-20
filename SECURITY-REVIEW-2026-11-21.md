@@ -31,9 +31,11 @@ The repository's current public visibility is a separate concern from the securi
 2. Expanded `.gitignore` to exclude local environment files, credentials, private keys, service-role key files, and local build/development artifacts.
 3. Added this security policy and review record.
 
-## Repository secret search
+## Repository secret search limitations
 
-A targeted search of the current default-branch code for common Supabase service-role/secret-key markers and private-key PEM markers returned no matches. This is not a complete scan of every historical commit, GitHub Actions secret, external backup, or deployment environment. Review repository history and rotate any credential that may ever have been committed.
+The targeted GitHub code-search queries returned no matches for common service-role/secret-key markers and private-key PEM markers. However, the repository code-search index may be incomplete or unavailable, so this is **not proof that the repository contains no secrets**. It is not a complete scan of every current file, historical commit, GitHub Actions secret, external backup, or deployment environment.
+
+A full review of repository files and Git history is still required. If any credential may ever have been committed, rotate it even if the current file has been removed. The `.gitignore` rules prevent accidental addition of future local secret files; they do not remove already tracked files or erase Git history.
 
 The browser-facing Supabase publishable key is not a secret. Never put a Supabase secret key, legacy service-role key, database password, JWT signing secret, private key, or recovery code in browser code or source control.
 
