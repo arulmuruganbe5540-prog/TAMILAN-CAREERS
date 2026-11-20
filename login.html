@@ -236,6 +236,9 @@ function toggleMode() {
   showMessage("");
 }
 
+// A Register button from any page opens this same page in registration mode.
+if(new URLSearchParams(window.location.search).get("mode")==="register") toggleMode();
+
 function showMessage(message, success=false) {
   const box = document.getElementById("message");
 
