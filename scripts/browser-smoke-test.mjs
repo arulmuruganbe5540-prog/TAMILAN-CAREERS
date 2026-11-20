@@ -157,6 +157,25 @@ await check("Login page role, mode and password controls work", async () => {
 });
 
 
+await check("Login defaults to Login, Register stays on the same page, and the domain wordmark is text-only", async () => {
+  await open("login.html");
+  await page.locator(".tc-login-wordmark").waitFor({ state: "visible", timeout: 10000 });
+  if (!(await page.locator("#heading").innerText()).includes("Login")) throw new Error("Login is not the default mode");
+  if (await page.locator("#nameField").isVisible()) throw new Error("Registration fields should be hidden until Register is selected");
+  if ((await page.locator("#switchLink").innerText()).trim() !== "Register") throw new Error("Register switch is not visible on the login page");
+  if (await page.locator(".card img, .tc-premium-login-brand img").count()) throw new Error("Login page still contains a photo/banner logo");
+  if ((await page.locator(".tc-login-wordmark").innerText()).trim() !== "WWW.TAMILANCAREERS.IN") throw new Error("Login wordmark text is incorrect");
+  if (await page.locator("#tc-globalbar, body > footer.tc-footer").count()) throw new Error("Authentication page should not show the global information bar or full site footer");
+  await open("login.html?mode=register");
+  if (!(await page.locator("#heading").innerText()).includes("Create a new account")) throw new Error("Homepage Register link does not open the in-page registration mode");
+  if (!(await page.locator("#nameField").isVisible())) throw new Error("Register mode did not reveal the name field");
+  await open("index.html");
+  await page.locator(".site-header .tc-premium-wordmark").waitFor({ state: "visible", timeout: 10000 });
+  if ((await page.locator(".site-header .tc-premium-wordmark").innerText()).trim() !== "WWW.TAMILANCAREERS.IN") throw new Error("Homepage header wordmark is incorrect");
+  if (await page.locator(".site-header .tc-premium-header-brand img").count()) throw new Error("Homepage logo still uses an image");
+});
+
+
 await check("English-only registration validates and submits employer signup", async () => {
   const registrationPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   let signupBody = null;
