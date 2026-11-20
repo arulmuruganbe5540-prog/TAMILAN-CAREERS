@@ -68,6 +68,45 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
    reportPanel.className="panel";reportPanel.hidden=true;
    reportPanel.innerHTML='<h2>Report this job posting</h2><p class="copy">Tell us if the posting requests advance payment, contains misleading information, or asks for inappropriate personal data.</p><label for="reportReason">Reason</label><select id="reportReason" style="display:block;width:100%;padding:11px;margin:8px 0;border:1px solid #ccd8e6;border-radius:8px"><option value="upfront_payment">Requests an advance payment or registration fee</option><option value="fake_or_misleading">Fake or misleading job details</option><option value="identity_impersonation">Impersonation of a company or person</option><option value="personal_data_request">Requests unnecessary personal documents or information</option><option value="expired_or_filled">Job expired or position filled</option><option value="other">Other</option></select><label for="reportDetails">Additional details (optional)</label><textarea id="reportDetails" maxlength="2000" rows="4" style="display:block;width:100%;padding:11px;margin:8px 0;border:1px solid #ccd8e6;border-radius:8px;font:inherit"></textarea><div class="actions"><button class="btn primary" id="sendReport">Submit report</button><button class="btn light" id="cancelReport">Cancel</button></div><p id="reportMessage" class="copy" role="status"></p>';
    root.appendChild(reportPanel);
+   const messagePanel=document.createElement("section");
+   messagePanel.className="panel";
+   messagePanel.id="jobPostMessages";
+   messagePanel.innerHTML='<div class="kicker">JOB POST DISCUSSION</div><h2>Messages about this Job</h2><p class="copy">Ask a question or share useful information about this job. Only signed-in TAMILAN CAREERS members can send messages. Your account email address will be displayed with your message.</p><div id="jobMessageList" aria-live="polite"><p class="copy">Loading messages...</p></div><div id="jobMessageComposer"></div>';
+   root.appendChild(messagePanel);
+   const messageList=messagePanel.querySelector("#jobMessageList"),composer=messagePanel.querySelector("#jobMessageComposer");
+   const msgStyle=document.createElement("style");
+   msgStyle.textContent="#jobPostMessages .job-msg{border:1px solid #e2e9f2;border-radius:10px;padding:12px;margin:10px 0;background:#f7f9fc}#jobPostMessages .job-msg-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#174777;font-size:12px;font-weight:800}#jobPostMessages .job-msg-body{white-space:pre-wrap;overflow-wrap:anywhere;color:#43536a;font-size:13px;margin-top:7px}#jobPostMessages textarea{width:100%;padding:12px;border:1px solid #d5dfeb;border-radius:9px;font:inherit;resize:vertical}#jobPostMessages .job-msg-help{font-size:11px;color:#718098;margin:6px 0 10px}";
+   document.head.appendChild(msgStyle);
+   async function loadJobMessages(){
+    const {data,error}=await db.from("job_post_messages").select("id,sender_email,message,created_at").eq("job_id",id).eq("status","visible").order("created_at",{ascending:false}).limit(100);
+    if(error){messageList.innerHTML='<p class="copy">Messages are temporarily unavailable.</p>';return}
+    if(!data?.length){messageList.innerHTML='<p class="copy">No messages yet. Be the first to ask a question about this job.</p>';return}
+    messageList.innerHTML=data.map(m=>'<article class="job-msg"><div class="job-msg-head"><span>'+esc(m.sender_email||"Registered member")+'</span><time>'+esc(new Date(m.created_at).toLocaleString("en-IN"))+'</time></div><div class="job-msg-body">'+esc(m.message)+'</div></article>').join("");
+   }
+   async function setupJobMessageComposer(){
+    const {data,error}=await db.auth.getUser();
+    if(error||!data?.user){
+     composer.innerHTML='<div class="job-msg-help">You must be logged in to send a message. Messages already approved for display can be read without logging in.</div><a class="btn primary" href="login.html?next='+encodeURIComponent("job-details.html?id="+id)+'">Log in to Send a Message</a>';
+     return;
+    }
+    composer.innerHTML='<label for="jobMessageText" style="display:block;font-weight:800;font-size:13px;margin:14px 0 7px">Your Message</label><textarea id="jobMessageText" rows="4" maxlength="2000" placeholder="Write your question or message about this job..." required></textarea><div class="job-msg-help">Your registered account email will be shown beside your message. Maximum 2,000 characters.</div><div class="actions"><button class="btn primary" id="sendJobMessage" type="button">Send Message</button></div><p id="jobMessageStatus" class="copy" role="status"></p>';
+    document.getElementById("sendJobMessage").addEventListener("click",async()=>{
+     const button=document.getElementById("sendJobMessage"),field=document.getElementById("jobMessageText"),status=document.getElementById("jobMessageStatus"),message=field.value.trim();
+     if(!message){status.textContent="Please enter a message.";return}
+     if(message.length>2000){status.textContent="Messages must be 2,000 characters or fewer.";return}
+     button.disabled=true;status.textContent="Sending...";
+     try{
+      const {data:current,error:authError}=await db.auth.getUser();if(authError||!current?.user)throw new Error("Your login session has expired. Please log in again.");
+      const {error:insertError}=await db.from("job_post_messages").insert({job_id:id,user_id:current.user.id,message});
+      if(insertError)throw insertError;
+      field.value="";status.textContent="Your message has been sent.";
+      await loadJobMessages();
+     }catch(e){status.textContent=e.message||"Unable to send your message."}
+     finally{button.disabled=false}
+    });
+   }
+   await loadJobMessages();
+   await setupJobMessageComposer();
    document.getElementById("reportJob")?.addEventListener("click",()=>{reportPanel.hidden=!reportPanel.hidden;reportPanel.scrollIntoView({behavior:"smooth",block:"center"})});
    document.getElementById("cancelReport")?.addEventListener("click",()=>{reportPanel.hidden=true});
    document.getElementById("sendReport")?.addEventListener("click",async()=>{
