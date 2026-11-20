@@ -8,8 +8,8 @@ function loadScript(src){
   script.defer=true;
   document.head.appendChild(script);
 }
-loadScript("assets/global-experience.js");
-loadScript("assets/professional-footer.js");
+loadScript("assets/global-experience.js?v=20261120-2");
+loadScript("assets/professional-footer.js?v=20261120-2");
 /* Load the configured AdSense publisher script once; ad placement remains controlled by publisher settings. */
 var adSrc="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418";
 if(!document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')){
