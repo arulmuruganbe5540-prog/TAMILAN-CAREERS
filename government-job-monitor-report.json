@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-19T19:13:22.274049+00:00",
+  "checked_at_utc": "2026-11-20T01:21:29.824863+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 25,
@@ -21,23 +21,23 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "join-indian-army",
-      "url": "https://joinindianarmy.nic.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "ncs",
-      "url": "https://www.ncs.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "nabard",
       "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "join-indian-army",
+      "url": "https://joinindianarmy.nic.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "join-indian-navy",
       "url": "https://www.joinindiannavy.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "ncs",
+      "url": "https://www.ncs.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -48,11 +48,6 @@
     {
       "source_id": "agniveervayu",
       "url": "https://agnipathvayu.cdac.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "appsc",
-      "url": "https://psc.ap.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -71,6 +66,16 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "appsc",
+      "url": "https://psc.ap.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "appsc-arunachal",
+      "url": "https://appsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "gpsc-goa",
       "url": "https://gpsc.goa.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
@@ -81,18 +86,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "appsc-arunachal",
-      "url": "https://appsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "psc-cg",
       "url": "https://psc.cg.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "gpsc-gujarat",
-      "url": "https://gpsc.gujarat.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -116,13 +111,18 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "mpsc-mizoram",
-      "url": "https://mpsc.mizoram.gov.in/",
+      "source_id": "gpsc-gujarat",
+      "url": "https://gpsc.gujarat.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "hpsc",
       "url": "https://hpsc.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "mpsc-mizoram",
+      "url": "https://mpsc.mizoram.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
