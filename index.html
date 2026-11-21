@@ -169,7 +169,7 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
 <section class="government-directory" id="government-directory" aria-label="Explore government job categories">
   <div class="directory-heading">
     <h2>Explore Government Jobs</h2>
-    <p>Browse Central Government job categories or select a State / Union Territory to view its published government jobs.</p>
+    <p>Browse Central Government job categories or select a State / Union Territory to view its job categories.</p>
   </div>
   <div class="directory-grid">
     <section class="directory-panel central-directory" aria-labelledby="central-directory-title">
@@ -199,7 +199,7 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
             <option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option>
             <option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option>
             <option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option>
-            <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option>
+            <option>Rajasthan</option><option>Sikkim</option><option selected>Tamil Nadu</option><option>Telangana</option>
             <option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option>
           </optgroup>
           <optgroup label="8 Union Territories">
@@ -210,8 +210,8 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
         </select>
       </div>
       <div class="state-job-results" id="home-state-job-results" aria-live="polite">
-        <h4>Select a State / UT to view its government jobs</h4>
-        <p>Published job posts for the selected location will appear here.</p>
+        <h4>Tamil Nadu – Job Categories</h4>
+        <ul class="state-job-list"><li>TNPSC Jobs</li><li>Tamil Nadu Police Jobs</li><li>Teacher Recruitment Jobs</li><li>Medical Recruitment Jobs</li><li>Forest Department Jobs</li><li>TANGEDCO Jobs</li><li>Government Department Jobs</li></ul>
       </div>
     </section>
   </div>
@@ -251,16 +251,26 @@ function renderHomeStateJobs(){
 const select=$('home-state-select'),target=$('home-state-job-results');
 if(!select||!target)return;
 const state=select.value;
-if(!state){target.innerHTML='<h4>Select a State / UT to view its government jobs</h4><p>Published job posts for the selected location will appear here.</p>';return;}
-const matches=jobs.filter(j=>{
- const category=String(j.government_category||j.government_scope||'').toLowerCase();
- const savedState=String(j.state_name||'').trim().toLowerCase();
- const isStateJob=category==='state government'||category==='tamil nadu government';
- const stateMatch=savedState===state.toLowerCase()||(state==='Tamil Nadu'&&category==='tamil nadu government'&&!savedState);
- return isStateJob&&stateMatch;
-});
-target.innerHTML='<h4>'+esc(state)+' Government Jobs ('+matches.length+')</h4>'+
-(matches.length?'<ul class="state-job-list">'+matches.map(j=>'<li><a href="'+jobUrl(j)+'">'+esc(j.job_title||'Government Job')+'</a>'+(j.department_name?' <span>— '+esc(j.department_name)+'</span>':'')+'</li>').join('')+'</ul>':'<p>No published government jobs are available for '+esc(state)+' yet. New posts for this state will appear here after they are published by the Admin.</p>');
+if(!state){target.innerHTML='<h4>Select a State / UT</h4>';return;}
+const special={
+'Tamil Nadu':['TNPSC Jobs','Tamil Nadu Police Jobs','Teacher Recruitment Jobs','Medical Recruitment Jobs','Forest Department Jobs','TANGEDCO Jobs','Government Department Jobs'],
+'Kerala':['Kerala PSC Jobs','Kerala Police Jobs','Teacher Recruitment Jobs','Health Department Jobs','Forest Department Jobs','Government Department Jobs'],
+'Karnataka':['KPSC Jobs','Karnataka Police Jobs','Teacher Recruitment Jobs','Health Department Jobs','Forest Department Jobs','Government Department Jobs'],
+'Andhra Pradesh':['APPSC Jobs','Andhra Pradesh Police Jobs','Teacher Recruitment Jobs','Medical Jobs','Forest Department Jobs'],
+'Telangana':['TSPSC Jobs','Telangana Police Jobs','Teacher Recruitment Jobs','Medical Jobs','Forest Department Jobs'],
+'Delhi':['Delhi Subordinate Services Jobs','Delhi Police Jobs','Teacher Recruitment Jobs','Health Department Jobs','Government Department Jobs'],
+'Puducherry':['Puducherry Government Jobs','Police Jobs','Teacher Recruitment Jobs','Health Department Jobs','Local Administration Jobs']
+};
+const categories=special[state]||[
+state+' Public Service Commission Jobs',
+state+' Police Jobs',
+state+' Teacher Recruitment Jobs',
+state+' Health Department Jobs',
+state+' Forest Department Jobs',
+state+' Government Department Jobs'
+];
+target.innerHTML='<h4>'+esc(state)+' – Job Categories</h4><ul class="state-job-list">'+
+categories.map(name=>'<li>'+esc(name)+'</li>').join('')+'</ul>';
 }
 
 function renderAll(){
