@@ -57,8 +57,8 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
 <body>
 <header class="site-header"><h1>TAMILAN CAREERS</h1><p>Government Jobs · Exam Notifications · Career Updates</p></header>
 <div class="nav-wrap"><nav aria-label="Main navigation">
-<a href="tamil-nadu-government-jobs.html">TN Government Jobs</a>
-<a href="indian-government-jobs.html">General Government Jobs</a>
+<a href="central-government-jobs.html">Central Government Jobs</a>
+<a href="state-government-jobs.html">All State Government Jobs</a>
 <a href="#exam-dates">Exam Date</a>
 <a href="#admit-cards">Admit Card</a>
 <a href="#results">Results</a>
@@ -71,7 +71,7 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
 <main>
 <div class="intro"><h2>Government Jobs & Exam Updates</h2><p>Find the latest Central Government and Tamil Nadu Government recruitment notifications, qualification-wise opportunities and important examination updates. Always verify details in the official notification before applying.</p></div>
 <div class="section-nav" aria-label="Home page sections">
-<a href="#latest-jobs">Latest Jobs</a><a href="#central-jobs">Central Government</a><a href="#tn-jobs">Tamil Nadu Government</a><a href="#qualification-jobs">Qualification-wise Jobs</a><a href="#answer-keys">Answer Key</a><a href="#results">Results</a><a href="#exam-dates">Exam Date</a><a href="#admit-cards">Admit Card</a>
+<a href="#latest-jobs">Latest Jobs</a><a href="central-government-jobs.html">Central Government</a><a href="state-government-jobs.html">All State Governments</a><a href="#qualification-jobs">Qualification-wise Jobs</a><a href="#answer-keys">Answer Key</a><a href="#results">Results</a><a href="#exam-dates">Exam Date</a><a href="#admit-cards">Admit Card</a>
 </div>
 
 <section class="table-section" id="latest-jobs">
@@ -85,7 +85,7 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
 </section>
 
 <section class="table-section" id="tn-jobs">
-<h2>Tamil Nadu Government Jobs</h2><p>Recruitment notifications published by Tamil Nadu Government departments and authorities. Maximum 20 records per page with Previous and Next navigation.</p>
+<h2>All State Government Jobs</h2><p>Recruitment notifications published by State Government departments across India. Select a state and qualification on the dedicated page to narrow the results. Maximum 20 records per page.</p>
 <div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Government Type</th><th>State / Job Location</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="tn-body"><tr><td colspan="8" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="tn-pager"></div>
 </section>
 
@@ -139,7 +139,7 @@ pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{page
 function renderAll(){
 jobRows('latest',jobs);
 jobRows('central',jobs.filter(j=>String(j.government_category||j.government_scope||'').toLowerCase()==='central government'));
-jobRows('tn',jobs.filter(j=>{const c=String(j.government_category||'').toLowerCase(),loc=String(j.location||'').toLowerCase();return c==='tamil nadu government'||(c==='state government'&&(loc.includes('tamil nadu')||loc.includes('tamilnadu')||loc.includes('tn')));}));
+jobRows('tn',jobs.filter(j=>{const c=String(j.government_category||'').toLowerCase();return c==='state government'||c==='tamil nadu government';}));
 const byType=t=>resources.filter(r=>r.resource_type===t);
 resourceRows('answer',byType('answer_key'),false);
 resourceRows('results',byType('result'),false);
