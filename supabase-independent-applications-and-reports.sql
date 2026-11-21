@@ -419,3 +419,37 @@ END $$;
 REVOKE ALL ON FUNCTION public.tc_company_update_private_application_status(uuid,uuid,text) FROM PUBLIC,anon,authenticated;
 REVOKE ALL ON FUNCTION public.tc_company_update_international_application_status(uuid,uuid,text) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.tc_company_update_private_application_status(uuid,uuid,text),public.tc_company_update_international_application_status(uuid,uuid,text) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.tc_company_manage_private_job(p_job_id uuid,p_new_status text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $$
+DECLARE v_company uuid; v_deadline timestamptz;
+BEGIN
+ IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
+ IF p_new_status NOT IN ('closed','published') THEN RAISE EXCEPTION 'Invalid job status'; END IF;
+ SELECT company_id,application_deadline INTO v_company,v_deadline FROM public.private_jobs WHERE id=p_job_id FOR UPDATE;
+ IF NOT FOUND OR v_company IS NULL THEN RAISE EXCEPTION 'Private job not found or not linked to a company'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM public.companies c WHERE c.id=v_company AND c.owner_user_id=auth.uid())
+ AND NOT EXISTS(SELECT 1 FROM public.company_members cm WHERE cm.company_id=v_company AND cm.user_id=auth.uid() AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager')) THEN RAISE EXCEPTION 'Company owner or HR Manager permission required'; END IF;
+ IF p_new_status='published' AND v_deadline IS NOT NULL AND v_deadline<=now() THEN RAISE EXCEPTION 'Expired job cannot be republished'; END IF;
+ UPDATE public.private_jobs SET status=p_new_status,published_at=CASE WHEN p_new_status='published' THEN coalesce(published_at,now()) ELSE published_at END,updated_at=now() WHERE id=p_job_id;
+ RETURN jsonb_build_object('success',true,'job_id',p_job_id,'status',p_new_status);
+END $$;
+CREATE OR REPLACE FUNCTION public.tc_company_manage_international_job(p_job_id uuid,p_new_status text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $$
+DECLARE v_company uuid; v_deadline timestamptz;
+BEGIN
+ IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
+ IF p_new_status NOT IN ('closed','published') THEN RAISE EXCEPTION 'Invalid job status'; END IF;
+ SELECT company_id,application_deadline INTO v_company,v_deadline FROM public.international_jobs WHERE id=p_job_id FOR UPDATE;
+ IF NOT FOUND OR v_company IS NULL THEN RAISE EXCEPTION 'International job not found or not linked to a company'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM public.companies c WHERE c.id=v_company AND c.owner_user_id=auth.uid())
+ AND NOT EXISTS(SELECT 1 FROM public.company_members cm WHERE cm.company_id=v_company AND cm.user_id=auth.uid() AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager')) THEN RAISE EXCEPTION 'Company owner or HR Manager permission required'; END IF;
+ IF p_new_status='published' AND v_deadline IS NOT NULL AND v_deadline<=now() THEN RAISE EXCEPTION 'Expired job cannot be republished'; END IF;
+ UPDATE public.international_jobs SET status=p_new_status,published_at=CASE WHEN p_new_status='published' THEN coalesce(published_at,now()) ELSE published_at END,updated_at=now() WHERE id=p_job_id;
+ RETURN jsonb_build_object('success',true,'job_id',p_job_id,'status',p_new_status);
+END $$;
+REVOKE ALL ON FUNCTION public.tc_company_manage_private_job(uuid,text) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION public.tc_company_manage_international_job(uuid,text) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.tc_company_manage_private_job(uuid,text),public.tc_company_manage_international_job(uuid,text) TO authenticated;
