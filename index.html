@@ -1,47 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101d3a">
 <title>TAMILAN CAREERS</title>
-<meta name="description" content="TAMILAN CAREERS navigation">
 <style>
-:root{color-scheme:light;--navy:#101d3a;--blue:#176b9e;--cyan:#54c8ff}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif}
-header{background:var(--navy);border-bottom:4px solid var(--cyan);padding:22px 14px}
-nav.main-nav{max-width:1240px;margin:auto;display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap}
-.main-nav a{display:block;padding:12px 15px;border-radius:8px;background:#ffffff12;color:#fff;text-decoration:none;font-size:13px;font-weight:800;text-align:center}
-.main-nav a:hover,.main-nav a:focus-visible{background:var(--blue);outline:2px solid var(--cyan);outline-offset:2px}
-footer{margin-top:auto;background:#08142b;padding:22px 14px}
-.footer-links{max-width:1240px;margin:auto;display:flex;justify-content:center;align-items:center;gap:12px 24px;flex-wrap:wrap}
-.footer-links a{color:#d5e5f7;text-decoration:none;font-size:12px}
-.footer-links a:hover{text-decoration:underline}
-@media(max-width:650px){header{padding:14px 10px}.main-nav{gap:7px}.main-nav a{flex:1 1 calc(50% - 7px);padding:12px 8px;font-size:11px}.footer-links{gap:12px 18px}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:#f3f6fb;font-family:Arial,Helvetica,sans-serif;color:#14213d}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:28px 16px}
+nav{width:min(100%,980px);display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+nav a{display:flex;align-items:center;justify-content:center;min-height:74px;padding:18px;border-radius:12px;background:#101d3a;color:#fff;text-decoration:none;font-weight:700;text-align:center;border:2px solid #54c8ff}
+nav a:focus-visible,nav a:hover{background:#176b9e;outline:3px solid #54c8ff;outline-offset:2px}
+footer{padding:18px 12px;background:#101d3a;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+footer a{color:#fff;font-size:13px;text-decoration:underline}
 </style>
 </head>
 <body>
-<header>
-<nav class="main-nav" aria-label="Main navigation">
-<a href="tamil-nadu-government-jobs.html">TN GOVERNMENT JOBS</a>
-<a href="indian-government-jobs.html">GENERAL GOVERNMENT JOBS</a>
-<a href="career-updates.html#exam-calendar">EXAM DATE</a>
-<a href="career-updates.html#admit-cards">ADMIT CARD</a>
-<a href="career-updates.html#results">RESULTS</a>
-<a href="career-updates.html#admissions">ADMISSION OPEN</a>
-<a href="government-exam-category.html">ENTRANCE EXAM</a>
-<a href="private-jobs.html">PRIVATE JOBS</a>
-<a href="international-jobs.html">INTERNATIONAL JOBS</a>
+<main>
+<nav aria-label="Main navigation">
+<a href="tamil-nadu-government-jobs.html">TN Government Jobs</a>
+<a href="indian-government-jobs.html">General Government Jobs</a>
+<a href="exam-date.html">Exam Date</a>
+<a href="admit-card.html">Admit Card</a>
+<a href="results.html">Results</a>
+<a href="admission-open.html">Admission Open</a>
+<a href="entrance-exam.html">Entrance Exam</a>
+<a href="private-jobs.html">Private Jobs</a>
+<a href="international-jobs.html">International Jobs</a>
 </nav>
-</header>
-<footer>
-<nav class="footer-links" aria-label="Google advertising information">
-<a href="https://ads.google.com/" target="_blank" rel="noopener noreferrer">Google Ads</a>
-<a href="https://support.google.com/adsense/" target="_blank" rel="noopener noreferrer">Google AdSense Help</a>
-<a href="https://support.google.com/My-Ad-Center-Help/" target="_blank" rel="noopener noreferrer">Report an Ad</a>
-<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a>
-</nav>
+</main>
+<footer aria-label="Google advertising links">
+<a href="https://ads.google.com/">Google Ads</a>
+<a href="https://www.google.com/adsense/">Google AdSense</a>
+<a href="https://support.google.com/adsense/">AdSense Help</a>
+<a href="https://policies.google.com/privacy">Google Privacy</a>
 </footer>
 </body>
 </html>
