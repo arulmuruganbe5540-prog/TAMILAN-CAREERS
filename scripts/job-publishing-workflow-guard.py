@@ -54,7 +54,7 @@ checks = {
     "Admin UI captures salary period":
         'id="salaryPeriod"' in admin and '"salaryPeriod"' in admin,
     "public listing labels salary period":
-        "salary_period" in listing and "salarySuffix" in listing,
+        "salary_period" in listing and 'Salary period: ' in listing and "salaryPeriod" in listing,
     "job detail labels salary period":
         "salary_period" in details and "salarySuffix" in details,
     "company drafts are protected by RLS":
