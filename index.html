@@ -8,6 +8,8 @@
 <meta name="description" content="Explore government job notifications, private jobs, international opportunities, exam dates, admit cards, results and exam preparation resources.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://tamilancareers.in/">
+<script type="application/ld+json" id="tc-website-jsonld">{"@context":"https://schema.org","@type":"WebSite","name":"TAMILAN CAREERS","url":"https://tamilancareers.in/","description":"Government jobs, private jobs, international opportunities and exam updates."}</script>
+<script type="application/ld+json" id="tc-organization-jsonld">{"@context":"https://schema.org","@type":"Organization","name":"TAMILAN CAREERS","url":"https://tamilancareers.in/","email":"arulmuruganbe5540@gmail.com"}</script>
 <link rel="stylesheet" href="assets/site-protection.css">
 <style>
 :root{--navy:#101d3a;--accent:#54c8ff;--ink:#17263d;--muted:#65758b;--line:#e2eaf3;--soft:#f3f7fc;--white:#fff}
@@ -21,6 +23,7 @@ header{background:var(--navy);color:#fff;border-bottom:3px solid var(--accent)}
 .main-nav a{padding:10px 13px;border-radius:8px;background:#ffffff12;color:#fff;text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap}
 .main-nav a:hover,.main-nav a:focus-visible{background:#1d5689;outline:2px solid var(--accent);outline-offset:1px}
 main{max-width:1240px;margin:0 auto;padding:22px 18px 40px}
+.search-panel{margin:22px 0;padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px #10233f0d}.search-panel h2{margin:0 0 14px;color:var(--navy);font-size:20px}.home-search-form{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:10px;align-items:end}.home-search-form label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px}.home-search-form input,.home-search-form select{width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font:14px Arial,sans-serif}.search-submit{padding:13px 18px;border:0;border-radius:8px;background:#147bb5;color:#fff;font-weight:800;cursor:pointer}.category-card{min-height:105px}@media(max-width:720px){.home-search-form{grid-template-columns:1fr 1fr}.home-search-form label{grid-column:auto}.search-submit{grid-column:1/-1}}@media(max-width:420px){.home-search-form{grid-template-columns:1fr}}
 .hero{position:relative;overflow:hidden;border-radius:19px;background:linear-gradient(115deg,#101d3a 0%,#164d82 62%,#167ba5 100%);padding:clamp(25px,5vw,48px);color:#fff;box-shadow:0 12px 32px #10233f20}
 .hero:after{content:"";position:absolute;width:300px;height:300px;border:1px solid #ffffff20;border-radius:50%;right:-90px;top:-120px;box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff06}
 .eyebrow{font-size:11px;letter-spacing:2px;font-weight:900;color:#aeeaff}.hero h1{font-size:clamp(25px,4vw,39px);line-height:1.2;margin:10px 0;max-width:760px}.hero p{max-width:760px;color:#deedfc;font-size:14px;margin:0}
@@ -43,7 +46,7 @@ footer{background:#08142b;color:#c5d4e7;padding:27px 18px 20px}.footer-inner{max
 </head>
 <body>
 <div class="top-strip"><span>CAREER INFORMATION AND OPPORTUNITIES</span><span>Explore. Prepare. Progress.</span></div>
-<header>
+<header class="site-header">
  <div class="header-inner">
   <a class="brand" href="index.html">TAMILAN<span> CAREERS</span><small>WWW.TAMILANCAREERS.IN</small></a>
   <div class="header-actions"><a href="login.html">USER LOGIN</a><a href="dashboard.html">MY DASHBOARD</a></div>
@@ -67,6 +70,24 @@ footer{background:#08142b;color:#c5d4e7;padding:27px 18px 20px}.footer-inner{max
    <a class="private" href="jobs.html?type=private">PRIVATE JOBS</a>
    <a class="international" href="international-jobs.html">INTERNATIONAL JOBS</a>
    <a class="exam" href="exam-preparation.html">EXAM PREPARATION</a>
+  </div>
+ </section>
+ <section class="search-panel" aria-label="Search jobs">
+  <h2>Search Career Opportunities</h2>
+  <form id="homepage-search" class="home-search-form" action="jobs.html" method="get">
+   <label for="keyword">Job title or keyword</label><input id="keyword" name="q" type="search" placeholder="e.g. Accountant, Engineer">
+   <label for="location">Location</label><input id="location" name="location" type="search" placeholder="City or district">
+   <label for="category">Category</label><select id="category" name="category"><option value="">All Categories</option><option>IT &amp; Software</option><option>Accounting</option><option>Engineering</option><option>Healthcare</option><option>Education</option><option>Sales &amp; Marketing</option></select>
+   <button class="search-submit" type="submit">Search Jobs</button>
+  </form>
+ </section>
+ <section class="section" id="career-categories">
+  <div class="section-head"><div><h2>EXPLORE CAREER CATEGORIES</h2><p>Choose an industry to explore relevant opportunities.</p></div></div>
+  <div class="info-grid">
+   <a class="category-card info-card" href="jobs.html?category=IT%20%26%20Software"><b>IT &amp; Software</b><span>Technology and software careers.</span></a>
+   <a class="category-card info-card" href="jobs.html?category=Accounting"><b>Accounting</b><span>Finance, accounts and audit roles.</span></a>
+   <a class="category-card info-card" href="jobs.html?category=Engineering"><b>Engineering</b><span>Engineering and technical opportunities.</span></a>
+   <a class="category-card info-card" href="jobs.html?category=Healthcare"><b>Healthcare</b><span>Healthcare and medical support roles.</span></a>
   </div>
  </section>
  <div class="ad-slot" data-ad-unit="guide_top" aria-label="Advertisement placement">ADVERTISEMENT</div>
@@ -114,6 +135,7 @@ footer{background:#08142b;color:#c5d4e7;padding:27px 18px 20px}.footer-inner{max
  <div class="footer-bottom"><span>© <span id="year"></span> TAMILAN CAREERS. All rights reserved.</span><span>Independent career information platform. Always verify details with official notifications.</span></div>
 </div></footer>
 <script>document.getElementById("year").textContent=new Date().getFullYear();</script>
+<script src="assets/global-experience.js?v=20261121-2" defer></script>
 <script src="assets/site-protection.js?v=20261121-1" defer></script>
 <script src="assets/adsense-config.js" defer></script><script src="assets/adsense.js" defer></script>
 </body></html>
