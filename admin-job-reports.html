@@ -17,23 +17,41 @@ async function init(){
  const {data:s}=await db.auth.getSession();if(!s.session){location.replace("login.html?next="+encodeURIComponent("admin-job-reports.html"));return}
  const {data:r,error}=await db.from("user_roles").select("role").eq("user_id",s.session.user.id).eq("role","super_admin").maybeSingle();
  if(error||!r){$("message").textContent="Super Admin access required.";return}
- const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){$("message").textContent="Authenticator MFA verification is required. Please sign in again through Admin Login.";return}
+ const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||aal?.currentLevel!=="aal2"){$("message").textContent="Authenticator MFA verification is required. Please sign in again through Admin Login.";return}
  allowed=true;$("message").textContent="Administrator access confirmed.";await load();
 }
 async function load(){
  if(!allowed)return;
  $("reports").textContent="Loading reports…";
- const {data:rows,error}=await db.from("job_reports").select("id,job_id,reporter_user_id,reason,details,status,admin_note,created_at,reviewed_at,jobs(job_title,job_code,job_kind,company_id,companies(company_name))").order("created_at",{ascending:false}).limit(150);
- if(error){$("reports").textContent="Unable to load: "+error.message;return}
- const items=rows||[],pending=items.filter(x=>x.status==="pending").length;
+
+ const specs=[
+  {system:"legacy",reports:"job_reports",jobs:"jobs",review:"tc_review_job_report"},
+  {system:"government",reports:"government_job_reports",jobs:"government_jobs",review:"tc_review_government_job_report"},
+  {system:"private",reports:"private_job_reports",jobs:"private_jobs",review:"tc_review_private_job_report"},
+  {system:"international",reports:"international_job_reports",jobs:"international_jobs",review:"tc_review_international_job_report"}
+ ];
+ const loaded=await Promise.all(specs.map(async spec=>{
+  const {data,error}=await db.from(spec.reports).select("id,job_id,reporter_user_id,reason,details,status,admin_note,created_at,reviewed_at").order("created_at",{ascending:false}).limit(150);
+  if(error)return {spec,error};
+  const ids=[...new Set((data||[]).map(x=>x.job_id))];
+  const jobs=ids.length?await db.from(spec.jobs).select("id,job_title,job_code,job_kind,employer_name,company_id").in("id",ids):{data:[],error:null};
+  if(jobs.error)return {spec,error:jobs.error};
+  const map=new Map((jobs.data||[]).map(j=>[j.id,j]));
+  return {spec,rows:(data||[]).map(x=>({...x,_system:spec.system,_review:spec.review,job:map.get(x.job_id)||null}))};
+ }));
+ const failed=loaded.find(x=>x.error);
+ if(failed){$("reports").textContent="Unable to load "+failed.spec.system+" reports: "+failed.error.message;return}
+ const items=loaded.flatMap(x=>x.rows||[]).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+ const pending=items.filter(x=>x.status==="pending").length;
  $("summary").textContent="Total "+items.length+" · Pending "+pending;
  if(!items.length){$("reports").innerHTML='<div class="empty">There are no reports yet.</div>';return}
  $("reports").innerHTML=items.map(x=>{
-  const j=Array.isArray(x.jobs)?x.jobs[0]:x.jobs,c=Array.isArray(j?.companies)?j.companies[0]:j?.companies;
-  return '<article class="report"><div class="row"><h2>'+esc(j?.job_title||"Job removed")+'</h2><span class="tag">'+esc(x.status)+'</span><span class="tag">'+esc(reasonNames[x.reason]||x.reason)+'</span></div><p class="muted">Job Code: '+esc(j?.job_code||x.job_id)+' · Report Date: '+new Date(x.created_at).toLocaleString("en-IN")+' · Reporter ID: '+esc(x.reporter_user_id)+'</p><p><b>Company:</b> '+esc(c?.company_name||"—")+' · <b>Type:</b> '+esc(j?.job_kind||"—")+'</p><p><b>Details:</b> '+esc(x.details||"No additional details")+'</p><p><a href="job-details.html?id='+encodeURIComponent(x.job_id)+'" target="_blank" rel="noopener">View Job Page</a></p><label>Admin Note</label><textarea id="note-'+x.id+'" maxlength="2000" rows="2">'+esc(x.admin_note||"")+'</textarea><div class="row"><button class="btn secondary" data-id="'+x.id+'" data-status="reviewing">Under Review</button><button class="btn" data-id="'+x.id+'" data-status="actioned">Action Completed</button><button class="btn secondary" data-id="'+x.id+'" data-status="dismissed">Reject Report</button></div></article>';
+  const j=x.job;
+  return '<article class="report"><div class="row"><h2>'+esc(j?.job_title||"Job removed")+'</h2><span class="tag">'+esc(x.status)+'</span><span class="tag">'+esc(reasonNames[x.reason]||x.reason)+'</span><span class="tag">'+esc(x._system)+'</span></div><p class="muted">Job Code: '+esc(j?.job_code||x.job_id)+' · Report Date: '+new Date(x.created_at).toLocaleString("en-IN")+' · Reporter ID: '+esc(x.reporter_user_id)+'</p><p><b>Employer:</b> '+esc(j?.employer_name||"—")+' · <b>Type:</b> '+esc(x._system)+'</p><p><b>Details:</b> '+esc(x.details||"No additional details")+'</p><p><a href="job-details.html?id='+encodeURIComponent(x.job_id)+(x._system!=="legacy"?"&system="+encodeURIComponent(x._system):"")+'" target="_blank" rel="noopener">View Job Page</a></p><label>Admin Note</label><textarea id="note-'+x.id+'" maxlength="2000" rows="2">'+esc(x.admin_note||"")+'</textarea><div class="row"><button class="btn secondary" data-id="'+x.id+'" data-system="'+x._system+'" data-status="reviewing">Under Review</button><button class="btn" data-id="'+x.id+'" data-system="'+x._system+'" data-status="actioned">Action Completed</button><button class="btn secondary" data-id="'+x.id+'" data-system="'+x._system+'" data-status="dismissed">Reject Report</button></div></article>';
  }).join("");
  $("reports").querySelectorAll("button[data-id]").forEach(b=>b.addEventListener("click",async()=>{
-  b.disabled=true;try{const {error}=await db.rpc("tc_review_job_report",{p_report_id:b.dataset.id,p_status:b.dataset.status,p_admin_note:$("note-"+b.dataset.id).value});if(error)throw error;await load()}catch(e){alert("Unable to refresh: "+e.message);b.disabled=false}
+  b.disabled=true;try{const reviewFunctions={legacy:"tc_review_job_report",government:"tc_review_government_job_report",private:"tc_review_private_job_report",international:"tc_review_international_job_report"};
+  const {error}=await db.rpc(reviewFunctions[b.dataset.system],{p_report_id:b.dataset.id,p_status:b.dataset.status,p_admin_note:$("note-"+b.dataset.id).value});if(error)throw error;await load()}catch(e){alert("Unable to refresh: "+e.message);b.disabled=false}
  }));
 }
 $("refresh").addEventListener("click",load);init().catch(e=>$("message").textContent=e.message||String(e));
