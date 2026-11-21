@@ -45,7 +45,7 @@ function toUtcFromZonedLocal(value,zone){
  if(+p.year!==+m[1]||+p.month!==+m[2]||+p.day!==+m[3]||+p.hour!==+m[4]||+p.minute!==+m[5])throw new Error("That local time is not valid in the selected time zone. Choose another time.");
  return new Date(guess).toISOString();
 }
-const statusLabels={applied:"Applied",under_review:"Under Review",shortlisted:"Shortlisted",rejected:"Rejected",withdrawn:"Withdrawn"};
+const statusLabels={applied:"Applied",under_review:"Under Review",shortlisted:"Shortlisted",interview:"Interview Stage",offer_sent:"Offer Sent",selected:"Final Selected",rejected:"Rejected",withdrawn:"Withdrawn"};
 function message(t,kind){$("message").hidden=false;$("message").className=kind==="error"?"error":"panel";$("message").textContent=t}
 function dateText(v){if(!v)return "Date unavailable";const d=new Date(v);return Number.isNaN(d.getTime())?"Date unavailable":d.toLocaleString("en-IN")}
 async function init(){
@@ -107,7 +107,7 @@ async function loadCompany(){
    const pref=prefs.data||{};
    const salaryPref=pref.minimum_salary||pref.maximum_salary?((pref.salary_currency||"₹")+" "+(pref.minimum_salary??"")+(pref.minimum_salary&&pref.maximum_salary?" – ":"")+(pref.maximum_salary??"")):"";
    const detailErrors=[p.error,profile.error,edu.error,exp.error,skills.error,certs.error,languages.error,prefs.error].filter(Boolean);
-   const canChange=["applied","under_review","shortlisted"].includes(a.status);
+   const canChange=["applied","under_review","shortlisted","interview","offer_sent"].includes(a.status);
    const statusControl='<div class="status-actions"><select class="app-status" data-app-id="'+esc(a.id)+'" data-company-id="'+esc(x.job.company_id)+'" data-system="'+esc(x.job._system)+'" '+(!canChange?'disabled':'')+'><option value="under_review" '+(a.status==="under_review"?'selected':'')+'>Under Review</option><option value="shortlisted" '+(a.status==="shortlisted"?'selected':'')+'>Shortlist</option></select><button type="button" class="save-app-status" data-app-id="'+esc(a.id)+'" '+(!canChange?'disabled':'')+'>Save Status</button><button type="button" class="finalise-app" data-app-id="'+esc(a.id)+'" data-company-id="'+esc(x.job.company_id)+'" data-system="'+x.job._system+'" data-final-status="selected" '+(!canChange?'disabled':'')+'>Final Select</button><button type="button" class="finalise-app" data-app-id="'+esc(a.id)+'" data-company-id="'+esc(x.job.company_id)+'" data-system="'+x.job._system+'" data-final-status="rejected" '+(!canChange?'disabled':'')+'>Final Reject</button></div>';
    const resumeAction=a.resume_id&&canChange?'<div class="status-actions"><button type="button" class="view-resume" data-app-id="'+esc(a.id)+'" data-system="'+esc(x.job._system)+'">📄 View Resume Securely</button></div>':(a.resume_id?'<p class="muted">Resume access is not available for this application status.</p>':'<p class="muted">No resume is attached to this application.</p>');
    let interviewAction="";
