@@ -91,6 +91,16 @@ Deno.serve(async (req) => {
     if (roleError) return reply({ error: "Could not verify administrator role" }, 500);
     const isSuperAdmin = (roleRows || []).some((row: { role: string }) => row.role === "super_admin");
 
+    // Super Admin actions must use a verified MFA session (AAL2).
+    // Company Owner / HR Manager permissions continue to be checked separately below.
+    if (isSuperAdmin) {
+      const { data: assurance, error: assuranceError } =
+        await userClient.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (assuranceError || assurance?.currentLevel !== "aal2") {
+        return reply({ error: "Super Admin MFA verification required (AAL2)" }, 403);
+      }
+    }
+
     const body = await req.json().catch(() => ({}));
     const jobId = String(body.job_id || "");
     const action = String(body.action || "");
