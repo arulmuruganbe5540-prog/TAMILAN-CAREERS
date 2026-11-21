@@ -663,7 +663,7 @@ await check("Saved jobs sync with the signed-in Job Seeker account", async () =>
     await savedPage.goto(base + "/saved-jobs.html", {waitUntil:"domcontentloaded"});
     await savedPage.locator(".job h2").waitFor({state:"visible",timeout:10000});
     const visible=await savedPage.locator("main").innerText();
-    if(!visible.includes("Frontend Developer")||!visible.includes("Example Company")||!visible.includes("Apply now")) throw new Error("Account-saved job details or direct application link did not render");
+    if(!visible.includes("Frontend Developer")||!visible.includes("Example Company")||!visible.includes("Apply / Official Link")) throw new Error("Account-saved job details or direct application link did not render");
     await savedPage.locator("[data-remove]").click();
     await savedPage.locator(".empty").waitFor({state:"visible",timeout:10000});
     if(!upsertCalled) throw new Error("Guest saved jobs were not migrated into the account");
