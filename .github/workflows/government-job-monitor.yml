@@ -1,6 +1,8 @@
 name: Frequent official government recruitment monitor
 on:
   push:
+    branches:
+      - main
     paths:
       - 'scripts/government-job-monitor.py'
       - 'scripts/government-source-discovery.py'
@@ -18,8 +20,6 @@ permissions:
 jobs:
   discover:
     runs-on: ubuntu-latest
-    env:
-      GOVERNMENT_MONITOR_SECRET: ${{ secrets.GOVERNMENT_MONITOR_SECRET }}
     timeout-minutes: 20
     steps:
       - name: Checkout repository
@@ -34,8 +34,7 @@ jobs:
         run: python scripts/government-job-monitor.py
       - name: Discover possible new official recruiting portals
         run: python scripts/government-source-discovery.py
-      - name: Sync up to 15 new candidates to Supabase Admin Review
-        if: ${{ env.GOVERNMENT_MONITOR_SECRET != '' }}
+      - name: Prepare new candidates for Supabase Admin Review
         run: |
           python - <<'PY'
           import json
@@ -60,6 +59,14 @@ jobs:
           )
           print(f"Prepared {len(candidates)} candidates for secure Admin Review sync.")
           PY
+      - name: Sync candidates to Supabase Admin Review
+        env:
+          GOVERNMENT_MONITOR_SECRET: ${{ secrets.GOVERNMENT_MONITOR_SECRET }}
+        run: |
+          if [ -z "$GOVERNMENT_MONITOR_SECRET" ]; then
+            echo "GOVERNMENT_MONITOR_SECRET is not configured; secure sync skipped."
+            exit 0
+          fi
           curl --fail --show-error --silent --max-time 120 \
             -X POST "https://qkmljuuusfjowexvybvy.supabase.co/functions/v1/ingest-government-notices" \
             -H "x-monitor-secret: ${GOVERNMENT_MONITOR_SECRET}" \
