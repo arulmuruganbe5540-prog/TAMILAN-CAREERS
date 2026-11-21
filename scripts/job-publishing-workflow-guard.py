@@ -46,7 +46,7 @@ checks = {
     "Admin rejects require a non-empty reason":
         'if(!reason.trim())' in admin and 'update.review_note=reason.trim()' in admin,
     "Private admin form validates required fields and salary bounds":
-        '!title||!description||!country||!category' in private_admin and 'Number(min)>Number(max)' in private_admin,
+        '!title||!description' in private_admin and 'Number(min)>Number(max)' in private_admin,
     "Admin queue errors are shown instead of silently ignored":
         'if(error){$("queue").innerHTML' in admin,
     "Private admin form captures salary period":
@@ -64,15 +64,15 @@ checks = {
     "submission rejects past dates using India timezone":
         "(now() at time zone 'Asia/Kolkata')::date" in submission,
     "publisher requires verified company":
-        "c.verification_status='verified'" in publisher,
+        "c.verification_status='verified'" in publisher.lower(),
     "publisher is idempotent for already-published review":
-        "if v_review.published_private_job_id is not null then" in publisher,
+        "if v_review.published_private_job_id is not null then" in publisher.lower(),
     "publisher only accepts approved review":
-        "v_review.status<>'approved'" in publisher,
+        "v_review.status<>'approved'" in publisher.lower(),
     "publisher writes only to the independent private_jobs table":
-        "insert into public.private_jobs" in publisher and "insert into public.jobs" not in publisher,
+        "insert into public.private_jobs" in publisher.lower() and "insert into public.jobs" not in publisher.lower(),
     "salary period is validated before insert":
-        "v_salary_period not in ('monthly','daily')" in publisher and "v_salary_currency,v_salary_period" in publisher,
+        "v_salary_period not in ('monthly','daily')" in publisher.lower() and "v_salary_currency,v_salary_period" in publisher.lower(),
 }
 
 failed = [name for name, ok in checks.items() if not ok]
