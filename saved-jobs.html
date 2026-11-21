@@ -42,7 +42,8 @@ function renderAccount(){
  list.innerHTML=accountRows.map(row=>{
   const j=row.job||{},id=row.job_id,open=String(j.status||"").toLowerCase()==="published"&&!isExpired(j.application_deadline);
   const system=j._system||"",details="job-summary.html?type=job&system="+encodeURIComponent(system)+"&id="+encodeURIComponent(id);
-  const apply=j.application_url||(system==="government"?(j.official_notification_url||j.official_website_url):(j.contact_email?("mailto:"+j.contact_email):"apply.html?job="+encodeURIComponent(id)));
+  const officialRole=system==="government"||(system==="international"&&j.job_sector==="government");
+  const apply=j.application_url||(officialRole?(j.official_notification_url||j.official_website_url):(j.contact_email?("mailto:"+j.contact_email):"apply.html?job="+encodeURIComponent(id)));
   return '<article class="job"><h2>'+esc(j.job_title||"Job no longer available")+'</h2>'+(j.company_name?'<b>'+esc(j.company_name)+'</b><br>':'')+'<div class="meta">'+(j.location?'📍 '+esc(j.location)+' · ':'')+esc(j.employment_type||"")+'</div><div class="actions">'+(open?'<a class="btn apply" href="'+esc(apply)+'">Apply / Official Link</a>':'<span class="meta">This vacancy is closed or no longer accepting applications.</span>')+'<a class="btn apply" href="'+esc(details)+'">View Details</a><button class="btn remove" type="button" data-remove="'+esc(id)+'">Remove</button></div></article>';
  }).join("");
 }
