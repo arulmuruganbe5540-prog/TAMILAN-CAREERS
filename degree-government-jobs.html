@@ -54,7 +54,7 @@ button{border:1px solid #b9c8d9;background:#fff;color:#173554;padding:8px 12px;b
 <section class="info-section" id="upcoming-section"><h2>Upcoming Government Jobs</h2><p>Published notifications with an application start date in the future will appear here. Only confirmed dates entered from the official notification are shown.</p><div id="upcoming-jobs" class="info-list"><p>Loading upcoming notifications…</p></div></section>
 <section class="info-section"><h2>Government Departments</h2><p>Departments represented in the currently published job notifications for this qualification.</p><div id="department-list" class="info-list"><p>Loading departments…</p></div></section>
 <section class="info-section"><h2>Required Documents</h2><p>Documents commonly requested in government recruitment applications. The exact list depends on the individual official notification.</p><ul>
-<li>8th Standard / relevant educational certificate, where required</li><li>Date of birth proof</li><li>Government-issued photo identity proof</li><li>Recent passport-size photograph and signature</li><li>Community / category certificate, if claiming reservation</li><li>Disability, ex-servicemen or other relevant certificates, if applicable</li><li>Experience, technical or trade certificate, if specifically required</li>
+<li>Educational qualification certificates and mark sheets relevant to this recruitment</li><li>Date of birth proof</li><li>Government-issued photo identity proof</li><li>Recent passport-size photograph and signature</li><li>Community / category certificate, if claiming reservation</li><li>Disability, ex-servicemen or other relevant certificates, if applicable</li><li>Experience, technical or trade certificate, if specifically required</li>
 </ul><p>Always follow the document checklist in the official notification; do not upload documents that are not requested.</p></section>
 <section class="info-section"><h2>Selection Process</h2><p>The selection method varies by department and post. Details below are taken from published job records when supplied by the administrator.</p><div id="selection-list" class="info-list"><p>Loading selection details…</p></div></section>
 <section class="info-section"><h2>How to Apply</h2><p>Use the official application link shown on each job details page. General steps are listed below; the notification's instructions take priority.</p><ol><li>Open the job's full details and read the official notification PDF.</li><li>Confirm educational qualification, age limit, category rules and important dates.</li><li>Open the official application website using the provided link.</li><li>Complete the application form and upload the required documents.</li><li>Pay the fee only through the official portal, if a fee applies.</li><li>Submit the form before the deadline and save the acknowledgement.</li></ol><div id="apply-notes" class="info-list"></div></section>
@@ -80,7 +80,15 @@ const PAGE_SIZE=20;let rows=[],page=1;
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
 function matches(j){
-const q=[...(Array.isArray(j.qualification_tags)?j.qualification_tags:[]),j.education_level||'',j.required_skills||'',j.description||''].join(' ').toLowerCase();
+const tags=Array.isArray(j.qualification_tags)?j.qualification_tags:[];
+if(tags.length){
+ return tags.some(tag=>{
+  const value=String(tag||'').trim();
+  const group=value.includes('::')?value.split('::')[0].trim():value;
+  return group.toLowerCase()==='degree' || terms.some(t=>value.toLowerCase()===t);
+ });
+}
+const q=String(j.education_level||'').toLowerCase();
 return terms.some(t=>q.includes(t));
 }
 function render(){
