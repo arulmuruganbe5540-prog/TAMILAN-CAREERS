@@ -10,6 +10,7 @@
 
 /* Site-wide readability improvements */
 body{font-size:16.5px;line-height:1.65;-webkit-text-size-adjust:100%;text-rendering:optimizeLegibility}p,li,dd,dt,label,small,.muted,.description,.intro,.notice{line-height:1.7}p{font-size:1em}h1{line-height:1.25}h2{line-height:1.3}h3,h4{line-height:1.4}input,select,textarea,button{font:inherit;line-height:1.4}table{font-size:15.5px;line-height:1.55}th{font-size:15px;font-weight:700}td{padding-top:11px;padding-bottom:11px}a{text-underline-offset:3px}:focus-visible{outline:3px solid #087eaf;outline-offset:2px}@media(max-width:600px){body{font-size:16px}table{font-size:15px}th{font-size:14.5px}td{padding:10px 9px}input,select,textarea,button{font-size:16px}}
+.prep-section{background:#fff;border:1px solid #dce4ef;padding:18px 20px;margin:18px 0}.prep-section h2{margin:0 0 10px;font-size:20px;color:#101d3a}.prep-section p,.prep-section li{line-height:1.7}.prep-section ul{margin:8px 0;padding-left:22px}.prep-section li{margin:8px 0}.back{display:inline-block;margin-bottom:14px;color:#075e9b;font-weight:700}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418"
@@ -29,6 +30,13 @@ const fmt=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?esc(v):d.to
 const url=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch(e){return '';}};
 const params=new URLSearchParams(location.search),id=params.get('id');
 function row(label,value){return '<tr><th>'+esc(label)+'</th><td>'+esc(value)+'</td></tr>';}
+function prepSection(title,value,asLinks){
+ if(!value||!String(value).trim())return '';
+ const lines=String(value).split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+ const body=asLinks?'<ul>'+lines.map(line=>{const parts=line.split('|');const label=(parts[0]||'Resource').trim();const href=parts.length>1?url(parts.slice(1).join('|').trim()):'';return '<li>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(label)+'</a>':esc(line))+'</li>';}).join('')+'</ul>':'<p style="white-space:pre-wrap">'+esc(value)+'</p>';
+ return '<section class="prep-section"><h2>'+esc(title)+'</h2>'+body+'</section>';
+}
+
 async function load(){
 if(!id){host.innerHTML='<h2 class="title">Job not found</h2><p class="muted">A valid job notification was not selected. Return to the Home Page and choose a published job.</p>';return;}
 const {data,error}=await sb.from('government_jobs').select('*').eq('id',id).eq('status','published').maybeSingle();
@@ -44,7 +52,10 @@ const fields=[
 ['Selection Process',j.selection_process],['How to Apply',j.how_to_apply],['Additional Information',j.additional_info],['Job Description',j.description]
 ];
 const notification=url(j.official_notification_url),apply=url(j.application_url),official=url(j.official_website_url);
-host.innerHTML='<h2 class="title">'+esc(j.job_title)+'</h2><p class="muted">'+esc(j.department_name||j.employer_name||'Government Department')+' · '+esc(j.government_category||'Government Job')+'</p><table class="details"><tbody>'+fields.map(x=>row(x[0],x[1])).join('')+'</tbody></table><div class="actions">'+(notification?'<a href="'+esc(notification)+'" target="_blank" rel="noopener">Official Notification PDF</a>':'')+(apply?'<a class="secondary" href="'+esc(apply)+'" target="_blank" rel="noopener">Apply Online</a>':'')+(official?'<a href="'+esc(official)+'" target="_blank" rel="noopener">Official Website</a>':'')+'</div><p class="notice">Important: Read the official notification carefully and confirm eligibility, dates and application instructions on the recruiting authority website before applying.</p>';
+const prep=j.exam_preparation&&typeof j.exam_preparation==='object'?j.exam_preparation:{};
+const categoryBack=j.job_category?'central-government-category.html?category='+encodeURIComponent(j.job_category):'central-government-jobs.html';
+
+host.innerHTML='<a class="back" href="'+esc(categoryBack)+'">← Back to '+esc(j.job_category||'Government Jobs')+'</a><h2 class="title">'+esc(j.job_title)+'</h2><p class="muted">'+esc(j.department_name||j.employer_name||'Government Department')+' · '+esc(j.job_category||j.government_category||'Government Job')+'</p><table class="details"><tbody>'+fields.map(x=>row(x[0],x[1])).join('')+'</tbody></table><div class="actions">'+(notification?'<a href="'+esc(notification)+'" target="_blank" rel="noopener">Official Notification PDF</a>':'')+(apply?'<a class="secondary" href="'+esc(apply)+'" target="_blank" rel="noopener">Apply Online</a>':'')+(official?'<a href="'+esc(official)+'" target="_blank" rel="noopener">Official Website</a>':'')+'</div>'+prepSection('Syllabus & Exam Pattern',prep.syllabus,false)+prepSection('Model Exam Question Papers',prep.model_papers,true)+prepSection('Previous Year Question Papers',prep.previous_papers,true)+prepSection('Answer Keys',prep.answer_keys,true)+prepSection('Detailed Solutions / Explanations',prep.solutions,false)+prepSection('Mock Tests',prep.mock_tests,true)+'<p class="notice">Important: Read the official notification carefully and confirm eligibility, dates and application instructions on the recruiting authority website before applying. Previous-year papers should be labelled as official only when verified from the recruiting authority.</p>';
 }
 load();
 })();
