@@ -1,6 +1,6 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-20T19:14:57.842352+00:00",
+  "checked_at_utc": "2026-11-21T01:25:57.860748+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
   "successful_sources": 24,
@@ -9,6 +9,11 @@
       "source_id": "rrb",
       "url": "https://www.rrbapply.gov.in/",
       "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "source_id": "ibps",
+      "url": "https://www.ibps.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "sbi-careers",
@@ -21,6 +26,11 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "join-indian-army",
+      "url": "https://joinindianarmy.nic.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "nabard",
       "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "robots.txt disallows this page or could not be checked safely"
@@ -28,11 +38,6 @@
     {
       "source_id": "ncs",
       "url": "https://www.ncs.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "join-indian-army",
-      "url": "https://joinindianarmy.nic.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -111,13 +116,13 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "hpsc",
-      "url": "https://hpsc.gov.in/",
+      "source_id": "gpsc-gujarat",
+      "url": "https://gpsc.gujarat.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "gpsc-gujarat",
-      "url": "https://gpsc.gujarat.gov.in/",
+      "source_id": "hpsc",
+      "url": "https://hpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -151,11 +156,6 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "ibps-other-recruitment",
-      "url": "https://www.ibps.in/index.php/recruitment/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
       "source_id": "upsc-recruitment-advertisements",
       "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisement",
       "error": "HTTP Error 404: Not Found"
@@ -166,9 +166,9 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "upsc-exam-notification-archive",
-      "url": "https://www.upsc.gov.in/exams-related-info/exam-notification/archives",
-      "error": "HTTP Error 404: Not Found"
+      "source_id": "psc-uk",
+      "url": "https://psc.uk.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "psc-wb",
@@ -176,9 +176,9 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "psc-uk",
-      "url": "https://psc.uk.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
+      "source_id": "upsc-exam-notification-archive",
+      "url": "https://www.upsc.gov.in/exams-related-info/exam-notification/archives",
+      "error": "HTTP Error 404: Not Found"
     },
     {
       "source_id": "mrb-results",
@@ -186,7 +186,7 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     }
   ],
-  "candidate_links_discovered_this_run": 1179,
+  "candidate_links_discovered_this_run": 1178,
   "note": "Official-source link discovery only. This aggregate report contains no candidate URLs and does not assert that Supabase Admin Review sync succeeded. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 4,
   "request_timeout_seconds": 20
