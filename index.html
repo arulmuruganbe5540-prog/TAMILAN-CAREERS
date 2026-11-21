@@ -15,6 +15,12 @@
 .header-account:hover,.header-account:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 @media(max-width:520px){.site-header{padding:14px 12px;gap:8px}.site-header h1{font-size:19px}.site-header p{font-size:11px}.header-account{padding:8px 9px;font-size:12px}}
 .site-header h1{margin:0;font-size:24px;letter-spacing:.3px}.site-header p{margin:6px 0 0;color:#d6e5f6;font-size:13px}
+.featured-links{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 14px;background:#f3f6fb;overflow-x:auto;white-space:nowrap}
+.featured-links a{flex:0 0 auto;min-width:150px;text-align:center;padding:11px 20px;border-radius:8px;color:#fff;text-decoration:none;font-size:14px;font-weight:700;box-shadow:0 3px 8px rgba(16,29,58,.16);transition:transform .15s ease,filter .15s ease}
+.featured-links a:hover,.featured-links a:focus-visible{transform:translateY(-2px);filter:brightness(1.08);outline:2px solid #173554;outline-offset:2px}
+.featured-private{background:linear-gradient(110deg,#2563eb,#0891b2)}
+.featured-international{background:linear-gradient(110deg,#7c3aed,#db2777)}
+@media(max-width:520px){.featured-links{justify-content:flex-start;gap:8px;padding:9px 12px}.featured-links a{min-width:138px;padding:10px 14px;font-size:13px}}
 .nav-wrap{background:#14294c;border-bottom:3px solid var(--cyan);position:sticky;top:0;z-index:20}
 nav{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;padding:10px 14px;scrollbar-width:thin;max-width:1230px;margin:auto}
 nav a{flex:0 0 auto;padding:10px 13px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;border-radius:5px;background:#203b65}
@@ -59,14 +65,16 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
 </head>
 <body>
 <header class="site-header"><div class="site-brand"><h1>TAMILAN CAREERS</h1><p>Government Jobs · Exam Notifications · Career Updates</p></div><a class="header-account" id="accountNavLink" href="auth.html">Login / Register</a></header>
+<div class="featured-links" aria-label="Featured job categories">
+<a class="featured-private" href="private-jobs.html">Private Jobs</a>
+<a class="featured-international" href="international-jobs.html">International Jobs</a>
+</div>
 <div class="nav-wrap"><nav aria-label="Main navigation">
 <a href="central-government-jobs.html">Central Govt Jobs</a>
 <a href="tamil-nadu-government-jobs.html">Tamil Nadu Govt Jobs</a>
 <a href="state-government-jobs.html">All State Govt Jobs</a>
 <a href="#exam-dates">Exam Notifications</a>
 <a href="admissions.html">Admissions</a>
-<a class="private-link" href="private-jobs.html">Private Jobs</a>
-<a class="international-link" href="international-jobs.html">International Jobs</a>
 </nav></div>
 <div class="announcement" aria-label="Announcements"><div class="announcement-track">TAMILAN CAREERS — Government Job Notifications and Exam Updates · Check official notifications before applying · New published updates appear automatically every 5 minutes ·</div></div>
 <main>
