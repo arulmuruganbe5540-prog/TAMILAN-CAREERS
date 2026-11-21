@@ -16,7 +16,7 @@
 nav{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;padding:10px 14px;scrollbar-width:thin;max-width:1230px;margin:auto}
 nav a{flex:0 0 auto;padding:10px 13px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;border-radius:5px;background:#203b65}
 nav a:hover,nav a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;background:#28517f}
-nav a.private-link{background:#176b9e}nav a.international-link{background:#087443}
+nav a.private-link{background:#176b9e}nav a.international-link{background:#087443}nav a.account-link{background:#eaf5ff;color:#103a62;border:1px solid #9bdcff}
 .announcement{background:#eaf5ff;border-bottom:1px solid #c9e4fa;color:#103a62;overflow:hidden;padding:10px 0;font-size:13px;font-weight:700}
 .announcement-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:scrollnews 28s linear infinite}
 @keyframes scrollnews{to{transform:translateX(-100%)}}
@@ -64,6 +64,7 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
 <a href="admissions.html">Admissions</a>
 <a class="private-link" href="private-jobs.html">Private Jobs</a>
 <a class="international-link" href="international-jobs.html">International Jobs</a>
+<a class="account-link" id="accountNavLink" href="auth.html">Login / Register</a>
 </nav></div>
 <div class="announcement" aria-label="Announcements"><div class="announcement-track">TAMILAN CAREERS — Government Job Notifications and Exam Updates · Check official notifications before applying · New published updates appear automatically every 5 minutes ·</div></div>
 <main>
@@ -155,6 +156,16 @@ if(rr.error)console.error('Exam updates could not be loaded:',rr.error.message);
 renderAll();$('latest-updated').textContent='Last refreshed: '+new Date().toLocaleTimeString('en-IN')+' · Automatic refresh every 5 minutes';
 }
 refresh();setInterval(refresh,300000);
+})();
+</script>
+<script>
+(function(){
+const link=document.getElementById('accountNavLink');
+if(!link||!window.supabase)return;
+const client=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');
+function paint(session){link.textContent=session?'My Account':'Login / Register';link.href='auth.html';}
+client.auth.getSession().then(({data})=>paint(data.session));
+client.auth.onAuthStateChange((_event,session)=>paint(session));
 })();
 </script>
 </body>
