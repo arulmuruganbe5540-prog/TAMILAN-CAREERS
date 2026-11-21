@@ -180,6 +180,7 @@ declare
   v_title text;
   v_payload jsonb;
   v_review_id uuid;
+  v_country_name text;
 begin
   if auth.uid() is null then
     raise exception 'Login required';
@@ -214,6 +215,11 @@ begin
 
   if not found or nullif(btrim(v_company_name), '') is null then
     raise exception 'Company record or company name not found';
+  end if;
+
+  v_country_name := nullif(btrim(v_draft->>'countryName'), '');
+  if v_country_name is null or lower(v_country_name) <> 'india' then
+    raise exception 'Private Jobs are restricted to jobs located in India';
   end if;
 
   if v_draft->>'draft_status' = 'published' then
@@ -270,6 +276,7 @@ begin
     'type', v_draft->>'employmentType',
     'workplace', v_draft->>'workplaceType',
     'location', v_draft->>'location',
+    'country_name', 'India',
     'openings', coalesce(nullif(v_draft->>'openings',''), '1'),
     'experience', v_draft->>'experience',
     'education', v_draft->>'education',
