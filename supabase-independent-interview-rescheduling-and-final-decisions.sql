@@ -399,3 +399,7 @@ GRANT EXECUTE ON FUNCTION public.tc_candidate_propose_international_interview_da
  public.tc_company_propose_private_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text),
  public.tc_company_respond_international_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text),
  public.tc_company_respond_private_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text) TO authenticated;
+
+-- Trigger-only functions are not callable by application roles.
+REVOKE ALL ON FUNCTION private.tc_cancel_independent_interviews_on_application_close() FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION private.tc_log_independent_interview_schedule_change() FROM PUBLIC,anon,authenticated;
