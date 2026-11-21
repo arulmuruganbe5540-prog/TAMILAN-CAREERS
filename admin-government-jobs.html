@@ -77,6 +77,7 @@ function value(id){return $(id)?$(id).value.trim():""}
 function collect(status){
  const title=value("job_title"),description=value("description"),country=value("country_name"),category=value("category_id");
  if(!title||!description||!country||!category||!value("location")||!value("employment_type"))throw new Error("Complete Job Title, Category, Country, Location, Employment Type and Description.");
+  if(SYSTEM==="government"&&country.trim().toLowerCase()!=="india")throw new Error("Government Jobs is only for Indian government vacancies. Select India as the country.");
  if(SYSTEM==="government"&&!value("official_website_url"))throw new Error("Government postings require an official department website URL.");
  if(SYSTEM==="private"&&!value("employer_name"))throw new Error("Enter the company / employer name.");
  if(SYSTEM==="international"&&(!value("job_sector")||!value("employer_name")))throw new Error("Select the International Job Sector and enter the employer / recruiting authority.");
