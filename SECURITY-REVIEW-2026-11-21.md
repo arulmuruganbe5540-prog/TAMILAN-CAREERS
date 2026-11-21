@@ -35,6 +35,7 @@ The repository's current public visibility is a separate concern from the securi
 5. Improved the MFA setup page to recommend a second authenticator on a separate device as a recovery option.
 6. Standardized the external-job-candidate review RPC on the shared Super Admin MFA helper.
 7. Enforced mandatory MFA in the shared `private.is_super_admin()` and `private.require_super_admin_mfa()` helpers. Updated company-verification documents/requests, job-report moderation, and private verification-file policies to require the verified MFA session.
+8. Hardened `.github/workflows/government-job-monitor.yml`: the workflow now runs push-triggered scans only from `main`; the Supabase monitor secret is no longer a job-wide environment variable and is exposed only to the dedicated candidate-sync step. Candidate preparation and source-discovery steps run without that secret. The secret is not printed or written to the repository.
 
 ## Repository secret search limitations
 
