@@ -77,7 +77,8 @@ function collect(status){
  if(!title||!description||!country||!category||!value("location")||!value("employment_type"))throw new Error("Complete Job Title, Category, Country, Location, Employment Type and Description.");
  if(SYSTEM==="government"&&!value("official_website_url"))throw new Error("Government postings require an official department website URL.");
  if(SYSTEM==="private"&&!value("employer_name"))throw new Error("Enter the company / employer name.");
- if(SYSTEM==="international"&&(!value("job_sector")||!value("employer_name")))throw new Error("Select the International Job Sector and enter the employer / recruiting authority.");\n if(SYSTEM==="international"&&value("job_sector")==="government"&&!value("official_website_url"))throw new Error("International Government postings require an official authority website URL.");
+ if(SYSTEM==="international"&&(!value("job_sector")||!value("employer_name")))throw new Error("Select the International Job Sector and enter the employer / recruiting authority.");
+ if(SYSTEM==="international"&&value("job_sector")==="government"&&!value("official_website_url"))throw new Error("International Government postings require an official authority website URL.");
  if((SYSTEM==="private"||SYSTEM==="international")&&!value("application_url")&&!value("contact_email"))throw new Error("Provide an application URL or contact email.");
  const min=value("salary_min"),max=value("salary_max");
  if(min&&max&&Number(min)>Number(max))throw new Error("Maximum salary must be greater than or equal to minimum salary.");
