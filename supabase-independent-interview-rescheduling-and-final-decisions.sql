@@ -97,7 +97,7 @@ AS $function$
 DECLARE v_user uuid:=(SELECT auth.uid()); v_old text; v_candidate uuid; v_job_company uuid; v_title text;
 BEGIN
  IF v_user IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
- IF p_system NOT IN ('private','international') OR p_new_status NOT IN ('selected','rejected') THEN RAISE EXCEPTION 'Invalid final decision'; END IF;
+ IF p_system IS NULL OR p_system NOT IN ('private','international') OR p_new_status IS NULL OR p_new_status NOT IN ('selected','rejected') THEN RAISE EXCEPTION 'Invalid final decision'; END IF;
  IF length(coalesce(p_note,''))>2000 THEN RAISE EXCEPTION 'Decision note is too long'; END IF;
  IF NOT (EXISTS(SELECT 1 FROM public.company_members cm WHERE cm.company_id=p_company_id AND cm.user_id=v_user AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager','recruiter'))
   OR EXISTS(SELECT 1 FROM public.companies c WHERE c.id=p_company_id AND c.owner_user_id=v_user)) THEN RAISE EXCEPTION 'Company application-management permission required'; END IF;
@@ -140,8 +140,8 @@ DECLARE
  v_status text; v_title text; v_id uuid; v_proposal_type text:=p_proposal_type;
 BEGIN
  IF v_user IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
- IF p_system NOT IN ('private','international') THEN RAISE EXCEPTION 'Invalid job system'; END IF;
- IF p_proposal_type NOT IN ('employer_reschedule','candidate_alternative') THEN RAISE EXCEPTION 'Invalid proposal type'; END IF;
+ IF p_system IS NULL OR p_system NOT IN ('private','international') THEN RAISE EXCEPTION 'Invalid job system'; END IF;
+ IF p_proposal_type IS NULL OR p_proposal_type NOT IN ('employer_reschedule','candidate_alternative') THEN RAISE EXCEPTION 'Invalid proposal type'; END IF;
  IF p_scheduled_at IS NULL OR p_scheduled_at<=now() THEN RAISE EXCEPTION 'Proposed interview time must be in the future'; END IF;
  IF p_timezone IS NULL OR NOT EXISTS(SELECT 1 FROM pg_catalog.pg_timezone_names WHERE name=p_timezone) THEN RAISE EXCEPTION 'Select a valid IANA time zone'; END IF;
  IF p_duration_minutes IS NULL OR p_duration_minutes NOT BETWEEN 10 AND 480 THEN RAISE EXCEPTION 'Duration must be between 10 and 480 minutes'; END IF;
@@ -240,7 +240,7 @@ DECLARE v_user uuid:=(SELECT auth.uid()); v_candidate uuid; v_company uuid; v_in
  v_current_status text;
 BEGIN
  IF v_user IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
- IF p_system NOT IN ('private','international') OR p_response NOT IN ('accepted','declined') THEN RAISE EXCEPTION 'Invalid response'; END IF;
+ IF p_system IS NULL OR p_system NOT IN ('private','international') OR p_response IS NULL OR p_response NOT IN ('accepted','declined') THEN RAISE EXCEPTION 'Invalid response'; END IF;
  IF length(coalesce(p_response_note,''))>2000 THEN RAISE EXCEPTION 'Response note is too long'; END IF;
  IF p_system='private' THEN
   SELECT p.candidate_id,p.company_id,p.interview_id,p.application_id,p.proposal_type,p.status,p.proposed_at,p.timezone,p.duration_minutes,p.interview_mode,p.meeting_url,p.location,p.message,i.interview_title,i.status
@@ -370,36 +370,30 @@ CREATE TRIGGER trg_international_interview_schedule_history BEFORE UPDATE OF sch
 
 GRANT USAGE ON SCHEMA private TO authenticated;
 REVOKE ALL ON FUNCTION private.tc_cancel_independent_interviews_on_application_close() FROM PUBLIC,anon,authenticated;
-REVOKE ALL ON FUNCTION private.tc_company_finalise_independent_application(p_system text, p_application_id uuid, p_company_id uuid, p_new_status text, p_note text) FROM PUBLIC,anon,authenticated;
-REVOKE ALL ON FUNCTION private.tc_create_interview_schedule_proposal(p_system text, p_interview_id uuid, p_proposal_type text, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION private.tc_company_finalise_independent_application(text, uuid, uuid, text, text) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION private.tc_create_interview_schedule_proposal(text, uuid, text, timestamp with time zone, text, integer, text, text, text, text) FROM PUBLIC,anon,authenticated;
 REVOKE ALL ON FUNCTION private.tc_log_independent_interview_schedule_change() FROM PUBLIC,anon,authenticated;
-REVOKE ALL ON FUNCTION private.tc_respond_interview_schedule_proposal(p_system text, p_proposal_id uuid, p_response text, p_response_note text) FROM PUBLIC,anon,authenticated;
-GRANT EXECUTE ON FUNCTION private.tc_cancel_independent_interviews_on_application_close(),
- private.tc_company_finalise_independent_application(p_system text, p_application_id uuid, p_company_id uuid, p_new_status text, p_note text),
- private.tc_create_interview_schedule_proposal(p_system text, p_interview_id uuid, p_proposal_type text, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text),
- private.tc_log_independent_interview_schedule_change(),
- private.tc_respond_interview_schedule_proposal(p_system text, p_proposal_id uuid, p_response text, p_response_note text) TO authenticated;
-REVOKE ALL ON FUNCTION public.tc_candidate_propose_international_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_candidate_propose_private_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_candidate_respond_international_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_candidate_respond_private_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_company_finalise_international_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_company_finalise_private_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_company_propose_international_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_company_propose_private_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_company_respond_international_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text) FROM PUBLIC,anon;
-REVOKE ALL ON FUNCTION public.tc_company_respond_private_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text) FROM PUBLIC,anon;
-GRANT EXECUTE ON FUNCTION public.tc_candidate_propose_international_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text),
- public.tc_candidate_propose_private_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text),
- public.tc_candidate_respond_international_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text),
- public.tc_candidate_respond_private_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text),
- public.tc_company_finalise_international_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text),
- public.tc_company_finalise_private_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text),
- public.tc_company_propose_international_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text),
- public.tc_company_propose_private_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text),
- public.tc_company_respond_international_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text),
- public.tc_company_respond_private_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text) TO authenticated;
-
--- Trigger-only functions are not callable by application roles.
-REVOKE ALL ON FUNCTION private.tc_cancel_independent_interviews_on_application_close() FROM PUBLIC,anon,authenticated;
-REVOKE ALL ON FUNCTION private.tc_log_independent_interview_schedule_change() FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION private.tc_respond_interview_schedule_proposal(text, uuid, text, text) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION private.tc_company_finalise_independent_application(text, uuid, uuid, text, text),
+ private.tc_create_interview_schedule_proposal(text, uuid, text, timestamp with time zone, text, integer, text, text, text, text),
+ private.tc_respond_interview_schedule_proposal(text, uuid, text, text) TO authenticated;
+REVOKE ALL ON FUNCTION public.tc_candidate_propose_international_interview_date(uuid, timestamp with time zone, text, integer, text, text, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_candidate_propose_private_interview_date(uuid, timestamp with time zone, text, integer, text, text, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_candidate_respond_international_interview_reschedule(uuid, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_candidate_respond_private_interview_reschedule(uuid, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_company_finalise_international_application(uuid, uuid, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_company_finalise_private_application(uuid, uuid, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_company_propose_international_interview_reschedule(uuid, timestamp with time zone, text, integer, text, text, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_company_propose_private_interview_reschedule(uuid, timestamp with time zone, text, integer, text, text, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_company_respond_international_interview_date_proposal(uuid, text, text) FROM PUBLIC,anon;
+REVOKE ALL ON FUNCTION public.tc_company_respond_private_interview_date_proposal(uuid, text, text) FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.tc_candidate_propose_international_interview_date(uuid, timestamp with time zone, text, integer, text, text, text, text),
+ public.tc_candidate_propose_private_interview_date(uuid, timestamp with time zone, text, integer, text, text, text, text),
+ public.tc_candidate_respond_international_interview_reschedule(uuid, text, text),
+ public.tc_candidate_respond_private_interview_reschedule(uuid, text, text),
+ public.tc_company_finalise_international_application(uuid, uuid, text, text),
+ public.tc_company_finalise_private_application(uuid, uuid, text, text),
+ public.tc_company_propose_international_interview_reschedule(uuid, timestamp with time zone, text, integer, text, text, text, text),
+ public.tc_company_propose_private_interview_reschedule(uuid, timestamp with time zone, text, integer, text, text, text, text),
+ public.tc_company_respond_international_interview_date_proposal(uuid, text, text),
+ public.tc_company_respond_private_interview_date_proposal(uuid, text, text) TO authenticated;
