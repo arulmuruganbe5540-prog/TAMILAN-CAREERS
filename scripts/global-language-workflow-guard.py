@@ -22,11 +22,11 @@ checks = {
         and "LANG_STORAGE" not in global_js
         and "tc-guide-demo-language" not in global_js
         and "languageSelect" not in global_js,
-    "country detection does not choose or switch the website language":
-        "navigator.language" not in global_js
-        and "primary:" not in global_js
-        and "langs:[" not in global_js
-        and 'setAttribute("lang","en")' in global_js,
+    "country detection changes regional context while keeping English":
+        "function setRegionalContext(countryCode,region,zone)" in global_js
+        and 'document.documentElement.setAttribute("lang","en")' in global_js
+        and 'language:"en"' in global_js
+        and "country:countryCode" in global_js,
     "automatic translation is explicitly disabled":
         "English-only" in translator
         and "MutationObserver" not in translator
@@ -41,24 +41,22 @@ checks = {
         "brand.replaceWith(link)" in global_js
         and "header.insertBefore(link,header.firstChild)" not in global_js
         and ".tc-premium-header-shell .tc-premium-header-brand" in global_js,
-    "shared footer does not duplicate an existing page footer":
-        'if(document.querySelector("body footer"))return;' in footer_script,
-    "homepage latest jobs excludes jobs already featured above":
-        "const featuredSections=[" in homepage
-        and "const alreadyShownIds=new Set()" in homepage
-        and "return !id||!alreadyShownIds.has(id)" in homepage
-        and "const overseasJobs=foreignError?[]:(foreignData||[])" in homepage,
-    "homepage prioritizes live jobs before career discovery and keeps education/tools later":
-        "const sections={country_government_jobs:" in homepage
-        and 'qualification_pathways:"qualification-pathways"' in homepage
-        and 'career_tools:"career-tools"' in homepage
-        and homepage.split("const sections={",1)[1].split("};",1)[0].index("country_government_jobs:") < homepage.split("const sections={",1)[1].split("};",1)[0].index("qualification_pathways:")
-        and homepage.split("const sections={",1)[1].split("};",1)[0].index("qualification_pathways:") < homepage.split("const sections={",1)[1].split("};",1)[0].index("career_tools:")
-        and "const order=defaults;" in homepage,
-    "main navigation links directly to private jobs and career tools":
-        '<a href="jobs.html?job_kind=private">Private Jobs</a>' in homepage
-        and '<a href="#career-tools">Career Tools</a>' in homepage
-        and '<a href="indian-government-jobs.html">Government Jobs</a>' in homepage,
+    "shared footer reuses an existing page footer":
+        'var existingFooter=document.querySelector("body footer");' in footer_script
+        and "if(existingFooter){addSuperAdminLink(existingFooter);return;}" in footer_script,
+    "homepage keeps recent and government vacancy tables separate":
+        'id="just-posted"' in homepage
+        and 'id="latest-government"' in homepage
+        and "No recent verified vacancies are available." in homepage
+        and "No verified government vacancies are published yet." in homepage,
+    "homepage presents vacancy updates before career discovery":
+        homepage.index('id="just-posted"') < homepage.index('id="latest-government"')
+        and homepage.index('id="latest-government"') < homepage.index('id="updates"')
+        and homepage.index('id="updates"') < homepage.index("EXPLORE TAMILAN CAREERS"),
+    "homepage provides direct access to private jobs and exam preparation":
+        'href="jobs.html?type=private"' in homepage
+        and 'href="exam-preparation.html"' in homepage
+        and 'href="indian-government-jobs.html"' in homepage,
     "homepage publishes accurate website and organization structured data":
         '"@type": "WebSite"' in seo
         and '"@type": "Organization"' in seo
