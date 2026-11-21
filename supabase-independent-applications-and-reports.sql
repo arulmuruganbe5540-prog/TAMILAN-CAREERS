@@ -453,3 +453,59 @@ END $$;
 REVOKE ALL ON FUNCTION public.tc_company_manage_private_job(uuid,text) FROM PUBLIC,anon,authenticated;
 REVOKE ALL ON FUNCTION public.tc_company_manage_international_job(uuid,text) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.tc_company_manage_private_job(uuid,text),public.tc_company_manage_international_job(uuid,text) TO authenticated;
+
+CREATE OR REPLACE FUNCTION private.notify_independent_job_application()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $$
+DECLARE v_company uuid; v_title text; v_name text;
+BEGIN
+ IF TG_TABLE_NAME='private_job_applications' THEN
+  SELECT j.company_id,j.job_title,c.company_name INTO v_company,v_title,v_name FROM public.private_jobs j LEFT JOIN public.companies c ON c.id=j.company_id WHERE j.id=NEW.job_id;
+ ELSIF TG_TABLE_NAME='international_job_applications' THEN
+  SELECT j.company_id,j.job_title,c.company_name INTO v_company,v_title,v_name FROM public.international_jobs j LEFT JOIN public.companies c ON c.id=j.company_id WHERE j.id=NEW.job_id;
+ ELSE RETURN NEW; END IF;
+ IF v_company IS NULL OR to_regclass('public.tc_notifications') IS NULL THEN RETURN NEW; END IF;
+ INSERT INTO public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+ SELECT cm.user_id,'application_status','New job application received',coalesce(v_name,'Company')||' — '||coalesce(v_title,'Job')||' has received a new application.',NEW.id
+ FROM public.company_members cm WHERE cm.company_id=v_company AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager','recruiter');
+ INSERT INTO public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+ SELECT c.owner_user_id,'application_status','New job application received',coalesce(c.company_name,'Company')||' — '||coalesce(v_title,'Job')||' has received a new application.',NEW.id
+ FROM public.companies c WHERE c.id=v_company AND c.owner_user_id IS NOT NULL
+ AND NOT EXISTS(SELECT 1 FROM public.company_members cm WHERE cm.company_id=v_company AND cm.user_id=c.owner_user_id AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager','recruiter'));
+ RETURN NEW;
+END $$;
+REVOKE ALL ON FUNCTION private.notify_independent_job_application() FROM PUBLIC,anon,authenticated;
+
+CREATE OR REPLACE FUNCTION private.notify_employer_on_independent_withdrawal()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $$
+DECLARE v_company uuid; v_title text; v_name text;
+BEGIN
+ IF NEW.status IS DISTINCT FROM OLD.status AND NEW.status='withdrawn' THEN
+  IF TG_TABLE_NAME='private_job_applications' THEN
+   SELECT j.company_id,j.job_title,c.company_name INTO v_company,v_title,v_name FROM public.private_jobs j LEFT JOIN public.companies c ON c.id=j.company_id WHERE j.id=NEW.job_id;
+  ELSIF TG_TABLE_NAME='international_job_applications' THEN
+   SELECT j.company_id,j.job_title,c.company_name INTO v_company,v_title,v_name FROM public.international_jobs j LEFT JOIN public.companies c ON c.id=j.company_id WHERE j.id=NEW.job_id;
+  END IF;
+  IF v_company IS NOT NULL AND to_regclass('public.tc_notifications') IS NOT NULL THEN
+   INSERT INTO public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+   SELECT cm.user_id,'application_status','Candidate withdrew an application',coalesce(v_name,'Company')||' — '||coalesce(v_title,'Job')||' — the candidate withdrew this application.',NEW.id
+   FROM public.company_members cm WHERE cm.company_id=v_company AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager','recruiter');
+   INSERT INTO public.tc_notifications(user_id,notification_type,title,body,related_application_id)
+   SELECT c.owner_user_id,'application_status','Candidate withdrew an application',coalesce(c.company_name,'Company')||' — '||coalesce(v_title,'Job')||' — the candidate withdrew this application.',NEW.id
+   FROM public.companies c WHERE c.id=v_company AND c.owner_user_id IS NOT NULL
+   AND NOT EXISTS(SELECT 1 FROM public.company_members cm WHERE cm.company_id=v_company AND cm.user_id=c.owner_user_id AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager','recruiter'));
+  END IF;
+ END IF;
+ RETURN NEW;
+END $$;
+REVOKE ALL ON FUNCTION private.notify_employer_on_independent_withdrawal() FROM PUBLIC,anon,authenticated;
+
+DROP TRIGGER IF EXISTS trg_notify_private_job_application ON public.private_job_applications;
+DROP TRIGGER IF EXISTS trg_notify_international_job_application ON public.international_job_applications;
+DROP TRIGGER IF EXISTS trg_notify_private_job_withdrawal ON public.private_job_applications;
+DROP TRIGGER IF EXISTS trg_notify_international_job_withdrawal ON public.international_job_applications;
+CREATE TRIGGER trg_notify_private_job_application AFTER INSERT ON public.private_job_applications FOR EACH ROW EXECUTE FUNCTION private.notify_independent_job_application();
+CREATE TRIGGER trg_notify_international_job_application AFTER INSERT ON public.international_job_applications FOR EACH ROW EXECUTE FUNCTION private.notify_independent_job_application();
+CREATE TRIGGER trg_notify_private_job_withdrawal AFTER UPDATE ON public.private_job_applications FOR EACH ROW EXECUTE FUNCTION private.notify_employer_on_independent_withdrawal();
+CREATE TRIGGER trg_notify_international_job_withdrawal AFTER UPDATE ON public.international_job_applications FOR EACH ROW EXECUTE FUNCTION private.notify_employer_on_independent_withdrawal();
