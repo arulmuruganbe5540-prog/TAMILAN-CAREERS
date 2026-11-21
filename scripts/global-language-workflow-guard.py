@@ -54,7 +54,7 @@ checks = {
         and homepage.index('id="latest-government"') < homepage.index('id="updates"')
         and homepage.index('id="updates"') < homepage.index("EXPLORE TAMILAN CAREERS"),
     "homepage provides direct access to private jobs and exam preparation":
-        'href="jobs.html?type=private"' in homepage
+        'href="private-jobs.html"' in homepage
         and 'href="exam-preparation.html"' in homepage
         and 'href="indian-government-jobs.html"' in homepage,
     "homepage publishes accurate website and organization structured data":
