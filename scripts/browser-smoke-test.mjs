@@ -855,8 +855,9 @@ await check("Candidate can propose an alternative date for an accepted Private i
     await p.locator("details summary").filter({hasText:"Propose Another Interview Date"}).click();
     await p.locator('[data-alt-date="candidate-private-interview"]').fill("2030-01-03T11:00");
     await p.locator('[data-alt-zone="candidate-private-interview"]').fill("Asia/Kolkata");
+    const proposalResponse=p.waitForResponse(response=>response.url().includes("/rpc/tc_candidate_propose_private_interview_date"));
     await p.locator('[data-propose-alt="candidate-private-interview"]').click();
-    await p.waitForFunction(()=>document.getElementById("interviews")?.textContent.includes("Private Interview"));
+    await proposalResponse;
     if(proposalCalls!==1||proposalPayload?.p_interview_id!=="candidate-private-interview"||proposalPayload?.p_interview_mode!=="online")throw new Error("Candidate alternative-date proposal did not preserve the interview details");
   }finally{await p.close()}
 });
