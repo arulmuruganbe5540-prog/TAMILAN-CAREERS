@@ -117,7 +117,7 @@ if((x.job._system==="private"||x.job._system==="international")&&canChange){
  const proposalTable=x.job._system==="private"?"private_job_interview_reschedule_proposals":"international_job_interview_reschedule_proposals";
  const {data:proposals,error:proposalError}=await db.from(proposalTable).select("id,interview_id,proposal_type,proposed_at,timezone,duration_minutes,interview_mode,meeting_url,location,message,status,response_note").eq("application_id",a.id).order("created_at",{ascending:false});
  const historyTable=x.job._system==="private"?"private_job_interview_history":"international_job_interview_history";
- const {data:scheduleHistory,error:scheduleHistoryError}=await db.from(historyTable).select("id,interview_id,change_note,old_schedule,new_schedule,changed_at").in("interview_id",(interviews||[]).map(iv=>iv.id)).order("changed_at",{ascending:false});
+ const {data:scheduleHistory,error:scheduleHistoryError}=(interviews||[]).length?await db.from(historyTable).select("id,interview_id,change_note,old_schedule,new_schedule,changed_at").in("interview_id",(interviews||[]).map(iv=>iv.id)).order("changed_at",{ascending:false}):{data:[],error:null};
  const zoneDefault=x.job._system==="private"?"Asia/Kolkata":(Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC");
  let historyHtml=interviewError?'<p class="muted">Unable to load interview history: '+esc(interviewError.message)+'</p>':(interviews||[]).map(iv=>{
  const related=(proposals||[]).filter(p=>p.interview_id===iv.id);
