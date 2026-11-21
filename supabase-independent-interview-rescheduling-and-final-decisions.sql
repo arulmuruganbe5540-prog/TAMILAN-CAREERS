@@ -88,6 +88,8 @@ END;
 $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION private.tc_company_finalise_independent_application(p_system text, p_application_id uuid, p_company_id uuid, p_new_status text, p_note text)
  RETURNS text
  LANGUAGE plpgsql
@@ -128,6 +130,8 @@ BEGIN
 END;
 $function$
 
+
+;
 
 CREATE OR REPLACE FUNCTION private.tc_create_interview_schedule_proposal(p_system text, p_interview_id uuid, p_proposal_type text, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text)
  RETURNS uuid
@@ -200,6 +204,8 @@ END;
 $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION private.tc_log_independent_interview_schedule_change()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -228,6 +234,8 @@ BEGIN
 END;
 $function$
 
+
+;
 
 CREATE OR REPLACE FUNCTION private.tc_respond_interview_schedule_proposal(p_system text, p_proposal_id uuid, p_response text, p_response_note text)
  RETURNS text
@@ -293,12 +301,16 @@ END;
 $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION public.tc_candidate_propose_international_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
  LANGUAGE sql
  SET search_path = ''
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('international',p_interview_id,'candidate_alternative',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
+
+;
 
 CREATE OR REPLACE FUNCTION public.tc_candidate_propose_private_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
@@ -307,12 +319,16 @@ CREATE OR REPLACE FUNCTION public.tc_candidate_propose_private_interview_date(p_
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('private',p_interview_id,'candidate_alternative',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION public.tc_candidate_respond_international_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
  SET search_path = ''
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('international',p_proposal_id,p_response,p_response_note) $function$
 
+
+;
 
 CREATE OR REPLACE FUNCTION public.tc_candidate_respond_private_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
@@ -321,12 +337,16 @@ CREATE OR REPLACE FUNCTION public.tc_candidate_respond_private_interview_resched
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('private',p_proposal_id,p_response,p_response_note) $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION public.tc_company_finalise_international_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
  SET search_path = ''
 AS $function$ SELECT private.tc_company_finalise_independent_application('international',p_application_id,p_company_id,p_new_status,p_note) $function$
 
+
+;
 
 CREATE OR REPLACE FUNCTION public.tc_company_finalise_private_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text DEFAULT ''::text)
  RETURNS text
@@ -335,12 +355,16 @@ CREATE OR REPLACE FUNCTION public.tc_company_finalise_private_application(p_appl
 AS $function$ SELECT private.tc_company_finalise_independent_application('private',p_application_id,p_company_id,p_new_status,p_note) $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION public.tc_company_propose_international_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
  LANGUAGE sql
  SET search_path = ''
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('international',p_interview_id,'employer_reschedule',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
+
+;
 
 CREATE OR REPLACE FUNCTION public.tc_company_propose_private_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
@@ -349,6 +373,8 @@ CREATE OR REPLACE FUNCTION public.tc_company_propose_private_interview_reschedul
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('private',p_interview_id,'employer_reschedule',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION public.tc_company_respond_international_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
@@ -356,12 +382,16 @@ CREATE OR REPLACE FUNCTION public.tc_company_respond_international_interview_dat
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('international',p_proposal_id,p_response,p_response_note) $function$
 
 
+;
+
 CREATE OR REPLACE FUNCTION public.tc_company_respond_private_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
  SET search_path = ''
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('private',p_proposal_id,p_response,p_response_note) $function$
 
+
+;
 
 DROP TRIGGER IF EXISTS trg_private_interview_schedule_history ON public.private_job_interview_invitations;
 CREATE TRIGGER trg_private_interview_schedule_history BEFORE UPDATE OF scheduled_at,timezone,duration_minutes,interview_mode,meeting_url,location ON public.private_job_interview_invitations FOR EACH ROW EXECUTE FUNCTION private.tc_log_independent_interview_schedule_change();
