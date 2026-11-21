@@ -51,16 +51,26 @@ async function init(){
 async function loadCompany(){
  const companyId=$("company").value;if(!companyId)return;
  $("jobs").innerHTML='<div class="panel">Loading company jobs...</div>';$("applications").innerHTML="";
- const {data:jobs,error}=await db.from("jobs").select("id,job_title,company_id,status,created_at").eq("company_id",companyId).order("created_at",{ascending:false});
- if(error){$("jobs").innerHTML='<div class="error">Unable to load jobs: '+esc(error.message)+'</div>';$("jobCount").textContent="—";$("appCount").textContent="—";return}
- const list=jobs||[];$("jobCount").textContent=String(list.length);
- if(!list.length){$("jobs").innerHTML='<div class="empty">There are no job notifications linked to this company.</div>';$("appCount").textContent="0";return}
+
+ const specs=[
+  {system:"private",jobs:"private_jobs",applications:"private_job_applications"},
+  {system:"international",jobs:"international_jobs",applications:"international_job_applications"}
+ ];
+ const loaded=await Promise.all(specs.map(async spec=>{
+  const result=await db.from(spec.jobs).select("id,job_title,company_id,status,created_at").eq("company_id",companyId).order("created_at",{ascending:false});
+  return {spec,jobs:result.data||[],error:result.error};
+ }));
+ const failed=loaded.find(x=>x.error);
+ if(failed){$("jobs").innerHTML='<div class="error">Unable to load '+esc(failed.spec.system)+' jobs: '+esc(failed.error.message)+'</div>';$("jobCount").textContent="—";$("appCount").textContent="—";return}
+ const list=loaded.flatMap(x=>x.jobs.map(j=>({...j,_system:x.spec.system,_applicationTable:x.spec.applications})));
+ $("jobCount").textContent=String(list.length);
+ if(!list.length){$("jobs").innerHTML='<div class="empty">There are no Private or International job notifications linked to this company.</div>';$("appCount").textContent="0";return}
  const results=await Promise.all(list.map(async j=>{
-  const {data:apps,error:appError}=await db.from("job_applications").select("id,job_id,candidate_id,resume_id,cover_letter,status,applied_at,updated_at").eq("job_id",j.id).order("applied_at",{ascending:false});
+  const {data:apps,error:appError}=await db.from(j._applicationTable).select("id,job_id,candidate_id,resume_id,cover_letter,status,applied_at,updated_at").eq("job_id",j.id).order("applied_at",{ascending:false});
   return {job:j,apps:apps||[],error:appError};
  }));
  let total=0;results.forEach(x=>{if(!x.error)total+=x.apps.length});$("appCount").textContent=String(total);
- $("jobs").innerHTML=results.map(x=>'<article class="job"><h2>'+esc(x.job.job_title||"Job Posting")+'</h2><div class="muted">Job Status: '+esc(x.job.status||"Not specified")+'</div>'+ (x.error?'<p class="error">Unable to load applications: '+esc(x.error.message)+'</p>':'<p class="muted">Applications for this job: <b>'+x.apps.length+'</b></p>')+'</article>').join("");
+ $("jobs").innerHTML=results.map(x=>'<article class="job"><h2>'+esc(x.job.job_title||"Job Posting")+'</h2><div class="muted">System: '+esc(x.job._system)+' · Job Status: '+esc(x.job.status||"Not specified")+'</div>'+ (x.error?'<p class="error">Unable to load applications: '+esc(x.error.message)+'</p>':'<p class="muted">Applications for this job: <b>'+x.apps.length+'</b></p>')+'</article>').join("");
  const cards=[];
  for(const x of results){
   if(x.error)continue;
@@ -87,9 +97,9 @@ async function loadCompany(){
    const salaryPref=pref.minimum_salary||pref.maximum_salary?((pref.salary_currency||"₹")+" "+(pref.minimum_salary??"")+(pref.minimum_salary&&pref.maximum_salary?" – ":"")+(pref.maximum_salary??"")):"";
    const detailErrors=[p.error,profile.error,edu.error,exp.error,skills.error,certs.error,languages.error,prefs.error].filter(Boolean);
    const canChange=["applied","under_review","shortlisted"].includes(a.status);
-   const statusControl='<div class="status-actions"><select class="app-status" data-app-id="'+esc(a.id)+'" data-company-id="'+esc(x.job.company_id)+'" '+(!canChange?'disabled':'')+'><option value="under_review" '+(a.status==="under_review"?'selected':'')+'>Under Review</option><option value="shortlisted" '+(a.status==="shortlisted"?'selected':'')+'>Shortlist</option><option value="rejected" '+(a.status==="rejected"?'selected':'')+'>Reject</option></select><button type="button" class="save-app-status" data-app-id="'+esc(a.id)+'" '+(!canChange?'disabled':'')+'>Save Status</button></div>';
-   const resumeAction=a.resume_id&&canChange?'<div class="status-actions"><button type="button" class="view-resume" data-app-id="'+esc(a.id)+'">📄 View Resume Securely</button></div>':(a.resume_id?'<p class="muted">Resume access is not available for this application status.</p>':'<p class="muted">No resume is attached to this application.</p>');
-   const interviewAction=canChange?'<details class="panel"><summary><b>📅 Send Interview Invitation</b></summary><div class="field"><label>Interview Date and Time</label><input type="datetime-local" class="interview-date" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview Type</label><select class="interview-mode" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"><option value="in_person">In Person</option><option value="online">Online</option><option value="phone">Phone</option></select></div><div class="field"><label>Location / Online Link</label><input class="interview-location" data-app-id="'+esc(a.id)+'" maxlength="1000" placeholder="Address or meeting link" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview Letter / Additional Information</label><textarea class="interview-letter" data-app-id="'+esc(a.id)+'" maxlength="8000" rows="4" placeholder="Interview letter details" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></textarea></div><button type="button" class="send-interview" data-app-id="'+esc(a.id)+'">Send Invitation</button><p class="muted interview-msg" data-app-id="'+esc(a.id)+'"></p></details>':'';
+   const statusControl='<div class="status-actions"><select class="app-status" data-app-id="'+esc(a.id)+'" data-company-id="'+esc(x.job.company_id)+'" data-system="'+esc(x.job._system)+'" '+(!canChange?'disabled':'')+'><option value="under_review" '+(a.status==="under_review"?'selected':'')+'>Under Review</option><option value="shortlisted" '+(a.status==="shortlisted"?'selected':'')+'>Shortlist</option><option value="rejected" '+(a.status==="rejected"?'selected':'')+'>Reject</option></select><button type="button" class="save-app-status" data-app-id="'+esc(a.id)+'" '+(!canChange?'disabled':'')+'>Save Status</button></div>';
+   const resumeAction=x.job._system==="legacy"&&a.resume_id&&canChange?'<div class="status-actions"><button type="button" class="view-resume" data-app-id="'+esc(a.id)+'">📄 View Resume Securely</button></div>':(a.resume_id?'<p class="muted">Resume access is not available for this application status.</p>':'<p class="muted">No resume is attached to this application.</p>');
+   const interviewAction=x.job._system==="legacy"&&canChange?'<details class="panel"><summary><b>📅 Send Interview Invitation</b></summary><div class="field"><label>Interview Date and Time</label><input type="datetime-local" class="interview-date" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview Type</label><select class="interview-mode" data-app-id="'+esc(a.id)+'" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"><option value="in_person">In Person</option><option value="online">Online</option><option value="phone">Phone</option></select></div><div class="field"><label>Location / Online Link</label><input class="interview-location" data-app-id="'+esc(a.id)+'" maxlength="1000" placeholder="Address or meeting link" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></div><div class="field"><label>Interview Letter / Additional Information</label><textarea class="interview-letter" data-app-id="'+esc(a.id)+'" maxlength="8000" rows="4" placeholder="Interview letter details" style="width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px"></textarea></div><button type="button" class="send-interview" data-app-id="'+esc(a.id)+'">Send Invitation</button><p class="muted interview-msg" data-app-id="'+esc(a.id)+'"></p></details>':'';
 
    cards.push('<article class="app"><h3>'+esc(x.job.job_title)+'</h3><span class="status">'+esc(statusLabels[a.status]||a.status||"Status not specified")+'</span>'+statusControl+resumeAction+interviewAction+'<p><b>Applied On:</b> '+esc(dateText(a.applied_at))+'</p><h3>'+esc(person.full_name||"Applicant")+'</h3>'+(pr.headline?'<p>'+esc(pr.headline)+'</p>':"")+(person.email?'<p>Email: '+esc(person.email)+'</p>':"")+(person.phone?'<p>Phone: '+esc(person.phone)+'</p>':"")+(pr.current_city?'<p>Location: '+esc(pr.current_city)+'</p>':"")+(pr.total_experience_months!=null?'<p>Total Experience: '+esc((pr.total_experience_months/12).toFixed(1))+' years</p>':"")+(eduHtml?'<p><b>Education</b></p><ul>'+eduHtml+'</ul>':"")+(expHtml?'<p><b>Work Experience</b></p><ul>'+expHtml+'</ul>':"")+(skillHtml?'<p><b>Skills</b></p>'+skillHtml:"")+(certHtml?'<p><b>Certificates</b></p><ul>'+certHtml+'</ul>':"")+(languageHtml?'<p><b>Language Skills</b></p><ul>'+languageHtml+'</ul>':"")+(pref.preferred_job_title||pref.preferred_city||pref.preferred_work_mode||pref.preferred_employment_type||salaryPref?'<p><b>Job Preferences</b></p><p>'+[pref.preferred_job_title,pref.preferred_city,pref.preferred_work_mode,pref.preferred_employment_type,salaryPref,pref.willing_to_relocate===true?"Willing to Relocate":null].filter(Boolean).map(esc).join(" · ")+'</p>':"")+(a.cover_letter?'<p><b>Cover Letter:</b><br>'+esc(a.cover_letter).replace(/\\n/g,"<br>")+'</p>':"")+(detailErrors.length?'<p class="muted">Some profile details are not available yet. Check whether the required RLS permission SQL has been applied.</p>':"")+'<div class="small">Application ID: '+esc(a.id)+'</div></article>');
   }
@@ -128,7 +138,8 @@ async function loadCompany(){
   const next=select.value;
   if(!confirm("Change this application's status to "+(statusLabels[next]||next)+"?"))return;
   button.disabled=true;button.textContent="Saving...";
-  const {error}=await db.rpc("tc_company_update_application_status",{p_application_id:id,p_company_id:select.dataset.companyId,p_new_status:next});
+  const fn=select.dataset.system==="international"?"tc_company_update_international_application_status":"tc_company_update_private_application_status";
+  const {error}=await db.rpc(fn,{p_application_id:id,p_company_id:select.dataset.companyId,p_new_status:next});
   if(error){button.disabled=false;button.textContent="Save Status";message("Unable to update application status. Check whether supabase-company-application-status.sql has been run. "+error.message,"error");return}
   message("Application status updated successfully.","ok");
   await loadCompany();
