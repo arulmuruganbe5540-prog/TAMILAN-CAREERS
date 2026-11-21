@@ -687,6 +687,8 @@ await check("Legacy Tamil notification content is presented in English", async (
         title:"\u0baa\u0bc1\u0ba4\u0bbf\u0baf \u0bb5\u0bc7\u0bb2\u0bc8 \u0bb5\u0bbf\u0ba3\u0bcd\u0ba3\u0baa\u0bcd\u0baa\u0bae\u0bcd \u0bb5\u0ba8\u0bcd\u0ba4\u0bc1\u0bb3\u0bcd\u0bb3\u0ba4\u0bc1", body:"Example Company \u2014 Software Engineer \u0baa\u0ba3\u0bbf\u0b95\u0bcd\u0b95\u0bc1 \u0baa\u0bc1\u0ba4\u0bbf\u0baf \u0bb5\u0bbf\u0ba3\u0bcd\u0ba3\u0baa\u0bcd\u0baa\u0bae\u0bcd \u0bb5\u0ba8\u0bcd\u0ba4\u0bc1\u0bb3\u0bcd\u0bb3\u0ba4\u0bc1.", is_read:false, created_at:new Date().toISOString() }])
     }));
     await notificationPage.route("**/rest/v1/tc_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+    await notificationPage.route("**/rest/v1/private_job_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+    await notificationPage.route("**/rest/v1/international_job_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
     await notificationPage.route("**/rest/v1/user_roles**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({role:"job_seeker"})}));
     await notificationPage.goto(base + "/notifications.html", { waitUntil:"domcontentloaded" });
     await notificationPage.locator("#notifications .item h3").waitFor({state:"visible",timeout:10000});
@@ -705,6 +707,8 @@ await check("Notifications mark-read, mark-all and interview responses call each
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ id: "notification-smoke", notification_type: "application_status", title: "Application update", body: "Your application is under review", related_application_id: "application-smoke", related_interview_id: null, is_read: isRead, created_at: "2026-11-18T10:00:00Z" }])
   }));
+  await p.route("**/rest/v1/private_job_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/international_job_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
   await p.route("**/rest/v1/tc_interview_invitations**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ id: "interview-smoke", application_id: "application-smoke", scheduled_at: "2030-01-01T10:00:00Z", interview_mode: "online", location_or_link: "https://example.test/meeting", letter_text: "Mock interview invitation", status: interviewAccepted ? "accepted" : "pending", jobs: { job_id: "job-smoke", jobs: { job_title: "Accountant" } }, companies: { company_name: "Smoke Test Ltd" } }])
@@ -773,6 +777,7 @@ await check("Employer applicant management updates independent Private applicati
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ id: "job-smoke", job_title: "Mock Accountant", company_id: "smoke-company", status: "published" }])
   }));
+  await p.route("**/rest/v1/private_job_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
   await p.route("**/rest/v1/private_job_applications**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ id: "application-smoke", job_id: "job-smoke", candidate_id: "candidate-smoke", resume_id: null, cover_letter: "Mock application", status: "applied", applied_at: "2026-11-18T10:00:00Z" }])
@@ -797,9 +802,45 @@ await check("Employer applicant management updates independent Private applicati
     await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("updated successfully"));
     if (statusUpdates !== 1) throw new Error("Independent Private application status RPC called " + statusUpdates + " times");
     if (await p.locator(".send-interview").count()) throw new Error("Legacy interview workflow must not be attached to independent Private applications");
+    if (!(await p.locator(".send-independent-interview").count())) throw new Error("Independent Private interview invitation form did not render");
+    if (await p.locator(".ind-int-zone").inputValue() !== "Asia/Kolkata") throw new Error("Private interview default time zone is incorrect");
   } finally { await p.close(); }
 });
 
+
+await check("Private and International interview invitations display and candidate responses use separate RPCs", async () => {
+  const p = await createMockSignedInPage();
+  let privateStatus="pending", internationalStatus="pending", privateCalls=0, internationalCalls=0;
+  await p.route("**/rest/v1/tc_notifications**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/tc_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/user_roles**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({role:"job_seeker"})}));
+  await p.route("**/rest/v1/private_job_interview_invitations**", route => route.fulfill({
+    status:200,contentType:"application/json",
+    body:JSON.stringify([{id:"private-interview",application_id:"private-app",job_id:"private-job",candidate_id:"candidate-smoke",interview_title:"Private Interview",scheduled_at:"2030-01-01T10:00:00Z",timezone:"Asia/Kolkata",duration_minutes:45,interview_mode:"online",meeting_url:"https://meet.example.test/p",invitation_message:"Private invitation",status:privateStatus,job:{job_title:"Private Accountant"},company:{company_name:"Private Co"}}])
+  }));
+  await p.route("**/rest/v1/international_job_interview_invitations**", route => route.fulfill({
+    status:200,contentType:"application/json",
+    body:JSON.stringify([{id:"international-interview",application_id:"international-app",job_id:"international-job",candidate_id:"candidate-smoke",interview_title:"International Interview",scheduled_at:"2030-02-01T10:00:00Z",timezone:"Europe/London",duration_minutes:60,interview_mode:"online",meeting_url:"https://meet.example.test/i",invitation_message:"International invitation",status:internationalStatus,job:{job_title:"International Analyst"},company:{company_name:"Global Co"}}])
+  }));
+  await p.route("**/rest/v1/rpc/tc_candidate_respond_private_interview", route => {
+    privateCalls++;privateStatus="accepted";
+    return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify("accepted")});
+  });
+  await p.route("**/rest/v1/rpc/tc_candidate_respond_international_interview", route => {
+    internationalCalls++;internationalStatus="declined";
+    return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify("declined")});
+  });
+  try{
+    await p.goto(base+"/notifications.html",{waitUntil:"domcontentloaded"});
+    await p.getByText("Private Interview",{exact:true}).waitFor({state:"visible"});
+    await p.getByText("International Interview",{exact:true}).waitFor({state:"visible"});
+    await p.locator('[data-response="accepted"][data-system="private"]').click();
+    await p.waitForFunction(()=>document.getElementById("interviews")?.innerText.includes("accepted"));
+    await p.locator('[data-response="declined"][data-system="international"]').click();
+    await p.waitForFunction(()=>document.getElementById("interviews")?.innerText.includes("declined"));
+    if(privateCalls!==1||internationalCalls!==1)throw new Error("Private/International candidate response RPCs were not called exactly once each");
+  }finally{await p.close()}
+});
 
 await check("Job Seeker profile requires login", async () => {
   await open("job-seeker-profile.html");
