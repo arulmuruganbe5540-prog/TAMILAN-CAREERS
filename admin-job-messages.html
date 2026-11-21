@@ -15,13 +15,45 @@ async function init(){const {data,error}=await db.auth.getUser();if(error||!data
 const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",data.user.id).eq("role","super_admin").limit(1);if(roleError||!roles?.length){gate("This account does not have Super Admin permissions.");return}
 const {data:aal,error:ae}=await db.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||(aal?.nextLevel==="aal2"&&aal?.currentLevel!=="aal2")){gate("Authenticator MFA verification is required. Please sign in again.");return}
 $("state").textContent="Super Admin access verified.";await load()}
-async function load(){const status=$("filter").value;let q=db.from("job_post_messages").select("id,job_id,user_id,sender_email,message,status,created_at").order("created_at",{ascending:false}).limit(200);if(status!=="all")q=q.eq("status",status);
-const {data,error}=await q;if(error){$("list").innerHTML='<div class="empty">Unable to load messages: '+esc(error.message)+'</div>';return}
-if(!data?.length){$("list").innerHTML='<div class="empty">No messages found for this filter.</div>';return}
-const ids=[...new Set(data.map(x=>x.job_id))];const {data:jobs}=await db.from("jobs").select("id,job_title,job_kind").in("id",ids);const map=new Map((jobs||[]).map(j=>[j.id,j]));
-$("list").innerHTML=data.map(m=>{const j=map.get(m.job_id)||{};return '<article class="msg" data-id="'+esc(m.id)+'"><div class="head"><span class="email">'+esc(m.sender_email)+'</span><span class="status">'+esc(m.status.toUpperCase())+'</span></div><p class="muted">Job: '+esc(j.job_title||"Unavailable job")+' · '+esc(j.job_kind||"")+' · '+esc(new Date(m.created_at).toLocaleString("en-IN"))+'</p><div class="body">'+esc(m.message)+'</div><div class="actions">'+(m.status!=="visible"?'<button class="btn show" data-action="visible">Make Visible</button>':'')+(m.status!=="hidden"?'<button class="btn hide" data-action="hidden">Hide</button>':'')+(m.status!=="removed"?'<button class="btn remove" data-action="removed">Remove</button>':'')+'</div></article>'}).join("");
-$("list").querySelectorAll("button[data-action]").forEach(b=>b.addEventListener("click",()=>moderate(b.closest("[data-id]").dataset.id,b.dataset.action,b)))}
-async function moderate(id,status,button){if(!confirm("Change this message status to "+status+"?"))return;button.disabled=true;const {error}=await db.from("job_post_messages").update({status,updated_at:new Date().toISOString()}).eq("id",id);if(error){alert("Unable to update message: "+error.message);button.disabled=false;return}await load()}
+async function load(){
+ const status=$("filter").value;
+ const systems=[
+  {table:"job_post_messages",jobs:"jobs",label:"Legacy"},
+  {table:"government_job_post_messages",jobs:"government_jobs",label:"Government"},
+  {table:"private_job_post_messages",jobs:"private_jobs",label:"Private"},
+  {table:"international_job_post_messages",jobs:"international_jobs",label:"International"}
+ ];
+ const results=await Promise.all(systems.map(async x=>{
+  let q=db.from(x.table).select("id,job_id,user_id,sender_email,message,status,created_at").order("created_at",{ascending:false}).limit(200);
+  if(status!=="all")q=q.eq("status",status);
+  const {data,error}=await q;
+  if(error)return {error,system:x};
+  return {rows:(data||[]).map(m=>({...m,_table:x.table,_jobs:x.jobs,_label:x.label}))};
+ }));
+ const failed=results.find(x=>x.error);
+ if(failed){$("list").innerHTML='<div class="empty">Unable to load '+esc(failed.system.label)+' messages: '+esc(failed.error.message)+'</div>';return}
+ const messages=results.flatMap(x=>x.rows||[]).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+ if(!messages.length){$("list").innerHTML='<div class="empty">No messages found for this filter.</div>';return}
+ const groups=systems.map(async x=>{
+  const ids=[...new Set(messages.filter(m=>m._table===x.table).map(m=>m.job_id))];
+  if(!ids.length)return [x.table,new Map()];
+  const {data}=await db.from(x.jobs).select("id,job_title").in("id",ids);
+  return [x.table,new Map((data||[]).map(j=>[j.id,j]))];
+ });
+ const maps=new Map(await Promise.all(groups));
+ $("list").innerHTML=messages.map(m=>{
+  const j=maps.get(m._table)?.get(m.job_id)||{};
+  return '<article class="msg" data-id="'+esc(m.id)+'" data-table="'+esc(m._table)+'"><div class="head"><span class="email">'+esc(m.sender_email)+'</span><span class="status">'+esc(m.status.toUpperCase())+'</span></div><p class="muted">System: '+esc(m._label)+' · Job: '+esc(j.job_title||"Unavailable job")+' · '+esc(new Date(m.created_at).toLocaleString("en-IN"))+'</p><div class="body">'+esc(m.message)+'</div><div class="actions">'+(m.status!=="visible"?'<button class="btn show" data-action="visible">Make Visible</button>':'')+(m.status!=="hidden"?'<button class="btn hide" data-action="hidden">Hide</button>':'')+(m.status!=="removed"?'<button class="btn remove" data-action="removed">Remove</button>':'')+'</div></article>';
+ }).join("");
+ $("list").querySelectorAll("button[data-action]").forEach(b=>b.addEventListener("click",()=>moderate(b.closest("[data-id]").dataset.id,b.closest("[data-id]").dataset.table,b.dataset.action,b)));
+}
+async function moderate(id,table,status,button){
+ if(!confirm("Change this message status to "+status+"?"))return;
+ button.disabled=true;
+ const {error}=await db.from(table).update({status,updated_at:new Date().toISOString()}).eq("id",id);
+ if(error){alert("Unable to update message: "+error.message);button.disabled=false;return}
+ await load();
+}
 $("refresh").addEventListener("click",load);$("filter").addEventListener("change",load);init();
 })();
 </script><script src="assets/site-protection.js" defer></script></body></html>
