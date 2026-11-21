@@ -178,10 +178,20 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
         <div><h3 id="central-directory-title">Central Government Jobs</h3><p>Central job categories</p></div>
       </div>
       <ul class="directory-list">
-        <li>Railway Jobs</li><li>SSC Jobs</li><li>UPSC Jobs</li><li>Banking Jobs</li>
-        <li>Defence Jobs</li><li>Army Jobs</li><li>Navy Jobs</li><li>Air Force Jobs</li>
-        <li>Postal Jobs</li><li>Income Tax Jobs</li><li>Customs Jobs</li><li>ISRO Jobs</li>
-        <li>DRDO Jobs</li><li>PSU Jobs</li>
+        <li><a href="government-category-jobs.html?scope=central&category=Railway%20Jobs">Railway Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=SSC%20Jobs">SSC Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=UPSC%20Jobs">UPSC Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Banking%20Jobs">Banking Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Defence%20Jobs">Defence Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Army%20Jobs">Army Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Navy%20Jobs">Navy Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Air%20Force%20Jobs">Air Force Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Postal%20Jobs">Postal Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Income%20Tax%20Jobs">Income Tax Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=Customs%20Jobs">Customs Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=ISRO%20Jobs">ISRO Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=DRDO%20Jobs">DRDO Jobs</a></li>
+        <li><a href="government-category-jobs.html?scope=central&category=PSU%20Jobs">PSU Jobs</a></li>
       </ul>
     </section>
     <section class="directory-panel state-directory" aria-labelledby="state-directory-title">
@@ -211,7 +221,7 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
       </div>
       <div class="state-job-results" id="home-state-job-results" aria-live="polite">
         <h4>Tamil Nadu – Job Categories</h4>
-        <ul class="state-job-list"><li>TNPSC Jobs</li><li>Tamil Nadu Police Jobs</li><li>Teacher Recruitment Jobs</li><li>Medical Recruitment Jobs</li><li>Forest Department Jobs</li><li>TANGEDCO Jobs</li><li>Government Department Jobs</li></ul>
+        <ul class="state-job-list"><li><a href="government-category-jobs.html?scope=state&state=Tamil%20Nadu&category=TNPSC%20Jobs">TNPSC Jobs</a></li><li><a href="government-category-jobs.html?scope=state&state=Tamil%20Nadu&category=Tamil%20Nadu%20Police%20Jobs">Tamil Nadu Police Jobs</a></li><li><a href="government-category-jobs.html?scope=state&state=Tamil%20Nadu&category=Teacher%20Recruitment%20Jobs">Teacher Recruitment Jobs</a></li><li><a href="government-category-jobs.html?scope=state&state=Tamil%20Nadu&category=Medical%20Recruitment%20Jobs">Medical Recruitment Jobs</a></li><li><a href="government-category-jobs.html?scope=state&state=Tamil%20Nadu&category=Forest%20Department%20Jobs">Forest Department Jobs</a></li><li><a href="government-category-jobs.html?scope=state&state=Tamil%20Nadu&category=TANGEDCO%20Jobs">TANGEDCO Jobs</a></li><li><a href="government-category-jobs.html?scope=state&state=Tamil%20Nadu&category=Government%20Department%20Jobs">Government Department Jobs</a></li></ul>
       </div>
     </section>
   </div>
@@ -270,7 +280,7 @@ state+' Forest Department Jobs',
 state+' Government Department Jobs'
 ];
 target.innerHTML='<h4>'+esc(state)+' – Job Categories</h4><ul class="state-job-list">'+
-categories.map(name=>'<li>'+esc(name)+'</li>').join('')+'</ul>';
+categories.map(name=>'<li><a href="government-category-jobs.html?scope=state&state='+encodeURIComponent(state)+'&category='+encodeURIComponent(name)+'">'+esc(name)+'</a></li>').join('')+'</ul>';
 }
 
 function renderAll(){
