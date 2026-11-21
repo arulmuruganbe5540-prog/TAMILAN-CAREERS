@@ -123,9 +123,9 @@ await check("Employer registration page fits mobile widths without horizontal sc
   }
 });
 
-await check("Job search filters have accessible names", async () => {
-  await open("jobs.html");
-  const missing = await page.evaluate(() => ["#q", "#kind", "#type", "#place", "#workplace", "#education", "#skillMatch"]
+await check("Private job search filters have accessible names", async () => {
+  await open("private-jobs.html");
+  const missing = await page.evaluate(() => ["#q", "#type", "#place", "#workplace", "#education", "#skillMatch"]
     .filter(selector => {
       const el = document.querySelector(selector);
       return !el || !(el.getAttribute("aria-label") || el.labels?.length || el.getAttribute("title"));
@@ -364,28 +364,28 @@ await check("All 16 government exam categories have a dedicated practice track",
 await check("Empty job board clearly explains that no verified vacancies are published yet", async () => {
   const emptyPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
-    await emptyPage.route("**/rest/v1/jobs**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
-    await emptyPage.goto(base + "/jobs.html", {waitUntil:"domcontentloaded"});
+    await emptyPage.route("**/rest/v1/private_jobs**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+    await emptyPage.goto(base + "/private-jobs.html", {waitUntil:"domcontentloaded"});
     await emptyPage.locator("#results .empty").waitFor({state:"visible",timeout:10000});
     const message=await emptyPage.locator("#results .empty").innerText();
     if(!message.includes("No verified job vacancies have been published yet")) throw new Error("Empty job board message is unclear: "+message);
   } finally { await emptyPage.close(); }
 });
 
-await check("Rule-based job search filters work without AI controls", async () => {
-  await open("jobs.html");
-  if (!(await page.locator("#q").isVisible())) throw new Error("Job keyword search is missing");
-  if (!(await page.locator("#kind").isVisible())) throw new Error("Job category filter is missing");
-  if (!(await page.locator("#place").isVisible())) throw new Error("Job location filter is missing");
+await check("Private job search filters work without AI controls", async () => {
+  await open("private-jobs.html");
+  for (const selector of ["#q", "#type", "#place", "#workplace", "#education"]) {
+    if (!(await page.locator(selector).isVisible())) throw new Error("Private job search control is missing: " + selector);
+  }
   if (await page.locator("#aiSearch").count()) throw new Error("An AI search control must not be shown");
   await page.locator("#q").fill("accountant");
   await page.locator("#place").fill("Salem");
-  await page.locator("#kind").selectOption("private");
+  await page.locator("#type").selectOption("Full Time");
   if (!(await page.locator("#count").innerText()).includes("job")) throw new Error("Rule-based filters did not refresh the result count");
 });
 
 await check("Multi-word job search matches every entered keyword", async () => {
-  await page.route("**/rest/v1/jobs**", route => route.fulfill({
+  await page.route("**/rest/v1/private_jobs**", route => route.fulfill({
     status: 200,
     contentType: "application/json",
     body: JSON.stringify([{
@@ -400,7 +400,7 @@ await check("Multi-word job search matches every entered keyword", async () => {
     }])
   }));
   try {
-    await open("jobs.html");
+    await open("private-jobs.html");
     await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 job found"));
     await page.locator("#q").fill("accountant excel");
     if (!(await page.locator("#count").innerText()).includes("1 job found")) {
@@ -416,7 +416,7 @@ await check("Multi-word job search matches every entered keyword", async () => {
 });
 
 await check("Education and workplace filters narrow jobs correctly", async () => {
-  await page.route("**/rest/v1/jobs**", route => route.fulfill({
+  await page.route("**/rest/v1/private_jobs**", route => route.fulfill({
     status: 200,
     contentType: "application/json",
     body: JSON.stringify([{
@@ -432,7 +432,7 @@ await check("Education and workplace filters narrow jobs correctly", async () =>
     }])
   }));
   try {
-    await open("jobs.html");
+    await open("private-jobs.html");
     await page.waitForFunction(() => document.documentElement.lang === "en");
     await page.waitForFunction(() => document.getElementById("count")?.textContent.includes("1 job found"));
     await page.locator("#education").selectOption("ITI");
@@ -456,7 +456,7 @@ await check("Candidate skills match relevant jobs and filter the results", async
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ skill_name: "MS Excel" }])
   }));
-  await skillPage.route("**/rest/v1/jobs**", route => route.fulfill({
+  await skillPage.route("**/rest/v1/private_jobs**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([
       { id: "skill-match", status: "published", job_title: "Accounts Assistant", description: "Accounts work", required_skills: "MS Excel, Tally", location: "Salem", employment_type: "full_time", job_kind: "private" },
@@ -473,7 +473,7 @@ await check("Candidate skills match relevant jobs and filter the results", async
       expires_at: Math.floor(Date.now() / 1000) + 3600,
       user: { id: "candidate-smoke", aud: "authenticated", role: "authenticated" }
     })));
-    const response = await skillPage.goto(base + "/jobs.html", { waitUntil: "domcontentloaded" });
+    const response = await skillPage.goto(base + "/private-jobs.html", { waitUntil: "domcontentloaded" });
     if (!response || !response.ok()) throw new Error("Jobs page failed to load");
     await skillPage.waitForFunction(() => document.getElementById("count")?.textContent.includes("2 jobs found"));
     await skillPage.locator("#skillMatch").selectOption("matched");
@@ -655,7 +655,10 @@ await check("Saved jobs sync with the signed-in Job Seeker account", async () =>
       if(route.request().method()==="DELETE"){deleteCalled=true;return route.fulfill({status:204,body:""});}
       return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{job_id:"123e4567-e89b-12d3-a456-426614174000",saved_at:new Date().toISOString()}])});
     });
-    await savedPage.route("**/rest/v1/jobs**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"123e4567-e89b-12d3-a456-426614174000",job_title:"Frontend Developer",location:"Remote",employment_type:"Full Time",status:"published",application_deadline:"2099-12-31",company_id:"saved-company-1"}])}));
+    await savedPage.route("**/rest/v1/private_jobs**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"123e4567-e89b-12d3-a456-426614174000",job_title:"Frontend Developer",location:"Remote",employment_type:"Full Time",status:"published",application_deadline:"2099-12-31",company_id:"saved-company-1"}])}));
+    await savedPage.route("**/rest/v1/government_jobs**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+    await savedPage.route("**/rest/v1/international_jobs**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+    await savedPage.route("**/rest/v1/jobs**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
     await savedPage.route("**/rest/v1/companies**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"saved-company-1",company_name:"Example Company"}])}));
     await savedPage.goto(base + "/saved-jobs.html", {waitUntil:"domcontentloaded"});
     await savedPage.locator(".job h2").waitFor({state:"visible",timeout:10000});
@@ -763,14 +766,14 @@ await check("Job application submits a published vacancy with the selected resum
   } finally { await p.close(); }
 });
 
-await check("Employer applicant management updates status and sends an interview invitation", async () => {
+await check("Employer applicant management updates independent Private application status", async () => {
   const p = await createMockSignedInPage("employer");
-  let statusUpdates = 0, interviewInvites = 0;
-  await p.route("**/rest/v1/jobs**", route => route.fulfill({
+  let statusUpdates = 0;
+  await p.route("**/rest/v1/private_jobs**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ id: "job-smoke", job_title: "Mock Accountant", company_id: "smoke-company", status: "published" }])
   }));
-  await p.route("**/rest/v1/job_applications**", route => route.fulfill({
+  await p.route("**/rest/v1/private_job_applications**", route => route.fulfill({
     status: 200, contentType: "application/json",
     body: JSON.stringify([{ id: "application-smoke", job_id: "job-smoke", candidate_id: "candidate-smoke", resume_id: null, cover_letter: "Mock application", status: "applied", applied_at: "2026-11-18T10:00:00Z" }])
   }));
@@ -782,12 +785,8 @@ await check("Employer applicant management updates status and sends an interview
     status: 200, contentType: "application/json",
     body: JSON.stringify({ user_id: "candidate-smoke", headline: "Accounts Assistant", current_city: "Salem", total_experience_months: 12 })
   }));
-  await p.route("**/rest/v1/rpc/tc_company_update_application_status", route => {
+  await p.route("**/rest/v1/rpc/tc_company_update_private_application_status", route => {
     statusUpdates++;
-    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
-  });
-  await p.route("**/rest/v1/rpc/tc_send_interview_invitation", route => {
-    interviewInvites++;
     return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
   });
   try {
@@ -796,15 +795,8 @@ await check("Employer applicant management updates status and sends an interview
     await p.locator(".app-status").selectOption("shortlisted");
     await p.locator(".save-app-status").click();
     await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("updated successfully"));
-    if (statusUpdates !== 1) throw new Error("Application status RPC called " + statusUpdates + " times");
-    const details = p.locator("#applications details").first();
-    await details.locator("summary").click();
-    await details.locator(".interview-date").fill("2030-01-01T10:00");
-    await details.locator(".interview-mode").selectOption("online");
-    await details.locator(".interview-location").fill("https://example.test/interview");
-    await details.locator(".send-interview").click();
-    await p.waitForFunction(() => document.querySelector(".interview-msg")?.textContent.includes("sent to the candidate as a notification"));
-    if (interviewInvites !== 1) throw new Error("Interview invitation RPC called " + interviewInvites + " times");
+    if (statusUpdates !== 1) throw new Error("Independent Private application status RPC called " + statusUpdates + " times");
+    if (await p.locator(".send-interview").count()) throw new Error("Legacy interview workflow must not be attached to independent Private applications");
   } finally { await p.close(); }
 });
 
