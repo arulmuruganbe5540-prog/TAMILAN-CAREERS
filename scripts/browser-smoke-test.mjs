@@ -802,6 +802,7 @@ await check("Employer applicant management updates independent Private applicati
     await p.waitForFunction(() => document.getElementById("message")?.textContent.includes("updated successfully"));
     if (statusUpdates !== 1) throw new Error("Independent Private application status RPC called " + statusUpdates + " times");
     if (await p.locator(".send-interview").count()) throw new Error("Legacy interview workflow must not be attached to independent Private applications");
+    await p.locator(".app details summary").first().click();
     await p.locator(".send-independent-interview").waitFor({state:"visible"});
     if (!(await p.locator(".send-independent-interview").count())) throw new Error("Independent Private interview invitation form did not render");
     if (await p.locator(".ind-int-zone").inputValue() !== "Asia/Kolkata") throw new Error("Private interview default time zone is incorrect");
