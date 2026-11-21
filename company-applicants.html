@@ -26,7 +26,7 @@ main{max-width:1050px;margin:25px auto;padding:0 15px}.hero{background:linear-gr
 <div class="panel"><label for="company">Select Company</label><select id="company" class="select"></select></div>
 <div class="grid"><div class="stat">Selected Company Jobs<b id="jobCount">—</b></div><div class="stat">Visible Applications<b id="appCount">—</b></div></div>
 <div id="jobs"></div><div id="applications"></div>
-<div class="notice"><b>Privacy Protection:</b> Only the company owner or an active HR / Recruiter of the company the candidate applied to can view applicant profile details. RLS and API permissions enforce this. Attached resumes are available only through secure signed links that expire after 60 seconds. <code>company-resume-access</code> Edge Function has been deployed. Private and International applications use separate application tables, protected status updates and short-lived secure resume links. Interview scheduling for these independent systems is a separate upcoming step. End-to-end testing with a real candidate and verified employer account is still pending. Interview reminders are checked automatically every 15 minutes.</div>
+<div class="notice"><b>Privacy Protection:</b> Only the company owner or an active HR / Recruiter of the company the candidate applied to can view applicant profile details. RLS and API permissions enforce this. Attached resumes are available only through secure signed links that expire after 60 seconds. <code>company-resume-access</code> Edge Function has been deployed. Private and International applications use separate application tables, protected status updates and short-lived secure resume links. Private and International interviews now use separate invitation records, time zones, candidate responses and cancellation controls. End-to-end testing with a real candidate and verified employer account is still pending. Interview reminders are checked automatically every 15 minutes.</div>
 </section>
 </main>
 <script>
@@ -34,6 +34,17 @@ const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co"
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let memberships=[];
 const allowedRoles=["owner","hr_manager","recruiter"];
+function toUtcFromZonedLocal(value,zone){
+ const m=String(value||"").match(/^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$/);
+ if(!m)throw new Error("Enter a valid interview date and time.");
+ const target=Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);
+ const fmt=new Intl.DateTimeFormat("en-CA",{timeZone:zone,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"});
+ let guess=target;
+ for(let n=0;n<4;n++){const p=Object.fromEntries(fmt.formatToParts(new Date(guess)).filter(x=>x.type!=="literal").map(x=>[x.type,x.value]));const represented=Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second);const delta=target-represented;guess+=delta;if(delta===0)break;}
+ const p=Object.fromEntries(fmt.formatToParts(new Date(guess)).filter(x=>x.type!=="literal").map(x=>[x.type,x.value]));
+ if(+p.year!==+m[1]||+p.month!==+m[2]||+p.day!==+m[3]||+p.hour!==+m[4]||+p.minute!==+m[5])throw new Error("That local time is not valid in the selected time zone. Choose another time.");
+ return new Date(guess).toISOString();
+}
 const statusLabels={applied:"Applied",under_review:"Under Review",shortlisted:"Shortlisted",rejected:"Rejected",withdrawn:"Withdrawn"};
 function message(t,kind){$("message").hidden=false;$("message").className=kind==="error"?"error":"panel";$("message").textContent=t}
 function dateText(v){if(!v)return "Date unavailable";const d=new Date(v);return Number.isNaN(d.getTime())?"Date unavailable":d.toLocaleString("en-IN")}
