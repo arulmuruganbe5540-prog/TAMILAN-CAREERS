@@ -36,7 +36,8 @@ function render(){
  let rows=jobs.filter(j=>{
   const title=english(pick(j,["job_title","title"])),company=english(pick(j,["company_name","employer_name"])),loc=english(pick(j,["location","job_location","work_location"])),cn=english(pick(j,["country_name","country"])),jobSector=String(pick(j,["job_sector"])).toLowerCase();
   const hay=[title,company,loc,cn].join(" ").toLowerCase();
-  return (!q||q.split(/\s+/).every(w=>hay.includes(w)))&&(!country||cn.toLowerCase()===country)&&(!sector||jobSector===sector);
+   const accepted=String(pick(j,["education_level","education"])).split(/[,;|\n]+/).map(x=>x.trim().toLowerCase()).filter(Boolean);
+   return (!q||q.split(/\s+/).every(w=>hay.includes(w)))&&(!country||cn.toLowerCase()===country)&&(!sector||jobSector===sector)&&(!education||accepted.includes(education));
  });
  if($("sort").value==="salary")rows.sort((a,b)=>Number(pick(b,["salary_max","salary_min"])||0)-Number(pick(a,["salary_max","salary_min"])||0));
  else if($("sort").value==="deadline")rows.sort((a,b)=>new Date(pick(a,["application_deadline","deadline"])||"2999-12-31")-new Date(pick(b,["application_deadline","deadline"])||"2999-12-31"));
