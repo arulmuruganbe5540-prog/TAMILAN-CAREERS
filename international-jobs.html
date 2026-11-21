@@ -58,7 +58,7 @@ function render(){
 }
 async function init(){
  try{
-  const {data,error}=await db.from("jobs").select("*").eq("status","published").eq("job_kind","foreign");
+  const {data,error}=await db.from("international_jobs").select("*").eq("status","published");
   if(error)throw error;
   jobs=(data||[]).filter(j=>!j.application_deadline||new Date(j.application_deadline)>=new Date(new Date().toDateString()));
   render();
