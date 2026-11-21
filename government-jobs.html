@@ -69,13 +69,37 @@ function deadlineDate(value){
  return Number.isNaN(parsed.getTime())?null:parsed;
 }
 function isExpiredJob(job){const d=deadlineDate(pick(job,["application_deadline","deadline","last_date"]));return Boolean(d&&d.getTime()<Date.now());}
+// Qualification tags are stored as canonical comma-separated values.
+// Legacy delimiters are accepted; "desirable" qualifications are not treated as eligible tags.
+const QUALIFICATION_ALIASES={
+ "8th pass":["8th pass","8th standard","eighth pass","class 8","8 pass"],
+ "10th pass":["10th pass","10th standard","matriculation","sslc","class 10","10 pass"],
+ "12th pass":["12th pass","12th standard","higher secondary","hsc","class 12","12 pass"],
+ "iti":["iti","industrial training institute"],
+ "diploma":["diploma"],
+ "diploma studying":["diploma studying"],
+ "degree":["degree","bachelor degree","graduate"],
+ "postgraduate":["postgraduate","post graduate","pg","masters degree"],
+ "studying":["studying"]
+};
+function qualificationTags(raw){
+ const parts=String(raw||"").split(/[,;|\\n]+/).map(x=>x.trim().toLowerCase()).filter(Boolean);
+ const found=new Set();
+ for(const part of parts){
+  const clean=part.replace(/\\s*\\([^)]*\\)\\s*/g," ").replace(/[._]+/g," ").replace(/\\s+/g," ").trim();
+  for(const [canonical,aliases] of Object.entries(QUALIFICATION_ALIASES)){
+   if(aliases.includes(clean))found.add(canonical);
+  }
+ }
+ return [...found];
+}
 function render(){
  const q=$("q").value.trim().toLowerCase(),type=$("type").value.toLowerCase(),place=$("place").value.trim().toLowerCase(),workplace=$("workplace").value.toLowerCase(),education=$("education").value.toLowerCase(),skillMode=$("skillMatch").value;
  const list=allJobs.filter(j=>{
   const title=pick(j,["job_title","title"]),desc=pick(j,["description","job_description"]),company=pick(j,["company_name","employer_name"]),loc=pick(j,["location","job_location","work_location"]),jt=pick(j,["employment_type","job_type"]);
   const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
   const visible=String(pick(j,["status"])).toLowerCase()==="published"&&!isExpiredJob(j);
-  const jobEducation=String(pick(j,["education_level","education"])).split(",").map(value=>value.trim().toLowerCase()).filter(Boolean);
+  const jobEducation=qualificationTags(pick(j,["education_level","education"]));
   const jobWorkplace=String(pick(j,["workplace_type"])).trim().toLowerCase();
   const skillMatch=getSkillMatch(j);
   return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase().replace(/_/g," ")===type)&&(!place||String(loc).toLowerCase().includes(place))&&(!workplace||jobWorkplace===workplace)&&(!education||jobEducation.includes(education))&&(!skillMode||skillMatch.score>0);
@@ -95,7 +119,7 @@ function render(){
   const loc=englishText(bi?.location_en)||englishText(pick(j,["location","job_location","work_location"]))||"Not specified";
   const company=companyNames[String(pick(j,["company_id"]))]||pick(j,["employer_name","company_name"])||"Employer not specified";
   const type=String(pick(j,["employment_type","job_type"])||pick(j,["job_kind"])||"Job").replace(/_/g," ");
-  const education=pick(j,["education_level","education"])||"As per notification";
+  const educationTags=qualificationTags(pick(j,["education_level","education"]));\n  const education=educationTags.length?educationTags.map(tag=>tag.replace(/\\b\\w/g,ch=>ch.toUpperCase())).join(", "):(pick(j,["education_level","education"])||"As per notification");
   const salaryMin=pick(j,["salary_min"]),salaryMax=pick(j,["salary_max"]),salaryCurrency=pick(j,["salary_currency"])||"₹",salaryPeriod=pick(j,["salary_period"])||"monthly";
   const salary=salaryMin||salaryMax?(salaryCurrency+" "+(salaryMin||"")+(salaryMin&&salaryMax?" – ":"")+(salaryMax||"")+" / "+String(salaryPeriod).replace(/_/g," ")):"Not specified";
   const deadline=pick(j,["application_deadline","deadline","last_date"])||"Not specified";
