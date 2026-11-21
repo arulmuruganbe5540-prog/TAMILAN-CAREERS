@@ -4,36 +4,167 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101d3a">
-<title>TAMILAN CAREERS</title>
+<title>TAMILAN CAREERS | Government Jobs & Exam Updates</title>
+<meta name="description" content="Latest Central Government and Tamil Nadu Government job notifications, qualification-wise jobs and government exam updates.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:#f3f6fb;font-family:Arial,Helvetica,sans-serif;color:#14213d}
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:28px 16px}
-nav{width:min(100%,980px);display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-nav a{display:flex;align-items:center;justify-content:center;min-height:74px;padding:18px;border-radius:12px;background:#101d3a;color:#fff;text-decoration:none;font-weight:700;text-align:center;border:2px solid #54c8ff}
-nav a:focus-visible,nav a:hover{background:#176b9e;outline:3px solid #54c8ff;outline-offset:2px}
-footer{padding:18px 12px;background:#101d3a;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+:root{--navy:#101d3a;--blue:#176b9e;--cyan:#54c8ff;--green:#087443;--bg:#f3f6fb;--ink:#14213d;--muted:#65738b;--line:#dce4ef}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--ink);font:15px Arial,Helvetica,sans-serif}
+.site-header{background:var(--navy);color:#fff;padding:18px max(16px,calc((100% - 1200px)/2))}
+.site-header h1{margin:0;font-size:24px;letter-spacing:.3px}.site-header p{margin:6px 0 0;color:#d6e5f6;font-size:13px}
+.nav-wrap{background:#14294c;border-bottom:3px solid var(--cyan);position:sticky;top:0;z-index:20}
+nav{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;padding:10px 14px;scrollbar-width:thin;max-width:1230px;margin:auto}
+nav a{flex:0 0 auto;padding:10px 13px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;border-radius:5px;background:#203b65}
+nav a:hover,nav a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;background:#28517f}
+nav a.private-link{background:#176b9e}nav a.international-link{background:#087443}
+.announcement{background:#eaf5ff;border-bottom:1px solid #c9e4fa;color:#103a62;overflow:hidden;padding:10px 0;font-size:13px;font-weight:700}
+.announcement-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:scrollnews 28s linear infinite}
+@keyframes scrollnews{to{transform:translateX(-100%)}}
+main{width:min(1200px,100%);margin:0 auto;padding:20px 16px 40px}
+.intro{padding:4px 0 14px}.intro h2{font-size:22px;margin:0 0 7px}.intro p{color:var(--muted);line-height:1.55;margin:0}
+.section-nav{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;padding:12px 0 20px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.section-nav a{color:#155d8b;font-size:13px;font-weight:700;text-decoration:underline;padding:4px 2px}
+.table-section{padding:22px 0;border-bottom:1px solid var(--line);scroll-margin-top:76px}
+.table-section h2{font-size:20px;margin:0 0 7px;color:var(--navy)}
+.table-section h3{font-size:16px;margin:18px 0 6px;color:var(--navy)}
+.table-section p{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 12px}
+.table-scroll{width:100%;overflow-x:auto;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;min-width:680px;background:#fff;font-size:13px}
+th{background:#eaf0f8;color:#183252;text-align:left;font-weight:700;padding:12px 11px;border-bottom:1px solid #cbd7e6;white-space:nowrap}
+td{padding:12px 11px;border-bottom:1px solid #e5ebf3;vertical-align:top;line-height:1.45}
+tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
+table a{color:#075e9b;font-weight:700;text-decoration:underline}
+.empty-cell{text-align:center;color:#68778d;padding:22px}
+.pager{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:10px 0;font-size:13px;color:var(--muted)}
+.pager button{border:1px solid #b9c8d9;background:#fff;color:#173554;padding:7px 12px;border-radius:4px;font-weight:700}
+.pager button:disabled{opacity:.4;cursor:not-allowed}.pager button:not(:disabled){cursor:pointer}
+.updated{font-size:12px;color:var(--muted);padding-top:5px}
+.degree-filter{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.degree-filter a{border:1px solid #cbd7e6;padding:6px 9px;border-radius:3px;color:#175e91;text-decoration:none;font-size:12px;font-weight:700}
+footer{padding:18px 12px;background:var(--navy);display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
 footer a{color:#fff;font-size:13px;text-decoration:underline}
+@media(max-width:640px){.site-header h1{font-size:21px}.table-section{padding:18px 0}.table-section h2{font-size:18px}main{padding-left:12px;padding-right:12px}}
 </style>
 </head>
 <body>
-<main>
-<nav aria-label="Main navigation">
+<header class="site-header"><h1>TAMILAN CAREERS</h1><p>Government Jobs · Exam Notifications · Career Updates</p></header>
+<div class="nav-wrap"><nav aria-label="Main navigation">
 <a href="tamil-nadu-government-jobs.html">TN Government Jobs</a>
 <a href="indian-government-jobs.html">General Government Jobs</a>
-<a href="exam-date.html">Exam Date</a>
-<a href="admit-card.html">Admit Card</a>
-<a href="results.html">Results</a>
+<a href="#exam-dates">Exam Date</a>
+<a href="#admit-cards">Admit Card</a>
+<a href="#results">Results</a>
 <a href="admission-open.html">Admission Open</a>
 <a href="entrance-exam.html">Entrance Exam</a>
-<a href="private-jobs.html">Private Jobs</a>
-<a href="international-jobs.html">International Jobs</a>
-</nav>
+<a class="private-link" href="private-jobs.html">Private Jobs</a>
+<a class="international-link" href="international-jobs.html">International Jobs</a>
+</nav></div>
+<div class="announcement" aria-label="Announcements"><div class="announcement-track">TAMILAN CAREERS — Government Job Notifications and Exam Updates · Check official notifications before applying · New published updates appear automatically every 5 minutes ·</div></div>
+<main>
+<div class="intro"><h2>Government Jobs & Exam Updates</h2><p>Find the latest Central Government and Tamil Nadu Government recruitment notifications, qualification-wise opportunities and important examination updates. Always verify details in the official notification before applying.</p></div>
+<div class="section-nav" aria-label="Home page sections">
+<a href="#latest-jobs">Latest Jobs</a><a href="#central-jobs">Central Government</a><a href="#tn-jobs">Tamil Nadu Government</a><a href="#qualification-jobs">Qualification-wise Jobs</a><a href="#answer-keys">Answer Key</a><a href="#results">Results</a><a href="#exam-dates">Exam Date</a><a href="#admit-cards">Admit Card</a>
+</div>
+
+<section class="table-section" id="latest-jobs">
+<h2>Latest Government Jobs</h2><p>Recently published government job notifications from the website. This table refreshes automatically every 5 minutes and displays up to 20 records per page.</p>
+<div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latest-body"><tr><td colspan="5" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="latest-pager"></div><div class="updated" id="latest-updated"></div>
+</section>
+
+<section class="table-section" id="central-jobs">
+<h2>Central Government Jobs</h2><p>Recruitment notifications published for Central Government departments and authorities. Maximum 20 records per page with Previous and Next navigation.</p>
+<div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="central-body"><tr><td colspan="5" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="central-pager"></div>
+</section>
+
+<section class="table-section" id="tn-jobs">
+<h2>Tamil Nadu Government Jobs</h2><p>Recruitment notifications published by Tamil Nadu Government departments and authorities. Maximum 20 records per page with Previous and Next navigation.</p>
+<div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="tn-body"><tr><td colspan="5" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="tn-pager"></div>
+</section>
+
+<section class="table-section" id="qualification-jobs">
+<h2>Qualification-wise Government Jobs</h2><p>Browse published government vacancies by educational qualification. Each qualification has its own table, with up to 20 records per page.</p>
+<div class="section-nav">
+<a href="#q8">8th Pass</a><a href="#q10">10th Pass</a><a href="#q12">12th Pass</a><a href="#qiti">ITI</a><a href="#qdiploma">Diploma</a><a href="#qdegree">Degree</a>
+</div>
+<div id="qualification-tables"></div>
+</section>
+
+<section class="table-section" id="answer-keys"><h2>Government Exam – Answer Key</h2><p>Official answer key notifications and related updates published for government examinations.</p><div class="table-scroll"><table><thead><tr><th>Exam / Update</th><th>Department / Source</th><th>Year</th><th>Updated</th><th>Official Link</th></tr></thead><tbody id="answer-body"><tr><td colspan="5" class="empty-cell">Loading updates…</td></tr></tbody></table></div><div class="pager" id="answer-pager"></div></section>
+<section class="table-section" id="results"><h2>Government Exam – Results</h2><p>Published government examination results and result-related official announcements.</p><div class="table-scroll"><table><thead><tr><th>Exam / Update</th><th>Department / Source</th><th>Year</th><th>Updated</th><th>Official Link</th></tr></thead><tbody id="results-body"><tr><td colspan="5" class="empty-cell">Loading updates…</td></tr></tbody></table></div><div class="pager" id="results-pager"></div></section>
+<section class="table-section" id="exam-dates"><h2>Government Exam – Exam Dates</h2><p>Upcoming examination dates from published job notifications and official exam schedule updates.</p><div class="table-scroll"><table><thead><tr><th>Exam / Job</th><th>Department / Source</th><th>Exam Date</th><th>Updated</th><th>Official Link</th></tr></thead><tbody id="examdate-body"><tr><td colspan="5" class="empty-cell">Loading dates…</td></tr></tbody></table></div><div class="pager" id="examdate-pager"></div></section>
+<section class="table-section" id="admit-cards"><h2>Government Exam – Admit Cards</h2><p>Published admit card and hall ticket announcements with official download links.</p><div class="table-scroll"><table><thead><tr><th>Exam / Update</th><th>Department / Source</th><th>Year</th><th>Updated</th><th>Official Download</th></tr></thead><tbody id="admit-body"><tr><td colspan="5" class="empty-cell">Loading updates…</td></tr></tbody></table></div><div class="pager" id="admit-pager"></div></section>
 </main>
-<footer aria-label="Google advertising links">
-<a href="https://ads.google.com/">Google Ads</a>
-<a href="https://www.google.com/adsense/">Google AdSense</a>
-<a href="https://support.google.com/adsense/">AdSense Help</a>
-<a href="https://policies.google.com/privacy">Google Privacy</a>
-</footer>
+<footer aria-label="Google advertising links"><a href="https://ads.google.com/">Google Ads</a><a href="https://www.google.com/adsense/">Google AdSense</a><a href="https://support.google.com/adsense/">AdSense Help</a><a href="https://policies.google.com/privacy">Google Privacy</a></footer>
+<script>
+(function(){
+const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
+const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const PAGE_SIZE=20;let jobs=[],resources=[],pages={};
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
+const safeUrl=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch(e){return '';}};
+const jobUrl=j=>'government-job-details.html?id='+encodeURIComponent(j.id);
+function tags(j){let a=Array.isArray(j.qualification_tags)?j.qualification_tags:[];if(j.education_level)a=a.concat(String(j.education_level).split(/[,;|]/));return a.map(x=>String(x).trim().toLowerCase()).filter(Boolean);}
+function jobRows(id,rows){
+const page=pages[id]||1,total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),start=(page-1)*PAGE_SIZE,shown=rows.slice(start,start+PAGE_SIZE);
+const body=$(id+'-body');if(!body)return;
+if(!rows.length){body.innerHTML='<tr><td colspan="5" class="empty-cell">No published records available yet.</td></tr>';}
+else body.innerHTML=shown.map(j=>'<tr><td>'+esc(j.department_name||j.employer_name||j.recruitment_authority||'—')+'</td><td>'+esc(j.job_title||'—')+'</td><td>'+esc(j.education_level||((Array.isArray(j.qualification_tags)&&j.qualification_tags.join(', '))||'—'))+'</td><td>'+date(j.application_deadline)+'</td><td><a href="'+jobUrl(j)+'">View Details</a></td></tr>').join('');
+const pager=$(id+'-pager');pager.innerHTML='<button type="button" '+(page<=1?'disabled':'')+' data-step="-1">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' data-step="1">Next</button>';
+pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{pages[id]=Math.min(total,Math.max(1,page+Number(b.dataset.step)));jobRows(id,rows);}));
+}
+function resourceRows(id,rows,isDate){
+const page=pages[id]||1,total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE),body=$(id+'-body');
+if(!rows.length)body.innerHTML='<tr><td colspan="5" class="empty-cell">No published updates available yet.</td></tr>';
+else body.innerHTML=shown.map(r=>{const link=safeUrl(r.resource_url||r.official_notification_url);return '<tr><td>'+esc(r.title||r.job_title||'—')+'</td><td>'+esc(r.source_name||r.department_name||'—')+'</td><td>'+(isDate?date(r.exam_date):esc(r.resource_year||'—'))+'</td><td>'+date(r.updated_at||r.created_at||r.published_at)+'</td><td>'+(link?'<a href="'+esc(link)+'" target="_blank" rel="noopener">Official Link</a>':'—')+'</td></tr>';}).join('');
+const pager=$(id+'-pager');pager.innerHTML='<button type="button" '+(page<=1?'disabled':'')+' data-step="-1">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' data-step="1">Next</button>';
+pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{pages[id]=Math.min(total,Math.max(1,page+Number(b.dataset.step)));resourceRows(id,rows,isDate);}));
+}
+function includesAny(j,needles){const all=tags(j).join(' ')+' '+String(j.education_level||'').toLowerCase()+' '+String(j.required_skills||'').toLowerCase()+' '+String(j.description||'').toLowerCase();return needles.some(n=>all.includes(n.toLowerCase()));}
+const qualDefs=[
+{id:'q8',title:'8th Pass Government Jobs',needles:['8th pass','8th standard','eighth standard']},
+{id:'q10',title:'10th Pass Government Jobs',needles:['10th pass','sslc','matriculation']},
+{id:'q12',title:'12th Pass Government Jobs',needles:['12th pass','hsc','higher secondary']},
+{id:'qiti',title:'ITI Government Jobs',needles:['iti','fitter','electrician','wireman','welder','turner','machinist','mechanic motor vehicle','mechanic diesel','copA','electronics mechanic','instrument mechanic','draughtsman','plumber','carpenter','surveyor','stenographer']},
+{id:'qdiploma',title:'Diploma Government Jobs',needles:['diploma','mechanical engineering','civil engineering','eee','ece','computer engineering','information technology','automobile engineering','mechatronics','instrumentation and control','chemical engineering','textile technology','agricultural engineering','biomedical engineering','architecture assistantship']},
+{id:'qba',title:'B.A. Government Jobs',needles:['b.a.','ba degree']},
+{id:'qbsc',title:'B.Sc. Government Jobs',needles:['b.sc.','bsc']},
+{id:'qbcom',title:'B.Com. Government Jobs',needles:['b.com.','bcom']},
+{id:'qbemech',title:'B.E. Mechanical Government Jobs',needles:['b.e. mechanical','be mechanical','mechanical engineering']},
+{id:'qbecivil',title:'B.E. Civil Government Jobs',needles:['b.e. civil','be civil','civil engineering']},
+{id:'qbecs',title:'B.E. Computer Science Government Jobs',needles:['b.e. computer science','be computer science','computer science engineering','cse']},
+{id:'qbtech',title:'B.Tech. Government Jobs',needles:['b.tech.','btech']}
+];
+function renderQualifications(){
+const host=$('qualification-tables');let out='';
+qualDefs.forEach(d=>{out+='<section class="table-section" id="'+d.id+'"><h3>'+esc(d.title)+'</h3><p>Published government vacancies matching this qualification. Up to 20 records per page.</p><div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="'+d.id+'-body"><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table></div><div class="pager" id="'+d.id+'-pager"></div></section>';});
+host.innerHTML=out;
+}
+function renderAll(){
+jobRows('latest',jobs);
+jobRows('central',jobs.filter(j=>String(j.government_category||j.government_scope||'').toLowerCase()==='central government'));
+jobRows('tn',jobs.filter(j=>{const c=String(j.government_category||'').toLowerCase(),loc=String(j.location||'').toLowerCase();return c==='tamil nadu government'||(c==='state government'&&(loc.includes('tamil nadu')||loc.includes('tamilnadu')||loc.includes('tn')));}));
+qualDefs.forEach(d=>jobRows(d.id,jobs.filter(j=>includesAny(j,d.needles))));
+const byType=t=>resources.filter(r=>r.resource_type===t);
+resourceRows('answer',byType('answer_key'),false);
+resourceRows('results',byType('result'),false);
+const dateRows=jobs.filter(j=>j.exam_date).map(j=>({title:j.job_title,department_name:j.department_name||j.employer_name,exam_date:j.exam_date,updated_at:j.updated_at,official_notification_url:j.official_notification_url})).concat(byType('exam_schedule'));
+resourceRows('examdate',dateRows,true);
+resourceRows('admit',resources.filter(r=>r.resource_type==='admit_card'||r.resource_type==='hall_ticket'),false);
+}
+async function refresh(){
+const [jr,rr]=await Promise.all([
+sb.from('government_jobs').select('*').eq('status','published').order('published_at',{ascending:false,nullsFirst:false}).limit(1000),
+sb.from('job_exam_resources').select('*').eq('status','published').order('created_at',{ascending:false}).limit(1000)
+]);
+if(jr.error)console.error('Government jobs could not be loaded:',jr.error.message);else jobs=jr.data||[];
+if(rr.error)console.error('Exam updates could not be loaded:',rr.error.message);else resources=rr.data||[];
+renderAll();$('latest-updated').textContent='Last refreshed: '+new Date().toLocaleTimeString('en-IN')+' · Automatic refresh every 5 minutes';
+}
+renderQualifications();refresh();setInterval(refresh,300000);
+})();
+</script>
 </body>
 </html>
