@@ -1,19 +1,14 @@
 {
   "monitor_version": 2,
-  "checked_at_utc": "2026-11-21T03:16:46.166647+00:00",
+  "checked_at_utc": "2026-11-21T07:24:12.696602+00:00",
   "check_interval_hours": 6,
   "registered_sources": 60,
-  "successful_sources": 23,
+  "successful_sources": 24,
   "failed_sources": [
     {
       "source_id": "rrb",
       "url": "https://www.rrbapply.gov.in/",
       "error": "HTTP Error 404: Not Found"
-    },
-    {
-      "source_id": "ibps",
-      "url": "https://www.ibps.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "sbi-careers",
@@ -23,11 +18,6 @@
     {
       "source_id": "indian-railways",
       "url": "https://indianrailways.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "nabard",
-      "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -41,13 +31,18 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "apprenticeship",
-      "url": "https://www.apprenticeshipindia.gov.in/",
+      "source_id": "nabard",
+      "url": "https://www.nabard.org/careers-notices1.aspx",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "join-indian-navy",
       "url": "https://www.joinindiannavy.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "apprenticeship",
+      "url": "https://www.apprenticeshipindia.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -106,8 +101,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "kerala-psc",
-      "url": "https://www.keralapsc.gov.in/",
+      "source_id": "jpsc",
+      "url": "https://www.jpsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -116,13 +111,8 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "jpsc",
-      "url": "https://www.jpsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
-    },
-    {
-      "source_id": "mpsc-mizoram",
-      "url": "https://mpsc.mizoram.gov.in/",
+      "source_id": "kerala-psc",
+      "url": "https://www.keralapsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -131,8 +121,18 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
+      "source_id": "mpsc-mizoram",
+      "url": "https://mpsc.mizoram.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
       "source_id": "mppsc",
       "url": "https://mppsc.mp.gov.in/",
+      "error": "robots.txt disallows this page or could not be checked safely"
+    },
+    {
+      "source_id": "npsc",
+      "url": "https://npsc.nagaland.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
@@ -156,19 +156,14 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
-      "source_id": "ibps-other-recruitment",
-      "url": "https://www.ibps.in/index.php/recruitment/",
+      "source_id": "ppsc",
+      "url": "https://www.ppsc.gov.in/",
       "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "upsc-recruitment-advertisements",
       "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisement",
       "error": "HTTP Error 404: Not Found"
-    },
-    {
-      "source_id": "ppsc",
-      "url": "https://www.ppsc.gov.in/",
-      "error": "robots.txt disallows this page or could not be checked safely"
     },
     {
       "source_id": "upsc-exam-notification-archive",
@@ -191,7 +186,7 @@
       "error": "robots.txt disallows this page or could not be checked safely"
     }
   ],
-  "candidate_links_discovered_this_run": 1176,
+  "candidate_links_discovered_this_run": 1173,
   "note": "Official-source link discovery only. This aggregate report contains no candidate URLs and does not assert that Supabase Admin Review sync succeeded. It does not validate vacancy facts, does not use AI to certify truth, and never publishes.",
   "scan_workers": 4,
   "request_timeout_seconds": 20
