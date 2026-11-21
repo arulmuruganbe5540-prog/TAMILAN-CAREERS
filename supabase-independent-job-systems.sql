@@ -92,3 +92,21 @@ DROP POLICY IF EXISTS international_jobs_public_read ON public.international_job
 CREATE POLICY international_jobs_public_read ON public.international_jobs FOR SELECT TO anon,authenticated USING (status='published');
 DROP POLICY IF EXISTS international_jobs_super_admin_all ON public.international_jobs;
 CREATE POLICY international_jobs_super_admin_all ON public.international_jobs FOR ALL TO authenticated USING ((SELECT private.is_super_admin())) WITH CHECK ((SELECT private.is_super_admin()));
+
+-- Enforce the three systems' country boundaries at database level.
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname='government_jobs_india_only_check' AND conrelid='public.government_jobs'::regclass) THEN
+    ALTER TABLE public.government_jobs ADD CONSTRAINT government_jobs_india_only_check
+      CHECK (country_name IS NOT NULL AND lower(btrim(country_name))='india');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname='private_jobs_india_only_check' AND conrelid='public.private_jobs'::regclass) THEN
+    ALTER TABLE public.private_jobs ADD CONSTRAINT private_jobs_india_only_check
+      CHECK (country_name IS NOT NULL AND lower(btrim(country_name))='india');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname='international_jobs_outside_india_check' AND conrelid='public.international_jobs'::regclass) THEN
+    ALTER TABLE public.international_jobs ADD CONSTRAINT international_jobs_outside_india_check
+      CHECK (country_name IS NOT NULL AND lower(btrim(country_name))<>'india');
+  END IF;
+END $$;
+ALTER TABLE public.international_jobs ALTER COLUMN job_sector SET NOT NULL;
