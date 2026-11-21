@@ -20,7 +20,7 @@ The repository's current public visibility is a separate concern from the securi
 - No private SECURITY DEFINER function was executable by the `anon` role in the post-change catalog check.
 - Fifteen authenticated-callable SECURITY DEFINER RPCs remain flagged by Security Advisor. Source review found caller identity and ownership/company-role checks on candidate and employer actions, and Super Admin checks on privileged review/publish actions. Do not revoke them in bulk because that can break candidate, employer, and admin workflows. Add positive and negative integration tests for every RPC.
 - The external-job-candidate review RPC was updated to call the shared `private.require_super_admin_mfa()` helper instead of maintaining a separate inline MFA check. Verification confirmed the RPC remains unavailable to `anon`, available to `authenticated` for its protected UI workflow, and uses the centralized MFA check.
-- Supabase Security Advisor reports leaked-password protection disabled. This is a project Auth setting and must be enabled by the project owner in the Supabase Dashboard if supported by the active plan.
+- Supabase Security Advisor reports leaked-password protection disabled. The connected TAMILAN CAREERS organization is currently on the Free plan. Current Supabase documentation says leaked-password protection requires Pro or above, so this setting cannot be enabled on the current plan. No paid upgrade was made.
 - The project currently has one Super Admin account and no verified MFA factor. Do not enforce mandatory MFA until the Super Admin has enrolled and tested a recovery authenticator; otherwise access may be locked out.
 
 ## Changes made on 2026-11-21
@@ -46,7 +46,7 @@ The browser-facing Supabase publishable key is not a secret. Never put a Supabas
 ## Required next actions
 
 1. Enroll and test Super Admin MFA, including a recovery method, before making MFA mandatory for all admin access.
-2. Enable leaked-password protection in Supabase Auth settings if available on the current plan; use a strong minimum password length and character requirements.
+2. Leaked-password protection requires Supabase Pro or above according to current documentation. Do not upgrade automatically; the project owner must decide whether to pay for that plan. Keep strong password requirements and avoid password reuse in the meantime.
 3. Review Auth rate limits and abuse protection in the Supabase Dashboard.
 4. Test every authenticated SECURITY DEFINER RPC with an authorized user and an unauthorized user.
 5. Confirm that company invitations and source-directory data remain inaccessible to anonymous and ordinary authenticated users. Their current RLS/no-grant configuration is default-deny; do not add broad policies just to silence the linter.
