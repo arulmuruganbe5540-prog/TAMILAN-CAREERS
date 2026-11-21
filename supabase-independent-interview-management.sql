@@ -116,7 +116,7 @@ DECLARE v_user uuid:=(SELECT auth.uid()); v_job_id uuid; v_company_id uuid; v_ca
  v_job_title text; v_company_name text; v_interview_id uuid; v_old_status text;
 BEGIN
  IF v_user IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
- IF p_system NOT IN ('private','international') THEN RAISE EXCEPTION 'Invalid job system'; END IF;
+ IF p_system IS NULL OR p_system NOT IN ('private','international') THEN RAISE EXCEPTION 'Invalid job system'; END IF;
  IF p_scheduled_at IS NULL OR p_scheduled_at<=now() THEN RAISE EXCEPTION 'Interview date and time must be in the future'; END IF;
  IF p_timezone IS NULL OR NOT EXISTS(SELECT 1 FROM pg_catalog.pg_timezone_names WHERE name=p_timezone) THEN RAISE EXCEPTION 'Select a valid IANA time zone'; END IF;
  IF p_duration_minutes IS NULL OR p_duration_minutes NOT BETWEEN 10 AND 480 THEN RAISE EXCEPTION 'Interview duration must be between 10 and 480 minutes'; END IF;
