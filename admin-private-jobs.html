@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101d3a"><title>Private Job Posting | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#182943;font:14px/1.55 Arial,sans-serif}header{background:#101d3a;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}header a{color:#8ce7ff;text-decoration:none;font-weight:900}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;background:#ffffff18;padding:8px 11px;border-radius:8px;text-decoration:none;font-size:12px}main{max-width:1100px;margin:24px auto;padding:0 15px}.hero,.panel{background:#fff;border:1px solid #dfe7f1;border-radius:14px;padding:20px;margin-bottom:15px}.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:white}.hero h1{margin:0 0 7px;font-size:25px}.hero p{margin:0;color:#d8eaff}.form{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:flex;flex-direction:column;gap:6px}.wide{grid-column:1/-1}label{font-weight:800;font-size:12px;color:#344d6c}input,select,textarea{width:100%;padding:11px;border:1px solid #cfdbea;border-radius:8px;font:inherit;background:#fff;color:#172943}textarea{resize:vertical}.checks{display:flex;gap:10px 16px;flex-wrap:wrap}.checks label{display:flex;align-items:center;gap:6px;font-weight:600}.checks input{width:auto}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.btn{border:0;border-radius:8px;padding:10px 14px;font-weight:800;cursor:pointer;background:#1768aa;color:#fff}.btn.soft{background:#eaf2fb;color:#1d5689}.btn.green{background:#16834f}.btn.red{background:#a73a3a}.btn:disabled{opacity:.55;cursor:not-allowed}.muted{color:#718199;font-size:12px}.notice{padding:11px;background:#fff8e8;border:1px solid #efdfb8;border-radius:9px;color:#72531b;font-size:12px}.record{border:1px solid #e1e8f1;border-radius:10px;padding:13px;margin:10px 0;background:#fff}.record h3{margin:0 0 5px;color:#1c4e7d}.record-meta{font-size:11px;color:#6d7b90;margin-bottom:8px}.gate{display:none}.status{display:inline-block;padding:3px 8px;border-radius:20px;background:#eaf1fa;font-size:10px;font-weight:800}.pager{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}#message{white-space:pre-wrap;margin-top:12px;font-size:13px}@media(max-width:620px){.form{grid-template-columns:1fr}.wide{grid-column:auto}.hero{padding:17px}.panel{padding:15px}}
+</style></head><body>
+<header><a href="admin-control.html">TAMILAN CAREERS · SUPER ADMIN</a><nav><a href="admin-government-jobs.html">Government</a><a href="admin-private-jobs.html">Private</a><a href="admin-international-jobs.html">International</a><a href="admin-control.html">Control</a></nav></header>
+<main>
+<section class="hero"><h1>Private Jobs Management</h1><p>Dedicated private jobs posting form and records. This page writes only to <b>private_jobs</b>.</p></section>
+<section id="gate" class="panel gate"><h2>Super Admin access required</h2><p id="gateText">Checking secure sign-in…</p><a class="btn" href="admin-login.html">Super Admin Login</a><a class="btn soft" href="admin-security.html">Account Security / MFA</a></section>
+<div id="app" style="display:none">
+<section class="panel"><h2 id="formTitle">Private Job Posting</h2><div class="notice">Only a Super Admin session with verified authenticator MFA (AAL2) can manage these records. Public visitors can read published records only.</div>
+<form id="postForm" class="form" autocomplete="off">
+<input type="hidden" id="recordId">
+<div class="field"><label for="job_title">Job Title *</label><input id="job_title" maxlength="180" required></div>
+
+<div class="field"><label for="category_id">Job Category *</label><select id="category_id" required><option value="">Loading categories…</option></select></div>
+<div class="field"><label for="country_name">Country *</label><select id="country_name" required><option value="">Loading countries…</option></select></div>
+<div class="field"><label for="location">Job Location *</label><input id="location" maxlength="180" required placeholder="City / State / Country"></div>
+<div class="field"><label for="employment_type">Employment Type *</label><select id="employment_type" required><option value="">Select</option><option value="full_time">Full Time</option><option value="part_time">Part Time</option><option value="contract">Contract</option><option value="temporary">Temporary</option><option value="internship">Internship</option><option value="freelance">Freelance</option></select></div>
+<div class="field"><label for="workplace_type">Workplace Type</label><select id="workplace_type"><option value="onsite">On-site</option><option value="hybrid">Hybrid</option><option value="remote">Remote</option></select></div>
+<div class="field"><label for="vacancies">Number of Vacancies</label><input id="vacancies" type="number" min="1" value="1"></div>
+<div class="field"><label for="application_deadline">Application Deadline</label><input id="application_deadline" type="date"></div>
+<div class="field"><label for="salary_min">Minimum Salary</label><input id="salary_min" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="salary_max">Maximum Salary</label><input id="salary_max" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="salary_currency">Salary Currency</label><input id="salary_currency" maxlength="8" value="INR"></div>
+<div class="field"><label for="salary_period">Salary Period</label><select id="salary_period"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="daily">Daily</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label for="education_level">Education / Qualification</label><div class="checks" id="educationChoices"><label><input type="checkbox" value="8th Pass"> 8th Pass</label><label><input type="checkbox" value="10th Pass"> 10th Pass</label><label><input type="checkbox" value="12th Pass"> 12th Pass</label><label><input type="checkbox" value="ITI"> ITI</label><label><input type="checkbox" value="Diploma"> Diploma</label><label><input type="checkbox" value="Diploma Studying"> Diploma Studying</label><label><input type="checkbox" value="Degree"> Degree</label><label><input type="checkbox" value="Postgraduate"> Postgraduate</label><label><input type="checkbox" value="Studying"> Studying</label></div></div>
+<div class="field"><label for="required_skills">Required Skills</label><input id="required_skills" maxlength="1000" placeholder="Comma-separated skills"></div>
+<div class="field"><label for="contact_email">Contact Email</label><input id="contact_email" type="email" maxlength="254"></div>
+<div class="field"><label for="application_url">Application URL</label><input id="application_url" type="url"></div>
+<div class="field"><label for="company_name">Company / Employer Name *</label><input id="company_name" maxlength="180" required></div>
+ <div class="field"><label for="official_website_url">Company Website</label><input id="official_website_url" type="url"></div>
+<div class="field wide"><label for="description">Job Description *</label><textarea id="description" rows="6" maxlength="8000" required></textarea></div>
+</form>
+<div class="actions"><button class="btn soft" id="saveDraft" type="button">Save Draft</button><button class="btn green" id="publish" type="button">Publish Job</button><button class="btn soft" id="reset" type="button">New Posting</button></div><p id="message" role="status"></p>
+</section>
+<section class="panel"><h2>Manage Private Jobs Records</h2><div class="muted">10 records per page · Drafts and published records are listed separately from other job systems.</div><div id="records">Loading records…</div><div class="pager" id="pager" hidden><button class="btn soft" id="prev">Previous</button><span id="pageText" class="muted"></span><button class="btn soft" id="next">Next</button></div></section>
+</div></main>
+<script>
+(function(){
+"use strict";
+const TABLE="private_jobs",SYSTEM="private",PAGE_SIZE=10;
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let user=null,records=[],page=1;
+const fields=["job_title","employer_name","location","employment_type","workplace_type","vacancies","application_deadline","salary_min","salary_max","salary_currency","salary_period","required_skills","contact_email","application_url","description","government_scope","recruitment_authority","notification_number","exam_year","notification_date","age_limit","application_fee","selection_process","official_website_url","official_notification_url","job_sector","country_code","visa_type","work_permit","language_requirements","visa_notes"];
+function gate(msg){$("gate").style.display="block";$("gateText").textContent=msg}
+async function verify(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data?.user){gate("Please sign in using the Super Admin account.");return false}
+ user=data.user;
+ const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
+ if(roleError||!roles?.length){gate("This account does not have Super Admin permissions.");return false}
+ const {data:aal,error:aalError}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalError||aal?.currentLevel!=="aal2"){gate("Verified authenticator MFA is required. Open Account Security, enroll an authenticator, then sign in again and complete MFA.");return false}
+ $("app").style.display="block";return true;
+}
+async function loadOptions(){
+ const [cats,countries]=await Promise.all([
+  db.from("job_categories").select("id,category_name").eq("is_active",true).order("category_name"),
+  db.from("countries").select("country_name,is_active").eq("is_active",true).order("country_name")
+ ]);
+ if(cats.error||countries.error)throw cats.error||countries.error;
+ $("category_id").innerHTML='<option value="">Select category</option>'+(cats.data||[]).map(x=>'<option value="'+esc(x.id)+'">'+esc(x.category_name)+'</option>').join("");
+ $("country_name").innerHTML='<option value="">Select country</option>'+(countries.data||[]).map(x=>'<option>'+esc(x.country_name)+'</option>').join("");
+}
+function value(id){return $(id)?$(id).value.trim():""}
+function collect(status){
+ const title=value("job_title"),description=value("description"),country=value("country_name"),category=value("category_id");
+ if(!title||!description||!country||!category||!value("location")||!value("employment_type"))throw new Error("Complete Job Title, Category, Country, Location, Employment Type and Description.");
+ if(SYSTEM==="government"&&!value("official_website_url"))throw new Error("Government postings require an official department website URL.");
+ if(SYSTEM==="private"&&!value("employer_name"))throw new Error("Enter the company / employer name.");
+ if(SYSTEM==="international"&&(!value("job_sector")||!value("employer_name")))throw new Error("Select the International Job Sector and enter the employer / recruiting authority.");
+ if((SYSTEM==="private"||SYSTEM==="international")&&!value("application_url")&&!value("contact_email"))throw new Error("Provide an application URL or contact email.");
+ const min=value("salary_min"),max=value("salary_max");
+ if(min&&max&&Number(min)>Number(max))throw new Error("Maximum salary must be greater than or equal to minimum salary.");
+ const education=[...document.querySelectorAll("#educationChoices input:checked")].map(x=>x.value).join(", ");
+ const row={
+  job_title:title,description,category_id:category,location:value("location"),country_name:country,
+  employment_type:value("employment_type"),workplace_type:value("workplace_type")||"onsite",
+  vacancies:Number(value("vacancies")||1),application_deadline:value("application_deadline")||null,
+  salary_min:min?Number(min):null,salary_max:max?Number(max):null,salary_currency:value("salary_currency")||"INR",
+  salary_period:value("salary_period")||"monthly",education_level:education,required_skills:value("required_skills")||null,
+  contact_email:value("contact_email")||null,application_url:value("application_url")||null,
+  employer_name:value("employer_name")||null,is_admin_managed:true,status,
+  published_at:status==="published"?new Date().toISOString():null,updated_at:new Date().toISOString()
+ };
+ if(!Number.isInteger(row.vacancies)||row.vacancies<1)throw new Error("Enter at least one vacancy.");
+ if(SYSTEM==="government")Object.assign(row,{government_scope:value("government_scope")||null,recruitment_authority:value("recruitment_authority")||null,notification_number:value("notification_number")||null,exam_year:value("exam_year")?Number(value("exam_year")):null,notification_date:value("notification_date")||null,age_limit:value("age_limit")||null,application_fee:value("application_fee")||null,selection_process:value("selection_process")||null,official_website_url:value("official_website_url"),official_notification_url:value("official_notification_url")||null});
+ if(SYSTEM==="private")row.official_website_url=value("official_website_url")||null;
+ if(SYSTEM==="international")Object.assign(row,{job_sector:value("job_sector"),country_code:value("country_code")||null,visa_type:value("visa_type")||null,work_permit:value("work_permit")||null,visa_sponsorship_available:value("visa_sponsorship_available")==="true",relocation_support:value("relocation_support")==="true",language_requirements:value("language_requirements")||null,visa_notes:value("visa_notes")||null});
+ return row;
+}
+function slug(){return value("job_title").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,80)+"-"+crypto.randomUUID().slice(0,8)}
+function reset(){ $("postForm").reset();$("recordId").value="";$("salary_currency").value="INR";$("vacancies").value="1";$("formTitle").textContent="Private Job Posting";$("message").textContent=""; }
+async function save(status){
+ const button=status==="published"?$("publish"):$("saveDraft");button.disabled=true;$("message").textContent="Saving…";
+ try{
+  const row=collect(status),id=value("recordId");
+  if(id){
+   const {error}=await db.from(TABLE).update(row).eq("id",id);
+   if(error)throw error;
+  }else{
+   row.created_by=user.id;row.job_slug=slug();row.job_code="TC-PRI-"+crypto.randomUUID().replace(/-/g,"").slice(0,10).toUpperCase();
+   const {error}=await db.from(TABLE).insert(row);
+   if(error)throw error;
+  }
+  $("message").textContent=status==="published"?"Published successfully. This record is now available in its own public listing.":"Draft saved successfully.";
+  reset();await loadRecords();
+ }catch(e){$("message").textContent=e.message||"Unable to save this posting."}
+ finally{button.disabled=false}
+}
+function edit(id){
+ const r=records.find(x=>x.id===id);if(!r)return;
+ $("recordId").value=r.id;$("formTitle").textContent="Edit Private Jobs Record";
+ fields.forEach(k=>{if($(k))$(k).value=r[k]??""});
+ ["category_id","country_name"].forEach(k=>{if($(k))$(k).value=r[k]??""});
+ ["vacancies","salary_min","salary_max","salary_currency","salary_period","employment_type","workplace_type"].forEach(k=>{if($(k))$(k).value=r[k]??($(k).value)});
+ const chosen=String(r.education_level||"").split(",").map(x=>x.trim());
+ document.querySelectorAll("#educationChoices input").forEach(x=>x.checked=chosen.includes(x.value));
+ if($("visa_sponsorship_available"))$("visa_sponsorship_available").value=String(Boolean(r.visa_sponsorship_available));
+ if($("relocation_support"))$("relocation_support").value=String(Boolean(r.relocation_support));
+ $("message").textContent="Record loaded. Save Draft or Publish to update it.";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+async function setStatus(id,status){if(!confirm("Change this record to "+status+"?"))return;const {error}=await db.from(TABLE).update({status,published_at:status==="published"?new Date().toISOString():null,updated_at:new Date().toISOString()}).eq("id",id);if(error){alert(error.message);return}await loadRecords()}
+async function remove(id){if(!confirm("Permanently delete this record? This cannot be undone."))return;const {error}=await db.from(TABLE).delete().eq("id",id);if(error){alert(error.message);return}await loadRecords()}
+function render(){
+ const count=Math.max(1,Math.ceil(records.length/PAGE_SIZE));page=Math.min(page,count);
+ const rows=records.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+ $("records").innerHTML=rows.length?rows.map(r=>'<article class="record"><h3>'+esc(r.job_title)+'</h3><div class="record-meta"><span class="status">'+esc(String(r.status).toUpperCase())+'</span> · '+esc(r.employer_name||"")+' · '+esc(r.location||"")+' · '+esc(r.country_name||"")+'</div><div class="actions"><button class="btn soft" data-edit="'+esc(r.id)+'">Edit</button>'+(r.status!=="published"?'<button class="btn green" data-publish="'+esc(r.id)+'">Publish</button>':'<button class="btn soft" data-pause="'+esc(r.id)+'">Pause</button>')+'<button class="btn red" data-delete="'+esc(r.id)+'">Delete</button></div></article>').join(""):'<div class="notice">No records have been added to this dedicated system yet.</div>';
+ $("pager").hidden=records.length<=PAGE_SIZE;$("pageText").textContent="Page "+page+" of "+count+" · "+records.length+" records";$("prev").disabled=page<=1;$("next").disabled=page>=count;
+ $("records").querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>edit(b.dataset.edit)));
+ $("records").querySelectorAll("[data-publish]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.publish,"published")));
+ $("records").querySelectorAll("[data-pause]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.pause,"paused")));
+ $("records").querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>remove(b.dataset.delete)));
+}
+async function loadRecords(){const {data,error}=await db.from(TABLE).select("*").order("created_at",{ascending:false}).limit(500);if(error){$("records").textContent="Unable to load records: "+error.message;return}records=data||[];render()}
+$("saveDraft").addEventListener("click",()=>save("draft"));$("publish").addEventListener("click",()=>save("published"));$("reset").addEventListener("click",reset);
+$("prev").addEventListener("click",()=>{if(page>1){page--;render()}});$("next").addEventListener("click",()=>{page++;render()});
+(async()=>{if(!(await verify()))return;try{await loadOptions();await loadRecords()}catch(e){$("message").textContent=e.message||"Unable to load form options."}})();
+})();
+</script><script src="assets/site-protection.js" defer></script></body></html>
