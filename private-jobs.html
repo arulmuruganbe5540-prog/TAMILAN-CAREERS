@@ -75,7 +75,7 @@ function render(){
   const title=pick(j,["job_title","title"]),desc=pick(j,["description","job_description"]),company=pick(j,["company_name","employer_name"]),loc=pick(j,["location","job_location","work_location"]),jt=pick(j,["employment_type","job_type"]);
   const hay=[title,desc,company,loc,pick(j,["required_skills","skills"])].join(" ").toLowerCase();
   const visible=String(pick(j,["status"])).toLowerCase()==="published"&&!isExpiredJob(j);
-  const jobEducation=String(pick(j,["education_level","education"])).split(/[,;|\\n]+/).map(value=>value.trim().toLowerCase()).filter(Boolean);
+  const jobEducation=String(pick(j,["education_level","education"])).split(/[,;|\n]+/).map(value=>value.trim().toLowerCase()).filter(Boolean);
   const jobWorkplace=String(pick(j,["workplace_type"])).trim().toLowerCase();
   const skillMatch=getSkillMatch(j);
   return visible&&q.split(/\s+/).filter(Boolean).every(word=>hay.includes(word))&&(!type||String(jt).toLowerCase().replace(/_/g," ")===type)&&(!place||String(loc).toLowerCase().includes(place))&&(!workplace||jobWorkplace===workplace)&&(!education||jobEducation.includes(education))&&(!skillMode||skillMatch.score>0);
