@@ -123,6 +123,13 @@ const pager=$(id+'-pager');pager.innerHTML='<button type="button" '+(page<=1?'di
 pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{pages[id]=Math.min(total,Math.max(1,page+Number(b.dataset.step)));resourceRows(id,rows,isDate);}));
 }
 function includesAny(j,needles){const all=tags(j).join(' ')+' '+String(j.education_level||'').toLowerCase()+' '+String(j.required_skills||'').toLowerCase()+' '+String(j.description||'').toLowerCase();return needles.some(n=>all.includes(n.toLowerCase()));}
+function qualificationMatch(j,d){
+const all=tags(j).join(' ')+' '+String(j.education_level||'').toLowerCase()+' '+String(j.required_skills||'').toLowerCase()+' '+String(j.description||'').toLowerCase();
+if(d.id==='qbemech')return (all.includes('b.e.')||all.includes('be '))&&all.includes('mechanical');
+if(d.id==='qbecivil')return (all.includes('b.e.')||all.includes('be '))&&all.includes('civil');
+if(d.id==='qbecs')return (all.includes('b.e.')||all.includes('be '))&&(all.includes('computer science')||all.includes('cse'));
+return includesAny(j,d.needles);
+}
 const qualDefs=[
 {id:'q8',title:'8th Pass Government Jobs',needles:['8th pass','8th standard','eighth standard']},
 {id:'q10',title:'10th Pass Government Jobs',needles:['10th pass','sslc','matriculation']},
@@ -149,7 +156,7 @@ function renderAll(){
 jobRows('latest',jobs);
 jobRows('central',jobs.filter(j=>String(j.government_category||j.government_scope||'').toLowerCase()==='central government'));
 jobRows('tn',jobs.filter(j=>{const c=String(j.government_category||'').toLowerCase(),loc=String(j.location||'').toLowerCase();return c==='tamil nadu government'||(c==='state government'&&(loc.includes('tamil nadu')||loc.includes('tamilnadu')||loc.includes('tn')));}));
-qualDefs.forEach(d=>jobRows(d.id,jobs.filter(j=>includesAny(j,d.needles))));
+qualDefs.forEach(d=>jobRows(d.id,jobs.filter(j=>qualificationMatch(j,d))));
 const byType=t=>resources.filter(r=>r.resource_type===t);
 resourceRows('answer',byType('answer_key'),false);
 resourceRows('results',byType('result'),false);
