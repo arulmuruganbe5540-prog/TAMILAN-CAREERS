@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101d3a">
+<title>Government Job Details | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#14213d;font:15px Arial,Helvetica,sans-serif}.top{background:#101d3a;color:#fff;padding:18px max(16px,calc((100% - 1000px)/2))}.top h1{margin:0;font-size:22px}.top p{margin:6px 0 0;color:#d6e5f6;font-size:13px}.wrap{width:min(1000px,100%);margin:24px auto;padding:0 16px}.back{display:inline-block;margin-bottom:16px;color:#075e9b;font-weight:700}.title{font-size:24px;margin:0 0 8px}.muted{color:#65738b;line-height:1.55}.details{width:100%;border-collapse:collapse;background:#fff;margin:18px 0;min-width:0}.details th,.details td{border:1px solid #dce4ef;padding:12px;text-align:left;vertical-align:top;line-height:1.5}.details th{width:30%;background:#eaf0f8}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.actions a{display:inline-block;background:#176b9e;color:#fff;padding:11px 16px;border-radius:4px;text-decoration:none;font-weight:700}.actions a.secondary{background:#087443}.notice{padding:14px 0;color:#65738b;border-top:1px solid #dce4ef;font-size:13px}
+@media(max-width:600px){.details th{width:38%}.title{font-size:21px}}
+</style>
+</head>
+<body>
+<header class="top"><h1>TAMILAN CAREERS</h1><p>Government Job Notification Details</p></header>
+<main class="wrap"><a class="back" href="index.html">← Back to Home</a><div id="content"><h2 class="title">Loading job details…</h2><p class="muted">Please wait while the published notification is retrieved.</p></div></main>
+<script>
+(function(){
+const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
+const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const host=document.getElementById('content');
+const esc=v=>String(v==null||v===''?'—':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});};
+const url=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch(e){return '';}};
+const params=new URLSearchParams(location.search),id=params.get('id');
+function row(label,value){return '<tr><th>'+esc(label)+'</th><td>'+esc(value)+'</td></tr>';}
+async function load(){
+if(!id){host.innerHTML='<h2 class="title">Job not found</h2><p class="muted">A valid job notification was not selected. Return to the Home Page and choose a published job.</p>';return;}
+const {data,error}=await sb.from('government_jobs').select('*').eq('id',id).eq('status','published').maybeSingle();
+if(error||!data){host.innerHTML='<h2 class="title">Job details unavailable</h2><p class="muted">This notification may no longer be published, or the link may be invalid.</p>';return;}
+const j=data,qual=Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level;
+const fields=[
+['Department',j.department_name||j.employer_name],['Recruitment Authority',j.recruitment_authority],['Government Category',j.government_category],
+['Job Post',j.job_title],['Job Type',j.job_type_label||j.employment_type],['Notification Number',j.notification_number],
+['Qualification',qual],['Vacancies',j.vacancies],['Age Limit',j.age_limit],['Age Relaxation',j.age_relaxation],
+['Experience',j.experience_requirement],['Application Fee',j.application_fee],['Location',j.location],
+['Salary',j.salary_min||j.salary_max?String(j.salary_min||'')+(j.salary_min&&j.salary_max?' - ':'')+String(j.salary_max||'')+' '+(j.salary_currency||'INR')+' / '+(j.salary_period||''):'—'],
+['Notification Date',fmt(j.notification_date)],['Application Start Date',fmt(j.application_start_date)],['Last Date to Apply',fmt(j.application_deadline)],['Exam Date',fmt(j.exam_date)],
+['Selection Process',j.selection_process],['How to Apply',j.how_to_apply],['Additional Information',j.additional_info],['Job Description',j.description]
+];
+const notification=url(j.official_notification_url),apply=url(j.application_url),official=url(j.official_website_url);
+host.innerHTML='<h2 class="title">'+esc(j.job_title)+'</h2><p class="muted">'+esc(j.department_name||j.employer_name||'Government Department')+' · '+esc(j.government_category||'Government Job')+'</p><table class="details"><tbody>'+fields.map(x=>row(x[0],x[1])).join('')+'</tbody></table><div class="actions">'+(notification?'<a href="'+esc(notification)+'" target="_blank" rel="noopener">Official Notification PDF</a>':'')+(apply?'<a class="secondary" href="'+esc(apply)+'" target="_blank" rel="noopener">Apply Online</a>':'')+(official?'<a href="'+esc(official)+'" target="_blank" rel="noopener">Official Website</a>':'')+'</div><p class="notice">Important: Read the official notification carefully and confirm eligibility, dates and application instructions on the recruiting authority website before applying.</p>';
+}
+load();
+})();
+</script>
+</body>
+</html>
