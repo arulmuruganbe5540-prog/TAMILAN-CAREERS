@@ -20,7 +20,9 @@ function setApplyLanguage(){document.documentElement.lang="en";document.querySel
 
 
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
-const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),jobId=params.get("job");
+const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),jobId=params.get("job"),system=params.get("system")||"";
+const jobTable=system==="government"?"government_jobs":system==="private"?"private_jobs":system==="international"?"international_jobs":"jobs";
+const applicationTable=system==="government"?"government_job_applications":system==="private"?"private_job_applications":system==="international"?"international_job_applications":"job_applications";
 
 let user=null,job=null,resumes=[];
 setApplyLanguage();
@@ -45,15 +47,15 @@ function msg(t,kind){$("message").hidden=false;$("message").className="state "+(
 async function init(){
  if(!jobId){$("jobbox").textContent=at("jobIdMissing");return}
  const {data:sessionData}=await db.auth.getSession();user=sessionData.session?.user;
- if(!user){location.href="login.html?next="+encodeURIComponent("apply.html?job="+jobId);return}
+ if(!user){location.href="login.html?next="+encodeURIComponent("apply.html?job="+jobId+(system?"&system="+encodeURIComponent(system):""));return}
  const {data:roleData,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  if(roleError||roleData?.role!=="job_seeker"){$("jobbox").textContent=at("jobSeekerOnly");return}
- const {data,error}=await db.from("jobs").select("*").eq("id",jobId).maybeSingle();
+ const {data,error}=await db.from(jobTable).select("*").eq("id",jobId).maybeSingle();
  if(error||!data){$("jobbox").textContent=at("jobUnavailable")+(error?.message||at("jobNotFound"));return}
  job=data;const status=String(pick(job,["status"])).toLowerCase();
  if(status!=="published"){$("jobbox").textContent=at("notPublished");return}
  if(isExpiredJob(job)){$("jobbox").textContent=at("expired");return}
- $("jobbox").innerHTML="<b>"+esc(pick(job,["job_title","job_title"])||"Job")+"</b><br><a href='job-details.html?id="+encodeURIComponent(jobId)+"'>Full job details</a>";
+ $("jobbox").innerHTML="<b>"+esc(pick(job,["job_title","job_title"])||"Job")+"</b><br><a href='job-details.html?id="+encodeURIComponent(jobId)+(system?"&system="+encodeURIComponent(system):"")+"'>Full job details</a>";
  await loadResumes();
  $("application").hidden=false;
 }
@@ -73,7 +75,7 @@ $("application").addEventListener("submit",async e=>{
  const selectedResume=$("resume").value||null;
  if(selectedResume&&!resumes.some(r=>r.id===selectedResume)){msg(at("invalidResume"),"error");btn.disabled=false;btn.textContent=at("submit");return}
  const payload={job_id:job.id,candidate_id:user.id,status:"applied",resume_id:selectedResume,cover_letter:cover||null};
- const {error}=await db.from("job_applications").insert(payload);
+ const {error}=await db.from(applicationTable).insert(payload);
  if(error){
   if(error.code==="23505"){
    msg(at("alreadyApplied"),"error");
