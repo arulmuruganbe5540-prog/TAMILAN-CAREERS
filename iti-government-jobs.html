@@ -44,6 +44,8 @@ button{border:1px solid #b9c8d9;background:#fff;color:#173554;padding:8px 12px;b
 <p class="intro">Explore government vacancies that accept ITI qualifications across eligible trades. Check the trade requirement, NCVT or SCVT conditions, experience criteria and other instructions in the official recruitment notification.</p>
 <h2>Latest ITI Government Job Notifications</h2>
 <p class="intro">The table below shows published government vacancies matching this qualification. Open a job to view its complete details, application steps and verified official links. Maximum 20 records per page.</p>
+<div class="table-scroll"><table><thead><tr><th>Job Title</th><th>Department</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="jobs-body"><tr><td colspan="6" class="empty">Loading published government jobs…</td></tr></tbody></table></div>
+<div class="pager" id="pager"></div>
 <section class="info-section" id="jobs-you-can-apply-for"><h2>ITI Government Job Types</h2><p>ITI opportunities are trade-specific. A candidate must hold the exact or an officially accepted related trade and certificate stated in the notification.</p><div class="table-scroll"><table><thead><tr><th>Job Type</th><th>Recruitment Area</th><th>Qualification / Additional Conditions</th></tr></thead><tbody><tr><td>Apprentice</td><td>Railways, PSUs and government establishments</td><td>Relevant ITI trade and prescribed apprenticeship conditions.</td></tr><tr><td>Technician / Technician Grade posts</td><td>Railways, PSUs and departments</td><td>Only accepted ITI trades; some posts also require 10th, experience or other criteria.</td></tr><tr><td>Assistant Loco Pilot (ALP)</td><td>Railway Recruitment Boards</td><td>10th plus ITI in an accepted trade or another qualification route listed in the current notice.</td></tr><tr><td>Electrician / Fitter / Welder / Mechanic roles</td><td>Electricity boards, workshops and PSUs</td><td>Exact trade, NCVT/SCVT recognition and other conditions must match the notice.</td></tr><tr><td>Trade-based Technical Assistant</td><td>Government departments and institutions</td><td>Only where the vacancy specifies the candidate's ITI trade.</td></tr></tbody></table></div><p class="note">This is a guidance list of job types, not a list of live vacancies. Eligibility is decided only by the latest official notification. Check age, subject/trade, marks, physical standards, experience, language and other conditions before applying. Higher qualifications do not automatically replace a specifically required subject, trade or certificate.</p></section>
 
 <div class="stats" aria-label="Job summary">
@@ -67,8 +69,7 @@ button{border:1px solid #b9c8d9;background:#fff;color:#173554;padding:8px 12px;b
 <div class="faq-item"><strong>Why are there no jobs listed?</strong><p>There may be no currently published job posts tagged for this qualification. Check again later for newly verified notifications.</p></div>
 </section>
 
-<div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="jobs-body"><tr><td colspan="5" class="empty">Loading published government jobs…</td></tr></tbody></table></div>
-<div class="pager" id="pager"></div>
+
 <p class="note">Please read the official recruitment notification carefully. Eligibility, age relaxation, fees and deadlines are determined by the recruiting authority.</p>
 </main>
 <script>
@@ -94,14 +95,14 @@ return terms.some(t=>q.includes(t));
 }
 function render(){
 const body=document.getElementById('jobs-body'),total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
-if(!rows.length)body.innerHTML='<tr><td colspan="5" class="empty">No published government jobs matching this qualification are available right now.</td></tr>';
-else body.innerHTML=shown.map(j=>'<tr><td>'+esc(j.department_name||j.recruitment_authority||'—')+'</td><td>'+esc(j.job_title||'—')+'</td><td>'+esc(j.education_level||(Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):'—'))+'</td><td>'+date(j.application_deadline)+'</td><td><a href="government-job-details.html?id='+encodeURIComponent(j.id)+'">View Full Details</a></td></tr>').join('');
+if(!rows.length)body.innerHTML='<tr><td colspan="6" class="empty">No published government jobs matching this qualification are available right now.</td></tr>';
+else body.innerHTML=shown.map(j=>'<tr><td>'+esc(j.job_title||'—')+'</td><td>'+esc(j.department_name||j.recruitment_authority||'—')+'</td><td>'+esc(j.education_level||(Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):'—'))+'</td><td>'+esc(j.vacancies==null?'—':j.vacancies)+'</td><td>'+date(j.application_deadline)+'</td><td><a href="government-job-details.html?id='+encodeURIComponent(j.id)+'">View Full Details</a></td></tr>').join('');
 const pager=document.getElementById('pager');pager.innerHTML='<button type="button" '+(page<=1?'disabled':'')+' id="prev">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' id="next">Next</button>';
 document.getElementById('prev').addEventListener('click',()=>{if(page>1){page--;render();}});
 document.getElementById('next').addEventListener('click',()=>{if(page<total){page++;render();}});
 }
 const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
-if(error){document.getElementById('jobs-body').innerHTML='<tr><td colspan="5" class="empty">Government job records could not be loaded. Please try again later.</td></tr>';console.error(error.message);return;}
+if(error){document.getElementById('jobs-body').innerHTML='<tr><td colspan="6" class="empty">Government job records could not be loaded. Please try again later.</td></tr>';console.error(error.message);return;}
 rows=(data||[]).filter(matches);render();
 
 const now=new Date();
