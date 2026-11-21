@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-# Account, application, company and admin pages declare noindex in their HTML.
-# Keep them crawlable so search engines can read that directive.
-
-Sitemap: https://tamilancareers.in/sitemap.xml

@@ -1,2 +1,0 @@
-/* TAMILAN CAREERS is English-only. Automatic translation is intentionally disabled. */
-(function(){document.documentElement.setAttribute("lang","en");document.documentElement.setAttribute("dir","ltr");document.documentElement.dataset.tcLanguage="en";})();
