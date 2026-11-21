@@ -55,20 +55,35 @@ function displayEnglish(value, fallback = "") {
 async function init(){
  const {data:s,error:se}=await db.auth.getSession(),user=s.session?.user;
  if(se||!user){location.replace("login.html?next="+encodeURIComponent("notifications.html"));return}
- const [nr,ir]=await Promise.all([
+ const [nr,legacyIr,privateIr,internationalIr]=await Promise.all([
   db.from("tc_notifications").select("id,notification_type,title,body,related_application_id,related_interview_id,is_read,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(100),
-  db.from("tc_interview_invitations").select("id,application_id,scheduled_at,interview_mode,location_or_link,letter_text,status,candidate_response_at,created_at,jobs:job_applications(job_id,jobs(job_title)),companies(company_name)").order("scheduled_at",{ascending:true})
+  db.from("tc_interview_invitations").select("id,application_id,scheduled_at,interview_mode,location_or_link,letter_text,status,candidate_response_at,created_at,jobs:job_applications(job_id,jobs(job_title)),companies(company_name)").eq("candidate_id",user.id).order("scheduled_at",{ascending:true}),
+  db.from("private_job_interview_invitations").select("id,application_id,job_id,company_id,candidate_id,interview_title,scheduled_at,timezone,duration_minutes,interview_mode,meeting_url,location,invitation_message,status,candidate_response_note,candidate_response_at,created_at,job:private_jobs(job_title),company:companies(company_name)").eq("candidate_id",user.id).order("scheduled_at",{ascending:true}),
+  db.from("international_job_interview_invitations").select("id,application_id,job_id,company_id,candidate_id,interview_title,scheduled_at,timezone,duration_minutes,interview_mode,meeting_url,location,invitation_message,status,candidate_response_note,candidate_response_at,created_at,job:international_jobs(job_title),company:companies(company_name)").eq("candidate_id",user.id).order("scheduled_at",{ascending:true})
  ]);
- if(nr.error){$("summary").className="error";$("summary").textContent="Unable to load notifications. Check whether supabase-interview-notifications.sql has been run. "+nr.error.message;return}
- const notes=nr.data||[],invs=ir.data||[];
- $("summary").textContent="Total notifications: "+notes.length+" · Unread: "+notes.filter(n=>!n.is_read).length+(ir.error?" · Unable to load interview list: "+ir.error.message:"");
+ if(nr.error){$("summary").className="error";$("summary").textContent="Unable to load notifications. "+nr.error.message;return}
+ const notes=nr.data||[];
+ const errors=[legacyIr.error,privateIr.error,internationalIr.error].filter(Boolean);
+ $("summary").textContent="Total notifications: "+notes.length+" · Unread: "+notes.filter(n=>!n.is_read).length+(errors.length?" · Some interview records could not be loaded: "+errors.map(e=>e.message).join("; "):"");
  const candidateRole=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  const isCandidate=candidateRole.data?.role==="job_seeker";
- const active=invs.filter(i=>i.status==="pending"||i.status==="accepted");
- $("interviews").innerHTML=active.length?'<h2>Interview Invitations</h2>'+active.map(i=>{
-  const rel=Array.isArray(i.jobs)?i.jobs[0]:i.jobs,job=Array.isArray(rel?.jobs)?rel.jobs[0]:rel?.jobs,co=Array.isArray(i.companies)?i.companies[0]:i.companies;
-  return '<article class="item"><h3>'+esc(displayEnglish(job?.job_title,"Job")||"Job")+'</h3><div><b>Company:</b> '+esc(displayEnglish(co?.company_name,"Company")||"Company")+'</div><div><b>Date:</b> '+esc(new Date(i.scheduled_at).toLocaleString("en-IN"))+'</div><div><b>Type:</b> '+esc(modeText[i.interview_mode]||i.interview_mode)+'</div>'+(displayEnglish(i.location_or_link)?'<div><b>Location / Link:</b> '+esc(displayEnglish(i.location_or_link))+'</div>':"")+(displayEnglish(i.letter_text)?'<div class="letter">'+esc(displayEnglish(i.letter_text))+'</div>':"")+'<span class="pill">'+esc(i.status==="pending"?"Response required":i.status==="accepted"?"Accepted":i.status)+'</span>'+(isCandidate&&i.status==="pending"?'<div><button class="btn" data-response="accepted" data-id="'+esc(i.id)+'">Accept</button><button class="btn alt" data-response="declined" data-id="'+esc(i.id)+'">Decline</button></div>':"")+'</article>';
- }).join(""):'<h2>Interview Invitations</h2><div class="empty">There are no pending interview invitations.</div>';
+ const legacy=(legacyIr.data||[]).filter(i=>i.status==="pending"||i.status==="accepted").map(i=>({...i,_system:"legacy"}));
+ const independent=[...(privateIr.data||[]).map(i=>({...i,_system:"private"})),...(internationalIr.data||[]).map(i=>({...i,_system:"international"}))];
+ const invs=[...legacy,...independent].sort((a,b)=>new Date(a.scheduled_at)-new Date(b.scheduled_at));
+ $("interviews").innerHTML=invs.length?'<h2>Interview Invitations</h2>'+invs.map(i=>{
+  let jobTitle="Job",companyName="Company",when="";
+  if(i._system==="legacy"){
+   const rel=Array.isArray(i.jobs)?i.jobs[0]:i.jobs,job=Array.isArray(rel?.jobs)?rel.jobs[0]:rel?.jobs,co=Array.isArray(i.companies)?i.companies[0]:i.companies;
+   jobTitle=job?.job_title||jobTitle;companyName=co?.company_name||companyName;when=new Date(i.scheduled_at).toLocaleString("en-IN");
+  }else{
+   jobTitle=i.job?.job_title||jobTitle;companyName=i.company?.company_name||companyName;
+   try{when=new Date(i.scheduled_at).toLocaleString("en-IN",{timeZone:i.timezone||"UTC"})+" ("+i.timezone+")"}catch(e){when=new Date(i.scheduled_at).toLocaleString("en-IN")}
+  }
+  const title=i.interview_title||jobTitle,mode=modeText[i.interview_mode]||i.interview_mode;
+  const venue=i._system==="legacy"?i.location_or_link:(i.meeting_url||i.location);
+  const letter=i._system==="legacy"?i.letter_text:i.invitation_message;
+  return '<article class="item"><span class="pill">'+esc(i._system==="private"?"Private Jobs":i._system==="international"?"International Jobs":"Interview")+'</span><h3>'+esc(displayEnglish(title,"Interview"))+'</h3><div><b>Role:</b> '+esc(displayEnglish(jobTitle,"Job"))+'</div><div><b>Company:</b> '+esc(displayEnglish(companyName,"Company"))+'</div><div><b>Date & Time:</b> '+esc(when)+'</div>'+(i.duration_minutes?'<div><b>Duration:</b> '+esc(i.duration_minutes)+' minutes</div>':"")+'<div><b>Type:</b> '+esc(mode)+'</div>'+(venue?'<div><b>Location / Link:</b> '+esc(displayEnglish(venue))+'</div>':"")+(letter?'<div class="letter">'+esc(displayEnglish(letter))+'</div>':"")+'<span class="pill">'+esc(i.status==="pending"?"Response required":i.status==="accepted"?"Accepted":i.status)+'</span>'+(i.candidate_response_note?'<p><b>Your response:</b> '+esc(i.candidate_response_note)+'</p>':"")+(isCandidate&&i.status==="pending"?'<div><textarea rows="2" maxlength="2000" data-response-note="'+esc(i.id)+'" placeholder="Optional response note" style="width:100%;padding:9px;margin-top:8px"></textarea><button class="btn" data-response="accepted" data-system="'+i._system+'" data-id="'+esc(i.id)+'">Accept</button><button class="btn alt" data-response="declined" data-system="'+i._system+'" data-id="'+esc(i.id)+'">Decline</button></div>':"")+'</article>';
+ }).join(""):'<h2>Interview Invitations</h2><div class="empty">There are no interview invitations yet.</div>';
  $("notifications").innerHTML='<h2>All Notifications</h2><div class="panel"><button class="btn alt" id="markAll">Mark All as Read</button></div>'+(notes.length?notes.map(n=>'<article class="item '+(!n.is_read?'unread':'')+'"><span class="pill">'+esc(typeText[n.notification_type]||"Notification")+'</span> <span class="muted">'+esc(new Date(n.created_at).toLocaleString("en-IN"))+'</span><h3>'+esc(displayEnglish(n.title,"Notification"))+'</h3><p>'+esc(displayEnglish(n.body,"Open the related application or interview for more information."))+'</p>'+(!n.is_read?'<button class="btn alt" data-read="'+esc(n.id)+'">Mark as Read</button>': '<span class="muted">Read</span>')+(n.related_application_id?'<a class="btn alt" href="my-applications.html">View Application</a>':"")+'</article>').join(""):'<div class="empty">There are no notifications yet.</div>');
 
 }
@@ -80,7 +95,10 @@ async function init(){
  $("interviews").addEventListener("click",async e=>{
   const b=e.target.closest("[data-response]");if(!b)return;
   const label=b.textContent;b.disabled=true;b.textContent="Saving...";
-  const {error}=await db.rpc("tc_respond_interview_invitation",{p_interview_id:b.dataset.id,p_response:b.dataset.response});
+  const system=b.dataset.system||"legacy",note=$( "interviews").querySelector('[data-response-note="'+b.dataset.id+'"]')?.value.trim()||"";
+  const fn=system==="private"?"tc_candidate_respond_private_interview":system==="international"?"tc_candidate_respond_international_interview":"tc_respond_interview_invitation";
+  const args=system==="legacy"?{p_interview_id:b.dataset.id,p_response:b.dataset.response}:{p_interview_id:b.dataset.id,p_response:b.dataset.response,p_response_note:note};
+  const {error}=await db.rpc(fn,args);
   if(error){b.disabled=false;b.textContent=label;alert("Unable to save response: "+error.message);return}
   await init();
  });
