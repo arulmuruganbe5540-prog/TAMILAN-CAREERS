@@ -19,6 +19,18 @@ a{color:#075e9b;font-weight:700}.empty{text-align:center;color:#68778d;padding:2
 button{border:1px solid #b9c8d9;background:#fff;color:#173554;padding:8px 12px;border-radius:4px;font-weight:700}button:disabled{opacity:.4}
 .note{margin-top:12px;color:var(--muted);font-size:12px}
 @media(max-width:640px){main{padding:18px 12px 32px}h2{font-size:20px}}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0 24px}
+.stat{border:1px solid var(--line);border-radius:8px;padding:14px;background:#f8fbff}
+.stat strong{display:block;font-size:24px;color:var(--navy);margin-bottom:4px}.stat span{font-size:12px;color:var(--muted)}
+.info-section{margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.info-section h2{font-size:20px;margin-bottom:8px}.info-section p,.info-section li{line-height:1.65;color:#52627a}
+.info-section ul{padding-left:22px;margin:10px 0}.info-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.info-item{padding:12px;border:1px solid var(--line);border-radius:7px;background:#fff}
+.info-item strong{display:block;color:var(--navy);margin-bottom:4px}.info-item span{font-size:13px;color:var(--muted)}
+.faq-item{padding:12px 0;border-bottom:1px solid var(--line)}.faq-item strong{display:block;margin-bottom:5px}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.info-list{grid-template-columns:1fr}}
+
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418"
@@ -32,6 +44,28 @@ button{border:1px solid #b9c8d9;background:#fff;color:#173554;padding:8px 12px;b
 <p class="intro">Browse government job notifications for candidates with a recognised Bachelor's Degree or an explicitly accepted equivalent qualification. Some posts require a particular subject, specialisation or professional degree; verify the notification before applying.</p>
 <h2>Latest Degree Government Job Notifications</h2>
 <p class="intro">The table below shows published government vacancies matching this qualification. Open a job to view its complete details, application steps and verified official links. Maximum 20 records per page.</p>
+
+<div class="stats" aria-label="Job summary">
+  <div class="stat"><strong id="total-jobs">—</strong><span>Total Published Jobs</span></div>
+  <div class="stat"><strong id="active-jobs">—</strong><span>Applications Open</span></div>
+  <div class="stat"><strong id="upcoming-jobs-count">—</strong><span>Upcoming Applications</span></div>
+  <div class="stat"><strong id="department-count">—</strong><span>Departments</span></div>
+</div>
+<section class="info-section" id="upcoming-section"><h2>Upcoming Government Jobs</h2><p>Published notifications with an application start date in the future will appear here. Only confirmed dates entered from the official notification are shown.</p><div id="upcoming-jobs" class="info-list"><p>Loading upcoming notifications…</p></div></section>
+<section class="info-section"><h2>Government Departments</h2><p>Departments represented in the currently published job notifications for this qualification.</p><div id="department-list" class="info-list"><p>Loading departments…</p></div></section>
+<section class="info-section"><h2>Required Documents</h2><p>Documents commonly requested in government recruitment applications. The exact list depends on the individual official notification.</p><ul>
+<li>8th Standard / relevant educational certificate, where required</li><li>Date of birth proof</li><li>Government-issued photo identity proof</li><li>Recent passport-size photograph and signature</li><li>Community / category certificate, if claiming reservation</li><li>Disability, ex-servicemen or other relevant certificates, if applicable</li><li>Experience, technical or trade certificate, if specifically required</li>
+</ul><p>Always follow the document checklist in the official notification; do not upload documents that are not requested.</p></section>
+<section class="info-section"><h2>Selection Process</h2><p>The selection method varies by department and post. Details below are taken from published job records when supplied by the administrator.</p><div id="selection-list" class="info-list"><p>Loading selection details…</p></div></section>
+<section class="info-section"><h2>How to Apply</h2><p>Use the official application link shown on each job details page. General steps are listed below; the notification's instructions take priority.</p><ol><li>Open the job's full details and read the official notification PDF.</li><li>Confirm educational qualification, age limit, category rules and important dates.</li><li>Open the official application website using the provided link.</li><li>Complete the application form and upload the required documents.</li><li>Pay the fee only through the official portal, if a fee applies.</li><li>Submit the form before the deadline and save the acknowledgement.</li></ol><div id="apply-notes" class="info-list"></div></section>
+<section class="info-section"><h2>Frequently Asked Questions</h2>
+<div class="faq-item"><strong>Can I apply if I have studied beyond this qualification?</strong><p>Only if the official notification accepts your higher qualification or does not restrict candidates by a maximum qualification. Check the notification before applying.</p></div>
+<div class="faq-item"><strong>Is every job shown here suitable for this qualification?</strong><p>Jobs are listed using the qualification tags selected by the administrator from the official notification. Always verify the exact eligibility conditions in the original notification.</p></div>
+<div class="faq-item"><strong>How do I know the last date and application fee?</strong><p>Open View Full Details and read the official notification. Dates, fees and age relaxations are set by the recruiting authority and may vary by category.</p></div>
+<div class="faq-item"><strong>Where can I apply?</strong><p>Use the Apply Online link or official department website displayed on the job details page. Avoid unofficial application websites.</p></div>
+<div class="faq-item"><strong>Why are there no jobs listed?</strong><p>There may be no currently published job posts tagged for this qualification. Check again later for newly verified notifications.</p></div>
+</section>
+
 <div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="jobs-body"><tr><td colspan="5" class="empty">Loading published government jobs…</td></tr></tbody></table></div>
 <div class="pager" id="pager"></div>
 <p class="note">Please read the official recruitment notification carefully. Eligibility, age relaxation, fees and deadlines are determined by the recruiting authority.</p>
@@ -60,6 +94,24 @@ document.getElementById('next').addEventListener('click',()=>{if(page<total){pag
 const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
 if(error){document.getElementById('jobs-body').innerHTML='<tr><td colspan="5" class="empty">Government job records could not be loaded. Please try again later.</td></tr>';console.error(error.message);return;}
 rows=(data||[]).filter(matches);render();
+
+const now=new Date();
+const active=rows.filter(j=>!j.application_deadline||new Date(j.application_deadline)>=now);
+const upcoming=rows.filter(j=>j.application_start_date&&new Date(j.application_start_date)>now);
+const depts=[...new Set(rows.map(j=>j.department_name||j.recruitment_authority).filter(Boolean))].sort();
+document.getElementById('total-jobs').textContent=rows.length;
+document.getElementById('active-jobs').textContent=active.length;
+document.getElementById('upcoming-jobs-count').textContent=upcoming.length;
+document.getElementById('department-count').textContent=depts.length;
+const upcomingRoot=document.getElementById('upcoming-jobs');
+upcomingRoot.innerHTML=upcoming.length?upcoming.map(j=>'<div class="info-item"><strong>'+esc(j.job_title||'Government Job')+'</strong><span>'+esc(j.department_name||j.recruitment_authority||'Government Department')+' · Applications start: '+date(j.application_start_date)+'</span><div><a href="government-job-details.html?id='+encodeURIComponent(j.id)+'">View Details</a></div></div>').join(''):'<p>No confirmed upcoming application start dates are currently available for this qualification.</p>';
+const deptRoot=document.getElementById('department-list');
+deptRoot.innerHTML=depts.length?depts.map(d=>'<div class="info-item"><strong>'+esc(d)+'</strong><span>Has at least one published notification tagged for this qualification.</span></div>').join(''):'<p>Department information will appear when matching jobs are published.</p>';
+const selection=[...new Set(rows.map(j=>j.selection_process).filter(x=>x&&String(x).trim()))];
+document.getElementById('selection-list').innerHTML=selection.length?selection.map(x=>'<div class="info-item">'+esc(x).replace(/\n/g,'<br>')+'</div>').join(''):'<p>Selection details have not been entered for currently published jobs. Check each official notification for the confirmed process.</p>';
+const applyNotes=[...new Set(rows.map(j=>j.how_to_apply).filter(x=>x&&String(x).trim()))];
+document.getElementById('apply-notes').innerHTML=applyNotes.length?applyNotes.map(x=>'<div class="info-item">'+esc(x).replace(/\n/g,'<br>')+'</div>').join(''):'<p>Post-specific application instructions will appear here when provided. Follow the official notification.</p>';
+
 })();
 </script>
 </body></html>
