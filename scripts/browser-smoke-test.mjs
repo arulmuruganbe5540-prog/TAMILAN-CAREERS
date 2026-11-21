@@ -835,7 +835,7 @@ await check("Private and International interview invitations display and candida
     await p.getByText("Private Interview",{exact:true}).waitFor({state:"visible"});
     await p.getByText("International Interview",{exact:true}).waitFor({state:"visible"});
     await p.locator('[data-response="accepted"][data-system="private"]').click();
-    await p.waitForFunction(()=>document.getElementById("interviews")?.innerText.includes("accepted"));
+    await p.waitForFunction(()=>document.getElementById("interviews")?.innerText.includes("Accepted"));
     await p.locator('[data-response="declined"][data-system="international"]').click();
     await p.waitForFunction(()=>document.getElementById("interviews")?.innerText.includes("declined"));
     if(privateCalls!==1||internationalCalls!==1)throw new Error("Private/International candidate response RPCs were not called exactly once each");
