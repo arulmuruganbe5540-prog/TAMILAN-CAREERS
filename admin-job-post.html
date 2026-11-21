@@ -1,1 +1,108 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Job Posting Systems | TAMILAN CAREERS</title><meta http-equiv="refresh" content="0;url=admin-control.html"><style>body{margin:0;background:#f2f6fb;color:#18314f;font:16px Arial,sans-serif;display:grid;min-height:100vh;place-items:center}.box{max-width:620px;margin:20px;background:#fff;border:1px solid #dce6f2;border-radius:16px;padding:26px;box-shadow:0 12px 35px #10264a12}h1{font-size:22px}p{line-height:1.6;color:#65758c}a{display:inline-block;margin:7px 8px 0 0;padding:11px 14px;border-radius:8px;background:#1768aa;color:white;text-decoration:none;font-weight:700}</style></head><body><main class="box"><h1>Dedicated Job Posting Systems</h1><p>The previous combined posting form has been retired. Government, Private and International Jobs now have separate posting and management pages.</p><a href="admin-government-jobs.html">Government Jobs</a><a href="admin-private-jobs.html">Private Jobs</a><a href="admin-international-jobs.html">International Jobs</a><p><a href="admin-control.html">Open Super Admin Control Centre</a></p></main><script>location.replace("admin-control.html");</script></body></html>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101d3a">
+<title>Private Job Review Queue | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/site-protection.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#182943;font:14px/1.6 Arial,sans-serif}
+header{background:#101d3a;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{color:#83e4ff;font-weight:900;text-decoration:none}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;background:#ffffff18;padding:8px 11px;border-radius:8px;font-size:12px}
+main{max-width:1050px;margin:25px auto;padding:0 15px}.hero,.panel,.item{background:#fff;border:1px solid #e1e8f1;border-radius:14px;padding:18px;margin-bottom:14px}
+.hero{background:linear-gradient(120deg,#101d3a,#1765a5);color:#fff}.hero h1{margin:0 0 6px;font-size:24px}.hero p{margin:0;color:#dcecff}
+.notice{background:#fff8e8;border:1px solid #efdcae;color:#76551a;padding:12px;border-radius:9px;font-size:12px;margin:14px 0}
+.gate{display:none}.muted{color:#718097;font-size:12px}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+select,textarea{width:100%;padding:10px;border:1px solid #cfdae7;border-radius:8px;font:inherit;background:white}
+.btn{border:0;border-radius:8px;padding:10px 14px;background:#1768aa;color:white;font-weight:800;cursor:pointer}.btn.soft{background:#eaf2fb;color:#1c578b}.btn.green{background:#16834f}.btn.red{background:#a63b3b}
+.btn:disabled{opacity:.55;cursor:not-allowed}.pill{display:inline-block;background:#edf3fa;color:#3b5878;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:800}
+.item h2{font-size:17px;margin:0 0 6px;color:#174777}.meta{display:flex;gap:8px;flex-wrap:wrap;color:#6d7c91;font-size:11px;margin:8px 0}
+.payload{background:#f5f8fc;border-radius:9px;padding:12px;margin:10px 0;font-size:13px;overflow-wrap:anywhere}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.status{padding:12px;border-radius:9px;background:#f3f7fc;color:#37516d;margin:10px 0;white-space:pre-wrap}
+.empty{text-align:center;padding:26px;background:#fff;border:1px dashed #ccd8e7;border-radius:12px;color:#708096}
+@media(max-width:560px){header{justify-content:center}nav{justify-content:center}.hero{padding:16px}}
+</style></head><body>
+<header><a class="brand" href="admin-control.html">TAMILAN CAREERS · SUPER ADMIN</a><nav>
+<a href="admin-government-jobs.html">Government Jobs</a><a href="admin-private-jobs.html">Private Jobs</a><a href="admin-international-jobs.html">International Jobs</a><a href="admin-control.html">Control Centre</a>
+</nav></header>
+<main>
+<section class="hero"><h1>Private Job Review Queue</h1><p>Review verified-company submissions before they are published into the independent Private Jobs database.</p></section>
+<section id="gate" class="panel gate"><h2>Super Admin access required</h2><p id="gateText">Checking secure sign-in…</p><a class="btn" href="admin-login.html">Super Admin Login</a><a class="btn soft" href="admin-security.html">Account Security / MFA</a></section>
+<div id="app" style="display:none">
+<section class="panel"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Review Submissions</h2><button class="btn soft" id="refresh">Refresh</button></div>
+<div class="notice">Approval and publication are separate actions. Publishing writes only to <b>public.private_jobs</b>. Government Jobs and International Jobs are not handled by this queue. A verified company is required for company-submitted jobs.</div>
+<label for="filter">Filter by Status</label><select id="filter"><option value="">All Statuses</option><option value="draft">Draft</option><option value="pending_review">Pending Review</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
+<div id="status" class="status">Loading private job review queue…</div>
+</section>
+<div id="queue"></div>
+</div></main>
+<script>
+"use strict";
+const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let user=null;
+function say(message){$("status").textContent=message}
+function gate(message){$("gate").style.display="block";$("gateText").textContent=message}
+function statusLabel(value){return ({draft:"Draft",pending_review:"Pending Review",approved:"Approved",rejected:"Rejected"})[value]||value}
+async function verify(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data?.user){gate("Sign in with the Super Admin account.");return false}
+ user=data.user;
+ const {data:roles,error:roleError}=await db.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
+ if(roleError||!roles?.length){gate("This account does not have Super Admin access.");return false}
+ const {data:aal,error:aalError}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalError||aal?.currentLevel!=="aal2"){gate("Verified authenticator MFA is required. Enrol an authenticator and sign in again with MFA.");return false}
+ $("app").style.display="block";return true;
+}
+function render(rows){
+ if(!rows.length){$("queue").innerHTML='<div class="empty">No Private Job submissions match this filter.</div>';return}
+ $("queue").innerHTML=rows.map(r=>{
+  const p=r.payload||{},published=Boolean(r.published_private_job_id);
+  const info=[
+   ["Job Title",p.title||r.title],["Employer",p.company||r.company_name],["Category",p.category],
+   ["Employment",p.type],["Location",p.location],["Country",p.country_name||"India"],
+   ["Education",p.education],["Salary",(p.salaryCurrency||"INR")+" "+(p.salaryMin||"—")+" – "+(p.salaryMax||"—")+" / "+(p.salaryPeriod||"monthly")],
+   ["Deadline",p.deadline],["Application Email",p.email],["Application URL",p.applicationUrl]
+  ].filter(x=>x[1]).map(x=>'<div><b>'+esc(x[0])+':</b> '+esc(x[1])+'</div>').join("");
+  return '<article class="item"><h2>'+esc(r.title)+'</h2><div class="meta"><span class="pill">'+esc(statusLabel(r.status))+'</span><span class="pill">Private Jobs</span>'+(r.company_name?'<span class="pill">'+esc(r.company_name)+'</span>':'')+'<span class="pill">'+esc(new Date(r.created_at).toLocaleString("en-IN"))+'</span>'+(p.source_draft_id?'<span class="pill">Company Submission</span>':'')+'</div><div class="payload">'+info+'<p>'+esc(p.description||"No description supplied")+'</p></div>'+(r.review_note?'<p><b>Admin Note:</b> '+esc(r.review_note)+'</p>':'')+(published?'<p class="status">Published Private Job ID: '+esc(r.published_private_job_id)+'</p>':'')+'<div class="actions">'+(r.status==="pending_review"?'<button class="btn green" data-action="approve" data-id="'+esc(r.id)+'">Approve</button><button class="btn red" data-action="reject" data-id="'+esc(r.id)+'">Reject</button>':'')+(r.status==="approved"&&!published?'<button class="btn" data-action="publish" data-id="'+esc(r.id)+'">Publish to Private Jobs</button>':'')+(r.status==="rejected"?'<button class="btn soft" data-action="draft" data-id="'+esc(r.id)+'">Return to Draft</button>':'')+'</div></article>';
+ }).join("");
+ $("queue").querySelectorAll("button[data-action]").forEach(b=>b.addEventListener("click",()=>act(b.dataset.action,b.dataset.id,rows)));
+}
+async function loadQueue(){
+ $("queue").innerHTML='<div class="empty">Loading submissions…</div>';
+ const filter=$("filter").value;
+ let q=db.from("admin_job_post_reviews").select("id,title,company_name,status,payload,review_note,published_private_job_id,created_at,updated_at").order("created_at",{ascending:false}).limit(100);
+ if(filter)q=q.eq("status",filter);
+ const {data,error}=await q;
+ if(error){$("queue").innerHTML='<div class="empty">Unable to load the Private Job review queue: '+esc(error.message)+'</div>';say("Review queue access failed.");return}
+ const rows=(data||[]).filter(r=>(r.payload||{}).job_kind==="private"||!(r.payload||{}).job_kind);
+ render(rows);say("Private job submissions: "+rows.length);
+}
+async function act(action,id,rows){
+ const row=rows.find(x=>x.id===id);if(!row)return;
+ if(action==="publish"){
+  if(!confirm("Publish this approved Private Job into the separate private_jobs table? This cannot be undone."))return;
+  say("Verifying Super Admin MFA and publishing…");
+  const {data,error}=await db.rpc("tc_admin_publish_private_job",{p_review_id:id});
+  if(error){say("Unable to publish: "+error.message);return}
+  say("Private Job published successfully. Job ID: "+String(data||""));await loadQueue();return;
+ }
+ let update={status:action==="approve"?"approved":action==="reject"?"rejected":"draft",review_note:null,reviewed_by:null,reviewed_at:null};
+ if(action==="reject"){
+  const reason=prompt("Enter the reason for rejecting this private job:");
+  if(reason===null)return;if(!reason.trim()){alert("Please enter a reason.");return}
+  update.review_note=reason.trim().slice(0,1000);
+ }
+ if(action==="approve"){
+  if(!confirm("Approve this Private Job for publication? This does not publish it yet."))return;
+  update.reviewed_by=user.id;update.reviewed_at=new Date().toISOString();
+ }
+ const {error}=await db.from("admin_job_post_reviews").update(update).eq("id",id);
+ if(error){say("Unable to update review status: "+error.message);return}
+ say("Review status updated: "+statusLabel(update.status));await loadQueue();
+}
+$("refresh").addEventListener("click",loadQueue);
+$("filter").addEventListener("change",loadQueue);
+(async()=>{if(await verify())await loadQueue()})().catch(e=>{say(e.message||String(e))});
+</script><script src="assets/site-protection.js" defer></script></body></html>
