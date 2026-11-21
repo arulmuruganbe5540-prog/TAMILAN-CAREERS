@@ -92,10 +92,12 @@ function render(){
   const salaryMin=pick(j,["salary_min"]),salaryMax=pick(j,["salary_max"]),salaryCurrency=pick(j,["salary_currency"])||"₹",salaryPeriod=pick(j,["salary_period"])||"monthly";
   const salary=salaryMin||salaryMax?(salaryCurrency+" "+(salaryMin||"")+(salaryMin&&salaryMax?" – ":"")+(salaryMax||"")+" / "+String(salaryPeriod).replace(/_/g," ")):"Not specified";
   const deadline=pick(j,["application_deadline","deadline","last_date"])||"Not specified";
+  const skillMatch=getSkillMatch(j);
+  const skillScore=candidateSkills.length&&skillMatch.total?'<br><span class="skill-match-score">Your skills: '+skillMatch.score+'/'+skillMatch.total+' match</span>':"";
   const id=pick(j,["id","job_id"]);
   const kind=String(pick(j,["job_kind"])||"job");
   const savedLink="job-summary.html?type=job&id="+encodeURIComponent(id);
-  return '<tr class="job" style="border-bottom:1px solid #edf1f6"><td style="padding:11px"><b>'+safe(title)+'</b><br><span style="color:#718098">'+safe(company)+'</span></td><td style="padding:11px">'+safe(loc)+'</td><td style="padding:11px">'+safe(type)+'</td><td style="padding:11px">'+safe(salary)+'<br><span style="color:#718098">Salary period: '+safe(salaryPeriod)+'</span></td><td style="padding:11px">'+safe(education)+'</td><td style="padding:11px">'+safe(deadline)+'</td><td style="padding:11px"><a class="apply" style="display:inline-block;padding:7px 9px;background:#eaf3fc;color:#17558d;border-radius:7px;font-weight:800" href="'+savedLink+'">View Summary →</a></td><td class="save-cell" style="padding:11px"></td></tr>';
+  return '<tr class="job" style="border-bottom:1px solid #edf1f6"><td style="padding:11px"><b>'+safe(title)+'</b><br><span style="color:#718098">'+safe(company)+'</span>'+skillScore+'</td><td style="padding:11px">'+safe(loc)+'</td><td style="padding:11px">'+safe(type)+'</td><td style="padding:11px">'+safe(salary)+'<br><span style="color:#718098">Salary period: '+safe(salaryPeriod)+'</span></td><td style="padding:11px">'+safe(education)+'</td><td style="padding:11px">'+safe(deadline)+'</td><td style="padding:11px"><a class="apply" style="display:inline-block;padding:7px 9px;background:#eaf3fc;color:#17558d;border-radius:7px;font-weight:800" href="'+savedLink+'">View Summary →</a></td><td class="save-cell" style="padding:11px"></td></tr>';
  }).join("")+'</tbody></table></div>';
  list.forEach((job,index)=>{
   const id=pick(job,["id","job_id"]);
