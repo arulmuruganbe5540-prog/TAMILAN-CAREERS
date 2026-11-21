@@ -170,8 +170,8 @@ if((x.job._system==="private"||x.job._system==="international")&&canChange){
   const fn=select.dataset.system==="international"?"tc_company_update_international_application_status":"tc_company_update_private_application_status";
   const {error}=await db.rpc(fn,{p_application_id:id,p_company_id:select.dataset.companyId,p_new_status:next});
   if(error){button.disabled=false;button.textContent="Save Status";message("Unable to update application status. Check whether supabase-company-application-status.sql has been run. "+error.message,"error");return}
-  message("Application status updated successfully.","ok");
   await loadCompany();
+  message("Application status updated successfully.","ok");
  }));
 }
 $("company").addEventListener("change",loadCompany);
