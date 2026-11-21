@@ -121,7 +121,7 @@ function render(){
   const type=String(pick(j,["employment_type","job_type"])||pick(j,["job_kind"])||"Job").replace(/_/g," ");
   const educationTags=qualificationTags(pick(j,["education_level","education"]));
   const education=educationTags.length?educationTags.map(tag=>tag.replace(/\b\w/g,ch=>ch.toUpperCase())).join(", "):(pick(j,["education_level","education"])||"As per notification");
-  const educationLinks=educationTags.map(tag=>'<a href="government-jobs.html?education='+encodeURIComponent(tag)+'" style="display:inline-block;margin:2px;padding:3px 7px;border-radius:12px;background:#eaf3fc;color:#17558d;text-decoration:none;font-size:11px;font-weight:700">'+safe(tag.replace(/\b\w/g,ch=>ch.toUpperCase()))+'</a>').join(" ");
+  const educationLinks=educationTags.map(tag=>'<a href="government-jobs.html?education='+encodeURIComponent(tag.replace(/\\b\\w/g,ch=>ch.toUpperCase()))+'" style="display:inline-block;margin:2px;padding:3px 7px;border-radius:12px;background:#eaf3fc;color:#17558d;text-decoration:none;font-size:11px;font-weight:700">'+safe(tag.replace(/\b\w/g,ch=>ch.toUpperCase()))+'</a>').join(" ");
   const salaryMin=pick(j,["salary_min"]),salaryMax=pick(j,["salary_max"]),salaryCurrency=pick(j,["salary_currency"])||"₹",salaryPeriod=pick(j,["salary_period"])||"monthly";
   const salary=salaryMin||salaryMax?(salaryCurrency+" "+(salaryMin||"")+(salaryMin&&salaryMax?" – ":"")+(salaryMax||"")+" / "+String(salaryPeriod).replace(/_/g," ")):"Not specified";
   const deadline=pick(j,["application_deadline","deadline","last_date"])||"Not specified";
