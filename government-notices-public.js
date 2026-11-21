@@ -150,7 +150,8 @@
       });
       rows.sort((a,b)=>new Date(String(b.notice_date).slice(0,10))-new Date(String(a.notice_date).slice(0,10)));
       if(!rows.length){status.textContent="No officially verified and published recruitment notices are available for this period.";grid.append(el("div","tc-gov-empty","New notices will appear here after verification. Vacancy counts and eligibility details are not estimated."));return;}
-      grid.innerHTML="<table><thead><tr><th>Job / Notification</th><th>Department</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody></tbody></table>";\n      const tbody=grid.querySelector("tbody");rows.forEach(r=>tbody.append(card(r)));
+      grid.innerHTML="<table><thead><tr><th>Job / Notification</th><th>Department</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody></tbody></table>";
+      const tbody=grid.querySelector("tbody");rows.forEach(r=>tbody.append(card(r)));
       status.textContent=rows.length+" verified government records · last "+months+" months";
     }catch(e){status.textContent="Notices could not be loaded. Please try again later.";grid.append(el("div","tc-gov-empty","Information service or permission verification is required."));}
   }
