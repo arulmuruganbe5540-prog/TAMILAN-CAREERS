@@ -24,7 +24,7 @@
 <div class="field"><label for="salary_max">Maximum Salary</label><input id="salary_max" type="number" min="0" step="0.01"></div>
 <div class="field"><label for="salary_currency">Salary Currency</label><input id="salary_currency" maxlength="8" value="USD"></div>
 <div class="field"><label for="salary_period">Salary Period</label><select id="salary_period"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="daily">Daily</option><option value="hourly">Hourly</option></select></div>
-<div class="field"><label for="education_level">Education / Qualification</label><div class="checks" id="educationChoices"><label><input type="checkbox" value="8th Pass"> 8th Pass</label><label><input type="checkbox" value="10th Pass"> 10th Pass</label><label><input type="checkbox" value="12th Pass"> 12th Pass</label><label><input type="checkbox" value="ITI"> ITI</label><label><input type="checkbox" value="Diploma"> Diploma</label><label><input type="checkbox" value="Diploma Studying"> Diploma Studying</label><label><input type="checkbox" value="Degree"> Degree</label><label><input type="checkbox" value="Postgraduate"> Postgraduate</label><label><input type="checkbox" value="Studying"> Studying</label></div></div>
+<div class="field"><label for="education_level">Education / Qualification</label><p class="muted">Select every qualification genuinely accepted as eligible by this overseas job notification. The job will appear only in the selected International Jobs qualification filters. Do not select merely desirable or preferred qualifications.</p><div class="checks" id="educationChoices"><label><input type="checkbox" value="8th Pass"> 8th Pass</label><label><input type="checkbox" value="10th Pass"> 10th Pass</label><label><input type="checkbox" value="12th Pass"> 12th Pass</label><label><input type="checkbox" value="ITI"> ITI</label><label><input type="checkbox" value="Diploma"> Diploma</label><label><input type="checkbox" value="Diploma Studying"> Diploma Studying</label><label><input type="checkbox" value="Degree"> Degree</label><label><input type="checkbox" value="Postgraduate"> Postgraduate</label><label><input type="checkbox" value="Studying"> Studying</label></div></div>
 <div class="field"><label for="required_skills">Required Skills</label><input id="required_skills" maxlength="1000" placeholder="Comma-separated skills"></div>
 <div class="field"><label for="contact_email">Contact Email</label><input id="contact_email" type="email" maxlength="254"></div>
 <div class="field"><label for="application_url">Application URL</label><input id="application_url" type="url"></div>
@@ -124,7 +124,7 @@ function edit(id){
  fields.forEach(k=>{if($(k))$(k).value=r[k]??""});
  ["category_id","country_name"].forEach(k=>{if($(k))$(k).value=r[k]??""});
  ["vacancies","salary_min","salary_max","salary_currency","salary_period","employment_type","workplace_type"].forEach(k=>{if($(k))$(k).value=r[k]??($(k).value)});
- const chosen=String(r.education_level||"").split(",").map(x=>x.trim());
+ const chosen=String(r.education_level||"").split(/[,;|\\n]+/).map(x=>x.trim());
  document.querySelectorAll("#educationChoices input").forEach(x=>x.checked=chosen.includes(x.value));
  if($("visa_sponsorship_available"))$("visa_sponsorship_available").value=String(Boolean(r.visa_sponsorship_available));
  if($("relocation_support"))$("relocation_support").value=String(Boolean(r.relocation_support));
