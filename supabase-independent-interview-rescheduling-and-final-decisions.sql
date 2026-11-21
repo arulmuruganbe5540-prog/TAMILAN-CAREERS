@@ -427,3 +427,30 @@ GRANT EXECUTE ON FUNCTION public.tc_candidate_propose_international_interview_da
  public.tc_company_propose_private_interview_reschedule(uuid, timestamp with time zone, text, integer, text, text, text, text),
  public.tc_company_respond_international_interview_date_proposal(uuid, text, text),
  public.tc_company_respond_private_interview_date_proposal(uuid, text, text) TO authenticated;
+
+
+-- Support notification records for all independent job application systems.
+ALTER TABLE public.tc_notifications DROP CONSTRAINT IF EXISTS tc_notifications_notification_type_check;
+ALTER TABLE public.tc_notifications ADD CONSTRAINT tc_notifications_notification_type_check
+ CHECK (notification_type = ANY (ARRAY['application_status','interview_invitation','interview_response','interview_reminder','interview_reschedule','system']::text[]));
+ALTER TABLE public.tc_notifications DROP CONSTRAINT IF EXISTS tc_notifications_related_application_id_fkey;
+
+CREATE OR REPLACE FUNCTION private.tc_validate_notification_application_reference()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = ''
+AS $$
+BEGIN
+ IF NEW.related_application_id IS NULL THEN RETURN NEW; END IF;
+ IF NOT (
+  EXISTS(SELECT 1 FROM public.job_applications a WHERE a.id=NEW.related_application_id)
+  OR EXISTS(SELECT 1 FROM public.government_job_applications a WHERE a.id=NEW.related_application_id)
+  OR EXISTS(SELECT 1 FROM public.private_job_applications a WHERE a.id=NEW.related_application_id)
+  OR EXISTS(SELECT 1 FROM public.international_job_applications a WHERE a.id=NEW.related_application_id)
+ ) THEN RAISE EXCEPTION 'Related application reference is invalid'; END IF;
+ RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION private.tc_validate_notification_application_reference() FROM PUBLIC,anon,authenticated;
+DROP TRIGGER IF EXISTS trg_tc_validate_notification_application_reference ON public.tc_notifications;
+CREATE TRIGGER trg_tc_validate_notification_application_reference
+ BEFORE INSERT OR UPDATE OF related_application_id ON public.tc_notifications
+ FOR EACH ROW EXECUTE FUNCTION private.tc_validate_notification_application_reference();
