@@ -24,12 +24,12 @@ footer{padding:18px 12px;background:var(--navy);display:flex;justify-content:cen
 </style>
 </head>
 <body>
-<header class="site-header"><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>Government Jobs · Exam Notifications · Career Updates</p></header>\n<div class="nav-wrap"><nav aria-label="Main navigation"><a href="central-government-jobs.html">Central Govt Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Govt Jobs</a><a href="state-government-jobs.html">All State Govt Jobs</a><a href="index.html#exam-dates">Exam Notifications</a><a href="admissions.html">Admissions</a><a class="private-link" href="private-jobs.html">Private Jobs</a><a class="international-link" href="international-jobs.html">International Jobs</a><a class="account-link" href="auth.html">Login / Register</a></nav></div>\n<div class="announcement"><div class="announcement-track">TAMILAN CAREERS — Government Job Notifications and Exam Updates · Check official notifications before applying ·</div></div>\n<main>
-<div class="crumb"><a href="index.html">Home</a> / User Account</div>
-<section class="auth-shell" aria-label="User account">
+<header class="site-header"><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>Government Jobs · Exam Notifications · Career Updates</p></header>\n<main>
+<div class="crumb"><a href="index.html">Home</a> / Job Seeker Account</div>
+<section class="auth-shell" aria-label="Job seeker login and registration">
 <div id="authView">
-<h2 id="formTitle">Welcome Back</h2><p class="sub" id="formSub">Sign in to your TAMILAN CAREERS account.</p>
-<div class="tabs"><button type="button" id="loginTab" class="active">Login</button><button type="button" id="registerTab">Register</button></div>
+<h2 id="formTitle">Job Seeker Login</h2><p class="sub" id="formSub">Sign in to manage your job seeker account and applications.</p>
+<div class="tabs"><button type="button" id="loginTab" class="active">Job Seeker Login</button><button type="button" id="registerTab">Create Job Seeker Account</button></div>
 <div id="notice" class="notice" role="status" aria-live="polite"></div>
 <form id="loginForm">
 <div class="field"><label for="loginEmail">Email Address</label><input id="loginEmail" type="email" autocomplete="email" required></div>
@@ -40,7 +40,7 @@ footer{padding:18px 12px;background:var(--navy);display:flex;justify-content:cen
 <form id="registerForm" class="hidden">
 <div class="field"><label for="fullName">Full Name</label><input id="fullName" type="text" autocomplete="name" maxlength="100" required></div>
 <div class="field"><label for="registerEmail">Email Address</label><input id="registerEmail" type="email" autocomplete="email" required></div>
-<div class="field"><label for="registerPhone">Mobile Number (Optional)</label><input id="registerPhone" type="tel" autocomplete="tel" maxlength="30" placeholder="Enter your mobile number"></div>
+<div class="field"><label for="registerPhone">Mobile Number</label><input id="registerPhone" type="tel" autocomplete="tel" maxlength="30" placeholder="Enter your mobile number"></div>
 <div class="field"><label for="registerPassword">Password</label><input id="registerPassword" type="password" autocomplete="new-password" minlength="8" required><small class="profile-meta">Use at least 8 characters.</small></div>
 <div class="field"><label for="confirmPassword">Confirm Password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></div>
 <button class="primary" type="submit" id="registerButton">Create Account</button>
@@ -58,7 +58,7 @@ footer{padding:18px 12px;background:var(--navy);display:flex;justify-content:cen
 </form>
 </div>
 <div id="accountView" class="hidden">
-<h2>My Account</h2><p class="sub">Manage your TAMILAN CAREERS profile.</p>
+<h2>Job Seeker Account</h2><p class="sub">Manage your personal details and account settings.</p>
 <div id="accountNotice" class="notice" role="status" aria-live="polite"></div>
 <div class="profile-card"><h3>Account Details</h3><div class="profile-meta" id="accountEmail"></div><div class="profile-meta" id="accountStatus"></div></div>
 <form id="profileForm">
@@ -90,14 +90,14 @@ $('loginTab').classList.toggle('active',which==='login');
 $('registerTab').classList.toggle('active',which==='register');
 $('loginTab').classList.toggle('hidden',which==='forgot'||which==='recovery');
 $('registerTab').classList.toggle('hidden',which==='forgot'||which==='recovery');
-$('formTitle').textContent=which==='register'?'Create Your Account':which==='forgot'?'Reset Your Password':which==='recovery'?'Choose a New Password':'Welcome Back';
-$('formSub').textContent=which==='register'?'Register to access your TAMILAN CAREERS account.':which==='forgot'?'We will email you a secure password reset link.':which==='recovery'?'Enter a new password for your account.':'Sign in to your TAMILAN CAREERS account.';
+$('formTitle').textContent=which==='register'?'Create Job Seeker Account':which==='forgot'?'Reset Your Password':which==='recovery'?'Choose a New Password':'Welcome Back';
+$('formSub').textContent=which==='register'?'Create your job seeker account to save jobs and manage applications.':which==='forgot'?'We will email you a secure password reset link.':which==='recovery'?'Enter a new password for your account.':'Sign in to manage your job seeker account and applications.';
 }
 function setBusy(id,busy,label){const b=$(id);b.disabled=busy;if(!b.dataset.label)b.dataset.label=b.textContent;b.textContent=busy?'Please wait…':(label||b.dataset.label);}
 function showAccount(user){
 currentUser=user;$('authView').classList.add('hidden');$('accountView').classList.remove('hidden');
 $('accountEmail').textContent='Email: '+(user.email||'—');
-$('accountStatus').textContent='Account: Signed in';
+$('accountStatus').textContent='Account type: Job Seeker';
 loadProfile(user);
 }
 async function loadProfile(user){
