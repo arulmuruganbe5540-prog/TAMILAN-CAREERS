@@ -8,6 +8,7 @@ on:
     paths:
       - "*.html"
       - "*.js"
+      - "government-notices-public.js"
       - "assets/**"
       - "data/**"
       - "supabase-*.sql"
