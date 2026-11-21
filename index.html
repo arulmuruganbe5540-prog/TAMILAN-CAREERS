@@ -118,7 +118,7 @@ pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{page
 function resourceRows(id,rows,isDate){
 const page=pages[id]||1,total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE),body=$(id+'-body');
 if(!rows.length)body.innerHTML='<tr><td colspan="5" class="empty-cell">No published updates available yet.</td></tr>';
-else body.innerHTML=shown.map(r=>{const link=safeUrl(r.resource_url||r.official_notification_url);return '<tr><td>'+esc(r.title||r.job_title||'—')+'</td><td>'+esc(r.source_name||r.department_name||'—')+'</td><td>'+(isDate?date(r.exam_date):esc(r.resource_year||'—'))+'</td><td>'+date(r.updated_at||r.created_at||r.published_at)+'</td><td>'+(link?'<a href="'+esc(link)+'" target="_blank" rel="noopener">Official Link</a>':'—')+'</td></tr>';}).join('');
+else body.innerHTML=shown.map(r=>{const link=safeUrl(r.resource_url||r.official_notification_url);const third=isDate?(r.exam_date?date(r.exam_date):(r.description||r.resource_year||'—')):esc(r.resource_year||'—');return '<tr><td>'+esc(r.title||r.job_title||'—')+'</td><td>'+esc(r.source_name||r.department_name||'—')+'</td><td>'+esc(third)+'</td><td>'+date(r.updated_at||r.created_at||r.published_at)+'</td><td>'+(link?'<a href="'+esc(link)+'" target="_blank" rel="noopener">Official Link</a>':'—')+'</td></tr>';}).join('');
 const pager=$(id+'-pager');pager.innerHTML='<button type="button" '+(page<=1?'disabled':'')+' data-step="-1">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' data-step="1">Next</button>';
 pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{pages[id]=Math.min(total,Math.max(1,page+Number(b.dataset.step)));resourceRows(id,rows,isDate);}));
 }
@@ -139,7 +139,10 @@ const qualDefs=[
 ];
 function renderQualifications(){
 const host=$('qualification-tables');let out='';
-qualDefs.forEach(d=>{out+='<section class="table-section" id="'+d.id+'"><h3>'+esc(d.title)+'</h3><p>Published government vacancies matching this qualification. Up to 20 records per page.</p><div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="'+d.id+'-body"><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table></div><div class="pager" id="'+d.id+'-pager"></div></section>';});
+qualDefs.forEach((d,index)=>{
+if(index===6)out+='<section class="table-section" id="qdegree"><h3>Degree Government Jobs</h3><p>Filter published graduate-level government vacancies by degree. Choose the qualification below to jump to its table.</p><div class="degree-filter"><a href="#qba">B.A.</a><a href="#qbsc">B.Sc.</a><a href="#qbcom">B.Com.</a><a href="#qbemech">B.E. Mechanical</a><a href="#qbecivil">B.E. Civil</a><a href="#qbecs">B.E. Computer Science</a><a href="#qbtech">B.Tech.</a></div></section>';
+out+='<section class="table-section" id="'+d.id+'"><h3>'+esc(d.title)+'</h3><p>Published government vacancies matching this qualification. Up to 20 records per page.</p><div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="'+d.id+'-body"><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table></div><div class="pager" id="'+d.id+'-pager"></div></section>';
+});
 host.innerHTML=out;
 }
 function renderAll(){
