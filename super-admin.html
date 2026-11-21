@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
+<title>Super Admin | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#101d3a;--blue:#176b9e;--cyan:#54c8ff;--bg:#f3f6fb;--ink:#14213d;--muted:#65738b;--line:#dce4ef;--red:#b42318;--green:#067647}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,Helvetica,sans-serif}header{background:var(--navy);color:white;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}header h1{font-size:21px;margin:0}header p{margin:5px 0 0;color:#c9d8ec;font-size:13px}.wrap{width:min(1200px,100%);margin:24px auto;padding:0 16px}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 5px 18px #10203a0a}.hidden{display:none!important}.auth{max-width:460px;margin:8vh auto}.auth h2,.panel h2{margin:0 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.5}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-weight:700;font-size:13px}input,select,textarea{width:100%;border:1px solid #c8d3e2;border-radius:8px;padding:11px 12px;font:inherit;color:var(--ink);background:#fff}textarea{min-height:100px;resize:vertical}input:focus,select:focus,textarea:focus{outline:2px solid #54c8ff;outline-offset:1px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}button,.btn{border:0;border-radius:8px;padding:11px 16px;background:var(--blue);color:white;font-weight:700;cursor:pointer}button.secondary{background:#e9eff7;color:var(--ink)}button.danger{background:#b42318}button:disabled{opacity:.55;cursor:not-allowed}.notice{padding:12px;border-radius:8px;background:#eef7ff;color:#17456a;margin:12px 0;line-height:1.5}.error{background:#fff0ef;color:#9b1c13}.success{background:#ecfdf3;color:#05603a}.section{border-top:1px solid var(--line);padding-top:18px;margin-top:20px}.section h3{margin:0 0 12px;font-size:16px}.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.checks label{display:flex;align-items:center;gap:8px;font-weight:400;background:#f7f9fc;padding:8px;border-radius:7px}.checks input{width:auto}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:720px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:12px;color:#53627a;background:#f7f9fc}td{font-size:13px}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#eef2f7;font-size:11px;font-weight:700}.pill.published{background:#e8f7ef;color:#067647}.row-actions{display:flex;gap:6px}.row-actions button{padding:7px 9px;font-size:12px}.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.small{font-size:12px}.qr{max-width:190px;display:block;margin:12px 0}.footer-note{font-size:12px;color:var(--muted);margin-top:12px}@media(max-width:650px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:16px}header{padding:16px}}
+</style></head>
+<body>
+<header><div><h1>TAMILAN CAREERS — Super Admin</h1><p>Restricted administration workspace</p></div><button id="logoutBtn" class="secondary hidden">Sign out</button></header>
+<main class="wrap">
+<section id="loginPanel" class="panel auth"><h2>Super Admin Sign in</h2><p class="muted">This private area is restricted to authorized Super Admin accounts with verified multi-factor authentication.</p><div id="authMessage" class="notice hidden"></div>
+<form id="loginForm"><div class="field"><label for="email">Email address</label><input id="email" type="email" autocomplete="username" required></div><div class="field" style="margin-top:12px"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div><div class="actions"><button type="submit" id="loginBtn">Sign in</button></div></form>
+<div id="mfaBox" class="hidden section"><h3>Multi-factor verification</h3><p id="mfaText" class="muted">Enter the current code from your authenticator app.</p><img id="mfaQr" class="qr hidden" alt="Authenticator enrollment QR code"><div class="field"><label for="totpCode">6-digit authenticator code</label><input id="totpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}"></div><div class="actions"><button id="verifyMfaBtn" type="button">Verify and continue</button></div></div>
+</section>
+<section id="dashboard" class="hidden">
+<div class="panel"><div class="topline"><div><h2>Government Job Control Center</h2><p class="muted">Create, edit, publish, pause and close government job posts. Only this Super Admin workspace can manage these records.</p></div><button id="newJobBtn">+ Create Government Job</button></div><div id="dashboardMessage" class="notice hidden"></div></div>
+<section id="formPanel" class="panel hidden"><div class="topline"><h2 id="formHeading">Create Government Job</h2><button type="button" id="cancelEdit" class="secondary">Close</button></div>
+<form id="jobForm">
+<div class="section"><h3>1. Job Information</h3><div class="grid">
+<div class="field"><label for="job_title">Job Title *</label><input id="job_title" required></div>
+<div class="field"><label for="department_name">Department *</label><input id="department_name" required></div>
+<div class="field"><label for="recruitment_authority">Recruitment Board / Authority</label><input id="recruitment_authority"></div>
+<div class="field"><label for="government_category">Government Category</label><select id="government_category"><option value="">Select category</option><option>Central Government</option><option>State Government</option><option>Tamil Nadu Government</option><option>Public Sector Undertaking</option><option>Local Government</option><option>Constitutional / Statutory Body</option></select></div>
+<div class="field"><label for="job_type_label">Job Type</label><select id="job_type_label"><option value="">Select job type</option><option>Permanent</option><option>Contract</option><option>Temporary</option><option>Apprenticeship</option><option>Internship</option></select></div>
+<div class="field"><label for="employment_type">Employment Type</label><select id="employment_type"><option value="full_time">Full time</option><option value="part_time">Part time</option><option value="contract">Contract</option><option value="temporary">Temporary</option><option value="internship">Internship</option></select></div>
+<div class="field"><label for="notification_number">Notification Number</label><input id="notification_number"></div>
+<div class="field"><label for="job_code">Job Code (optional)</label><input id="job_code"></div>
+</div></div>
+<div class="section"><h3>2. Educational Qualification</h3><p class="muted">Select every qualification category and branch that is explicitly accepted by the official notification. A job can appear under multiple matching qualification pages.</p><div id="qualificationGroups"></div><div class="field" style="margin-top:12px"><label for="customQualifications">Additional / Custom Qualifications (comma separated)</label><input id="customQualifications" placeholder="Enter other accepted qualifications"></div></div>
+<div class="section"><h3>3. Eligibility and Vacancies</h3><div class="grid">
+<div class="field"><label for="age_min">Minimum Age</label><input id="age_min" type="number" min="0"></div><div class="field"><label for="age_max">Maximum Age</label><input id="age_max" type="number" min="0"></div>
+<div class="field full"><label for="age_relaxation">Category-wise Age Relaxation</label><textarea id="age_relaxation"></textarea></div>
+<div class="field"><label for="vacancies">Total Vacancies</label><input id="vacancies" type="number" min="0"></div>
+<div class="field"><label for="application_fee">Application Fee</label><input id="application_fee" placeholder="e.g. General: ₹100; SC/ST: Nil"></div>
+<div class="field"><label for="experience_requirement">Experience Requirement</label><input id="experience_requirement"></div>
+<div class="field"><label for="location">Job Location</label><input id="location"></div>
+<div class="field"><label for="salary_min">Minimum Salary (INR)</label><input id="salary_min" type="number" min="0"></div>
+<div class="field"><label for="salary_max">Maximum Salary (INR)</label><input id="salary_max" type="number" min="0"></div>
+<div class="field"><label for="salary_period">Salary Period</label><select id="salary_period"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="daily">Daily</option><option value="hourly">Hourly</option></select></div>
+</div></div>
+<div class="section"><h3>4. Important Dates</h3><div class="grid">
+<div class="field"><label for="notification_date">Notification Date</label><input id="notification_date" type="date"></div>
+<div class="field"><label for="application_start_date">Application Start Date</label><input id="application_start_date" type="date"></div>
+<div class="field"><label for="application_deadline">Last Date to Apply</label><input id="application_deadline" type="date"></div>
+<div class="field"><label for="exam_date">Exam Date</label><input id="exam_date" type="date"></div>
+</div></div>
+<div class="section"><h3>5. Official Links</h3><div class="grid">
+<div class="field full"><label for="official_notification_url">Official Notification PDF URL</label><input id="official_notification_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="official_website_url">Official Department Website</label><input id="official_website_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="application_url">Direct Apply Online URL</label><input id="application_url" type="url" placeholder="https://"></div>
+</div><p class="muted">Enter only verified official government URLs. Do not use unofficial application links.</p></div>
+<div class="section"><h3>6. Full Job Details</h3><div class="grid">
+<div class="field full"><label for="description">Job Description / Overview *</label><textarea id="description" required></textarea></div>
+<div class="field full"><label for="selection_process">Selection Process</label><textarea id="selection_process"></textarea></div>
+<div class="field full"><label for="how_to_apply">How to Apply</label><textarea id="how_to_apply"></textarea></div>
+<div class="field full"><label for="additional_info">Additional Information</label><textarea id="additional_info"></textarea></div>
+</div></div>
+<div class="section"><h3>7. Publishing Control</h3><div class="grid"><div class="field"><label for="status">Publishing Status</label><select id="status"><option value="draft">Save as Draft</option><option value="published">Publish Now</option><option value="paused">Paused</option><option value="closed">Closed</option></select></div><div class="field"><label for="country_name">Country</label><input id="country_name" value="India" readonly></div></div><p class="muted">Published posts become visible on public Government Jobs pages according to the existing database read policy. Drafts remain private.</p></div>
+<div class="actions"><button type="submit" id="saveJobBtn">Save Government Job</button><button type="button" id="resetJobBtn" class="secondary">Reset Form</button></div>
+</form></section>
+<section class="panel"><div class="topline"><div><h2>All Government Job Posts</h2><p class="muted">Manage existing government job records.</p></div><button id="refreshBtn" class="secondary">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Job Title</th><th>Department</th><th>Qualification</th><th>Deadline</th><th>Status</th><th>Actions</th></tr></thead><tbody id="jobsBody"><tr><td colspan="6">Loading…</td></tr></tbody></table></div><p id="jobsCount" class="footer-note"></p></section>
+</section>
+</main>
+<script>
+(() => {
+const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
+const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+let currentUser=null, editingId=null, mfaFactorId=null, mfaChallengeId=null, enrollFactorId=null;
+const groups={
+'8th Pass':['8th Standard Pass','Equivalent'],
+'10th Pass':['SSLC','Matriculation','Equivalent'],
+'12th Pass':['HSC Science','Mathematics','Biology','Computer Science','Commerce','Arts','Vocational','Equivalent'],
+'ITI':['Fitter','Electrician','Wireman','Welder','Turner','Machinist','Mechanic Motor Vehicle','Mechanic Diesel','Refrigeration and Air Conditioning','COPA','Electronics Mechanic','Instrument Mechanic','Draughtsman Civil','Draughtsman Mechanical','Plumber','Carpenter','Foundryman','Surveyor','Stenographer','Other ITI Trade'],
+'Diploma':['Mechanical Engineering','Civil Engineering','EEE','ECE','Computer Engineering','Information Technology','Automobile Engineering','Mechatronics Engineering','Instrumentation and Control Engineering','Chemical Engineering','Textile Technology','Agricultural Engineering','Biomedical Engineering','Architecture Assistantship','Commercial Practice','Other Diploma Branch'],
+'Degree':['B.A.','B.Sc.','B.Com.','BBA','BCA','B.E.','B.Tech.','B.Ed.','LLB','B.Pharm.','B.Sc Nursing','Other Degree'],
+'Postgraduate':['M.A.','M.Sc.','M.Com.','MBA','MCA','M.E.','M.Tech.','M.Ed.','LLM','M.Pharm.','M.Sc Nursing','MSW','Other Postgraduate'],
+'Any Qualification':['Any Educational Qualification','Any Degree','Any Diploma','Any ITI Trade','Any 10th Pass or Above','Any 12th Pass or Above','Any Graduate','Any Postgraduate','Relevant Experience Accepted','No Specific Educational Qualification','As Per Official Notification'],
+'Other':['Equivalent Qualification','Professional Qualification','Technical Qualification','Vocational Qualification','Certificate Course','Apprenticeship','Open University','Foreign Qualification','Specialized Qualification','Experience-Based Eligibility','Other']
+};
+function showMsg(el,msg,type='notice'){el.textContent=msg;el.className='notice '+type;el.classList.remove('hidden')}
+function clearMsg(el){el.classList.add('hidden')}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderQualificationGroups(){const root=$('qualificationGroups');root.innerHTML='';Object.entries(groups).forEach(([g,items])=>{const box=document.createElement('div');box.style.margin='12px 0';const title=document.createElement('strong');title.textContent=g;box.appendChild(title);const list=document.createElement('div');list.className='checks';items.forEach(item=>{const lab=document.createElement('label'),cb=document.createElement('input');cb.type='checkbox';cb.name='qualification';cb.value=g+'::'+item;lab.append(cb,document.createTextNode(item));list.appendChild(lab)});box.appendChild(list);root.appendChild(box)})}
+function setAuthState(on){$('loginPanel').classList.toggle('hidden',on);$('dashboard').classList.toggle('hidden',!on);$('logoutBtn').classList.toggle('hidden',!on)}
+async function authorizeSession(){
+ const {data:{user},error}=await sb.auth.getUser();if(error||!user){setAuthState(false);return false}
+ const {data:roles,error:roleErr}=await sb.from('user_roles').select('role').eq('user_id',user.id);
+ if(roleErr||!roles?.some(r=>r.role==='super_admin')){await sb.auth.signOut();showMsg($('authMessage'),'Access denied. This account is not assigned the Super Admin role.','error');setAuthState(false);return false}
+ const {data:aal,error:aalErr}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalErr||aal.currentLevel!=='aal2'){await startMfa();return false}
+ currentUser=user;setAuthState(true);await loadJobs();return true
+}
+async function startMfa(){
+ const {data,error}=await sb.auth.mfa.listFactors();if(error){showMsg($('authMessage'),error.message,'error');return}
+ const verified=(data.totp||[]).find(f=>f.status==='verified');
+ $('mfaBox').classList.remove('hidden');$('mfaQr').classList.add('hidden');
+ if(verified){mfaFactorId=verified.id;const {data:ch,error:ce}=await sb.auth.mfa.challenge({factorId:mfaFactorId});if(ce){showMsg($('authMessage'),ce.message,'error');return}mfaChallengeId=ch.id;$('mfaText').textContent='Enter the current 6-digit code from your authenticator app.'}
+ else {const {data:en,error:ee}=await sb.auth.mfa.enroll({factorType:'totp',friendlyName:'TAMILAN CAREERS Super Admin'});if(ee){showMsg($('authMessage'),ee.message,'error');return}enrollFactorId=en.id;mfaFactorId=en.id;$('mfaQr').src=en.totp.qr_code;$('mfaQr').classList.remove('hidden');$('mfaText').textContent='Scan this QR code with an authenticator app, then enter the generated 6-digit code.';const {data:ch,error:ce}=await sb.auth.mfa.challenge({factorId:mfaFactorId});if(ce){showMsg($('authMessage'),ce.message,'error');return}mfaChallengeId=ch.id}
+}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginBtn').disabled=true;clearMsg($('authMessage'));const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});$('loginBtn').disabled=false;if(error){showMsg($('authMessage'),error.message,'error');return}await authorizeSession()});
+$('verifyMfaBtn').addEventListener('click',async()=>{const code=$('totpCode').value.trim();if(!/^\d{6}$/.test(code)){showMsg($('authMessage'),'Enter a valid 6-digit code.','error');return}const {error}=await sb.auth.mfa.verify({factorId:mfaFactorId,challengeId:mfaChallengeId,code});if(error){showMsg($('authMessage'),error.message,'error');return}await authorizeSession()});
+$('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;setAuthState(false);$('mfaBox').classList.add('hidden')});
+function selectedQualifications(){return [...document.querySelectorAll('input[name="qualification"]:checked')].map(x=>x.value).concat($('customQualifications').value.split(',').map(x=>x.trim()).filter(Boolean))}
+function dateVal(id){return $(id).value||null}function numVal(id){return $(id).value===''?null:Number($(id).value)}
+function collectJob(){const qs=selectedQualifications();const ageMin=numVal('age_min'),ageMax=numVal('age_max');return {
+job_title:$('job_title').value.trim(),department_name:$('department_name').value.trim(),employer_name:$('department_name').value.trim(),recruitment_authority:$('recruitment_authority').value.trim()||null,government_category:$('government_category').value||null,government_scope:$('government_category').value||'India',job_type_label:$('job_type_label').value||null,employment_type:$('employment_type').value,notification_number:$('notification_number').value.trim()||null,job_code:$('job_code').value.trim()||null,
+education_level:qs.join(', ')||null,qualification_tags:qs,required_skills:qs.join(', ')||null,
+age_limit:[ageMin!==null?'Min '+ageMin:'',ageMax!==null?'Max '+ageMax:''].filter(Boolean).join(' / ')||null,age_relaxation:$('age_relaxation').value.trim()||null,experience_requirement:$('experience_requirement').value.trim()||null,experience_min:null,experience_max:null,vacancies:numVal('vacancies'),application_fee:$('application_fee').value.trim()||null,location:$('location').value.trim()||null,salary_min:numVal('salary_min'),salary_max:numVal('salary_max'),salary_currency:'INR',salary_period:$('salary_period').value,
+notification_date:dateVal('notification_date'),application_start_date:dateVal('application_start_date'),application_deadline:dateVal('application_deadline')?new Date(dateVal('application_deadline')+'T23:59:59').toISOString():null,exam_date:dateVal('exam_date'),
+official_notification_url:$('official_notification_url').value.trim()||null,official_website_url:$('official_website_url').value.trim()||null,application_url:$('application_url').value.trim()||null,
+description:$('description').value.trim(),selection_process:$('selection_process').value.trim()||null,how_to_apply:$('how_to_apply').value.trim()||null,additional_info:$('additional_info').value.trim()||null,status:$('status').value,country_name:'India',is_admin_managed:true,created_by:currentUser.id,workplace_type:'onsite'
+}}
+function resetForm(){editingId=null;$('jobForm').reset();$('country_name').value='India';document.querySelectorAll('input[name="qualification"]').forEach(x=>x.checked=false);$('formHeading').textContent='Create Government Job';$('saveJobBtn').textContent='Save Government Job'}
+function openForm(){ $('formPanel').classList.remove('hidden');$('formPanel').scrollIntoView({behavior:'smooth',block:'start'})}
+$('newJobBtn').addEventListener('click',()=>{resetForm();openForm()});$('cancelEdit').addEventListener('click',()=>$('formPanel').classList.add('hidden'));$('resetJobBtn').addEventListener('click',resetForm);
+$('jobForm').addEventListener('submit',async e=>{e.preventDefault();$('saveJobBtn').disabled=true;const data=collectJob();if(!data.job_title||!data.department_name||!data.description){showMsg($('dashboardMessage'),'Job title, department and description are required.','error');$('saveJobBtn').disabled=false;return}
+if(data.job_code===null)delete data.job_code;else if(editingId===null)data.job_code=data.job_code||('GOV-'+Date.now());
+if(editingId===null)data.job_slug=data.job_title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now();
+if(data.status==='published')data.published_at=new Date().toISOString();
+if(editingId){delete data.created_by;const {error}=await sb.from('government_jobs').update(data).eq('id',editingId);if(error)showMsg($('dashboardMessage'),'Save failed: '+error.message,'error');else{showMsg($('dashboardMessage'),'Government job updated successfully.','success');$('formPanel').classList.add('hidden');resetForm();await loadJobs()}}
+else{const {error}=await sb.from('government_jobs').insert(data);if(error)showMsg($('dashboardMessage'),'Save failed: '+error.message,'error');else{showMsg($('dashboardMessage'),'Government job created successfully.','success');$('formPanel').classList.add('hidden');resetForm();await loadJobs()}}
+$('saveJobBtn').disabled=false});
+async function loadJobs(){const {data,error}=await sb.from('government_jobs').select('*').order('created_at',{ascending:false}).limit(200);const body=$('jobsBody');body.innerHTML='';if(error){body.innerHTML='<tr><td colspan="6">Unable to load records: '+esc(error.message)+'</td></tr>';return}if(!data?.length){body.innerHTML='<tr><td colspan="6">No government job posts yet.</td></tr>';$('jobsCount').textContent='0 records';return}
+data.forEach(j=>{const tr=document.createElement('tr');const title=document.createElement('td'),dept=document.createElement('td'),qual=document.createElement('td'),deadline=document.createElement('td'),status=document.createElement('td'),actions=document.createElement('td');title.textContent=j.job_title;dept.textContent=j.department_name||j.employer_name||'—';qual.textContent=(j.qualification_tags||[]).join(', ')||j.education_level||'—';deadline.textContent=j.application_deadline?new Date(j.application_deadline).toLocaleDateString():'—';status.innerHTML='<span class="pill '+(j.status==='published'?'published':'')+'">'+esc(j.status)+'</span>';actions.className='row-actions';const edit=document.createElement('button');edit.textContent='Edit';edit.addEventListener('click',()=>editJob(j));const del=document.createElement('button');del.textContent='Delete';del.className='danger';del.addEventListener('click',()=>deleteJob(j));actions.append(edit,del);tr.append(title,dept,qual,deadline,status,actions);body.appendChild(tr)});$('jobsCount').textContent=data.length+' record(s) shown (maximum 200).'}
+function editJob(j){resetForm();editingId=j.id;const map={job_title:'job_title',department_name:'department_name',recruitment_authority:'recruitment_authority',government_category:'government_category',job_type_label:'job_type_label',employment_type:'employment_type',notification_number:'notification_number',job_code:'job_code',age_relaxation:'age_relaxation',experience_requirement:'experience_requirement',vacancies:'vacancies',application_fee:'application_fee',location:'location',salary_min:'salary_min',salary_max:'salary_max',salary_period:'salary_period',notification_date:'notification_date',application_start_date:'application_start_date',exam_date:'exam_date',official_notification_url:'official_notification_url',official_website_url:'official_website_url',application_url:'application_url',description:'description',selection_process:'selection_process',how_to_apply:'how_to_apply',additional_info:'additional_info',status:'status'};Object.entries(map).forEach(([k,id])=>$(id).value=j[k]??'');$('application_deadline').value=j.application_deadline?String(j.application_deadline).slice(0,10):'';const qs=j.qualification_tags||[];document.querySelectorAll('input[name="qualification"]').forEach(x=>x.checked=qs.includes(x.value));const known=new Set(Object.values(groups).flatMap((a)=>a));$('customQualifications').value=qs.filter(q=>!q.includes('::')).join(', ');$('formHeading').textContent='Edit Government Job';$('saveJobBtn').textContent='Update Government Job';openForm()}
+async function deleteJob(j){if(!confirm('Permanently delete this government job post?'))return;const {error}=await sb.from('government_jobs').delete().eq('id',j.id);if(error)showMsg($('dashboardMessage'),'Delete failed: '+error.message,'error');else{showMsg($('dashboardMessage'),'Government job deleted.','success');await loadJobs()}}
+$('refreshBtn').addEventListener('click',loadJobs);
+renderQualificationGroups();
+sb.auth.onAuthStateChange((_event,session)=>{if(!session){setAuthState(false);currentUser=null}});
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session)await authorizeSession()})();
+})();
+</script></body></html>
