@@ -256,3 +256,16 @@ GRANT EXECUTE ON FUNCTION public.tc_company_send_private_interview_invitation(uu
  public.tc_candidate_respond_private_interview(uuid,text,text),
  public.tc_candidate_respond_international_interview(uuid,text,text),
  public.tc_company_cancel_private_interview(uuid),public.tc_company_cancel_international_interview(uuid) TO authenticated;
+
+
+-- Keep exposed wrappers SECURITY INVOKER; privileged checks stay in the non-exposed private schema.
+GRANT USAGE ON SCHEMA private TO authenticated;
+GRANT EXECUTE ON FUNCTION private.tc_create_independent_interview(text,uuid,text,timestamptz,text,integer,text,text,text,text),
+ private.tc_respond_independent_interview(text,uuid,text,text),
+ private.tc_cancel_independent_interview(text,uuid) TO authenticated;
+ALTER FUNCTION public.tc_company_send_private_interview_invitation(uuid,text,timestamptz,text,integer,text,text,text,text) SECURITY INVOKER;
+ALTER FUNCTION public.tc_company_send_international_interview_invitation(uuid,text,timestamptz,text,integer,text,text,text,text) SECURITY INVOKER;
+ALTER FUNCTION public.tc_candidate_respond_private_interview(uuid,text,text) SECURITY INVOKER;
+ALTER FUNCTION public.tc_candidate_respond_international_interview(uuid,text,text) SECURITY INVOKER;
+ALTER FUNCTION public.tc_company_cancel_private_interview(uuid) SECURITY INVOKER;
+ALTER FUNCTION public.tc_company_cancel_international_interview(uuid) SECURITY INVOKER;
