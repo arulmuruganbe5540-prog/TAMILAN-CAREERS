@@ -63,7 +63,7 @@ footer{background:#061229;color:#c9d7ec;padding:25px 18px;text-align:center;font
 <aside class="sidebar">
 <section class="section"><h3>Search Jobs</h3><input id="sideSearch" type="search" placeholder="Search published jobs…" style="width:100%;padding:11px;border:1px solid #dce5f0;border-radius:9px"><p class="muted" style="margin-top:8px">Search the government job table by post or department.</p></section>
 <section class="section"><h3>Jobs by Qualification</h3><div class="side-list"><a href="education-government-jobs.html?qualification=8th">8th Pass Government Jobs</a><a href="education-government-jobs.html?qualification=10th%20Pass">10th Pass Government Jobs</a><a href="education-government-jobs.html?qualification=12th%20Pass">12th Pass Government Jobs</a><a href="education-government-jobs.html?qualification=ITI">ITI Government Jobs</a><a href="education-government-jobs.html?qualification=Diploma">Diploma Government Jobs</a><a href="education-government-jobs.html?qualification=Degree">Any Degree Government Jobs</a><a href="education-government-jobs.html?qualification=Postgraduate">Postgraduate Government Jobs</a></div></section>
-<section class="section"><h3>Government Job Categories</h3><div class="side-list"><a href="indian-government-jobs.html">Central Government Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Government Jobs</a><a href="jobs.html?job_kind=government">All Government Vacancies</a><a href="jobs.html?category=Banking">Bank Jobs</a><a href="jobs.html?category=Railway">Railway Jobs</a><a href="jobs.html?category=Police">Police Jobs</a><a href="jobs.html?category=Engineering">Engineering Jobs</a></div></section>
+<section class="section"><h3>Government Job Categories</h3><div class="side-list"><a href="indian-government-jobs.html">Central Government Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Government Jobs</a><a href="jobs.html?job_kind=government">All Government Vacancies</a><a href="government-jobs.html?category=Banking">Bank Jobs</a><a href="government-jobs.html?category=Railway">Railway Jobs</a><a href="government-jobs.html?category=Police">Police Jobs</a><a href="government-jobs.html?category=Engineering">Engineering Jobs</a></div></section>
 <section class="section"><h3>Career Resources</h3><div class="side-list"><a href="exam-preparation.html">Exam Preparation</a><a href="job-search-guide.html">Job Search Guide</a><a href="government-job-application-guide.html">Application Guide</a><a href="community.html">Career Community</a></div></section>
 </aside>
 </div>
@@ -84,7 +84,7 @@ function qual(j){return pick(j,["education_level","education","qualification"])|
 function deadline(j){return pick(j,["deadline","application_deadline","last_date","closing_date"])}
 function published(j){return pick(j,["published_at","created_at","updated_at"])}
 function vacancies(j){return pick(j,["vacancies","number_of_vacancies","openings","vacancy_count"])||"See notification"}
-function details(j){const id=pick(j,["id","job_id"]);return id?"job-summary.html?type=job&id="+encodeURIComponent(id):"indian-government-jobs.html"}
+function details(j){const id=pick(j,["id","job_id"]);return id?"job-summary.html?type=job&system=government&id="+encodeURIComponent(id):"indian-government-jobs.html"}
 function renderTable(target,list,compact){
 const el=document.getElementById(target);if(!list.length){el.innerHTML='<tr><td colspan="'+(compact?5:6)+'">No matching published government job records are available.</td></tr>';return}
 el.innerHTML=list.map(j=>'<tr><td><b>'+esc(org(j))+'</b></td><td>'+esc(title(j))+'</td>'+(compact?'':'<td>'+esc(vacancies(j))+'</td>')+'<td>'+esc(qual(j))+'</td><td>'+esc(fmt(deadline(j)))+'</td><td><a class="view" href="'+esc(details(j))+'">View Details →</a></td></tr>').join("");
@@ -108,7 +108,7 @@ renderTable("weekRows",withDate.filter(j=>dateVal(deadline(j))<=weekEnd),true);
 renderTable("monthRows",withDate.filter(j=>dateVal(deadline(j))>weekEnd&&dateVal(deadline(j))<=monthEnd),true);
 }
 async function init(){
-try{const db=window.supabase.createClient(url,key);const {data,error}=await db.from("jobs").select("*").eq("status","published").eq("job_kind","government").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(250);if(error)throw error;all=data||[];filter();renderDaily(all);renderDeadlines()}
+try{const db=window.supabase.createClient(url,key);const {data,error}=await db.from("government_jobs").select("*").eq("status","published").order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false}).limit(250);if(error)throw error;all=data||[];filter();renderDaily(all);renderDeadlines()}
 catch(e){rows.innerHTML='<tr><td colspan="6">Government job records could not be loaded. Please try again later.</td></tr>';count.textContent="Unable to load published job records."}
 }
 ["jobSearch","qualification","scope"].forEach(id=>document.getElementById(id).addEventListener("input",filter));
