@@ -126,7 +126,7 @@ function edit(id){
  fields.forEach(k=>{if($(k))$(k).value=r[k]??""});
  ["category_id","country_name"].forEach(k=>{if($(k))$(k).value=r[k]??""});
  ["vacancies","salary_min","salary_max","salary_currency","salary_period","employment_type","workplace_type"].forEach(k=>{if($(k))$(k).value=r[k]??($(k).value)});
- const chosen=String(r.education_level||"").split(",").map(x=>x.trim());
+ const chosen=String(r.education_level||"").split(/[,;|\n]+/).map(x=>x.trim());
  document.querySelectorAll("#educationChoices input").forEach(x=>x.checked=chosen.includes(x.value));
  if($("visa_sponsorship_available"))$("visa_sponsorship_available").value=String(Boolean(r.visa_sponsorship_available));
  if($("relocation_support"))$("relocation_support").value=String(Boolean(r.relocation_support));
