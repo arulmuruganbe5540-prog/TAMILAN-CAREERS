@@ -41,6 +41,14 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const applicationId = safeText(body?.application_id, 80).trim();
+    const system = safeText(body?.system || "legacy", 24).trim().toLowerCase();
+    const appTable = system === "private" ? "private_job_applications"
+      : system === "international" ? "international_job_applications"
+      : system === "legacy" ? "job_applications" : "";
+    const jobTable = system === "private" ? "private_jobs"
+      : system === "international" ? "international_jobs"
+      : system === "legacy" ? "jobs" : "";
+    if (!appTable || !jobTable) return json({ error: "This job system does not provide employer resume access" }, 403);
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(applicationId)) {
       return json({ error: "A valid application_id is required" }, 400);
     }
@@ -50,7 +58,7 @@ Deno.serve(async (req) => {
     });
 
     const { data: application, error: applicationError } = await admin
-      .from("job_applications")
+      .from(appTable)
       .select("id,job_id,candidate_id,resume_id,status")
       .eq("id", applicationId)
       .maybeSingle();
@@ -61,7 +69,7 @@ Deno.serve(async (req) => {
     }
 
     const { data: job, error: jobError } = await admin
-      .from("jobs")
+      .from(jobTable)
       .select("company_id")
       .eq("id", application.job_id)
       .maybeSingle();
