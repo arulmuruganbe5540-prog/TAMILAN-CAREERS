@@ -31,7 +31,7 @@ await check("Homepage loads, career categories navigate and job search works", a
     organization: JSON.parse(document.querySelector("#tc-organization-jsonld")?.textContent || "null")
   }));
   if (structuredData.website?.["@type"] !== "WebSite" || structuredData.organization?.["@type"] !== "Organization" ||
-      structuredData.organization?.email !== "arulmuruganbe5540@gmail.com" || structuredData.organization?.url !== new URL(base).origin + "/") {
+      structuredData.organization?.email !== "arulmuruganbe5540@gmail.com" || structuredData.organization?.url !== (document.querySelector('link[rel="canonical"]')?.href || new URL(base).origin + "/")) {
     throw new Error("Homepage structured data is missing or inconsistent: " + JSON.stringify(structuredData));
   }
   const categoryCard = page.locator('.category-card[href*="category=IT"]').first();
