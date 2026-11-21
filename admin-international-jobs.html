@@ -30,7 +30,7 @@
 <div class="field"><label for="application_url">Application URL</label><input id="application_url" type="url"></div>
 
  <div class="field"><label for="job_sector">Job Sector *</label><select id="job_sector" required><option value="">Select Sector</option><option value="government">International Government</option><option value="private">International Private</option></select></div>
- <div class="field"><label for="country_code">Country Code</label><input id="country_code" maxlength="8" placeholder="AE, SG, CA"></div>
+ <div class="field"><label for="official_website_url">Official Employer / Authority Website</label><input id="official_website_url" type="url"></div><div class="field"><label for="official_notification_url">Official Job Notification / Application Link</label><input id="official_notification_url" type="url"></div><div class="field"><label for="country_code">Country Code</label><input id="country_code" maxlength="8" placeholder="AE, SG, CA"></div>
  <div class="field"><label for="visa_type">Visa Type</label><input id="visa_type" maxlength="160" placeholder="Employment Visa"></div>
  <div class="field"><label for="work_permit">Work Permit</label><input id="work_permit" maxlength="160"></div>
  <div class="field"><label for="visa_sponsorship_available">Visa Sponsorship</label><select id="visa_sponsorship_available"><option value="false">Not specified / No</option><option value="true">Available</option></select></div>
@@ -77,7 +77,7 @@ function collect(status){
  if(!title||!description||!country||!category||!value("location")||!value("employment_type"))throw new Error("Complete Job Title, Category, Country, Location, Employment Type and Description.");
  if(SYSTEM==="government"&&!value("official_website_url"))throw new Error("Government postings require an official department website URL.");
  if(SYSTEM==="private"&&!value("employer_name"))throw new Error("Enter the company / employer name.");
- if(SYSTEM==="international"&&(!value("job_sector")||!value("employer_name")))throw new Error("Select the International Job Sector and enter the employer / recruiting authority.");
+ if(SYSTEM==="international"&&(!value("job_sector")||!value("employer_name")))throw new Error("Select the International Job Sector and enter the employer / recruiting authority.");\n if(SYSTEM==="international"&&value("job_sector")==="government"&&!value("official_website_url"))throw new Error("International Government postings require an official authority website URL.");
  if((SYSTEM==="private"||SYSTEM==="international")&&!value("application_url")&&!value("contact_email"))throw new Error("Provide an application URL or contact email.");
  const min=value("salary_min"),max=value("salary_max");
  if(min&&max&&Number(min)>Number(max))throw new Error("Maximum salary must be greater than or equal to minimum salary.");
@@ -95,7 +95,7 @@ function collect(status){
  if(!Number.isInteger(row.vacancies)||row.vacancies<1)throw new Error("Enter at least one vacancy.");
  if(SYSTEM==="government")Object.assign(row,{government_scope:value("government_scope")||null,recruitment_authority:value("recruitment_authority")||null,notification_number:value("notification_number")||null,exam_year:value("exam_year")?Number(value("exam_year")):null,notification_date:value("notification_date")||null,age_limit:value("age_limit")||null,application_fee:value("application_fee")||null,selection_process:value("selection_process")||null,official_website_url:value("official_website_url"),official_notification_url:value("official_notification_url")||null});
  if(SYSTEM==="private")row.official_website_url=value("official_website_url")||null;
- if(SYSTEM==="international")Object.assign(row,{job_sector:value("job_sector"),country_code:value("country_code")||null,visa_type:value("visa_type")||null,work_permit:value("work_permit")||null,visa_sponsorship_available:value("visa_sponsorship_available")==="true",relocation_support:value("relocation_support")==="true",language_requirements:value("language_requirements")||null,visa_notes:value("visa_notes")||null});
+ if(SYSTEM==="international")Object.assign(row,{official_website_url:value("official_website_url")||null,official_notification_url:value("official_notification_url")||null,job_sector:value("job_sector"),country_code:value("country_code")||null,visa_type:value("visa_type")||null,work_permit:value("work_permit")||null,visa_sponsorship_available:value("visa_sponsorship_available")==="true",relocation_support:value("relocation_support")==="true",language_requirements:value("language_requirements")||null,visa_notes:value("visa_notes")||null});
  return row;
 }
 function slug(){return value("job_title").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,80)+"-"+crypto.randomUUID().slice(0,8)}
