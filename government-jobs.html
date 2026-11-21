@@ -178,7 +178,6 @@ async function load(){
  const {data,error}=await client.from("government_jobs").select("*");
   if(error)throw error;
   allJobs=(data||[]).filter(j=>String(pick(j,["country_name","country"])).trim().toLowerCase()==="india");
- allJobs=data||[];
  const companyIds=[...new Set(allJobs.map(j=>j.company_id).filter(Boolean))];
  companyNames={};
  if(companyIds.length){
