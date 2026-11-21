@@ -13,7 +13,7 @@
 <script>
 const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const statusText={applied:"Application received",under_review:"Under review",shortlisted:"Shortlisted",rejected:"Not selected",withdrawn:"Withdrawn"};
+const statusText={applied:"Application received",under_review:"Under review",shortlisted:"Shortlisted",interview:"Interview stage",offer_sent:"Offer sent",selected:"Final selected",rejected:"Not selected",withdrawn:"Withdrawn"};
 const canWithdraw=status=>["applied","under_review","shortlisted"].includes(String(status||"").toLowerCase());
 async function init(){
  const {data,error}=await db.auth.getSession();const user=data.session?.user;
