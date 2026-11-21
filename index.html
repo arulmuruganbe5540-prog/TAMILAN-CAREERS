@@ -41,6 +41,11 @@ table a{color:#075e9b;font-weight:700;text-decoration:underline}
 .updated{font-size:12px;color:var(--muted);padding-top:5px}
 .degree-filter{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .degree-filter a{border:1px solid #cbd7e6;padding:6px 9px;border-radius:3px;color:#175e91;text-decoration:none;font-size:12px;font-weight:700}
+.qualification-tag-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 4px}
+.qualification-tag{min-height:76px;display:flex;align-items:center;justify-content:center;padding:16px 10px;border-radius:10px;color:#fff;text-decoration:none;font-size:16px;font-weight:700;text-align:center;box-shadow:0 3px 9px rgba(16,29,58,.12);transition:transform .15s ease,box-shadow .15s ease}
+.qualification-tag:hover,.qualification-tag:focus-visible{transform:translateY(-2px);box-shadow:0 6px 14px rgba(16,29,58,.2);outline:3px solid #9bdcff;outline-offset:2px}
+.qualification-tag.q8{background:#2563eb}.qualification-tag.q10{background:#059669}.qualification-tag.q12{background:#d97706}.qualification-tag.qiti{background:#7c3aed}.qualification-tag.qdiploma{background:#db2777}.qualification-tag.qdegree{background:#0891b2}.qualification-tag.qpg{background:#9333ea}
+@media(min-width:700px){.qualification-tag-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 footer{padding:18px 12px;background:var(--navy);display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
 footer a{color:#fff;font-size:13px;text-decoration:underline}
 @media(max-width:640px){.site-header h1{font-size:21px}.table-section{padding:18px 0}.table-section h2{font-size:18px}main{padding-left:12px;padding-right:12px}}
@@ -82,11 +87,17 @@ footer a{color:#fff;font-size:13px;text-decoration:underline}
 </section>
 
 <section class="table-section" id="qualification-jobs">
-<h2>Qualification-wise Government Jobs</h2><p>Browse published government vacancies by educational qualification. Each qualification has its own table, with up to 20 records per page.</p>
-<div class="section-nav">
-<a href="#q8">8th Pass</a><a href="#q10">10th Pass</a><a href="#q12">12th Pass</a><a href="#qiti">ITI</a><a href="#qdiploma">Diploma</a><a href="#qdegree">Degree</a>
+<h2>Government Jobs by Qualification</h2>
+<p>Select your educational qualification to view matching Central and State Government job notifications. Each qualification opens its own page with a dedicated jobs table and full job details.</p>
+<div class="qualification-tag-grid" aria-label="Select your qualification">
+<a class="qualification-tag q8" href="8th-pass-government-jobs.html">8th Pass</a>
+<a class="qualification-tag q10" href="10th-pass-government-jobs.html">10th Pass</a>
+<a class="qualification-tag q12" href="12th-pass-government-jobs.html">12th Pass</a>
+<a class="qualification-tag qiti" href="iti-government-jobs.html">ITI</a>
+<a class="qualification-tag qdiploma" href="diploma-government-jobs.html">Diploma</a>
+<a class="qualification-tag qdegree" href="degree-government-jobs.html">Degree</a>
+<a class="qualification-tag qpg" href="postgraduate-government-jobs.html">PG</a>
 </div>
-<div id="qualification-tables"></div>
 </section>
 
 <section class="table-section" id="answer-keys"><h2>Government Exam – Answer Key</h2><p>Official answer key notifications and related updates published for government examinations.</p><div class="table-scroll"><table><thead><tr><th>Exam / Update</th><th>Department / Source</th><th>Year</th><th>Updated</th><th>Official Link</th></tr></thead><tbody id="answer-body"><tr><td colspan="5" class="empty-cell">Loading updates…</td></tr></tbody></table></div><div class="pager" id="answer-pager"></div></section>
@@ -122,41 +133,10 @@ else body.innerHTML=shown.map(r=>{const link=safeUrl(r.resource_url||r.official_
 const pager=$(id+'-pager');pager.innerHTML='<button type="button" '+(page<=1?'disabled':'')+' data-step="-1">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' data-step="1">Next</button>';
 pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{pages[id]=Math.min(total,Math.max(1,page+Number(b.dataset.step)));resourceRows(id,rows,isDate);}));
 }
-function includesAny(j,needles){const all=tags(j).join(' ')+' '+String(j.education_level||'').toLowerCase()+' '+String(j.required_skills||'').toLowerCase()+' '+String(j.description||'').toLowerCase();return needles.some(n=>all.includes(n.toLowerCase()));}
-function qualificationMatch(j,d){
-const all=tags(j).join(' ')+' '+String(j.education_level||'').toLowerCase()+' '+String(j.required_skills||'').toLowerCase()+' '+String(j.description||'').toLowerCase();
-if(d.id==='qbemech')return (all.includes('b.e.')||all.includes('be '))&&all.includes('mechanical');
-if(d.id==='qbecivil')return (all.includes('b.e.')||all.includes('be '))&&all.includes('civil');
-if(d.id==='qbecs')return (all.includes('b.e.')||all.includes('be '))&&(all.includes('computer science')||all.includes('cse'));
-return includesAny(j,d.needles);
-}
-const qualDefs=[
-{id:'q8',title:'8th Pass Government Jobs',needles:['8th pass','8th standard','eighth standard']},
-{id:'q10',title:'10th Pass Government Jobs',needles:['10th pass','sslc','matriculation']},
-{id:'q12',title:'12th Pass Government Jobs',needles:['12th pass','hsc','higher secondary']},
-{id:'qiti',title:'ITI Government Jobs',needles:['iti','fitter','electrician','wireman','welder','turner','machinist','mechanic motor vehicle','mechanic diesel','copA','electronics mechanic','instrument mechanic','draughtsman','plumber','carpenter','surveyor','stenographer']},
-{id:'qdiploma',title:'Diploma Government Jobs',needles:['diploma','mechanical engineering','civil engineering','eee','ece','computer engineering','information technology','automobile engineering','mechatronics','instrumentation and control','chemical engineering','textile technology','agricultural engineering','biomedical engineering','architecture assistantship']},
-{id:'qba',title:'B.A. Government Jobs',needles:['b.a.','ba degree']},
-{id:'qbsc',title:'B.Sc. Government Jobs',needles:['b.sc.','bsc']},
-{id:'qbcom',title:'B.Com. Government Jobs',needles:['b.com.','bcom']},
-{id:'qbemech',title:'B.E. Mechanical Government Jobs',needles:['b.e. mechanical','be mechanical','mechanical engineering']},
-{id:'qbecivil',title:'B.E. Civil Government Jobs',needles:['b.e. civil','be civil','civil engineering']},
-{id:'qbecs',title:'B.E. Computer Science Government Jobs',needles:['b.e. computer science','be computer science','computer science engineering','cse']},
-{id:'qbtech',title:'B.Tech. Government Jobs',needles:['b.tech.','btech']}
-];
-function renderQualifications(){
-const host=$('qualification-tables');let out='';
-qualDefs.forEach((d,index)=>{
-if(index===5)out+='<section class="table-section" id="qdegree"><h3>Degree Government Jobs</h3><p>Filter published graduate-level government vacancies by degree. Choose the qualification below to jump to its table.</p><div class="degree-filter"><a href="#qba">B.A.</a><a href="#qbsc">B.Sc.</a><a href="#qbcom">B.Com.</a><a href="#qbemech">B.E. Mechanical</a><a href="#qbecivil">B.E. Civil</a><a href="#qbecs">B.E. Computer Science</a><a href="#qbtech">B.Tech.</a></div></section>';
-out+='<section class="table-section" id="'+d.id+'"><h3>'+esc(d.title)+'</h3><p>Published government vacancies matching this qualification. Up to 20 records per page.</p><div class="table-scroll"><table><thead><tr><th>Department</th><th>Job Post</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="'+d.id+'-body"><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table></div><div class="pager" id="'+d.id+'-pager"></div></section>';
-});
-host.innerHTML=out;
-}
 function renderAll(){
 jobRows('latest',jobs);
 jobRows('central',jobs.filter(j=>String(j.government_category||j.government_scope||'').toLowerCase()==='central government'));
 jobRows('tn',jobs.filter(j=>{const c=String(j.government_category||'').toLowerCase(),loc=String(j.location||'').toLowerCase();return c==='tamil nadu government'||(c==='state government'&&(loc.includes('tamil nadu')||loc.includes('tamilnadu')||loc.includes('tn')));}));
-qualDefs.forEach(d=>jobRows(d.id,jobs.filter(j=>qualificationMatch(j,d))));
 const byType=t=>resources.filter(r=>r.resource_type===t);
 resourceRows('answer',byType('answer_key'),false);
 resourceRows('results',byType('result'),false);
@@ -173,7 +153,7 @@ if(jr.error)console.error('Government jobs could not be loaded:',jr.error.messag
 if(rr.error)console.error('Exam updates could not be loaded:',rr.error.message);else resources=rr.data||[];
 renderAll();$('latest-updated').textContent='Last refreshed: '+new Date().toLocaleTimeString('en-IN')+' · Automatic refresh every 5 minutes';
 }
-renderQualifications();refresh();setInterval(refresh,300000);
+refresh();setInterval(refresh,300000);
 })();
 </script>
 </body>
