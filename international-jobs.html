@@ -61,7 +61,7 @@ async function init(){
  try{
   const {data,error}=await db.from("international_jobs").select("*").eq("status","published");
   if(error)throw error;
-  jobs=(data||[]).filter(j=>!j.application_deadline||new Date(j.application_deadline)>=new Date(new Date().toDateString()));
+  jobs=(data||[]).filter(j=>String(pick(j,["country_name","country"])).trim().toLowerCase()!=="india"&&(!j.application_deadline||new Date(j.application_deadline)>=new Date(new Date().toDateString())));
   render();
  }catch(e){$("count").textContent="International jobs could not be loaded";$("results").innerHTML='<div class="empty">The job service is temporarily unavailable. Please try again later.</div>'}
 }
