@@ -9,8 +9,7 @@
 <style>
 :root{--navy:#101d3a;--blue:#176b9e;--cyan:#54c8ff;--ink:#14213d;--muted:#65738b;--line:#dce4ef;--bg:#f3f6fb}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,Helvetica,sans-serif}
-header{background:var(--navy);color:white;padding:18px max(16px,calc((100% - 1100px)/2))}
-header a{color:white;text-decoration:none}header h1{margin:0;font-size:23px}header p{margin:6px 0 0;color:#d6e5f6;font-size:13px}
+.site-header{background:var(--navy);color:#fff;padding:18px max(16px,calc((100% - 1200px)/2))}.site-header a{color:#fff;text-decoration:none}.site-header h1{margin:0;font-size:24px;letter-spacing:.3px}.site-header p{margin:6px 0 0;color:#d6e5f6;font-size:13px}\n.nav-wrap{background:#14294c;border-bottom:3px solid var(--cyan);position:sticky;top:0;z-index:20}nav{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;padding:10px 14px;scrollbar-width:thin;max-width:1230px;margin:auto}nav a{flex:0 0 auto;padding:10px 13px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;border-radius:5px;background:#203b65}nav a.private-link{background:#176b9e}nav a.international-link{background:#087443}nav a.account-link{background:#eaf5ff;color:#103a62;border:1px solid #9bdcff}nav a:hover,nav a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;background:#28517f}\n.announcement{background:#eaf5ff;border-bottom:1px solid #c9e4fa;color:#103a62;overflow:hidden;padding:10px 0;font-size:13px;font-weight:700}.announcement-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:scrollnews 28s linear infinite}@keyframes scrollnews{to{transform:translateX(-100%)}}
 main{width:min(1100px,100%);margin:0 auto;padding:28px 16px 48px}.crumb{font-size:13px;margin-bottom:18px}.crumb a{color:#075e9b}
 .auth-shell{max-width:520px;margin:0 auto;background:white;border:1px solid var(--line);border-radius:12px;padding:24px;box-shadow:0 8px 28px rgba(16,29,58,.07)}
 h2{font-size:23px;color:var(--navy);margin:0 0 7px}.sub{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 20px}
@@ -25,8 +24,7 @@ footer{padding:18px 12px;background:var(--navy);display:flex;justify-content:cen
 </style>
 </head>
 <body>
-<header><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>Government Jobs · Exam Notifications · Career Updates</p></header>
-<main>
+<header class="site-header"><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>Government Jobs · Exam Notifications · Career Updates</p></header>\n<div class="nav-wrap"><nav aria-label="Main navigation"><a href="central-government-jobs.html">Central Govt Jobs</a><a href="tamil-nadu-government-jobs.html">Tamil Nadu Govt Jobs</a><a href="state-government-jobs.html">All State Govt Jobs</a><a href="index.html#exam-dates">Exam Notifications</a><a href="admissions.html">Admissions</a><a class="private-link" href="private-jobs.html">Private Jobs</a><a class="international-link" href="international-jobs.html">International Jobs</a><a class="account-link" href="auth.html">Login / Register</a></nav></div>\n<div class="announcement"><div class="announcement-track">TAMILAN CAREERS — Government Job Notifications and Exam Updates · Check official notifications before applying ·</div></div>\n<main>
 <div class="crumb"><a href="index.html">Home</a> / User Account</div>
 <section class="auth-shell" aria-label="User account">
 <div id="authView">
