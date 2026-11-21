@@ -810,6 +810,57 @@ await check("Employer applicant management updates independent Private applicati
 });
 
 
+
+await check("Employer can propose a new Private interview time and make a final selection", async () => {
+  const p = await createMockSignedInPage("employer");
+  let rescheduleCalls = 0, finaliseCalls = 0;
+  p.on("dialog", dialog => dialog.accept());
+  await p.route("**/rest/v1/private_jobs**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"private-job-smoke",job_title:"Private Analyst",company_id:"smoke-company",status:"published"}])}));
+  await p.route("**/rest/v1/private_job_applications**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"private-app-smoke",job_id:"private-job-smoke",candidate_id:"candidate-smoke",resume_id:null,status:"shortlisted",applied_at:"2026-11-20T10:00:00Z"}])}));
+  await p.route("**/rest/v1/private_job_interview_invitations**", route => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"private-interview-smoke",application_id:"private-app-smoke",interview_title:"Technical Interview",scheduled_at:"2030-01-01T10:00:00Z",timezone:"Asia/Kolkata",duration_minutes:45,interview_mode:"online",meeting_url:"https://meet.example.test/current",status:"accepted"}])}));
+  await p.route("**/rest/v1/private_job_interview_reschedule_proposals**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/private_job_interview_history**", route => route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/rpc/tc_company_propose_private_interview_reschedule", route => {rescheduleCalls++;return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify("proposal-smoke")});});
+  await p.route("**/rest/v1/rpc/tc_company_finalise_private_application", route => {finaliseCalls++;return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify("selected")});});
+  try {
+    await p.goto(base+"/company-applicants.html",{waitUntil:"domcontentloaded"});
+    await p.locator(".app details summary").first().click();
+    await p.locator("details details summary").first().click();
+    await p.locator(".reschedule-date").fill("2030-01-02T11:00");
+    await p.locator(".reschedule-zone").fill("Asia/Kolkata");
+    await p.locator(".reschedule-mode").selectOption("online");
+    await p.locator(".reschedule-url").fill("https://meet.example.test/new");
+    await p.locator(".propose-interview-reschedule").click();
+    await p.waitForFunction(()=>document.getElementById("message")?.textContent.includes("current schedule remains unchanged"));
+    if(rescheduleCalls!==1)throw new Error("Private interview reschedule RPC was not called exactly once");
+    await p.locator('.finalise-app[data-final-status="selected"]').click();
+    await p.waitForFunction(()=>document.getElementById("message")?.textContent.includes("candidate notified"));
+    if(finaliseCalls!==1)throw new Error("Private final-selection RPC was not called exactly once");
+  } finally { await p.close(); }
+});
+
+await check("Candidate can propose an alternative date for an accepted Private interview", async () => {
+  const p=await createMockSignedInPage();
+  let proposalCalls=0,proposalPayload=null;
+  await p.route("**/rest/v1/tc_notifications**",route=>route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/tc_interview_invitations**",route=>route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/private_job_interview_invitations**",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([{id:"candidate-private-interview",application_id:"candidate-app",candidate_id:"tc-flow-smoke-user",interview_title:"Private Interview",scheduled_at:"2030-01-01T10:00:00Z",timezone:"Asia/Kolkata",duration_minutes:45,interview_mode:"online",meeting_url:"https://meet.example.test/current",status:"accepted",job:{job_title:"Private Analyst"},company:{company_name:"Private Co"}}])}));
+  await p.route("**/rest/v1/international_job_interview_invitations**",route=>route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/private_job_interview_reschedule_proposals**",route=>route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/international_job_interview_reschedule_proposals**",route=>route.fulfill({status:200,contentType:"application/json",body:"[]"}));
+  await p.route("**/rest/v1/rpc/tc_candidate_propose_private_interview_date",route=>{proposalCalls++;proposalPayload=route.request().postDataJSON();return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify("candidate-proposal")});});
+  try{
+    await p.goto(base+"/notifications.html",{waitUntil:"domcontentloaded"});
+    await p.getByText("Private Interview",{exact:true}).waitFor({state:"visible"});
+    await p.locator("details summary").filter({hasText:"Propose Another Interview Date"}).click();
+    await p.locator('[data-alt-date="candidate-private-interview"]').fill("2030-01-03T11:00");
+    await p.locator('[data-alt-zone="candidate-private-interview"]').fill("Asia/Kolkata");
+    await p.locator('[data-propose-alt="candidate-private-interview"]').click();
+    await p.waitForFunction(()=>document.getElementById("interviews")?.textContent.includes("Private Interview"));
+    if(proposalCalls!==1||proposalPayload?.p_interview_id!=="candidate-private-interview"||proposalPayload?.p_interview_mode!=="online")throw new Error("Candidate alternative-date proposal did not preserve the interview details");
+  }finally{await p.close()}
+});
+
 await check("Private and International interview invitations display and candidate responses use separate RPCs", async () => {
   const p = await createMockSignedInPage();
   let privateStatus="pending", internationalStatus="pending", privateCalls=0, internationalCalls=0;
