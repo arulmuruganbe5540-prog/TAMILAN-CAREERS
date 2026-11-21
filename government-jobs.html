@@ -176,7 +176,8 @@ async function load(){
  $("skillNotice").textContent=candidateSkills.length?"We are matching job requirements with your profile skills.":(currentUserRole==="job_seeker"&&!profileSyncReady?"Complete your Job Seeker Profile to sync saved jobs across devices.":"Log in and add skills to your profile to see matching jobs.");
  $("results").innerHTML='<div class="empty">Loading job listings...</div>';
  const {data,error}=await client.from("government_jobs").select("*");
- if(error){$("count").textContent="Unable to load job listings";$("results").innerHTML='<div class="empty">There is a database permission or connection issue. '+safe(error.message)+'<br>An administrator should check the jobs table and its read permissions.</div>';return;}
+  if(error)throw error;
+  allJobs=(data||[]).filter(j=>String(pick(j,["country_name","country"])).trim().toLowerCase()==="india");
  allJobs=data||[];
  const companyIds=[...new Set(allJobs.map(j=>j.company_id).filter(Boolean))];
  companyNames={};
