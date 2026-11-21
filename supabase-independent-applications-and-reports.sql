@@ -324,9 +324,98 @@ REVOKE ALL ON FUNCTION public.tc_review_private_job_report(uuid,text,text) FROM 
 REVOKE ALL ON FUNCTION public.tc_review_international_job_report(uuid,text,text) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.tc_review_government_job_report(uuid,text,text),public.tc_review_private_job_report(uuid,text,text),public.tc_review_international_job_report(uuid,text,text) TO authenticated;
 
+DROP TRIGGER IF EXISTS trg_independent_job_application_validation ON public.government_job_applications;
+DROP TRIGGER IF EXISTS trg_independent_job_application_validation ON public.private_job_applications;
+DROP TRIGGER IF EXISTS trg_independent_job_application_validation ON public.international_job_applications;
+DROP TRIGGER IF EXISTS trg_independent_job_application_history ON public.government_job_applications;
+DROP TRIGGER IF EXISTS trg_independent_job_application_history ON public.private_job_applications;
+DROP TRIGGER IF EXISTS trg_independent_job_application_history ON public.international_job_applications;
 CREATE TRIGGER trg_independent_job_application_validation BEFORE INSERT ON public.government_job_applications FOR EACH ROW EXECUTE FUNCTION private.validate_independent_job_application();
 CREATE TRIGGER trg_independent_job_application_validation BEFORE INSERT ON public.private_job_applications FOR EACH ROW EXECUTE FUNCTION private.validate_independent_job_application();
 CREATE TRIGGER trg_independent_job_application_validation BEFORE INSERT ON public.international_job_applications FOR EACH ROW EXECUTE FUNCTION private.validate_independent_job_application();
 CREATE TRIGGER trg_independent_job_application_history AFTER INSERT OR UPDATE ON public.government_job_applications FOR EACH ROW EXECUTE FUNCTION private.log_independent_job_application_status();
 CREATE TRIGGER trg_independent_job_application_history AFTER INSERT OR UPDATE ON public.private_job_applications FOR EACH ROW EXECUTE FUNCTION private.log_independent_job_application_status();
 CREATE TRIGGER trg_independent_job_application_history AFTER INSERT OR UPDATE ON public.international_job_applications FOR EACH ROW EXECUTE FUNCTION private.log_independent_job_application_status();
+
+-- Foreign keys are deliberately added explicitly because CREATE TABLE LIKE does not copy FK constraints.
+DO $$
+BEGIN
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.government_job_applications'::regclass AND conname='government_job_applications_candidate_id_fkey') THEN ALTER TABLE public.government_job_applications ADD CONSTRAINT government_job_applications_candidate_id_fkey FOREIGN KEY(candidate_id) REFERENCES auth.users(id) ON DELETE RESTRICT; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.government_job_applications'::regclass AND conname='government_job_applications_resume_id_fkey') THEN ALTER TABLE public.government_job_applications ADD CONSTRAINT government_job_applications_resume_id_fkey FOREIGN KEY(resume_id) REFERENCES public.candidate_resumes(id) ON DELETE SET NULL; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.government_job_application_status_history'::regclass AND conname='government_job_application_history_changed_by_fkey') THEN ALTER TABLE public.government_job_application_status_history ADD CONSTRAINT government_job_application_history_changed_by_fkey FOREIGN KEY(changed_by) REFERENCES auth.users(id) ON DELETE SET NULL; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.government_job_reports'::regclass AND conname='government_job_reports_reporter_user_id_fkey') THEN ALTER TABLE public.government_job_reports ADD CONSTRAINT government_job_reports_reporter_user_id_fkey FOREIGN KEY(reporter_user_id) REFERENCES auth.users(id) ON DELETE CASCADE; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.government_job_reports'::regclass AND conname='government_job_reports_reviewed_by_fkey') THEN ALTER TABLE public.government_job_reports ADD CONSTRAINT government_job_reports_reviewed_by_fkey FOREIGN KEY(reviewed_by) REFERENCES auth.users(id); END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.private_job_applications'::regclass AND conname='private_job_applications_candidate_id_fkey') THEN ALTER TABLE public.private_job_applications ADD CONSTRAINT private_job_applications_candidate_id_fkey FOREIGN KEY(candidate_id) REFERENCES auth.users(id) ON DELETE RESTRICT; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.private_job_applications'::regclass AND conname='private_job_applications_resume_id_fkey') THEN ALTER TABLE public.private_job_applications ADD CONSTRAINT private_job_applications_resume_id_fkey FOREIGN KEY(resume_id) REFERENCES public.candidate_resumes(id) ON DELETE SET NULL; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.private_job_application_status_history'::regclass AND conname='private_job_application_history_changed_by_fkey') THEN ALTER TABLE public.private_job_application_status_history ADD CONSTRAINT private_job_application_history_changed_by_fkey FOREIGN KEY(changed_by) REFERENCES auth.users(id) ON DELETE SET NULL; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.private_job_reports'::regclass AND conname='private_job_reports_reporter_user_id_fkey') THEN ALTER TABLE public.private_job_reports ADD CONSTRAINT private_job_reports_reporter_user_id_fkey FOREIGN KEY(reporter_user_id) REFERENCES auth.users(id) ON DELETE CASCADE; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.private_job_reports'::regclass AND conname='private_job_reports_reviewed_by_fkey') THEN ALTER TABLE public.private_job_reports ADD CONSTRAINT private_job_reports_reviewed_by_fkey FOREIGN KEY(reviewed_by) REFERENCES auth.users(id); END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.international_job_applications'::regclass AND conname='international_job_applications_candidate_id_fkey') THEN ALTER TABLE public.international_job_applications ADD CONSTRAINT international_job_applications_candidate_id_fkey FOREIGN KEY(candidate_id) REFERENCES auth.users(id) ON DELETE RESTRICT; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.international_job_applications'::regclass AND conname='international_job_applications_resume_id_fkey') THEN ALTER TABLE public.international_job_applications ADD CONSTRAINT international_job_applications_resume_id_fkey FOREIGN KEY(resume_id) REFERENCES public.candidate_resumes(id) ON DELETE SET NULL; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.international_job_application_status_history'::regclass AND conname='international_job_application_history_changed_by_fkey') THEN ALTER TABLE public.international_job_application_status_history ADD CONSTRAINT international_job_application_history_changed_by_fkey FOREIGN KEY(changed_by) REFERENCES auth.users(id) ON DELETE SET NULL; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.international_job_reports'::regclass AND conname='international_job_reports_reporter_user_id_fkey') THEN ALTER TABLE public.international_job_reports ADD CONSTRAINT international_job_reports_reporter_user_id_fkey FOREIGN KEY(reporter_user_id) REFERENCES auth.users(id) ON DELETE CASCADE; END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.international_job_reports'::regclass AND conname='international_job_reports_reviewed_by_fkey') THEN ALTER TABLE public.international_job_reports ADD CONSTRAINT international_job_reports_reviewed_by_fkey FOREIGN KEY(reviewed_by) REFERENCES auth.users(id); END IF;
+END $$;
+
+CREATE OR REPLACE FUNCTION private.validate_independent_job_application()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $$
+DECLARE v_ok boolean:=false;
+BEGIN
+ IF (SELECT auth.uid()) IS NULL OR NEW.candidate_id IS DISTINCT FROM (SELECT auth.uid()) THEN RAISE EXCEPTION 'You can only submit an application for your own signed-in account.'; END IF;
+ IF NEW.status<>'applied' THEN RAISE EXCEPTION 'New applications must start in applied status.'; END IF;
+ IF NEW.resume_id IS NOT NULL AND NOT EXISTS(SELECT 1 FROM public.candidate_resumes r WHERE r.id=NEW.resume_id AND r.user_id=(SELECT auth.uid())) THEN RAISE EXCEPTION 'The selected resume does not belong to your account.'; END IF;
+ IF TG_TABLE_NAME='government_job_applications' THEN
+  SELECT EXISTS(SELECT 1 FROM public.government_jobs j WHERE j.id=NEW.job_id AND j.status='published' AND (j.application_deadline IS NULL OR j.application_deadline>now())) INTO v_ok;
+ ELSIF TG_TABLE_NAME='private_job_applications' THEN
+  SELECT EXISTS(SELECT 1 FROM public.private_jobs j LEFT JOIN public.companies c ON c.id=j.company_id WHERE j.id=NEW.job_id AND j.status='published' AND (j.is_admin_managed=true OR c.verification_status='verified') AND (j.application_deadline IS NULL OR j.application_deadline>now())) INTO v_ok;
+ ELSIF TG_TABLE_NAME='international_job_applications' THEN
+  SELECT EXISTS(SELECT 1 FROM public.international_jobs j LEFT JOIN public.companies c ON c.id=j.company_id WHERE j.id=NEW.job_id AND j.status='published' AND (j.application_deadline IS NULL OR j.application_deadline>now()) AND (j.job_sector='government' OR (j.job_sector='private' AND (j.is_admin_managed=true OR c.verification_status='verified')))) INTO v_ok;
+ END IF;
+ IF NOT v_ok THEN RAISE EXCEPTION 'This job is unavailable, not published, expired, or not verified for applications.'; END IF;
+ RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION private.validate_independent_job_application() FROM PUBLIC,anon,authenticated;
+
+CREATE OR REPLACE FUNCTION public.tc_company_update_private_application_status(p_application_id uuid,p_company_id uuid,p_new_status text)
+RETURNS text LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $$
+DECLARE v_old text; v_candidate uuid; v_title text;
+BEGIN
+ IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
+ IF p_new_status NOT IN ('under_review','shortlisted','rejected') THEN RAISE EXCEPTION 'Invalid application status'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM public.companies c WHERE c.id=p_company_id AND c.owner_user_id=auth.uid())
+ AND NOT EXISTS(SELECT 1 FROM public.company_members cm WHERE cm.company_id=p_company_id AND cm.user_id=auth.uid() AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager','recruiter')) THEN RAISE EXCEPTION 'Company application permission required'; END IF;
+ SELECT a.status,a.candidate_id,j.job_title INTO v_old,v_candidate,v_title FROM public.private_job_applications a JOIN public.private_jobs j ON j.id=a.job_id WHERE a.id=p_application_id AND j.company_id=p_company_id FOR UPDATE OF a;
+ IF NOT FOUND THEN RAISE EXCEPTION 'Private job application not found'; END IF;
+ IF v_old IN ('withdrawn','rejected') THEN RAISE EXCEPTION 'This application is closed'; END IF;
+ IF v_old NOT IN ('applied','under_review','shortlisted') THEN RAISE EXCEPTION 'Application status cannot be changed'; END IF;
+ IF v_old=p_new_status THEN RETURN p_new_status; END IF;
+ UPDATE public.private_job_applications SET status=p_new_status,updated_at=now() WHERE id=p_application_id;
+ IF to_regclass('public.tc_notifications') IS NOT NULL THEN INSERT INTO public.tc_notifications(user_id,notification_type,title,body,related_application_id) VALUES(v_candidate,'application_status','Your application status was updated',coalesce(v_title,'Private Job')||' — '||replace(p_new_status,'_',' '),p_application_id); END IF;
+ RETURN p_new_status;
+END $$;
+
+CREATE OR REPLACE FUNCTION public.tc_company_update_international_application_status(p_application_id uuid,p_company_id uuid,p_new_status text)
+RETURNS text LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $$
+DECLARE v_old text; v_candidate uuid; v_title text;
+BEGIN
+ IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Login required'; END IF;
+ IF p_new_status NOT IN ('under_review','shortlisted','rejected') THEN RAISE EXCEPTION 'Invalid application status'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM public.companies c WHERE c.id=p_company_id AND c.owner_user_id=auth.uid())
+ AND NOT EXISTS(SELECT 1 FROM public.company_members cm WHERE cm.company_id=p_company_id AND cm.user_id=auth.uid() AND cm.member_status='active' AND cm.member_role IN ('owner','hr_manager','recruiter')) THEN RAISE EXCEPTION 'Company application permission required'; END IF;
+ SELECT a.status,a.candidate_id,j.job_title INTO v_old,v_candidate,v_title FROM public.international_job_applications a JOIN public.international_jobs j ON j.id=a.job_id WHERE a.id=p_application_id AND j.company_id=p_company_id FOR UPDATE OF a;
+ IF NOT FOUND THEN RAISE EXCEPTION 'International job application not found'; END IF;
+ IF v_old IN ('withdrawn','rejected') THEN RAISE EXCEPTION 'This application is closed'; END IF;
+ IF v_old NOT IN ('applied','under_review','shortlisted') THEN RAISE EXCEPTION 'Application status cannot be changed'; END IF;
+ IF v_old=p_new_status THEN RETURN p_new_status; END IF;
+ UPDATE public.international_job_applications SET status=p_new_status,updated_at=now() WHERE id=p_application_id;
+ IF to_regclass('public.tc_notifications') IS NOT NULL THEN INSERT INTO public.tc_notifications(user_id,notification_type,title,body,related_application_id) VALUES(v_candidate,'application_status','Your application status was updated',coalesce(v_title,'International Job')||' — '||replace(p_new_status,'_',' '),p_application_id); END IF;
+ RETURN p_new_status;
+END $$;
+
+REVOKE ALL ON FUNCTION public.tc_company_update_private_application_status(uuid,uuid,text) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION public.tc_company_update_international_application_status(uuid,uuid,text) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.tc_company_update_private_application_status(uuid,uuid,text),public.tc_company_update_international_application_status(uuid,uuid,text) TO authenticated;
