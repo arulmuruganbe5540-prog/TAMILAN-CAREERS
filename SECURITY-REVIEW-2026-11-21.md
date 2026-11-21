@@ -21,7 +21,7 @@ The repository's current public visibility is a separate concern from the securi
 - Fifteen authenticated-callable SECURITY DEFINER RPCs remain flagged by Security Advisor. Source review found caller identity and ownership/company-role checks on candidate and employer actions, and Super Admin checks on privileged review/publish actions. Do not revoke them in bulk because that can break candidate, employer, and admin workflows. Add positive and negative integration tests for every RPC.
 - The external-job-candidate review RPC was updated to call the shared `private.require_super_admin_mfa()` helper instead of maintaining a separate inline MFA check. Verification confirmed the RPC remains unavailable to `anon`, available to `authenticated` for its protected UI workflow, and uses the centralized MFA check.
 - Supabase Security Advisor reports leaked-password protection disabled. The connected TAMILAN CAREERS organization is currently on the Free plan. Current Supabase documentation says leaked-password protection requires Pro or above, so this setting cannot be enabled on the current plan. No paid upgrade was made.
-- The project currently has one Super Admin account and no verified MFA factor. Do not enforce mandatory MFA until the Super Admin has enrolled and tested a recovery authenticator; otherwise access may be locked out.
+- The project currently has one Super Admin account and no verified MFA factor. Database-level Super Admin access enforcement is now active: sensitive admin policies and privileged RPCs require a verified authenticator and an AAL2 session. The Admin Account Security page remains accessible so the Super Admin can enroll; most privileged admin data/actions are intentionally blocked until enrollment is complete.
 
 ## Changes made on 2026-11-21
 
@@ -34,6 +34,7 @@ The repository's current public visibility is a separate concern from the securi
 4. Updated the Admin Control Center to show a live MFA readiness warning and link to Admin Account Security.
 5. Improved the MFA setup page to recommend a second authenticator on a separate device as a recovery option.
 6. Standardized the external-job-candidate review RPC on the shared Super Admin MFA helper.
+7. Enforced mandatory MFA in the shared `private.is_super_admin()` and `private.require_super_admin_mfa()` helpers. Updated company-verification documents/requests, job-report moderation, and private verification-file policies to require the verified MFA session.
 
 ## Repository secret search limitations
 
@@ -45,7 +46,7 @@ The browser-facing Supabase publishable key is not a secret. Never put a Supabas
 
 ## Required next actions
 
-1. Enroll and test Super Admin MFA, including a recovery method, before making MFA mandatory for all admin access.
+1. Complete Super Admin MFA enrollment now. The database enforcement is already active; use the Admin Account Security page, verify the first authenticator, then add a second authenticator on a separate device as a recovery option. Test a fresh login and confirm the session reaches AAL2.
 2. Leaked-password protection requires Supabase Pro or above according to current documentation. Do not upgrade automatically; the project owner must decide whether to pay for that plan. Keep strong password requirements and avoid password reuse in the meantime.
 3. Review Auth rate limits and abuse protection in the Supabase Dashboard.
 4. Test every authenticated SECURITY DEFINER RPC with an authorized user and an unauthorized user.
