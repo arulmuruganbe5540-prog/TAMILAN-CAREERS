@@ -42,8 +42,10 @@ class AuditParser(HTMLParser):
         if a.get("id"):
             self.ids.append(a["id"])
         if tag == "script" and not a.get("src"):
-            self.script_open = True
-            self.current_script = []
+            script_type = a.get("type", "text/javascript").lower().split(";", 1)[0].strip()
+            if script_type in ("text/javascript", "application/javascript", "module", "text/ecmascript", "application/ecmascript"):
+                self.script_open = True
+                self.current_script = []
         if tag == "title":
             self.title_open = True
         if tag == "meta" and a.get("name", "").lower() == "viewport":
