@@ -69,7 +69,7 @@ async function loadOptions(){
  ]);
  if(cats.error||countries.error)throw cats.error||countries.error;
  $("category_id").innerHTML='<option value="">Select category</option>'+(cats.data||[]).map(x=>'<option value="'+esc(x.id)+'">'+esc(x.category_name)+'</option>').join("");
- $("country_name").innerHTML='<option value="">Select country</option>'+(countries.data||[]).map(x=>'<option>'+esc(x.country_name)+'</option>').join("");
+ $("country_name").innerHTML='<option value="">Select country</option>'+(countries.data||[]).filter(x=>String(x.country_name).trim().toLowerCase()!=="india").map(x=>'<option>'+esc(x.country_name)+'</option>').join("");
 }
 function value(id){return $(id)?$(id).value.trim():""}
 function collect(status){
