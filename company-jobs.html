@@ -32,18 +32,30 @@ async function init(){
 async function loadJobs(){
  const id=$("company").value;if(!id)return;
  $("jobs").innerHTML='<div class="panel">Loading jobs...</div>';
- const {data:rows,error}=await db.from("jobs").select("id,job_title,job_code,location,country_name,status,created_at,published_at,application_deadline,vacancies,job_kind").eq("company_id",id).order("created_at",{ascending:false});
- if(error){$("jobs").innerHTML='<div class="notice">Unable to load jobs: '+esc(error.message)+'</div>';return}
- const jobs=rows||[];let appTotal=0;
- const items=await Promise.all(jobs.map(async j=>{const {count,error:ce}=await db.from("job_applications").select("id",{count:"exact",head:true}).eq("job_id",j.id);return {job:j,count:ce?null:(count||0),error:ce}}));
- items.forEach(x=>{if(x.count!==null)appTotal+=x.count});
- $("total").textContent=jobs.length;$("published").textContent=jobs.filter(j=>j.status==="published").length;$("closed").textContent=jobs.filter(j=>j.status==="closed").length;$("applications").textContent=appTotal;
- if(!jobs.length){$("jobs").innerHTML='<div class="empty">There are no job postings for this company yet. You can create a new job.</div>';return}
+
+ const specs=[
+  {system:"private",jobs:"private_jobs",applications:"private_job_applications"},
+  {system:"international",jobs:"international_jobs",applications:"international_job_applications"}
+ ];
+ const loaded=await Promise.all(specs.map(async spec=>{
+  const result=await db.from(spec.jobs).select("id,job_title,job_code,location,country_name,status,created_at,published_at,application_deadline,vacancies,job_sector,company_id").eq("company_id",id).order("created_at",{ascending:false});
+  return {spec,rows:result.data||[],error:result.error};
+ }));
+ const failed=loaded.find(x=>x.error);
+ if(failed){$("jobs").innerHTML='<div class="notice">Unable to load '+esc(failed.spec.system)+' jobs: '+esc(failed.error.message)+'</div>';return}
+ const jobs=loaded.flatMap(x=>x.rows.map(j=>({...j,_system:x.spec.system,_applicationTable:x.spec.applications})));
+ const items=await Promise.all(jobs.map(async j=>{
+  const {count,error:ce}=await db.from(j._applicationTable).select("id",{count:"exact",head:true}).eq("job_id",j.id);
+  return {job:j,count:ce?null:(count||0),error:ce};
+ }));
+ const appTotal=items.reduce((sum,x)=>sum+(x.count||0),0);
+ $("total").textContent=jobs.length;$("published").textContent=jobs.filter(j=>j.status==="published").length;$("closed").textContent=jobs.filter(j=>["closed","paused"].includes(j.status)).length;$("applications").textContent=appTotal;
+ if(!jobs.length){$("jobs").innerHTML='<div class="empty">There are no Private or International job postings linked to this company yet.</div>';return}
  const role=memberships.find(m=>m.company_id===id)?.member_role,canManage=["owner","hr_manager"].includes(role);
- $("jobs").innerHTML=items.map(x=>{const j=x.job,closed=j.status==="closed",manageable=["published","closed"].includes(j.status),expired=j.application_deadline&&new Date(j.application_deadline)<=new Date();
- return '<article class="job"><div class="jobtop"><h2>'+esc(j.job_title)+'</h2><span class="tag '+(j.status==="published"?"published":closed?"closed":"")+'">'+esc(j.status)+'</span></div><div class="meta">Location: '+esc(j.location||"—")+' · Country: '+esc(j.country_name||"—")+' · Vacancies: '+esc(j.vacancies??"—")+'</div><div class="meta">Created: '+date(j.created_at)+' · Published: '+date(j.published_at)+' · Application Deadline: '+date(j.application_deadline)+'</div><div class="meta">Job ID: '+esc(j.job_code||j.id)+' · Applications: '+(x.count===null?"Not available":x.count)+'</div><div class="actions"><a class="btn secondary" href="company-applicants.html">Manage Applications</a>'+(canManage&&manageable?'<button class="btn '+(!closed?"danger":"")+'" data-job="'+esc(j.id)+'" data-next="'+(closed?"published":"closed")+'" '+(closed&&expired?"disabled":"")+'>'+(closed?"Republish":"Close Job Applications")+'</button>':"")+'</div>'+(closed&&expired?'<p class="muted">This job cannot be reopened because its application deadline has passed.</p>':"")+'</article>'
+ $("jobs").innerHTML=items.map(x=>{const j=x.job,closed=["closed","paused"].includes(j.status),manageable=["published","closed","paused"].includes(j.status),expired=j.application_deadline&&new Date(j.application_deadline)<=new Date();
+ return '<article class="job"><div class="jobtop"><h2>'+esc(j.job_title)+'</h2><span class="tag '+(j.status==="published"?"published":closed?"closed":"")+'">'+esc(j.status)+'</span></div><div class="meta">Location: '+esc(j.location||"—")+' · Country: '+esc(j.country_name||"—")+' · Vacancies: '+esc(j.vacancies??"—")+'</div><div class="meta">Created: '+date(j.created_at)+' · Published: '+date(j.published_at)+' · Application Deadline: '+date(j.application_deadline)+'</div><div class="meta">Job ID: '+esc(j.job_code||j.id)+' · Applications: '+(x.count===null?"Not available":x.count)+'</div><div class="actions"><a class="btn secondary" href="company-applicants.html">Manage Applications</a>'+(canManage&&manageable?'<button class="btn '+(!closed?"danger":"")+'" data-job="'+esc(j.id)+'" data-system="'+esc(j._system)+'" data-next="'+(closed?"published":"closed")+'" '+(closed&&expired?"disabled":"")+'>'+(closed?"Republish":"Close Job Applications")+'</button>':"")+'</div>'+(closed&&expired?'<p class="muted">This job cannot be reopened because its application deadline has passed.</p>':"")+'</article>'
  }).join("");
- $("jobs").querySelectorAll("[data-job]").forEach(btn=>btn.addEventListener("click",async()=>{const next=btn.dataset.next,verb=next==="closed"?"close":"republish";if(!confirm("Do you want to "+verb+" this job posting?"))return;btn.disabled=true;btn.textContent="Updating...";try{const {data,error}=await db.rpc("tc_company_manage_published_job",{p_job_id:btn.dataset.job,p_new_status:next});if(error)throw error;const {data:indexData,error:indexError}=await db.functions.invoke("google-indexing-notify",{body:{job_id:btn.dataset.job,action:next==="closed"?"URL_DELETED":"URL_UPDATED"}});const indexNote=indexData?.ok?" The update was also sent to Google Search.": " Google Search notification was not sent: "+(indexData?.error||indexError?.message||"The configuration is pending.");msg((next==="closed"?"Job posting closed. New applications are stopped.":"Job posting republished.")+indexNote);await loadJobs()}catch(e){alert("Unable to update: "+(e.message||e));btn.disabled=false;btn.textContent=next==="closed"?"Close Job Applications":"Republish"}}));
+ $("jobs").querySelectorAll("[data-job]").forEach(btn=>btn.addEventListener("click",async()=>{const next=btn.dataset.next,verb=next==="closed"?"close":"republish";if(!confirm("Do you want to "+verb+" this job posting?"))return;btn.disabled=true;btn.textContent="Updating...";try{const fn=btn.dataset.system==="international"?"tc_company_manage_international_job":"tc_company_manage_private_job";const {data,error}=await db.rpc(fn,{p_job_id:btn.dataset.job,p_new_status:next});if(error)throw error;msg(next==="closed"?"Job posting closed. New applications are stopped.":"Job posting republished.");await loadJobs()}catch(e){alert("Unable to update: "+(e.message||e));btn.disabled=false;btn.textContent=next==="closed"?"Close Job Applications":"Republish"}}));
 }
 $("company").addEventListener("change",()=>loadJobs().catch(e=>msg(e.message,true)));
 init().catch(e=>msg("Unable to open page: "+(e.message||e),true));
