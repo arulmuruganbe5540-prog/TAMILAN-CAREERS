@@ -41,7 +41,7 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
 <script>
 (function(){
  const db=window.supabase.createClient("https://qkmljuuusfjowexvybvy.supabase.co","sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2");
- const root=document.getElementById("content"),id=new URLSearchParams(location.search).get("id");
+ const params=new URLSearchParams(location.search),root=document.getElementById("content"),id=params.get("id"),system=params.get("system")||"";
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const pick=(o,keys)=>{for(const k of keys)if(o[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return ""};
  function deadline(v){if(!v)return null;const s=String(v),m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3],23,59,59,999);const d=new Date(v);return Number.isNaN(d.getTime())?null:d}
@@ -51,13 +51,14 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
  function panel(title,body){return '<section class="panel"><div class="kicker">JOB INFORMATION</div><h2>'+esc(title)+'</h2>'+body+'</section>'}
  async function show(){
   if(!id){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="Job ID is missing. Please select a job from the Find Jobs page.";return}
-  const {data:j,error}=await db.from("jobs").select("*").eq("id",id).maybeSingle();
+  const table=system==="government"?"government_jobs":system==="private"?"private_jobs":system==="international"?"international_jobs":"jobs";
+   const {data:j,error}=await db.from(table).select("*").eq("id",id).maybeSingle();
   if(error||!j){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="This job could not be found.";return}
   if(String(pick(j,["status"])).toLowerCase()!=="published"){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="This job posting is not currently available to the public.";return}
   const end=deadline(pick(j,["application_deadline","deadline","last_date"]));
   if(end&&end.getTime()<Date.now()){document.querySelector('meta[name="robots"]')?.setAttribute("content","noindex,follow");root.textContent="The application period for this job has ended. Browse new opportunities on the Find Jobs page.";return}
   let company=pick(j,["employer_name","company_name"]),companyVerified=false;if(j.company_id){try{const c=await db.from("companies").select("company_name,verification_status").eq("id",j.company_id).maybeSingle();if(c.data?.company_name)company=c.data.company_name;companyVerified=c.data?.verification_status==="verified"}catch(e){}}
-  const title=englishText(pick(j,["job_title","title"]))||"Job title not available in English",jobKind=pick(j,["job_kind"]),jobKindLabel=jobKind==="government"?"Government Job":jobKind==="foreign"?"Overseas Job":"Private Job",loc=englishText(pick(j,["location","job_location","work_location"])),type=englishText(String(pick(j,["employment_type","job_type"])).replace(/_/g," ")),work=englishText(pick(j,["workplace_type"])),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹",period=pick(j,["salary_period"])||"monthly";
+  const title=englishText(pick(j,["job_title","title"]))||"Job title not available in English",jobKind=system==="government"?"government":system==="private"?"private":system==="international"?"international":pick(j,["job_kind"]),jobKindLabel=jobKind==="government"?"Government Job":jobKind==="international"||jobKind==="foreign"?"International Job":"Private Job",loc=englishText(pick(j,["location","job_location","work_location"])),type=englishText(String(pick(j,["employment_type","job_type"])).replace(/_/g," ")),work=englishText(pick(j,["workplace_type"])),min=pick(j,["salary_min"]),max=pick(j,["salary_max"]),currency=pick(j,["salary_currency"])||"₹",period=pick(j,["salary_period"])||"monthly";
   const salarySuffix=p=>p==="yearly"?" / year":p==="daily"?" / day":p==="hourly"?" / hour":" / month";const salary=min||max?currency+" "+(min||"")+(min&&max?" – ":"")+(max||"")+salarySuffix(period):"Not specified by employer";
   const apply=pick(j,["application_url"])||('login.html?next='+encodeURIComponent("apply.html?job="+id));
   const details=[fact("Job category",jobKindLabel),fact("Company / Department",company,true),fact("Recruiting authority / Department",pick(j,["recruitment_authority"])),fact("Country",pick(j,["country_name"])),fact("Notification number",pick(j,["notification_number"])),fact("Exam year",pick(j,["exam_year"])),fact("Notification date",pick(j,["notification_date"])),fact("Age limit",pick(j,["age_limit"])),fact("Application fee",pick(j,["application_fee"])),fact("Job location",loc),fact("Employment type",type),fact("Work arrangement",work),fact("Department",pick(j,["category","job_category"])),fact("Vacancies",pick(j,["openings","vacancies"])),fact("Experience",pick(j,["experience","experience_required","experience_min"])),fact("Education",pick(j,["education","education_level"])),fact("Age limit",pick(j,["age_limit","age_range"])),fact("Salary",salary),fact("Application deadline",end?date(pick(j,["application_deadline","deadline","last_date"])):"Not specified"),fact("Contact",pick(j,["contact_email","application_email"]))].join("");
@@ -78,7 +79,8 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
    msgStyle.textContent="#jobPostMessages .job-msg{border:1px solid #e2e9f2;border-radius:10px;padding:12px;margin:10px 0;background:#f7f9fc}#jobPostMessages .job-msg-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#174777;font-size:12px;font-weight:800}#jobPostMessages .job-msg-body{white-space:pre-wrap;overflow-wrap:anywhere;color:#43536a;font-size:13px;margin-top:7px}#jobPostMessages textarea{width:100%;padding:12px;border:1px solid #d5dfeb;border-radius:9px;font:inherit;resize:vertical}#jobPostMessages .job-msg-help{font-size:11px;color:#718098;margin:6px 0 10px}";
    document.head.appendChild(msgStyle);
    async function loadJobMessages(){
-    const {data,error}=await db.from("job_post_messages").select("id,sender_email,message,created_at").eq("job_id",id).eq("status","visible").order("created_at",{ascending:false}).limit(100);
+    const messageTable=system==="government"?"government_job_post_messages":system==="private"?"private_job_post_messages":system==="international"?"international_job_post_messages":"job_post_messages";
+     const {data,error}=await db.from(messageTable).select("id,sender_email,message,created_at").eq("job_id",id).eq("status","visible").order("created_at",{ascending:false}).limit(100);
     if(error){messageList.innerHTML='<p class="copy">Messages are temporarily unavailable.</p>';return}
     if(!data?.length){messageList.innerHTML='<p class="copy">No messages yet. Be the first to ask a question about this job.</p>';return}
     messageList.innerHTML=data.map(m=>'<article class="job-msg"><div class="job-msg-head"><span>'+esc(m.sender_email||"Registered member")+'</span><time>'+esc(new Date(m.created_at).toLocaleString("en-IN"))+'</time></div><div class="job-msg-body">'+esc(m.message)+'</div></article>').join("");
@@ -86,7 +88,7 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
    async function setupJobMessageComposer(){
     const {data,error}=await db.auth.getUser();
     if(error||!data?.user){
-     composer.innerHTML='<div class="job-msg-help">You must be logged in to send a message. Messages already approved for display can be read without logging in.</div><a class="btn primary" href="login.html?next='+encodeURIComponent("job-details.html?id="+id)+'">Log in to Send a Message</a>';
+     composer.innerHTML='<div class="job-msg-help">You must be logged in to send a message. Messages already approved for display can be read without logging in.</div><a class="btn primary" href="login.html?next='+encodeURIComponent("job-details.html?id="+id+(system?"&system="+system:""))+'">Log in to Send a Message</a>';
      return;
     }
     composer.innerHTML='<label for="jobMessageText" style="display:block;font-weight:800;font-size:13px;margin:14px 0 7px">Your Message</label><textarea id="jobMessageText" rows="4" maxlength="2000" placeholder="Write your question or message about this job..." required></textarea><div class="job-msg-help">Your registered account email will be shown beside your message. Maximum 2,000 characters.</div><div class="actions"><button class="btn primary" id="sendJobMessage" type="button">Send Message</button></div><p id="jobMessageStatus" class="copy" role="status"></p>';
@@ -97,7 +99,8 @@ footer{margin-top:30px;background:#09152c;color:#d3deef;padding:23px;text-align:
      button.disabled=true;status.textContent="Sending...";
      try{
       const {data:current,error:authError}=await db.auth.getUser();if(authError||!current?.user)throw new Error("Your login session has expired. Please log in again.");
-      const {error:insertError}=await db.from("job_post_messages").insert({job_id:id,user_id:current.user.id,message});
+      const messageTable=system==="government"?"government_job_post_messages":system==="private"?"private_job_post_messages":system==="international"?"international_job_post_messages":"job_post_messages";
+       const {error:insertError}=await db.from(messageTable).insert({job_id:id,user_id:current.user.id,message});
       if(insertError)throw insertError;
       field.value="";status.textContent="Your message has been sent.";
       await loadJobMessages();
