@@ -20,27 +20,42 @@ async function init(){
  if(error||!user){location.replace("login.html?next="+encodeURIComponent("my-applications.html"));return}
  const {data:role,error:roleErr}=await db.from("user_roles").select("role").eq("user_id",user.id).maybeSingle();
  if(roleErr||role?.role!=="job_seeker"){$("summary").textContent="Sign in with a Job Seeker account to view your applications.";return}
- const {data:rows,error:appErr}=await db.from("job_applications").select("id,job_id,status,applied_at,jobs(job_title)").eq("candidate_id",user.id).order("applied_at",{ascending:false});
- if(appErr){$("summary").className="error";$("summary").textContent="Unable to load applications. The database table or RLS setup may be incomplete. "+appErr.message;return}
- const items=rows||[];$("summary").textContent="Total applications: "+items.length;
+
+ const specs=[
+  {system:"government",apps:"government_job_applications",jobs:"government_jobs",withdraw:"tc_candidate_withdraw_government_application"},
+  {system:"private",apps:"private_job_applications",jobs:"private_jobs",withdraw:"tc_candidate_withdraw_private_application"},
+  {system:"international",apps:"international_job_applications",jobs:"international_jobs",withdraw:"tc_candidate_withdraw_international_application"},
+  {system:"legacy",apps:"job_applications",jobs:"jobs",withdraw:"tc_candidate_withdraw_application"}
+ ];
+ const loaded=await Promise.all(specs.map(async x=>{
+  const q=await db.from(x.apps).select("id,job_id,candidate_id,status,applied_at").eq("candidate_id",user.id).order("applied_at",{ascending:false});
+  if(q.error)return {error:q.error,system:x.system};
+  const ids=[...new Set((q.data||[]).map(a=>a.job_id))];
+  const j=ids.length?await db.from(x.jobs).select("id,job_title").in("id",ids):{data:[],error:null};
+  if(j.error)return {error:j.error,system:x.system};
+  const map=new Map((j.data||[]).map(z=>[z.id,z]));
+  return {system:x.system,withdraw:x.withdraw,rows:(q.data||[]).map(a=>({...a,_system:x.system,job:map.get(a.job_id)||null}))};
+ }));
+ const failed=loaded.find(x=>x.error);
+ if(failed){$("summary").className="error";$("summary").textContent="Unable to load "+failed.system+" applications: "+failed.error.message;return}
+ const items=loaded.flatMap(x=>x.rows||[]).sort((a,b)=>new Date(b.applied_at)-new Date(a.applied_at));
+ $("summary").textContent="Total applications: "+items.length;
  if(!items.length){$("list").innerHTML='<div class="empty">You have not applied for any jobs yet. <br><a class="link" href="jobs.html">Browse Jobs →</a></div>';return}
  $("list").innerHTML=items.map(a=>{
-  const j=Array.isArray(a.jobs)?a.jobs[0]:a.jobs;
-  const withdrawButton=canWithdraw(a.status)?'<button class="withdraw" type="button" data-withdraw="'+esc(a.id)+'">Withdraw Application</button>':'';
-  return '<article class="card item"><h2>'+esc(j?.job_title||"Job posting")+'</h2><div class="row"><span class="pill">'+esc(statusText[a.status]||a.status||"Status unavailable")+'</span><span class="muted">Applied on: '+esc(a.applied_at?new Date(a.applied_at).toLocaleDateString("en-US"):"—")+'</span><a class="link" href="job-details.html?id='+encodeURIComponent(a.job_id)+'">Job Details →</a>'+withdrawButton+'</div><div class="actionmsg" id="msg-'+esc(a.id)+'"></div></article>';
+  const system=a._system==="legacy"?"":a._system;
+  const details='job-details.html?id='+encodeURIComponent(a.job_id)+(system?'&system='+encodeURIComponent(system):'');
+  const withdraw=canWithdraw(a.status)?'<button class="withdraw" type="button" data-withdraw="'+esc(a.id)+'" data-system="'+esc(a._system)+'">Withdraw Application</button>':'';
+  return '<article class="card item"><h2>'+esc(a.job?.job_title||"Job posting")+'</h2><div class="row"><span class="pill">'+esc(a._system==="legacy"?"Legacy":a._system.charAt(0).toUpperCase()+a._system.slice(1))+'</span><span class="pill">'+esc(statusText[a.status]||a.status||"Status unavailable")+'</span><span class="muted">Applied on: '+esc(a.applied_at?new Date(a.applied_at).toLocaleDateString("en-IN"):"—")+'</span><a class="link" href="'+details+'">Job Details →</a>'+withdraw+'</div><div class="actionmsg" id="msg-'+esc(a.id)+'"></div></article>';
  }).join("");
  $("list").addEventListener("click",async event=>{
   const button=event.target.closest("[data-withdraw]");
   if(!button)return;
-  const id=button.dataset.withdraw;
+  const system=button.dataset.system,id=button.dataset.withdraw;
   if(!confirm("Do you want to withdraw this application? This action cannot be undone."))return;
+  const spec=specs.find(x=>x.system===system);
   button.disabled=true;button.textContent="Processing...";
-  const {error}=await db.rpc("tc_candidate_withdraw_application",{p_application_id:id});
-  if(error){
-   button.disabled=false;button.textContent="Withdraw Application";
-   const msg=document.getElementById("msg-"+id);if(msg)msg.textContent="Unable to process: "+error.message;
-   return;
-  }
+  const {error}=await db.rpc(spec.withdraw,{p_application_id:id});
+  if(error){button.disabled=false;button.textContent="Withdraw Application";const el=document.getElementById("msg-"+id);if(el)el.textContent="Unable to process: "+error.message;return;}
   await init();
  });
 }
