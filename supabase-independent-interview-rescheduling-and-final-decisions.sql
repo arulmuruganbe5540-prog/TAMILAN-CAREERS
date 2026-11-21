@@ -61,7 +61,7 @@ CREATE OR REPLACE FUNCTION private.tc_cancel_independent_interviews_on_applicati
  RETURNS trigger
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO ''
+ SET search_path = ''
 AS $function$
 DECLARE v_row record; v_actor uuid:=(SELECT auth.uid());
 BEGIN
@@ -92,7 +92,7 @@ CREATE OR REPLACE FUNCTION private.tc_company_finalise_independent_application(p
  RETURNS text
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO ''
+ SET search_path = ''
 AS $function$
 DECLARE v_user uuid:=(SELECT auth.uid()); v_old text; v_candidate uuid; v_job_company uuid; v_title text;
 BEGIN
@@ -133,7 +133,7 @@ CREATE OR REPLACE FUNCTION private.tc_create_interview_schedule_proposal(p_syste
  RETURNS uuid
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO ''
+ SET search_path = ''
 AS $function$
 DECLARE
  v_user uuid:=(SELECT auth.uid()); v_candidate uuid; v_company uuid; v_application uuid;
@@ -204,7 +204,7 @@ CREATE OR REPLACE FUNCTION private.tc_log_independent_interview_schedule_change(
  RETURNS trigger
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO ''
+ SET search_path = ''
 AS $function$
 DECLARE v_actor uuid:=(SELECT auth.uid());
  v_old jsonb; v_new jsonb;
@@ -233,7 +233,7 @@ CREATE OR REPLACE FUNCTION private.tc_respond_interview_schedule_proposal(p_syst
  RETURNS text
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO ''
+ SET search_path = ''
 AS $function$
 DECLARE v_user uuid:=(SELECT auth.uid()); v_candidate uuid; v_company uuid; v_interview uuid; v_application uuid;
  v_type text; v_status text; v_scheduled timestamptz; v_zone text; v_duration integer; v_mode text; v_url text; v_location text; v_message text; v_title text;
@@ -296,70 +296,70 @@ $function$
 CREATE OR REPLACE FUNCTION public.tc_candidate_propose_international_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('international',p_interview_id,'candidate_alternative',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_candidate_propose_private_interview_date(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('private',p_interview_id,'candidate_alternative',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_candidate_respond_international_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('international',p_proposal_id,p_response,p_response_note) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_candidate_respond_private_interview_reschedule(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('private',p_proposal_id,p_response,p_response_note) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_company_finalise_international_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_company_finalise_independent_application('international',p_application_id,p_company_id,p_new_status,p_note) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_company_finalise_private_application(p_application_id uuid, p_company_id uuid, p_new_status text, p_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_company_finalise_independent_application('private',p_application_id,p_company_id,p_new_status,p_note) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_company_propose_international_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('international',p_interview_id,'employer_reschedule',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_company_propose_private_interview_reschedule(p_interview_id uuid, p_scheduled_at timestamp with time zone, p_timezone text, p_duration_minutes integer, p_interview_mode text, p_meeting_url text, p_location text, p_message text DEFAULT ''::text)
  RETURNS uuid
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_create_interview_schedule_proposal('private',p_interview_id,'employer_reschedule',p_scheduled_at,p_timezone,p_duration_minutes,p_interview_mode,p_meeting_url,p_location,p_message) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_company_respond_international_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('international',p_proposal_id,p_response,p_response_note) $function$
 
 
 CREATE OR REPLACE FUNCTION public.tc_company_respond_private_interview_date_proposal(p_proposal_id uuid, p_response text, p_response_note text DEFAULT ''::text)
  RETURNS text
  LANGUAGE sql
- SET search_path TO ''
+ SET search_path = ''
 AS $function$ SELECT private.tc_respond_interview_schedule_proposal('private',p_proposal_id,p_response,p_response_note) $function$
 
 
