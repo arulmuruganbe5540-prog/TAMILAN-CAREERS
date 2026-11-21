@@ -16,7 +16,7 @@ main{max-width:1180px;margin:25px auto;padding:0 16px}.hero{padding:28px;border-
 <main><section class="hero"><h1>International Jobs</h1><p>Explore published overseas job opportunities by country. Review the employer, salary, eligibility and official application information before applying.</p></section>
 <div class="safety"><b>Recruitment safety:</b> TAMILAN CAREERS displays published listings only. Verify the employer, visa terms and official application channel independently. Never pay an advance fee to an unverified agent or share sensitive documents with unknown contacts.</div>
 <section class="filters" aria-label="Search international jobs"><input id="search" type="search" placeholder="Search job title, employer or location" aria-label="Search jobs"><select id="country" aria-label="Filter by country"><option value="">All Countries</option><option>United Arab Emirates</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option><option>Oman</option><option>Singapore</option><option>Malaysia</option><option>Canada</option><option>Australia</option><option>United Kingdom</option><option>Germany</option><option>France</option><option>Japan</option><option>Other</option></select><select id="sort" aria-label="Sort jobs"><option value="newest">Newest First</option><option value="salary">Salary: High to Low</option><option value="deadline">Closing Date</option></select></section>
-<div id="count" class="count" aria-live="polite">Loading international jobs…</div><div id="results" class="table-wrap"><div class="empty">Loading published international job records…</div></div>
+<div id="count" class="count" aria-live="polite">Loading international jobs…</div><div id="results" class="table-wrap"><div class="empty">Loading published international job records…</div></div><nav id="pagination" aria-label="International job pages" style="display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0" hidden><button type="button" id="previousPage" class="view" style="border:0;cursor:pointer">Previous</button><span id="pageIndicator" class="muted" aria-live="polite"></span><button type="button" id="nextPage" class="view" style="border:0;cursor:pointer">Next</button></nav>
 <p class="muted">Listings appear here only after they are published through employer and Admin review. No sample or unverified vacancy is displayed.</p></main>
 <footer>© 2026 TAMILAN CAREERS · WWW.TAMILANCAREERS.IN</footer>
 <script>
@@ -28,6 +28,8 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const pick=(o,keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&v!=="")return v}return ""};
 const english=v=>{const s=String(v??"").trim();return Array.from(s).some(c=>/\p{L}/u.test(c)&&!/\p{Script=Latin}/u.test(c))?"":s};
 let jobs=[];
+let currentPage=1;
+const PAGE_SIZE=10;
 function date(v){if(!v)return "Not specified";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}
 function render(){
  const q=$("search").value.trim().toLowerCase(),country=$("country").value.toLowerCase();
@@ -40,8 +42,16 @@ function render(){
  else if($("sort").value==="deadline")rows.sort((a,b)=>new Date(pick(a,["application_deadline","deadline"])||"2999-12-31")-new Date(pick(b,["application_deadline","deadline"])||"2999-12-31"));
  else rows.sort((a,b)=>new Date(pick(b,["published_at","created_at"])||0)-new Date(pick(a,["published_at","created_at"])||0));
  $("count").textContent=rows.length+(rows.length===1?" verified international job":" verified international jobs");
+ const pageCount=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));
+ currentPage=Math.min(Math.max(1,currentPage),pageCount);
+ const pageRows=rows.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
+ const pager=$("pagination");
+ pager.hidden=rows.length<=PAGE_SIZE;
+ $("pageIndicator").textContent="Page "+currentPage+" of "+pageCount+" · "+rows.length+" jobs";
+ $("previousPage").disabled=currentPage<=1;
+ $("nextPage").disabled=currentPage>=pageCount;
  if(!rows.length){$("results").innerHTML='<div class="empty">No verified international jobs are available right now. Please check again later.</div>';return}
- $("results").innerHTML='<table><thead><tr><th>Job Title / Employer</th><th>Country</th><th>Location</th><th>Salary</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody>'+rows.map(j=>{
+ $("results").innerHTML='<table><thead><tr><th>Job Title / Employer</th><th>Country</th><th>Location</th><th>Salary</th><th>Qualification</th><th>Last Date</th><th>Details</th></tr></thead><tbody>'+pageRows.map(j=>{
   const id=pick(j,["id","job_id"]),title=english(pick(j,["job_title","title"]))||"Job title not available in English",company=english(pick(j,["company_name","employer_name"]))||"Employer not specified",country=english(pick(j,["country_name","country"]))||"Not specified",loc=english(pick(j,["location","job_location","work_location"]))||"Not specified",currency=pick(j,["salary_currency"])||"",lo=pick(j,["salary_min"]),hi=pick(j,["salary_max"]),period=pick(j,["salary_period"])||"monthly",salary=lo||hi?currency+" "+(lo||"")+(lo&&hi?" – ":"")+(hi||"")+" / "+period:"Not specified",edu=english(pick(j,["education_level","education"]))||"As specified by employer",deadline=pick(j,["application_deadline","deadline","last_date"]);
   return '<tr><td><b>'+esc(title)+'</b><br><span class="muted">'+esc(company)+'</span></td><td>'+esc(country)+'</td><td>'+esc(loc)+'</td><td>'+esc(salary)+'</td><td>'+esc(edu)+'</td><td>'+esc(date(deadline))+'</td><td><a class="view" href="job-summary.html?type=job&id='+encodeURIComponent(id)+'">View Summary →</a></td></tr>';
  }).join("")+'</tbody></table>';
@@ -54,7 +64,9 @@ async function init(){
   render();
  }catch(e){$("count").textContent="International jobs could not be loaded";$("results").innerHTML='<div class="empty">The job service is temporarily unavailable. Please try again later.</div>'}
 }
-["search","country","sort"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",render));
+["search","country","sort"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",()=>{currentPage=1;render()}));
+$("previousPage").addEventListener("click",()=>{if(currentPage>1){currentPage--;render();$("results").scrollIntoView({behavior:"smooth",block:"start"})}});
+$("nextPage").addEventListener("click",()=>{currentPage++;render();$("results").scrollIntoView({behavior:"smooth",block:"start"})}});
 init();
 })();
 </script><script src="assets/site-protection.js" defer></script></body></html>
