@@ -18,7 +18,7 @@ main{max-width:900px;margin:28px auto;padding:0 16px}.crumb{font-size:12px;color
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (async function(){
-const params=new URLSearchParams(location.search),id=params.get("id"),type=params.get("type")||"job";
+const params=new URLSearchParams(location.search),id=params.get("id"),type=params.get("type")||"job",system=params.get("system")||"";
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pick=(o,keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&v!=="")return v}return ""};
 function fact(label,value){return '<div class="fact"><small>'+esc(label)+'</small><b>'+esc(value||"See official notification")+'</b></div>'}
@@ -30,8 +30,9 @@ if(type==="notice"){
 const result=await db.from("government_notices").select("*").eq("id",id).eq("is_active",true).maybeSingle();if(result.error)throw result.error;row=result.data;
 if(row)fullUrl="government-notice-details.html?id="+encodeURIComponent(id);
 }else{
-const result=await db.from("jobs").select("*").eq("id",id).eq("status","published").maybeSingle();if(result.error)throw result.error;row=result.data;
-if(row)fullUrl="job-details.html?id="+encodeURIComponent(id);
+const table=system==="government"?"government_jobs":system==="private"?"private_jobs":system==="international"?"international_jobs":"jobs";
+const result=await db.from(table).select("*").eq("id",id).eq("status","published").maybeSingle();if(result.error)throw result.error;row=result.data;
+if(row)fullUrl="job-details.html?id="+encodeURIComponent(id)+(system?"&system="+encodeURIComponent(system):"");
 }
 if(!row)throw new Error("This published job or notice is no longer available.");
 const d=row.details&&typeof row.details==="object"?row.details:{};
@@ -39,7 +40,7 @@ const title=pick(row,["title","job_title","post_name"])||"Recruitment Notice";
 const authority=pick(d,["authority","department"])||pick(row,["recruitment_authority","employer_name","company_name"])||"Government Department";
 $("title").textContent=title;$("authority").textContent=authority;
 const fields=[
-["Job Type",type==="notice"?"Verified Government Notice":pick(row,["job_kind"])==="foreign"?"International Job":pick(row,["job_kind"])||"Government Job"],
+["Job Type",type==="notice"?"Verified Government Notice":system==="government"?"Government Job":system==="private"?"Private Job":system==="international"?"International Job":pick(row,["job_kind"])||"Government Job"],
 ["Country",pick(row,["country_name","country"])],
 ["Location",pick(d,["state","location"])||pick(row,["location","job_location"])],
 ["Salary",pick(row,["salary_currency"])?pick(row,["salary_currency"])+" "+pick(row,["salary_min"])+" – "+pick(row,["salary_max"])+" / "+(pick(row,["salary_period"])||"monthly"):""],
