@@ -12,7 +12,7 @@ main{max-width:1100px;margin:22px auto;padding:0 16px 40px}.crumb{font-size:13px
 h2{color:#101d3a;font-size:22px;margin:10px 0}.intro{color:#53627a}
 .status{padding:13px;background:#eef6ff;border-left:4px solid #176b9e;margin:16px 0;color:#234967}
 .list{display:grid;gap:12px}.job{background:#fff;border:1px solid #dce4ef;border-radius:8px;padding:16px}
-.job h3{margin:0 0 5px;color:#12345a;font-size:18px}.meta{color:#53627a;font-size:13px;margin:4px 0}
+.job h3{margin:0 0 5px;color:#12345a;font-size:18px}.job-title{color:#12345a;text-decoration:underline;text-underline-offset:3px}.meta{color:#53627a;font-size:13px;margin:4px 0}
 .desc{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;color:#34445b}
 .actions{display:flex;gap:10px;flex-wrap:wrap}.actions a{display:inline-block;padding:9px 13px;border-radius:5px;background:#176b9e;color:white;text-decoration:none;font-weight:700;font-size:13px}
 .actions a.secondary{background:#eaf0f8;color:#17466c}
@@ -52,7 +52,7 @@ function render(){
  const apply=safeUrl(j.application_url),site=safeUrl(j.official_website_url);
  const salary=j.salary_min!=null||j.salary_max!=null?[j.salary_currency||'',j.salary_min??'—','–',j.salary_max??'—'].join(' '):'Not specified';
  const extra='<p class="meta"><b>Country:</b> '+esc(j.country_name||'Not specified')+' · <b>Sector:</b> '+esc(j.job_sector||'Not specified')+' · <b>Visa:</b> '+esc(j.visa_type||'Not specified')+' · <b>Work permit:</b> '+esc(j.work_permit||'Not specified')+' · <b>Visa sponsorship:</b> '+(j.visa_sponsorship_available?'Available':'Not specified')+'</p>';
- return '<article class="job"><h3>'+esc(j.job_title)+'</h3><p class="meta"><b>Employer:</b> '+esc(j.employer_name||'Not specified')+' · <b>Location:</b> '+esc(j.location||'Not specified')+'</p>'+extra+'<p class="meta"><b>Employment:</b> '+esc(j.employment_type||'Not specified')+' · <b>Salary:</b> '+esc(salary)+' · <b>Last date:</b> '+esc(date(j.application_deadline))+'</p><p class="desc">'+esc(j.description)+'</p><div class="actions">'+(apply?'<a href="'+esc(apply)+'" target="_blank" rel="noopener noreferrer">Apply on official site</a>':'')+(site?'<a class="secondary" href="'+esc(site)+'" target="_blank" rel="noopener noreferrer">Employer website</a>':'')+'</div></article>';
+ return '<article class="job"><h3><a class="job-title" href="international-job-details.html?id='+encodeURIComponent(j.id)+'">'+esc(j.job_title)+'</a></h3><p class="meta"><b>Employer:</b> '+esc(j.employer_name||'Not specified')+' · <b>Location:</b> '+esc(j.location||'Not specified')+'</p>'+extra+'<p class="meta"><b>Employment:</b> '+esc(j.employment_type||'Not specified')+' · <b>Salary:</b> '+esc(salary)+' · <b>Last date:</b> '+esc(date(j.application_deadline))+'</p><p class="desc">'+esc(j.description)+'</p><div class="actions">'+(apply?'<a href="'+esc(apply)+'" target="_blank" rel="noopener noreferrer">Apply on official site</a>':'')+(site?'<a class="secondary" href="'+esc(site)+'" target="_blank" rel="noopener noreferrer">Employer website</a>':'')+'</div></article>';
  }).join('');
  pager.innerHTML='';
  if(filtered.length>PAGE_SIZE){
