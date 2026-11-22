@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate sitemap files from published jobs
+      - name: Generate sitemap files from all independent published job systems
         env:
           SUPABASE_URL: https://qkmljuuusfjowexvybvy.supabase.co
           SUPABASE_PUBLISHABLE_KEY: sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2
@@ -31,61 +31,121 @@ jobs:
           const fs = require('fs');
           const base = process.env.SUPABASE_URL;
           const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+          const site = 'https://tamilancareers.in';
           const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
           const iso = v => v ? new Date(v).toISOString() : new Date().toISOString();
-          (async () => {
-            const jobs = [];
+
+          async function fetchPublished(table) {
+            const rows = [];
             const pageSize = 1000;
-            for (let offset=0; ; offset+=pageSize) {
-              const url = new URL('/rest/v1/government_jobs', base);
-              url.searchParams.set('select','id,updated_at,published_at,application_deadline');
-              url.searchParams.set('status','eq.published');
-              url.searchParams.set('or','(application_deadline.is.null,application_deadline.gt.'+new Date().toISOString()+')');
-              url.searchParams.set('order','updated_at.desc.nullslast');
-              url.searchParams.set('limit',String(pageSize));
-              url.searchParams.set('offset',String(offset));
-              const res = await fetch(url, {headers:{apikey:key,'Range-Unit':'items'}});
-              if (!res.ok) throw new Error('Supabase REST failed: '+res.status+' '+await res.text());
+            for (let offset = 0; ; offset += pageSize) {
+              const url = new URL('/rest/v1/' + table, base);
+              url.searchParams.set('select', 'id,updated_at,published_at,application_deadline');
+              url.searchParams.set('status', 'eq.published');
+              url.searchParams.set('or', '(application_deadline.is.null,application_deadline.gt.' + new Date().toISOString() + ')');
+              url.searchParams.set('order', 'updated_at.desc.nullslast');
+              url.searchParams.set('limit', String(pageSize));
+              url.searchParams.set('offset', String(offset));
+              const res = await fetch(url, { headers: { apikey: key, 'Range-Unit': 'items' } });
+              if (!res.ok) throw new Error(table + ' REST failed: ' + res.status + ' ' + await res.text());
               const page = await res.json();
-              jobs.push(...page);
+              rows.push(...page);
               if (page.length < pageSize) break;
             }
+            return rows;
+          }
+
+          (async () => {
+            const [government, privateJobs, international] = await Promise.all([
+              fetchPublished('government_jobs'),
+              fetchPublished('private_jobs'),
+              fetchPublished('international_jobs')
+            ]);
+            const jobs = [
+              ...government.map(j => ({ ...j, detailPage: 'government-job-details.html' })),
+              ...privateJobs.map(j => ({ ...j, detailPage: 'private-job-details.html' })),
+              ...international.map(j => ({ ...j, detailPage: 'international-job-details.html' }))
+            ];
+
+            const staticPages = [
+              '', 'government-jobs.html', 'indian-government-jobs.html',
+              'central-government-jobs.html', 'state-government-jobs.html',
+              'state-jobs.html', 'tamil-nadu-government-jobs.html',
+              'private-jobs.html', 'international-jobs.html', 'police-jobs.html',
+              '8th-pass-government-jobs.html', '10th-pass-government-jobs.html',
+              '12th-pass-government-jobs.html', 'iti-government-jobs.html',
+              'diploma-government-jobs.html', 'degree-government-jobs.html',
+              'postgraduate-government-jobs.html', 'admissions.html',
+              'admission-open.html', 'entrance-exam.html', 'exam-date.html',
+              'admit-card.html', 'results.html', 'about-us.html', 'contact-us.html',
+              'privacy-policy.html', 'terms-and-conditions.html', 'disclaimer.html',
+              'government-category-jobs.html', 'central-government-category.html'
+            ];
+
+            const statesAndUTs = [
+              'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa',
+              'Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala',
+              'Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland',
+              'Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura',
+              'Uttar Pradesh','Uttarakhand','West Bengal','Andaman and Nicobar Islands',
+              'Chandigarh','Dadra and Nagar Haveli and Daman and Diu','Delhi',
+              'Jammu and Kashmir','Ladakh','Lakshadweep','Puducherry'
+            ];
+
+            const staticUrls = [
+              ...staticPages.map(p => site + '/' + p),
+              ...statesAndUTs.map(state => site + '/state-jobs.html?state=' + encodeURIComponent(state))
+            ];
+
             const xml = entries => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-              entries.map(j => '<url><loc>'+esc('https://tamilancareers.in/government-job-details.html?id='+j.id)+'</loc>'+(j.updated_at||j.published_at?'<lastmod>'+iso(j.updated_at||j.published_at)+'</lastmod>':'')+'</url>').join('\n') +
-              '\n</urlset>\n';
+              entries.map(j => '<url><loc>' + esc(site + '/' + j.detailPage + '?id=' + encodeURIComponent(j.id)) + '</loc>' +
+                (j.updated_at || j.published_at ? '<lastmod>' + iso(j.updated_at || j.published_at) + '</lastmod>' : '') +
+                '</url>').join('\n') + '\n</urlset>\n';
+
             const chunks = [];
-            for (let i=0;i<jobs.length;i+=40) chunks.push(jobs.slice(i,i+40));
+            for (let i = 0; i < jobs.length; i += 40) chunks.push(jobs.slice(i, i + 40));
             if (!chunks.length) chunks.push([]);
             const names = [];
-            chunks.forEach((chunk,i) => {
-              const name='job-sitemap-'+(i+1)+'.xml'; names.push(name); fs.writeFileSync(name,xml(chunk));
+            chunks.forEach((chunk, i) => {
+              const name = 'job-sitemap-' + (i + 1) + '.xml';
+              names.push(name);
+              fs.writeFileSync(name, xml(chunk));
             });
-            for (let i=chunks.length+1;i<=20;i++) {
-              const stale='job-sitemap-'+i+'.xml'; if (fs.existsSync(stale)) fs.unlinkSync(stale);
+            for (let i = chunks.length + 1; i <= 100; i++) {
+              const stale = 'job-sitemap-' + i + '.xml';
+              if (fs.existsSync(stale)) fs.unlinkSync(stale);
             }
-            const staticPages=["","government-jobs.html","indian-government-jobs.html","central-government-jobs.html","state-government-jobs.html","tamil-nadu-government-jobs.html","private-jobs.html","international-jobs.html","police-jobs.html","8th-pass-government-jobs.html","10th-pass-government-jobs.html","12th-pass-government-jobs.html","iti-government-jobs.html","diploma-government-jobs.html","degree-government-jobs.html","postgraduate-government-jobs.html","admissions.html","admission-open.html","entrance-exam.html","exam-date.html","admit-card.html","results.html","about-us.html","contact-us.html","privacy-policy.html","terms-and-conditions.html","disclaimer.html","government-category-jobs.html","central-government-category.html"]
-            fs.writeFileSync('sitemap-static.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+staticPages.map(p=>'<url><loc>'+esc('https://tamilancareers.in/'+p)+'</loc></url>').join('\n')+'\n</urlset>\n');
-            fs.writeFileSync('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+['sitemap-static.xml',...names].map(n=>'<sitemap><loc>'+esc('https://tamilancareers.in/'+n)+'</loc></sitemap>').join('\n')+'\n</sitemapindex>\n');
-            // Validate generated sitemap files before committing them.
-            const allPages = [...staticPages.map(p => 'https://tamilancareers.in/'+p),
-              ...jobs.map(j => 'https://tamilancareers.in/government-job-details.html?id='+j.id)];
-            if (new Set(allPages).size !== allPages.length) throw new Error('Duplicate URL detected in sitemap inputs.');
-            for (const p of staticPages) {
-              const file = p || 'index.html';
-              if (!fs.existsSync(file)) throw new Error('Sitemap references a missing page: '+file);
+
+            fs.writeFileSync('sitemap-static.xml',
+              '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+              staticUrls.map(url => '<url><loc>' + esc(url) + '</loc></url>').join('\n') + '\n</urlset>\n');
+
+            fs.writeFileSync('sitemap.xml',
+              '<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+              ['sitemap-static.xml', ...names].map(n => '<sitemap><loc>' + esc(site + '/' + n) + '</loc></sitemap>').join('\n') +
+              '\n</sitemapindex>\n');
+
+            const allUrls = [...staticUrls, ...jobs.map(j => site + '/' + j.detailPage + '?id=' + encodeURIComponent(j.id))];
+            if (new Set(allUrls).size !== allUrls.length) throw new Error('Duplicate URL detected in sitemap inputs.');
+            for (const page of staticPages) {
+              const file = page || 'index.html';
+              if (!fs.existsSync(file)) throw new Error('Sitemap references a missing page: ' + file);
             }
-            for (const name of ['sitemap.xml','sitemap-static.xml',...names]) {
-              const body = fs.readFileSync(name,'utf8');
-              if (!body.startsWith('<?xml') || !body.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"') ||
-                  !body.trimEnd().endsWith(name==='sitemap.xml' ? '</sitemapindex>' : '</urlset>')) {
-                throw new Error('Invalid sitemap XML structure: '+name);
+            for (const name of ['sitemap.xml', 'sitemap-static.xml', ...names]) {
+              const body = fs.readFileSync(name, 'utf8');
+              if (!body.startsWith('<?xml') ||
+                  !body.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"') ||
+                  !body.trimEnd().endsWith(name === 'sitemap.xml' ? '</sitemapindex>' : '</urlset>')) {
+                throw new Error('Invalid sitemap XML structure: ' + name);
               }
             }
-            const robots = fs.readFileSync('robots.txt','utf8');
-            if (!robots.includes('Sitemap: https://tamilancareers.in/sitemap.xml')) throw new Error('robots.txt does not advertise sitemap.xml');
-            console.log('Validated '+staticPages.length+' static pages and '+jobs.length+' active job URLs.');
-            console.log('Generated sitemaps for '+jobs.length+' active published jobs.');
-          })().catch(e=>{console.error(e);process.exit(1)});
+            const robots = fs.readFileSync('robots.txt', 'utf8');
+            if (!robots.includes('Sitemap: ' + site + '/sitemap.xml')) throw new Error('robots.txt does not advertise sitemap.xml');
+            console.log('Validated ' + staticPages.length + ' static pages, ' + statesAndUTs.length +
+              ' state/UT pages and ' + jobs.length + ' active published jobs.');
+            console.log('Government: ' + government.length + '; Private: ' + privateJobs.length +
+              '; International: ' + international.length);
+          })().catch(e => { console.error(e); process.exit(1); });
           NODE
 
       - name: Commit refreshed sitemap files
@@ -96,6 +156,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Sitemaps are already up to date."
           else
-            git commit -m "Refresh active job sitemaps"
+            git commit -m "Refresh all independent job sitemaps"
             git push
           fi
