@@ -1,0 +1,47 @@
+/* TAMILAN CAREERS — unified Premium Blue / Purple / Cyan theme */
+:root{
+ --tc-navy:#111b3d;--tc-blue:#2563eb;--tc-purple:#7c3aed;--tc-cyan:#0891b2;
+ --tc-bg:#f3f6ff;--tc-surface:#ffffff;--tc-ink:#17213d;--tc-muted:#61708a;
+ --tc-line:#dce4f3;--tc-green:#15945b;--tc-orange:#e88a18;
+ --navy:var(--tc-navy);--blue:var(--tc-blue);--cyan:#67e8f9;--ink:var(--tc-ink);--muted:var(--tc-muted);--line:var(--tc-line);--bg:var(--tc-bg);
+}
+html{scroll-behavior:smooth}
+body{background:var(--tc-bg)!important;color:var(--tc-ink)!important}
+header,.site-header{background:linear-gradient(112deg,#111b3d 0%,#1e3a8a 58%,#5b21b6 100%)!important;color:#fff!important}
+header h1,.site-header h1,header p,.site-header p{color:#fff!important}
+nav,.nav-wrap{background:linear-gradient(90deg,#172554,#312e81)!important;border-bottom:3px solid #22d3ee!important}
+nav a{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.12)!important;color:#fff!important;border-radius:8px!important;transition:background .18s,transform .18s}
+nav a:hover,nav a:focus-visible,nav a[aria-current="page"]{background:linear-gradient(100deg,#2563eb,#7c3aed)!important;color:#fff!important}
+nav a.private-link{background:#0e7490!important}nav a.international-link{background:#6d28d9!important}
+footer{background:linear-gradient(110deg,#111b3d,#312e81)!important;color:#fff!important}
+footer a{color:#eaf2ff!important}
+.featured-links{background:#e9efff!important}
+.featured-links a{box-shadow:0 5px 14px rgba(37,99,235,.2)!important}
+.announcement{background:linear-gradient(90deg,#e0f2fe,#ede9fe)!important;border-color:#c4b5fd!important;color:#26366b!important}
+main{color:var(--tc-ink)}
+h1,h2,h3,h4,.table-section h2,.table-section h3{color:#1e2b59}
+a,.crumb a,.back{color:#245bd5}
+a:hover{color:#6d28d9}
+button,.button,.primary{background:linear-gradient(105deg,#2563eb,#6d28d9)!important;color:#fff!important;border:1px solid #4f46e5!important;border-radius:8px!important;box-shadow:0 3px 9px rgba(55,65,160,.15)}
+button:hover,.button:hover,.primary:hover{filter:brightness(1.07);transform:translateY(-1px)}
+button:disabled{opacity:.45}
+input,select,textarea{border:1px solid #c8d4ee!important;border-radius:8px!important;background:#fff!important;color:#17213d!important}
+input:focus,select:focus,textarea:focus{outline:3px solid rgba(34,211,238,.28)!important;border-color:#4f46e5!important}
+.panel,.auth-shell,.profile-card,.stat,.empty,.notice,.gov-entry-card,.card,.tile:not([class*="c"]){border-color:#d8def4}
+.panel,.auth-shell,.profile-card,.stat{background:#fff!important;box-shadow:0 5px 18px rgba(35,49,105,.07)!important;border-radius:12px!important}
+.notice{background:#eef2ff!important;border-left-color:#7c3aed!important;color:#334078!important}
+.table-scroll{border:1px solid #cfd8f2!important;border-radius:10px!important;box-shadow:0 4px 14px rgba(35,49,105,.05)}
+table{background:#fff!important}
+th{background:linear-gradient(100deg,#dbeafe,#ede9fe)!important;color:#26336d!important;border-bottom:2px solid #a5b4fc!important}
+td{color:#26334d!important;border-bottom:1px solid #e5e9f5!important}
+tbody tr:nth-child(even){background:#f7f8ff!important}
+tbody tr:hover{background:#eaf3ff!important}
+.table-scroll a{color:#245bd5!important}
+.pager{color:#586783}
+.pager button{background:#fff!important;color:#33418a!important;border:1px solid #b8c5eb!important;box-shadow:none!important}
+.pager button:not(:disabled){background:linear-gradient(100deg,#2563eb,#7c3aed)!important;color:#fff!important}
+.badge,.status,.tag{border-radius:999px}
+.gov-entry-card{box-shadow:0 5px 15px rgba(37,99,235,.13)!important}
+hr,.section-nav{border-color:#dce4f3!important}
+:focus-visible{outline:3px solid #22d3ee!important;outline-offset:2px}
+@media(max-width:640px){main{background:transparent} .table-scroll{border-radius:8px!important}}
