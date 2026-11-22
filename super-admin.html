@@ -30,7 +30,7 @@ a{ text-underline-offset:3px }
 <div class="panel"><div class="topline"><div><h2>Government Job Control Center</h2><p class="muted">Create, edit, publish, pause and close government job posts. Only this Super Admin workspace can manage these records.</p></div><button id="newJobBtn">+ Create Government Job</button></div><div id="dashboardMessage" class="notice hidden"></div></div>
 
 <section class="panel" id="gricPanel">
- <div class="topline"><div><h2>அரசுப் பணி கண்காணிப்பு மையம்</h2><p class="muted">அதிகாரப்பூர்வ அரசு இணையதளங்கள், கண்டுபிடிக்கப்பட்ட அறிவிப்புகள் மற்றும் சரிபார்ப்பு வரிசையை நிர்வகிக்கவும். இந்தப் பகுதி Super Admin-க்கு மட்டும்.</p></div><button type="button" id="gricRefresh" class="secondary">புதுப்பிக்க</button></div>
+ <div class="topline"><div><h2>அரசுப் பணி கண்காணிப்பு மையம்</h2><p class="muted">அதிகாரப்பூர்வ அரசு இணையதளங்கள், கண்டுபிடிக்கப்பட்ட அறிவிப்புகள் மற்றும் சரிபார்ப்பு வரிசையை நிர்வகிக்கவும். இந்தப் பகுதி Super Admin-க்கு மட்டும்.</p></div><div class="actions"><button type="button" id="gricScan" >இப்போது கண்காணி</button><button type="button" id="gricRefresh" class="secondary">புதுப்பிக்க</button></div></div>
  <div class="notice">குறிப்பு: இங்கு சேர்க்கப்படும் ஆதாரங்கள் அதிகாரப்பூர்வ இணையதளங்களாக இருக்க வேண்டும். கண்டுபிடிக்கப்பட்ட அறிவிப்புகள் சரிபார்க்கப்படும் வரை பொதுவில் வெளியிடப்படாது.</div>
  <div class="grid">
   <div class="panel"><strong>அதிகாரப்பூர்வ ஆதாரங்கள்</strong><div id="gricSourceCount">—</div></div>
@@ -48,10 +48,10 @@ a{ text-underline-offset:3px }
    <div class="field full"><button type="submit" id="gricSaveSource">ஆதாரத்தைச் சேமிக்கவும்</button></div>
   </form><div id="gricSourceMessage" class="notice hidden"></div>
  </div>
- <div class="section"><h3>2. பதிவு செய்யப்பட்ட அதிகாரப்பூர்வ ஆதாரங்கள்</h3><div class="table-wrap"><table><thead><tr><th>அமைப்பு</th><th>நிலை</th><th>மாநிலம்</th><th>இணையதளம்</th><th>கண்காணிப்பு</th></tr></thead><tbody id="gricSourcesBody"><tr><td colspan="5">தரவுகள் ஏற்றப்படுகின்றன…</td></tr></tbody></table></div></div>
+ <div class="section"><h3>2. பதிவு செய்யப்பட்ட அதிகாரப்பூர்வ ஆதாரங்கள்</h3><div class="table-wrap"><table><thead><tr><th>அமைப்பு</th><th>நிலை</th><th>மாநிலம்</th><th>இணையதளம்</th><th>கண்காணிப்பு</th></tr></thead><tbody id="gricSourcesBody"><tr><td colspan="5">தரவுகள் ஏற்றப்படுகின்றன…</td></tr></tbody></table></div><div class="actions" id="gricSourcePager"></div></div>
  <div class="section"><h3>3. அரசு அறிவிப்புகள் – சரிபார்ப்பு வரிசை</h3><p class="muted">வேலைவாய்ப்பு, தேர்வு அறிவிப்பு, தேர்வு முடிவு, நுழைவுச்சீட்டு, விடைக்குறிப்பு மற்றும் தேர்வு புதுப்பிப்புகள் இங்கு பட்டியலிடப்படும்.</p>
   <div class="field"><label for="gricReviewFilter">நிலை வடிகட்டி</label><select id="gricReviewFilter"><option value="all">அனைத்தும்</option><option value="pending">சரிபார்க்க காத்திருக்கிறது</option><option value="verified">சரிபார்க்கப்பட்டது</option><option value="rejected">நிராகரிக்கப்பட்டது</option><option value="published">வெளியிடப்பட்டது</option></select></div>
-  <div class="table-wrap"><table><thead><tr><th>அறிவிப்பு</th><th>வகை</th><th>விண்ணப்ப கடைசி நாள்</th><th>நிலை</th><th>அதிகாரப்பூர்வ இணைப்பு</th><th>செயல்</th></tr></thead><tbody id="gricReviewsBody"><tr><td colspan="6">தரவுகள் ஏற்றப்படுகின்றன…</td></tr></tbody></table></div>
+  <div class="table-wrap"><table><thead><tr><th>அறிவிப்பு</th><th>வகை</th><th>விண்ணப்ப கடைசி நாள்</th><th>நிலை</th><th>அதிகாரப்பூர்வ இணைப்பு</th><th>செயல்</th></tr></thead><tbody id="gricReviewsBody"><tr><td colspan="6">தரவுகள் ஏற்றப்படுகின்றன…</td></tr></tbody></table></div><div class="actions" id="gricReviewPager"></div>
   <p id="gricReviewCount" class="footer-note"></p>
  </div>
  <p class="footer-note">தானியங்கி கண்காணிப்பு இன்னும் தனியாகச் செயல்படுத்தப்படவில்லை. ஆதாரப் பட்டியல் மற்றும் சரிபார்ப்பு வரிசை இப்போது நிர்வாகப் பகுதியில் இணைக்கப்பட்டுள்ளது; வெளியீடு தானாக நடைபெறாது.</p>
@@ -180,6 +180,8 @@ function editJob(j){resetForm();editingId=j.id;const prep=j.exam_preparation||{}
 async function deleteJob(j){if(!confirm('Permanently delete this government job post?'))return;const {error}=await sb.from('government_jobs').delete().eq('id',j.id);if(error)showMsg($('dashboardMessage'),'Delete failed: '+error.message,'error');else{showMsg($('dashboardMessage'),'Government job deleted.','success');await loadJobs()}}
 $('refreshBtn').addEventListener('click',loadJobs);
 
+let gricSourcePage=0,gricReviewPage=0;
+function pager(rootId,page,total,onPrev,onNext){const root=$(rootId);root.innerHTML='';const prev=document.createElement('button');prev.className='secondary';prev.textContent='முந்தைய பக்கம்';prev.disabled=page===0;prev.addEventListener('click',onPrev);const next=document.createElement('button');next.className='secondary';next.textContent='அடுத்த பக்கம்';next.disabled=(page+1)*20>=total;next.addEventListener('click',onNext);const label=document.createElement('span');label.className='muted';label.textContent='பக்கம் '+(page+1)+' / '+Math.max(1,Math.ceil(total/20));root.append(prev,label,next)}
 async function loadGric(){
  const sbq=sb.from('government_notice_sources');
  const [sourcesRes,reviewsRes,noticesRes]=await Promise.all([
@@ -192,7 +194,7 @@ async function loadGric(){
  else{
   const rows=sourcesRes.data||[];$('gricSourceCount').textContent=rows.length+' ஆதாரங்கள்';
   if(!rows.length)sourceBody.innerHTML='<tr><td colspan="5">இன்னும் ஆதாரங்கள் சேர்க்கப்படவில்லை.</td></tr>';
-  rows.forEach(s=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+esc(s.authority)+'</td><td>'+esc(s.scope==='central'?'மத்திய அரசு':'மாநிலம் / யூனியன் பிரதேசம்')+'</td><td>'+esc(s.state||'—')+'</td><td><a href="'+esc(s.base_url)+'" target="_blank" rel="noopener noreferrer">அதிகாரப்பூர்வ தளம்</a></td><td>'+((s.enabled)?'இயக்கத்தில்':'நிறுத்தப்பட்டது')+'<br><small>'+esc(s.last_checked_at?new Date(s.last_checked_at).toLocaleString():'இன்னும் சரிபார்க்கப்படவில்லை')+'</small></td>';sourceBody.appendChild(tr)})
+  rows.slice(gricSourcePage*20,(gricSourcePage+1)*20).forEach(s=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+esc(s.authority)+'</td><td>'+esc(s.scope==='central'?'மத்திய அரசு':'மாநிலம் / யூனியன் பிரதேசம்')+'</td><td>'+esc(s.state||'—')+'</td><td><a href="'+esc(s.base_url)+'" target="_blank" rel="noopener noreferrer">அதிகாரப்பூர்வ தளம்</a></td><td>'+((s.enabled)?'இயக்கத்தில்':'நிறுத்தப்பட்டது')+'<br><small>'+esc(s.last_checked_at?new Date(s.last_checked_at).toLocaleString():'இன்னும் சரிபார்க்கப்படவில்லை')+'</small></td>';sourceBody.appendChild(tr)});pager('gricSourcePager',gricSourcePage,rows.length,()=>{gricSourcePage=Math.max(0,gricSourcePage-1);loadGric()},()=>{gricSourcePage++;loadGric()})
  }
  const reviews=reviewsRes.data||[];const count=(v)=>reviews.filter(x=>x.status===v).length;
  $('gricPendingCount').textContent=count('pending')+' அறிவிப்புகள்';$('gricVerifiedCount').textContent=count('verified')+' அறிவிப்புகள்';$('gricPublishedCount').textContent=noticesRes.count??'—';
@@ -200,8 +202,8 @@ async function loadGric(){
  const body=$('gricReviewsBody');body.innerHTML='';
  if(reviewsRes.error)body.innerHTML='<tr><td colspan="6">அறிவிப்புகளை ஏற்ற முடியவில்லை: '+esc(reviewsRes.error.message)+'</td></tr>';
  else if(!shown.length)body.innerHTML='<tr><td colspan="6">இந்த நிலையில் அறிவிப்புகள் எதுவும் இல்லை.</td></tr>';
- shown.slice(0,20).forEach(r=>{const tr=document.createElement('tr');const category=({recruitment:'வேலைவாய்ப்பு',result:'தேர்வு முடிவு',admit_card:'நுழைவுச்சீட்டு',answer_key:'விடைக்குறிப்பு',exam_update:'தேர்வு புதுப்பிப்பு',other:'மற்றவை'})[r.category]||r.category;const status=({pending:'சரிபார்க்க காத்திருக்கிறது',verified:'சரிபார்க்கப்பட்டது',rejected:'நிராகரிக்கப்பட்டது',published:'வெளியிடப்பட்டது'})[r.status]||r.status;tr.innerHTML='<td>'+esc(r.title)+'</td><td>'+esc(category)+'</td><td>'+esc(r.application_end||'—')+'</td><td>'+esc(status)+'</td><td><a href="'+esc(r.official_url)+'" target="_blank" rel="noopener noreferrer">அறிவிப்பைப் பார்க்க</a></td><td></td>';const actions=tr.lastElementChild;if(r.status==='pending'){const verify=document.createElement('button');verify.textContent='சரிபார்க்கப்பட்டது';verify.addEventListener('click',()=>setGricReviewStatus(r.id,'verified'));const reject=document.createElement('button');reject.textContent='நிராகரி';reject.className='danger';reject.addEventListener('click',()=>setGricReviewStatus(r.id,'rejected'));actions.append(verify,reject)}body.appendChild(tr)});
- $('gricReviewCount').textContent=shown.length+' பதிவுகள் (முதல் 20 மட்டும் காட்டப்படும்).';
+ shown.slice(gricReviewPage*20,(gricReviewPage+1)*20).forEach(r=>{const tr=document.createElement('tr');const category=({recruitment:'வேலைவாய்ப்பு',result:'தேர்வு முடிவு',admit_card:'நுழைவுச்சீட்டு',answer_key:'விடைக்குறிப்பு',exam_update:'தேர்வு புதுப்பிப்பு',other:'மற்றவை'})[r.category]||r.category;const status=({pending:'சரிபார்க்க காத்திருக்கிறது',verified:'சரிபார்க்கப்பட்டது',rejected:'நிராகரிக்கப்பட்டது',published:'வெளியிடப்பட்டது'})[r.status]||r.status;tr.innerHTML='<td>'+esc(r.title)+'</td><td>'+esc(category)+'</td><td>'+esc(r.application_end||'—')+'</td><td>'+esc(status)+'</td><td><a href="'+esc(r.official_url)+'" target="_blank" rel="noopener noreferrer">அறிவிப்பைப் பார்க்க</a></td><td></td>';const actions=tr.lastElementChild;if(r.status==='pending'){const verify=document.createElement('button');verify.textContent='சரிபார்க்கப்பட்டது';verify.addEventListener('click',()=>setGricReviewStatus(r.id,'verified'));const reject=document.createElement('button');reject.textContent='நிராகரி';reject.className='danger';reject.addEventListener('click',()=>setGricReviewStatus(r.id,'rejected'));actions.append(verify,reject)}body.appendChild(tr)});
+ pager('gricReviewPager',gricReviewPage,shown.length,()=>{gricReviewPage=Math.max(0,gricReviewPage-1);loadGric()},()=>{gricReviewPage++;loadGric()});$('gricReviewCount').textContent=shown.length+' பதிவுகள்.';
 }
 async function setGricReviewStatus(id,status){
  if(status==='rejected'&&!confirm('இந்த அறிவிப்பை நிராகரிக்கவா?'))return;
@@ -221,7 +223,8 @@ $('gricSourceForm').addEventListener('submit',async e=>{
  if(error){showMsg($('gricSourceMessage'),'சேமிக்க முடியவில்லை: '+error.message,'error');return}
  $('gricSourceForm').reset();$('gricEnabled').checked=true;showMsg($('gricSourceMessage'),'அதிகாரப்பூர்வ ஆதாரம் சேமிக்கப்பட்டது.','success');await loadGric();
 });
-$('gricRefresh').addEventListener('click',loadGric);$('gricReviewFilter').addEventListener('change',loadGric);
+$('gricRefresh').addEventListener('click',loadGric);$('gricReviewFilter').addEventListener('change',()=>{gricReviewPage=0;loadGric()});
+$('gricScan').addEventListener('click',async()=>{const b=$('gricScan');b.disabled=true;b.textContent='கண்காணிக்கிறது…';showMsg($('gricSourceMessage'),'அதிகாரப்பூர்வ இணையதளங்களைச் சரிபார்க்கிறது. இந்தச் செயலுக்கு சிறிது நேரம் ஆகலாம்.');try{const {data,error}=await sb.functions.invoke('scan-government-notice-sources',{body:{}});if(error)throw error;showMsg($('gricSourceMessage'),'கண்காணிப்பு முடிந்தது. சரிபார்த்த ஆதாரங்கள்: '+data.checked_sources+'; வெற்றி: '+data.successful_sources+'; தோல்வி: '+data.failed_sources+'; புதிய அறிவிப்பு இணைப்புகள்: '+data.new_review_items+'; ஏற்கெனவே உள்ள இணைப்புகள்: '+data.duplicate_links+'. பொதுவில் வெளியிடப்பட்டவை: 0.','success');await loadGric()}catch(e){showMsg($('gricSourceMessage'),'கண்காணிப்பு இயங்கவில்லை: '+(e.message||String(e)),'error')}finally{b.disabled=false;b.textContent='இப்போது கண்காணி'}});
 
 renderQualificationGroups();
 sb.auth.onAuthStateChange((_event,session)=>{if(!session){setAuthState(false);currentUser=null}});
