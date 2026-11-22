@@ -6,3 +6,5 @@ Disallow: /super-admin-government-resources.html
 Disallow: /super-admin-admissions.html
 
 Sitemap: https://tamilancareers.in/sitemap.xml
+
+Disallow: /super-admin-review-center.html
