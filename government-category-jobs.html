@@ -45,7 +45,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 <link rel="stylesheet" href="site-theme.css?v=1">
 
 <link rel="canonical" href="https://tamilancareers.in/government-category-jobs.html">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="robots" id="pageRobots" content="noindex,follow"><meta name="googlebot" id="googleRobots" content="noindex,follow">
 <meta property="og:title" content="Government Job Category | TAMILAN CAREERS">
 <meta property="og:description" content="Browse government job vacancies by Central Government category or State / Union Territory category.">
 <meta property="og:url" content="https://tamilancareers.in/government-category-jobs.html">
@@ -81,7 +81,7 @@ $('pageTitle').textContent='Category Not Found';$('categoryIntro').textContent='
 const parent=scope==='central'?'central-government-jobs.html':'state-government-jobs.html';
 $('parentLink').href=parent;$('backLink').href=parent;$('backLink').textContent=scope==='central'?'← All Central Government Categories':'← All State Government Jobs';
 const label=scope==='central'?'Central Government':state+' State Government';
-$('pageTitle').textContent=category+' – Published Vacancies';$('crumbCategory').textContent=category;document.title=category+' | TAMILAN CAREERS';
+$('pageTitle').textContent=category+' – Published Vacancies';$('crumbCategory').textContent=category;document.title=category+' | TAMILAN CAREERS';$('pageRobots').content='index,follow,max-image-preview:large';$('googleRobots').content='index,follow,max-image-preview:large';
 $('categoryIntro').textContent='Browse published '+label+' vacancies in '+category+'. Open a job to view its full details, official application links and available exam preparation resources.';
 let allRows=[],page=1;
 function matches(j){const q=$('qualification').value.toLowerCase();const tags=Array.isArray(j.qualification_tags)?j.qualification_tags:[];return !q||tags.some(t=>String(t).toLowerCase().includes(q))||String(j.education_level||'').toLowerCase().includes(q);}
