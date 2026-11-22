@@ -66,10 +66,10 @@ function prepSection(title,value,asLinks){
 }
 
 async function load(){
-if(!id){host.innerHTML='<h2 class="title">Job not found</h2><p class="muted">A valid job notification was not selected. Return to the Home Page and choose a published job.</p>';return;}
+if(!id){document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');host.innerHTML='<h2 class="title">Job not found</h2><p class="muted">A valid job notification was not selected. Return to the Home Page and choose a published job.</p>';return;}
 const {data,error}=await sb.from('government_jobs').select('*').eq('id',id).eq('status','published').maybeSingle();
-if(error||!data){host.innerHTML='<h2 class="title">Job details unavailable</h2><p class="muted">This notification may no longer be published, or the link may be invalid.</p>';return;}
-const j=data,qual=Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level;
+if(error||!data){document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');host.innerHTML='<h2 class="title">Job details unavailable</h2><p class="muted">This notification may no longer be published, or the link may be invalid.</p>';return;}
+const j=data;setJobSeo(j);const qual=Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level;
 const fields=[
 ['Department',j.department_name||j.employer_name],['Recruitment Authority',j.recruitment_authority],['Government Category',j.government_category],['State / Union Territory',j.state_name],
 ['Job Post',j.job_title],['Job Type',j.job_type_label||j.employment_type],['Notification Number',j.notification_number],
