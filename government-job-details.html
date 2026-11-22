@@ -37,9 +37,9 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const host=document.getElementById('content');
 const setMeta=(name,value,attr='name')=>{let el=document.querySelector('meta['+attr+'=\"'+name+'\"]');if(!el){el=document.createElement('meta');el.setAttribute(attr,name);document.head.appendChild(el)}el.setAttribute('content',value)};
 function setJobSeo(j){
- const title=(j.job_title||'Government Job').replace(/\\s+/g,' ').trim();
+ const title=(j.job_title||'Government Job').replace(/\s+/g,' ').trim();
  const employer=j.department_name||j.employer_name||j.recruitment_authority||'Government Recruitment';
- const plain=String(j.description||'').replace(/<[^>]*>/g,' ').replace(/\\s+/g,' ').trim();
+ const plain=String(j.description||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
  const desc=(plain||title+' – official vacancy details, eligibility, application dates and apply link on TAMILAN CAREERS.').slice(0,300);
  const canonical='https://tamilancareers.in/government-job-details.html?id='+encodeURIComponent(j.id);
  document.title=title+' | TAMILAN CAREERS';setMeta('description',desc);setMeta('og:title',document.title,'property');setMeta('og:description',desc,'property');setMeta('og:url',canonical,'property');
