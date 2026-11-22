@@ -7,7 +7,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const safe=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
 const fmt=v=>v?new Date(v+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'Not specified';
 let page=1,rows=[];
-const {data,error}=await db.from('admission_notifications').select('*').eq('notification_type','entrance_exam').eq('status','published').order('application_deadline',{ascending:true,nullsFirst:false}).order('published_at',{ascending:false}).limit(1000);
+const {data,error}=await db.from('admission_notifications').select('*').eq('notification_type','entrance_exam').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString().slice(0,10)).order('application_deadline',{ascending:true,nullsFirst:false}).order('published_at',{ascending:false}).limit(1000);
 if(error){status.textContent='Unable to load notifications right now. Please try again later.';return}
 rows=data||[];
 function render(){const term=search.value.trim().toLowerCase(),filtered=rows.filter(x=>[x.title,x.institution_name,x.course_name,x.location,x.description,x.eligibility].some(v=>String(v||'').toLowerCase().includes(term))),pages=Math.max(1,Math.ceil(filtered.length/10));if(page>pages)page=pages;const shown=filtered.slice((page-1)*10,page*10);
