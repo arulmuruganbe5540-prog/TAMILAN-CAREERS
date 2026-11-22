@@ -21,7 +21,7 @@ jobs:
 
       - name: Generate sitemap files from published jobs
         env:
-          SUPABASE_URL: https://qkmljuuusfjowexvy.supabase.co
+          SUPABASE_URL: https://qkmljuuusfjowexvybvy.supabase.co
           SUPABASE_PUBLISHABLE_KEY: sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2
         run: |
           node <<'NODE'
