@@ -96,17 +96,15 @@ function matchesQualification(job,q){
  if(!q)return true;
  const tags=Array.isArray(job.qualification_tags)?job.qualification_tags:[];
  const keys=aliases[q]||[q.toLowerCase()];
- if(tags.length){
-  return tags.some(tag=>{
-   const raw=String(tag||'').trim().toLowerCase();
-   const group=raw.includes('::')?raw.split('::')[0].trim():raw;
-   if(group===q.toLowerCase())return true;
-   if(keys.includes(raw))return true;
-   return false;
-  });
- }
+ const tagMatch=tags.some(tag=>{
+  const raw=String(tag||'').trim().toLowerCase();
+  const group=raw.includes('::')?raw.split('::')[0].trim():raw;
+  return group===q.toLowerCase()||keys.some(key=>raw===key);
+ });
  const education=String(job.education_level||'').toLowerCase();
- return keys.some(key=>education.includes(key));
+ const educationMatch=keys.some(key=>education.includes(key));
+ if(q==='Degree' && (education.includes('postgraduate')||education.includes('post graduate')||education.includes('master degree')||education.includes('masters degree')) && !/(bachelor|graduation|graduate|b\.?e\.?|b\.?tech|b\.?sc|b\.?com|bba|bca|mbbs|llb)/i.test(education)) return tagMatch;
+ return tagMatch||educationMatch;
 }
 function orgName(job){
  return String(job.recruitment_authority||(String(job.job_category||'').toLowerCase().includes('psc')?state+' Public Service Commission':(job.department_name||job.employer_name||'Other Government Recruitment'))).trim();
