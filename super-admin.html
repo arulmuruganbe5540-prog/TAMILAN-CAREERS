@@ -27,6 +27,7 @@ a{ text-underline-offset:3px }
 <div id="mfaBox" class="hidden section"><h3>Multi-factor verification</h3><p id="mfaText" class="muted">Enter the current code from your authenticator app.</p><img id="mfaQr" class="qr hidden" alt="Authenticator enrollment QR code"><div class="field"><label for="totpCode">6-digit authenticator code</label><input id="totpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}"></div><div class="actions"><button id="verifyMfaBtn" type="button">Verify and continue</button></div></div>
 </section>
 <section id="dashboard" class="hidden">
+<div class="panel"><p><strong>Independent Job Systems:</strong> <a href="super-admin-independent-jobs.html" style="color:#176b9e;font-weight:700">Manage Private Jobs and International Jobs</a> — separate forms and database tables.</p></div>
 <div class="panel"><div class="topline"><div><h2>Government Job Control Center</h2><p class="muted">Create, edit, publish, pause and close government job posts. Only this Super Admin workspace can manage these records.</p></div><button id="newJobBtn">+ Create Government Job</button></div><div id="dashboardMessage" class="notice hidden"></div></div>
 
 <section class="panel" id="gricPanel">
