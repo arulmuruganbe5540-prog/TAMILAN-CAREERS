@@ -131,6 +131,9 @@ jobs:
               const file = page || 'index.html';
               if (!fs.existsSync(file)) throw new Error('Sitemap references a missing page: ' + file);
             }
+            for (const file of ['government-job-details.html', 'private-job-details.html', 'international-job-details.html']) {
+              if (!fs.existsSync(file)) throw new Error('A job detail template is missing: ' + file);
+            }
             for (const name of ['sitemap.xml', 'sitemap-static.xml', ...names]) {
               const body = fs.readFileSync(name, 'utf8');
               if (!body.startsWith('<?xml') ||
