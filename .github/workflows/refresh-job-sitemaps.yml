@@ -77,7 +77,7 @@ jobs:
             for (const name of ['sitemap.xml','sitemap-static.xml',...names]) {
               const body = fs.readFileSync(name,'utf8');
               if (!body.startsWith('<?xml') || !body.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"') ||
-                  !body.endsWith(name==='sitemap.xml' ? '</sitemapindex>\\n' : '</urlset>\\n')) {
+                  !body.trimEnd().endsWith(name==='sitemap.xml' ? '</sitemapindex>' : '</urlset>')) {
                 throw new Error('Invalid sitemap XML structure: '+name);
               }
             }
