@@ -12,7 +12,7 @@ const [jobs,res]=await Promise.all([
  db.from('government_job_resources').select('*').eq('resource_type','exam_schedule').eq('status','published').eq('is_official',true).order('created_at',{ascending:false}).limit(1000)
 ]);
 if(jobs.error||res.error){status.textContent='Unable to load exam schedules right now. Please try again later.';return}
-const jobRows=(jobs.data||[]).map(j=>({id:j.id,title:j.job_title,department:j.department_name,location:j.location,date:j.exam_date,description:'Published exam date in the Government Job notification.',url:j.official_notification_url,stage:'Exam date'}));
+const today=new Date().toISOString().slice(0,10);const jobRows=(jobs.data||[]).filter(j=>String(j.exam_date).slice(0,10)>=today).map(j=>({id:j.id,title:j.job_title,department:j.department_name,location:j.location,date:j.exam_date,description:'Published exam date in the Government Job notification.',url:j.official_notification_url,stage:'Exam date'}));
 const jobMap=new Map((jobs.data||[]).map(j=>[j.id,j]));
 const resourceRows=(res.data||[]).filter(x=>jobMap.has(x.government_job_id)).map(x=>{const j=jobMap.get(x.government_job_id);return{id:j.id,title:j.job_title,department:j.department_name,location:j.location,date:null,description:x.description, url:x.resource_url,stage:x.exam_stage||'Exam schedule',source:x.source_name}});
 let rows=[...jobRows,...resourceRows],page=1;
