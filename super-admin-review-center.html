@@ -14,7 +14,7 @@ const show=(id,m,bad=false)=>{$(id).textContent=m;$(id).classList.remove('hidden
 const hide=id=>$(id).classList.add('hidden');
 const fmt=v=>v?new Date(v).toLocaleString('en-IN'):'—';
 async function loadCompanies(){
- const [r,c]=await Promise.all([sb.from('company_verification_requests').select('*').order('created_at',{ascending:false}).limit(500),sb.from('companies').select('id,company_name,verification_status,owner_user_id').limit(500)]);
+ const [r,c]=await Promise.all([sb.from('company_verification_requests').select('*').order('created_at',{ascending:false}).limit(500),sb.from('companies').select('id,company_name,verification_status,owner_user_id,website_url,industry,company_size').limit(500)]);
  if(r.error||c.error){show('companyMsg','Could not load company requests: '+(r.error?.message||c.error?.message),true);return}
  requests=r.data||[];companies=c.data||[];const map=new Map(companies.map(x=>[x.id,x]));const root=$('companyRequests');root.innerHTML='';
  if(!requests.length){root.textContent='No company verification requests.';return}
@@ -22,9 +22,9 @@ async function loadCompanies(){
  const heading=document.createElement('h3');heading.textContent=co.company_name||x.legal_name||'Company verification';card.append(heading);
  const meta=document.createElement('p');meta.className='meta';meta.textContent='Status: '+x.status+' · Company status: '+(co.verification_status||'unknown')+' · Submitted: '+fmt(x.created_at);card.append(meta);
  const details=document.createElement('p');details.className='meta';details.textContent='Legal entity: '+x.legal_entity_type+' · Country: '+x.country_code+' · Registration: '+x.registration_number+' · Official email: '+x.official_email+' · Contact: '+x.contact_person+' / '+x.contact_phone;card.append(details);
- const address=document.createElement('p');address.className='meta';address.textContent='Registered address: '+x.registered_address;card.append(address);
+ const address=document.createElement('p');address.className='meta';address.textContent='Registered address: '+x.registered_address+' · Industry: '+(co.industry||'—')+' · Company size: '+(co.company_size||'—');card.append(address);
  const auth=document.createElement('p');auth.className='meta';auth.textContent='Overseas recruitment authorization: '+(x.recruitment_authorization||'Not supplied');card.append(auth);
- if(x.official_website){const a=document.createElement('a');a.href=x.official_website;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Official website';card.append(a)}
+ if(co.website_url){const a=document.createElement('a');a.href=co.website_url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Official company website';card.append(a)}
  if(x.admin_notes){const n=document.createElement('p');n.className='meta';n.textContent='Previous admin note: '+x.admin_notes;card.append(n)}
  if(['pending','under_review','more_information'].includes(x.status)){
  const actions=document.createElement('div');actions.className='actions';
