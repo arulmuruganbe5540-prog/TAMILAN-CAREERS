@@ -72,7 +72,9 @@ const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const params=new URLSearchParams(location.search);
 const state=params.get('state')||'';
-function updateStateSeo(){const canonical=new URL(location.pathname,location.origin);canonical.searchParams.set('state',state);const valid=!!state;const title=valid?state+' Government Jobs | TAMILAN CAREERS':'State Government Jobs | TAMILAN CAREERS';const description=valid?'Browse published '+state+' Government job notifications, recruitment departments and qualification-wise vacancies.':'Browse published state government job notifications, departments and qualification-wise vacancies.';document.title=title;document.getElementById('pageCanonical').href=canonical.href;document.getElementById('pageRobots').content=valid?'index,follow,max-image-preview:large':'noindex,follow';document.getElementById('googleRobots').content=valid?'index,follow,max-image-preview:large':'noindex,follow';document.getElementById('pageDescription').content=description;document.getElementById('ogTitle').content=title;document.getElementById('ogDescription').content=description;document.getElementById('ogUrl').content=canonical.href;}
+const validStates=["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"];
+const validState=validStates.includes(state);
+function updateStateSeo(){const canonical=new URL(location.pathname,location.origin);canonical.searchParams.set('state',state);const valid=validState;const title=valid?state+' Government Jobs | TAMILAN CAREERS':'State Government Jobs | TAMILAN CAREERS';const description=valid?'Browse published '+state+' Government job notifications, recruitment departments and qualification-wise vacancies.':'Browse published state government job notifications, departments and qualification-wise vacancies.';document.title=title;document.getElementById('pageCanonical').href=canonical.href;document.getElementById('pageRobots').content=valid?'index,follow,max-image-preview:large':'noindex,follow';document.getElementById('googleRobots').content=valid?'index,follow,max-image-preview:large':'noindex,follow';document.getElementById('pageDescription').content=description;document.getElementById('ogTitle').content=title;document.getElementById('ogDescription').content=description;document.getElementById('ogUrl').content=canonical.href;}
 updateStateSeo();
 const PAGE_SIZE=20;
 const $=id=>document.getElementById(id);
@@ -89,12 +91,12 @@ const aliases={
 'Degree':['degree','bachelor degree','bachelor’s degree','bachelors degree','graduation','graduate','b.a.','b.sc','b.com','bba','bca','b.e.','b.tech','b.ed','b.pharm','llb','mbbs'],
 'Postgraduate':['postgraduate','post graduate','pg','master degree','masters degree','mba','mca','m.sc','m.com','m.a.','m.e.','m.tech','m.ed','m.pharm','m.phil','ph.d']
 };
-if(!state){
+if(!validState){
  document.title='State Government Jobs | TAMILAN CAREERS';
- $('pageTitle').textContent='Select a State or Union Territory';
- $('pageIntro').textContent='Go back and select a State or Union Territory.';
- $('latestRows').innerHTML='<tr><td colspan="6" class="empty">No state selected.</td></tr>';
- $('authorityCards').innerHTML='<div class="empty">No state selected.</div>';
+ $('pageTitle').textContent='Select a valid State or Union Territory';
+ $('pageIntro').textContent='Please choose a state from the All States & Union Territories directory.';
+ $('latestRows').innerHTML='<tr><td colspan="6" class="empty">Invalid or missing state. Please select a valid state.</td></tr>';
+ $('authorityCards').innerHTML='<div class="empty">No valid state selected.</div>';
  return;
 }
 document.title=state+' Government Jobs | TAMILAN CAREERS';
