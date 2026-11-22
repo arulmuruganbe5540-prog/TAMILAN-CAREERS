@@ -148,7 +148,7 @@ document.querySelectorAll('.qtag').forEach(link=>link.addEventListener('click',e
  params.set('qualification',selectedQ);if(!selectedQ)params.delete('qualification');updateStateSeo();
  render();
 }));
-const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').in('government_category',stateTypes).eq('state_name',state).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
+const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).in('government_category',stateTypes).eq('state_name',state).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
 if(error){
  $('latestRows').innerHTML='<tr><td colspan="6" class="empty">Unable to load published jobs. Please try again later.</td></tr>';
  $('authorityCards').innerHTML='<div class="empty">Department information could not be loaded.</div>';
