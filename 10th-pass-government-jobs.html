@@ -71,7 +71,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 <h2>10th Pass Government Jobs</h2>
 <p class="intro">Find government job notifications for candidates who have completed 10th Standard or SSLC. Review each recruitment notice carefully to confirm required marks, age criteria, additional qualifications and application deadlines.</p>
 <h2>Latest 10th Pass Government Job Notifications</h2>
-<p class="intro">The table below shows published government vacancies matching this qualification. Open a job to view its complete details, application steps and verified official links. Maximum 20 records per page.</p>
+<p class="intro">The table below shows published government vacancies matching this qualification. Open a job to view its complete details, application steps and verified official links. Maximum 10 records per page.</p>
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="jobs-body"><tr><td colspan="6" class="empty">Loading published government jobs…</td></tr></tbody></table></div>
 <div class="pager" id="pager"></div>
 <section class="info-section" id="jobs-you-can-apply-for"><h2>10th Pass Government Job Types</h2><p>Common recruitment routes that may accept 10th Standard / SSLC. Some posts require additional subjects, physical standards, trade certificates or other conditions.</p><div class="table-scroll"><table><thead><tr><th>Job Type</th><th>Recruitment Area</th><th>Qualification / Additional Conditions</th></tr></thead><tbody><tr><td>Multi-Tasking Staff (MTS)</td><td>SSC / Central Government offices</td><td>Matriculation; age and other conditions depend on the SSC notice.</td></tr><tr><td>Constable / GD Constable</td><td>State Police / CAPFs</td><td>Usually 10th for selected recruitments; physical and medical standards apply.</td></tr><tr><td>Railway Level-1 posts</td><td>Railway Recruitment Boards</td><td>10th pass or ITI or equivalent / NAC as specified by Railway Board rules and the current notice.</td></tr><tr><td>Gramin Dak Sevak (GDS)</td><td>India Post</td><td>10th with prescribed subjects/local-language conditions; selection rules apply.</td></tr><tr><td>Technician / Trade posts</td><td>Departments and PSUs</td><td>Often 10th plus the exact ITI trade or other technical certificate; 10th alone may not be enough.</td></tr></tbody></table></div><p class="note">This is a guidance list of job types, not a list of live vacancies. Eligibility is decided only by the latest official notification. Check age, subject/trade, marks, physical standards, experience, language and other conditions before applying. Higher qualifications do not automatically replace a specifically required subject, trade or certificate.</p></section>
@@ -106,7 +106,7 @@ const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
 const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const terms=["10th pass","10th standard","sslc","matriculation","10th"];
-const PAGE_SIZE=20;let rows=[],page=1;
+const PAGE_SIZE=10;let rows=[],page=1;
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
 function matches(j){
