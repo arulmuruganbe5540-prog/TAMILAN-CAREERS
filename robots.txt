@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /super-admin.html
+Disallow: /super-admin-independent-jobs.html
 
 Sitemap: https://tamilancareers.in/sitemap.xml
