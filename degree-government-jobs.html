@@ -138,7 +138,7 @@ const pager=document.getElementById('pager');pager.innerHTML='<button type="butt
 document.getElementById('prev').addEventListener('click',()=>{if(page>1){page--;render();}});
 document.getElementById('next').addEventListener('click',()=>{if(page<total){page++;render();}});
 }
-const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
+const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
 if(error){document.getElementById('jobs-body').innerHTML='<tr><td colspan="6" class="empty">Government job records could not be loaded. Please try again later.</td></tr>';console.error(error.message);return;}
 rows=(data||[]).filter(matches);render();
 
