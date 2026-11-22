@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/refresh-job-sitemaps.yml'
+      - '*.html'
+      - 'robots.txt'
+      - 'CNAME'
   schedule:
     - cron: "17 */6 * * *"
 
@@ -63,6 +66,24 @@ jobs:
             const staticPages=["","government-jobs.html","indian-government-jobs.html","central-government-jobs.html","state-government-jobs.html","tamil-nadu-government-jobs.html","private-jobs.html","international-jobs.html","police-jobs.html","8th-pass-government-jobs.html","10th-pass-government-jobs.html","12th-pass-government-jobs.html","iti-government-jobs.html","diploma-government-jobs.html","degree-government-jobs.html","postgraduate-government-jobs.html","admissions.html","admission-open.html","entrance-exam.html","exam-date.html","admit-card.html","results.html","about-us.html","contact-us.html","privacy-policy.html","terms-and-conditions.html","disclaimer.html"];
             fs.writeFileSync('sitemap-static.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+staticPages.map(p=>'<url><loc>'+esc('https://tamilancareers.in/'+p)+'</loc></url>').join('\n')+'\n</urlset>\n');
             fs.writeFileSync('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+['sitemap-static.xml',...names].map(n=>'<sitemap><loc>'+esc('https://tamilancareers.in/'+n)+'</loc></sitemap>').join('\n')+'\n</sitemapindex>\n');
+            // Validate generated sitemap files before committing them.
+            const allPages = [...staticPages.map(p => 'https://tamilancareers.in/'+p),
+              ...jobs.map(j => 'https://tamilancareers.in/government-job-details.html?id='+j.id)];
+            if (new Set(allPages).size !== allPages.length) throw new Error('Duplicate URL detected in sitemap inputs.');
+            for (const p of staticPages) {
+              const file = p || 'index.html';
+              if (!fs.existsSync(file)) throw new Error('Sitemap references a missing page: '+file);
+            }
+            for (const name of ['sitemap.xml','sitemap-static.xml',...names]) {
+              const body = fs.readFileSync(name,'utf8');
+              if (!body.startsWith('<?xml') || !body.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"') ||
+                  !body.endsWith(name==='sitemap.xml' ? '</sitemapindex>\\n' : '</urlset>\\n')) {
+                throw new Error('Invalid sitemap XML structure: '+name);
+              }
+            }
+            const robots = fs.readFileSync('robots.txt','utf8');
+            if (!robots.includes('Sitemap: https://tamilancareers.in/sitemap.xml')) throw new Error('robots.txt does not advertise sitemap.xml');
+            console.log('Validated '+staticPages.length+' static pages and '+jobs.length+' active job URLs.');
             console.log('Generated sitemaps for '+jobs.length+' active published jobs.');
           })().catch(e=>{console.error(e);process.exit(1)});
           NODE
