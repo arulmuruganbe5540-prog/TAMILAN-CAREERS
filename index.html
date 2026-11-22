@@ -265,7 +265,7 @@ pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{page
 function resourceRows(id,rows,isDate){
 const page=pages[id]||1,total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE),body=$(id+'-body');
 if(!rows.length)body.innerHTML='<tr><td colspan="4" class="empty-cell">No published updates available yet.</td></tr>';
-else body.innerHTML=shown.map(r=>{const link=safeUrl(r.resource_url||r.official_notification_url);const third=isDate?(r.exam_date?date(r.exam_date):(r.description||r.resource_year||'—')):esc(r.resource_year||'—');return '<tr><td>'+esc(r.title||r.job_title||'—')+'</td><td>'+esc(r.source_name||r.department_name||'—')+'</td><td>'+esc(isDate?(r.exam_date?date(r.exam_date):(r.description||r.resource_year||'—')):(r.resource_year||date(r.published_at||r.created_at)||'—'))+'</td><td>'+(link?'<a href="'+esc(link)+'" target="_blank" rel="noopener">View</a>':'—')+'</td></tr>';}).join('');
+else body.innerHTML=shown.map(r=>{const link=safeUrl(r.resource_url||r.official_notification_url);const third=isDate?(r.exam_date?date(r.exam_date):(r.exam_stage||r.description||r.resource_year||'—')):esc(r.resource_year||'—');return '<tr><td>'+esc(r.title||r.job_title||'—')+'</td><td>'+esc(r.source_name||r.department_name||'—')+'</td><td>'+esc(isDate?(r.exam_date?date(r.exam_date):(r.exam_stage||r.description||r.resource_year||'—')):(r.resource_year||date(r.published_at||r.created_at)||'—'))+'</td><td>'+(link?'<a href="'+esc(link)+'" target="_blank" rel="noopener">View</a>':'—')+'</td></tr>';}).join('');
 const pager=$(id+'-pager');pager.innerHTML='<button type="button" '+(page<=1?'disabled':'')+' data-step="-1">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' data-step="1">Next</button>';
 pager.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{pages[id]=Math.min(total,Math.max(1,page+Number(b.dataset.step)));resourceRows(id,rows,isDate);}));
 }
@@ -290,10 +290,10 @@ resourceRows('admit',resources.filter(r=>r.resource_type==='admit_card'||r.resou
 async function refresh(){
 const [jr,rr]=await Promise.all([
 sb.from('government_jobs').select('*').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).order('published_at',{ascending:false,nullsFirst:false}).limit(1000),
-sb.from('job_exam_resources').select('*').eq('status','published').order('created_at',{ascending:false}).limit(1000)
+sb.from('government_job_resources').select('*').eq('status','published').eq('is_official',true).order('created_at',{ascending:false}).limit(1000)
 ]);
 if(jr.error)console.error('Government jobs could not be loaded:',jr.error.message);else jobs=jr.data||[];
-if(rr.error)console.error('Exam updates could not be loaded:',rr.error.message);else resources=rr.data||[];
+if(rr.error)console.error('Exam updates could not be loaded:',rr.error.message);else{const jobMap=new Map(jobs.map(j=>[j.id,j]));resources=(rr.data||[]).filter(r=>jobMap.has(r.government_job_id)).map(r=>{const j=jobMap.get(r.government_job_id);return {...r,department_name:j.department_name||j.employer_name||'—',job_title:j.job_title,exam_date:j.exam_date};});}
 renderAll();$('latest-updated').textContent='Last refreshed: '+new Date().toLocaleTimeString('en-IN')+' · Automatic refresh every 5 minutes';
 }
 const homeStateSelect=$('home-state-select');if(homeStateSelect)homeStateSelect.addEventListener('change',renderHomeStateJobs);
