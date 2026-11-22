@@ -67,7 +67,7 @@ async function approvePublish(id){
  show('jobMsg','Published successfully. New record ID: '+data);await loadJobs();
 }
 async function rejectJob(id){const note=prompt('Reason for rejection (required):','');if(!note||note.trim().length<5){show('jobMsg','Enter a clear rejection reason.',true);return}
- const {error}=await sb.from('admin_job_post_reviews').update({status:'rejected',review_note:note.trim(),reviewed_by:user.id,reviewed_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id);
+ const {error}=await sb.rpc('tc_admin_reject_job_post_review',{p_review_id:id,p_review_note:note.trim()});
  if(error){show('jobMsg','Reject failed: '+error.message,true);return}show('jobMsg','Job submission rejected.');await loadJobs()}
 $('refreshCompanies').onclick=loadCompanies;$('refreshJobs').onclick=loadJobs;
 async function start(){const {data:{session}}=await sb.auth.getSession();if(!session){$('guardText').textContent='Sign in through Super Admin first.';return}
