@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#101d3a"><title>Private & International Job Admin | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font:15px/1.6 Arial,sans-serif}
+header{background:#101d3a;color:#fff;padding:18px max(16px,calc((100% - 1180px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:21px;margin:0}header a{color:#fff}main{max-width:1180px;margin:22px auto;padding:0 14px 40px}
+.panel{background:#fff;border:1px solid #dce4ef;border-radius:9px;padding:16px;margin:14px 0}
+h2{margin:0 0 6px;color:#102849;font-size:20px}h3{margin:0 0 12px;color:#173b61;font-size:17px}
+.muted{color:#64748b;font-size:13px}.notice{padding:12px;border-radius:6px;background:#eef6ff;color:#234967;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{min-width:0}.field.full{grid-column:1/-1}
+label{display:block;font-size:13px;font-weight:700;margin:0 0 5px}
+input,select,textarea{width:100%;min-height:42px;padding:9px 10px;border:1px solid #b9c7d8;border-radius:5px;background:#fff;color:#17243b;font:inherit;font-size:15px}
+textarea{min-height:92px;resize:vertical}button,.btn{border:0;border-radius:5px;background:#176b9e;color:white;padding:10px 14px;font:700 13px Arial;cursor:pointer;text-decoration:none;display:inline-block}
+button:disabled{opacity:.5;cursor:not-allowed}.secondary{background:#eaf0f8;color:#17466c}.danger{background:#a52f35}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:620px;font-size:13px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid #e4eaf2;vertical-align:top}th{background:#eaf0f8;color:#193653}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}.row-actions button{padding:7px 9px}
+.hidden{display:none!important}.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+small{color:#64748b}@media(max-width:620px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}header h1{font-size:18px}main{padding:0 10px 30px}.panel{padding:12px}}
+</style></head><body>
+<header><div><h1>TAMILAN CAREERS — Independent Job Management</h1><small style="color:#d6e5f6">Super Admin · MFA protected</small></div><a href="super-admin.html">← Back to Super Admin</a></header>
+<main>
+<div id="guard" class="panel"><h2>Super Admin verification</h2><p id="guardText" class="muted">Checking your secure session and MFA…</p><a class="btn" href="super-admin.html">Open Super Admin sign-in</a></div>
+<div id="app" class="hidden">
+<div class="notice">Private Jobs and International Jobs are managed independently. Each form writes only to its own database table. Only published records appear on the public listing pages.</div>
+<section class="panel">
+<div class="topline"><div><h2>Private Jobs</h2><p class="muted">India-only private-sector vacancies · public records are read from <b>private_jobs</b></p></div><button type="button" id="newPrivate">+ New Private Job</button></div>
+<div id="privateMsg" class="notice hidden" role="status"></div>
+<form id="privateForm" class="hidden">
+<h3 id="privateHeading">Create Private Job</h3><div class="grid">
+<div class="field"><label for="p_title">Job title *</label><input id="p_title" required maxlength="180"></div>
+<div class="field"><label for="p_employer">Employer name *</label><input id="p_employer" required maxlength="180"></div>
+<div class="field"><label for="p_location">Work location *</label><input id="p_location" required maxlength="180"></div>
+<div class="field"><label for="p_category">Job category *</label><select id="p_category" required></select></div>
+<div class="field"><label for="p_employment">Employment type *</label><select id="p_employment" required><option value="full_time">Full time</option><option value="part_time">Part time</option><option value="contract">Contract</option><option value="temporary">Temporary</option><option value="internship">Internship</option><option value="freelance">Freelance</option></select></div>
+<div class="field"><label for="p_workplace">Workplace type</label><select id="p_workplace"><option value="onsite">On-site</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option></select></div>
+<div class="field"><label for="p_salaryMin">Minimum salary</label><input id="p_salaryMin" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="p_salaryMax">Maximum salary</label><input id="p_salaryMax" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="p_currency">Salary currency</label><select id="p_currency"></select></div>
+<div class="field"><label for="p_period">Salary period</label><select id="p_period"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="daily">Daily</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label for="p_vacancies">Vacancies</label><input id="p_vacancies" type="number" min="1" step="1" value="1"></div>
+<div class="field"><label for="p_deadline">Application deadline</label><input id="p_deadline" type="date"></div>
+<div class="field"><label for="p_education">Education / qualification</label><input id="p_education" maxlength="300"></div>
+<div class="field"><label for="p_skills">Required skills</label><input id="p_skills" maxlength="1000"></div>
+<div class="field"><label for="p_email">Contact email</label><input id="p_email" type="email"></div>
+<div class="field"><label for="p_apply">Application URL</label><input id="p_apply" type="url" placeholder="https://"></div>
+<div class="field"><label for="p_site">Official employer website</label><input id="p_site" type="url" placeholder="https://"></div>
+<div class="field"><label for="p_notice">Official notification URL</label><input id="p_notice" type="url" placeholder="https://"></div>
+<div class="field"><label for="p_status">Publishing status</label><select id="p_status"><option value="draft">Draft</option><option value="published">Publish now</option><option value="paused">Paused</option><option value="closed">Closed</option></select></div>
+<div class="field full"><label for="p_description">Job description *</label><textarea id="p_description" required maxlength="8000"></textarea></div>
+</div><div class="actions"><button type="submit" id="savePrivate">Save Private Job</button><button type="button" class="secondary" id="cancelPrivate">Cancel</button></div>
+</form>
+<div class="table-wrap"><table><thead><tr><th>Job title</th><th>Employer</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead><tbody id="privateRows"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
+</section>
+<section class="panel">
+<div class="topline"><div><h2>International Jobs</h2><p class="muted">Outside India · government and private roles are stored in <b>international_jobs</b></p></div><button type="button" id="newInternational">+ New International Job</button></div>
+<div id="internationalMsg" class="notice hidden" role="status"></div>
+<form id="internationalForm" class="hidden">
+<h3 id="internationalHeading">Create International Job</h3><div class="grid">
+<div class="field"><label for="i_title">Job title *</label><input id="i_title" required maxlength="180"></div>
+<div class="field"><label for="i_employer">Employer / authority *</label><input id="i_employer" required maxlength="180"></div>
+<div class="field"><label for="i_country">Country *</label><select id="i_country" required></select></div>
+<div class="field"><label for="i_sector">Job sector *</label><select id="i_sector" required><option value="government">Government</option><option value="private">Private</option></select></div>
+<div class="field"><label for="i_location">Work location *</label><input id="i_location" required maxlength="180"></div>
+<div class="field"><label for="i_category">Job category</label><select id="i_category"></select></div>
+<div class="field"><label for="i_employment">Employment type *</label><select id="i_employment" required><option value="full_time">Full time</option><option value="part_time">Part time</option><option value="contract">Contract</option><option value="temporary">Temporary</option><option value="internship">Internship</option><option value="freelance">Freelance</option></select></div>
+<div class="field"><label for="i_workplace">Workplace type</label><select id="i_workplace"><option value="onsite">On-site</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option></select></div>
+<div class="field"><label for="i_salaryMin">Minimum salary</label><input id="i_salaryMin" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="i_salaryMax">Maximum salary</label><input id="i_salaryMax" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="i_currency">Salary currency</label><select id="i_currency"></select></div>
+<div class="field"><label for="i_period">Salary period</label><select id="i_period"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="daily">Daily</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label for="i_vacancies">Vacancies</label><input id="i_vacancies" type="number" min="1" step="1" value="1"></div>
+<div class="field"><label for="i_deadline">Application deadline</label><input id="i_deadline" type="date"></div>
+<div class="field"><label for="i_education">Education / qualification</label><input id="i_education" maxlength="300"></div>
+<div class="field"><label for="i_skills">Required skills</label><input id="i_skills" maxlength="1000"></div>
+<div class="field"><label for="i_visa">Visa type</label><input id="i_visa" maxlength="180"></div>
+<div class="field"><label for="i_workPermit">Work permit</label><input id="i_workPermit" maxlength="180"></div>
+<div class="field"><label for="i_sponsor">Visa sponsorship</label><select id="i_sponsor"><option value="false">Not offered / not specified</option><option value="true">Available</option></select></div>
+<div class="field"><label for="i_relocation">Relocation support</label><select id="i_relocation"><option value="false">Not offered / not specified</option><option value="true">Available</option></select></div>
+<div class="field"><label for="i_languages">Language requirements</label><input id="i_languages" maxlength="500"></div>
+<div class="field"><label for="i_email">Contact email</label><input id="i_email" type="email"></div>
+<div class="field"><label for="i_apply">Application URL</label><input id="i_apply" type="url" placeholder="https://"></div>
+<div class="field"><label for="i_site">Official employer / authority website</label><input id="i_site" type="url" placeholder="https://"></div>
+<div class="field"><label for="i_notice">Official notification URL</label><input id="i_notice" type="url" placeholder="https://"></div>
+<div class="field"><label for="i_status">Publishing status</label><select id="i_status"><option value="draft">Draft</option><option value="published">Publish now</option><option value="paused">Paused</option><option value="closed">Closed</option></select></div>
+<div class="field full"><label for="i_visaNotes">Visa / recruitment notes</label><textarea id="i_visaNotes" maxlength="2000"></textarea></div>
+<div class="field full"><label for="i_description">Job description *</label><textarea id="i_description" required maxlength="8000"></textarea></div>
+</div><div class="actions"><button type="submit" id="saveInternational">Save International Job</button><button type="button" class="secondary" id="cancelInternational">Cancel</button></div>
+</form>
+<div class="table-wrap"><table><thead><tr><th>Job title</th><th>Employer</th><th>Country / sector</th><th>Status</th><th>Actions</th></tr></thead><tbody id="internationalRows"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
+</section>
+</div></main>
+<script>
+(()=>{
+const URL='https://qkmljuuusfjowexvybvy.supabase.co',KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
+let user=null,privateRows=[],internationalRows=[],editingPrivate=null,editingInternational=null,countries=[],categories=[],currencies=[];
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug=v=>String(v||'job').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,90);
+const num=id=>$(id).value===''?null:Number($(id).value);
+const dateValue=id=>$(id).value?new Date($(id).value+'T23:59:59+05:30').toISOString():null;
+const show=(id,msg,bad=false)=>{$(id).textContent=msg;$(id).classList.remove('hidden');$(id).style.background=bad?'#fff0f0':'#eef6ff';$(id).style.color=bad?'#8d2525':'#234967'};
+const hide=id=>$(id).classList.add('hidden');
+const setSelect=(id,items,label,value)=>{const el=$(id);el.innerHTML='';for(const item of items){const op=document.createElement('option');op.value=item.value;op.textContent=item.label;el.append(op)}if(value)el.value=value};
+function renderPrivate(){
+ const body=$('privateRows');body.innerHTML='';
+ if(!privateRows.length){body.innerHTML='<tr><td colspan="5">No private job records yet.</td></tr>';return}
+ privateRows.forEach(j=>{const tr=document.createElement('tr');[j.job_title,j.employer_name||'—',j.location||'—',j.status].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});
+ const td=document.createElement('td'),edit=document.createElement('button'),del=document.createElement('button');edit.textContent='Edit';del.textContent='Delete';del.className='danger';edit.onclick=()=>editPrivate(j);del.onclick=()=>deleteRow('private_jobs',j.id,'private');td.className='row-actions';td.append(edit,del);tr.append(td);body.append(tr)});
+}
+function renderInternational(){
+ const body=$('internationalRows');body.innerHTML='';
+ if(!internationalRows.length){body.innerHTML='<tr><td colspan="5">No international job records yet.</td></tr>';return}
+ internationalRows.forEach(j=>{const tr=document.createElement('tr');[j.job_title,j.employer_name||'—',(j.country_name||'—')+' / '+(j.job_sector||'—'),j.status].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});
+ const td=document.createElement('td'),edit=document.createElement('button'),del=document.createElement('button');edit.textContent='Edit';del.textContent='Delete';del.className='danger';edit.onclick=()=>editInternational(j);del.onclick=()=>deleteRow('international_jobs',j.id,'international');td.className='row-actions';td.append(edit,del);tr.append(td);body.append(tr)});
+}
+async function loadRows(){
+ const [p,i]=await Promise.all([
+  sb.from('private_jobs').select('*').order('created_at',{ascending:false}).limit(500),
+  sb.from('international_jobs').select('*').order('created_at',{ascending:false}).limit(500)
+ ]);
+ if(p.error)show('privateMsg','Unable to load private jobs: '+p.error.message,true);else{privateRows=p.data||[];renderPrivate()}
+ if(i.error)show('internationalMsg','Unable to load international jobs: '+i.error.message,true);else{internationalRows=i.data||[];renderInternational()}
+}
+function resetPrivate(){editingPrivate=null;$('privateForm').reset();$('privateForm').classList.add('hidden');$('privateHeading').textContent='Create Private Job';$('savePrivate').textContent='Save Private Job';hide('privateMsg')}
+function resetInternational(){editingInternational=null;$('internationalForm').reset();$('internationalForm').classList.add('hidden');$('internationalHeading').textContent='Create International Job';$('saveInternational').textContent='Save International Job';hide('internationalMsg')}
+function editPrivate(j){
+ editingPrivate=j;$('privateForm').classList.remove('hidden');$('privateHeading').textContent='Edit Private Job';$('savePrivate').textContent='Update Private Job';
+ const map={p_title:'job_title',p_employer:'employer_name',p_location:'location',p_category:'category_id',p_employment:'employment_type',p_workplace:'workplace_type',p_salaryMin:'salary_min',p_salaryMax:'salary_max',p_currency:'salary_currency',p_period:'salary_period',p_vacancies:'vacancies',p_education:'education_level',p_skills:'required_skills',p_email:'contact_email',p_apply:'application_url',p_site:'official_website_url',p_notice:'official_notification_url',p_status:'status',p_description:'description'};
+ Object.entries(map).forEach(([id,k])=>$(id).value=j[k]??'');$('p_deadline').value=j.application_deadline?String(j.application_deadline).slice(0,10):'';$('privateForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function editInternational(j){
+ editingInternational=j;$('internationalForm').classList.remove('hidden');$('internationalHeading').textContent='Edit International Job';$('saveInternational').textContent='Update International Job';
+ const map={i_title:'job_title',i_employer:'employer_name',i_country:'country_code',i_sector:'job_sector',i_location:'location',i_category:'category_id',i_employment:'employment_type',i_workplace:'workplace_type',i_salaryMin:'salary_min',i_salaryMax:'salary_max',i_currency:'salary_currency',i_period:'salary_period',i_vacancies:'vacancies',i_education:'education_level',i_skills:'required_skills',i_visa:'visa_type',i_workPermit:'work_permit',i_languages:'language_requirements',i_email:'contact_email',i_apply:'application_url',i_site:'official_website_url',i_notice:'official_notification_url',i_status:'status',i_visaNotes:'visa_notes'};
+ Object.entries(map).forEach(([id,k])=>$(id).value=j[k]??'');$('i_sponsor').value=String(!!j.visa_sponsorship_available);$('i_relocation').value=String(!!j.relocation_support);$('i_deadline').value=j.application_deadline?String(j.application_deadline).slice(0,10):'';$('internationalForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function deleteRow(table,id,kind){if(!confirm('Permanently delete this '+kind+' job?'))return;const {error}=await sb.from(table).delete().eq('id',id);if(error){show(kind==='private'?'privateMsg':'internationalMsg','Delete failed: '+error.message,true);return}show(kind==='private'?'privateMsg':'internationalMsg','Job deleted successfully.');await loadRows()}
+function validSalary(a,b){return a===null||b===null||a<=b}
+$('newPrivate').onclick=()=>{resetPrivate();$('privateForm').classList.remove('hidden');$('privateForm').scrollIntoView({behavior:'smooth'})};
+$('cancelPrivate').onclick=resetPrivate;$('newInternational').onclick=()=>{resetInternational();$('internationalForm').classList.remove('hidden');$('internationalForm').scrollIntoView({behavior:'smooth'})};$('cancelInternational').onclick=resetInternational;
+$('privateForm').addEventListener('submit',async e=>{
+ e.preventDefault();hide('privateMsg');const min=num('p_salaryMin'),max=num('p_salaryMax');if(!validSalary(min,max)){show('privateMsg','Minimum salary cannot exceed maximum salary.',true);return}
+ const title=$('p_title').value.trim(),status=$('p_status').value,now=new Date().toISOString();
+ const payload={job_title:title,job_slug:editingPrivate?.job_slug||slug(title)+'-'+crypto.randomUUID().slice(0,8),job_code:editingPrivate?.job_code||'TC-PRI-'+crypto.randomUUID().replaceAll('-','').slice(0,10).toUpperCase(),employer_name:$('p_employer').value.trim(),description:$('p_description').value.trim(),location:$('p_location').value.trim(),category_id:$('p_category').value||null,employment_type:$('p_employment').value,workplace_type:$('p_workplace').value,salary_min:min,salary_max:max,salary_currency:$('p_currency').value||'INR',salary_period:$('p_period').value,vacancies:num('p_vacancies')??1,application_deadline:dateValue('p_deadline'),education_level:$('p_education').value.trim()||null,required_skills:$('p_skills').value.trim()||null,contact_email:$('p_email').value.trim()||null,application_url:$('p_apply').value.trim()||null,official_website_url:$('p_site').value.trim()||null,official_notification_url:$('p_notice').value.trim()||null,country_name:'India',status,published_at:status==='published'?(editingPrivate?.published_at||now):(editingPrivate?.published_at||null),is_admin_managed:editingPrivate?editingPrivate.is_admin_managed:true,company_id:editingPrivate?.company_id||null,created_by:editingPrivate?.created_by||user.id,updated_at:now};
+ $('savePrivate').disabled=true;const result=editingPrivate?await sb.from('private_jobs').update(payload).eq('id',editingPrivate.id):await sb.from('private_jobs').insert(payload);$('savePrivate').disabled=false;
+ if(result.error){show('privateMsg','Save failed: '+result.error.message,true);return}show('privateMsg',editingPrivate?'Private job updated.':'Private job created.');resetPrivate();await loadRows();
+});
+$('internationalForm').addEventListener('submit',async e=>{
+ e.preventDefault();hide('internationalMsg');const min=num('i_salaryMin'),max=num('i_salaryMax');if(!validSalary(min,max)){show('internationalMsg','Minimum salary cannot exceed maximum salary.',true);return}
+ const country=countries.find(x=>x.country_code===$('i_country').value);if(!country||country.country_code==='IN'||country.country_name.toLowerCase()==='india'){show('internationalMsg','Select a country outside India for International Jobs.',true);return}
+ const title=$('i_title').value.trim(),status=$('i_status').value,now=new Date().toISOString();
+ const payload={job_title:title,job_slug:editingInternational?.job_slug||slug(title)+'-'+crypto.randomUUID().slice(0,8),job_code:editingInternational?.job_code||'TC-INT-'+crypto.randomUUID().replaceAll('-','').slice(0,10).toUpperCase(),employer_name:$('i_employer').value.trim(),description:$('i_description').value.trim(),location:$('i_location').value.trim(),category_id:$('i_category').value||null,job_sector:$('i_sector').value,country_name:country.country_name,country_code:country.country_code,employment_type:$('i_employment').value,workplace_type:$('i_workplace').value,salary_min:min,salary_max:max,salary_currency:$('i_currency').value||country.currency_code,salary_period:$('i_period').value,vacancies:num('i_vacancies')??1,application_deadline:dateValue('i_deadline'),education_level:$('i_education').value.trim()||null,required_skills:$('i_skills').value.trim()||null,visa_type:$('i_visa').value.trim()||null,work_permit:$('i_workPermit').value.trim()||null,visa_sponsorship_available:$('i_sponsor').value==='true',relocation_support:$('i_relocation').value==='true',language_requirements:$('i_languages').value.trim()||null,visa_notes:$('i_visaNotes').value.trim()||null,contact_email:$('i_email').value.trim()||null,application_url:$('i_apply').value.trim()||null,official_website_url:$('i_site').value.trim()||null,official_notification_url:$('i_notice').value.trim()||null,status,published_at:status==='published'?(editingInternational?.published_at||now):(editingInternational?.published_at||null),is_admin_managed:editingInternational?editingInternational.is_admin_managed:true,company_id:editingInternational?.company_id||null,created_by:editingInternational?.created_by||user.id,updated_at:now};
+ $('saveInternational').disabled=true;const result=editingInternational?await sb.from('international_jobs').update(payload).eq('id',editingInternational.id):await sb.from('international_jobs').insert(payload);$('saveInternational').disabled=false;
+ if(result.error){show('internationalMsg','Save failed: '+result.error.message,true);return}show('internationalMsg',editingInternational?'International job updated.':'International job created.');resetInternational();await loadRows();
+});
+async function start(){
+ const {data:{session},error:sErr}=await sb.auth.getSession();if(sErr||!session){$('guardText').textContent='Sign in through the Super Admin page first.';return}
+ const {data:roles,error:rErr}=await sb.from('user_roles').select('role').eq('user_id',session.user.id);
+ if(rErr||!roles?.some(x=>x.role==='super_admin')){$('guardText').textContent='Super Admin permission is required.';return}
+ const {data:aal,error:aalErr}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalErr||aal.currentLevel!=='aal2'){$('guardText').textContent='Complete authenticator verification in Super Admin, then open this page again.';return}
+ user=session.user;
+ const [co,ca]=await Promise.all([sb.from('countries').select('country_code,country_name,currency_code').eq('is_active',true).order('country_name'),sb.from('job_categories').select('id,category_name').eq('is_active',true).order('category_name'),sb.from('currencies').select('currency_code,currency_name').eq('is_active',true).order('currency_code')]);
+ if(co.error||ca.error||co.data==null||ca.data==null){$('guardText').textContent='Could not load country and category lists. Check Supabase read policies.';return}
+ countries=co.data;categories=ca.data;currencies=ca.data?ca.data:[]; 
+ setSelect('p_category',[{value:'',label:'Select category'},...categories.map(x=>({value:x.id,label:x.category_name}))]);
+ setSelect('i_category',[{value:'',label:'Select category'},...categories.map(x=>({value:x.id,label:x.category_name}))]);
+ setSelect('p_currency',currencies.map(x=>({value:x.currency_code,label:x.currency_code+' — '+x.currency_name})),'INR');
+ setSelect('i_currency',currencies.map(x=>({value:x.currency_code,label:x.currency_code+' — '+x.currency_name})),'USD');
+ setSelect('i_country',countries.filter(x=>x.country_code!=='IN').map(x=>({value:x.country_code,label:x.country_name})));
+ $('guard').classList.add('hidden');$('app').classList.remove('hidden');await loadRows();
+}
+start();
+})();
+</script></body></html>
