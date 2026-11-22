@@ -78,8 +78,7 @@ jobs:
               'postgraduate-government-jobs.html', 'admissions.html',
               'admission-open.html', 'entrance-exam.html', 'exam-date.html',
               'admit-card.html', 'results.html', 'about-us.html', 'contact-us.html',
-              'privacy-policy.html', 'terms-and-conditions.html', 'disclaimer.html',
-              'tamil-nadu-government-jobs.html'
+              'privacy-policy.html', 'terms-and-conditions.html', 'disclaimer.html'
             ];
 
             const statesAndUTs = [
