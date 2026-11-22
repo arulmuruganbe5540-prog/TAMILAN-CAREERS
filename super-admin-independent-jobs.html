@@ -164,9 +164,9 @@ async function start(){
  const {data:aal,error:aalErr}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
  if(aalErr||aal.currentLevel!=='aal2'){$('guardText').textContent='Complete authenticator verification in Super Admin, then open this page again.';return}
  user=session.user;
- const [co,ca]=await Promise.all([sb.from('countries').select('country_code,country_name,currency_code').eq('is_active',true).order('country_name'),sb.from('job_categories').select('id,category_name').eq('is_active',true).order('category_name'),sb.from('currencies').select('currency_code,currency_name').eq('is_active',true).order('currency_code')]);
- if(co.error||ca.error||co.data==null||ca.data==null){$('guardText').textContent='Could not load country and category lists. Check Supabase read policies.';return}
- countries=co.data;categories=ca.data;currencies=ca.data?ca.data:[]; 
+ const [co,ca,cu]=await Promise.all([sb.from('countries').select('country_code,country_name,currency_code').eq('is_active',true).order('country_name'),sb.from('job_categories').select('id,category_name').eq('is_active',true).order('category_name'),sb.from('currencies').select('currency_code,currency_name').eq('is_active',true).order('currency_code')]);
+ if(co.error||ca.error||cu.error||co.data==null||ca.data==null||cu.data==null){$('guardText').textContent='Could not load country and category lists. Check Supabase read policies.';return}
+ countries=co.data;categories=ca.data;currencies=cu.data; 
  setSelect('p_category',[{value:'',label:'Select category'},...categories.map(x=>({value:x.id,label:x.category_name}))]);
  setSelect('i_category',[{value:'',label:'Select category'},...categories.map(x=>({value:x.id,label:x.category_name}))]);
  setSelect('p_currency',currencies.map(x=>({value:x.currency_code,label:x.currency_code+' — '+x.currency_name})),'INR');
