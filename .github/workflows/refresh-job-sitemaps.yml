@@ -2,6 +2,10 @@ name: Refresh job sitemaps
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/refresh-job-sitemaps.yml'
   schedule:
     - cron: "17 */6 * * *"
 
