@@ -43,9 +43,9 @@ jobs:
               jobs.push(...page);
               if (page.length < pageSize) break;
             }
-            const xml = entries => '<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n' +
-              entries.map(j => '<url><loc>'+esc('https://tamilancareers.in/government-job-details.html?id='+j.id)+'</loc>'+(j.updated_at||j.published_at?'<lastmod>'+iso(j.updated_at||j.published_at)+'</lastmod>':'')+'</url>').join('\\n') +
-              '\\n</urlset>\\n';
+            const xml = entries => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+              entries.map(j => '<url><loc>'+esc('https://tamilancareers.in/government-job-details.html?id='+j.id)+'</loc>'+(j.updated_at||j.published_at?'<lastmod>'+iso(j.updated_at||j.published_at)+'</lastmod>':'')+'</url>').join('\n') +
+              '\n</urlset>\n';
             const chunks = [];
             for (let i=0;i<jobs.length;i+=40) chunks.push(jobs.slice(i,i+40));
             if (!chunks.length) chunks.push([]);
@@ -56,9 +56,9 @@ jobs:
             for (let i=chunks.length+1;i<=20;i++) {
               const stale='job-sitemap-'+i+'.xml'; if (fs.existsSync(stale)) fs.unlinkSync(stale);
             }
-            const staticPages=['','government-jobs.html','central-government-jobs.html','state-government-jobs.html','tamil-nadu-government-jobs.html','private-jobs.html','international-jobs.html','8th-pass-government-jobs.html','10th-pass-government-jobs.html','12th-pass-government-jobs.html','iti-government-jobs.html','diploma-government-jobs.html','degree-government-jobs.html','postgraduate-government-jobs.html','about-us.html','contact-us.html','privacy-policy.html','terms-and-conditions.html','disclaimer.html'];
-            fs.writeFileSync('sitemap-static.xml','<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n'+staticPages.map(p=>'<url><loc>'+esc('https://tamilancareers.in/'+p)+'</loc></url>').join('\\n')+'\\n</urlset>\\n');
-            fs.writeFileSync('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n'+['sitemap-static.xml',...names].map(n=>'<sitemap><loc>'+esc('https://tamilancareers.in/'+n)+'</loc></sitemap>').join('\\n')+'\\n</sitemapindex>\\n');
+            const staticPages=["","government-jobs.html","indian-government-jobs.html","central-government-jobs.html","state-government-jobs.html","tamil-nadu-government-jobs.html","private-jobs.html","international-jobs.html","police-jobs.html","8th-pass-government-jobs.html","10th-pass-government-jobs.html","12th-pass-government-jobs.html","iti-government-jobs.html","diploma-government-jobs.html","degree-government-jobs.html","postgraduate-government-jobs.html","admissions.html","admission-open.html","entrance-exam.html","exam-date.html","admit-card.html","results.html","about-us.html","contact-us.html","privacy-policy.html","terms-and-conditions.html","disclaimer.html"];
+            fs.writeFileSync('sitemap-static.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+staticPages.map(p=>'<url><loc>'+esc('https://tamilancareers.in/'+p)+'</loc></url>').join('\n')+'\n</urlset>\n');
+            fs.writeFileSync('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+['sitemap-static.xml',...names].map(n=>'<sitemap><loc>'+esc('https://tamilancareers.in/'+n)+'</loc></sitemap>').join('\n')+'\n</sitemapindex>\n');
             console.log('Generated sitemaps for '+jobs.length+' active published jobs.');
           })().catch(e=>{console.error(e);process.exit(1)});
           NODE
