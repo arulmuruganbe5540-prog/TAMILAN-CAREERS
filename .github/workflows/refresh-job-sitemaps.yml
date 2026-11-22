@@ -40,7 +40,7 @@ jobs:
             const pageSize = 1000;
             for (let offset = 0; ; offset += pageSize) {
               const url = new URL('/rest/v1/' + table, base);
-              url.searchParams.set('select', 'id,updated_at,published_at,application_deadline');
+              url.searchParams.set('select', table === 'government_jobs' ? 'id,updated_at,published_at,application_deadline,government_category,state_name,job_category,recruitment_authority,department_name,employer_name' : 'id,updated_at,published_at,application_deadline');
               url.searchParams.set('status', 'eq.published');
               url.searchParams.set('or', '(application_deadline.is.null,application_deadline.gt.' + new Date().toISOString() + ')');
               url.searchParams.set('order', 'updated_at.desc.nullslast');
@@ -70,7 +70,7 @@ jobs:
             const staticPages = [
               '', 'government-jobs.html', 'indian-government-jobs.html',
               'central-government-jobs.html', 'state-government-jobs.html',
-              'state-jobs.html', 'tamil-nadu-government-jobs.html',
+              'tamil-nadu-government-jobs.html',
               'private-jobs.html', 'international-jobs.html', 'police-jobs.html',
               '8th-pass-government-jobs.html', '10th-pass-government-jobs.html',
               '12th-pass-government-jobs.html', 'iti-government-jobs.html',
@@ -79,7 +79,7 @@ jobs:
               'admission-open.html', 'entrance-exam.html', 'exam-date.html',
               'admit-card.html', 'results.html', 'about-us.html', 'contact-us.html',
               'privacy-policy.html', 'terms-and-conditions.html', 'disclaimer.html',
-              'government-category-jobs.html', 'central-government-category.html'
+              'tamil-nadu-government-jobs.html'
             ];
 
             const statesAndUTs = [
@@ -96,6 +96,23 @@ jobs:
               ...staticPages.map(p => site + '/' + p),
               ...statesAndUTs.map(state => site + '/state-jobs.html?state=' + encodeURIComponent(state))
             ];
+            const dynamicGovUrls = new Set();
+            for (const job of government) {
+              const category = String(job.job_category || '').trim();
+              if (!category) continue;
+              if (job.government_category === 'Central Government') {
+                dynamicGovUrls.add(site + '/central-government-category.html?category=' + encodeURIComponent(category));
+              } else if (job.state_name) {
+                const state = String(job.state_name).trim();
+                const authority = String(job.recruitment_authority ||
+                  (category.toLowerCase().includes('psc') ? state + ' Public Service Commission' :
+                  (job.department_name || job.employer_name || 'Other Government Recruitment'))).trim();
+                dynamicGovUrls.add(site + '/government-category-jobs.html?scope=state&state=' + encodeURIComponent(state) + '&category=' + encodeURIComponent(category));
+                dynamicGovUrls.add(site + '/state-department.html?state=' + encodeURIComponent(state) + '&authority=' + encodeURIComponent(authority));
+                dynamicGovUrls.add(site + '/state-category-jobs.html?state=' + encodeURIComponent(state) + '&authority=' + encodeURIComponent(authority) + '&category=' + encodeURIComponent(category));
+              }
+            }
+            const allStaticUrls = [...staticUrls, ...dynamicGovUrls];
 
             const xml = entries => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
               entries.map(j => '<url><loc>' + esc(site + '/' + j.detailPage + '?id=' + encodeURIComponent(j.id)) + '</loc>' +
@@ -118,20 +135,20 @@ jobs:
 
             fs.writeFileSync('sitemap-static.xml',
               '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-              staticUrls.map(url => '<url><loc>' + esc(url) + '</loc></url>').join('\n') + '\n</urlset>\n');
+              allStaticUrls.map(url => '<url><loc>' + esc(url) + '</loc></url>').join('\n') + '\n</urlset>\n');
 
             fs.writeFileSync('sitemap.xml',
               '<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
               ['sitemap-static.xml', ...names].map(n => '<sitemap><loc>' + esc(site + '/' + n) + '</loc></sitemap>').join('\n') +
               '\n</sitemapindex>\n');
 
-            const allUrls = [...staticUrls, ...jobs.map(j => site + '/' + j.detailPage + '?id=' + encodeURIComponent(j.id))];
+            const allUrls = [...allStaticUrls, ...jobs.map(j => site + '/' + j.detailPage + '?id=' + encodeURIComponent(j.id))];
             if (new Set(allUrls).size !== allUrls.length) throw new Error('Duplicate URL detected in sitemap inputs.');
             for (const page of staticPages) {
               const file = page || 'index.html';
               if (!fs.existsSync(file)) throw new Error('Sitemap references a missing page: ' + file);
             }
-            for (const file of ['government-job-details.html', 'private-job-details.html', 'international-job-details.html']) {
+            for (const file of ['state-jobs.html', 'government-category-jobs.html', 'central-government-category.html', 'state-department.html', 'state-category-jobs.html', 'government-job-details.html', 'private-job-details.html', 'international-job-details.html']) {
               if (!fs.existsSync(file)) throw new Error('A job detail template is missing: ' + file);
             }
             for (const name of ['sitemap.xml', 'sitemap-static.xml', ...names]) {
