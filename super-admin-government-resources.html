@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>Government Job Resources Admin | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font:15px/1.6 Arial,sans-serif}header{background:#101d3a;color:#fff;padding:18px max(16px,calc((100% - 1100px)/2));display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:20px}header a{color:white}main{max-width:1100px;margin:22px auto;padding:0 14px 40px}.panel{background:#fff;border:1px solid #dce4ef;border-radius:9px;padding:16px;margin:14px 0}h2{margin:0 0 6px;color:#102849;font-size:20px}.muted{color:#64748b;font-size:13px}.notice{padding:12px;background:#eef6ff;color:#234967;border-radius:6px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:0 0 5px}input,select,textarea{width:100%;min-height:42px;padding:9px 10px;border:1px solid #b9c7d8;border-radius:5px;font:inherit;background:#fff}textarea{min-height:90px}button,.btn{border:0;border-radius:5px;background:#176b9e;color:white;padding:10px 14px;font:700 13px Arial;cursor:pointer;text-decoration:none;display:inline-block}button:disabled{opacity:.5}.secondary{background:#eaf0f8;color:#17466c}.danger{background:#a52f35}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e4eaf2}th{background:#eaf0f8}.row-actions{display:flex;gap:6px}.row-actions button{padding:7px 9px}.hidden{display:none!important}@media(max-width:620px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}main{padding:0 10px 30px}}
+</style></head><body><header><div><h1>TAMILAN CAREERS — Government Job Resource Library</h1><small style="color:#d6e5f6">Super Admin · MFA protected</small></div><a href="super-admin.html">← Back to Super Admin</a></header><main>
+<div id="guard" class="panel"><h2>Super Admin verification</h2><p id="guardText" class="muted">Checking secure session…</p><a class="btn" href="super-admin.html">Open Super Admin sign-in</a></div>
+<div id="app" class="hidden"><section class="panel"><h2>Exam resources, admit cards, answer keys and results</h2><p class="muted">Each resource belongs to one Government Job record. Only records marked Published are visible publicly.</p><div id="msg" class="notice hidden" role="status"></div>
+<button id="newBtn" type="button">+ Add Resource</button>
+<form id="resourceForm" class="hidden" style="margin-top:16px"><h3 id="formHeading">Create resource</h3><div class="grid">
+<div class="field full"><label for="jobId">Government job *</label><select id="jobId" required></select></div>
+<div class="field"><label for="resourceType">Resource type *</label><select id="resourceType" required><option value="syllabus">Syllabus</option><option value="previous_paper">Previous year paper</option><option value="official_notice">Official notice</option><option value="exam_schedule">Exam schedule</option><option value="hall_ticket">Hall ticket</option><option value="admit_card">Admit card</option><option value="answer_key">Answer key</option><option value="result">Result</option><option value="cutoff">Cut-off marks</option><option value="mock_test">Mock test</option><option value="other">Other</option></select></div>
+<div class="field"><label for="resourceYear">Year</label><input id="resourceYear" type="number" min="1950" max="2100"></div>
+<div class="field"><label for="examStage">Exam stage</label><input id="examStage" maxlength="160"></div>
+<div class="field"><label for="sourceName">Source / authority name</label><input id="sourceName" maxlength="180"></div>
+<div class="field"><label for="resourceUrl">Official resource URL</label><input id="resourceUrl" type="url" placeholder="https://"></div>
+<div class="field"><label for="official">Official source?</label><select id="official"><option value="true">Yes — verified official source</option><option value="false">No / not verified</option></select></div>
+<div class="field"><label for="resourceStatus">Publishing status</label><select id="resourceStatus"><option value="draft">Draft</option><option value="published">Publish</option><option value="archived">Archived</option></select></div>
+<div class="field full"><label for="resourceTitle">Resource title *</label><input id="resourceTitle" required maxlength="240"></div>
+<div class="field full"><label for="resourceDescription">Description</label><textarea id="resourceDescription" maxlength="4000"></textarea></div>
+</div><div class="actions"><button id="saveBtn" type="submit">Save resource</button><button id="cancelBtn" type="button" class="secondary">Cancel</button></div></form>
+<div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>Resource</th><th>Government job</th><th>Type</th><th>Official</th><th>Status</th><th>Actions</th></tr></thead><tbody id="rows"><tr><td colspan="6">Loading…</td></tr></tbody></table></div></section></div></main>
+<script>
+(()=>{
+const sb=supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2'),$=id=>document.getElementById(id);
+let user=null,jobs=[],resources=[],editing=null;
+const show=(m,bad=false)=>{$('msg').textContent=m;$('msg').classList.remove('hidden');$('msg').style.background=bad?'#fff0f0':'#eef6ff';$('msg').style.color=bad?'#8d2525':'#234967'};
+const hide=()=>$('msg').classList.add('hidden');
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function reset(){editing=null;$('resourceForm').reset();$('resourceForm').classList.add('hidden');$('formHeading').textContent='Create resource';$('saveBtn').textContent='Save resource';hide()}
+function render(){
+ const body=$('rows');body.innerHTML='';
+ if(!resources.length){body.innerHTML='<tr><td colspan="6">No resources have been added yet.</td></tr>';return}
+ resources.forEach(r=>{const tr=document.createElement('tr');const job=jobs.find(j=>j.id===r.government_job_id);[r.title,job?.job_title||'—',r.resource_type,r.is_official?'Yes':'No',r.status].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});
+ const td=document.createElement('td'),edit=document.createElement('button'),del=document.createElement('button');edit.textContent='Edit';del.textContent='Delete';del.className='danger';edit.onclick=()=>editRow(r);del.onclick=()=>deleteRow(r.id);td.className='row-actions';td.append(edit,del);tr.append(td);body.append(tr)});
+}
+async function load(){const [j,r]=await Promise.all([sb.from('government_jobs').select('id,job_title').order('created_at',{ascending:false}).limit(500),sb.from('government_job_resources').select('*').order('created_at',{ascending:false}).limit(1000)]);
+ if(j.error||r.error){show('Could not load resources: '+(j.error?.message||r.error?.message),true);return}
+ jobs=j.data||[];resources=r.data||[];$('jobId').innerHTML='';for(const item of jobs){const op=document.createElement('option');op.value=item.id;op.textContent=item.job_title;$('jobId').append(op)}render();}
+function editRow(r){editing=r;$('resourceForm').classList.remove('hidden');$('formHeading').textContent='Edit resource';$('saveBtn').textContent='Update resource';
+ const map={jobId:'government_job_id',resourceType:'resource_type',resourceYear:'resource_year',examStage:'exam_stage',sourceName:'source_name',resourceUrl:'resource_url',resourceStatus:'status',resourceTitle:'title',resourceDescription:'description'};
+ Object.entries(map).forEach(([id,k])=>$(id).value=r[k]??'');$('official').value=String(r.is_official);$('resourceForm').scrollIntoView({behavior:'smooth'});}
+async function deleteRow(id){if(!confirm('Permanently delete this resource?'))return;const {error}=await sb.from('government_job_resources').delete().eq('id',id);if(error){show('Delete failed: '+error.message,true);return}show('Resource deleted.');await load()}
+$('newBtn').onclick=()=>{reset();$('resourceForm').classList.remove('hidden');$('resourceForm').scrollIntoView({behavior:'smooth'})};$('cancelBtn').onclick=reset;
+$('resourceForm').addEventListener('submit',async e=>{e.preventDefault();hide();const payload={government_job_id:$('jobId').value,resource_type:$('resourceType').value,title:$('resourceTitle').value.trim(),description:$('resourceDescription').value.trim()||null,resource_url:$('resourceUrl').value.trim()||null,resource_year:$('resourceYear').value?Number($('resourceYear').value):null,exam_stage:$('examStage').value.trim()||null,source_name:$('sourceName').value.trim()||null,is_official:$('official').value==='true',status:$('resourceStatus').value,updated_at:new Date().toISOString(),created_by:editing?.created_by||user.id};
+ if(!payload.government_job_id){show('Select a Government Job first.',true);return}
+ $('saveBtn').disabled=true;const res=editing?await sb.from('government_job_resources').update(payload).eq('id',editing.id):await sb.from('government_job_resources').insert(payload);$('saveBtn').disabled=false;
+ if(res.error){show('Save failed: '+res.error.message,true);return}show(editing?'Resource updated.':'Resource created.');reset();await load();
+});
+async function start(){const {data:{session}}=await sb.auth.getSession();if(!session){$('guardText').textContent='Sign in through Super Admin first.';return}
+ const {data:roles,error}=await sb.from('user_roles').select('role').eq('user_id',session.user.id);if(error||!roles?.some(x=>x.role==='super_admin')){$('guardText').textContent='Super Admin permission is required.';return}
+ const {data:aal,error:ae}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||aal.currentLevel!=='aal2'){$('guardText').textContent='Complete MFA in Super Admin, then reopen this page.';return}
+ user=session.user;$('guard').classList.add('hidden');$('app').classList.remove('hidden');await load();}
+start();
+})();
+</script></body></html>
