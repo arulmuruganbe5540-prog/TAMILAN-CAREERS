@@ -208,7 +208,15 @@ async function loadGric(){
 async function setGricReviewStatus(id,status){
  if(status==='rejected'&&!confirm('இந்த அறிவிப்பை நிராகரிக்கவா?'))return;
  const update={status,updated_at:new Date().toISOString()};
- if(status==='verified'){update.verified_at=new Date().toISOString();update.verified_by=currentUser.id;update.verification_method='admin_manual_review'}
+ if(status==='verified'){
+  const evidence=prompt('அதிகாரப்பூர்வ அறிவிப்பு PDF / இணையதளத்தைத் திறந்து கீழ்கண்ட விவரங்களைச் சரிபார்த்த பிறகே உறுதிப்படுத்தவும்.\n\nNotification Number | அறிவிப்பு தேதி | காலிப்பணியிடங்கள் | கல்வித்தகுதி | விண்ணப்ப தொடக்க/கடைசி தேதி | அதிகாரப்பூர்வ Apply URL\n\nசரிபார்த்த விவரங்களை இங்கே எழுதவும். காலியாக விட்டால் ரத்து செய்யப்படும்.');
+  if(!evidence||evidence.trim().length<25){showMsg($('gricSourceMessage'),'போதுமான சரிபார்ப்பு ஆதாரம் தரப்படவில்லை. Pending நிலையிலேயே வைக்கப்பட்டது.','error');return}
+  const {data:existing,error:readError}=await sb.from('government_notice_reviews').select('verification,details').eq('id',id).maybeSingle();
+  if(readError||!existing){showMsg($('gricSourceMessage'),'சரிபார்ப்பு விவரங்களைப் படிக்க முடியவில்லை.','error');return}
+  update.verified_at=new Date().toISOString();update.verified_by=currentUser.id;update.verification_method='admin_manual_review';
+  update.verification={...(existing.verification||{}),manual_review_confirmed:true,notification_number_verified:true,dates_verified:true,vacancies_verified:true,eligibility_verified:true,application_link_verified:true,reviewed_by_super_admin:true};
+  update.details={...(existing.details||{}),manual_verification_note:evidence.trim(),manual_verification_at:new Date().toISOString()};
+ }
  if(status==='rejected')update.rejection_reason='நிர்வாகி நிராகரித்தார்';
  const {error}=await sb.from('government_notice_reviews').update(update).eq('id',id);
  if(error){showMsg($('gricSourceMessage'),'மாற்றம் சேமிக்கப்படவில்லை: '+error.message,'error');return}
