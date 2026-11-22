@@ -105,7 +105,7 @@ const num=id=>$(id).value===''?null:Number($(id).value);
 const dateValue=id=>$(id).value?new Date($(id).value+'T23:59:59+05:30').toISOString():null;
 const show=(id,msg,bad=false)=>{$(id).textContent=msg;$(id).classList.remove('hidden');$(id).style.background=bad?'#fff0f0':'#eef6ff';$(id).style.color=bad?'#8d2525':'#234967'};
 const hide=id=>$(id).classList.add('hidden');
-const setSelect=(id,items,label,value)=>{const el=$(id);el.innerHTML='';for(const item of items){const op=document.createElement('option');op.value=item.value;op.textContent=item.label;el.append(op)}if(value)el.value=value};
+const setSelect=(id,items,value)=>{const el=$(id);el.innerHTML='';for(const item of items){const op=document.createElement('option');op.value=item.value;op.textContent=item.label;el.append(op)}if(value)el.value=value};
 function renderPrivate(){
  const body=$('privateRows');body.innerHTML='';
  if(!privateRows.length){body.innerHTML='<tr><td colspan="5">No private job records yet.</td></tr>';return}
