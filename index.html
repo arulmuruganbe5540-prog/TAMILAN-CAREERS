@@ -289,7 +289,7 @@ resourceRows('admit',resources.filter(r=>r.resource_type==='admit_card'||r.resou
 }
 async function refresh(){
 const [jr,rr]=await Promise.all([
-sb.from('government_jobs').select('*').eq('status','published').order('published_at',{ascending:false,nullsFirst:false}).limit(1000),
+sb.from('government_jobs').select('*').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).order('published_at',{ascending:false,nullsFirst:false}).limit(1000),
 sb.from('job_exam_resources').select('*').eq('status','published').order('created_at',{ascending:false}).limit(1000)
 ]);
 if(jr.error)console.error('Government jobs could not be loaded:',jr.error.message);else jobs=jr.data||[];
