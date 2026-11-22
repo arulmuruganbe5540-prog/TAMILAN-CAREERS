@@ -54,7 +54,7 @@ a{ text-underline-offset:3px }
   <div class="table-wrap"><table><thead><tr><th>அறிவிப்பு</th><th>வகை</th><th>விண்ணப்ப கடைசி நாள்</th><th>நிலை</th><th>அதிகாரப்பூர்வ இணைப்பு</th><th>செயல்</th></tr></thead><tbody id="gricReviewsBody"><tr><td colspan="6">தரவுகள் ஏற்றப்படுகின்றன…</td></tr></tbody></table></div><div class="actions" id="gricReviewPager"></div>
   <p id="gricReviewCount" class="footer-note"></p>
  </div>
- <p class="footer-note">தானியங்கி கண்காணிப்பு இன்னும் தனியாகச் செயல்படுத்தப்படவில்லை. ஆதாரப் பட்டியல் மற்றும் சரிபார்ப்பு வரிசை இப்போது நிர்வாகப் பகுதியில் இணைக்கப்பட்டுள்ளது; வெளியீடு தானாக நடைபெறாது.</p>
+ <p class="footer-note">'இப்போது கண்காணி' பொத்தானை அழுத்தும்போது பதிவு செய்யப்பட்ட அதிகாரப்பூர்வ தளங்கள் சரிபார்க்கப்படும். தானியங்கி கால அட்டவணை (Cron) இன்னும் இயக்கப்படவில்லை. கண்டறியப்பட்ட தகவல்கள் நிர்வாகச் சரிபார்ப்புக்குப் பிறகே வெளியிடப்பட வேண்டும்.</p>
 </section>
 <section id="formPanel" class="panel hidden"><div class="topline"><h2 id="formHeading">Create Government Job</h2><button type="button" id="cancelEdit" class="secondary">Close</button></div>
 <form id="jobForm">
@@ -192,7 +192,7 @@ async function loadGric(){
  const sourceBody=$('gricSourcesBody');sourceBody.innerHTML='';
  if(sourcesRes.error){sourceBody.innerHTML='<tr><td colspan="5">ஆதாரங்களை ஏற்ற முடியவில்லை: '+esc(sourcesRes.error.message)+'</td></tr>'}
  else{
-  const rows=sourcesRes.data||[];$('gricSourceCount').textContent=rows.length+' ஆதாரங்கள்';
+  const rows=sourcesRes.data||[];$('gricSourceCount').textContent=rows.length+' ஆதாரங்கள் · மத்திய அரசு: '+rows.filter(x=>x.scope==='central').length+' · மாநிலம்/UT: '+rows.filter(x=>x.scope==='state').length;
   if(!rows.length)sourceBody.innerHTML='<tr><td colspan="5">இன்னும் ஆதாரங்கள் சேர்க்கப்படவில்லை.</td></tr>';
   rows.slice(gricSourcePage*20,(gricSourcePage+1)*20).forEach(s=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+esc(s.authority)+'</td><td>'+esc(s.scope==='central'?'மத்திய அரசு':'மாநிலம் / யூனியன் பிரதேசம்')+'</td><td>'+esc(s.state||'—')+'</td><td><a href="'+esc(s.base_url)+'" target="_blank" rel="noopener noreferrer">அதிகாரப்பூர்வ தளம்</a></td><td>'+((s.enabled)?'இயக்கத்தில்':'நிறுத்தப்பட்டது')+'<br><small>'+esc(s.last_checked_at?new Date(s.last_checked_at).toLocaleString():'இன்னும் சரிபார்க்கப்படவில்லை')+'</small></td>';sourceBody.appendChild(tr)});pager('gricSourcePager',gricSourcePage,rows.length,()=>{gricSourcePage=Math.max(0,gricSourcePage-1);loadGric()},()=>{gricSourcePage++;loadGric()})
  }
