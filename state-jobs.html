@@ -5,7 +5,7 @@ if(!state){$('pageTitle').textContent='Select a State or Union Territory';$('pag
 document.title=state+' Government Jobs | TAMILAN CAREERS';$('pageTitle').textContent=state+' Government Jobs';$('crumbState').textContent=state;
 const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').in('government_category',stateTypes).eq('state_name',state).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
 if(error){$('authorityCards').innerHTML='<div class="empty">Unable to load published jobs. Please try again later.</div>';return}
-const rows=data||[],orgName=j=>String(j.recruitment_authority||j.department_name||j.employer_name||'Other Government Recruitment').trim(),groups=new Map();
+const rows=data||[],orgName=j=>String(j.recruitment_authority||(String(j.job_category||'').toLowerCase().includes('psc')?state+' Public Service Commission':(j.department_name||j.employer_name||'Other Government Recruitment'))).trim(),groups=new Map();
 rows.forEach(j=>{const n=orgName(j);if(!groups.has(n))groups.set(n,[]);groups.get(n).push(j)});
 const categories=[...new Set(rows.map(j=>String(j.job_category||'Other Government Jobs').trim()))];
 $('jobCount').textContent=rows.length;$('authorityCount').textContent=groups.size;$('categoryCount').textContent=categories.length;
