@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /super-admin.html
+
+Sitemap: https://tamilancareers.in/sitemap.xml
