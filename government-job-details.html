@@ -71,6 +71,35 @@ function prepSection(title,value,asLinks){
  return '<section class="prep-section"><h2>'+esc(title)+'</h2>'+body+'</section>';
 }
 
+
+function messagePanel(){
+ return '<section class="prep-section" id="postMessages"><h2>Questions and Messages</h2><p class="muted">Only signed-in users can post. Your account email is shown beside your message.</p><div id="postMessageNotice" class="notice" role="status" aria-live="polite"></div><div id="postMessageList"></div><div id="postMessageAuth"></div><form id="postMessageForm" hidden><label for="postMessageText">Your message</label><textarea id="postMessageText" maxlength="2000" required style="width:100%;min-height:90px;padding:10px;border:1px solid #b9c7d8;border-radius:5px"></textarea><button type="submit" id="postMessageBtn" style="margin-top:10px">Post message</button></form></section>';
+}
+async function loadMessages(table,jobId){
+ const list=document.getElementById('postMessageList'),notice=document.getElementById('postMessageNotice'),authBox=document.getElementById('postMessageAuth'),form=document.getElementById('postMessageForm');
+ const {data,error}=await sb.from(table).select('id,sender_email,message,created_at').eq('job_id',jobId).eq('status','visible').order('created_at',{ascending:true}).limit(100);
+ if(error){notice.textContent='Messages could not be loaded right now.';return}
+ list.innerHTML=(data||[]).length?(data||[]).map(m=>'<article style="padding:12px 0;border-bottom:1px solid #e1e8f0"><b>'+esc(m.sender_email)+'</b><small style="display:block;color:#65738b">'+fmt(m.created_at)+'</small><p style="white-space:pre-wrap;margin:6px 0">'+esc(m.message)+'</p></article>').join():'<p class="muted">No messages yet.</p>';
+ const {data:authData,error:authError}=await sb.auth.getUser(),user=authData?.user;
+ if(authError||!user||!user.email){authBox.innerHTML='<p class="muted">Please <a href="auth.html">sign in or register</a> to post a message. Visitors who are not logged in cannot post.</p>';return}
+ authBox.textContent='Posting as '+user.email;form.hidden=false;
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();const message=document.getElementById('postMessageText').value.trim(),btn=document.getElementById('postMessageBtn');
+  if(!message){notice.textContent='Enter a message before posting.';return}
+  btn.disabled=true;notice.textContent='Posting…';
+  const {error:insertError}=await sb.from(table).insert({job_id:jobId,user_id:user.id,sender_email:user.email,message,status:'visible'});
+  btn.disabled=false;
+  if(insertError){notice.textContent='Message was not posted. Please sign in again and retry.';return}
+  document.getElementById('postMessageText').value='';notice.textContent='Your message was posted.';await loadMessagesListOnly(table,jobId);
+ });
+}
+async function loadMessagesListOnly(table,jobId){
+ const list=document.getElementById('postMessageList');
+ const {data,error}=await sb.from(table).select('id,sender_email,message,created_at').eq('job_id',jobId).eq('status','visible').order('created_at',{ascending:true}).limit(100);
+ if(error)return;
+ list.innerHTML=(data||[]).length?(data||[]).map(m=>'<article style="padding:12px 0;border-bottom:1px solid #e1e8f0"><b>'+esc(m.sender_email)+'</b><small style="display:block;color:#65738b">'+fmt(m.created_at)+'</small><p style="white-space:pre-wrap;margin:6px 0">'+esc(m.message)+'</p></article>').join():'<p class="muted">No messages yet.</p>';
+}
+
 async function load(){
 if(!id){document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');host.innerHTML='<h2 class="title">Job not found</h2><p class="muted">A valid job notification was not selected. Return to the Home Page and choose a published job.</p>';return;}
 const {data,error}=await sb.from('government_jobs').select('*').eq('id',id).eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).maybeSingle();
@@ -89,7 +118,8 @@ const notification=url(j.official_notification_url),apply=url(j.application_url)
 const prep=j.exam_preparation&&typeof j.exam_preparation==='object'?j.exam_preparation:{};
 const categoryBack=j.government_category==='Central Government'?(j.job_category?'central-government-category.html?category='+encodeURIComponent(j.job_category):'central-government-jobs.html'):(j.job_category?'government-category-jobs.html?scope=state&state='+encodeURIComponent(j.state_name||'Tamil Nadu')+'&category='+encodeURIComponent(j.job_category):'state-government-jobs.html');
 
-host.innerHTML='<a class="back" href="'+esc(categoryBack)+'">← Back to '+esc(j.job_category||'Government Jobs')+'</a><h2 class="title">'+esc(j.job_title)+'</h2><p class="muted">'+esc(j.department_name||j.employer_name||'Government Department')+' · '+esc(j.job_category||j.government_category||'Government Job')+'</p><table class="details"><tbody>'+fields.map(x=>row(x[0],x[1])).join('')+'</tbody></table><div class="actions">'+(notification?'<a href="'+esc(notification)+'" target="_blank" rel="noopener">Official Notification PDF</a>':'')+(apply?'<a class="secondary" href="'+esc(apply)+'" target="_blank" rel="noopener">Apply Online</a>':'')+(official?'<a href="'+esc(official)+'" target="_blank" rel="noopener">Official Website</a>':'')+'</div>'+prepSection('Syllabus & Exam Pattern',prep.syllabus,false)+prepSection('Model Exam Question Papers',prep.model_papers,true)+prepSection('Previous Year Question Papers',prep.previous_papers,true)+prepSection('Answer Keys',prep.answer_keys,true)+prepSection('Detailed Solutions / Explanations',prep.solutions,false)+prepSection('Mock Tests',prep.mock_tests,true)+'<p class="notice">Important: Read the official notification carefully and confirm eligibility, dates and application instructions on the recruiting authority website before applying. Previous-year papers should be labelled as official only when verified from the recruiting authority.</p>';
+host.innerHTML='<a class="back" href="'+esc(categoryBack)+'">← Back to '+esc(j.job_category||'Government Jobs')+'</a><h2 class="title">'+esc(j.job_title)+'</h2><p class="muted">'+esc(j.department_name||j.employer_name||'Government Department')+' · '+esc(j.job_category||j.government_category||'Government Job')+'</p><table class="details"><tbody>'+fields.map(x=>row(x[0],x[1])).join('')+'</tbody></table><div class="actions">'+(notification?'<a href="'+esc(notification)+'" target="_blank" rel="noopener">Official Notification PDF</a>':'')+(apply?'<a class="secondary" href="'+esc(apply)+'" target="_blank" rel="noopener">Apply Online</a>':'')+(official?'<a href="'+esc(official)+'" target="_blank" rel="noopener">Official Website</a>':'')+'</div>'+prepSection('Syllabus & Exam Pattern',prep.syllabus,false)+prepSection('Model Exam Question Papers',prep.model_papers,true)+prepSection('Previous Year Question Papers',prep.previous_papers,true)+prepSection('Answer Keys',prep.answer_keys,true)+prepSection('Detailed Solutions / Explanations',prep.solutions,false)+prepSection('Mock Tests',prep.mock_tests,true)+'<p class="notice">Important: Read the official notification carefully and confirm eligibility, dates and application instructions on the recruiting authority website before applying. Previous-year papers should be labelled as official only when verified from the recruiting authority.</p>'+messagePanel();
+await loadMessages('government_job_post_messages',j.id);
 }
 load();
 })();
