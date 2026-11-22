@@ -171,7 +171,8 @@ async function start(){
  setSelect('i_category',[{value:'',label:'Select category'},...categories.map(x=>({value:x.id,label:x.category_name}))]);
  setSelect('p_currency',currencies.map(x=>({value:x.currency_code,label:x.currency_code+' — '+x.currency_name})),'INR');
  setSelect('i_currency',currencies.map(x=>({value:x.currency_code,label:x.currency_code+' — '+x.currency_name})),'USD');
- setSelect('i_country',countries.filter(x=>x.country_code!=='IN').map(x=>({value:x.country_code,label:x.country_name})));
+ setSelect('i_country',[{value:'',label:'Select country'},...countries.filter(x=>x.country_code!=='IN').map(x=>({value:x.country_code,label:x.country_name}))]);
+ $('i_country').addEventListener('change',()=>{const selected=countries.find(x=>x.country_code===$('i_country').value);if(selected&&currencies.some(x=>x.currency_code===selected.currency_code))$('i_currency').value=selected.currency_code;});
  $('guard').classList.add('hidden');$('app').classList.remove('hidden');await loadRows();
 }
 start();
