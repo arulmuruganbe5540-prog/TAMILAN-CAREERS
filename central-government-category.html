@@ -70,7 +70,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 <script>
 (async function(){
 const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co',SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),PAGE_SIZE=20;
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),PAGE_SIZE=10;
 const categories=['Railway Jobs','SSC Jobs','UPSC Jobs','Banking Jobs','Defence Jobs','Army Jobs','Navy Jobs','Air Force Jobs','Postal Jobs','Income Tax Jobs','Customs Jobs','ISRO Jobs','DRDO Jobs','PSU Jobs','Other Central Government Jobs'];
 const params=new URLSearchParams(location.search),category=params.get('category')||'';
 const $=id=>document.getElementById(id),esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
