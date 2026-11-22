@@ -19,17 +19,135 @@ table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;line-he
 th{background:#eaf0f8;color:#183252;text-align:left;font-size:13px;font-weight:700;padding:9px 10px;border-bottom:1px solid #cbd7e6;white-space:nowrap}
 td{padding:9px 10px;border-bottom:1px solid #e5ebf3;vertical-align:middle;line-height:1.4}
 tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
+
+.tags .qtag{display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd7e6;padding:8px 12px;border-radius:7px;color:#175e91;background:#fff;text-decoration:none;font-size:13px;font-weight:700}.tags .qtag.active{background:#176b9e;color:#fff;border-color:#176b9e}.tags .qtag:hover{background:#eaf5ff}
 </style><link rel="stylesheet" href="site-theme.css?v=1">
-</head><body><header><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>State Government Recruitment Directory – India</p></header><main><div class="crumb"><a href="index.html">Home</a> / <a href="state-government-jobs.html">All States & Union Territories</a> / <span id="crumbState">State</span></div><a class="back" href="state-government-jobs.html">← All States & Union Territories</a><h2 id="pageTitle">State Government Recruitment</h2><p class="intro" id="pageIntro">Select a recruitment department or government organisation to explore its published job categories and notifications.</p><div class="stats"><div class="stat"><strong id="jobCount">—</strong><span>Published job notifications</span></div><div class="stat"><strong id="authorityCount">—</strong><span>Recruitment departments / organisations</span></div><div class="stat"><strong id="categoryCount">—</strong><span>Job categories</span></div></div><section class="section"><h3>Government Recruitment Departments & Organisations</h3><div class="cards" id="authorityCards"><div class="empty">Loading published departments and organisations…</div></div></section><section class="section"><h3>Latest Published Government Jobs</h3><div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latestRows"><tr><td colspan="6">Loading…</td></tr></tbody></table></div><div class="pager" id="pager"></div><p class="intro">Only published records are shown. Department cards are generated from the recruitment authority and department details in verified published job records. An organisation without a published job record will not be shown as if it has a current vacancy.</p></section></main><footer><a href="index.html">Home</a><a href="state-government-jobs.html">All States & UTs</a><a href="about-us.html">About Us</a><a href="contact-us.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="disclaimer.html">Disclaimer</a></footer><script>(async()=>{const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co',SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2',sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),params=new URLSearchParams(location.search),state=params.get('state')||'',PAGE_SIZE=20,$=id=>document.getElementById(id),esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})},stateTypes=['State Government','Tamil Nadu Government','Tamil Nadu Government (Legacy)'];
-if(!state){$('pageTitle').textContent='Select a State or Union Territory';$('pageIntro').textContent='Go back and select a state or Union Territory.';$('authorityCards').innerHTML='<div class="empty">No state selected.</div>';return}
-document.title=state+' Government Jobs | TAMILAN CAREERS';$('pageTitle').textContent=state+' Government Jobs';$('crumbState').textContent=state;
+</head><body><header><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>State Government Recruitment Directory – India</p></header><main>
+<div class="crumb"><a href="index.html">Home</a> / <a href="state-government-jobs.html">All States & Union Territories</a> / <span id="crumbState">State</span></div>
+<a class="back" href="state-government-jobs.html">← All States & Union Territories</a>
+<h2 id="pageTitle">State Government Jobs</h2>
+<p class="intro" id="pageIntro">Select a qualification to view published government jobs for this State / Union Territory only.</p>
+<section class="section" aria-labelledby="qualificationHeading">
+<h3 id="qualificationHeading">Select Qualification</h3>
+<div class="tags" id="qualificationTags" aria-label="Filter jobs by qualification">
+<a href="#" data-q="" class="qtag active">All</a>
+<a href="#" data-q="8th Pass" class="qtag">8th Pass</a>
+<a href="#" data-q="10th Pass" class="qtag">10th Pass</a>
+<a href="#" data-q="12th Pass" class="qtag">12th Pass</a>
+<a href="#" data-q="ITI" class="qtag">ITI</a>
+<a href="#" data-q="Diploma" class="qtag">Diploma</a>
+<a href="#" data-q="Degree" class="qtag">Degree</a>
+<a href="#" data-q="Postgraduate" class="qtag">Postgraduate</a>
+</div>
+</section>
+<div class="stats">
+<div class="stat"><strong id="jobCount">—</strong><span>Published job notifications</span></div>
+<div class="stat"><strong id="authorityCount">—</strong><span>Recruitment departments / organisations</span></div>
+<div class="stat"><strong id="categoryCount">—</strong><span>Job categories</span></div>
+</div>
+<section class="section">
+<h3 id="tableHeading">Published Government Job Notifications</h3>
+<p class="intro" id="tableIntro">The table shows jobs for the selected state only. Maximum 20 records per page.</p>
+<div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latestRows"><tr><td colspan="6" class="empty">Loading published jobs…</td></tr></tbody></table></div>
+<div class="pager" id="pager"></div>
+</section>
+<section class="section">
+<h3>Government Recruitment Departments & Organisations</h3>
+<div class="cards" id="authorityCards"><div class="empty">Loading published departments and organisations…</div></div>
+<p class="intro">Department cards are generated only from published job records. An organisation without a published job record is not shown as having a current vacancy.</p>
+</section>
+</main><footer><a href="index.html">Home</a><a href="state-government-jobs.html">All States & UTs</a><a href="about-us.html">About Us</a><a href="contact-us.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="disclaimer.html">Disclaimer</a></footer><script>
+(async()=>{
+const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
+const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const params=new URLSearchParams(location.search);
+const state=params.get('state')||'';
+const PAGE_SIZE=20;
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
+const stateTypes=['State Government','Tamil Nadu Government','Tamil Nadu Government (Legacy)'];
+const qualifications=['8th Pass','10th Pass','12th Pass','ITI','Diploma','Degree','Postgraduate'];
+const aliases={
+'8th Pass':['8th pass','8th standard','8th standard pass'],
+'10th Pass':['10th pass','10th standard','sslc','matriculation','matric'],
+'12th Pass':['12th pass','12th standard','higher secondary','hsc','plus two','10+2'],
+'ITI':['iti','fitter','electrician','wireman','welder','turner','machinist','mechanic motor vehicle','mechanic diesel','copa','electronics mechanic','instrument mechanic','draughtsman','plumber','carpenter','refrigeration'],
+'Diploma':['diploma','polytechnic'],
+'Degree':['degree','bachelor degree','bachelor’s degree','bachelors degree','graduation','graduate','b.a.','b.sc','b.com','bba','bca','b.e.','b.tech','b.ed','b.pharm','llb','mbbs'],
+'Postgraduate':['postgraduate','post graduate','pg','master degree','masters degree','mba','mca','m.sc','m.com','m.a.','m.e.','m.tech','m.ed','m.pharm','m.phil','ph.d']
+};
+if(!state){
+ document.title='State Government Jobs | TAMILAN CAREERS';
+ $('pageTitle').textContent='Select a State or Union Territory';
+ $('pageIntro').textContent='Go back and select a State or Union Territory.';
+ $('latestRows').innerHTML='<tr><td colspan="6" class="empty">No state selected.</td></tr>';
+ $('authorityCards').innerHTML='<div class="empty">No state selected.</div>';
+ return;
+}
+document.title=state+' Government Jobs | TAMILAN CAREERS';
+$('pageTitle').textContent=state+' Government Jobs';
+$('crumbState').textContent=state;
+$('pageIntro').textContent='Browse published '+state+' Government job notifications. Select a qualification to filter this state’s jobs only.';
+let selectedQ=qualifications.includes(params.get('qualification'))?params.get('qualification'):'';
+let allRows=[],page=1;
+function matchesQualification(job,q){
+ if(!q)return true;
+ const tags=Array.isArray(job.qualification_tags)?job.qualification_tags:[];
+ const keys=aliases[q]||[q.toLowerCase()];
+ if(tags.length){
+  return tags.some(tag=>{
+   const raw=String(tag||'').trim().toLowerCase();
+   const group=raw.includes('::')?raw.split('::')[0].trim():raw;
+   if(group===q.toLowerCase())return true;
+   if(keys.includes(raw))return true;
+   return false;
+  });
+ }
+ const education=String(job.education_level||'').toLowerCase();
+ return keys.some(key=>education.includes(key));
+}
+function orgName(job){
+ return String(job.recruitment_authority||(String(job.job_category||'').toLowerCase().includes('psc')?state+' Public Service Commission':(job.department_name||job.employer_name||'Other Government Recruitment'))).trim();
+}
+function render(){
+ const rows=allRows.filter(job=>matchesQualification(job,selectedQ));
+ const total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));
+ if(page>total)page=total;
+ const shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+ $('jobCount').textContent=allRows.length;
+ $('authorityCount').textContent=new Set(allRows.map(orgName)).size;
+ $('categoryCount').textContent=new Set(allRows.map(job=>String(job.job_category||'Other Government Jobs').trim())).size;
+ $('tableHeading').textContent=selectedQ?state+' – '+selectedQ+' Government Jobs':state+' Government Job Notifications';
+ $('tableIntro').textContent='Showing '+rows.length+' published '+(selectedQ?selectedQ+' ':'')+'job record(s) for '+state+'. Maximum 20 records per page.';
+ $('latestRows').innerHTML=shown.length?shown.map(job=>'<tr><td><strong>'+esc(job.job_title||'—')+'</strong><small class="table-sub">'+esc(orgName(job))+'</small></td><td>'+esc(state)+'</td><td>'+esc(job.education_level||(Array.isArray(job.qualification_tags)?job.qualification_tags.map(tag=>String(tag).split('::').pop()).join(', '):'—'))+'</td><td>'+esc(job.vacancies==null?'—':job.vacancies)+'</td><td>'+date(job.application_deadline)+'</td><td><a href="government-job-details.html?id='+encodeURIComponent(job.id)+'">View</a></td></tr>').join(''):'<tr><td colspan="6" class="empty">No published '+esc(selectedQ||'')+' government jobs are currently listed for '+esc(state)+'.</td></tr>';
+ $('pager').innerHTML='<button type="button" '+(page<=1?'disabled':'')+' id="prev">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' id="next">Next</button>';
+ $('prev').onclick=()=>{if(page>1){page--;render();}};
+ $('next').onclick=()=>{if(page<total){page++;render();}};
+ document.querySelectorAll('.qtag').forEach(link=>link.classList.toggle('active',link.dataset.q===selectedQ));
+}
+document.querySelectorAll('.qtag').forEach(link=>link.addEventListener('click',event=>{
+ event.preventDefault();
+ selectedQ=link.dataset.q||'';
+ page=1;
+ const next=new URL(location.href);
+ if(selectedQ)next.searchParams.set('qualification',selectedQ);else next.searchParams.delete('qualification');
+ history.replaceState(null,'',next);
+ render();
+}));
 const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').in('government_category',stateTypes).eq('state_name',state).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
-if(error){$('authorityCards').innerHTML='<div class="empty">Unable to load published jobs. Please try again later.</div>';return}
-const rows=data||[],orgName=j=>String(j.recruitment_authority||(String(j.job_category||'').toLowerCase().includes('psc')?state+' Public Service Commission':(j.department_name||j.employer_name||'Other Government Recruitment'))).trim(),groups=new Map();
-rows.forEach(j=>{const n=orgName(j);if(!groups.has(n))groups.set(n,[]);groups.get(n).push(j)});
-const categories=[...new Set(rows.map(j=>String(j.job_category||'Other Government Jobs').trim()))];
-$('jobCount').textContent=rows.length;$('authorityCount').textContent=groups.size;$('categoryCount').textContent=categories.length;
+if(error){
+ $('latestRows').innerHTML='<tr><td colspan="6" class="empty">Unable to load published jobs. Please try again later.</td></tr>';
+ $('authorityCards').innerHTML='<div class="empty">Department information could not be loaded.</div>';
+ console.error(error.message);
+ return;
+}
+allRows=data||[];
+const groups=new Map();
+allRows.forEach(job=>{const name=orgName(job);if(!groups.has(name))groups.set(name,[]);groups.get(name).push(job);});
 const palette=['c1','c2','c3','c4','c5','c6','c7','c8'];
-$('authorityCards').innerHTML=groups.size?[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([name,items],i)=>'<a class="tile '+palette[i%palette.length]+'" href="state-department.html?state='+encodeURIComponent(state)+'&authority='+encodeURIComponent(name)+'"><strong>'+esc(name)+'</strong><small>'+esc([...new Set(items.map(j=>j.job_category||'Other Government Jobs'))].join(' · '))+'</small><em>'+items.length+' published job(s) · Explore</em></a>').join(''):'<div class="empty">No published State Government jobs are currently listed for '+esc(state)+'. This does not mean the state has no vacancies; check official recruitment websites.</div>';
-let page=1;function render(){const total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);$('latestRows').innerHTML=shown.length?shown.map(j=>'<tr><td><strong>'+esc(j.job_title||'—')+'</strong><small class="table-sub">'+esc(orgName(j))+'</small></td><td>'+esc(state)+'</td><td>'+esc(j.education_level||((Array.isArray(j.qualification_tags)&&j.qualification_tags.join(', '))||'—'))+'</td><td>'+esc(j.vacancies??'—')+'</td><td>'+date(j.application_deadline)+'</td><td><a href="government-job-details.html?id='+encodeURIComponent(j.id)+'">View</a></td></tr>').join(''):'<tr><td colspan="6">No published records.</td></tr>';$('pager').innerHTML='<button id="prev" '+(page<=1?'disabled':'')+'>Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button id="next" '+(page>=total?'disabled':'')+'>Next</button>';$('prev').onclick=()=>{page--;render()};$('next').onclick=()=>{page++;render()}}
-render();})();</script></body></html>
+$('authorityCards').innerHTML=groups.size?[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([name,items],i)=>'<a class="tile '+palette[i%palette.length]+'" href="state-department.html?state='+encodeURIComponent(state)+'&authority='+encodeURIComponent(name)+'"><strong>'+esc(name)+'</strong><small>'+esc([...new Set(items.map(job=>job.job_category||'Other Government Jobs'))].join(' · '))+'</small><em>'+items.length+' published job(s) · Explore</em></a>').join(''):'<div class="empty">No published State Government jobs are currently listed for '+esc(state)+'. This does not mean the state has no vacancies; check official recruitment websites.</div>';
+render();
+})();
+</script></body></html>
