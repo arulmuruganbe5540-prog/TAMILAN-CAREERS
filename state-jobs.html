@@ -56,7 +56,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 </div>
 <section class="section">
 <h3 id="tableHeading">Published Government Job Notifications</h3>
-<p class="intro" id="tableIntro">The table shows jobs for the selected state only. Maximum 20 records per page.</p>
+<p class="intro" id="tableIntro">The table shows jobs for the selected state only. Maximum 10 records per page.</p>
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latestRows"><tr><td colspan="6" class="empty">Loading published jobs…</td></tr></tbody></table></div>
 <div class="pager" id="pager"></div>
 </section>
@@ -76,7 +76,7 @@ const validStates=["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhatti
 const validState=validStates.includes(state);
 function updateStateSeo(){const canonical=new URL(location.pathname,location.origin);canonical.searchParams.set('state',state);const valid=validState;const title=valid?state+' Government Jobs | TAMILAN CAREERS':'State Government Jobs | TAMILAN CAREERS';const description=valid?'Browse published '+state+' Government job notifications, recruitment departments and qualification-wise vacancies.':'Browse published state government job notifications, departments and qualification-wise vacancies.';document.title=title;document.getElementById('pageCanonical').href=canonical.href;document.getElementById('pageRobots').content=valid?'index,follow,max-image-preview:large':'noindex,follow';document.getElementById('googleRobots').content=valid?'index,follow,max-image-preview:large':'noindex,follow';document.getElementById('pageDescription').content=description;document.getElementById('ogTitle').content=title;document.getElementById('ogDescription').content=description;document.getElementById('ogUrl').content=canonical.href;}
 updateStateSeo();
-const PAGE_SIZE=20;
+const PAGE_SIZE=10;
 const $=id=>document.getElementById(id);
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
@@ -131,7 +131,7 @@ function render(){
  $('authorityCount').textContent=new Set(allRows.map(orgName)).size;
  $('categoryCount').textContent=new Set(allRows.map(job=>String(job.job_category||'Other Government Jobs').trim())).size;
  $('tableHeading').textContent=selectedQ?state+' – '+selectedQ+' Government Jobs':state+' Government Job Notifications';
- $('tableIntro').textContent='Showing '+rows.length+' published '+(selectedQ?selectedQ+' ':'')+'job record(s) for '+state+'. Maximum 20 records per page.';
+ $('tableIntro').textContent='Showing '+rows.length+' published '+(selectedQ?selectedQ+' ':'')+'job record(s) for '+state+'. Maximum 10 records per page.';
  $('latestRows').innerHTML=shown.length?shown.map(job=>'<tr><td><strong>'+esc(job.job_title||'—')+'</strong><small class="table-sub">'+esc(orgName(job))+'</small></td><td>'+esc(state)+'</td><td>'+esc(job.education_level||(Array.isArray(job.qualification_tags)?job.qualification_tags.map(tag=>String(tag).split('::').pop()).join(', '):'—'))+'</td><td>'+esc(job.vacancies==null?'—':job.vacancies)+'</td><td>'+date(job.application_deadline)+'</td><td><a href="government-job-details.html?id='+encodeURIComponent(job.id)+'">View</a></td></tr>').join(''):'<tr><td colspan="6" class="empty">No published '+esc(selectedQ||'')+' government jobs are currently listed for '+esc(state)+'.</td></tr>';
  $('pager').innerHTML='<button type="button" '+(page<=1?'disabled':'')+' id="prev">Previous</button><span>Page '+page+' of '+total+' · '+rows.length+' records</span><button type="button" '+(page>=total?'disabled':'')+' id="next">Next</button>';
  $('prev').onclick=()=>{if(page>1){page--;render();}};
