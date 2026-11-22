@@ -17,6 +17,21 @@ table{font-size:15.5px;line-height:1.55}th{font-size:15px;font-weight:700}td{pad
 a{ text-underline-offset:3px }
 :focus-visible{outline:3px solid #087eaf;outline-offset:2px}
 @media(max-width:600px){body{font-size:16px}table{font-size:15px}th{font-size:14.5px}td{padding:10px 9px}input,select,textarea,button{font-size:16px}}
+
+/* Unified compact government directory cards */
+.gov-entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0 20px}
+.gov-entry-card{display:flex;min-width:0;min-height:62px;flex-direction:column;justify-content:center;padding:9px 11px;border-radius:8px;color:#fff!important;text-decoration:none!important;font-size:13px;font-weight:800;line-height:1.2;box-shadow:0 2px 7px rgba(16,29,58,.12);transition:filter .15s,transform .15s}
+.gov-entry-card small{display:block;margin-top:4px;color:#ffffffdf;font-size:10px;font-weight:600;line-height:1.2}
+.gov-entry-card:hover,.gov-entry-card:focus-visible{filter:brightness(1.08);transform:translateY(-1px);outline:2px solid #9bdcff;outline-offset:2px}
+.gov-entry-card:nth-child(8n+1){background:linear-gradient(120deg,#176b9e,#218fb4)}
+.gov-entry-card:nth-child(8n+2){background:linear-gradient(120deg,#087443,#1b9b72)}
+.gov-entry-card:nth-child(8n+3){background:linear-gradient(120deg,#6941a5,#9462c5)}
+.gov-entry-card:nth-child(8n+4){background:linear-gradient(120deg,#a94b27,#d77b32)}
+.gov-entry-card:nth-child(8n+5){background:linear-gradient(120deg,#a52f5e,#d65380)}
+.gov-entry-card:nth-child(8n+6){background:linear-gradient(120deg,#315b9b,#5485ce)}
+.gov-entry-card:nth-child(8n+7){background:linear-gradient(120deg,#52652a,#829a3d)}
+.gov-entry-card:nth-child(8n){background:linear-gradient(120deg,#385b66,#508b99)}
+@media(min-width:700px){.gov-entry-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.gov-entry-card{min-height:66px;padding:10px 12px}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418" crossorigin="anonymous"></script>
 </head><body>
@@ -24,7 +39,47 @@ a{ text-underline-offset:3px }
 <main><div class="crumb"><a href="index.html">Home</a> / All State Government Jobs</div>
 <h2>All State Government Jobs</h2>
 <p class="intro">Find published recruitment notifications from State Government departments across India. Select a state and qualification to narrow the table. Each job opens an individual details page with the full notification information and available official links. Verify eligibility using the official notification.</p>
-<div class="filters"><div><label for="stateFilter">Select State / Union Territory</label><select id="stateFilter"><option value="">All States and Union Territories</option><option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Andaman and Nicobar Islands</option><option>Chandigarh</option><option>Dadra and Nagar Haveli and Daman and Diu</option><option>Delhi</option><option>Jammu and Kashmir</option><option>Ladakh</option><option>Lakshadweep</option><option>Puducherry</option></select></div>
+<h2>Choose a State / Union Territory</h2>
+<div class="gov-entry-grid" aria-label="Choose an Indian State or Union Territory">
+<a class="gov-entry-card" href="state-jobs.html?state=Andhra%20Pradesh">Andhra Pradesh<small>Andhra Pradesh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Arunachal%20Pradesh">Arunachal Pradesh<small>Arunachal Pradesh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Assam">Assam<small>Assam Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Bihar">Bihar<small>Bihar Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Chhattisgarh">Chhattisgarh<small>Chhattisgarh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Goa">Goa<small>Goa Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Gujarat">Gujarat<small>Gujarat Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Haryana">Haryana<small>Haryana Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Himachal%20Pradesh">Himachal Pradesh<small>Himachal Pradesh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Jharkhand">Jharkhand<small>Jharkhand Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Karnataka">Karnataka<small>Karnataka Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Kerala">Kerala<small>Kerala Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Madhya%20Pradesh">Madhya Pradesh<small>Madhya Pradesh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Maharashtra">Maharashtra<small>Maharashtra Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Manipur">Manipur<small>Manipur Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Meghalaya">Meghalaya<small>Meghalaya Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Mizoram">Mizoram<small>Mizoram Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Nagaland">Nagaland<small>Nagaland Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Odisha">Odisha<small>Odisha Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Punjab">Punjab<small>Punjab Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Rajasthan">Rajasthan<small>Rajasthan Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Sikkim">Sikkim<small>Sikkim Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Tamil%20Nadu">Tamil Nadu<small>Tamil Nadu Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Telangana">Telangana<small>Telangana Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Tripura">Tripura<small>Tripura Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Uttar%20Pradesh">Uttar Pradesh<small>Uttar Pradesh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Uttarakhand">Uttarakhand<small>Uttarakhand Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=West%20Bengal">West Bengal<small>West Bengal Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Andaman%20and%20Nicobar%20Islands">Andaman and Nicobar Islands<small>Andaman and Nicobar Islands Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Chandigarh">Chandigarh<small>Chandigarh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Dadra%20and%20Nagar%20Haveli%20and%20Daman%20and%20Diu">Dadra and Nagar Haveli and Daman and Diu<small>Dadra and Nagar Haveli and Daman and Diu Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Delhi">Delhi<small>Delhi Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Jammu%20and%20Kashmir">Jammu and Kashmir<small>Jammu and Kashmir Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Ladakh">Ladakh<small>Ladakh Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Lakshadweep">Lakshadweep<small>Lakshadweep Government Jobs</small></a>
+<a class="gov-entry-card" href="state-jobs.html?state=Puducherry">Puducherry<small>Puducherry Government Jobs</small></a>
+</div>
+
+<div class="filters">
 <div><label for="qualificationFilter">Qualification</label><select id="qualificationFilter"><option value="">All Qualifications</option><option>8th Pass</option><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>PG</option></select></div></div>
 <div class="tags" aria-label="Qualification quick filters"><a href="#" data-q="8th Pass" class="qtag">8th Pass</a><a href="#" data-q="10th Pass" class="qtag">10th Pass</a><a href="#" data-q="12th Pass" class="qtag">12th Pass</a><a href="#" data-q="ITI" class="qtag">ITI</a><a href="#" data-q="Diploma" class="qtag">Diploma</a><a href="#" data-q="Degree" class="qtag">Degree</a><a href="#" data-q="PG" class="qtag">PG</a></div>
 <h2>Published Job Notifications</h2><p class="intro">The table displays up to 20 records per page. Use Previous and Next to browse all matching notifications.</p>
