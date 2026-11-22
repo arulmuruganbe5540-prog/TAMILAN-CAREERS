@@ -27,17 +27,24 @@ jobs:
           const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
           const iso = v => v ? new Date(v).toISOString() : new Date().toISOString();
           (async () => {
-            const url = new URL('/rest/v1/government_jobs', base);
-            url.searchParams.set('select','id,updated_at,published_at,application_deadline');
-            url.searchParams.set('status','eq.published');
-            url.searchParams.set('or','(application_deadline.is.null,application_deadline.gt.'+new Date().toISOString()+')');
-            url.searchParams.set('order','updated_at.desc.nullslast');
-            url.searchParams.set('limit','5000');
-            const res = await fetch(url, {headers:{apikey:key}});
-            if (!res.ok) throw new Error('Supabase REST failed: '+res.status+' '+await res.text());
-            const jobs = await res.json();
+            const jobs = [];
+            const pageSize = 1000;
+            for (let offset=0; ; offset+=pageSize) {
+              const url = new URL('/rest/v1/government_jobs', base);
+              url.searchParams.set('select','id,updated_at,published_at,application_deadline');
+              url.searchParams.set('status','eq.published');
+              url.searchParams.set('or','(application_deadline.is.null,application_deadline.gt.'+new Date().toISOString()+')');
+              url.searchParams.set('order','updated_at.desc.nullslast');
+              url.searchParams.set('limit',String(pageSize));
+              url.searchParams.set('offset',String(offset));
+              const res = await fetch(url, {headers:{apikey:key,'Range-Unit':'items'}});
+              if (!res.ok) throw new Error('Supabase REST failed: '+res.status+' '+await res.text());
+              const page = await res.json();
+              jobs.push(...page);
+              if (page.length < pageSize) break;
+            }
             const xml = entries => '<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n' +
-              entries.map(j => '<url><loc>'+esc('https://tamilancareers.in/government-job-details.html?id='+j.id)+'</loc><lastmod>'+iso(j.updated_at||j.published_at)+'</lastmod></url>').join('\\n') +
+              entries.map(j => '<url><loc>'+esc('https://tamilancareers.in/government-job-details.html?id='+j.id)+'</loc>'+(j.updated_at||j.published_at?'<lastmod>'+iso(j.updated_at||j.published_at)+'</lastmod>':'')+'</url>').join('\\n') +
               '\\n</urlset>\\n';
             const chunks = [];
             for (let i=0;i<jobs.length;i+=40) chunks.push(jobs.slice(i,i+40));
