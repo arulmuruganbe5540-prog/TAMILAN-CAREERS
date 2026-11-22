@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101d3a">
 <title>Government Job Details | TAMILAN CAREERS</title>
+<meta name="description" content="Read official government job notifications, eligibility, vacancies, salary, important dates and application links on TAMILAN CAREERS.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="googlebot" content="index,follow">
+<meta property="og:site_name" content="TAMILAN CAREERS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Government Job Details | TAMILAN CAREERS">
+<meta property="og:description" content="Official government recruitment details, eligibility, vacancies and application dates.">
+<meta property="og:url" content="https://tamilancareers.in/government-job-details.html">
+<link rel="canonical" href="https://tamilancareers.in/government-job-details.html">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#14213d;font:15px Arial,Helvetica,sans-serif}.top{background:#101d3a;color:#fff;padding:18px max(16px,calc((100% - 1000px)/2))}.top h1{margin:0;font-size:22px}.top p{margin:6px 0 0;color:#d6e5f6;font-size:13px}.wrap{width:min(1000px,100%);margin:24px auto;padding:0 16px}.back{display:inline-block;margin-bottom:16px;color:#075e9b;font-weight:700}.title{font-size:24px;margin:0 0 8px}.muted{color:#65738b;line-height:1.55}.details{width:100%;border-collapse:collapse;background:#fff;margin:18px 0;min-width:0}.details th,.details td{border:1px solid #dce4ef;padding:12px;text-align:left;vertical-align:top;line-height:1.5}.details th{width:30%;background:#eaf0f8}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.actions a{display:inline-block;background:#176b9e;color:#fff;padding:11px 16px;border-radius:4px;text-decoration:none;font-weight:700}.actions a.secondary{background:#087443}.notice{padding:14px 0;color:#65738b;border-top:1px solid #dce4ef;font-size:13px}
@@ -26,6 +35,24 @@ const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
 const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const host=document.getElementById('content');
+const setMeta=(name,value,attr='name')=>{let el=document.querySelector('meta['+attr+'=\"'+name+'\"]');if(!el){el=document.createElement('meta');el.setAttribute(attr,name);document.head.appendChild(el)}el.setAttribute('content',value)};
+function setJobSeo(j){
+ const title=(j.job_title||'Government Job').replace(/\\s+/g,' ').trim();
+ const employer=j.department_name||j.employer_name||j.recruitment_authority||'Government Recruitment';
+ const plain=String(j.description||'').replace(/<[^>]*>/g,' ').replace(/\\s+/g,' ').trim();
+ const desc=(plain||title+' – official vacancy details, eligibility, application dates and apply link on TAMILAN CAREERS.').slice(0,300);
+ const canonical='https://tamilancareers.in/government-job-details.html?id='+encodeURIComponent(j.id);
+ document.title=title+' | TAMILAN CAREERS';setMeta('description',desc);setMeta('og:title',document.title,'property');setMeta('og:description',desc,'property');setMeta('og:url',canonical,'property');
+ let link=document.querySelector('link[rel=canonical]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical;
+ const old=document.getElementById('job-posting-jsonld');if(old)old.remove();
+ const deadline=j.application_deadline?new Date(j.application_deadline):null;
+ const posted=j.notification_date||j.published_at||j.created_at;
+ const schema={'@context':'https://schema.org','@type':'JobPosting','title':title,'description':plain||title,'datePosted':posted?new Date(posted).toISOString():undefined,'validThrough':deadline&&!isNaN(deadline)?deadline.toISOString():undefined,'employmentType':({'full_time':'FULL_TIME','part_time':'PART_TIME','contract':'CONTRACTOR','temporary':'TEMPORARY','internship':'INTERN','freelance':'OTHER'})[j.employment_type]||undefined,'hiringOrganization':{'@type':'Organization','name':employer,'sameAs':j.official_website_url||undefined},'identifier':j.notification_number?{'@type':'PropertyValue','name':employer,'value':j.notification_number}:undefined,'jobLocation':{'@type':'Place','address':{'@type':'PostalAddress','addressCountry':'IN'}},'directApply':false};
+ if(j.salary_min||j.salary_max){schema.baseSalary={'@type':'MonetaryAmount','currency':j.salary_currency||'INR','value':{'@type':'QuantitativeValue','minValue':j.salary_min||j.salary_max,'maxValue':j.salary_max||j.salary_min,'unitText':String(j.salary_period||'MONTH').toUpperCase()}}}
+ if(deadline&&deadline.getTime()<Date.now())return;
+ const script=document.createElement('script');script.type='application/ld+json';script.id='job-posting-jsonld';script.textContent=JSON.stringify(schema);document.head.appendChild(script);
+}
+
 const esc=v=>String(v==null||v===''?'—':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});};
 const url=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch(e){return '';}};
