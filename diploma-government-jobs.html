@@ -106,12 +106,10 @@ const tags=Array.isArray(j.qualification_tags)?j.qualification_tags:[];
 const tagMatch=tags.some(tag=>{
  const value=String(tag||'').trim().toLowerCase();
  const group=value.includes('::')?value.split('::')[0].trim():value;
- return group==="diploma" || terms.some(t=>value===t || value.includes(t));
+ return group==='diploma' || value.includes('diploma') || value.includes('polytechnic');
 });
 const education=String(j.education_level||'').toLowerCase();
-const educationMatch=terms.some(t=>education.includes(t));
-if("Diploma"==='Degree' && (education.includes('postgraduate')||education.includes('post graduate')||education.includes('master degree')||education.includes('masters degree')) && !/(bachelor|graduation|graduate|b\.?e\.?|b\.?tech|b\.?sc|b\.?com|bba|bca|mbbs|llb)/i.test(education)) return tagMatch;
-return tagMatch||educationMatch;
+return tagMatch || education.includes('diploma') || education.includes('polytechnic');
 }
 function render(){
 const body=document.getElementById('jobs-body'),total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
