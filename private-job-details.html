@@ -6,7 +6,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const url=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
 const date=v=>v?new Date(v).toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}):'Not specified';
 if(!id){status.textContent='A valid private job was not selected.';return}
-const {data:j,error}=await db.from('private_jobs').select('*').eq('id',id).eq('status','published').maybeSingle();
+const {data:j,error}=await db.from('private_jobs').select('*').eq('id',id).eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).maybeSingle();
 if(error||!j){status.textContent='This private job is unavailable or no longer published.';return}
 document.title=j.job_title+' | Private Jobs | TAMILAN CAREERS';
 document.querySelector('meta[name="robots"]').content='index,follow,max-image-preview:large';
