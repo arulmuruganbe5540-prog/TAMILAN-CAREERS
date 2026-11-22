@@ -71,7 +71,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 <h2>12th Pass Government Jobs</h2>
 <p class="intro">Browse Central and State Government opportunities for candidates who have completed 12th Standard or Higher Secondary education. Eligibility can vary by subject group and post, so always verify the official notification.</p>
 <h2>Latest 12th Pass Government Job Notifications</h2>
-<p class="intro">The table below shows published government vacancies matching this qualification. Open a job to view its complete details, application steps and verified official links. Maximum 20 records per page.</p>
+<p class="intro">The table below shows published government vacancies matching this qualification. Open a job to view its complete details, application steps and verified official links. Maximum 10 records per page.</p>
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="jobs-body"><tr><td colspan="6" class="empty">Loading published government jobs…</td></tr></tbody></table></div>
 <div class="pager" id="pager"></div>
 <section class="info-section" id="jobs-you-can-apply-for"><h2>12th Pass Government Job Types</h2><p>Common recruitment routes for Higher Secondary / 10+2 candidates. Stream, subjects, typing or skill tests may be compulsory for particular posts.</p><div class="table-scroll"><table><thead><tr><th>Job Type</th><th>Recruitment Area</th><th>Qualification / Additional Conditions</th></tr></thead><tbody><tr><td>Lower Division Clerk (LDC) / Junior Secretariat Assistant</td><td>SSC CHSL and departments</td><td>12th pass; typing/skill test and other notice-specific conditions may apply.</td></tr><tr><td>Data Entry Operator (DEO)</td><td>SSC CHSL and departments</td><td>12th; some DEO posts require specific subjects or skill standards.</td></tr><tr><td>Stenographer Grade C / D</td><td>SSC and departments</td><td>12th pass plus shorthand/stenography skill test.</td></tr><tr><td>Railway NTPC Undergraduate posts</td><td>Railway Recruitment Boards</td><td>12th or equivalent for specified undergraduate-level posts; age and post-specific rules apply.</td></tr><tr><td>Police Constable</td><td>State Police</td><td>12th in some states/recruitments; physical, medical and local rules vary.</td></tr></tbody></table></div><p class="note">This is a guidance list of job types, not a list of live vacancies. Eligibility is decided only by the latest official notification. Check age, subject/trade, marks, physical standards, experience, language and other conditions before applying. Higher qualifications do not automatically replace a specifically required subject, trade or certificate.</p></section>
@@ -106,7 +106,7 @@ const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
 const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const terms=["12th pass","12th standard","higher secondary","hsc","12th"];
-const PAGE_SIZE=20;let rows=[],page=1;
+const PAGE_SIZE=10;let rows=[],page=1;
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
 function matches(j){
