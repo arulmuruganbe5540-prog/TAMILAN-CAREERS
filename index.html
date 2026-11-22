@@ -196,17 +196,17 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 </div>
 
 <section class="table-section" id="latest-jobs">
-<h2>Latest Government Jobs</h2><p>Recently published government job notifications from the website. This table refreshes automatically every 5 minutes and displays up to 20 records per page.</p>
+<h2>Latest Government Jobs</h2><p>Recently published government job notifications from the website. This table refreshes automatically every 5 minutes and displays up to 10 records per page.</p>
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latest-body"><tr><td colspan="6" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="latest-pager"></div><div class="updated" id="latest-updated"></div>
 </section>
 
 <section class="table-section" id="central-jobs">
-<h2>Central Government Jobs</h2><p>Recruitment notifications published for Central Government departments and authorities. Maximum 20 records per page with Previous and Next navigation.</p>
+<h2>Central Government Jobs</h2><p>Recruitment notifications published for Central Government departments and authorities. Maximum 10 records per page with Previous and Next navigation.</p>
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="central-body"><tr><td colspan="6" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="central-pager"></div>
 </section>
 
 <section class="table-section" id="tn-jobs">
-<h2>All State Government Jobs</h2><p>Recruitment notifications published by State Government departments across India. Select a state and qualification on the dedicated page to narrow the results. Maximum 20 records per page.</p>
+<h2>All State Government Jobs</h2><p>Recruitment notifications published by State Government departments across India. Select a state and qualification on the dedicated page to narrow the results. Maximum 10 records per page.</p>
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="tn-body"><tr><td colspan="6" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="tn-pager"></div>
 </section>
 
@@ -247,7 +247,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
 const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const PAGE_SIZE=20;let jobs=[],resources=[],pages={};
+const PAGE_SIZE=10;let jobs=[],resources=[],pages={};
 const $=id=>document.getElementById(id);
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
