@@ -283,7 +283,7 @@ renderHomeStateJobs();
 const byType=t=>resources.filter(r=>r.resource_type===t);
 resourceRows('answer',byType('answer_key'),false);
 resourceRows('results',byType('result'),false);
-const dateRows=jobs.filter(j=>j.exam_date).map(j=>({title:j.job_title,department_name:j.department_name||j.employer_name,exam_date:j.exam_date,updated_at:j.updated_at,official_notification_url:j.official_notification_url})).concat(byType('exam_schedule'));
+const today=new Date().toISOString().slice(0,10);const dateRows=jobs.filter(j=>j.exam_date&&String(j.exam_date).slice(0,10)>=today).map(j=>({title:j.job_title,department_name:j.department_name||j.employer_name,exam_date:j.exam_date,updated_at:j.updated_at,official_notification_url:j.official_notification_url})).concat(byType('exam_schedule'));
 resourceRows('examdate',dateRows,true);
 resourceRows('admit',resources.filter(r=>r.resource_type==='admit_card'||r.resource_type==='hall_ticket'),false);
 }
