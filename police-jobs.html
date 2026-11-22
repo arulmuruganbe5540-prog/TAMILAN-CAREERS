@@ -55,7 +55,7 @@ h2{font-size:23px;line-height:1.3;color:var(--navy);margin:0 0 8px}.intro{color:
 <script>
 (async function(){
 const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co',SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),PAGE_SIZE=20;
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),PAGE_SIZE=10;
 const $=id=>document.getElementById(id),esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
 let allRows=[],page=1;
