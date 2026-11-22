@@ -1,0 +1,165 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>Employer Company Portal | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font:15px/1.6 Arial,sans-serif}header{background:#101d3a;color:white;padding:18px max(16px,calc((100% - 1100px)/2));display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:20px}header a{color:white}main{max-width:1100px;margin:22px auto;padding:0 14px 40px}.panel{background:#fff;border:1px solid #dce4ef;border-radius:9px;padding:16px;margin:14px 0}h2{margin:0 0 6px;color:#102849;font-size:20px}h3{margin:0 0 12px;color:#173b61;font-size:17px}.muted{color:#64748b;font-size:13px}.notice{padding:12px;background:#eef6ff;color:#234967;border-radius:6px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:0 0 5px}input,select,textarea{width:100%;min-height:42px;padding:9px 10px;border:1px solid #b9c7d8;border-radius:5px;font:inherit;background:#fff}textarea{min-height:95px;resize:vertical}button,.btn{border:0;border-radius:5px;background:#176b9e;color:white;padding:10px 14px;font:700 13px Arial;cursor:pointer;text-decoration:none;display:inline-block}button:disabled{opacity:.5}.secondary{background:#eaf0f8;color:#17466c}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.hidden{display:none!important}.item{border:1px solid #e1e8f0;border-radius:7px;padding:12px;margin:10px 0}.meta{font-size:13px;color:#5a6a80;margin:5px 0}@media(max-width:620px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}main{padding:0 10px 30px}.panel{padding:12px}}
+</style></head><body><header><div><h1>TAMILAN CAREERS — Employer Portal</h1><small style="color:#d6e5f6">Company verification · Private & International job submissions</small></div><a href="index.html">← Back to Website</a></header><main>
+<div id="authGuard" class="panel"><h2>Sign in required</h2><p class="muted">Company owners and authorized company members must sign in before accessing the employer portal.</p><a id="signInLink" class="btn" href="auth.html">Sign in / Register</a></div>
+<div id="app" class="hidden">
+<div class="notice">Company verification is required before job submission. Private Jobs are for India. International Jobs must be outside India. Company-submitted jobs remain pending until the Super Admin reviews them.</div>
+<section id="companySelectPanel" class="panel hidden"><h2>Your Company</h2><div class="field"><label for="companySelect">Select company</label><select id="companySelect"></select></div><p id="companyStatus" class="notice"></p></section>
+<section id="verificationPanel" class="panel hidden"><h2>Company Verification</h2><p class="muted">Submit legal business information for verification. Overseas employers must provide recruitment licence, sponsor/work authorization, issuing authority or a clear explanation if no licence is applicable.</p><div id="verificationMsg" class="notice hidden" role="status"></div>
+<form id="verificationForm"><div class="grid">
+<div class="field"><label for="companyName">Company / organization name *</label><input id="companyName" required maxlength="160"></div>
+<div class="field"><label for="industry">Industry</label><input id="industry" maxlength="120"></div>
+<div class="field"><label for="companySize">Company size</label><select id="companySize"><option value="">Select size</option><option>1–10</option><option>11–50</option><option>51–200</option><option>201–500</option><option>501–1000</option><option>1000+</option></select></div>
+<div class="field"><label for="website">Company website</label><input id="website" type="url" placeholder="https://"></div>
+<div class="field"><label for="entityType">Legal entity type *</label><select id="entityType" required><option value="">Select legal entity</option><option value="sole_proprietorship">Sole proprietorship</option><option value="partnership">Partnership</option><option value="llp">LLP</option><option value="private_limited">Private limited</option><option value="public_limited">Public limited</option><option value="government">Government</option><option value="nonprofit">Non-profit</option><option value="foreign_company">Foreign company</option><option value="other">Other</option></select></div>
+<div class="field"><label for="country">Country *</label><select id="country" required></select></div>
+<div class="field"><label for="legalName">Registered legal name *</label><input id="legalName" required maxlength="180"></div>
+<div class="field"><label for="registrationNumber">Registration number *</label><input id="registrationNumber" required maxlength="120"></div>
+<div class="field full"><label for="address">Full registered address *</label><textarea id="address" required minlength="8" maxlength="1200"></textarea></div>
+<div class="field"><label for="officialEmail">Official company email *</label><input id="officialEmail" type="email" required></div>
+<div class="field"><label for="contactPerson">Contact person *</label><input id="contactPerson" required maxlength="120"></div>
+<div class="field"><label for="contactPhone">Contact phone *</label><input id="contactPhone" required maxlength="30"></div>
+<div class="field full"><label for="authorization">Overseas recruitment authorization (required for non-India / foreign companies)</label><textarea id="authorization" maxlength="3000" placeholder="Recruitment licence, sponsor/work authorization, issuing authority, or explain why a licence is not applicable"></textarea></div>
+<div class="field full"><label for="companyDescription">Company description</label><textarea id="companyDescription" maxlength="2000"></textarea></div>
+</div><div class="actions"><button type="submit" id="submitVerification">Submit for verification</button></div></form>
+</section>
+<section id="moreInfoPanel" class="panel hidden"><h2>Additional Information Requested</h2><p id="adminNote" class="notice"></p><form id="moreInfoForm"><label for="companyResponse">Your response *</label><textarea id="companyResponse" required minlength="10" maxlength="2000"></textarea><button type="submit" id="sendResponse" style="margin-top:10px">Send additional information</button></form></section>
+<div id="verifiedArea" class="hidden">
+<section class="panel"><h2>Post a Private Job — India</h2><p class="muted">Private job submissions go to the separate Private Jobs review workflow. They become public only after admin approval and publication.</p><div id="privateMsg" class="notice hidden" role="status"></div>
+<form id="privateForm"><div class="grid">
+<div class="field"><label for="pTitle">Job title *</label><input id="pTitle" required maxlength="180"></div>
+<div class="field"><label for="pCategory">Job category *</label><select id="pCategory" required></select></div>
+<div class="field"><label for="pType">Employment type *</label><select id="pType" required><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option></select></div>
+<div class="field"><label for="pWorkplace">Workplace type</label><select id="pWorkplace"><option value="onsite">On-site</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option></select></div>
+<div class="field"><label for="pLocation">Location *</label><input id="pLocation" required maxlength="180"></div>
+<div class="field"><label for="pOpenings">Number of vacancies</label><input id="pOpenings" type="number" min="1" value="1"></div>
+<div class="field"><label for="pSalaryMin">Minimum salary (INR)</label><input id="pSalaryMin" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="pSalaryMax">Maximum salary (INR)</label><input id="pSalaryMax" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="pSalaryPeriod">Salary period</label><select id="pSalaryPeriod"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="daily">Daily</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label for="pExperience">Experience required</label><input id="pExperience" placeholder="e.g. 0–2 years"></div>
+<div class="field"><label for="pEducation">Education / qualification</label><input id="pEducation" maxlength="300"></div>
+<div class="field"><label for="pSkills">Required skills</label><input id="pSkills" maxlength="1000"></div>
+<div class="field"><label for="pDeadline">Application deadline</label><input id="pDeadline" type="date"></div>
+<div class="field"><label for="pEmail">Contact email</label><input id="pEmail" type="email"></div>
+<div class="field"><label for="pApply">Application URL *</label><input id="pApply" type="url" placeholder="https://" required></div>
+<div class="field"><label for="pWebsite">Official employer website</label><input id="pWebsite" type="url" placeholder="https://"></div>
+<div class="field"><label for="pNotice">Official job notification URL</label><input id="pNotice" type="url" placeholder="https://"></div>
+<div class="field full"><label for="pDescription">Job description *</label><textarea id="pDescription" required maxlength="8000"></textarea></div>
+</div><div class="actions"><button id="submitPrivate" type="submit">Submit Private Job for Review</button></div></form>
+<div id="privateDrafts"></div></section>
+<section class="panel"><h2>Post an International Private Job</h2><p class="muted">International company submissions are saved in the separate International Jobs table as Pending Review. Country must be outside India.</p><div id="internationalMsg" class="notice hidden" role="status"></div>
+<form id="internationalForm"><div class="grid">
+<div class="field"><label for="iTitle">Job title *</label><input id="iTitle" required maxlength="180"></div>
+<div class="field"><label for="iCountry">Country *</label><select id="iCountry" required></select></div>
+<div class="field"><label for="iCategory">Job category</label><select id="iCategory"></select></div>
+<div class="field"><label for="iLocation">Work location *</label><input id="iLocation" required maxlength="180"></div>
+<div class="field"><label for="iType">Employment type *</label><select id="iType" required><option value="full_time">Full time</option><option value="part_time">Part time</option><option value="contract">Contract</option><option value="temporary">Temporary</option><option value="internship">Internship</option><option value="freelance">Freelance</option></select></div>
+<div class="field"><label for="iWorkplace">Workplace type</label><select id="iWorkplace"><option value="onsite">On-site</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option></select></div>
+<div class="field"><label for="iSalaryMin">Minimum salary</label><input id="iSalaryMin" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="iSalaryMax">Maximum salary</label><input id="iSalaryMax" type="number" min="0" step="0.01"></div>
+<div class="field"><label for="iCurrency">Salary currency</label><select id="iCurrency"></select></div>
+<div class="field"><label for="iPeriod">Salary period</label><select id="iPeriod"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="daily">Daily</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label for="iVacancies">Vacancies</label><input id="iVacancies" type="number" min="1" value="1"></div>
+<div class="field"><label for="iDeadline">Application deadline</label><input id="iDeadline" type="date"></div>
+<div class="field"><label for="iExperienceMin">Minimum experience (years)</label><input id="iExperienceMin" type="number" min="0" step="0.5"></div>
+<div class="field"><label for="iExperienceMax">Maximum experience (years)</label><input id="iExperienceMax" type="number" min="0" step="0.5"></div>
+<div class="field"><label for="iEducation">Education / qualification</label><input id="iEducation" maxlength="300"></div>
+<div class="field"><label for="iSkills">Required skills</label><input id="iSkills" maxlength="1000"></div>
+<div class="field"><label for="iVisa">Visa type</label><input id="iVisa" maxlength="180"></div>
+<div class="field"><label for="iWorkPermit">Work permit</label><input id="iWorkPermit" maxlength="180"></div>
+<div class="field"><label for="iSponsor">Visa sponsorship</label><select id="iSponsor"><option value="false">Not offered / not specified</option><option value="true">Available</option></select></div>
+<div class="field"><label for="iRelocation">Relocation support</label><select id="iRelocation"><option value="false">Not offered / not specified</option><option value="true">Available</option></select></div>
+<div class="field"><label for="iLanguages">Language requirements</label><input id="iLanguages" maxlength="500"></div>
+<div class="field"><label for="iEmail">Contact email</label><input id="iEmail" type="email"></div>
+<div class="field"><label for="iApply">Application URL *</label><input id="iApply" type="url" required placeholder="https://"></div>
+<div class="field"><label for="iWebsite">Official employer website</label><input id="iWebsite" type="url" placeholder="https://"></div>
+<div class="field"><label for="iNotice">Official notification URL</label><input id="iNotice" type="url" placeholder="https://"></div>
+<div class="field full"><label for="iVisaNotes">Visa / recruitment notes</label><textarea id="iVisaNotes" maxlength="2000"></textarea></div>
+<div class="field full"><label for="iDescription">Job description *</label><textarea id="iDescription" required maxlength="8000"></textarea></div>
+</div><div class="actions"><button id="submitInternational" type="submit">Submit International Job for Review</button></div></form>
+<div id="internationalRows"></div></section>
+</div>
+</div></main>
+<script>
+(()=>{
+const sb=supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2'),$=id=>document.getElementById(id);
+let user=null,companies=[],members=[],currentCompany=null,countries=[],categories=[],currencies=[],moreInfoRequest=null;
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug=v=>String(v||'job').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,90);
+const num=id=>$(id).value===''?null:Number($(id).value);
+const deadline=id=>$(id).value?new Date($(id).value+'T23:59:59+05:30').toISOString():null;
+const show=(id,m,bad=false)=>{$(id).textContent=m;$(id).classList.remove('hidden');$(id).style.background=bad?'#fff0f0':'#eef6ff';$(id).style.color=bad?'#8d2525':'#234967'};
+const hide=id=>$(id).classList.add('hidden');
+const fill=(id,items,placeholder)=>{const el=$(id);el.innerHTML='';if(placeholder){const o=document.createElement('option');o.value='';o.textContent=placeholder;el.append(o)}for(const x of items){const o=document.createElement('option');o.value=x.value;o.textContent=x.label;el.append(o)}};
+function companyPanel(){const co=currentCompany;if(!co)return;
+ $('companySelectPanel').classList.remove('hidden');$('companyStatus').textContent='Company: '+co.company_name+' · Verification: '+co.verification_status;
+ $('companySelect').value=co.id;
+ const verified=co.verification_status==='verified';$('verifiedArea').classList.toggle('hidden',!verified);
+}
+async function loadCompanyStatus(){
+ const ids=members.map(m=>m.company_id);if(!ids.length){$('verificationPanel').classList.remove('hidden');$('companySelectPanel').classList.add('hidden');$('verifiedArea').classList.add('hidden');return}
+ const {data,error}=await sb.from('companies').select('id,company_name,verification_status,owner_user_id,industry,company_size,description,website_url,registration_number').in('id',ids);
+ if(error){show('verificationMsg','Could not load company profile: '+error.message,true);return}
+ companies=data||[];
+ if(!companies.length){$('verificationPanel').classList.remove('hidden');return}
+ fill('companySelect',companies.map(c=>({value:c.id,label:c.company_name+' — '+c.verification_status})));
+ currentCompany=companies[0];companyPanel();await loadVerificationRequests();
+}
+async function loadVerificationRequests(){
+ if(!currentCompany)return;
+ const {data,error}=await sb.from('company_verification_requests').select('*').eq('company_id',currentCompany.id).order('created_at',{ascending:false}).limit(5);
+ if(error){show('verificationMsg','Could not load verification status.',true);return}
+ const latest=data?.[0];
+ $('verificationPanel').classList.toggle('hidden',currentCompany.verification_status==='verified'||(latest&&['pending','under_review','more_information'].includes(latest.status)));
+ if(latest&&latest.status==='more_information'){moreInfoRequest=latest;$('moreInfoPanel').classList.remove('hidden');$('adminNote').textContent=latest.admin_notes||'The verification team needs additional information.';}
+ else $('moreInfoPanel').classList.add('hidden');
+ if(currentCompany.verification_status==='verified'){ $('verifiedArea').classList.remove('hidden'); await loadCompanyJobs(); }
+ else $('verifiedArea').classList.add('hidden');
+}
+async function loadLookups(){
+ const [co,ca,cu]=await Promise.all([sb.from('countries').select('country_code,country_name,currency_code').eq('is_active',true).order('country_name'),sb.from('job_categories').select('id,category_name').eq('is_active',true).order('category_name'),sb.from('currencies').select('currency_code,currency_name').eq('is_active',true).order('currency_code')]);
+ if(co.error||ca.error||cu.error)throw new Error('Country, category or currency lists could not be loaded');
+ countries=co.data||[];categories=ca.data||[];currencies=cu.data||[];
+ fill('country',countries.map(x=>({value:x.country_code,label:x.country_name})),'Select country');
+ fill('iCountry',countries.filter(x=>x.country_code!=='IN').map(x=>({value:x.country_code,label:x.country_name})),'Select country outside India');
+ fill('pCategory',categories.map(x=>({value:x.category_name,label:x.category_name})),'Select category');
+ fill('iCategory',categories.map(x=>({value:x.id,label:x.category_name})),'Select category');
+ fill('iCurrency',currencies.map(x=>({value:x.currency_code,label:x.currency_code+' — '+x.currency_name})),'Select currency');
+ $('iCountry').addEventListener('change',()=>{const c=countries.find(x=>x.country_code===$('iCountry').value);if(c&&currencies.some(x=>x.currency_code===c.currency_code))$('iCurrency').value=c.currency_code});
+}
+async function loadCompanyJobs(){
+ const [d,i]=await Promise.all([sb.from('job_posting_drafts').select('id,draft,created_at,updated_at').eq('company_id',currentCompany.id).order('created_at',{ascending:false}).limit(100),sb.from('international_jobs').select('id,job_title,country_name,status,created_at').eq('company_id',currentCompany.id).order('created_at',{ascending:false}).limit(100)]);
+ $('privateDrafts').innerHTML='<h3>Your Private Job Submissions</h3>'+((d.data||[]).length?(d.data||[]).map(x=>'<div class="item"><b>'+esc(x.draft?.jobTitle||'Private Job Draft')+'</b><p class="meta">Status: '+esc(x.draft?.draft_status||'draft')+' · Submitted: '+new Date(x.updated_at).toLocaleString('en-IN')+'</p></div>').join():'<p class="meta">No private job submissions yet.</p>');
+ $('internationalRows').innerHTML='<h3>Your International Job Submissions</h3>'+((i.data||[]).length?(i.data||[]).map(x=>'<div class="item"><b>'+esc(x.job_title)+'</b><p class="meta">'+esc(x.country_name)+' · Status: '+esc(x.status)+' · '+new Date(x.created_at).toLocaleString('en-IN')+'</p></div>').join():'<p class="meta">No international job submissions yet.</p>');
+}
+$('companySelect').addEventListener('change',async()=>{currentCompany=companies.find(c=>c.id===$('companySelect').value);companyPanel();await loadVerificationRequests()});
+$('verificationForm').addEventListener('submit',async e=>{e.preventDefault();const country=$('country').value,entity=$('entityType').value;if((country!=='IN'||entity==='foreign_company')&&$('authorization').value.trim().length<5){show('verificationMsg','Overseas recruitment authorization details are required.',true);return}
+ const args={p_company_name:$('companyName').value.trim(),p_industry:$('industry').value.trim(),p_company_size:$('companySize').value,p_description:$('companyDescription').value.trim(),p_website_url:$('website').value.trim(),p_legal_entity_type:entity,p_country_code:country,p_legal_name:$('legalName').value.trim(),p_registration_number:$('registrationNumber').value.trim(),p_registered_address:$('address').value.trim(),p_official_email:$('officialEmail').value.trim(),p_contact_person:$('contactPerson').value.trim(),p_contact_phone:$('contactPhone').value.trim(),p_recruitment_authorization:$('authorization').value.trim()};
+ $('submitVerification').disabled=true;const {data,error}=await sb.rpc('tc_submit_company_verification',args);$('submitVerification').disabled=false;if(error){show('verificationMsg','Submission failed: '+error.message,true);return}show('verificationMsg','Company verification request submitted. Status: Pending.');await boot();}
+$('moreInfoForm').addEventListener('submit',async e=>{e.preventDefault();if(!moreInfoRequest)return;const {data,error}=await sb.rpc('tc_company_resubmit_verification',{p_request_id:moreInfoRequest.id,p_company_response:$('companyResponse').value.trim()});if(error){show('verificationMsg','Response failed: '+error.message,true);return}show('verificationMsg','Additional information sent for review.');await loadVerificationRequests()});
+$('privateForm').addEventListener('submit',async e=>{e.preventDefault();const min=num('pSalaryMin'),max=num('pSalaryMax');if(min!==null&&max!==null&&min>max){show('privateMsg','Minimum salary cannot exceed maximum salary.',true);return}
+ if(!$('pApply').value.trim()&&!$('pWebsite').value.trim()&&!$('pNotice').value.trim()){show('privateMsg','Add at least one official application, employer or notification URL.',true);return}
+ if($('pDeadline').value&&$('pDeadline').value<new Date().toISOString().slice(0,10)){show('privateMsg','Application deadline cannot be in the past.',true);return}
+ const draft={jobTitle:$('pTitle').value.trim(),description:$('pDescription').value.trim(),category:$('pCategory').value,employmentType:$('pType').value,workplaceType:$('pWorkplace').value,location:$('pLocation').value.trim(),countryName:'India',openings:String(num('pOpenings')||1),experience:$('pExperience').value.trim(),education:$('pEducation').value.trim(),salaryMin:min===null?'':String(min),salaryMax:max===null?'':String(max),salaryCurrency:'INR',salaryPeriod:$('pSalaryPeriod').value,skills:$('pSkills').value.trim(),deadline:$('pDeadline').value,contactEmail:$('pEmail').value.trim()||user.email,applicationUrl:$('pApply').value.trim(),officialWebsiteUrl:$('pWebsite').value.trim(),officialNotificationUrl:$('pNotice').value.trim(),draft_status:'draft'};
+ $('submitPrivate').disabled=true;const {data:created,error}=await sb.from('job_posting_drafts').insert({company_id:currentCompany.id,user_id:user.id,draft}).select('id').single();if(error){$('submitPrivate').disabled=false;show('privateMsg','Could not save private job draft: '+error.message,true);return}
+ const {data:review,error:reviewError}=await sb.rpc('tc_submit_company_job_draft_for_review',{p_draft_id:created.id});$('submitPrivate').disabled=false;if(reviewError){show('privateMsg','Draft saved, but review submission failed: '+reviewError.message,true);return}
+ show('privateMsg','Private job submitted for Admin review. It will be public only after approval.');$('privateForm').reset();await loadCompanyJobs();
+});
+$('internationalForm').addEventListener('submit',async e=>{e.preventDefault();const min=num('iSalaryMin'),max=num('iSalaryMax');if(min!==null&&max!==null&&min>max){show('internationalMsg','Minimum salary cannot exceed maximum salary.',true);return}
+ const country=countries.find(x=>x.country_code===$('iCountry').value);if(!country||country.country_code==='IN'){show('internationalMsg','Choose a country outside India.',true);return}
+ if(!$('iApply').value.trim()&&!$('iWebsite').value.trim()&&!$('iNotice').value.trim()){show('internationalMsg','Add at least one official application, employer or notification URL.',true);return}
+ if($('iDeadline').value&&$('iDeadline').value<new Date().toISOString().slice(0,10)){show('internationalMsg','Application deadline cannot be in the past.',true);return}
+ const title=$('iTitle').value.trim(),now=new Date().toISOString(),payload={company_id:currentCompany.id,category_id:$('iCategory').value||null,created_by:user.id,job_title:title,job_slug:slug(title)+'-'+crypto.randomUUID().slice(0,8),job_code:'TC-INT-'+crypto.randomUUID().replaceAll('-','').slice(0,10).toUpperCase(),description:$('iDescription').value.trim(),employment_type:$('iType').value,workplace_type:$('iWorkplace').value,experience_min:num('iExperienceMin'),experience_max:num('iExperienceMax'),salary_min:min,salary_max:max,salary_currency:$('iCurrency').value||country.currency_code,salary_period:$('iPeriod').value,vacancies:num('iVacancies')||1,application_url:$('iApply').value.trim()||null,official_website_url:$('iWebsite').value.trim()||null,official_notification_url:$('iNotice').value.trim()||null,application_deadline:deadline('iDeadline'),status:'pending_review',published_at:null,location:$('iLocation').value.trim(),education_level:$('iEducation').value.trim()||null,required_skills:$('iSkills').value.trim()||null,contact_email:$('iEmail').value.trim()||user.email,employer_name:currentCompany.company_name,country_name:country.country_name,is_admin_managed:false,government_scope:null,job_sector:'private',country_code:country.country_code,visa_type:$('iVisa').value.trim()||null,work_permit:$('iWorkPermit').value.trim()||null,visa_sponsorship_available:$('iSponsor').value==='true',relocation_support:$('iRelocation').value==='true',language_requirements:$('iLanguages').value.trim()||null,visa_notes:$('iVisaNotes').value.trim()||null,updated_at:now};
+ $('submitInternational').disabled=true;const {error}=await sb.from('international_jobs').insert(payload);$('submitInternational').disabled=false;if(error){show('internationalMsg','Could not submit international job: '+error.message,true);return}show('internationalMsg','International job submitted for Admin review. It is not public until approved and published.');$('internationalForm').reset();await loadCompanyJobs();
+});
+async function boot(){
+ const {data:{session},error}=await sb.auth.getSession();if(error||!session){$('authGuard').classList.remove('hidden');$('signInLink').href='auth.html?redirect='+encodeURIComponent('company-job-portal.html');return}
+ user=session.user;$('authGuard').classList.add('hidden');$('app').classList.remove('hidden');
+ try{await loadLookups()}catch(e){show('verificationMsg',e.message,true);return}
+ const {data:m,error:me}=await sb.from('company_members').select('company_id,member_role,member_status').eq('user_id',user.id).eq('member_status','active').in('member_role',['owner','hr_manager','recruiter']);
+ if(me){show('verificationMsg','Could not load your company access: '+me.message,true);return}
+ members=m||[];await loadCompanyStatus();
+}
+boot();
+})();
+</script></body></html>
