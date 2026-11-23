@@ -308,7 +308,7 @@ const client=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase
 let lastUserId='';
 async function paint(session){
 if(!session){lastUserId='';link.textContent='Login / Register';link.href='job-seeker-auth.html';link.removeAttribute('aria-label');return;}
-link.href='job-seeker-auth.html';
+link.href='auth.html';
 const user=session.user;
 let name=user.user_metadata?.full_name||user.user_metadata?.name||'';
 if(user.id!==lastUserId){
