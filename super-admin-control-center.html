@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Enterprise Control Center | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--green:#43c98b;--amber:#f3bd59}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px Arial,sans-serif}.top{padding:16px 22px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:900}.wrap{max-width:1200px;margin:auto;padding:22px}.muted{color:var(--muted);line-height:1.55}a{color:var(--cyan);text-decoration:none}.hero{padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(130deg,#123858,#10243d 65%,#142c49)}h1{margin:0 0 8px;font-size:clamp(24px,4vw,34px)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;min-width:0}.card h2{font-size:17px;margin:0 0 8px;color:#e9f7ff}.metric{font-size:24px;font-weight:800;color:var(--cyan);margin:10px 0}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.good{color:var(--green)}.warn{color:var(--amber)}.links{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}.link{display:inline-block;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:#0a1b2e}.btn{background:#087fbd;color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:bold}.small{font-size:12px}.section-title{margin:28px 0 8px}.footer{margin:28px 0 8px;color:var(--muted);font-size:12px}
+</style></head><body>
+<header class="top"><div class="brand">TAMILAN CAREERS · ENTERPRISE CONTROL CENTER</div><div><a href="super-admin.html">டாஷ்போர்டு</a>　<span id="email" class="muted"></span>　<button class="btn" id="logout">வெளியேறு</button></div></header>
+<main class="wrap">
+<section class="hero"><h1>நிறுவன அளவிலான கட்டுப்பாட்டு மையம்</h1><p class="muted">தற்போதைய இணையதள அமைப்புகளைப் பாதுகாத்தபடி கண்காணிப்பு, பாதுகாப்பு, தரம் மற்றும் நிர்வாகக் கட்டுப்பாடுகளை ஒரே இடத்தில் அணுகவும். இந்த முதல் கட்டம் பாதுகாப்பான Read-only ஆய்வு; ஏற்கெனவே உள்ள தரவுகளை மாற்றாது.</p><div id="overall" class="status">அணுகல் சரிபார்க்கப்படுகிறது...</div></section>
+<h2 class="section-title">நேரடி அமைப்பு நிலை</h2><section class="grid">
+<article class="card"><h2>அங்கீகாரம்</h2><div id="auth" class="metric">சரிபார்க்கிறது</div><p class="muted small">உள்நுழைந்த கணக்கு மற்றும் Super Admin பங்கு.</p></article>
+<article class="card"><h2>முகப்புப் பக்க அமைப்புகள்</h2><div id="settings" class="metric">—</div><p class="muted small">ஏற்கெனவே உள்ள homepage settings பதிவை வாசிக்கிறது.</p></article>
+<article class="card"><h2>நிர்வாகச் செயல்பாட்டு பதிவு</h2><div id="logs" class="metric">—</div><p class="muted small">பதிவு அட்டவணை வாசிக்கக் கிடைக்கிறதா எனச் சரிபார்க்கிறது.</p></article>
+<article class="card"><h2>Database API</h2><div id="db" class="metric">—</div><p class="muted small">அங்கீகரிக்கப்பட்ட Read-only API சோதனை.</p></article>
+</section>
+<h2 class="section-title">கட்டுப்பாட்டு பிரிவுகள்</h2><section class="grid">
+<article class="card"><h2>Website & Branding</h2><p class="muted">தற்போதைய முகப்புப் பெயர், தலைப்பு, துணைத்தலைப்பு, நிறம் மற்றும் Banner Path அமைப்புகள்.</p><div class="links"><a class="link" href="super-admin-site-settings.html">Website Settings திறக்க</a></div></article>
+<article class="card"><h2>Security & Access</h2><p class="muted">Super Admin அணுகல், பாதுகாப்பு நிலை மற்றும் அனுமதி அமைப்புகளை ஆய்வு செய்யவும்.</p><div class="links"><a class="link" href="super-admin-security.html">பாதுகாப்பு மையம்</a><a class="link" href="super-admin-activity-logs.html">செயல்பாட்டு பதிவுகள்</a></div></article>
+<article class="card"><h2>System Health</h2><p class="muted">முக்கிய தரவுத்தள API இணைப்புகள் மற்றும் அமைப்பு நிலை அறிக்கைகள்.</p><div class="links"><a class="link" href="super-admin-system-health.html">System Health</a><a class="link" href="super-admin-reports.html">அறிக்கைகள்</a></div></article>
+<article class="card"><h2>Jobs & Verification</h2><p class="muted">தனித்தனி அரசு, தனியார், சர்வதேச வேலைவாய்ப்பு அமைப்புகள் மற்றும் சரிபார்ப்பு.</p><div class="links"><a class="link" href="super-admin-government-jobs.html">அரசு வேலை</a><a class="link" href="super-admin-private-jobs.html">தனியார் வேலை</a><a class="link" href="super-admin-international-jobs.html">சர்வதேச வேலை</a></div></article>
+<article class="card"><h2>Sources & Exam Intelligence</h2><p class="muted">அதிகாரப்பூர்வ ஆதாரங்கள், தகுதி விதிகள் மற்றும் தேர்வுத் தயாரிப்பு வளங்கள்.</p><div class="links"><a class="link" href="super-admin-source-directory.html">ஆதாரப் பட்டியல்</a><a class="link" href="super-admin-exam-center.html">தேர்வு மையம்</a></div></article>
+<article class="card"><h2>Users & Companies</h2><p class="muted">பயனாளர்கள், நிறுவனங்கள், சரிபார்ப்பு மற்றும் ஆதரவு மேலாண்மை.</p><div class="links"><a class="link" href="super-admin-users.html">பயனாளர்கள்</a><a class="link" href="super-admin-companies.html">நிறுவனங்கள்</a><a class="link" href="super-admin-support.html">ஆதரவு</a></div></article>
+</section>
+<h2 class="section-title">அடுத்த கட்ட மேம்பாட்டு திட்டம்</h2><section class="grid">
+<article class="card"><h2>Live Visual Website Builder</h2><p class="muted">Preview, draft, publish approval மற்றும் rollback உடன் Homepage layout editor.</p><span class="tag warn">ஆய்வு / திட்டமிடல்</span></article>
+<article class="card"><h2>SEO & Search Console</h2><p class="muted">Page metadata, sitemap, indexing நிலை மற்றும் structured data கண்காணிப்பு.</p><span class="tag warn">Integration தேவை</span></article>
+<article class="card"><h2>Backup & Restore</h2><p class="muted">Versioned configuration backup, restore preview மற்றும் approval பாதுகாப்பு.</p><span class="tag warn">Storage திட்டமிடல்</span></article>
+<article class="card"><h2>Automation & Alerts</h2><p class="muted">Scheduled checks, email alerts, workflow history மற்றும் failed-task notifications.</p><span class="tag warn">Backend தேவை</span></article>
+<article class="card"><h2>Analytics & Performance</h2><p class="muted">Privacy-aware traffic, page performance, uptime மற்றும் error monitoring.</p><span class="tag warn">Analytics இணைப்பு தேவை</span></article>
+<article class="card"><h2>Change Approval & Audit</h2><p class="muted">முக்கிய அமைப்பு மாற்றங்களுக்கு preview, confirmation, activity log மற்றும் rollback.</p><span class="tag warn">அடுத்த கட்டம்</span></article>
+</section>
+<p class="footer">பாதுகாப்பு குறிப்பு: இந்தப் பக்கம் Super Admin கணக்குகளுக்கே. இது எந்த database schema-வையும் மாற்றாது; புதிய settings-ஐ எழுதாது; சேமிக்கப்பட்ட வேலைவாய்ப்பு அல்லது பயனர் பதிவுகளைத் தொடாது.</p>
+</main>
+<script>
+(()=>{const sb=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2'),$=id=>document.getElementById(id);
+const put=(id,value,good=true)=>{$(id).textContent=value;$(id).className='metric '+(good?'good':'warn')};
+async function init(){try{const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return}
+const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);if(re||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}
+$('email').textContent=user.email||'';put('auth','சரிபார்க்கப்பட்டது');$('overall').textContent='அணுகல் உறுதிசெய்யப்பட்டது. Read-only அமைப்பு ஆய்வு தொடங்கியது.';
+const [s,l]=await Promise.all([sb.from('site_settings').select('setting_key,site_name,updated_at').eq('setting_key','homepage').maybeSingle(),sb.from('super_admin_activity_logs').select('id',{count:'exact',head:true})]);
+if(s.error)put('settings','வாசிக்க முடியவில்லை',false);else put('settings',s.data?'இணைக்கப்பட்டுள்ளது':'பதிவு இல்லை',!!s.data);
+if(l.error)put('logs','அணுகல் இல்லை',false);else put('logs',String(l.count??0)+' பதிவுகள்');
+const {error:de}=await sb.from('user_roles').select('user_id',{head:true,count:'exact'});put('db',de?'சோதனை தோல்வி':'இணைப்பு OK',!de);
+}catch(e){$('overall').textContent='ஆய்வில் பிழை: '+(e?.message||'தெரியாத பிழை');}}
+$('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});init();
+})();
+</script></body></html>
