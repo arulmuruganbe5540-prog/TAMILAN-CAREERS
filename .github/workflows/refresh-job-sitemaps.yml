@@ -130,8 +130,7 @@ jobs:
             }
             const robots = fs.readFileSync('robots.txt', 'utf8');
             if (!robots.includes('Sitemap: ' + site + '/sitemap.xml')) throw new Error('robots.txt does not advertise sitemap.xml');
-            console.log('Validated ' + staticPages.length + ' static pages, ' + statesAndUTs.length +
-              ' state/UT pages and ' + jobs.length + ' active published jobs.');
+            console.log('Validated ' + staticPages.length + ' indexable static pages and ' + jobs.length + ' indexable published government jobs.');
             console.log('Government: ' + government.length + '; Private: ' + privateJobs.length +
               '; International: ' + international.length);
           })().catch(e => { console.error(e); process.exit(1); });
