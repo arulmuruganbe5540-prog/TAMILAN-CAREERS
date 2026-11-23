@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ta"><head>
+<html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
 <title>Super Admin Login | TAMILAN CAREERS</title>
@@ -12,28 +12,28 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 </style></head><body><main>
 <div class="brand">TAMILAN CAREERS · PRIVATE AREA</div><div class="lock">🔐</div>
 <h1>Super Admin Login</h1>
-<p>இப்போது Email + Password மூலம் மட்டும் Login செய்யலாம். Authenticator MFA இந்தப் பக்கத்தில் பயன்படுத்தப்படாது. Super Admin அனுமதி Database-ல் வழங்கப்பட்ட கணக்கிற்கு மட்டுமே Dashboard அணுகல் கிடைக்கும்.</p>
+<p>Sign in using Email and Password. Authenticator MFA is not used on this page. Only accounts granted the Super Admin role in the database can access the dashboard.</p>
 <div id="notice" class="notice" role="status"></div>
 <section id="loginPanel" class="panel show">
 <form id="loginForm">
 <div class="field"><label for="email">Email ID</label><input id="email" type="email" autocomplete="username" required></div>
 <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required></div>
-<button id="loginBtn">Email மூலம் Login செய்</button>
+<button id="loginBtn">Sign in with Email</button>
 </form>
-<button id="resetBtn" class="secondary" type="button">Password மறந்துவிட்டீர்களா? Reset செய்</button>
-<div class="links"><button id="showRegister" class="secondary" type="button">புதிய கணக்கு பதிவு</button></div>
+<button id="resetBtn" class="secondary" type="button">Forgot Password? Reset</button>
+<div class="links"><button id="showRegister" class="secondary" type="button">Register a New Account</button></div>
 </section>
 <section id="registerPanel" class="panel">
-<h2>புதிய கணக்கு பதிவு</h2><p>பதிவு செய்த Email-க்கு உறுதிப்படுத்தல் இணைப்பு அனுப்பப்படும். பதிவு செய்தாலே Super Admin அனுமதி கிடைக்காது.</p>
+<h2>Register a New Account</h2><p>பதிவு செய்த Email-க்கு உறுதிப்படுத்தல் Link அனுப்பப்படும். பதிவு செய்தாலே Super Admin அனுமதி கிடைக்காது.</p>
 <form id="registerForm">
 <div class="field"><label for="regEmail">Email ID</label><input id="regEmail" type="email" autocomplete="email" required></div>
-<div class="field"><label for="regPassword">Password (குறைந்தது 8 எழுத்துகள்)</label><input id="regPassword" type="password" autocomplete="new-password" minlength="8" required></div>
-<button id="registerBtn">கணக்கை பதிவு செய்</button>
-</form><button id="backLogin" class="secondary" type="button">Login பக்கத்திற்குத் திரும்பு</button>
+<div class="field"><label for="regPassword">Password (at least 8 characters)</label><input id="regPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+<button id="registerBtn">Create Account</button>
+</form><button id="backLogin" class="secondary" type="button">Back to Sign In</button>
 </section>
 <section id="recoverPanel" class="panel">
-<h2>புதிய Password அமைக்கவும்</h2><p>Gmail-க்கு வந்த Reset இணைப்பைத் திறந்து இங்கு வந்த பிறகு புதிய Password அமைக்கவும்.</p>
-<form id="recoverForm"><div class="field"><label for="newPassword">புதிய Password</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="savePasswordBtn">Password சேமி</button></form>
+<h2>Set a New Password</h2><p>Gmail-க்கு வந்த Reset இணைப்பைத் திறந்து இங்கு வந்த பிறகு Set a New Password.</p>
+<form id="recoverForm"><div class="field"><label for="newPassword">New Password</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="savePasswordBtn">Password Save</button></form>
 </section>
 </main>
 <script>
@@ -47,22 +47,22 @@ function show(which){['loginPanel','registerPanel','recoverPanel'].forEach(id=>$
 function busy(id,on){$(id).disabled=on;}
 async function checkAdmin(){
  const {data:{user},error:userError}=await sb.auth.getUser();
- if(userError||!user)throw new Error('Login session கிடைக்கவில்லை. மீண்டும் Login செய்யவும்.');
+ if(userError||!user)throw new Error('Login session not found. Please sign in again.');
  const {data,error}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(error)throw error;
- if(!data||data.length!==1)throw new Error('இந்த Email கணக்கிற்கு Super Admin அனுமதி இல்லை.');
- note('Login வெற்றி! Super Admin Dashboard திறக்கப்படுகிறது.','success');\n location.href='super-admin.html';
+ if(!data||data.length!==1)throw new Error('This email account does not have Super Admin permission.');
+ note('Sign-in successful. Opening the Super Admin Dashboard.','success');\n location.href='super-admin.html';
 }
-$('showRegister').addEventListener('click',()=>{show('registerPanel');note('புதிய கணக்கை பதிவு செய்யவும்.');});
+$('showRegister').addEventListener('click',()=>{show('registerPanel');note('புதிய Create Accountயவும்.');});
 $('backLogin').addEventListener('click',()=>{show('loginPanel');note('');});
 $('resetBtn').addEventListener('click',async()=>{
  try{
   const email=$('email').value.trim();
-  if(!email)throw new Error('முதலில் Email ID உள்ளிடவும்.');
+  if(!email)throw new Error('Enter your email address first.');
   const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
   if(error)throw error;
-  note('Password Reset இணைப்பு உங்கள் Email-க்கு அனுப்பப்பட்டது. Inbox / Spam பார்க்கவும்.','success');
- }catch(err){note(err.message||'Reset மின்னஞ்சல் அனுப்ப முடியவில்லை.','error');}
+  note('Password Reset Link உங்கள் Email-க்கு அனுப்பப்பட்டது. Inbox / Spam பார்க்கவும்.','success');
+ }catch(err){note(err.message||'Unable to send the reset email.','error');}
 });
 $('registerForm').addEventListener('submit',async e=>{
  e.preventDefault();busy('registerBtn',true);
@@ -70,9 +70,9 @@ $('registerForm').addEventListener('submit',async e=>{
   const email=$('regEmail').value.trim(),password=$('regPassword').value;
   const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
   if(error)throw error;
-  if(data.session){show('loginPanel');note('கணக்கு பதிவு செய்யப்பட்டது. Super Admin அனுமதி உள்ளதா என்று Login போது சரிபார்க்கப்படும்.','success');}
-  else note('பதிவு கோரிக்கை வெற்றி. Email-க்கு வந்த உறுதிப்படுத்தல் இணைப்பைத் திறக்கவும்.','success');
- }catch(err){note(err.message||'பதிவு தோல்வியடைந்தது.','error');}
+  if(data.session){show('loginPanel');note('Account registered. Super Admin permission will be checked at sign-in.','success');}
+  else note('Registration request submitted. Open the confirmation link sent to your email.','success');
+ }catch(err){note(err.message||'Registration failed.','error');}
  finally{busy('registerBtn',false);}
 });
 $('loginForm').addEventListener('submit',async e=>{
@@ -81,27 +81,27 @@ $('loginForm').addEventListener('submit',async e=>{
   const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
   if(error)throw error;
   await checkAdmin();
- }catch(err){await sb.auth.signOut();show('loginPanel');note(err.message||'Login தோல்வியடைந்தது.','error');}
+ }catch(err){await sb.auth.signOut();show('loginPanel');note(err.message||'Sign-in failed.','error');}
  finally{busy('loginBtn',false);}
 });
 $('recoverForm').addEventListener('submit',async e=>{
  e.preventDefault();busy('savePasswordBtn',true);
  try{
   const password=$('newPassword').value;
-  if(password.length<8)throw new Error('குறைந்தது 8 எழுத்துகள் Password அமைக்கவும்.');
+  if(password.length<8)throw new Error('Use a password with at least 8 characters.');
   const {error}=await sb.auth.updateUser({password});
   if(error)throw error;
-  await sb.auth.signOut();show('loginPanel');note('புதிய Password சேமிக்கப்பட்டது. இப்போது Login செய்யவும்.','success');
- }catch(err){note(err.message||'Password மாற்றம் தோல்வி.','error');}
+  await sb.auth.signOut();show('loginPanel');note('New Password Saveக்கப்பட்டது. இப்போது Login செய்யவும்.','success');
+ }catch(err){note(err.message||'Password update failed.','error');}
  finally{busy('savePasswordBtn',false);}
 });
 sb.auth.onAuthStateChange((event,session)=>{
- if(event==='PASSWORD_RECOVERY'&&session){show('recoverPanel');note('புதிய Password அமைக்கவும்.');}
+ if(event==='PASSWORD_RECOVERY'&&session){show('recoverPanel');note('Set a New Password.');}
 });
 sb.auth.getSession().then(async({data,error})=>{
  if(error||!data.session)return;
- if(location.search.includes('code=')||location.hash.includes('type=recovery')){show('recoverPanel');note('புதிய Password அமைக்கவும்.');return;}
- try{await checkAdmin();}catch(err){await sb.auth.signOut();show('loginPanel');note(err.message||'அனுமதி இல்லை.','error');}
+ if(location.search.includes('code=')||location.hash.includes('type=recovery')){show('recoverPanel');note('Set a New Password.');return;}
+ try{await checkAdmin();}catch(err){await sb.auth.signOut();show('loginPanel');note(err.message||'Access denied.','error');}
 });
 })();
 </script></body></html>
