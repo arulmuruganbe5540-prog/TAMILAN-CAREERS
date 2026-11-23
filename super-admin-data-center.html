@@ -42,6 +42,14 @@
 <article class="module"><h3>Review Center</h3><p>Review company verification requests and submitted job records.</p><a href="super-admin-review-center.html">Open Review Center →</a></article>
 <article class="module"><h3>Government Notice Review</h3><p>Use the existing Government Job Control Center's official-source and notice verification workflow.</p><a href="super-admin.html">Open Notice Verification →</a></article>
 </div></section>
+<section class="panel" id="privateStoragePanel">
+<h2 class="section-title">07 · Super Admin Private File Storage</h2>
+<p class="section-note">Private documents in this area are stored in the separate super-admin-private bucket. Only a Super Admin session with verified MFA (AAL2) can access these files. Maximum file size: 50 MB.</p>
+<div class="field"><label for="privateFile">Choose a private file (PDF, image, text, ZIP, DOCX or XLSX)</label><input id="privateFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.zip,.docx,.xlsx"></div>
+<div class="actions"><button id="uploadPrivateFile" type="button">Upload private file</button><button id="refreshPrivateFiles" type="button" class="secondary">Refresh file list</button></div>
+<div id="privateStorageMessage" class="notice hidden" role="status"></div>
+<div id="privateFileList" class="module" style="margin-top:14px"><p class="muted">Loading private files…</p></div>
+</section>
 <section class="panel"><h2 class="section-title">06 · Additional Data Center Modules</h2><p class="section-note">These are separate modules to be implemented and connected after the existing pages are audited. They are not represented as completed yet.</p><div class="grid">
 <article class="module"><h3>Website Settings</h3><p>Site identity, navigation, public content settings and maintenance controls.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
 <article class="module"><h3>Analytics & Reports</h3><p>Traffic, registrations, applications, job performance and downloadable reports.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
@@ -55,10 +63,41 @@
 (()=>{const sb=supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');const $=id=>document.getElementById(id);let busy=false;
 function msg(t,type){$('message').textContent=t;$('message').className='notice '+(type||'');$('message').classList.remove('hidden')}
 function state(on){$('login').classList.toggle('hidden',on);$('workspace').classList.toggle('hidden',!on);$('logout').classList.toggle('hidden',!on)}
+function storageMsg(t,type){const el=$('privateStorageMessage');el.textContent=t;el.className='notice '+(type||'');el.classList.remove('hidden')}
+function safeFileName(name){return name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/^-+|-+$/g,'').slice(-100)||'file'}
+async function loadPrivateFiles(){
+ const list=$('privateFileList');list.textContent='Loading private files…';
+ const {data,error}=await sb.storage.from('super-admin-private').list('',{limit:100,sortBy:{column:'created_at',order:'desc'}});
+ if(error){list.textContent='Could not load files: '+error.message;return}
+ list.replaceChildren();
+ if(!data?.length){const p=document.createElement('p');p.className='muted';p.textContent='No private files uploaded yet.';list.append(p);return}
+ for(const file of data){
+  if(!file.name)continue;
+  const row=document.createElement('div');row.className='item';row.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #e4eaf1';
+  const name=document.createElement('span');name.textContent=file.name;name.style.cssText='overflow-wrap:anywhere;font-weight:700';row.append(name);
+  const actions=document.createElement('div');actions.className='actions';
+  const download=document.createElement('button');download.type='button';download.className='secondary';download.textContent='Download';download.onclick=async()=>{const {data:d,error:e}=await sb.storage.from('super-admin-private').createSignedUrl(file.name,60);if(e){storageMsg(e.message,'error');return}window.open(d.signedUrl,'_blank','noopener')};
+  const remove=document.createElement('button');remove.type='button';remove.className='secondary';remove.textContent='Delete';remove.onclick=async()=>{if(!confirm('Permanently delete '+file.name+'?'))return;const {error:e}=await sb.storage.from('super-admin-private').remove([file.name]);if(e){storageMsg(e.message,'error');return}storageMsg('Private file deleted.');await loadPrivateFiles()};
+  actions.append(download,remove);row.append(actions);list.append(row);
+ }
+}
+$('refreshPrivateFiles').addEventListener('click',loadPrivateFiles);
+$('uploadPrivateFile').addEventListener('click',async()=>{
+ const file=$('privateFile').files?.[0];if(!file){storageMsg('Choose a file first.','error');return}
+ if(file.size>50*1024*1024){storageMsg('File is larger than the 50 MB limit.','error');return}
+ const allowed=['application/pdf','image/jpeg','image/png','image/webp','text/plain','application/zip','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+ if(!allowed.includes(file.type)){storageMsg('This file type is not allowed.','error');return}
+ const path=Date.now()+'-'+crypto.randomUUID().slice(0,8)+'-'+safeFileName(file.name);
+ $('uploadPrivateFile').disabled=true;
+ const {error}=await sb.storage.from('super-admin-private').upload(path,file,{upsert:false,contentType:file.type});
+ $('uploadPrivateFile').disabled=false;
+ if(error){storageMsg(error.message,'error');return}
+ $('privateFile').value='';storageMsg('Private file uploaded successfully.');await loadPrivateFiles();
+});
 async function authorize(){const {data:{user},error}=await sb.auth.getUser();if(error||!user){state(false);return false}
 const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_id',user.id);if(re||!roles?.some(x=>x.role==='super_admin')){await sb.auth.signOut();state(false);msg('Access denied. This account does not have the Super Admin role.','error');return false}
 const {data:aal,error:ae}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||aal.currentLevel!=='aal2'){state(false);msg('Complete authenticator MFA verification through the Super Admin login page before opening the Data Center.','error');return false}
-state(true);return true}
+state(true);await loadPrivateFiles();return true}
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;busy=true;$('loginBtn').disabled=true;const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});busy=false;$('loginBtn').disabled=false;if(error){msg(error.message,'error');return}await authorize()});
 $('logout').addEventListener('click',async()=>{await sb.auth.signOut();state(false);$('password').value=''});
 (async()=>{const {data:{session}}=await sb.auth.getSession();if(session)await authorize()})();
