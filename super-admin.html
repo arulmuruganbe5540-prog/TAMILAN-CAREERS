@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
+<title>Super Admin Dashboard | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--blue:#168bd2;--cyan:#65d7ff;--muted:#a8bed2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:15px Arial,sans-serif}.top{padding:18px 22px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:800;letter-spacing:1.5px}.wrap{max-width:1180px;margin:auto;padding:24px}.welcome h1{margin:0 0 6px}.muted{color:var(--muted);line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:22px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}.card h3{margin:0 0 8px}.number{font-size:26px;font-weight:800;color:var(--cyan)}.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.link{display:block;text-decoration:none;color:#eff7ff;background:#10243d;border:1px solid #244362;padding:17px;border-radius:12px}.link b{display:block;color:var(--cyan);margin-bottom:6px}.link:hover{border-color:var(--cyan)}button{background:#087fbd;color:white;border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.danger{background:#55313a}.foot{margin-top:28px;font-size:12px;color:var(--muted)}
+</style></head><body>
+<header class="top"><div class="brand">TAMILAN CAREERS · PRIVATE ADMIN</div><div><span id="adminEmail" class="muted"></span>　<button id="logout">Logout</button></div></header>
+<main class="wrap"><section class="welcome"><h1>Super Admin Dashboard</h1><div class="muted">தனிப்பட்ட நிர்வாக மையம் · அனுமதி பெற்ற கணக்கிற்கு மட்டும்</div></section>
+<div id="status" class="status">அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section class="grid">
+<div class="card"><h3>Government Jobs</h3><div class="number" id="govCount">—</div><div class="muted">அரசுப் பணிகள் பதிவுகள்</div></div>
+<div class="card"><h3>Private Jobs</h3><div class="number" id="privateCount">—</div><div class="muted">தனியார் பணிகள் பதிவுகள்</div></div>
+<div class="card"><h3>International Jobs</h3><div class="number" id="intlCount">—</div><div class="muted">வெளிநாட்டு பணிகள் பதிவுகள்</div></div>
+<div class="card"><h3>Registered Profiles</h3><div class="number" id="profileCount">—</div><div class="muted">பயனர் சுயவிவரங்கள்</div></div>
+</section>
+<h2>நிர்வாகப் பிரிவுகள்</h2><section class="links">
+<a class="link" href="super-admin-government-jobs.html"><b>அரசுப் பணிகள்</b><span class="muted">பதிவுகள், சரிபார்ப்பு, நிர்வாகம்</span></a>
+<a class="link" href="super-admin-private-jobs.html"><b>தனியார் பணிகள்</b><span class="muted">தனித்தனி தனியார் வேலைவாய்ப்பு அமைப்பு</span></a>
+<a class="link" href="super-admin-international-jobs.html"><b>சர்வதேச பணிகள்</b><span class="muted">வெளிநாட்டு வேலைவாய்ப்புகள்</span></a>
+<a class="link" href="super-admin-source-directory.html"><b>மூல இணையதள அடைவு</b><span class="muted">அதிகாரப்பூர்வ வேலைவாய்ப்பு அறிவிப்பு மூலங்கள்</span></a>
+<a class="link" href="super-admin-exam-center.html"><b>தேர்வு அறிவிப்புகள் & தயாரிப்பு</b><span class="muted">தகுதி கண்டறிதல், தேர்வு வளங்கள்</span></a>
+<a class="link" href="super-admin-review-center.html"><b>Review & Moderation</b><span class="muted">சரிபார்ப்பு மற்றும் புகார் பரிசீலனை</span></a>
+<a class="link" href="super-admin-users.html"><b>பயனர்கள் & அனுமதிகள்</b><span class="muted">கணக்குகள் மற்றும் Role நிர்வாகம்</span></a>
+<a class="link" href="super-admin-site-settings.html"><b>Website Settings</b><span class="muted">தள அமைப்புகள் மற்றும் கட்டுப்பாடுகள்</span></a>
+</section>
+<div class="foot">இந்தப் பக்கம் robots noindex மூலம் தேடுபொறிகளிலிருந்து மறைக்கப்பட்டுள்ளது. உண்மையான பாதுகாப்பு Supabase Auth + Database RLS மூலம் அமல்படுத்தப்படுகிறது. இன்னும் இணைக்கப்படாத நிர்வாகப் பிரிவுகள் அடுத்த கட்டங்களில் உருவாக்கப்படும்.</div>
+</main><script>
+(()=>{
+const URL='https://qkmljuuusfjowexvybvy.supabase.co',KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
+async function init(){
+ const {data:{user},error}=await sb.auth.getUser();
+ if(error||!user){location.replace('super-admin-login.html');return;}
+ const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
+ if(roleError||!roles||roles.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return;}
+ $('adminEmail').textContent=user.email||'';
+ $('status').textContent='Super Admin அனுமதி உறுதிப்படுத்தப்பட்டது. Dashboard அணுகல் வழங்கப்பட்டது.';
+ $('status').className='status';
+ const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount']];
+ for(const [table,id] of stats){try{const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});$(id).textContent=error?'—':String(count??0);}catch(e){$(id).textContent='—';}}
+}
+$('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html');});
+init();
+})();
+</script></body></html>
