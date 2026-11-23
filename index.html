@@ -355,7 +355,7 @@ if(!link||!window.supabase)return;
 const client=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');
 let lastUserId='';
 async function paint(session){
-if(!session){lastUserId='';link.textContent='Login / Register';link.href='job-seeker-auth.html';link.removeAttribute('aria-label');if(employerLink){employerLink.textContent='Employer Portal';employerLink.href='employer-auth.html';}return;}
+if(!session){lastUserId='';link.textContent='Login / Register';link.href='job-seeker-auth.html';link.style.display='';link.removeAttribute('aria-label');if(employerLink){employerLink.textContent='Employer Portal';employerLink.href='employer-auth.html';employerLink.style.display='';}return;}
 const user=session.user;
 let name=user.user_metadata?.full_name||user.user_metadata?.name||'';
 if(user.id!==lastUserId){
