@@ -115,6 +115,7 @@ $('enrollBtn').addEventListener('click',async()=>{
 });
 sb.auth.getSession().then(async({data,error})=>{
  if(error||!data.session)return;
+ if(location.search.includes('code=')||location.hash.includes('type=recovery')){step('recover');note('புதிய Password அமைக்கவும்.');return;}
  try{await mfaFlow();}catch(err){await sb.auth.signOut();step('login');note(err.message||'அனுமதி இல்லை.','error');}
 });
 })();
