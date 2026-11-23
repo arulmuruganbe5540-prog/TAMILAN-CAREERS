@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
+<title>Super Admin Data Center | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#101d3a;--blue:#176b9e;--cyan:#54c8ff;--bg:#f3f6fb;--ink:#14213d;--muted:#65738b;--line:#dce4ef;--green:#067647}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Arial,Helvetica,sans-serif}header{background:var(--navy);color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#c9d8ec;font-size:13px}.wrap{width:min(1180px,100%);margin:24px auto;padding:0 16px}.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 5px 18px #10203a0a}.hidden{display:none!important}.muted{color:var(--muted);font-size:13px}.field{display:grid;gap:6px;margin:12px 0}label{font-weight:700;font-size:13px}input{width:100%;padding:12px;border:1px solid #c8d3e2;border-radius:8px;font:inherit}button,.btn{border:0;border-radius:8px;padding:11px 16px;background:var(--blue);color:#fff;font-weight:700;text-decoration:none;cursor:pointer;display:inline-block}button.secondary{background:#e9eff7;color:var(--ink)}button:disabled{opacity:.6}.notice{padding:12px;border-radius:8px;background:#eef7ff;color:#17456a;margin:12px 0}.error{background:#fff0ef;color:#9b1c13}.success{background:#ecfdf3;color:#05603a}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.module{border:1px solid var(--line);border-radius:11px;padding:16px;background:#fff;min-width:0}.module h3{margin:0 0 6px;font-size:17px}.module p{margin:0 0 12px;color:var(--muted);font-size:13px}.module a{color:#145783;font-weight:700}.module .status{font-size:11px;font-weight:700;color:#52627a}.section-title{margin:0 0 12px;font-size:19px}.section-note{margin:-4px 0 14px;color:var(--muted);font-size:13px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}@media(max-width:650px){.grid{grid-template-columns:1fr}.panel{padding:16px}header{padding:16px}}
+</style></head>
+<body>
+<header><div><h1>TAMILAN CAREERS — Super Admin Data Center</h1><p>Private administration workspace · English interface</p></div><button id="logout" class="secondary hidden" type="button">Sign out</button></header>
+<main class="wrap">
+<section id="login" class="panel" style="max-width:470px;margin:8vh auto">
+<h2 style="margin-top:0">Super Admin Sign in</h2><p class="muted">Access is restricted to the authorized Super Admin account. Multi-factor authentication (AAL2) is required.</p>
+<div id="message" class="notice hidden" role="status"></div>
+<form id="loginForm"><div class="field"><label for="email">Email address</label><input id="email" type="email" autocomplete="username" required></div><div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div><button id="loginBtn" type="submit">Sign in</button></form>
+<p class="muted">First-time Super Admin registration is available only through the one-time secure registration invitation supplied by the site owner. Do not share that invitation.</p>
+</section>
+<div id="workspace" class="hidden">
+<section class="panel">
+<h2 class="section-title">01 · Super Admin Registration & Account</h2>
+<p class="section-note">This is the first and separate account-setup area. Super Admin registration is one-time and invitation-only; it is not part of Job Seeker or Employer registration.</p>
+<div class="grid">
+<article class="module"><h3>Super Admin Account Registration</h3><p>Use the private, one-time registration invitation to create or complete the Super Admin account. Never publish the invitation or token.</p><span class="status">ONE-TIME · INVITATION ONLY</span></article>
+<article class="module"><h3>Account Security & MFA</h3><p>Super Admin sign-in requires a verified authenticator factor and AAL2 session. Passwords are never shown or stored in this Data Center.</p><span class="status">MFA REQUIRED</span></article>
+</div>
+</section>
+<section class="panel"><h2 class="section-title">02 · Website Control Center</h2><p class="section-note">Open the existing control center. Its current forms and workflows remain in their own pages.</p><div class="grid">
+<article class="module"><h3>Website Control Center</h3><p>Overview and existing administration dashboard.</p><a href="super-admin.html">Open Website Control Center →</a></article>
+<article class="module"><h3>Users & Companies</h3><p>Company verification, member access and user-related review tools.</p><a href="super-admin-review-center.html">Open Review Center →</a></article>
+</div></section>
+<section class="panel"><h2 class="section-title">03 · Job Management — Separate Systems</h2><p class="section-note">Government, Private and International Jobs remain independent. Do not merge their forms, tables or records.</p><div class="grid">
+<article class="module"><h3>Government Jobs</h3><p>Create, edit, review and publish Government Job notifications using the existing Government Job form.</p><a href="super-admin.html#government-control">Open Government Job Posting →</a></article>
+<article class="module"><h3>Private & International Jobs</h3><p>Manage the existing separate Private Jobs and International Jobs posting forms.</p><a href="super-admin-independent-jobs.html">Open Independent Job Management →</a></article>
+</div></section>
+<section class="panel"><h2 class="section-title">04 · Admissions & Government Exam Resources</h2><div class="grid">
+<article class="module"><h3>Admissions Management</h3><p>Keep admission notifications and their existing management workflow separate.</p><a href="super-admin-admissions.html">Open Admissions →</a></article>
+<article class="module"><h3>Government Exam Resources</h3><p>Manage admit cards, results, answer keys, exam schedules and previous-year papers.</p><a href="super-admin-government-resources.html">Open Government Resources →</a></article>
+</div></section>
+<section class="panel"><h2 class="section-title">05 · Review & Verification</h2><div class="grid">
+<article class="module"><h3>Review Center</h3><p>Review company verification requests and submitted job records.</p><a href="super-admin-review-center.html">Open Review Center →</a></article>
+<article class="module"><h3>Government Notice Review</h3><p>Use the existing Government Job Control Center's official-source and notice verification workflow.</p><a href="super-admin.html">Open Notice Verification →</a></article>
+</div></section>
+<section class="panel"><h2 class="section-title">06 · Additional Data Center Modules</h2><p class="section-note">These are separate modules to be implemented and connected after the existing pages are audited. They are not represented as completed yet.</p><div class="grid">
+<article class="module"><h3>Website Settings</h3><p>Site identity, navigation, public content settings and maintenance controls.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
+<article class="module"><h3>Analytics & Reports</h3><p>Traffic, registrations, applications, job performance and downloadable reports.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
+<article class="module"><h3>Security Center</h3><p>Login events, MFA status, access policies, suspicious activity and security alerts.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
+<article class="module"><h3>Audit Logs</h3><p>Trace who changed what, when, and which record was affected.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
+<article class="module"><h3>Backup & Recovery</h3><p>Controlled backups, restore points and recovery verification.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
+<article class="module"><h3>Database & System Health</h3><p>Database status, storage, API health, scheduled tasks and error monitoring.</p><span class="status">IMPLEMENTATION REQUIRED</span></article>
+</div></section>
+</div></main>
+<script>
+(()=>{const sb=supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');const $=id=>document.getElementById(id);let busy=false;
+function msg(t,type){$('message').textContent=t;$('message').className='notice '+(type||'');$('message').classList.remove('hidden')}
+function state(on){$('login').classList.toggle('hidden',on);$('workspace').classList.toggle('hidden',!on);$('logout').classList.toggle('hidden',!on)}
+async function authorize(){const {data:{user},error}=await sb.auth.getUser();if(error||!user){state(false);return false}
+const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_id',user.id);if(re||!roles?.some(x=>x.role==='super_admin')){await sb.auth.signOut();state(false);msg('Access denied. This account does not have the Super Admin role.','error');return false}
+const {data:aal,error:ae}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||aal.currentLevel!=='aal2'){state(false);msg('Complete authenticator MFA verification through the Super Admin login page before opening the Data Center.','error');return false}
+state(true);return true}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;busy=true;$('loginBtn').disabled=true;const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});busy=false;$('loginBtn').disabled=false;if(error){msg(error.message,'error');return}await authorize()});
+$('logout').addEventListener('click',async()=>{await sb.auth.signOut();state(false);$('password').value=''});
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session)await authorize()})();
+})();
+</script></body></html>
