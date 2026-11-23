@@ -6,7 +6,7 @@
 <div class="notice">Company verification is required before job submission. Private Jobs are for India. International Jobs must be outside India. Company-submitted jobs remain pending until the Super Admin reviews them.</div>
 <section id="companySelectPanel" class="panel hidden"><h2>Your Company</h2><div class="field"><label for="companySelect">Select company</label><select id="companySelect"></select></div><p id="companyStatus" class="notice"></p></section>
 <section id="verificationPanel" class="panel hidden"><h2>Company Verification</h2><p class="muted">Submit legal business information for verification. Overseas employers must provide recruitment licence, sponsor/work authorization, issuing authority or a clear explanation if no licence is applicable.</p><div id="verificationMsg" class="notice hidden" role="status"></div>
-<form id="verificationForm"><div class="grid">
+<form id="verificationForm"><div class="grid"><div class="field full"><label for="marketScope">Verification required for *</label><select id="marketScope" required><option value="indian_private">Indian Private Jobs — India-registered company</option><option value="international">International Jobs — Overseas-registered company</option></select></div>
 <div class="field"><label for="companyName">Company / organization name *</label><input id="companyName" required maxlength="160"></div>
 <div class="field"><label for="industry">Industry</label><input id="industry" maxlength="120"></div>
 <div class="field"><label for="companySize">Company size</label><select id="companySize"><option value="">Select size</option><option>1–10</option><option>11–50</option><option>51–200</option><option>201–500</option><option>501–1000</option><option>1000+</option></select></div>
@@ -25,7 +25,7 @@
 </section>
 <section id="moreInfoPanel" class="panel hidden"><h2>Additional Information Requested</h2><p id="adminNote" class="notice"></p><form id="moreInfoForm"><label for="companyResponse">Your response *</label><textarea id="companyResponse" required minlength="10" maxlength="2000"></textarea><button type="submit" id="sendResponse" style="margin-top:10px">Send additional information</button></form></section>
 <div id="verifiedArea" class="hidden">
-<section class="panel"><h2>Post a Private Job — India</h2><p class="muted">Private job submissions go to the separate Private Jobs review workflow. They become public only after admin approval and publication.</p><div id="privateMsg" class="notice hidden" role="status"></div>
+<section class="panel hidden" id="privateMarketArea"><h2>Post a Private Job — India</h2><p class="muted">Private job submissions go to the separate Private Jobs review workflow. They become public only after admin approval and publication.</p><div id="privateMsg" class="notice hidden" role="status"></div>
 <form id="privateForm"><div class="grid">
 <div class="field"><label for="pTitle">Job title *</label><input id="pTitle" required maxlength="180"></div>
 <div class="field"><label for="pCategory">Job category *</label><select id="pCategory" required></select></div>
@@ -47,7 +47,7 @@
 <div class="field full"><label for="pDescription">Job description *</label><textarea id="pDescription" required maxlength="8000"></textarea></div>
 </div><div class="actions"><button id="submitPrivate" type="submit">Submit Private Job for Review</button></div></form>
 <div id="privateDrafts"></div></section>
-<section class="panel"><h2>Post an International Private Job</h2><p class="muted">International company submissions are saved in the separate International Jobs table as Pending Review. Country must be outside India.</p><div id="internationalMsg" class="notice hidden" role="status"></div>
+<section class="panel hidden" id="internationalMarketArea"><h2>Post an International Private Job</h2><p class="muted">International company submissions are saved in the separate International Jobs table as Pending Review. Country must be outside India.</p><div id="internationalMsg" class="notice hidden" role="status"></div>
 <form id="internationalForm"><div class="grid">
 <div class="field"><label for="iTitle">Job title *</label><input id="iTitle" required maxlength="180"></div>
 <div class="field"><label for="iCountry">Country *</label><select id="iCountry" required></select></div>
@@ -91,14 +91,10 @@ const deadline=id=>$(id).value?new Date($(id).value+'T23:59:59+05:30').toISOStri
 const show=(id,m,bad=false)=>{$(id).textContent=m;$(id).classList.remove('hidden');$(id).style.background=bad?'#fff0f0':'#eef6ff';$(id).style.color=bad?'#8d2525':'#234967'};
 const hide=id=>$(id).classList.add('hidden');
 const fill=(id,items,placeholder)=>{const el=$(id);el.innerHTML='';if(placeholder){const o=document.createElement('option');o.value='';o.textContent=placeholder;el.append(o)}for(const x of items){const o=document.createElement('option');o.value=x.value;o.textContent=x.label;el.append(o)}};
-function companyPanel(){const co=currentCompany;if(!co)return;
- $('companySelectPanel').classList.remove('hidden');$('companyStatus').textContent='Company: '+co.company_name+' · Verification: '+co.verification_status;
- $('companySelect').value=co.id;
- const verified=co.verification_status==='verified';$('verifiedArea').classList.toggle('hidden',!verified);
-}
+function companyPanel(){const co=currentCompany;if(!co)return;$('companySelectPanel').classList.remove('hidden');$('companyStatus').textContent='Company: '+co.company_name+' · Indian Private Jobs: '+(co.private_jobs_verification_status||'pending')+' · International Jobs: '+(co.international_jobs_verification_status||'pending');$('companySelect').value=co.id;$('privateMarketArea').classList.toggle('hidden',co.private_jobs_verification_status!=='verified');$('internationalMarketArea').classList.toggle('hidden',co.international_jobs_verification_status!=='verified');}
 async function loadCompanyStatus(){
  const ids=members.map(m=>m.company_id);if(!ids.length){$('verificationPanel').classList.remove('hidden');$('companySelectPanel').classList.add('hidden');$('verifiedArea').classList.add('hidden');return}
- const {data,error}=await sb.from('companies').select('id,company_name,verification_status,owner_user_id,industry,company_size,description,website_url,registration_number').in('id',ids);
+ const {data,error}=await sb.from('companies').select('id,company_name,verification_status,private_jobs_verification_status,international_jobs_verification_status,owner_user_id,industry,company_size,description,website_url,registration_number').in('id',ids);
  if(error){show('verificationMsg','Could not load company profile: '+error.message,true);return}
  companies=data||[];
  if(!companies.length){$('verificationPanel').classList.remove('hidden');return}
@@ -107,14 +103,9 @@ async function loadCompanyStatus(){
 }
 async function loadVerificationRequests(){
  if(!currentCompany)return;
- const {data,error}=await sb.from('company_verification_requests').select('*').eq('company_id',currentCompany.id).order('created_at',{ascending:false}).limit(5);
+ const {data,error}=await sb.from('company_verification_requests').select('*').eq('company_id',currentCompany.id).in('market_scope',['indian_private','international']).order('created_at',{ascending:false}).limit(10);
  if(error){show('verificationMsg','Could not load verification status.',true);return}
- const latest=data?.[0];
- $('verificationPanel').classList.toggle('hidden',currentCompany.verification_status==='verified'||(latest&&['pending','under_review','more_information'].includes(latest.status)));
- if(latest&&latest.status==='more_information'){moreInfoRequest=latest;$('moreInfoPanel').classList.remove('hidden');$('adminNote').textContent=latest.admin_notes||'The verification team needs additional information.';}
- else $('moreInfoPanel').classList.add('hidden');
- if(currentCompany.verification_status==='verified'){ $('verifiedArea').classList.remove('hidden'); await loadCompanyJobs(); }
- else $('verifiedArea').classList.add('hidden');
+ const open=(data||[]).filter(x=>['pending','under_review','more_information'].includes(x.status));$('verificationPanel').classList.toggle('hidden',open.length>0);const latestMore=open.find(x=>x.status==='more_information');if(latestMore){moreInfoRequest=latestMore;$('moreInfoPanel').classList.remove('hidden');$('adminNote').textContent=(latestMore.market_scope==='indian_private'?'Indian Private Jobs':'International Jobs')+': '+(latestMore.admin_notes||'Additional information is required.');}else{$('moreInfoPanel').classList.add('hidden');moreInfoRequest=null;}const anyVerified=currentCompany.private_jobs_verification_status==='verified'||currentCompany.international_jobs_verification_status==='verified';$('verifiedArea').classList.toggle('hidden',!anyVerified);if(anyVerified)await loadCompanyJobs();
 }
 async function loadLookups(){
  const [co,ca,cu]=await Promise.all([sb.from('countries').select('country_code,country_name,currency_code').eq('is_active',true).order('country_name'),sb.from('job_categories').select('id,category_name').eq('is_active',true).order('category_name'),sb.from('currencies').select('currency_code,currency_name').eq('is_active',true).order('currency_code')]);
@@ -134,8 +125,8 @@ async function loadCompanyJobs(){
 }
 $('companySelect').addEventListener('change',async()=>{currentCompany=companies.find(c=>c.id===$('companySelect').value);companyPanel();await loadVerificationRequests()});
 $('verificationForm').addEventListener('submit',async e=>{e.preventDefault();const country=$('country').value,entity=$('entityType').value;if((country!=='IN'||entity==='foreign_company')&&$('authorization').value.trim().length<5){show('verificationMsg','Overseas recruitment authorization details are required.',true);return}
- const args={p_company_name:$('companyName').value.trim(),p_industry:$('industry').value.trim(),p_company_size:$('companySize').value,p_description:$('companyDescription').value.trim(),p_website_url:$('website').value.trim(),p_legal_entity_type:entity,p_country_code:country,p_legal_name:$('legalName').value.trim(),p_registration_number:$('registrationNumber').value.trim(),p_registered_address:$('address').value.trim(),p_official_email:$('officialEmail').value.trim(),p_contact_person:$('contactPerson').value.trim(),p_contact_phone:$('contactPhone').value.trim(),p_recruitment_authorization:$('authorization').value.trim()};
- $('submitVerification').disabled=true;const {data,error}=await sb.rpc('tc_submit_company_verification',args);$('submitVerification').disabled=false;if(error){show('verificationMsg','Submission failed: '+error.message,true);return}show('verificationMsg','Company verification request submitted. Status: Pending.');await boot();});
+ const scope=$('marketScope').value;if(scope==='indian_private'&&country!=='IN'){show('verificationMsg','Indian Private Jobs verification requires an India-registered company.',true);return}if(scope==='international'&&country==='IN'){show('verificationMsg','International Jobs verification requires an overseas-registered company.',true);return}if(scope==='international'&&$('authorization').value.trim().length<5){show('verificationMsg','International recruitment authorization details are required.',true);return}const args={p_market_scope:scope,p_company_name:$('companyName').value.trim(),p_industry:$('industry').value.trim(),p_company_size:$('companySize').value,p_description:$('companyDescription').value.trim(),p_website_url:$('website').value.trim(),p_legal_entity_type:entity,p_country_code:country,p_legal_name:$('legalName').value.trim(),p_registration_number:$('registrationNumber').value.trim(),p_registered_address:$('address').value.trim(),p_official_email:$('officialEmail').value.trim(),p_contact_person:$('contactPerson').value.trim(),p_contact_phone:$('contactPhone').value.trim(),p_recruitment_authorization:$('authorization').value.trim()};
+ $('submitVerification').disabled=true;const {data,error}=await sb.rpc('tc_submit_company_market_verification',args);$('submitVerification').disabled=false;if(error){show('verificationMsg','Submission failed: '+error.message,true);return}show('verificationMsg','Market-specific company verification request submitted. Status: Pending.');await boot();});
 $('moreInfoForm').addEventListener('submit',async e=>{e.preventDefault();if(!moreInfoRequest)return;const {data,error}=await sb.rpc('tc_company_resubmit_verification',{p_request_id:moreInfoRequest.id,p_company_response:$('companyResponse').value.trim()});if(error){show('verificationMsg','Response failed: '+error.message,true);return}show('verificationMsg','Additional information sent for review.');await loadVerificationRequests()});
 $('privateForm').addEventListener('submit',async e=>{e.preventDefault();const min=num('pSalaryMin'),max=num('pSalaryMax');if(min!==null&&max!==null&&min>max){show('privateMsg','Minimum salary cannot exceed maximum salary.',true);return}
  if(!$('pApply').value.trim()&&!$('pWebsite').value.trim()&&!$('pNotice').value.trim()){show('privateMsg','Add at least one official application, employer or notification URL.',true);return}
@@ -160,6 +151,7 @@ async function boot(){
  if(me){show('verificationMsg','Could not load your company access: '+me.message,true);return}
  members=m||[];await loadCompanyStatus();
 }
+$('marketScope').addEventListener('change',()=>{const intl=$('marketScope').value==='international';$('authorizationField').classList.toggle('hidden',!intl);$('country').value=intl?'':'IN';});
 boot();
 })();
 </script></body></html>
