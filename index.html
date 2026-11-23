@@ -76,6 +76,24 @@ footer{padding:18px 12px;background:var(--navy);display:flex;justify-content:cen
 footer a{color:#fff;font-size:13px;text-decoration:underline}
 footer a.admin-login-link{font-size:11px;opacity:.72}
 
+
+/* AdSense reserved placements: remain invisible until a real ad unit is added.
+   Keep ad areas separate from tables, pagination, navigation and action links. */
+.ad-placement{display:none;width:100%;max-width:100%;margin:22px auto;padding:12px 0;text-align:center;clear:both;overflow:hidden}
+.ad-placement:not(:empty){display:block;min-height:110px}
+.ad-placement:not(:empty)::before{content:"Advertisement";display:block;margin:0 auto 8px;color:#65738b;font-size:11px;line-height:1.3;font-weight:400;letter-spacing:.2px}
+.ad-placement ins.adsbygoogle{display:block;width:100%;min-height:90px}
+@media(min-width:700px){
+ .ad-placement{max-width:970px;margin:28px auto;padding:14px 12px}
+ .ad-placement:not(:empty){min-height:130px}
+ .ad-placement ins.adsbygoogle{min-height:100px}
+}
+@media(max-width:699px){
+ .ad-placement{margin:18px auto;padding:10px 0}
+ .ad-placement:not(:empty){min-height:100px}
+ .ad-placement ins.adsbygoogle{min-height:90px}
+}
+
 /* Homepage government job directory */
 .government-directory{padding:22px 0 26px;border-bottom:1px solid var(--line);scroll-margin-top:76px}
 .directory-heading{margin-bottom:16px}
@@ -201,6 +219,9 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latest-body"><tr><td colspan="6" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="latest-pager"></div><div class="updated" id="latest-updated"></div>
 </section>
 
+<!-- Ad placement 1: after the complete Latest Government Jobs table and pagination -->
+<div class="ad-placement" id="ad-home-after-latest-jobs" data-ad-placement="home-after-latest-jobs" aria-label="Advertisement"></div>
+
 <section class="table-section" id="central-jobs">
 <h2>Central Government Jobs</h2><p>Recruitment notifications published for Central Government departments and authorities. Maximum 10 records per page with Previous and Next navigation.</p>
 <div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="central-body"><tr><td colspan="6" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="central-pager"></div>
@@ -225,10 +246,16 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 </div>
 </section>
 
+<!-- Ad placement 2: after qualification links, before exam resource tables -->
+<div class="ad-placement" id="ad-home-after-qualification" data-ad-placement="home-after-qualification" aria-label="Advertisement"></div>
+
 <section class="table-section" id="answer-keys"><h2>Government Exam – Answer Key</h2><p>Official answer key notifications and related updates published for government examinations.</p><div class="table-scroll"><table><thead><tr><th>Exam / Update</th><th>Department / Source</th><th>Year / Exam Date</th><th>Official Link</th></tr></thead><tbody id="answer-body"><tr><td colspan="4" class="empty-cell">Loading updates…</td></tr></tbody></table></div><div class="pager" id="answer-pager"></div></section>
 <section class="table-section" id="results"><h2>Government Exam – Results</h2><p>Published government examination results and result-related official announcements.</p><div class="table-scroll"><table><thead><tr><th>Exam / Update</th><th>Department / Source</th><th>Year / Exam Date</th><th>Official Link</th></tr></thead><tbody id="results-body"><tr><td colspan="4" class="empty-cell">Loading updates…</td></tr></tbody></table></div><div class="pager" id="results-pager"></div></section>
 <section class="table-section" id="exam-dates"><h2>Government Exam – Exam Dates</h2><p>Upcoming examination dates from published job notifications and official exam schedule updates.</p><div class="table-scroll"><table><thead><tr><th>Exam / Job</th><th>Department / Source</th><th>Exam Date</th><th>Official Link</th></tr></thead><tbody id="examdate-body"><tr><td colspan="4" class="empty-cell">Loading dates…</td></tr></tbody></table></div><div class="pager" id="examdate-pager"></div></section>
 <section class="table-section" id="admit-cards"><h2>Government Exam – Admit Cards</h2><p>Published admit card and hall ticket announcements with official download links.</p><div class="table-scroll"><table><thead><tr><th>Exam / Update</th><th>Department / Source</th><th>Year / Updated</th><th>Official Download</th></tr></thead><tbody id="admit-body"><tr><td colspan="4" class="empty-cell">Loading updates…</td></tr></tbody></table></div><div class="pager" id="admit-pager"></div></section>
+
+<!-- Ad placement 3: after the complete Admit Cards table and pagination -->
+<div class="ad-placement" id="ad-home-after-admit-cards" data-ad-placement="home-after-admit-cards" aria-label="Advertisement"></div>
 </main>
 <section class="government-directory" id="government-directory" aria-label="Explore government job categories">
   <div class="directory-heading">
