@@ -147,9 +147,15 @@ async function loadVerificationRequests(){
 async function loadVerificationDocumentList(){
  if(!activeVerificationRequest||!currentCompany)return;
  const prefix=currentCompany.id+'/'+activeVerificationRequest.id;
- const {data,error}=await sb.storage.from('company-verification').list(prefix,{limit:100,sortBy:{column:'name',order:'asc'}});
+ const {data:folders,error}=await sb.storage.from('company-verification').list(prefix,{limit:100,sortBy:{column:'name',order:'asc'}});
  if(error){$('uploadedVerificationDocuments').textContent='Could not load uploaded document list.';return}
- $('uploadedVerificationDocuments').innerHTML=(data||[]).filter(x=>x.name).map(x=>'<div class="item">'+esc(x.name)+' · Uploaded</div>').join('')||'No documents uploaded yet.';
+ const rows=[];
+ for(const folder of (folders||[]).filter(x=>x.id===null)){
+  const {data:files,error:fileError}=await sb.storage.from('company-verification').list(prefix+'/'+folder.name,{limit:100});
+  if(fileError)continue;
+  for(const file of (files||[]).filter(x=>x.name))rows.push(file.name);
+ }
+ $('uploadedVerificationDocuments').innerHTML=rows.map(name=>'<div class="item">'+esc(name)+' · Uploaded</div>').join('')||'No documents uploaded yet.';
 }
 $('uploadVerificationDocuments').addEventListener('click',async()=>{
  if(!activeVerificationRequest||!currentCompany){show('verificationDocumentStatus','Submit a verification request before uploading documents.',true);return}
