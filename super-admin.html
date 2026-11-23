@@ -18,7 +18,7 @@ table{font-size:15.5px;line-height:1.55}th{font-size:15px;font-weight:700}td{pad
 a{ text-underline-offset:3px }
 :focus-visible{outline:3px solid #087eaf;outline-offset:2px}
 @media(max-width:600px){body{font-size:16px}table{font-size:15px}th{font-size:14.5px}td{padding:10px 9px}input,select,textarea,button{font-size:16px}}
-</style></head>
+.cc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}.cc-stat{background:#f7faff;border:1px solid #dce7f4;border-radius:11px;padding:15px;min-width:0}.cc-stat span{display:block;color:#53627a;font-size:13px;font-weight:700}.cc-stat strong{display:block;font-size:28px;color:#102849;line-height:1.3;margin:5px 0}.cc-stat small{color:#65738b}.cc-section{border-top:1px solid var(--line);padding-top:16px;margin-top:18px}.cc-section h3{margin:0 0 12px}.cc-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cc-links a{display:block;padding:13px;border:1px solid #dce4ef;border-radius:9px;color:#145783;text-decoration:none;font-weight:700;background:#fff}.cc-links a:hover{background:#f1f8ff;border-color:#8dcdf1}.cc-links small{display:block;color:#65738b;font-weight:400;margin-top:4px}@media(max-width:700px){.cc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cc-links{grid-template-columns:1fr}}@media(max-width:380px){.cc-grid{grid-template-columns:1fr}}</style></head>
 <body>
 <header><div><h1>TAMILAN CAREERS — Super Admin</h1><p>Restricted administration workspace</p></div><button id="logoutBtn" class="secondary hidden">Sign out</button></header>
 <main class="wrap">
@@ -27,6 +27,27 @@ a{ text-underline-offset:3px }
 <div id="mfaBox" class="hidden section"><h3>Multi-factor verification</h3><p id="mfaText" class="muted">Enter the current code from your authenticator app.</p><img id="mfaQr" class="qr hidden" alt="Authenticator enrollment QR code"><div class="field"><label for="totpCode">6-digit authenticator code</label><input id="totpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}"></div><div class="actions"><button id="verifyMfaBtn" type="button">Verify and continue</button></div></div>
 </section>
 <section id="dashboard" class="hidden">
+<div class="panel" id="controlCenter">
+ <div class="topline"><div><h2>Website Control Center</h2><p class="muted">ஒரே இடத்தில் இணையதள நிர்வாகம் · தனித்தனி தரவுத்தளங்கள் · பாதுகாப்பான Super Admin அணுகல்</p></div><button type="button" id="refreshControlCenter" class="secondary">புள்ளிவிவரங்களைப் புதுப்பிக்க</button></div>
+ <div class="cc-grid" id="ccStats">
+  <article class="cc-stat"><span>Government Jobs</span><strong id="ccGov">—</strong><small>அரசு வேலைவாய்ப்புகள்</small></article>
+  <article class="cc-stat"><span>Private Jobs</span><strong id="ccPrivate">—</strong><small>தனியார் வேலைவாய்ப்புகள்</small></article>
+  <article class="cc-stat"><span>International Jobs</span><strong id="ccInternational">—</strong><small>சர்வதேச வேலைவாய்ப்புகள்</small></article>
+  <article class="cc-stat"><span>Admissions</span><strong id="ccAdmissions">—</strong><small>சேர்க்கை அறிவிப்புகள்</small></article>
+  <article class="cc-stat"><span>Exam Resources</span><strong id="ccResources">—</strong><small>தேர்வு வளங்கள்</small></article>
+  <article class="cc-stat"><span>Registered Profiles</span><strong id="ccProfiles">—</strong><small>பயனர் சுயவிவரங்கள்</small></article>
+ </div>
+ <p id="ccStatus" class="footer-note" role="status">நிர்வாகத் தரவுகள் ஏற்றப்படுகின்றன…</p>
+ <div class="cc-section"><h3>நிர்வாகப் பிரிவுகள்</h3><div class="cc-links">
+  <a href="#government-control">Government Jobs <small>அரசு வேலைவாய்ப்பு மேலாண்மை</small></a>
+  <a href="super-admin-independent-jobs.html">Private & International Jobs <small>இரண்டு தனித்தனி வேலைவாய்ப்பு அமைப்புகள்</small></a>
+  <a href="super-admin-admissions.html">Admissions & Entrance Exams <small>சேர்க்கை / நுழைவுத்தேர்வு அறிவிப்புகள்</small></a>
+  <a href="super-admin-government-resources.html">Exam Resources <small>Admit Card, Results, Answer Key, Papers</small></a>
+  <a href="super-admin-review-center.html">Review & Verification Center <small>நிறுவனச் சரிபார்ப்பு மற்றும் வேலைப் பதிவுகள்</small></a>
+ </div></div>
+ <div class="cc-section"><h3>நிர்வாக பாதுகாப்பு</h3><p class="muted">இந்த Dashboard-க்கு Super Admin role மற்றும் MFA AAL2 சரிபார்ப்பு முடிந்த பிறகே அணுகல் வழங்கப்படும். கீழுள்ள எண்ணிக்கைகள் அனுமதி உள்ள தரவுகளிலிருந்து மட்டும் பெறப்படும்; ஏதேனும் அட்டவணை அணுக முடியாவிட்டால் அதைத் தெளிவாகக் காட்டும்.</p></div>
+</div>
+
 <div class="panel"><p><strong>Independent Job Systems:</strong> <a href="super-admin-independent-jobs.html" style="color:#176b9e;font-weight:700">Manage Private Jobs and International Jobs</a> — separate forms and database tables.</p></div>
 <div class="panel"><p><strong>Government Job Resources:</strong> <a href="super-admin-government-resources.html" style="color:#176b9e;font-weight:700">Manage admit cards, results, answer keys, exam schedules and previous papers</a>.</p></div>
 <div class="panel"><p><strong>Admissions & Entrance Exams:</strong> <a href="super-admin-admissions.html" style="color:#176b9e;font-weight:700">Manage admission open and entrance exam notifications</a>.</p></div>
@@ -141,13 +162,27 @@ function clearMsg(el){el.classList.add('hidden')}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function renderQualificationGroups(){const root=$('qualificationGroups');root.innerHTML='';Object.entries(groups).forEach(([g,items])=>{const box=document.createElement('div');box.style.margin='12px 0';const title=document.createElement('strong');title.textContent=g;box.appendChild(title);const list=document.createElement('div');list.className='checks';items.forEach(item=>{const lab=document.createElement('label'),cb=document.createElement('input');cb.type='checkbox';cb.name='qualification';cb.value=g+'::'+item;lab.append(cb,document.createTextNode(item));list.appendChild(lab)});box.appendChild(list);root.appendChild(box)})}
 function setAuthState(on){$('loginPanel').classList.toggle('hidden',on);$('dashboard').classList.toggle('hidden',!on);$('logoutBtn').classList.toggle('hidden',!on)}
+async function refreshControlCenter(){
+ const specs=[
+  ['government_jobs','ccGov'],['private_jobs','ccPrivate'],['international_jobs','ccInternational'],
+  ['admission_notifications','ccAdmissions'],['government_job_resources','ccResources'],['profiles','ccProfiles']
+ ];
+ const results=await Promise.all(specs.map(async([table,id])=>{
+  try{const {count,error}=await sb.from(table).select('id',{count:'exact',head:true});return {id,count,error:error?.message||null}}
+  catch(e){return {id,count:null,error:e?.message||'அணுகல் தோல்வி'}}
+ }));
+ const problems=[];
+ results.forEach(x=>{const el=$(x.id);if(!el)return;if(x.error){el.textContent='—';problems.push(x.id.replace('cc','')+': '+x.error)}else el.textContent=Number(x.count||0).toLocaleString('en-IN')});
+ $('ccStatus').textContent='கடைசியாகப் புதுப்பிக்கப்பட்டது: '+new Date().toLocaleString('en-IN')+(problems.length?' · சில அட்டவணை எண்ணிக்கைகள் கிடைக்கவில்லை: '+problems.join(' | '):' · அனைத்து எண்ணிக்கைகளும் ஏற்றப்பட்டன.');
+}
+$('refreshControlCenter').addEventListener('click',refreshControlCenter);
 async function authorizeSession(){
  const {data:{user},error}=await sb.auth.getUser();if(error||!user){setAuthState(false);return false}
  const {data:roles,error:roleErr}=await sb.from('user_roles').select('role').eq('user_id',user.id);
  if(roleErr||!roles?.some(r=>r.role==='super_admin')){await sb.auth.signOut();showMsg($('authMessage'),'Access denied. This account is not assigned the Super Admin role.','error');setAuthState(false);return false}
  const {data:aal,error:aalErr}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
  if(aalErr||aal.currentLevel!=='aal2'){await startMfa();return false}
- currentUser=user;setAuthState(true);await loadJobs();await loadGric();return true
+ currentUser=user;setAuthState(true);await refreshControlCenter();await loadJobs();await loadGric();return true
 }
 async function startMfa(){
  const {data,error}=await sb.auth.mfa.listFactors();if(error){showMsg($('authMessage'),error.message,'error');return}
