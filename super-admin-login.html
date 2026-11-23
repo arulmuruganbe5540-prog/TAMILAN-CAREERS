@@ -51,7 +51,7 @@ async function checkAdmin(){
  const {data,error}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(error)throw error;
  if(!data||data.length!==1)throw new Error('இந்த Email கணக்கிற்கு Super Admin அனுமதி இல்லை.');
- note('Login வெற்றி! Super Admin அனுமதி சரிபார்க்கப்பட்டது. Dashboard அடுத்த கட்டத்தில் இணைக்கப்படும்.','success');
+ note('Login வெற்றி! Super Admin Dashboard திறக்கப்படுகிறது.','success');\n location.href='super-admin.html';
 }
 $('showRegister').addEventListener('click',()=>{show('registerPanel');note('புதிய கணக்கை பதிவு செய்யவும்.');});
 $('backLogin').addEventListener('click',()=>{show('loginPanel');note('');});
