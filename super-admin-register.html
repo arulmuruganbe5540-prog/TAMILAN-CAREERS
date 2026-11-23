@@ -44,7 +44,8 @@ async function claim(){
 }
 (async()=>{
  const {data:{session}}=await sb.auth.getSession();
- if(session&&session.user?.email?.toLowerCase()===allowedEmail){await claim();return;}
+ const {data:{user},error:userError}=await sb.auth.getUser();
+ if(!userError&&user&&user.email?.toLowerCase()===allowedEmail){await claim();return;}
  if(session){await sb.auth.signOut();}
  if(!token){$('registerForm').hidden=true;show('Invalid registration link.','error');}
 })();
