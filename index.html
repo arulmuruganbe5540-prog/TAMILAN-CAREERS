@@ -174,7 +174,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 <link rel="stylesheet" href="site-theme.css?v=1">
 </head>
 <body>
-<header class="site-header"><div class="site-brand"><h1>TAMILAN CAREERS</h1><p>Government Jobs · Exam Notifications · Career Updates</p></div><a class="header-account" id="accountNavLink" href="job-seeker-auth.html">Login / Register</a><a class="header-account" href="company-job-portal.html">Employer Portal</a></header>
+<header class="site-header"><div class="site-brand"><h1 id="siteName">TAMILAN CAREERS</h1><p id="siteHeadline">Government Jobs · Exam Notifications · Career Updates</p><small id="siteSubtitle" style="display:block;max-width:680px;color:inherit;opacity:.82"></small></div><a class="header-account" id="accountNavLink" href="job-seeker-auth.html">Login / Register</a><a class="header-account" href="company-job-portal.html">Employer Portal</a></header>
 <div class="nav-wrap"><nav aria-label="Main navigation">
 <a href="government-jobs.html">Government Jobs – All India</a>
 <a href="central-government-jobs.html">Central Government Jobs</a>
@@ -247,6 +247,14 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
 const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+sb.from('site_settings').select('site_name,headline,subtitle,primary_color').eq('setting_key','homepage').maybeSingle().then(({data,error})=>{
+ if(!error&&data){
+  if(data.site_name)document.getElementById('siteName').textContent=data.site_name;
+  if(data.headline)document.getElementById('siteHeadline').textContent=data.headline;
+  if(data.subtitle)document.getElementById('siteSubtitle').textContent=data.subtitle;
+  if(data.primary_color&&/^#[0-9a-f]{6}$/i.test(data.primary_color)){const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',data.primary_color);}
+ }
+});
 const PAGE_SIZE=10;let jobs=[],resources=[],pages={};
 const $=id=>document.getElementById(id);
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
