@@ -1,0 +1,39 @@
+/* TAMILAN CAREERS — responsive AdSense placement layout */
+.ad-placement{
+  display:none;
+  width:100%;
+  max-width:100%;
+  clear:both;
+  overflow:hidden;
+  margin:24px auto;
+  padding:14px 0;
+  text-align:center;
+  box-sizing:border-box;
+}
+.ad-placement:not(:empty){
+  display:block;
+  min-height:110px;
+}
+.ad-placement:not(:empty)::before{
+  content:"Advertisement";
+  display:block;
+  margin:0 auto 9px;
+  color:#64748b;
+  font:400 11px/1.4 Arial,Helvetica,sans-serif;
+  letter-spacing:.2px;
+}
+.ad-placement ins.adsbygoogle{
+  display:block;
+  width:100%;
+  min-height:90px;
+}
+@media(min-width:700px){
+  .ad-placement{max-width:970px;margin:30px auto;padding:16px 12px}
+  .ad-placement:not(:empty){min-height:130px}
+  .ad-placement ins.adsbygoogle{min-height:100px}
+}
+@media(max-width:699px){
+  .ad-placement{margin:18px auto;padding:10px 0}
+  .ad-placement:not(:empty){min-height:100px}
+  .ad-placement ins.adsbygoogle{min-height:90px}
+}
