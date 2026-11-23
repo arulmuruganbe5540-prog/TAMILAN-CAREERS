@@ -51,7 +51,8 @@ async function checkAdmin(){
  const {data,error}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(error)throw error;
  if(!data||data.length!==1)throw new Error('This email account does not have Super Admin permission.');
- note('Sign-in successful. Opening the Super Admin Dashboard.','success');\n location.href='super-admin.html';
+ note('Sign-in successful. Opening the Super Admin Dashboard.','success');
+ location.href='super-admin.html';
 }
 $('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});
 $('backLogin').addEventListener('click',()=>{show('loginPanel');note('');});
