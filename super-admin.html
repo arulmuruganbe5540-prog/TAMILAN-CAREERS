@@ -16,6 +16,8 @@
 <div class="card"><h3>Registered Profiles</h3><div class="number" id="profileCount">—</div><div class="muted">User profiles</div></div>
 <div class="card"><h3>Official Sources</h3><div class="number" id="sourceCount">—</div><div class="muted">Private source directory records</div></div>
 <div class="card"><h3>Exam Resources</h3><div class="number" id="resourceCount">—</div><div class="muted">Government exam resources</div></div>
+<div class="card"><h3>Eligibility Rules</h3><div class="number" id="eligibilityCount">—</div><div class="muted">Verified exam eligibility rules</div></div>
+<div class="card"><h3>Preparation Library</h3><div class="number" id="libraryCount">—</div><div class="muted">Exam study resources</div></div>
 </section>
 <section class="section"><h2>Job Management</h2><div class="links">
 <a class="link" href="super-admin-government-jobs.html"><b>Government Jobs</b><span class="muted">Government recruitment records, verification and status management.</span></a>
@@ -54,7 +56,7 @@ async function init(){
  if(roleError||!roles||roles.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return;}
  $('adminEmail').textContent=user.email||'';
  $('status').textContent='Super Admin access verified. Dashboard access granted.';
- const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount'],['super_admin_source_directory','sourceCount'],['government_job_resources','resourceCount']];
+ const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount'],['super_admin_source_directory','sourceCount'],['government_job_resources','resourceCount'],['exam_eligibility_rules','eligibilityCount'],['exam_preparation_library','libraryCount']];
  for(const [table,id] of stats){try{const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});$(id).textContent=error?'—':String(count??0);}catch(e){$(id).textContent='—';}}
 }
 $('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html');});
