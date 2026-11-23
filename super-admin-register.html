@@ -21,6 +21,7 @@
 <div class="field"><label for="password">Create password</label><input id="password" type="password" minlength="10" autocomplete="new-password" required placeholder="At least 10 characters"></div>
 <div class="field"><label for="confirmPassword">Confirm password</label><input id="confirmPassword" type="password" minlength="10" autocomplete="new-password" required></div>
 <button class="primary" id="registerButton" type="submit">Register Super Admin (One Time)</button>
+<button class="primary" id="finishExistingButton" type="button" style="margin-top:10px;background:#164e72">Already registered? Sign in and complete setup</button>
 </form>
 <div class="foot"><a href="super-admin.html">Super Admin Login</a></div>
 </main>
@@ -49,6 +50,16 @@ async function claim(){
  if(session){await sb.auth.signOut();}
  if(!token){$('registerForm').hidden=true;show('Invalid registration link.','error');}
 })();
+$('finishExistingButton').addEventListener('click',async()=>{
+ const password=$('password').value;
+ if(!password){show('Enter the password you created during registration.','error');return;}
+ if(!token){show('Invalid registration link.','error');return;}
+ $('finishExistingButton').disabled=true;$('finishExistingButton').textContent='Please wait…';
+ const {data,error}=await sb.auth.signInWithPassword({email:allowedEmail,password});
+ $('finishExistingButton').disabled=false;$('finishExistingButton').textContent='Already registered? Sign in and complete setup';
+ if(error){show(error.message,'error');return;}
+ await claim();
+});
 $('registerForm').addEventListener('submit',async e=>{
  e.preventDefault();
  if(!token){show('Invalid registration link.','error');return;}
