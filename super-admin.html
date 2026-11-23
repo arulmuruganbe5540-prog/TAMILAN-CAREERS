@@ -1,51 +1,51 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
-<title>Super Admin Dashboard | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>சூப்பர் அட்மின் டாஷ்போர்டு | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--blue:#168bd2;--cyan:#65d7ff;--muted:#a8bed2}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:15px Arial,sans-serif}.top{position:relative;isolation:isolate;overflow:hidden;padding:22px 26px;background:radial-gradient(ellipse at 18% 110%,rgba(170,225,93,.78),transparent 42%),radial-gradient(ellipse at 82% 120%,rgba(70,160,55,.72),transparent 48%),linear-gradient(180deg,#b7e5a0 0%,#5eaa54 42%,#1e673b 72%,#123e2b 100%);border-bottom:3px solid #d9bd69;box-shadow:0 5px 22px #0008;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.top:before{content:'';position:absolute;inset:48% 0 0;z-index:-1;opacity:.5;background:repeating-linear-gradient(102deg,transparent 0 9px,rgba(210,245,160,.22) 10px 11px,transparent 12px 19px),linear-gradient(180deg,transparent,rgba(5,48,28,.58))}.top:after{content:'WORLD’S NO.1';position:absolute;right:26px;top:7px;color:rgba(255,239,178,.72);font-size:10px;font-weight:800;letter-spacing:3px;z-index:-1}.brand{color:#fff6cf;font-weight:900;letter-spacing:1.2px;text-shadow:0 2px 5px #173d20}.admin-name{font-size:clamp(20px,3vw,30px);font-weight:900;color:#fff;text-shadow:0 2px 7px #143d20;letter-spacing:.2px;line-height:1.25}.admin-email{display:block;margin-top:5px;font-size:12px;color:#f0ffe9;text-shadow:0 1px 4px #173d20}.wrap{max-width:1250px;margin:auto;padding:24px}.muted{color:var(--muted);line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:22px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}.card h3{margin:0 0 8px}.number{font-size:26px;font-weight:800;color:var(--cyan)}.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.link{display:block;text-decoration:none;color:#eff7ff;background:#10243d;border:1px solid #244362;padding:17px;border-radius:12px}.link b{display:block;color:var(--cyan);margin-bottom:6px}.link:hover{border-color:var(--cyan)}button{background:#087fbd;color:white;border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.foot{margin-top:28px;font-size:12px;color:var(--muted)}.section{margin-top:26px}.tag{display:inline-block;border:1px solid var(--line);border-radius:20px;padding:3px 8px;font-size:11px;color:var(--muted)}
 </style></head><body>
-<header class="top"><div><div class="brand">TAMILAN CAREERS · SUPER ADMIN</div><div class="admin-name">அருள்முருகன் மங்கையர்கரசி</div><span id="adminEmail" class="admin-email"></span></div><div><button id="logout">Logout</button></div></header>
-<main class="wrap"><section><h1>Super Admin Dashboard</h1><div class="muted">Private administration workspace. Access is limited to authorized Super Admin accounts.</div></section>
-<div id="status" class="status">Verifying access...</div>
+<header class="top"><div><div class="brand">TAMILAN CAREERS · SUPER ADMIN</div><div class="admin-name">அருள்முருகன் மங்கையர்கரசி</div><span id="adminEmail" class="admin-email"></span></div><div><button id="logout">வெளியேறு</button></div></header>
+<main class="wrap"><section><h1>சூப்பர் அட்மின் டாஷ்போர்டு</h1><div class="muted">தனிப்பட்ட நிர்வாகப் பகுதி. அனுமதி பெற்ற சூப்பர் அட்மின் கணக்குகளுக்கு மட்டுமே அணுகல் உண்டு.</div></section>
+<div id="status" class="status">அணுகல் சரிபார்க்கப்படுகிறது...</div>
 <section class="grid">
-<div class="card"><h3>Government Jobs</h3><div class="number" id="govCount">—</div><div class="muted">Government job records</div></div>
-<div class="card"><h3>Private Jobs</h3><div class="number" id="privateCount">—</div><div class="muted">Private employer records</div></div>
-<div class="card"><h3>International Jobs</h3><div class="number" id="intlCount">—</div><div class="muted">Jobs outside India</div></div>
-<div class="card"><h3>Registered Profiles</h3><div class="number" id="profileCount">—</div><div class="muted">User profiles</div></div>
-<div class="card"><h3>Official Sources</h3><div class="number" id="sourceCount">—</div><div class="muted">Private source directory records</div></div>
-<div class="card"><h3>Exam Resources</h3><div class="number" id="resourceCount">—</div><div class="muted">Government exam resources</div></div>
-<div class="card"><h3>Eligibility Rules</h3><div class="number" id="eligibilityCount">—</div><div class="muted">Verified exam eligibility rules</div></div>
-<div class="card"><h3>Preparation Library</h3><div class="number" id="libraryCount">—</div><div class="muted">Exam study resources</div></div>
+<div class="card"><h3>அரசு வேலைவாய்ப்புகள்</h3><div class="number" id="govCount">—</div><div class="muted">அரசு வேலைவாய்ப்பு பதிவுகள்</div></div>
+<div class="card"><h3>தனியார் வேலைவாய்ப்புகள்</h3><div class="number" id="privateCount">—</div><div class="muted">தனியார் நிறுவன வேலைவாய்ப்பு பதிவுகள்</div></div>
+<div class="card"><h3>சர்வதேச வேலைவாய்ப்புகள்</h3><div class="number" id="intlCount">—</div><div class="muted">இந்தியாவிற்கு வெளியேயுள்ள வேலைவாய்ப்புகள்</div></div>
+<div class="card"><h3>பதிவு செய்த சுயவிவரங்கள்</h3><div class="number" id="profileCount">—</div><div class="muted">பயனர் சுயவிவரங்கள்</div></div>
+<div class="card"><h3>அதிகாரப்பூர்வ ஆதாரங்கள்</h3><div class="number" id="sourceCount">—</div><div class="muted">தனிப்பட்ட ஆதாரப் பட்டியல் பதிவுகள்</div></div>
+<div class="card"><h3>தேர்வு வளங்கள்</h3><div class="number" id="resourceCount">—</div><div class="muted">அரசுத் தேர்வு வளங்கள்</div></div>
+<div class="card"><h3>தகுதிக்கான விதிமுறைகள்</h3><div class="number" id="eligibilityCount">—</div><div class="muted">சரிபார்க்கப்பட்ட தேர்வுத் தகுதி விதிகள்</div></div>
+<div class="card"><h3>தேர்வுத் தயாரிப்பு நூலகம்</h3><div class="number" id="libraryCount">—</div><div class="muted">தேர்வுக்கான படிப்புப் பொருட்கள்</div></div>
 </section>
-<section class="section"><h2>Job Management</h2><div class="links">
-<a class="link" href="super-admin-government-jobs.html"><b>Government Jobs</b><span class="muted">Dedicated Government Jobs posting form, records, verification and status management.</span></a>
-<a class="link" href="super-admin-private-jobs.html"><b>Private Jobs</b><span class="muted">Dedicated Private Jobs posting form with qualification, experience, salary and employer details.</span></a>
-<a class="link" href="super-admin-international-jobs.html"><b>International Jobs</b><span class="muted">Dedicated International Jobs posting form with country, sector, visa, work permit and sponsorship details.</span></a>
+<section class="section"><h2>வேலைவாய்ப்பு மேலாண்மை</h2><div class="links">
+<a class="link" href="super-admin-government-jobs.html"><b>அரசு வேலைவாய்ப்புகள்</b><span class="muted">Dedicated அரசு வேலைவாய்ப்புகள் posting form, records, verification and status management.</span></a>
+<a class="link" href="super-admin-private-jobs.html"><b>தனியார் வேலைவாய்ப்புகள்</b><span class="muted">Dedicated தனியார் வேலைவாய்ப்புகள் posting form with qualification, experience, salary and employer details.</span></a>
+<a class="link" href="super-admin-international-jobs.html"><b>சர்வதேச வேலைவாய்ப்புகள்</b><span class="muted">Dedicated சர்வதேச வேலைவாய்ப்புகள் posting form with country, sector, visa, work permit and sponsorship details.</span></a>
 </div></section>
-<section class="section"><h2>Sources and Exam Preparation</h2><div class="links">
+<section class="section"><h2>ஆதாரங்கள் மற்றும் தேர்வுத் தயாரிப்பு</h2><div class="links">
 
-<a class="link" href="super-admin-source-directory.html"><b>Official Source Directory</b><span class="muted">Official websites, qualification evidence, verification and last-checked dates.</span></a>
-<a class="link" href="super-admin-job-source-inbox.html"><b>Job Source Discovery</b><span class="muted">Private Government, Indian Private and International job discovery folders with duplicate checks and manual review.</span></a>
-<a class="link" href="super-admin-eligibility-rules.html"><b>Eligibility Rules</b><span class="muted">Manage verified age, education, category and state criteria.</span></a>
-<a class="link" href="super-admin-exam-library.html"><b>Exam Preparation Library</b><span class="muted">Manage verified syllabus, papers, books, notes and mock tests.</span></a>
-<a class="link" href="super-admin-exam-center.html"><b>Exam and Preparation Center</b><span class="muted">Admission notifications, exam schedules, syllabus, previous papers, admit cards, answer keys and results.</span></a>
+<a class="link" href="super-admin-source-directory.html"><b>Official Source Directory</b><span class="muted">அதிகாரப்பூர்வ இணையதளங்கள், கல்வித் தகுதி ஆதாரங்கள், சரிபார்ப்பு மற்றும் கடைசியாகச் சரிபார்த்த தேதிகள்.</span></a>
+<a class="link" href="super-admin-job-source-inbox.html"><b>Job Source Discovery</b><span class="muted">அரசு, இந்திய தனியார் மற்றும் சர்வதேச வேலைவாய்ப்பு கண்டறிதல் பிரிவுகள்; நகல் சரிபார்ப்பு மற்றும் கைமுறை மதிப்பாய்வுடன்.</span></a>
+<a class="link" href="super-admin-eligibility-rules.html"><b>தகுதிக்கான விதிமுறைகள்</b><span class="muted">சரிபார்க்கப்பட்ட வயது, கல்வி, பிரிவு மற்றும் மாநிலத் தகுதி விதிகளை நிர்வகிக்கவும்.</span></a>
+<a class="link" href="super-admin-exam-library.html"><b>Exam தேர்வுத் தயாரிப்பு நூலகம்</b><span class="muted">சரிபார்க்கப்பட்ட பாடத்திட்டம், வினாத்தாள்கள், புத்தகங்கள், குறிப்புகள் மற்றும் மாதிரித் தேர்வுகளை நிர்வகிக்கவும்.</span></a>
+<a class="link" href="super-admin-exam-center.html"><b>Exam and Preparation Center</b><span class="muted">சேர்க்கை அறிவிப்புகள், தேர்வு அட்டவணைகள், பாடத்திட்டம், முந்தைய வினாத்தாள்கள், நுழைவுச்சீட்டுகள், விடைக்குறிப்புகள் மற்றும் முடிவுகள்.</span></a>
 </div></section>
-<section class="section"><h2>Additional Administration Modules</h2><div class="links">
-<a class="link" href="super-admin-review-center.html"><b>Review and Moderation</b><span class="muted">Job reports, official notice reviews and admin job submission approvals.</span></a>
-<a class="link" href="super-admin-users.html"><b>User Management</b><span class="muted">Registered profiles and account role overview.</span></a>
-<a class="link" href="super-admin-companies.html"><b>Company Management</b><span class="muted">Employer directory and verification requests.</span></a>
-<a class="link" href="super-admin-ai-management.html"><b>AI Management</b><span class="muted">AI governance and integration status. Government Jobs has no AI assistant.</span></a>
-<a class="link" href="super-admin-notifications.html"><b>Notifications</b><span class="muted">Send in-app system alerts to active users.</span></a>
-<a class="link" href="super-admin-reports.html"><b>Reports and Analytics</b><span class="muted">Live database totals and job status summaries.</span></a>
-<a class="link" href="super-admin-site-settings.html"><b>Website Settings</b><span class="muted">Homepage content and primary brand color.</span></a>
-<a class="link" href="super-admin-security.html"><b>Security and Permissions</b><span class="muted">Current session, Super Admin role and database access checks.</span></a>
-<a class="link" href="super-admin-activity-logs.html"><b>Activity Logs</b><span class="muted">Audited Super Admin changes across connected modules.</span></a>
-<a class="link" href="super-admin-support.html"><b>Support and Community Moderation</b><span class="muted">Support tickets, community posts and comments; job complaints are in Review Center.</span></a>
-<a class="link" href="super-admin-system-health.html"><b>Database and System Health</b><span class="muted">Live Data API connectivity checks for core tables.</span></a>
+<section class="section"><h2>கூடுதல் நிர்வாகப் பிரிவுகள்</h2><div class="links">
+<a class="link" href="super-admin-review-center.html"><b>மதிப்பாய்வு மற்றும் கண்காணிப்பு</b><span class="muted">வேலைவாய்ப்பு புகார்கள், அதிகாரப்பூர்வ அறிவிப்பு மதிப்பாய்வுகள் மற்றும் நிர்வாக வேலைவாய்ப்பு சமர்ப்பிப்பு ஒப்புதல்கள்.</span></a>
+<a class="link" href="super-admin-users.html"><b>பயனர் மேலாண்மை</b><span class="muted">பதிவு செய்த சுயவிவரங்கள் மற்றும் கணக்குப் பொறுப்புகளின் கண்ணோட்டம்.</span></a>
+<a class="link" href="super-admin-companies.html"><b>நிறுவன மேலாண்மை</b><span class="muted">நிறுவனப் பட்டியல் மற்றும் சரிபார்ப்பு கோரிக்கைகள்.</span></a>
+<a class="link" href="super-admin-ai-management.html"><b>AI மேலாண்மை</b><span class="muted">AI governance and integration status. அரசு வேலைவாய்ப்புகள் has no AI assistant.</span></a>
+<a class="link" href="super-admin-notifications.html"><b>அறிவிப்புகள்</b><span class="muted">செயலில் உள்ள பயனர்களுக்கு இணையதள அறிவிப்புகளை அனுப்பவும்.</span></a>
+<a class="link" href="super-admin-reports.html"><b>அறிக்கைகள் மற்றும் தரவுப் பகுப்பாய்வு</b><span class="muted">நேரடி தரவுத்தள எண்ணிக்கைகள் மற்றும் வேலைவாய்ப்பு நிலைச் சுருக்கங்கள்.</span></a>
+<a class="link" href="super-admin-site-settings.html"><b>இணையதள அமைப்புகள்</b><span class="muted">முகப்புப் பக்க உள்ளடக்கம் மற்றும் முதன்மை பிராண்ட் நிறம்.</span></a>
+<a class="link" href="super-admin-security.html"><b>பாதுகாப்பு மற்றும் அனுமதிகள்</b><span class="muted">தற்போதைய அமர்வு, சூப்பர் அட்மின் பொறுப்பு மற்றும் தரவுத்தள அணுகல் சரிபார்ப்புகள்.</span></a>
+<a class="link" href="super-admin-activity-logs.html"><b>செயல்பாட்டு பதிவுகள்</b><span class="muted">இணைக்கப்பட்ட பிரிவுகளில் சூப்பர் அட்மின் செய்த மாற்றங்களின் தணிக்கைப் பதிவுகள்.</span></a>
+<a class="link" href="super-admin-support.html"><b>ஆதரவு மற்றும் சமூகக் கண்காணிப்பு</b><span class="muted">ஆதரவு கோரிக்கைகள், சமூகப் பதிவுகள் மற்றும் கருத்துகள்; வேலைவாய்ப்பு புகார்கள் மதிப்பாய்வு மையத்தில் உள்ளன.</span></a>
+<a class="link" href="super-admin-system-health.html"><b>தரவுத்தளம் மற்றும் அமைப்பு நிலை</b><span class="muted">முக்கிய அட்டவணைகளுக்கான நேரடி Data API இணைப்பு சரிபார்ப்புகள்.</span></a>
 </div></section>
-<div class="foot">This page is excluded from search engines. Authentication and database Row Level Security enforce access. Never share this private dashboard URL or your account credentials.</div>
+<div class="foot">இந்தப் பக்கம் தேடுபொறிகளில் காட்டப்படாது. உள்நுழைவு சரிபார்ப்பும் தரவுத்தள Row Level Security-யும் அணுகலைக் கட்டுப்படுத்துகின்றன. இந்தத் தனிப்பட்ட டாஷ்போர்டு இணைப்பையோ கணக்கு விவரங்களையோ பகிர வேண்டாம்.</div>
 </main><script>
 (()=>{
 const URL='https://qkmljuuusfjowexvybvy.supabase.co',KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
@@ -56,7 +56,7 @@ async function init(){
  const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(roleError||!roles||roles.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return;}
  $('adminEmail').textContent=user.email||'';
- $('status').textContent='Super Admin access verified. Dashboard access granted.';
+ $('status').textContent='சூப்பர் அட்மின் அணுகல் உறுதிசெய்யப்பட்டது. டாஷ்போர்டு அணுகல் வழங்கப்பட்டது.';
  const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount'],['super_admin_source_directory','sourceCount'],['government_job_resources','resourceCount'],['exam_eligibility_rules','eligibilityCount'],['exam_preparation_library','libraryCount']];
  for(const [table,id] of stats){try{const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});$(id).textContent=error?'—':String(count??0);}catch(e){$(id).textContent='—';}}
 }
