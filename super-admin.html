@@ -4,28 +4,42 @@
 <title>Super Admin Dashboard | TAMILAN CAREERS</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--blue:#168bd2;--cyan:#65d7ff;--muted:#a8bed2}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:15px Arial,sans-serif}.top{padding:18px 22px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:800;letter-spacing:1.5px}.wrap{max-width:1180px;margin:auto;padding:24px}.welcome h1{margin:0 0 6px}.muted{color:var(--muted);line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:22px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}.card h3{margin:0 0 8px}.number{font-size:26px;font-weight:800;color:var(--cyan)}.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.link{display:block;text-decoration:none;color:#eff7ff;background:#10243d;border:1px solid #244362;padding:17px;border-radius:12px}.link b{display:block;color:var(--cyan);margin-bottom:6px}.link:hover{border-color:var(--cyan)}button{background:#087fbd;color:white;border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.danger{background:#55313a}.foot{margin-top:28px;font-size:12px;color:var(--muted)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:15px Arial,sans-serif}.top{padding:18px 22px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:800;letter-spacing:1.5px}.wrap{max-width:1250px;margin:auto;padding:24px}.muted{color:var(--muted);line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:22px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}.card h3{margin:0 0 8px}.number{font-size:26px;font-weight:800;color:var(--cyan)}.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.link{display:block;text-decoration:none;color:#eff7ff;background:#10243d;border:1px solid #244362;padding:17px;border-radius:12px}.link b{display:block;color:var(--cyan);margin-bottom:6px}.link:hover{border-color:var(--cyan)}button{background:#087fbd;color:white;border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.foot{margin-top:28px;font-size:12px;color:var(--muted)}.section{margin-top:26px}.tag{display:inline-block;border:1px solid var(--line);border-radius:20px;padding:3px 8px;font-size:11px;color:var(--muted)}
 </style></head><body>
 <header class="top"><div class="brand">TAMILAN CAREERS · PRIVATE ADMIN</div><div><span id="adminEmail" class="muted"></span>　<button id="logout">Logout</button></div></header>
-<main class="wrap"><section class="welcome"><h1>Super Admin Dashboard</h1><div class="muted">Private administration area · Authorized accounts only</div></section>
+<main class="wrap"><section><h1>Super Admin Dashboard</h1><div class="muted">Private administration workspace. Access is limited to authorized Super Admin accounts.</div></section>
 <div id="status" class="status">Verifying access...</div>
 <section class="grid">
 <div class="card"><h3>Government Jobs</h3><div class="number" id="govCount">—</div><div class="muted">Government job records</div></div>
-<div class="card"><h3>Private Jobs</h3><div class="number" id="privateCount">—</div><div class="muted">Private job records</div></div>
-<div class="card"><h3>International Jobs</h3><div class="number" id="intlCount">—</div><div class="muted">International job records</div></div>
-<div class="card"><h3>Registered Profiles</h3><div class="number" id="profileCount">—</div><div class="muted">Registered user profiles</div></div>
+<div class="card"><h3>Private Jobs</h3><div class="number" id="privateCount">—</div><div class="muted">Private employer records</div></div>
+<div class="card"><h3>International Jobs</h3><div class="number" id="intlCount">—</div><div class="muted">Jobs outside India</div></div>
+<div class="card"><h3>Registered Profiles</h3><div class="number" id="profileCount">—</div><div class="muted">User profiles</div></div>
+<div class="card"><h3>Official Sources</h3><div class="number" id="sourceCount">—</div><div class="muted">Private source directory records</div></div>
+<div class="card"><h3>Exam Resources</h3><div class="number" id="resourceCount">—</div><div class="muted">Government exam resources</div></div>
 </section>
-<h2>Administration Modules</h2><section class="links">
-<a class="link" href="super-admin-government-jobs.html"><b>அரசுப் பணிகள்</b><span class="muted">Records, verification and management</span></a>
-<a class="link" href="super-admin-private-jobs.html"><b>தனியார் பணிகள்</b><span class="muted">Independent private employment system</span></a>
-<a class="link" href="super-admin-international-jobs.html"><b>சர்வதேச பணிகள்</b><span class="muted">Jobs outside India</span></a>
-<a class="link" href="super-admin-source-directory.html"><b>மூல இணையதள அடைவு</b><span class="muted">Official recruitment notification sources</span></a>
-<a class="link" href="super-admin-exam-center.html"><b>தேர்வு அறிவிப்புகள் & தயாரிப்பு</b><span class="muted">Eligibility finder and exam resources</span></a>
-<a class="link" href="super-admin-review-center.html"><b>Review & Moderation</b><span class="muted">Verification and report moderation</span></a>
-<a class="link" href="super-admin-users.html"><b>Users and permissions</b><span class="muted">Account and role management</span></a>
-<a class="link" href="super-admin-site-settings.html"><b>Website Settings</b><span class="muted">Website settings and controls</span></a>
-</section>
-<div class="foot">இந்தப் Page robots noindex மூலம் Searchபொறிகளிலிருந்து மறைக்கப்பட்டுள்ளது. உண்மையான பாதுகாப்பு Supabase Auth + Database RLS மூலம் அமல்படுத்தப்படுகிறது. இன்னும் இணைக்கப்படாத Administration Modules அடுத்த கட்டங்களில் உருவாக்கப்படும்.</div>
+<section class="section"><h2>Job Management</h2><div class="links">
+<a class="link" href="super-admin-government-jobs.html"><b>Government Jobs</b><span class="muted">Government recruitment records, verification and status management.</span></a>
+<a class="link" href="super-admin-private-jobs.html"><b>Private Jobs</b><span class="muted">Independent private employment system and employer listings.</span></a>
+<a class="link" href="super-admin-international-jobs.html"><b>International Jobs</b><span class="muted">Jobs outside India, including visa and work permit details.</span></a>
+</div></section>
+<section class="section"><h2>Sources and Exam Preparation</h2><div class="links">
+<a class="link" href="super-admin-source-directory.html"><b>Official Source Directory</b><span class="muted">Official websites, qualification evidence, verification and last-checked dates.</span></a>
+<a class="link" href="super-admin-exam-center.html"><b>Exam and Preparation Center</b><span class="muted">Admission notifications, exam schedules, syllabus, previous papers, admit cards, answer keys and results.</span></a>
+</div></section>
+<section class="section"><h2>Additional Administration Modules</h2><div class="links">
+<div class="link"><b>Review and Moderation</b><span class="muted">Job approvals, official notice review, reports and comments.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>User Management</b><span class="muted">User accounts, verification, suspension and access roles.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Company Management</b><span class="muted">Employer verification, company records and authorization.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>AI Management</b><span class="muted">Discovery controls, matching, duplicate checks and usage monitoring. Government Jobs will not use an AI assistant.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Notifications</b><span class="muted">Job, exam, admit card and result notification controls.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Reports and Analytics</b><span class="muted">Visitors, records, views, applications and geographic summaries.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Website Settings</b><span class="muted">Branding, homepage content, SEO, footer and maintenance controls.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Security and Permissions</b><span class="muted">Role checks, RLS review, sessions and access monitoring.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Activity Logs</b><span class="muted">Admin actions, status changes and sign-in events.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Support and Complaints</b><span class="muted">Contact messages, employer complaints and job reports.</span><br><span class="tag">To be connected</span></div>
+<div class="link"><b>Database and System Health</b><span class="muted">Database, storage, API errors and backup monitoring.</span><br><span class="tag">To be connected</span></div>
+</div></section>
+<div class="foot">This page is excluded from search engines. Authentication and database Row Level Security enforce access. Never share this private dashboard URL or your account credentials.</div>
 </main><script>
 (()=>{
 const URL='https://qkmljuuusfjowexvybvy.supabase.co',KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
@@ -37,8 +51,7 @@ async function init(){
  if(roleError||!roles||roles.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return;}
  $('adminEmail').textContent=user.email||'';
  $('status').textContent='Super Admin access verified. Dashboard access granted.';
- $('status').className='status';
- const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount']];
+ const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount'],['super_admin_source_directory','sourceCount'],['government_job_resources','resourceCount']];
  for(const [table,id] of stats){try{const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});$(id).textContent=error?'—':String(count??0);}catch(e){$(id).textContent='—';}}
 }
 $('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html');});
