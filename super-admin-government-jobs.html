@@ -17,7 +17,7 @@
 <div class="toolbar"><input id="search" type="search" placeholder="Search job title..."><select id="statusFilter"><option value="">All Statuses</option><option value="draft">Draft</option><option value="pending_review">Pending Review</option><option value="published">Published</option><option value="paused">Paused</option><option value="closed">Closed</option><option value="rejected">Rejected</option><option value="expired">Expired</option></select><button id="searchBtn">Search</button><button id="clearBtn" class="secondary">Clear</button></div>
 <div class="tablewrap"><table><thead><tr><th>Job / Organization</th><th>Department / Qualification</th><th>Location</th><th>Deadline</th><th>Status</th><th>Actions</th></tr></thead><tbody id="rows"><tr><td colspan="6" class="empty">Loading records...</td></tr></tbody></table></div>
 <div class="pager"><span id="pageInfo" class="muted">—</span><div><button id="prev" class="secondary">Previous</button> <button id="next">Next</button></div></div>
-<div class="foot">ஒரு பக்கத்திற்கு 10 பதிவுகள். இந்த நிர்வாகப் Page noindex மூலம் Searchபொறிகளில் மறைக்கப்பட்டுள்ளது. தரவுத்தள RLS அனுமதியே உண்மையான அணுகல் பாதுகாப்பு.</div>
+<div class="foot">10 records per page. This admin page is excluded from search engines. Database RLS enforces access control.</div>
 </main>
 <dialog id="detailDialog"><h2 id="detailTitle">Job Details</h2><div id="detailBody" class="detailgrid"></div><div style="margin-top:16px;text-align:right"><button id="closeDetail" class="secondary">Close</button></div></dialog>
 <script>
@@ -45,7 +45,7 @@ function render(rows){
  if(!rows.length){$('rows').innerHTML='<tr><td colspan="6" class="empty">No records match this search.</td></tr>';return;}
  $('rows').innerHTML=rows.map(r=>{
  const opts=statuses.map(([v,l])=>'<option value="'+v+'" '+(r.status===v?'selected':'')+'>'+l+'</option>').join('');
- return '<tr><td><b>'+esc(r.job_title)+'</b><small>'+esc(r.employer_name||r.recruitment_authority||'')+'</small><small>அறிவிப்பு: '+esc(r.notification_number||'—')+'</small></td><td>'+esc(r.department_name||r.recruitment_authority||'—')+'<small>'+esc(r.education_level||r.qualification_tags||'')+'</small></td><td>'+esc(r.location||r.state_name||'—')+'</td><td>'+fmt(r.application_deadline)+'</td><td><span class="tag">'+esc(r.status)+'</span></td><td><div class="actions"><button class="secondary" data-view="'+r.id+'">Details</button><select id="st-'+r.id+'">'+opts+'</select><button data-save="'+r.id+'">Save</button></div></td></tr>';
+ return '<tr><td><b>'+esc(r.job_title)+'</b><small>'+esc(r.employer_name||r.recruitment_authority||'')+'</small><small>Notification: '+esc(r.notification_number||'—')+'</small></td><td>'+esc(r.department_name||r.recruitment_authority||'—')+'<small>'+esc(r.education_level||r.qualification_tags||'')+'</small></td><td>'+esc(r.location||r.state_name||'—')+'</td><td>'+fmt(r.application_deadline)+'</td><td><span class="tag">'+esc(r.status)+'</span></td><td><div class="actions"><button class="secondary" data-view="'+r.id+'">Details</button><select id="st-'+r.id+'">'+opts+'</select><button data-save="'+r.id+'">Save</button></div></td></tr>';
  }).join('');
  $('rows').querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showDetails(currentRows.find(x=>x.id===b.dataset.view))));
  $('rows').querySelectorAll('[data-save]').forEach(b=>b.addEventListener('click',()=>saveStatus(b.dataset.save,b)));
@@ -58,13 +58,13 @@ function showDetails(r){
 }
 async function saveStatus(id,button){
  const next=$('st-'+id).value,old=currentRows.find(r=>r.id===id)?.status;
- if(next===old)return note('Status மாற்றம் இல்லை.');
- if(!confirm('இந்தப் பணியின் Statusயை "'+next+'"?'))return;
+ if(next===old)return note('No status change required.');
+ if(!confirm('Change this job status to "'+next+'"?'))return;
  button.disabled=true;
  const {error}=await sb.from('government_jobs').update({status:next,updated_at:new Date().toISOString()}).eq('id',id);
  button.disabled=false;
- if(error){note('Status மாற்ற முடியவில்லை: '+error.message,true);return;}
- note('வேலை Status வெற்றிகரமாக மாற்றப்பட்டது.');await loadStats();await loadRows();
+ if(error){note('Unable to update status: '+error.message,true);return;}
+ note('Job status updated successfully.');await loadStats();await loadRows();
 }
 async function loadRows(){
  $('rows').innerHTML='<tr><td colspan="6" class="empty">Loading...</td></tr>';
@@ -77,7 +77,7 @@ async function loadRows(){
  const totalQ=await sb.from('government_jobs').select('id',{count:'exact',head:true}).ilike('job_title',searchTerm?'%'+searchTerm.replace(/[,%()]/g,' ')+'%':'%');
  let total=totalQ.count??0;
  if(statusFilter){const c=await sb.from('government_jobs').select('id',{count:'exact',head:true}).eq('status',statusFilter).ilike('job_title',searchTerm?'%'+searchTerm.replace(/[,%()]/g,' ')+'%':'%');total=c.count??0;}
- $('pageInfo').textContent='Page '+(page+1)+' · Total '+total+' பதிவுகள்';
+ $('pageInfo').textContent='Page '+(page+1)+' · Total '+total+' records';
  $('prev').disabled=page===0;$('next').disabled=(page+1)*PAGE_SIZE>=total;
 }
 $('searchBtn').addEventListener('click',()=>{searchTerm=$('search').value.trim();statusFilter=$('statusFilter').value;page=0;loadRows();});
