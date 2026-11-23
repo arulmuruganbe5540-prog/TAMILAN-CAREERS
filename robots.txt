@@ -8,3 +8,4 @@ Disallow: /super-admin-admissions.html
 Sitemap: https://tamilancareers.in/sitemap.xml
 
 Disallow: /super-admin-review-center.html
+Disallow: /super-admin-register.html
