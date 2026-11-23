@@ -21,7 +21,9 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 <div class="field"><label for="email">Admin Email</label><input id="email" type="email" autocomplete="username" required></div>
 <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
 <button id="loginBtn">பாதுகாப்பாக Login செய்</button>
+<button type="button" id="resetBtn" style="background:#244362">Password மறந்துவிட்டீர்களா? Reset செய்யவும்</button>
 </form></section>
+<section id="recover" class="step"><h2>புதிய Password அமைக்கவும்</h2><p>மின்னஞ்சலில் வந்த Reset இணைப்பின் மூலம் இங்கு வந்திருந்தால் புதிய Password அமைக்கவும்.</p><form id="recoverForm"><div class="field"><label for="newPassword">புதிய Password</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="savePasswordBtn">புதிய Password சேமிக்கவும்</button></form></section>
 <section id="mfa" class="step">
 <h2>Authenticator Verification</h2><p>உங்கள் Authenticator App-ல் வரும் 6 இலக்கக் குறியீட்டை உள்ளிடவும்.</p>
 <div class="field"><label for="otp">6-digit code</label><input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}"></div>
@@ -43,7 +45,7 @@ const sb=window.supabase.createClient(SB_URL,SB_KEY);
 const $=id=>document.getElementById(id);
 let factorId='',challengeId='',enrollFactorId='';
 function note(msg,type=''){ $('notice').textContent=msg;$('notice').className='notice show '+type; }
-function step(id){['login','mfa','enroll'].forEach(x=>$(x).classList.toggle('show',x===id));}
+function step(id){['login','mfa','enroll','recover'].forEach(x=>$(x).classList.toggle('show',x===id));}
 function busy(id,on){$(id).disabled=on;}
 async function assertAdmin(){
  const {data:{user},error:userError}=await sb.auth.getUser();
@@ -78,7 +80,7 @@ async function mfaFlow(){
   step('enroll');note('Authenticator App-ல் கணக்கைச் சேர்த்து, வரும் குறியீட்டை உள்ளிடவும்.');
  }
 }
-$('loginForm').addEventListener('submit',async e=>{
+$('resetBtn').addEventListener('click',async()=>{\n try{\n  const email=$('email').value.trim();\n  if(!email)throw new Error('முதலில் Admin Email உள்ளிடவும்.');\n  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});\n  if(error)throw error;\n  note('Password மாற்றும் இணைப்பு உங்கள் Gmail-க்கு அனுப்பப்பட்டுள்ளது. Inbox / Spam பார்க்கவும்.','success');\n }catch(err){note(err.message||'Reset மின்னஞ்சல் அனுப்ப முடியவில்லை.','error');}\n});\n$('recoverForm').addEventListener('submit',async e=>{\n e.preventDefault();busy('savePasswordBtn',true);\n try{\n  const password=$('newPassword').value;\n  if(password.length<8)throw new Error('குறைந்தது 8 எழுத்துகள் கொண்ட Password அமைக்கவும்.');\n  const {error}=await sb.auth.updateUser({password});\n  if(error)throw error;\n  await sb.auth.signOut();step('login');note('புதிய Password வெற்றிகரமாக அமைக்கப்பட்டது. இப்போது Login செய்யவும்.','success');\n }catch(err){note(err.message||'Password மாற்றம் தோல்வியடைந்தது.','error');}\n finally{busy('savePasswordBtn',false);}\n});\nsb.auth.onAuthStateChange((event,session)=>{\n if(event==='PASSWORD_RECOVERY' && session){step('recover');note('புதிய Password அமைக்கவும்.');}\n});\n$('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();busy('loginBtn',true);
  try{
   const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
