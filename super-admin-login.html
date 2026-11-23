@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+<title>Private Admin Access | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--blue:#168bd2;--cyan:#65d7ff;--muted:#a8bed2}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#12365a 0,#071426 58%);font:15px Arial,sans-serif;color:#f2f8ff;display:grid;place-items:center;padding:18px}
+main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 20px 60px #0008}
+.brand{font-size:13px;letter-spacing:2px;color:var(--cyan);font-weight:800}.lock{font-size:32px;margin:18px 0 6px}h1{font-size:23px;margin:0 0 8px}p{color:var(--muted);line-height:1.55}.field{margin:15px 0}label{display:block;margin-bottom:7px;font-weight:700;font-size:13px}input{width:100%;padding:13px;border:1px solid #3b5a79;border-radius:8px;background:#08192c;color:#fff;font-size:16px}button{width:100%;border:0;border-radius:8px;padding:13px;background:linear-gradient(100deg,#0878bd,#16a6c9);color:white;font-weight:800;font-size:15px;margin-top:12px;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.notice{display:none;padding:12px;border-radius:8px;margin:15px 0;line-height:1.5;background:#183b55;color:#d9f3ff}.notice.show{display:block}.notice.error{background:#512a32;color:#ffe0e4}.notice.success{background:#174b3c;color:#d9ffeb}.step{display:none}.step.show{display:block}.secret{word-break:break-all;background:#071426;padding:12px;border:1px dashed #4a779a;border-radius:8px;color:#aeeaff}.qr{display:grid;place-items:center;background:#fff;border-radius:8px;padding:12px;margin:12px auto;max-width:230px}.qr svg{width:100%;height:auto}.small{font-size:12px}.divider{border:0;border-top:1px solid var(--line);margin:20px 0}
+</style></head>
+<body><main>
+<div class="brand">TAMILAN CAREERS · PRIVATE AREA</div><div class="lock">🔐</div>
+<h1>Super Admin Login</h1><p>இந்தப் பக்கம் அனுமதி பெற்ற நிர்வாகிக்காக மட்டுமே. புதிய Admin பதிவு இங்கே கிடையாது. Login + Authenticator MFA இரண்டும் கட்டாயம்.</p>
+<div id="notice" class="notice" role="status"></div>
+<section id="login" class="step show">
+<form id="loginForm">
+<div class="field"><label for="email">Admin Email</label><input id="email" type="email" autocomplete="username" required></div>
+<div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
+<button id="loginBtn">பாதுகாப்பாக Login செய்</button>
+</form></section>
+<section id="mfa" class="step">
+<h2>Authenticator Verification</h2><p>உங்கள் Authenticator App-ல் வரும் 6 இலக்கக் குறியீட்டை உள்ளிடவும்.</p>
+<div class="field"><label for="otp">6-digit code</label><input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}"></div>
+<button id="verifyBtn">Verify MFA</button>
+</section>
+<section id="enroll" class="step">
+<h2>MFA அமைக்கவும்</h2><p>Google Authenticator அல்லது Microsoft Authenticator மூலம் கீழே உள்ள QR-ஐ scan செய்யவும். Scan செய்ய முடியாவிட்டால் Secret Key-ஐ கைமுறையாகச் சேர்க்கவும்.</p>
+<div id="qr" class="qr"></div><div id="secret" class="secret"></div>
+<div class="field"><label for="enrollOtp">Authenticator 6-digit code</label><input id="enrollOtp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}"></div>
+<button id="enrollBtn">MFA-வை உறுதிப்படுத்து</button>
+</section>
+<hr class="divider"><p class="small">இந்த Login பக்கத்தில் Public Registration இல்லை. Super Admin உரிமை Database-ல் தனியாக அனுமதிக்கப்பட்ட கணக்கிற்கு மட்டுமே வழங்கப்படும்.</p>
+</main>
+<script>
+(()=> {
+const SB_URL='https://qkmljuuusfjowexvybvy.supabase.co';
+const SB_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=window.supabase.createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+let factorId='',challengeId='',enrollFactorId='';
+function note(msg,type=''){ $('notice').textContent=msg;$('notice').className='notice show '+type; }
+function step(id){['login','mfa','enroll'].forEach(x=>$(x).classList.toggle('show',x===id));}
+function busy(id,on){$(id).disabled=on;}
+async function finishAdmin(){
+ const {data:{user},error:userError}=await sb.auth.getUser();
+ if(userError||!user)throw new Error('Login session சரிபார்க்க முடியவில்லை.');
+ const {data:roleRows,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
+ if(roleError)throw roleError;
+ if(!roleRows||roleRows.length!==1)throw new Error('இந்தக் கணக்கிற்கு Super Admin அனுமதி வழங்கப்படவில்லை.');
+ note('பாதுகாப்பு சரிபார்ப்பு வெற்றி. Dashboard அடுத்த கட்டத்தில் இணைக்கப்படும்.','success');
+}
+async function mfaFlow(){
+ const {data:aal,error:aalError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(aalError)throw aalError;
+ if(aal.currentLevel==='aal2'){await finishAdmin();return;}
+ const {data:factors,error}=await sb.auth.mfa.listFactors();
+ if(error)throw error;
+ const verified=(factors.totp||[]).find(f=>f.status==='verified');
+ if(verified){
+  factorId=verified.id;
+  const ch=await sb.auth.mfa.challenge({factorId});
+  if(ch.error)throw ch.error;
+  challengeId=ch.data.id;step('mfa');note('Authenticator App குறியீட்டை உள்ளிடவும்.');
+ }else{
+  const created=await sb.auth.mfa.enroll({factorType:'totp'});
+  if(created.error)throw created.error;
+  enrollFactorId=created.data.id;
+  $('qr').innerHTML=created.data.totp.qr_code;
+  $('secret').textContent='Secret Key: '+created.data.totp.secret;
+  step('enroll');note('Authenticator App-ல் கணக்கைச் சேர்த்து, வரும் குறியீட்டை உள்ளிடவும்.');
+ }
+}
+$('loginForm').addEventListener('submit',async e=>{
+ e.preventDefault();busy('loginBtn',true);
+ try{
+  const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
+  if(error)throw error;
+  await mfaFlow();
+ }catch(err){await sb.auth.signOut();step('login');note(err.message||'Login தோல்வியடைந்தது.','error');}
+ finally{busy('loginBtn',false);}
+});
+$('verifyBtn').addEventListener('click',async()=>{
+ busy('verifyBtn',true);
+ try{
+  const code=$('otp').value.trim();
+  if(!/^\d{6}$/.test(code))throw new Error('6 இலக்கக் குறியீட்டை உள்ளிடவும்.');
+  const {error}=await sb.auth.mfa.verify({factorId,challengeId,code});
+  if(error)throw error;
+  await finishAdmin();
+ }catch(err){note(err.message||'MFA சரிபார்ப்பு தோல்வி.','error');}
+ finally{busy('verifyBtn',false);}
+});
+$('enrollBtn').addEventListener('click',async()=>{
+ busy('enrollBtn',true);
+ try{
+  const code=$('enrollOtp').value.trim();
+  if(!/^\d{6}$/.test(code))throw new Error('6 இலக்கக் குறியீட்டை உள்ளிடவும்.');
+  const ch=await sb.auth.mfa.challenge({factorId:enrollFactorId});
+  if(ch.error)throw ch.error;
+  const {error}=await sb.auth.mfa.verify({factorId:enrollFactorId,challengeId:ch.data.id,code});
+  if(error)throw error;
+  await mfaFlow();
+ }catch(err){note(err.message||'MFA அமைக்க முடியவில்லை.','error');}
+ finally{busy('enrollBtn',false);}
+});
+sb.auth.getSession().then(async({data,error})=>{
+ if(error||!data.session)return;
+ try{await mfaFlow();}catch(err){await sb.auth.signOut();step('login');note(err.message||'அனுமதி இல்லை.','error');}
+});
+})();
+</script></body></html>
