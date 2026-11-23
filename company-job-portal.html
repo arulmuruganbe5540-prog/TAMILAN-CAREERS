@@ -105,13 +105,13 @@ async function loadVerificationRequests(){
  if(!currentCompany)return;
  const {data,error}=await sb.from('company_verification_requests').select('*').eq('company_id',currentCompany.id).in('market_scope',['indian_private','international']).order('created_at',{ascending:false}).limit(10);
  if(error){show('verificationMsg','Could not load verification status.',true);return}
- const open=(data||[]).filter(x=>['pending','under_review','more_information'].includes(x.status));$('verificationPanel').classList.toggle('hidden',open.length>0);const latestMore=open.find(x=>x.status==='more_information');if(latestMore){moreInfoRequest=latestMore;$('moreInfoPanel').classList.remove('hidden');$('adminNote').textContent=(latestMore.market_scope==='indian_private'?'Indian Private Jobs':'International Jobs')+': '+(latestMore.admin_notes||'Additional information is required.');}else{$('moreInfoPanel').classList.add('hidden');moreInfoRequest=null;}const anyVerified=currentCompany.private_jobs_verification_status==='verified'||currentCompany.international_jobs_verification_status==='verified';$('verifiedArea').classList.toggle('hidden',!anyVerified);if(anyVerified)await loadCompanyJobs();
+ const open=(data||[]).filter(x=>['pending','under_review','more_information'].includes(x.status));$('verificationPanel').classList.remove('hidden');const latestMore=open.find(x=>x.status==='more_information');if(latestMore){moreInfoRequest=latestMore;$('moreInfoPanel').classList.remove('hidden');$('adminNote').textContent=(latestMore.market_scope==='indian_private'?'Indian Private Jobs':'International Jobs')+': '+(latestMore.admin_notes||'Additional information is required.');}else{$('moreInfoPanel').classList.add('hidden');moreInfoRequest=null;}const anyVerified=currentCompany.private_jobs_verification_status==='verified'||currentCompany.international_jobs_verification_status==='verified';$('verifiedArea').classList.toggle('hidden',!anyVerified);if(anyVerified)await loadCompanyJobs();
 }
 async function loadLookups(){
  const [co,ca,cu]=await Promise.all([sb.from('countries').select('country_code,country_name,currency_code').eq('is_active',true).order('country_name'),sb.from('job_categories').select('id,category_name').eq('is_active',true).order('category_name'),sb.from('currencies').select('currency_code,currency_name').eq('is_active',true).order('currency_code')]);
  if(co.error||ca.error||cu.error)throw new Error('Country, category or currency lists could not be loaded');
  countries=co.data||[];categories=ca.data||[];currencies=cu.data||[];
- fill('country',countries.map(x=>({value:x.country_code,label:x.country_name})),'Select country');
+ fill('country',countries.filter(x=>x.country_code==='IN').map(x=>({value:x.country_code,label:x.country_name})),'Select India');
  fill('iCountry',countries.filter(x=>x.country_code!=='IN').map(x=>({value:x.country_code,label:x.country_name})),'Select country outside India');
  fill('pCategory',categories.map(x=>({value:x.category_name,label:x.category_name})),'Select category');
  fill('iCategory',categories.map(x=>({value:x.id,label:x.category_name})),'Select category');
@@ -151,7 +151,9 @@ async function boot(){
  if(me){show('verificationMsg','Could not load your company access: '+me.message,true);return}
  members=m||[];await loadCompanyStatus();
 }
-$('marketScope').addEventListener('change',()=>{const intl=$('marketScope').value==='international';$('authorizationField').classList.toggle('hidden',!intl);$('country').value=intl?'':'IN';});
+function syncVerificationCountry(){const intl=$('marketScope').value==='international';const allowed=countries.filter(x=>intl?x.country_code!=='IN':x.country_code==='IN');fill('country',allowed.map(x=>({value:x.country_code,label:x.country_name})),intl?'Select country outside India':'Select India');$('authorizationField').classList.toggle('hidden',!intl);}
+$('marketScope').addEventListener('change',syncVerificationCountry);
+syncVerificationCountry();
 boot();
 })();
 </script></body></html>
