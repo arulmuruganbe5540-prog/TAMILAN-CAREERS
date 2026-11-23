@@ -45,15 +45,19 @@ let factorId='',challengeId='',enrollFactorId='';
 function note(msg,type=''){ $('notice').textContent=msg;$('notice').className='notice show '+type; }
 function step(id){['login','mfa','enroll'].forEach(x=>$(x).classList.toggle('show',x===id));}
 function busy(id,on){$(id).disabled=on;}
-async function finishAdmin(){
+async function assertAdmin(){
  const {data:{user},error:userError}=await sb.auth.getUser();
  if(userError||!user)throw new Error('Login session சரிபார்க்க முடியவில்லை.');
  const {data:roleRows,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(roleError)throw roleError;
  if(!roleRows||roleRows.length!==1)throw new Error('இந்தக் கணக்கிற்கு Super Admin அனுமதி வழங்கப்படவில்லை.');
+}
+async function finishAdmin(){
+ await assertAdmin();
  note('பாதுகாப்பு சரிபார்ப்பு வெற்றி. Dashboard அடுத்த கட்டத்தில் இணைக்கப்படும்.','success');
 }
 async function mfaFlow(){
+ await assertAdmin();
  const {data:aal,error:aalError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
  if(aalError)throw aalError;
  if(aal.currentLevel==='aal2'){await finishAdmin();return;}
