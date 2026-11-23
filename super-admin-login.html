@@ -24,7 +24,7 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 <div class="links"><button id="showRegister" class="secondary" type="button">Register a New Account</button></div>
 </section>
 <section id="registerPanel" class="panel">
-<h2>Register a New Account</h2><p>பதிவு செய்த Email-க்கு உறுதிப்படுத்தல் Link அனுப்பப்படும். பதிவு செய்தாலே Super Admin அனுமதி கிடைக்காது.</p>
+<h2>Register a New Account</h2><p>A confirmation link will be sent to the registered email. Registration does not grant Super Admin access.</p>
 <form id="registerForm">
 <div class="field"><label for="regEmail">Email ID</label><input id="regEmail" type="email" autocomplete="email" required></div>
 <div class="field"><label for="regPassword">Password (at least 8 characters)</label><input id="regPassword" type="password" autocomplete="new-password" minlength="8" required></div>
@@ -32,7 +32,7 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 </form><button id="backLogin" class="secondary" type="button">Back to Sign In</button>
 </section>
 <section id="recoverPanel" class="panel">
-<h2>Set a New Password</h2><p>Gmail-க்கு வந்த Reset இணைப்பைத் திறந்து இங்கு வந்த பிறகு Set a New Password.</p>
+<h2>Set a New Password</h2><p>Open the password reset link sent to your email, then set a new password here.</p>
 <form id="recoverForm"><div class="field"><label for="newPassword">New Password</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="savePasswordBtn">Password Save</button></form>
 </section>
 </main>
@@ -53,7 +53,7 @@ async function checkAdmin(){
  if(!data||data.length!==1)throw new Error('This email account does not have Super Admin permission.');
  note('Sign-in successful. Opening the Super Admin Dashboard.','success');\n location.href='super-admin.html';
 }
-$('showRegister').addEventListener('click',()=>{show('registerPanel');note('புதிய Create Accountயவும்.');});
+$('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});
 $('backLogin').addEventListener('click',()=>{show('loginPanel');note('');});
 $('resetBtn').addEventListener('click',async()=>{
  try{
@@ -61,7 +61,7 @@ $('resetBtn').addEventListener('click',async()=>{
   if(!email)throw new Error('Enter your email address first.');
   const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
   if(error)throw error;
-  note('Password Reset Link உங்கள் Email-க்கு அனுப்பப்பட்டது. Inbox / Spam பார்க்கவும்.','success');
+  note('Password reset link sent to your email. Check your inbox and spam folder.','success');
  }catch(err){note(err.message||'Unable to send the reset email.','error');}
 });
 $('registerForm').addEventListener('submit',async e=>{
@@ -91,7 +91,7 @@ $('recoverForm').addEventListener('submit',async e=>{
   if(password.length<8)throw new Error('Use a password with at least 8 characters.');
   const {error}=await sb.auth.updateUser({password});
   if(error)throw error;
-  await sb.auth.signOut();show('loginPanel');note('New Password Saveக்கப்பட்டது. இப்போது Login செய்யவும்.','success');
+  await sb.auth.signOut();show('loginPanel');note('New password saved. Please sign in.','success');
  }catch(err){note(err.message||'Password update failed.','error');}
  finally{busy('savePasswordBtn',false);}
 });
