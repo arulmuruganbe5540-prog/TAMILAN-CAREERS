@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="ta"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
-<title>Super Admin Login | TAMILAN CAREERS</title>
+<title>Super Admin உள்நுழை | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--blue:#168bd2;--cyan:#65d7ff;--muted:#a8bed2}
@@ -11,29 +11,29 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 .brand{font-size:13px;letter-spacing:2px;color:var(--cyan);font-weight:800}.lock{font-size:32px;margin:18px 0 6px}h1{font-size:23px;margin:0 0 8px}p{color:var(--muted);line-height:1.55}.field{margin:15px 0}label{display:block;margin-bottom:7px;font-weight:700;font-size:13px}input{width:100%;padding:13px;border:1px solid #3b5a79;border-radius:8px;background:#08192c;color:#fff;font-size:16px}button{width:100%;border:0;border-radius:8px;padding:13px;background:linear-gradient(100deg,#0878bd,#16a6c9);color:white;font-weight:800;font-size:15px;margin-top:12px;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#244362}.notice{display:none;padding:12px;border-radius:8px;margin:15px 0;line-height:1.5;background:#183b55;color:#d9f3ff}.notice.show{display:block}.notice.error{background:#512a32;color:#ffe0e4}.notice.success{background:#174b3c;color:#d9ffeb}.panel{display:none}.panel.show{display:block}.links{display:flex;gap:12px;margin-top:16px}.links button{font-size:13px;padding:10px}
 </style></head><body><main>
 <div class="brand">TAMILAN CAREERS · PRIVATE AREA</div><div class="lock">🔐</div>
-<h1>Super Admin Login</h1>
-<p>Sign in using Email and Password. Authenticator MFA is not used on this page. Only accounts granted the Super Admin role in the database can access the dashboard.</p>
+<h1>Super Admin உள்நுழை</h1>
+<p>உள்நுழைக using மின்னஞ்சல் and கடவுச்சொல். Authenticator MFA is not used on this page. Only accounts granted the Super Admin role in the database can access the dashboard.</p>
 <div id="notice" class="notice" role="status"></div>
 <section id="loginPanel" class="panel show">
 <form id="loginForm">
-<div class="field"><label for="email">Email ID</label><input id="email" type="email" autocomplete="username" required></div>
-<div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required></div>
-<button id="loginBtn">Sign in with Email</button>
+<div class="field"><label for="email">மின்னஞ்சல் ID</label><input id="email" type="email" autocomplete="username" required></div>
+<div class="field"><label for="password">கடவுச்சொல்</label><input id="password" type="password" autocomplete="current-password" minlength="8" required></div>
+<button id="loginBtn">உள்நுழைக with மின்னஞ்சல்</button>
 </form>
-<button id="resetBtn" class="secondary" type="button">Forgot Password? Reset</button>
+<button id="resetBtn" class="secondary" type="button">Forgot கடவுச்சொல்? Reset</button>
 <div class="links"><button id="showRegister" class="secondary" type="button">Register a New Account</button></div>
 </section>
 <section id="registerPanel" class="panel">
 <h2>Register a New Account</h2><p>A confirmation link will be sent to the registered email. Registration does not grant Super Admin access.</p>
 <form id="registerForm">
-<div class="field"><label for="regEmail">Email ID</label><input id="regEmail" type="email" autocomplete="email" required></div>
-<div class="field"><label for="regPassword">Password (at least 8 characters)</label><input id="regPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+<div class="field"><label for="regமின்னஞ்சல்">மின்னஞ்சல் ID</label><input id="regமின்னஞ்சல்" type="email" autocomplete="email" required></div>
+<div class="field"><label for="regகடவுச்சொல்">கடவுச்சொல் (at least 8 characters)</label><input id="regகடவுச்சொல்" type="password" autocomplete="new-password" minlength="8" required></div>
 <button id="registerBtn">Create Account</button>
-</form><button id="backLogin" class="secondary" type="button">Back to Sign In</button>
+</form><button id="backஉள்நுழை" class="secondary" type="button">Back to Sign In</button>
 </section>
 <section id="recoverPanel" class="panel">
-<h2>Set a New Password</h2><p>Open the password reset link sent to your email, then set a new password here.</p>
-<form id="recoverForm"><div class="field"><label for="newPassword">New Password</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="savePasswordBtn">Password Save</button></form>
+<h2>Set a New கடவுச்சொல்</h2><p>Open the password reset link sent to your email, then set a new password here.</p>
+<form id="recoverForm"><div class="field"><label for="newகடவுச்சொல்">New கடவுச்சொல்</label><input id="newகடவுச்சொல்" type="password" minlength="8" autocomplete="new-password" required></div><button id="saveகடவுச்சொல்Btn">கடவுச்சொல் சேமிக்கவும்</button></form>
 </section>
 </main>
 <script>
@@ -47,28 +47,28 @@ function show(which){['loginPanel','registerPanel','recoverPanel'].forEach(id=>$
 function busy(id,on){$(id).disabled=on;}
 async function checkAdmin(){
  const {data:{user},error:userError}=await sb.auth.getUser();
- if(userError||!user)throw new Error('Login session not found. Please sign in again.');
+ if(userError||!user)throw new Error('உள்நுழை session not found. Please sign in again.');
  const {data,error}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(error)throw error;
  if(!data||data.length!==1)throw new Error('This email account does not have Super Admin permission.');
- note('Sign-in successful. Opening the Super Admin Dashboard.','success');
+ note('Sign-in successful. Opening the Super Admin டாஷ்போர்டு.','success');
  location.href='super-admin.html';
 }
 $('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});
-$('backLogin').addEventListener('click',()=>{show('loginPanel');note('');});
+$('backஉள்நுழை').addEventListener('click',()=>{show('loginPanel');note('');});
 $('resetBtn').addEventListener('click',async()=>{
  try{
   const email=$('email').value.trim();
   if(!email)throw new Error('Enter your email address first.');
-  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+  const {error}=await sb.auth.resetகடவுச்சொல்Forமின்னஞ்சல்(email,{redirectTo:location.origin+location.pathname});
   if(error)throw error;
-  note('Password reset link sent to your email. Check your inbox and spam folder.','success');
+  note('கடவுச்சொல் reset link sent to your email. Check your inbox and spam folder.','success');
  }catch(err){note(err.message||'Unable to send the reset email.','error');}
 });
 $('registerForm').addEventListener('submit',async e=>{
  e.preventDefault();busy('registerBtn',true);
  try{
-  const email=$('regEmail').value.trim(),password=$('regPassword').value;
+  const email=$('regமின்னஞ்சல்').value.trim(),password=$('regகடவுச்சொல்').value;
   const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
   if(error)throw error;
   if(data.session){show('loginPanel');note('Account registered. Super Admin permission will be checked at sign-in.','success');}
@@ -79,29 +79,29 @@ $('registerForm').addEventListener('submit',async e=>{
 $('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();busy('loginBtn',true);
  try{
-  const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
+  const {error}=await sb.auth.signInWithகடவுச்சொல்({email:$('email').value.trim(),password:$('password').value});
   if(error)throw error;
   await checkAdmin();
  }catch(err){await sb.auth.signOut();show('loginPanel');note(err.message||'Sign-in failed.','error');}
  finally{busy('loginBtn',false);}
 });
 $('recoverForm').addEventListener('submit',async e=>{
- e.preventDefault();busy('savePasswordBtn',true);
+ e.preventDefault();busy('saveகடவுச்சொல்Btn',true);
  try{
-  const password=$('newPassword').value;
+  const password=$('newகடவுச்சொல்').value;
   if(password.length<8)throw new Error('Use a password with at least 8 characters.');
   const {error}=await sb.auth.updateUser({password});
   if(error)throw error;
   await sb.auth.signOut();show('loginPanel');note('New password saved. Please sign in.','success');
- }catch(err){note(err.message||'Password update failed.','error');}
- finally{busy('savePasswordBtn',false);}
+ }catch(err){note(err.message||'கடவுச்சொல் update failed.','error');}
+ finally{busy('saveகடவுச்சொல்Btn',false);}
 });
 sb.auth.onAuthStateChange((event,session)=>{
- if(event==='PASSWORD_RECOVERY'&&session){show('recoverPanel');note('Set a New Password.');}
+ if(event==='PASSWORD_RECOVERY'&&session){show('recoverPanel');note('Set a New கடவுச்சொல்.');}
 });
 sb.auth.getSession().then(async({data,error})=>{
  if(error||!data.session)return;
- if(location.search.includes('code=')||location.hash.includes('type=recovery')){show('recoverPanel');note('Set a New Password.');return;}
+ if(location.search.includes('code=')||location.hash.includes('type=recovery')){show('recoverPanel');note('Set a New கடவுச்சொல்.');return;}
  try{await checkAdmin();}catch(err){await sb.auth.signOut();show('loginPanel');note(err.message||'Access denied.','error');}
 });
 })();
