@@ -153,7 +153,7 @@ $('internationalForm').addEventListener('submit',async e=>{e.preventDefault();co
  $('submitInternational').disabled=true;const {error}=await sb.from('international_jobs').insert(payload);$('submitInternational').disabled=false;if(error){show('internationalMsg','Could not submit international job: '+error.message,true);return}show('internationalMsg','International job submitted for Admin review. It is not public until approved and published.');$('internationalForm').reset();await loadCompanyJobs();
 });
 async function boot(){
- const {data:{session},error}=await sb.auth.getSession();if(error||!session){$('authGuard').classList.remove('hidden');$('signInLink').href='auth.html?redirect='+encodeURIComponent('company-job-portal.html');return}
+ const {data:{session},error}=await sb.auth.getSession();if(error||!session){$('authGuard').classList.remove('hidden');$('signInLink').href='employer-auth.html?redirect='+encodeURIComponent('company-job-portal.html');return}
  user=session.user;$('authGuard').classList.add('hidden');$('app').classList.remove('hidden');
  try{await loadLookups()}catch(e){show('verificationMsg',e.message,true);return}
  const {data:m,error:me}=await sb.from('company_members').select('company_id,member_role,member_status').eq('user_id',user.id).eq('member_status','active').in('member_role',['owner','hr_manager','recruiter']);
