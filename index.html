@@ -30,6 +30,7 @@
 .site-header{background:var(--navy);color:#fff;padding:18px max(16px,calc((100% - 1200px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px}
 .site-brand{min-width:0}.header-account{flex:0 0 auto;display:inline-block;padding:10px 14px;border-radius:7px;background:#eaf5ff;color:#103a62;text-decoration:none;border:1px solid #9bdcff;font-size:13px;font-weight:700;white-space:nowrap}
 .header-account:hover,.header-account:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+@media(max-width:520px){.header-account{max-width:38vw;overflow:hidden;text-overflow:ellipsis}}
 @media(max-width:520px){.site-header{padding:14px 12px;gap:8px}.site-header h1{font-size:19px}.site-header p{font-size:11px}.header-account{padding:8px 9px;font-size:12px}}
 .site-header h1{margin:0;font-size:24px;letter-spacing:.3px}.site-header p{margin:6px 0 0;color:#d6e5f6;font-size:13px}
 .featured-links{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 14px;background:#f3f6fb;overflow-x:auto;white-space:nowrap}
@@ -362,10 +363,10 @@ lastUserId=user.id;
 const {data}=await client.from('profiles').select('full_name').eq('id',user.id).maybeSingle();
 if(data?.full_name)name=data.full_name;
 }
-const firstName=(name||user.email||'Job Seeker').trim().split(' ')[0];
-const {data:roleRows}=await client.from('user_roles').select('role').eq('user_id',user.id);const roles=(roleRows||[]).map(x=>x.role);const isSeeker=roles.includes('job_seeker'),isCompany=roles.some(x=>['company_owner','company_member','employer'].includes(x));
-link.textContent=firstName;link.href=isSeeker?'student-dashboard.html':'company-job-portal.html';link.setAttribute('aria-label','Signed in as '+firstName);
-if(employerLink){employerLink.textContent=isCompany?firstName:'Employer Portal';employerLink.href=isCompany?'company-job-portal.html':'employer-auth.html';employerLink.setAttribute('aria-label',isCompany?'Signed in as '+firstName:'Employer Portal');}
+const displayName=(name||user.user_metadata?.full_name||'Account').trim();
+const {data:roleRows}=await client.from('user_roles').select('role').eq('user_id',user.id);const roles=(roleRows||[]).map(x=>x.role);const isSeeker=roles.includes('job_seeker'),isCompany=roles.includes('company_member');
+link.textContent=displayName;link.href=isSeeker?'student-dashboard.html':'company-job-portal.html';link.style.display=isCompany&&!isSeeker?'none':'';link.setAttribute('aria-label','Signed in as '+displayName);
+if(employerLink){employerLink.textContent=isCompany?displayName:'Employer Portal';employerLink.href=isCompany?'company-job-portal.html':'employer-auth.html';employerLink.style.display=isCompany&&!isSeeker?'inline-block':'';employerLink.setAttribute('aria-label',isCompany?'Signed in as '+displayName:'Employer Portal');}
 }
 client.auth.getSession().then(({data})=>paint(data.session));
 client.auth.onAuthStateChange((_event,session)=>paint(session));
