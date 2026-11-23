@@ -137,8 +137,8 @@ $('closeDetail').addEventListener('click',()=>$('detailDialog').close());
 })();
 </script><script>
 (()=>{const URL='https://qkmljuuusfjowexvybvy.supabase.co',KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2',db=window.supabase.createClient(URL,KEY),form=document.getElementById('adminJobPostForm'),result=document.getElementById('postResult'),toggle=document.getElementById('togglePostForm');if(!form||!toggle)return;const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));toggle.addEventListener('click',()=>{form.hidden=!form.hidden;toggle.textContent=form.hidden?'Open Posting Form':'Close Posting Form'});const val=(fd,k)=>String(fd.get(k)||'').trim();const num=(fd,k)=>val(fd,k)===''?null:Number(val(fd,k));const urlOk=v=>{if(!v)return true;try{return ['https:','http:'].includes(new URL(v).protocol)}catch{return false}};
-const norm=v=>String(v||'').trim().toLowerCase().replace(/\\s+/g,' ');
-const normUrl=v=>{try{const u=new URL(v);u.hash='';u.pathname=u.pathname.replace(/\\/+$/,'');return u.toString().toLowerCase()}catch{return ''}};
+const norm=v=>String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+const normUrl=v=>{try{const u=new URL(v);u.hash='';u.pathname=u.pathname.replace(/\/+$/,'');return u.toString().toLowerCase()}catch{return ''}};
 async function findExistingJobs(candidate){
  const {data,error}=await db.from('government_jobs').select('id,job_title,employer_name,recruitment_authority,notification_number,official_notification_url,application_url,official_website_url,application_deadline,status,created_at').order('created_at',{ascending:false}).limit(1000);
  if(error)throw new Error('Existing Government Jobs could not be checked: '+error.message);
