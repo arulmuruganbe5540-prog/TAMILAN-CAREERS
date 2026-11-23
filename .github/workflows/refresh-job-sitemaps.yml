@@ -61,11 +61,9 @@ jobs:
               fetchPublished('private_jobs'),
               fetchPublished('international_jobs')
             ]);
-            const jobs = [
-              ...government.map(j => ({ ...j, detailPage: 'government-job-details.html' })),
-              ...privateJobs.map(j => ({ ...j, detailPage: 'private-job-details.html' })),
-              ...international.map(j => ({ ...j, detailPage: 'international-job-details.html' }))
-            ];
+            // Only include job detail templates that are indexable. Private and international
+            // detail templates intentionally carry noindex, so their URLs must not enter sitemaps.
+            const jobs = government.map(j => ({ ...j, detailPage: 'government-job-details.html' }));
 
             const staticPages = [
               '', 'government-jobs.html', 'indian-government-jobs.html',
@@ -81,37 +79,9 @@ jobs:
               'privacy-policy.html', 'terms-and-conditions.html', 'disclaimer.html'
             ];
 
-            const statesAndUTs = [
-              'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa',
-              'Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala',
-              'Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland',
-              'Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura',
-              'Uttar Pradesh','Uttarakhand','West Bengal','Andaman and Nicobar Islands',
-              'Chandigarh','Dadra and Nagar Haveli and Daman and Diu','Delhi',
-              'Jammu and Kashmir','Ladakh','Lakshadweep','Puducherry'
-            ];
-
-            const staticUrls = [
-              ...staticPages.map(p => site + '/' + p),
-              ...statesAndUTs.map(state => site + '/state-jobs.html?state=' + encodeURIComponent(state))
-            ];
-            const dynamicGovUrls = new Set();
-            for (const job of government) {
-              const category = String(job.job_category || '').trim();
-              if (!category) continue;
-              if (job.government_category === 'Central Government') {
-                dynamicGovUrls.add(site + '/central-government-category.html?category=' + encodeURIComponent(category));
-              } else if (job.state_name) {
-                const state = String(job.state_name).trim();
-                const authority = String(job.recruitment_authority ||
-                  (category.toLowerCase().includes('psc') ? state + ' Public Service Commission' :
-                  (job.department_name || job.employer_name || 'Other Government Recruitment'))).trim();
-                dynamicGovUrls.add(site + '/government-category-jobs.html?scope=state&state=' + encodeURIComponent(state) + '&category=' + encodeURIComponent(category));
-                dynamicGovUrls.add(site + '/state-department.html?state=' + encodeURIComponent(state) + '&authority=' + encodeURIComponent(authority));
-                dynamicGovUrls.add(site + '/state-category-jobs.html?state=' + encodeURIComponent(state) + '&authority=' + encodeURIComponent(authority) + '&category=' + encodeURIComponent(category));
-              }
-            }
-            const allStaticUrls = [...staticUrls, ...dynamicGovUrls];
+            // Keep query-driven category/state pages out of the sitemap because their templates
+          // are intentionally noindex. Indexable landing pages remain in staticPages.
+          const allStaticUrls = staticPages.map(p => site + '/' + p);
 
             const xml = entries => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
               entries.map(j => '<url><loc>' + esc(site + '/' + j.detailPage + '?id=' + encodeURIComponent(j.id)) + '</loc>' +
