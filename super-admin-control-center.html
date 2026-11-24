@@ -4,7 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--green:#43c98b;--amber:#f3bd59}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px Arial,sans-serif}.top{padding:16px 22px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:900}.wrap{max-width:1200px;margin:auto;padding:22px}.muted{color:var(--muted);line-height:1.55}a{color:var(--cyan);text-decoration:none}.hero{padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(130deg,#123858,#10243d 65%,#142c49)}h1{margin:0 0 8px;font-size:clamp(24px,4vw,34px)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;min-width:0}.card h2{font-size:17px;margin:0 0 8px;color:#e9f7ff}.metric{font-size:24px;font-weight:800;color:var(--cyan);margin:10px 0}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.good{color:var(--green)}.warn{color:var(--amber)}.links{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}.link{display:inline-block;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:#0a1b2e}.btn{background:#087fbd;color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:bold}.small{font-size:12px}.section-title{margin:28px 0 8px}.footer{margin:28px 0 8px;color:var(--muted);font-size:12px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px Arial,sans-serif}.top{padding:16px 22px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:900}.wrap{max-width:1200px;margin:auto;padding:22px}.muted{color:var(--muted);line-height:1.55}a{color:var(--cyan);text-decoration:none}.hero{padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(130deg,#123858,#10243d 65%,#142c49)}h1{margin:0 0 8px;font-size:clamp(24px,4vw,34px)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;min-width:0}.card h2{font-size:17px;margin:0 0 8px;color:#e9f7ff}.metric{font-size:24px;font-weight:800;color:var(--cyan);margin:10px 0}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.good{color:var(--green)}.warn{color:var(--amber)}.links{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}.link{display:inline-block;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:#0a1b2e}.btn{background:#087fbd;color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:bold}.small{font-size:12px}.monitor-list{display:grid;gap:8px;margin-top:12px}.monitor-row{display:grid;grid-template-columns:minmax(130px,1fr) auto minmax(100px,auto);gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#0a1b2e}.monitor-row a{white-space:nowrap}.monitor-state{font-weight:700}.section-title{margin:28px 0 8px}.footer{margin:28px 0 8px;color:var(--muted);font-size:12px}
 </style></head><body>
 <header class="top"><div class="brand">TAMILAN CAREERS · ENTERPRISE CONTROL CENTER</div><div><a href="super-admin.html">டாஷ்போர்டு</a>　<span id="email" class="muted"></span>　<button class="btn" id="logout">வெளியேறு</button></div></header>
 <main class="wrap">
@@ -14,6 +14,12 @@
 <article class="card"><h2>முகப்புப் பக்க அமைப்புகள்</h2><div id="settings" class="metric">—</div><p class="muted small">ஏற்கெனவே உள்ள homepage settings பதிவை வாசிக்கிறது.</p></article>
 <article class="card"><h2>நிர்வாகச் செயல்பாட்டு பதிவு</h2><div id="logs" class="metric">—</div><p class="muted small">பதிவு அட்டவணை வாசிக்கக் கிடைக்கிறதா எனச் சரிபார்க்கிறது.</p></article>
 <article class="card"><h2>Database API</h2><div id="db" class="metric">—</div><p class="muted small">அங்கீகரிக்கப்பட்ட Read-only API சோதனை.</p></article>
+</section>
+<h2 class="section-title">நேரடி பிரிவு கண்காணிப்பு</h2>
+<section class="card">
+  <p class="muted small">கீழே உள்ள சோதனைகள் ஒவ்வொரு அட்டவணைக்கும் Read-only API அணுகலைச் சரிபார்க்கும். எண்ணிக்கை என்பது இந்த Super Admin session-க்கு அணுகக்கூடிய பதிவுகள்; மொத்த database எண்ணிக்கை என்று கருத வேண்டாம்.</p>
+  <button class="btn" id="refreshModules" type="button">மீண்டும் சரிபார்க்கவும்</button>
+  <div id="moduleStatus" class="monitor-list" aria-live="polite"><div class="muted">சோதனை தொடங்குகிறது...</div></div>
 </section>
 <h2 class="section-title">கட்டுப்பாட்டு பிரிவுகள்</h2><section class="grid">
 <article class="card"><h2>Website & Branding</h2><p class="muted">தற்போதைய முகப்புப் பெயர், தலைப்பு, துணைத்தலைப்பு, நிறம் மற்றும் Banner Path அமைப்புகள்.</p><div class="links"><a class="link" href="super-admin-site-settings.html">Website Settings திறக்க</a></div></article>
@@ -36,6 +42,34 @@
 <script>
 (()=>{const sb=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2'),$=id=>document.getElementById(id);
 const put=(id,value,good=true)=>{$(id).textContent=value;$(id).className='metric '+(good?'good':'warn')};
+const modules=[
+['அரசு வேலைவாய்ப்புகள்','government_jobs','super-admin-government-jobs.html'],
+['தனியார் வேலைவாய்ப்புகள்','private_jobs','super-admin-private-jobs.html'],
+['சர்வதேச வேலைவாய்ப்புகள்','international_jobs','super-admin-international-jobs.html'],
+['பயனர் விவரங்கள்','profiles','super-admin-users.html'],
+['நிறுவனங்கள்','companies','super-admin-companies.html'],
+['அரசு வேலை ஆதாரங்கள்','government_notice_sources','super-admin-source-directory.html'],
+['ஆதார Directory','super_admin_source_directory','super-admin-source-directory.html'],
+['வெளியக வேலை பரிந்துரைகள்','external_job_candidates','super-admin-job-source-inbox.html'],
+['தேர்வு அறிவிப்புகள்','government_exam_updates','super-admin-exam-center.html'],
+['சேர்க்கை அறிவிப்புகள்','admission_notifications','super-admin-exam-center.html'],
+['நிர்வாக செயல்பாட்டு பதிவுகள்','super_admin_activity_logs','super-admin-activity-logs.html']
+];
+async function moduleChecks(){
+ const host=$('moduleStatus');host.replaceChildren();
+ const results=await Promise.all(modules.map(async ([label,table,url])=>{
+  const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});
+  return {label,table,url,count,error};
+ }));
+ results.forEach(r=>{
+  const row=document.createElement('div');row.className='monitor-row';
+  const name=document.createElement('span');name.textContent=r.label+' · '+r.table;
+  const state=document.createElement('span');state.className='monitor-state '+(r.error?'warn':'good');
+  state.textContent=r.error?'API பிழை':'இணைப்பு OK · '+(r.count??0)+' பதிவுகள்';
+  const link=document.createElement('a');link.href=r.url;link.textContent='திறக்க';
+  row.append(name,state,link);host.append(row);
+ });
+}
 async function init(){try{const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return}
 const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);if(re||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}
 $('email').textContent=user.email||'';put('auth','சரிபார்க்கப்பட்டது');$('overall').textContent='அணுகல் உறுதிசெய்யப்பட்டது. Read-only அமைப்பு ஆய்வு தொடங்கியது.';
@@ -43,7 +77,9 @@ const [s,l]=await Promise.all([sb.from('site_settings').select('setting_key,site
 if(s.error)put('settings','வாசிக்க முடியவில்லை',false);else put('settings',s.data?'இணைக்கப்பட்டுள்ளது':'பதிவு இல்லை',!!s.data);
 if(l.error)put('logs','அணுகல் இல்லை',false);else put('logs',String(l.count??0)+' பதிவுகள்');
 const {error:de}=await sb.from('user_roles').select('user_id',{head:true,count:'exact'});put('db',de?'சோதனை தோல்வி':'இணைப்பு OK',!de);
+await moduleChecks();
 }catch(e){$('overall').textContent='ஆய்வில் பிழை: '+(e?.message||'தெரியாத பிழை');}}
+$('refreshModules').addEventListener('click',moduleChecks);
 $('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});init();
 })();
 </script></body></html>
