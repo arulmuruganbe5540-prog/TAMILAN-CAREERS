@@ -83,4 +83,4 @@ $('aPrev').onclick=()=>{ap--;renderAdmissions()};$('aஅடுத்தது').
 $('logout').onclick=async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')};
 async function init(){const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return}const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);if(re||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}$('adminEmail').textContent=user.email||'';await load()}init();
 })();
-</script></body></html>
+</script><script src="orbit-table-enhancer.js?v=1" defer></script></body></html>
