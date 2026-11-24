@@ -53,8 +53,15 @@ async function checkAdmin(){
  const {data,error}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(error)throw error;
  if(!data||data.length!==1)throw new Error('This email account does not have Super Admin permission.');
- note('Sign-in successful. Opening the Super Admin டாஷ்போர்டு.','success');
- location.href='super-admin.html';
+ const {data:aal,error:aalError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(aalError)throw aalError;
+ if(aal.nextLevel==='aal2'&&aal.currentLevel!=='aal2'){
+  const {data:factors,error:factorError}=await sb.auth.mfa.listFactors();if(factorError)throw factorError;
+  const factor=(factors.totp||[]).find(x=>x.status==='verified');
+  if(!factor){note('MFA இன்னும் அமைக்கப்படவில்லை. Security Setup பக்கத்தில் Authenticator MFA அமைக்கவும்.','error');location.href='super-admin-security.html';return;}
+  const challenge=await sb.auth.mfa.challenge({factorId:factor.id});if(challenge.error)throw challenge.error;
+  pendingMfa={factorId:factor.id,challengeId:challenge.data.id};show('mfaPanel');note('உங்கள் Authenticator App code-ஐ உள்ளிடவும்.','success');return;
+ }
+ note('Sign-in successful. Opening the Super Admin டாஷ்போர்டு.','success');location.href='super-admin.html';
 }
 $('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});
 $('securityBtn').addEventListener('click',()=>{location.href='super-admin-security.html'});
