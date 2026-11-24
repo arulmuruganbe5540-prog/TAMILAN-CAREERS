@@ -142,6 +142,7 @@ async function authorize(){
  if(error||!user){location.replace('super-admin-login.html');return false;}
  const {data,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(roleError||!data||data.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return false;}
+ const {data:assurance,error:assuranceError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(assuranceError||assurance.currentLevel!=='aal2'){location.replace('super-admin-login.html');return false;}
  $('adminEmail').textContent=user.email||'';note('Super Admin access verified.');return true;
 }
 async function loadStats(){
