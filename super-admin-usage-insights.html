@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>மக்கள் பயன்பாட்டு ஆய்வு | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--blue:#087fbd;--good:#7ee2a8;--warn:#ffd27d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px Arial,sans-serif}
+.top{padding:15px 20px;background:#0d2036;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.brand{color:var(--cyan);font-weight:800}.wrap{max-width:1250px;margin:auto;padding:22px}
+a{color:var(--cyan)}button{background:var(--blue);color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer}
+.muted{color:var(--muted);line-height:1.6}.status{padding:12px;background:#183b55;border-radius:8px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card strong{display:block;font-size:27px;color:var(--cyan);margin:8px 0}.card small{color:var(--muted)}
+.panel{margin:15px 0}.panel h2{margin-top:0;color:var(--cyan);font-size:18px}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:550px}td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line)}th{color:var(--cyan)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.note{border:1px solid var(--line);background:#0b1c31;border-radius:10px;padding:14px;line-height:1.65}
+.note b{color:var(--cyan)}.warn{color:var(--warn)}.good{color:var(--good)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:600px){.wrap{padding:13px}.top{padding:13px}.card strong{font-size:23px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">TAMILAN CAREERS · தனிப்பட்ட நிர்வாகம்</div><div><a href="super-admin.html">← Super Admin முகப்பு</a>　<span id="email" class="muted"></span>　<button id="logout">வெளியேறு</button></div></header>
+<main class="wrap">
+<h1>மக்கள் பயன்பாட்டு ஆய்வு & வளர்ச்சி குறிப்புகள்</h1>
+<p class="muted">இங்கு காட்டப்படும் எண்ணிக்கைகள் Supabase தரவுத்தளத்திலிருந்து நேரடியாகப் பெறப்படும். பார்வையாளர் எண்ணிக்கை மற்றும் மாணவர் நடத்தைத் தரவு தனியாகச் சேகரிக்கப்படாததால், அவை ஊகமாகக் காட்டப்படாது.</p>
+<div id="status" class="status">Super Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
+<section class="grid" id="cards"><div class="card">தரவு ஏற்றப்படுகிறது...</div></section>
+<section class="panel"><h2>வேலைவாய்ப்பு மற்றும் விண்ணப்ப நிலை</h2><div class="tablewrap"><table><thead><tr><th>பிரிவு</th><th>மொத்த பதிவுகள்</th><th>வெளியிடப்பட்டவை</th><th>விண்ணப்பங்கள்</th></tr></thead><tbody id="jobRows"><tr><td colspan="4">ஏற்றப்படுகிறது...</td></tr></tbody></table></div></section>
+<section class="panel"><h2>ஆய்வில் கிடைத்த உண்மைகள்</h2><div class="notes" id="findings"><div class="note">தரவு ஏற்றப்படுகிறது...</div></div></section>
+<section class="panel"><h2>மாணவர்கள் அதிகம் பயன்படுத்துவது எது என்பதை அறிய வேண்டிய அடுத்த கட்டம்</h2>
+<p class="muted">தற்போதைய Database-ல் Page View / Visitor Analytics அட்டவணை இல்லை. ஆகவே எந்தப் பக்கம் அதிகம் பார்க்கப்படுகிறது, எந்த வேலை அதிகம் திறக்கப்படுகிறது, எந்தத் தேடல் அதிகம் செய்யப்படுகிறது, எந்த Apply பொத்தானில் இருந்து விண்ணப்பம் முடிகிறது என்பதற்கான வரலாற்றுத் தரவு இல்லை.</p>
+<div class="notes">
+<div class="note"><b>1. பக்கப் பார்வை</b><br>முகப்பு, அரசு வேலை, தனியார் வேலை, சர்வதேச வேலை, தேர்வு தயாரிப்பு, தகுதி கண்டறிதல் போன்ற பக்கங்களுக்கு தனித்தனி பார்வை எண்ணிக்கை.</div>
+<div class="note"><b>2. வேலைவாய்ப்பு ஆர்வம்</b><br>ஒவ்வொரு Job Details திறப்பு, தேடல் சொல், கல்வித் தகுதி வடிகட்டி, மாநிலத் தேர்வு, Save Job செயல்கள்.</div>
+<div class="note"><b>3. விண்ணப்பப் பயணம்</b><br>Apply தொடங்கிய எண்ணிக்கை, வெற்றிகரமாக சமர்ப்பிக்கப்பட்ட விண்ணப்ப எண்ணிக்கை, எந்தப் பக்கத்தில் பயனர் வெளியேறுகிறார் என்பதற்கான மொத்த அளவீடு.</div>
+<div class="note"><b>4. தனியுரிமை</b><br>கடவுச்சொல், மின்னஞ்சல், தொலைபேசி, ரெஸ்யூம் உள்ளடக்கம் போன்ற தனிப்பட்ட தகவல்களை Analytics-ல் சேமிக்கக் கூடாது. மொத்த எண்ணிக்கைகள் மட்டுமே நிர்வாக அறிக்கையில் காட்டப்பட வேண்டும்.</div>
+</div></section>
+<section class="panel"><h2>மக்கள் சென்றடையவும் பயன்பாட்டை அதிகரிக்கவும் பரிந்துரைகள்</h2><div class="notes">
+<div class="note"><b>அதிகாரப்பூர்வ வேலை அறிவிப்புகள்</b><br>ஒவ்வொரு பதிவிலும் அதிகாரப்பூர்வ அறிவிப்பு லிங்க், கடைசி தேதி, கல்வித் தகுதி, வயது வரம்பு, காலியிடங்கள், விண்ணப்பிக்கும் முறை, கடைசியாகச் சரிபார்த்த தேதி ஆகியவற்றைத் தெளிவாகக் கொடுக்கவும்.</div>
+<div class="note"><b>மாணவர்களுக்கு ஏற்ற வழிசெலுத்தல்</b><br>8th, 10th, 12th, ITI, Diploma, Degree போன்ற தகுதி அடிப்படையிலான பக்கங்களை முகப்பிலேயே தெளிவாகக் காட்டவும். மொபைலில் Apply மற்றும் Official Notification பொத்தான்கள் எளிதில் கிடைக்க வேண்டும்.</div>
+<div class="note"><b>Google தேடல் வருகை</b><br>ஒவ்வொரு வேலை விவரப் பக்கத்திலும் தனித்துவமான தலைப்பு, விளக்கம், சரியான canonical URL, sitemap இணைப்பு, JobPosting structured data ஆகியவை உள்ளனவா தொடர்ந்து சரிபார்க்கவும். காலாவதியான வேலைகளை உடனே புதுப்பிக்கவும்.</div>
+<div class="note"><b>சமூக ஊடகப் பகிர்வு</b><br>புதிய சரிபார்க்கப்பட்ட வேலைகளை WhatsApp / Telegram / Facebook போன்ற இடங்களில் அதிகாரப்பூர்வ பக்க இணைப்புடன் பகிரலாம். ஒரே செய்தியை மீண்டும் மீண்டும் அனுப்பாமல், தகுதி அடிப்படையில் பயனுள்ள சுருக்கம் கொடுக்கவும்.</div>
+<div class="note"><b>நிறுவனப் பதிவுகள்</b><br>தற்போதைய தரவுத்தளத்தில் நிறுவனப் பதிவுகள் இல்லை. சரிபார்க்கப்பட்ட நிறுவனங்களைப் பதிவு செய்ய ஊக்குவிக்கவும்; சரிபார்ப்பு முடியும் முன் வேலைகளை வெளியிட அனுமதிக்க வேண்டாம்.</div>
+<div class="note"><b>விளம்பரங்கள்</b><br>Auto Ads ON என்பது விளம்பரங்கள் தோன்றத் தயாராக உள்ள அமைப்பு மட்டுமே; AdSense தள அனுமதி மற்றும் உண்மையான impressions இன்னும் தனியாக உறுதிப்படுத்தப்பட வேண்டும். உள்ளடக்கத்தை மறைக்கும் அளவுக்கு விளம்பரங்களை அதிகப்படுத்த வேண்டாம்.</div>
+</div></section>
+<section class="panel"><h2>கண்காணிப்பு வரம்புகள்</h2><ul class="muted">
+<li>இந்தப் பக்கம் தரவுத்தள எண்ணிக்கைகளை மட்டும் காட்டுகிறது; உண்மையான பார்வையாளர் எண்ணிக்கையை அல்ல.</li>
+<li>இணையதளத்தின் live browser navigation, login மற்றும் ஒவ்வொரு பொத்தானின் செயற்பாட்டையும் இந்தப் பக்கத்திலிருந்து தானாகச் சோதிக்க முடியாது.</li>
+<li>Google AdSense approval, Search Console indexing, hosting/CDN uptime ஆகியவை தனித்தனி சேவைகளில் உறுதிப்படுத்தப்பட வேண்டும்.</li>
+</ul><div class="actions"><button id="refresh">தரவை மீண்டும் ஏற்று</button><a href="super-admin-reports.html">தரவுத்தள அறிக்கைகள்</a><a href="super-admin-system-health.html">System Health</a></div></section>
+</main>
+<script>
+(()=> {
+ const sb=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');
+ const $=id=>document.getElementById(id);
+ const tables=[
+  ['அரசு வேலைவாய்ப்புகள்','government_jobs','government_job_applications'],
+  ['தனியார் வேலைவாய்ப்புகள்','private_jobs','private_job_applications'],
+  ['சர்வதேச வேலைவாய்ப்புகள்','international_jobs','international_job_applications']
+ ];
+ const count=async(table,field,value)=>{
+  let q=sb.from(table).select('*',{count:'exact',head:true});
+  if(field)q=q.eq(field,value);
+  const {count,error}=await q;
+  return error?null:(count??0);
+ };
+ const show=n=>n===null?'—':Number(n).toLocaleString('en-IN');
+ function status(s,bad=false){$('status').textContent=s;$('status').style.background=bad?'#55313a':'#183b55'}
+ async function load(){
+  status('தரவுத்தளத்திலிருந்து தற்போதைய எண்ணிக்கைகள் பெறப்படுகின்றன...');
+  const requests=[
+   ['மாணவர் கணக்குகள்',()=>count('user_roles','role','job_seeker')],
+   ['நிறுவனக் கணக்குகள்',()=>count('companies')],
+   ['அரசு அறிவிப்பு மதிப்பாய்வுகள்',()=>count('government_notice_reviews')],
+   ['சமூகப் பதிவுகள்',()=>count('community_posts')],
+   ['அரசு அறிவிப்புகள் வெளியீடு',()=>count('government_notices','is_active',true)],
+   ['மொத்த சுயவிவரங்கள்',()=>count('profiles')]
+  ];
+  const values=await Promise.all(requests.map(async([label,fn])=>({label,value:await fn()})));
+  const jobData=await Promise.all(tables.map(async([label,jobs,apps])=>({
+   label,total:await count(jobs),published:await count(jobs,'status','published'),applications:await count(apps)
+  })));
+  const appTotal=jobData.reduce((a,x)=>a+(x.applications||0),0);
+  const gov=jobData[0],priv=jobData[1],intl=jobData[2];
+  const approvedReviews=await count('government_notice_reviews','status','approved');
+  const cards=[
+   ...values.slice(0,2),
+   {label:'வெளியிடப்பட்ட அரசு வேலைகள்',value:gov.published},
+   {label:'தனியார் வேலைகள்',value:priv.total},
+   {label:'சர்வதேச வேலைகள்',value:intl.total},
+   {label:'மொத்த விண்ணப்பங்கள்',value:appTotal},
+   ...values.slice(2)
+  ];
+  $('cards').innerHTML=cards.map(x=>'<div class="card">'+x.label+'<strong>'+show(x.value)+'</strong><small>'+(x.value===null?'தரவு பெற முடியவில்லை':'நேரடி Database எண்ணிக்கை')+'</small></div>').join('');
+  $('jobRows').innerHTML=jobData.map(x=>'<tr><td>'+x.label+'</td><td>'+show(x.total)+'</td><td>'+show(x.published)+'</td><td>'+show(x.applications)+'</td></tr>').join('');
+  const student=values[0].value,companies=values[1].value,review=values[2].value,community=values[3].value,notices=values[4].value,profiles=values[5].value;
+  const notes=[
+   '<b>மாணவர் கணக்குகள்:</b> '+show(student)+'. இது பதிவு எண்ணிக்கை; செயலில் உள்ள மாதாந்திர பயனர்கள் என்று அர்த்தமல்ல.',
+   '<b>நிறுவனங்கள்:</b> '+show(companies)+'. நிறுவனப் பதிவு இல்லையெனில் தனியார் / சர்வதேச வேலைவாய்ப்பு வழங்கல் வளராது.',
+   '<b>வேலைவாய்ப்பு:</b> அரசு வேலைப் பதிவுகள் '+show(gov.total)+'; வெளியிடப்பட்டவை '+show(gov.published)+'. தனியார் '+show(priv.total)+'; சர்வதேசம் '+show(intl.total)+'.',
+   '<b>விண்ணப்பங்கள்:</b> மூன்று வேலைவாய்ப்பு பிரிவுகளிலும் மொத்தம் '+show(appTotal)+'. விண்ணப்ப எண்ணிக்கை 0 என்றால் Apply flow-ஐ உண்மையான கணக்குடன் சோதிக்க வேண்டும்.',
+   '<b>அறிவிப்பு மதிப்பாய்வு:</b> '+show(review)+' பதிவுகள்; அதில் Approved '+show(approvedReviews)+'. அரசு அறிவிப்பு வெளியீடு '+show(notices)+'.',
+   '<b>சமூகப் பதிவுகள்:</b> '+show(community)+'. மாணவர் சமூக உள்ளடக்கம் இன்னும் பயன்படுத்தப்படவில்லை அல்லது தரவு இல்லை.',
+   '<b>சுயவிவரங்கள்:</b> '+show(profiles)+'. மாணவர்கள் Profile நிறைவு செய்கிறார்களா என்பதை தனியாக கண்காணிக்க வேண்டும்.',
+   '<b>Analytics:</b> Page views / visitor tracking அட்டவணை இல்லாததால் அதிகம் பார்க்கப்படும் பக்கத்தை இப்போது நிரூபிக்க முடியாது.'
+  ];
+  $('findings').innerHTML=notes.map(x=>'<div class="note">'+x+'</div>').join('');
+  status('ஆய்வு தரவு புதுப்பிக்கப்பட்டது. இவை Database எண்ணிக்கைகள்; Visitor Analytics அல்ல.');
+ }
+ $('refresh').onclick=()=>load().catch(e=>status('தரவு ஏற்றுவதில் பிழை: '+e.message,true));
+ $('logout').onclick=async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')};
+ async function init(){
+  const {data:{user},error}=await sb.auth.getUser();
+  if(error||!user){location.replace('super-admin-login.html');return}
+  const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
+  if(roleError||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}
+  $('email').textContent=user.email||'';
+  await load();
+ }
+ init().catch(e=>status('ஆய்வு ஏற்றப்படவில்லை: '+e.message,true));
+})();
+</script>
+</body>
+</html>
