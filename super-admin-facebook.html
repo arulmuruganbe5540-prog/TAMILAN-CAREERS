@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>Facebook Publishing | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--green:#43c98b;--amber:#f3bd59;--red:#ff8585}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px Arial,sans-serif}.top{padding:15px 20px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:900}.wrap{max-width:1100px;margin:auto;padding:22px}.muted{color:var(--muted);line-height:1.55}a{color:var(--cyan);text-decoration:none}.hero,.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:15px 0}.hero{background:linear-gradient(130deg,#123858,#10243d 65%,#142c49)}h1{font-size:clamp(24px,4vw,34px);margin:0 0 8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px}.metric{font-size:25px;font-weight:800;color:var(--cyan);margin:9px 0}.status{padding:12px;border-radius:9px;background:#183b55;margin:12px 0}.good{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}button{border:0;border-radius:8px;padding:10px 14px;background:#087fbd;color:white;font-weight:800;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#213c58;border:1px solid var(--line)}.toggle{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#091a2c}.toggle input{width:23px;height:23px;accent-color:#16a6dd}.toggle b{display:block;margin-bottom:4px}.steps{display:grid;gap:10px}.step{display:flex;gap:12px;align-items:flex-start;padding:11px;border:1px solid var(--line);border-radius:9px;background:#091a2c}.num{width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:#17486b;color:#fff;font-weight:800;flex:none}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:700px}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--cyan);font-size:12px}td{font-size:13px}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#203c56;font-size:11px}.pill.good{background:#174632}.pill.bad{background:#542b35}.pill.warn{background:#514021}.foot{font-size:12px;color:var(--muted);margin:22px 0}
+</style></head><body>
+<header class="top"><div class="brand">TAMILAN CAREERS · FACEBOOK PUBLISHING CONTROL</div><div><a href="super-admin.html">← Dashboard</a>　<span id="email" class="muted"></span>　<button id="logout" class="secondary">Logout</button></div></header>
+<main class="wrap">
+<section class="hero"><h1>Facebook Auto Publishing</h1><p class="muted">Publish approved jobs from the website to the official Facebook Page. Government, Indian Private and International jobs remain separate in the website database and use their own job-detail links.</p><div id="overall" class="status">Verifying Super Admin access…</div><p><b>Destination Page:</b> <a href="https://www.facebook.com/tamilancareersofficial" target="_blank" rel="noopener noreferrer">TAMILAN CAREERS OFFICIAL ↗</a></p></section>
+<section class="grid">
+<article class="panel"><div class="muted">Facebook connection</div><div class="metric" id="connection">Checking…</div><div class="muted" id="connectionNote">Page credentials are checked on the server. Tokens are never shown here.</div></article>
+<article class="panel"><div class="muted">Queued posts</div><div class="metric" id="pending">—</div><div class="muted">Waiting to publish</div></article>
+<article class="panel"><div class="muted">Published posts</div><div class="metric" id="published">—</div><div class="muted">Successfully posted to Facebook</div></article>
+<article class="panel"><div class="muted">Failed posts</div><div class="metric" id="failed">—</div><div class="muted">Require review before retry</div></article>
+</section>
+<section class="panel"><h2>Automatic publishing</h2><label class="toggle"><input type="checkbox" id="autoPublish" disabled><span><b>Facebook Auto Publish — ON / OFF</b><span class="muted">When ON and the Page credentials are configured, a newly published job is added to the protected queue. Super Admin publishing screens can immediately process the queue.</span></span></label><p class="muted" id="toggleNote">Connect the Page first. The switch stays OFF until server credentials are verified.</p><div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button id="saveToggle" disabled>Save setting</button><button id="process" disabled>Publish next queued post</button><button id="refresh" class="secondary">Refresh status</button></div><div id="actionStatus" class="status" aria-live="polite">No publishing action has been run.</div></section>
+<section class="panel"><h2>Secure Facebook connection — setup required</h2><p class="muted">Do not paste a Facebook password or Page Access Token into this page, a chat, or website JavaScript. Store credentials only as Supabase Edge Function secrets.</p>
+<div class="steps">
+<div class="step"><span class="num">1</span><div><b>Create or open a Meta Developer App</b><p class="muted">Use the Meta account that has the Page task <b>CREATE_CONTENT</b> (or full Page management). Add the Facebook Login product if you use the OAuth connection flow.</p><a href="https://developers.facebook.com/apps/" target="_blank" rel="noopener noreferrer">Open Meta for Developers ↗</a></div></div>
+<div class="step"><span class="num">2</span><div><b>Get the Page ID and Page Access Token</b><p class="muted">Grant the Page publishing permissions: <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, and <code>pages_show_list</code>. Select the Page named TAMILAN CAREERS OFFICIAL and obtain its Page ID and Page Access Token.</p><a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener noreferrer">Open Graph API Explorer ↗</a></div></div>
+<div class="step"><span class="num">3</span><div><b>Add two secrets in Supabase</b><p class="muted">Supabase Dashboard → Project Settings / Edge Functions → Secrets. Add these exact names:</p><p><code>FACEBOOK_PAGE_ID</code><br><code>FACEBOOK_PAGE_ACCESS_TOKEN</code></p><p class="muted">Never put either value in public HTML, GitHub, or the browser.</p><a href="https://supabase.com/dashboard/project/qkmljuuusfjowexvybvy/functions/secrets" target="_blank" rel="noopener noreferrer">Open Supabase Function Secrets ↗</a></div></div>
+<div class="step"><span class="num">4</span><div><b>Verify connection and enable publishing</b><p class="muted">Return here and tap Refresh status. When both server secrets are detected, turn Auto Publish ON. A real Facebook test post should be made only after you confirm the connection and approve a test job.</p></div></div>
+</div></section>
+<section class="panel"><h2>Publishing queue</h2><p class="muted">A job is queued only when its status changes to Published. Each job can enter the queue once, preventing duplicate posts. If a request has an uncertain result, check the Facebook Page before retrying.</p><div class="table-wrap"><table><thead><tr><th>Job</th><th>Category</th><th>Queue status</th><th>Attempts</th><th>Last update / Error</th><th>Action</th></tr></thead><tbody id="queueRows"><tr><td colspan="6" class="muted">Loading queue…</td></tr></tbody></table></div></section>
+<p class="foot">Security: Page tokens remain server-side in Supabase Edge Function secrets. This page only reads the connection state and queue using the signed-in Super Admin session. No existing job data is modified by this page.</p>
+</main>
+<script>
+(()=> {
+ const URL='https://qkmljuuusfjowexvybvy.supabase.co',KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+ const sb=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
+ let configured=false, user=null;
+ function note(message,bad=false){$('actionStatus').textContent=message;$('actionStatus').className='status'+(bad?' bad':'')}
+ async function guard(){
+  const {data:{user:u},error}=await sb.auth.getUser();
+  if(error||!u){location.replace('super-admin-login.html');return false}
+  const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',u.id).eq('role','super_admin').limit(1);
+  if(roleError||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return false}
+  const {data:factors,error:factorError}=await sb.auth.mfa.listFactors();
+  if(factorError){$('overall').textContent='Unable to verify MFA status. Please sign in again.';return false}
+  if(!(factors.totp||[]).some(f=>f.status==='verified')){location.replace('super-admin-security.html');return false}
+  const {data:aal,error:aalError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  if(aalError||aal.currentLevel!=='aal2'){location.replace('super-admin-login.html');return false}
+  user=u;$('email').textContent=u.email||'';$('overall').textContent='Super Admin access verified.';return true;
+ }
+ async function refresh(){
+  const {data:settings,error:settingsError}=await sb.from('social_publish_settings').select('*').eq('singleton',true).maybeSingle();
+  if(settingsError){note('Unable to read Facebook settings: '+settingsError.message,true);return}
+  const {data:health,error:healthError}=await sb.functions.invoke('facebook-page-publisher',{method:'GET'});
+  if(healthError){configured=false;$('connection').textContent='Not verified';$('connectionNote').textContent='Server check failed: '+healthError.message;$('autoPublish').checked=false;$('autoPublish').disabled=true;$('saveToggle').disabled=true;$('process').disabled=true;return}
+  configured=!!health?.configured;
+  $('connection').textContent=configured?'Ready':'Setup required';
+  $('connection').className='metric '+(configured?'good':'warn');
+  $('connectionNote').textContent=configured?'Page ID and Page Access Token are present on the server.':'Missing server secret: '+[!health.page_id_configured?'FACEBOOK_PAGE_ID':null,!health.page_token_configured?'FACEBOOK_PAGE_ACCESS_TOKEN':null].filter(Boolean).join(', ');
+  $('autoPublish').checked=!!settings?.auto_publish_enabled;
+  $('autoPublish').disabled=!configured;
+  $('saveToggle').disabled=!configured;
+  $('process').disabled=!configured||!settings?.auto_publish_enabled;
+  $('toggleNote').textContent=configured?'Only enable after confirming the correct Page is connected.':'Add both Supabase secrets to unlock the switch.';
+  $('pending').textContent=String(health.queue?.pending??0);
+  $('published').textContent=String(health.queue?.published??0);
+  $('failed').textContent=String(health.queue?.failed??0);
+  const {data:rows,error:queueError}=await sb.from('social_publish_queue').select('id,source_table,job_title,status,attempts,last_error,queued_at,published_at,facebook_post_id').order('queued_at',{ascending:false}).limit(50);
+  if(queueError){$('queueRows').innerHTML='<tr><td colspan="6">Unable to load queue: '+esc(queueError.message)+'</td></tr>';return}
+  $('queueRows').innerHTML=(rows||[]).map(row=>{
+   const category=row.source_table==='government_jobs'?'Government':row.source_table==='private_jobs'?'Indian Private':'International';
+   const statusClass=row.status==='published'?'good':row.status==='failed'?'bad':'warn';
+   const uncertain=(row.last_error||'').toLowerCase().includes('uncertain result');
+   const retry=row.status==='failed'&&!uncertain?'<button class="secondary" data-retry="'+row.id+'">Retry</button>':uncertain?'<span class="muted">Check Page first</span>':'—';
+   const detail=row.last_error?esc(row.last_error):row.facebook_post_id?'Post ID: '+esc(row.facebook_post_id):'—';
+   return '<tr><td>'+esc(row.job_title)+'</td><td>'+category+'</td><td><span class="pill '+statusClass+'">'+esc(row.status)+'</span></td><td>'+row.attempts+'</td><td>'+detail+'</td><td>'+retry+'</td></tr>';
+  }).join('')||'<tr><td colspan="6" class="muted">No queued jobs yet. Publish a job from the Super Admin job posting page.</td></tr>';
+  $('queueRows').querySelectorAll('[data-retry]').forEach(btn=>btn.addEventListener('click',async()=>{
+   if(!confirm('Before retrying, confirm that this job is NOT already on the Facebook Page. Continue?'))return;
+   const {error}=await sb.from('social_publish_queue').update({status:'pending',last_error:null,updated_at:new Date().toISOString()}).eq('id',btn.dataset.retry).eq('status','failed');
+   if(error){note('Retry could not be queued: '+error.message,true);return}
+   note('Retry queued. Tap Publish next queued post to send it.');await refresh();
+  }));
+ }
+ function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ $('saveToggle').addEventListener('click',async()=>{
+  if(!configured)return;
+  const enabled=$('autoPublish').checked;
+  const {error}=await sb.from('social_publish_settings').update({auto_publish_enabled:enabled,updated_at:new Date().toISOString()}).eq('singleton',true);
+  if(error){note('Unable to save auto-publish setting: '+error.message,true);return}
+  note(enabled?'Facebook Auto Publish is ON. New published jobs will enter the queue.':'Facebook Auto Publish is OFF.');await refresh();
+ });
+ $('process').addEventListener('click',async()=>{
+  $('process').disabled=true;note('Processing the next queued post…');
+  const {data,error}=await sb.functions.invoke('facebook-page-publisher',{body:{}});
+  if(error){note('Facebook publishing failed: '+error.message,true)}else if(!data?.ok){note(data?.message||'Facebook publishing did not complete.',true)}else{note(data.processed?'Facebook post published successfully.':'No pending posts to publish.')}
+  await refresh();
+ });
+ $('refresh').addEventListener('click',refresh);
+ $('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});
+ (async()=>{if(await guard())await refresh()})();
+})();
+</script></body></html>
