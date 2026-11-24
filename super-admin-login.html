@@ -23,7 +23,8 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 <button id="resetBtn" class="secondary" type="button">Forgot கடவுச்சொல்? Reset</button><button id="securityBtn" class="secondary" type="button">Authenticator MFA அமைப்பு / Security Setup</button>
 <div class="links"><button id="showRegister" class="secondary" type="button">Register a New Account</button></div>
 </section>
-<section id="mfaPanel" class="panel"><h2>Authenticator சரிபார்ப்பு</h2><p>உங்கள் Authenticator App-ல் காட்டப்படும் 6 இலக்க code-ஐ உள்ளிடவும்.</p><div class="field"><label for="mfaCode">6 இலக்க code</label><input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div><button id="verifyMfaBtn" type="button">Verify MFA and Continue</button></section>\n<section id="registerPanel" class="panel">
+<section id="mfaPanel" class="panel"><h2>Authenticator சரிபார்ப்பு</h2><p>உங்கள் Authenticator App-ல் காட்டப்படும் 6 இலக்க code-ஐ உள்ளிடவும்.</p><div class="field"><label for="mfaCode">6 இலக்க code</label><input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div><button id="verifyMfaBtn" type="button">Verify MFA and Continue</button></section>
+<section id="registerPanel" class="panel">
 <h2>Register a New Account</h2><p>A confirmation link will be sent to the registered email. Registration does not grant Super Admin access.</p>
 <form id="registerForm">
 <div class="field"><label for="regமின்னஞ்சல்">மின்னஞ்சல் ID</label><input id="regமின்னஞ்சல்" type="email" autocomplete="email" required></div>
@@ -43,7 +44,8 @@ const SB_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SB_URL,SB_KEY);
 const $=id=>document.getElementById(id);
 function note(msg,type=''){ $('notice').textContent=msg;$('notice').className='notice show '+type; }
-function show(which){['loginPanel','registerPanel','recoverPanel','mfaPanel'].forEach(id=>$(id).classList.toggle('show',id===which));}\nlet pendingMfa={factorId:'',challengeId:''};
+function show(which){['loginPanel','registerPanel','recoverPanel','mfaPanel'].forEach(id=>$(id).classList.toggle('show',id===which));}
+let pendingMfa={factorId:'',challengeId:''};
 function busy(id,on){$(id).disabled=on;}
 async function checkAdmin(){
  const {data:{user},error:userError}=await sb.auth.getUser();
@@ -54,7 +56,9 @@ async function checkAdmin(){
  note('Sign-in successful. Opening the Super Admin டாஷ்போர்டு.','success');
  location.href='super-admin.html';
 }
-$('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});\n$('securityBtn').addEventListener('click',()=>{location.href='super-admin-security.html'});\n$('verifyMfaBtn').addEventListener('click',async()=>{try{const code=$('mfaCode').value.trim();if(!/^\\d{6}$/.test(code))throw new Error('6 இலக்க code உள்ளிடவும்.');const {error}=await sb.auth.mfa.verify({factorId:pendingMfa.factorId,challengeId:pendingMfa.challengeId,code});if(error)throw error;location.href='super-admin.html';}catch(err){note(err.message||'MFA verification failed.','error');}});
+$('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});
+$('securityBtn').addEventListener('click',()=>{location.href='super-admin-security.html'});
+$('verifyMfaBtn').addEventListener('click',async()=>{try{const code=$('mfaCode').value.trim();if(!/^\d{6}$/.test(code))throw new Error('6 இலக்க code உள்ளிடவும்.');const {error}=await sb.auth.mfa.verify({factorId:pendingMfa.factorId,challengeId:pendingMfa.challengeId,code});if(error)throw error;location.href='super-admin.html';}catch(err){note(err.message||'MFA verification failed.','error');}});
 $('backஉள்நுழை').addEventListener('click',()=>{show('loginPanel');note('');});
 $('resetBtn').addEventListener('click',async()=>{
  try{
