@@ -137,6 +137,7 @@ async function authorize(){
  const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return false;}
  const {data,error:e}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(e||!data||data.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return false;}
+ const {data:assurance,error:assuranceError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(assuranceError||assurance.currentLevel!=='aal2'){location.replace('super-admin-login.html');return false;}
  $('adminEmail').textContent=user.email||'';note('Super Admin access verified.');return true;
 }
 async function countFor(id,status){let q=sb.from('international_jobs').select('id',{count:'exact',head:true});if(status)q=q.eq('status',status);const {count,error}=await q;$(id).textContent=error?'—':String(count??0);}
