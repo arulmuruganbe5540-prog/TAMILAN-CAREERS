@@ -12,7 +12,7 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 </style></head><body><main>
 <div class="brand">TAMILAN CAREERS · PRIVATE AREA</div><div class="lock">🔐</div>
 <h1>Super Admin உள்நுழை</h1>
-<p>உள்நுழைக using மின்னஞ்சல் and கடவுச்சொல். Authenticator MFA is not used on this page. Only accounts granted the Super Admin role in the database can access the dashboard.</p>
+<p>உள்நுழைக using மின்னஞ்சல் and கடவுச்சொல். Authenticator MFA verification is required when enabled. Only database-authorized Super Admin accounts can access the dashboard.</p>
 <div id="notice" class="notice" role="status"></div>
 <section id="loginPanel" class="panel show">
 <form id="loginForm">
@@ -20,10 +20,10 @@ main{width:min(100%,440px);background:rgba(16,36,61,.97);border:1px solid var(--
 <div class="field"><label for="password">கடவுச்சொல்</label><input id="password" type="password" autocomplete="current-password" minlength="8" required></div>
 <button id="loginBtn">உள்நுழைக with மின்னஞ்சல்</button>
 </form>
-<button id="resetBtn" class="secondary" type="button">Forgot கடவுச்சொல்? Reset</button>
+<button id="resetBtn" class="secondary" type="button">Forgot கடவுச்சொல்? Reset</button><button id="securityBtn" class="secondary" type="button">Authenticator MFA அமைப்பு / Security Setup</button>
 <div class="links"><button id="showRegister" class="secondary" type="button">Register a New Account</button></div>
 </section>
-<section id="registerPanel" class="panel">
+<section id="mfaPanel" class="panel"><h2>Authenticator சரிபார்ப்பு</h2><p>உங்கள் Authenticator App-ல் காட்டப்படும் 6 இலக்க code-ஐ உள்ளிடவும்.</p><div class="field"><label for="mfaCode">6 இலக்க code</label><input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div><button id="verifyMfaBtn" type="button">Verify MFA and Continue</button></section>\n<section id="registerPanel" class="panel">
 <h2>Register a New Account</h2><p>A confirmation link will be sent to the registered email. Registration does not grant Super Admin access.</p>
 <form id="registerForm">
 <div class="field"><label for="regமின்னஞ்சல்">மின்னஞ்சல் ID</label><input id="regமின்னஞ்சல்" type="email" autocomplete="email" required></div>
@@ -43,7 +43,7 @@ const SB_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
 const sb=window.supabase.createClient(SB_URL,SB_KEY);
 const $=id=>document.getElementById(id);
 function note(msg,type=''){ $('notice').textContent=msg;$('notice').className='notice show '+type; }
-function show(which){['loginPanel','registerPanel','recoverPanel'].forEach(id=>$(id).classList.toggle('show',id===which));}
+function show(which){['loginPanel','registerPanel','recoverPanel','mfaPanel'].forEach(id=>$(id).classList.toggle('show',id===which));}\nlet pendingMfa={factorId:'',challengeId:''};
 function busy(id,on){$(id).disabled=on;}
 async function checkAdmin(){
  const {data:{user},error:userError}=await sb.auth.getUser();
@@ -54,13 +54,13 @@ async function checkAdmin(){
  note('Sign-in successful. Opening the Super Admin டாஷ்போர்டு.','success');
  location.href='super-admin.html';
 }
-$('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});
+$('showRegister').addEventListener('click',()=>{show('registerPanel');note('Register a new account.');});\n$('securityBtn').addEventListener('click',()=>{location.href='super-admin-security.html'});\n$('verifyMfaBtn').addEventListener('click',async()=>{try{const code=$('mfaCode').value.trim();if(!/^\\d{6}$/.test(code))throw new Error('6 இலக்க code உள்ளிடவும்.');const {error}=await sb.auth.mfa.verify({factorId:pendingMfa.factorId,challengeId:pendingMfa.challengeId,code});if(error)throw error;location.href='super-admin.html';}catch(err){note(err.message||'MFA verification failed.','error');}});
 $('backஉள்நுழை').addEventListener('click',()=>{show('loginPanel');note('');});
 $('resetBtn').addEventListener('click',async()=>{
  try{
   const email=$('email').value.trim();
   if(!email)throw new Error('Enter your email address first.');
-  const {error}=await sb.auth.resetகடவுச்சொல்Forமின்னஞ்சல்(email,{redirectTo:location.origin+location.pathname});
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
   if(error)throw error;
   note('கடவுச்சொல் reset link sent to your email. Check your inbox and spam folder.','success');
  }catch(err){note(err.message||'Unable to send the reset email.','error');}
@@ -79,10 +79,10 @@ $('registerForm').addEventListener('submit',async e=>{
 $('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();busy('loginBtn',true);
  try{
-  const {error}=await sb.auth.signInWithகடவுச்சொல்({email:$('email').value.trim(),password:$('password').value});
+  const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
   if(error)throw error;
   await checkAdmin();
- }catch(err){await sb.auth.signOut();show('loginPanel');note(err.message||'Sign-in failed.','error');}
+ }catch(err){show('loginPanel');note(err.message||'Sign-in failed.','error');}
  finally{busy('loginBtn',false);}
 });
 $('recoverForm').addEventListener('submit',async e=>{
