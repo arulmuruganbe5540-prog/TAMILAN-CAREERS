@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101d3a">
+<title>Expand Table Demo | TAMILAN CAREERS</title>
+<style>
+:root{--navy:#101d3a;--blue:#176b9e;--cyan:#54c8ff;--bg:#f3f6fb;--ink:#14213d;--muted:#65738b;--line:#dce4ef}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:15px Arial,Helvetica,sans-serif;line-height:1.55}
+header{background:var(--navy);color:#fff;padding:17px max(14px,calc((100% - 1120px)/2));border-bottom:3px solid var(--cyan)}
+header h1{font-size:22px;margin:0}header p{font-size:12px;color:#d6e5f6;margin:4px 0 0}
+main{width:min(1120px,100%);margin:auto;padding:20px 14px 42px}
+h2{font-size:20px;color:var(--navy);margin:0 0 7px}.intro{font-size:13px;color:var(--muted);margin:0 0 16px}
+.table-scroll{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:7px}
+table{width:100%;min-width:650px;border-collapse:collapse;background:#fff;font-size:13px;line-height:1.45}
+th{background:#eaf0f8;color:#183252;text-align:left;font-weight:700;padding:11px 10px;border-bottom:1px solid #cbd7e6;white-space:nowrap}
+td{padding:11px 10px;border-bottom:1px solid #e5ebf3;vertical-align:top}
+tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
+.job-name{font-weight:700;color:#173554}.sub{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.details{color:#263d57}.detail-line{display:block;margin:0 0 3px}.expand-btn{display:inline-block;margin-top:5px;border:0;background:transparent;color:#075e9b;padding:0;font:700 12px Arial,sans-serif;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.expand-btn:focus-visible{outline:2px solid #087eaf;outline-offset:3px}.full-details{display:none;margin-top:7px;padding-top:7px;border-top:1px dashed #cbd7e6;color:#263d57}.full-details.open{display:block}
+.view-link{color:#075e9b;font-weight:700;text-decoration:underline;white-space:nowrap}
+.note{margin-top:13px;padding:10px 12px;background:#f3f6fb;border-left:3px solid var(--blue);font-size:12px;color:#52627a}
+.back{display:inline-block;margin:0 0 15px;color:#075e9b;font-weight:700;font-size:13px}
+@media(max-width:640px){main{padding:16px 10px 30px}h2{font-size:18px}table{font-size:12px}th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
+<header><h1>TAMILAN CAREERS</h1><p>Government Jobs & Exam Updates</p></header>
+<main>
+<a class="back" href="/">← Back to Home</a>
+<h2>Latest Government Jobs — Expand Demo</h2>
+<p class="intro">இது தனி Demo பக்கம். முகப்புப் பக்கத்தின் அசல் அட்டவணையை மாற்றாது. Details பகுதியில் Expand அழுத்திப் பாருங்கள்.</p>
+<div class="table-scroll">
+<table aria-label="Government job listing demo">
+<thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead>
+<tbody>
+<tr>
+<td><span class="job-name">Junior Assistant</span><span class="sub">Tamil Nadu Government</span></td>
+<td><div class="details"><span class="detail-line"><b>Vacancies:</b> 450</span><span class="detail-line"><b>Qualification:</b> 10th / 12th Pass / Degree</span><span class="detail-line"><b>Last Date:</b> 30-12-2026</span><div class="full-details" id="d1"><b>Full Details:</b><br>Department: Tamil Nadu Government Department<br>Post: Junior Assistant<br>Educational Qualification: Applicants must have the qualification stated in the official notification. Relevant certificates must be produced during verification.<br>Age Limit: As specified in the official notification. Applicable category relaxations follow Government rules.<br>Selection Process: Written Examination and Certificate Verification.<br>How to Apply: Apply through the official recruitment portal before the closing date.</div><button class="expand-btn" type="button" aria-expanded="false" aria-controls="d1" onclick="toggleDetails(this,'d1')">Expand</button></div></td>
+<td><a class="view-link" href="#" onclick="return false">View</a></td>
+</tr>
+<tr>
+<td><span class="job-name">Technical Assistant</span><span class="sub">Central Government</span></td>
+<td><div class="details"><span class="detail-line"><b>Vacancies:</b> 120</span><span class="detail-line"><b>Qualification:</b> Diploma in relevant discipline</span><span class="detail-line"><b>Last Date:</b> 05-01-2027</span><div class="full-details" id="d2"><b>Full Details:</b><br>Department: Central Government Institution<br>Post: Technical Assistant<br>Educational Qualification: Diploma in the relevant engineering or technical discipline from a recognised institution, subject to the official notification.<br>Age Limit: As per recruitment rules.<br>Selection Process: Written Test / Skill Test / Document Verification, as notified.<br>How to Apply: Complete the online application and upload the required documents.</div><button class="expand-btn" type="button" aria-expanded="false" aria-controls="d2" onclick="toggleDetails(this,'d2')">Expand</button></div></td>
+<td><a class="view-link" href="#" onclick="return false">View</a></td>
+</tr>
+<tr>
+<td><span class="job-name">Office Assistant</span><span class="sub">Public Sector</span></td>
+<td><div class="details"><span class="detail-line"><b>Vacancies:</b> 75</span><span class="detail-line"><b>Qualification:</b> 12th Pass</span><span class="detail-line"><b>Last Date:</b> 12-01-2027</span><div class="full-details" id="d3"><b>Full Details:</b><br>Department: Public Sector Organisation<br>Post: Office Assistant<br>Educational Qualification: 12th standard pass from a recognised board, subject to the official recruitment notification.<br>Age Limit: As per the applicable recruitment rules.<br>Selection Process: Written Examination and Certificate Verification.<br>How to Apply: Submit the application using the official link and retain the acknowledgement.</div><button class="expand-btn" type="button" aria-expanded="false" aria-controls="d3" onclick="toggleDetails(this,'d3')">Expand</button></div></td>
+<td><a class="view-link" href="#" onclick="return false">View</a></td>
+</tr>
+</tbody></table></div>
+<p class="note">Demo பதிவுகள் விளக்கத்திற்கான மாதிரி தகவல்கள் மட்டுமே; உண்மையான வேலைவாய்ப்பு அறிவிப்புகள் அல்ல. மொபைலில் அட்டவணையின் தற்போதைய மூன்று Column வடிவம் பாதுகாக்கப்பட்டுள்ளது; அகலம் குறைந்தால் அட்டவணையை பக்கவாட்டில் நகர்த்திப் பார்க்கலாம்.</p>
+</main>
+<script>
+function toggleDetails(button,id){const panel=document.getElementById(id);const open=panel.classList.toggle('open');button.setAttribute('aria-expanded',String(open));button.textContent=open?'Collapse':'Expand';}
+</script>
+</body></html>
