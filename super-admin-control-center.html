@@ -72,6 +72,7 @@ async function moduleChecks(){
 }
 async function init(){try{const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return}
 const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);if(re||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}
+const {data:assurance,error:assuranceError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(assuranceError||assurance.currentLevel!=='aal2'){location.replace('super-admin-login.html');return}
 $('email').textContent=user.email||'';put('auth','சரிபார்க்கப்பட்டது');$('overall').textContent='அணுகல் உறுதிசெய்யப்பட்டது. Read-only அமைப்பு ஆய்வு தொடங்கியது.';
 const [s,l]=await Promise.all([sb.from('site_settings').select('setting_key,site_name,updated_at').eq('setting_key','homepage').maybeSingle(),sb.from('super_admin_activity_logs').select('id',{count:'exact',head:true})]);
 if(s.error)put('settings','வாசிக்க முடியவில்லை',false);else put('settings',s.data?'இணைக்கப்பட்டுள்ளது':'பதிவு இல்லை',!!s.data);
