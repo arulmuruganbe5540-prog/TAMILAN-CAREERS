@@ -48,15 +48,15 @@
   if(settingsError){note('Unable to read Facebook settings: '+settingsError.message,true);return}
   const {data:health,error:healthError}=await sb.functions.invoke('facebook-page-publisher',{method:'GET'});
   if(healthError){configured=false;$('connection').textContent='Not verified';$('connectionNote').textContent='Server check failed: '+healthError.message;$('autoPublish').checked=false;$('autoPublish').disabled=true;$('saveToggle').disabled=true;$('process').disabled=true;return}
-  configured=!!health?.configured;
-  $('connection').textContent=configured?'Ready':'Setup required';
+  configured=!!health?.page_verified;
+  $('connection').textContent=configured?'Page verified':'Not verified';
   $('connection').className='metric '+(configured?'good':'warn');
-  $('connectionNote').textContent=configured?'Page ID and Page Access Token are present on the server.':'Missing server secret: '+[!health.page_id_configured?'FACEBOOK_PAGE_ID':null,!health.page_token_configured?'FACEBOOK_PAGE_ACCESS_TOKEN':null].filter(Boolean).join(', ');
+  $('connectionNote').textContent=configured?'Meta confirmed the exact destination Page: '+esc(health.page_name_returned)+'.':(health.page_verification_error||('Missing server secret: '+[!health.page_id_configured?'FACEBOOK_PAGE_ID':null,!health.page_token_configured?'FACEBOOK_PAGE_ACCESS_TOKEN':null].filter(Boolean).join(', ')));
   $('autoPublish').checked=!!settings?.auto_publish_enabled;
   $('autoPublish').disabled=!configured;
   $('saveToggle').disabled=!configured;
   $('process').disabled=!configured||!settings?.auto_publish_enabled;
-  $('toggleNote').textContent=configured?'Only enable after confirming the correct Page is connected.':'Add both Supabase secrets to unlock the switch.';
+  $('toggleNote').textContent=configured?'The destination Page was verified by Meta. You can enable automatic publishing.':'Add the server secrets and verify that they belong to TAMILAN CAREERS OFFICIAL.';
   $('pending').textContent=String(health.queue?.pending??0);
   $('published').textContent=String(health.queue?.published??0);
   $('failed').textContent=String(health.queue?.failed??0);
