@@ -188,6 +188,22 @@ table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;line-he
 th{background:#eaf0f8;color:#183252;text-align:left;font-size:13px;font-weight:700;padding:9px 10px;border-bottom:1px solid #cbd7e6;white-space:nowrap}
 td{padding:9px 10px;border-bottom:1px solid #e5ebf3;vertical-align:middle;line-height:1.4}
 tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
+
+/* Premium balanced job-category buttons */
+.featured-links{width:100%;max-width:760px;margin:12px auto;padding:12px 16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:12px;overflow:visible;white-space:normal;background:linear-gradient(120deg,#edf4ff,#f7f1ff);border-top:1px solid #d7e4f5;border-bottom:1px solid #d7e4f5;border-radius:14px}
+.featured-links a{position:relative;isolation:isolate;display:flex;min-width:0;min-height:76px;flex-direction:column;justify-content:center;align-items:flex-start;gap:4px;padding:12px 36px 12px 15px;border:1px solid rgba(255,255,255,.55);border-radius:11px;color:#fff;text-align:left;text-decoration:none;white-space:normal;box-shadow:0 5px 14px rgba(16,29,58,.17),inset 0 1px 0 rgba(255,255,255,.22);transition:background .2s ease,box-shadow .2s ease,transform .2s ease,filter .2s ease}
+.featured-private{background:linear-gradient(125deg,#124eaa,#087eaa)}
+.featured-international{background:linear-gradient(125deg,#5424a8,#a32c83)}
+.featured-kicker{display:block;font-size:9px;line-height:1.2;letter-spacing:1.15px;font-weight:700;color:rgba(255,255,255,.8)}
+.featured-label{display:block;font-size:clamp(12px,2.5vw,16px);line-height:1.25;letter-spacing:.35px;font-weight:800;overflow-wrap:anywhere}
+.featured-arrow{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:19px;line-height:1;color:#fff}
+.featured-links a:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 18px rgba(16,29,58,.22)}
+.featured-links a:focus-visible{outline:3px solid #102c50;outline-offset:3px}
+.featured-links a.is-selected{background:linear-gradient(125deg,#0b8061,#16a078);border-color:#b9ffe7;box-shadow:0 0 0 3px rgba(22,160,120,.18),0 7px 18px rgba(16,29,58,.2)}
+.featured-links a.is-selected .featured-kicker{color:#e0fff4}
+@media(max-width:520px){.featured-links{width:calc(100% - 20px);margin:10px auto;padding:9px;gap:8px;border-radius:12px}.featured-links a{min-height:72px;padding:10px 27px 10px 10px;border-radius:9px}.featured-kicker{font-size:8px;letter-spacing:.7px}.featured-label{font-size:clamp(11px,3.2vw,14px)}.featured-arrow{right:9px;font-size:16px}}
+@media(prefers-reduced-motion:reduce){.featured-links a{transition:none}}
+
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418"
@@ -205,9 +221,20 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
 </nav></div>
 <div class="announcement" aria-label="Announcements"><div class="announcement-track">TAMILAN CAREERS — Government Job Notifications and Exam Updates · Check official notifications before applying · New published updates appear automatically every 5 minutes ·</div></div>
 <div class="featured-links" aria-label="Featured job categories">
-<a class="featured-private" href="private-jobs.html">Private Jobs</a>
-<a class="featured-international" href="international-jobs.html">International Jobs</a>
+<a class="featured-private" href="private-jobs.html" data-featured-choice="private"><span class="featured-kicker">CAREER OPPORTUNITIES</span><span class="featured-label">PRIVATE JOBS</span><span class="featured-arrow" aria-hidden="true">↗</span></a>
+<a class="featured-international" href="international-jobs.html" data-featured-choice="international"><span class="featured-kicker">GLOBAL OPPORTUNITIES</span><span class="featured-label">INTERNATIONAL JOBS</span><span class="featured-arrow" aria-hidden="true">↗</span></a>
 </div>
+<script>
+(function(){
+document.querySelectorAll('[data-featured-choice]').forEach(function(link){
+link.addEventListener('click',function(){
+document.querySelectorAll('[data-featured-choice]').forEach(function(item){item.classList.remove('is-selected')});
+link.classList.add('is-selected');
+});
+});
+})();
+</script>
+
 <main>
 <div class="intro"><h2>Government Jobs & Exam Updates</h2><p>Find the latest Central Government and State / Union Territory Government recruitment notifications across India, qualification-wise opportunities and important examination updates. Always verify details in the official notification before applying.</p></div>
 
