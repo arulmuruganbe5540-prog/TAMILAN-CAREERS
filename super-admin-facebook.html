@@ -78,18 +78,29 @@
   }));
  }
  function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ async function drainQueue(){
+  let sent=0,stoppedMessage='';
+  for(let i=0;i<20;i++){
+   const {data,error}=await sb.functions.invoke('facebook-page-publisher',{body:{}});
+   if(error){stoppedMessage=error.message;break}
+   if(!data?.ok){stoppedMessage=data?.message||'Facebook publishing did not complete.';break}
+   if(!data.processed)break;
+   sent++;
+  }
+  if(stoppedMessage)note((sent?'Published '+sent+' post(s). ':'')+stoppedMessage,true);
+  else note(sent?'Published '+sent+' queued post(s) successfully.':'No pending posts to publish.');
+  await refresh();
+ }
  $('saveToggle').addEventListener('click',async()=>{
   if(!configured)return;
   const enabled=$('autoPublish').checked;
   const {error}=await sb.from('social_publish_settings').update({auto_publish_enabled:enabled,updated_at:new Date().toISOString()}).eq('singleton',true);
   if(error){note('Unable to save auto-publish setting: '+error.message,true);return}
-  note(enabled?'Facebook Auto Publish is ON. New published jobs will enter the queue.':'Facebook Auto Publish is OFF.');await refresh();
+  if(enabled){note('Facebook Auto Publish is ON. Processing existing queue…');await drainQueue();}
+  else{note('Facebook Auto Publish is OFF.');await refresh();}
  });
  $('process').addEventListener('click',async()=>{
-  $('process').disabled=true;note('Processing the next queued post…');
-  const {data,error}=await sb.functions.invoke('facebook-page-publisher',{body:{}});
-  if(error){note('Facebook publishing failed: '+error.message,true)}else if(!data?.ok){note(data?.message||'Facebook publishing did not complete.',true)}else{note(data.processed?'Facebook post published successfully.':'No pending posts to publish.')}
-  await refresh();
+  $('process').disabled=true;note('Processing queued Facebook posts…');await drainQueue();$('process').disabled=false;
  });
  $('refresh').addEventListener('click',refresh);
  $('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});
