@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071426">
+<title>Orbit Jobs UI Demo | TAMILAN CAREERS</title>
+<style>
+:root{--ink:#14243b;--muted:#64748b;--line:#dce5ef}
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:var(--ink);font:14px/1.5 Arial,sans-serif}
+header{background:#071426;color:#fff;padding:17px max(14px,calc((100% - 1160px)/2));display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1d4266}
+header strong{font-size:21px;letter-spacing:.5px}header small{display:block;color:#9fb7ce;font-size:11px;margin-top:3px}
+main{max-width:1160px;margin:auto;padding:20px 14px 48px}.back{color:#075e9b;font-weight:700;font-size:13px;text-decoration:none}
+.intro{margin:14px 0 25px}.intro h1{margin:0 0 6px;color:#10213b;font-size:23px}.intro p{margin:0;color:var(--muted);font-size:13px}
+.zone{margin:28px 0 42px;--accent:#087bc1;--soft:#e7f5ff;--deep:#083c65;--glow:rgba(23,143,220,.2)}
+.zone.india{--accent:#07966c;--soft:#e4f8ef;--deep:#07533f;--glow:rgba(7,150,108,.2)}
+.zone.world{--accent:#8652c8;--soft:#f1eaff;--deep:#482875;--glow:rgba(134,82,200,.2)}
+.zone-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:10px}
+.zone-head h2{font-size:19px;margin:0;color:#132944}.zone-head p{font-size:11px;margin:3px 0 0;color:var(--muted)}
+.zone-code{font:800 10px Arial;letter-spacing:1px;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent),white 65%);background:var(--soft);padding:6px 9px;border-radius:5px;white-space:nowrap}
+/* New orbital launch panel: not a phone mock-up */
+.orbit-banner{position:relative;min-height:148px;margin:0 0 14px;overflow:hidden;border-radius:15px;background:radial-gradient(ellipse at 50% 130%,var(--glow),transparent 58%),linear-gradient(112deg,#0b1b30,#132e4b 60%,#0a1b30);border:1px solid #203b59;display:flex;align-items:center;justify-content:center;padding:18px}
+.orbit-banner:before,.orbit-banner:after{content:"";position:absolute;border:1px solid color-mix(in srgb,var(--accent),transparent 58%);border-radius:50%;width:310px;height:115px;transform:rotate(-13deg);left:50%;top:50%;translate:-50% -50%;box-shadow:0 0 25px var(--glow)}
+.orbit-banner:after{width:430px;height:150px;transform:rotate(14deg);opacity:.55}
+.orbit-dot{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent);z-index:1}
+.orbit-dot.one{left:calc(50% - 155px);top:32px}.orbit-dot.two{right:calc(50% - 185px);bottom:26px;width:6px;height:6px}
+.launch-core{position:relative;z-index:2;display:flex;align-items:center;gap:14px;padding:12px 20px;border:1px solid color-mix(in srgb,var(--accent),white 38%);border-radius:12px;background:rgba(5,18,33,.86);box-shadow:0 0 28px var(--glow),inset 0 0 18px rgba(255,255,255,.035);min-width:min(390px,95%)}
+.core-symbol{width:49px;height:49px;display:grid;place-items:center;border-radius:14px;background:var(--accent);color:#fff;font-size:19px;font-weight:900;box-shadow:0 0 20px var(--glow)}
+.core-text{min-width:0;flex:1}.core-text b{display:block;color:#fff;font-size:15px;letter-spacing:.2px}.core-text small{display:block;color:#a9bed2;font-size:10px;margin-top:4px}.live-chip{color:#fff;background:color-mix(in srgb,var(--accent),#071426 28%);font-size:9px;font-weight:800;letter-spacing:.8px;padding:6px 8px;border-radius:4px;white-space:nowrap}
+.table-frame{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 7px 20px rgba(15,35,60,.06)}
+.table-frame:before{content:"";display:block;height:4px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent),white 60%),var(--accent))}
+.table-scroll{overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:12px}
+th{background:#f5f8fc;color:#253d58;padding:11px 10px;text-align:left;font-size:11px;letter-spacing:.35px;border-bottom:1px solid #dce5ef}
+td{padding:12px 10px;vertical-align:top;border-bottom:1px solid #edf1f6}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--soft)}
+.job-cell{border-left:3px solid var(--accent)}.job-title{font-weight:800;color:#18334f;display:block}.job-company{font-size:10px;color:var(--muted);display:block;margin-top:4px}
+.fact{display:inline-block;margin:0 5px 4px 0;padding:3px 6px;border-radius:4px;background:#f0f4f8;color:#344b65;font-size:10px}.fact b{color:#18334f}
+.more{display:none;margin:7px 0 0;padding:8px 9px;border-left:2px solid var(--accent);background:#f8fafc;color:#40536a;font-size:11px;line-height:1.55}.more.open{display:block}
+.expand{display:inline-block;border:0;padding:0;margin-top:5px;background:none;color:var(--accent);font-weight:800;font-size:11px;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.expand:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.view{color:var(--accent);font-weight:800;text-decoration:none;white-space:nowrap}
+.frame-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:9px 12px;background:#fbfcfe;color:var(--muted);font-size:10px;border-top:1px solid #edf1f6}
+@media(max-width:600px){main{padding:15px 10px 32px}.intro h1{font-size:20px}.zone-head h2{font-size:17px}.orbit-banner{min-height:135px;padding:12px}.launch-core{min-width:0;width:min(340px,96%);padding:11px 13px;gap:10px}.core-symbol{width:42px;height:42px}.core-text b{font-size:13px}.orbit-banner:before{width:260px}.orbit-banner:after{width:340px}.zone-code{font-size:9px;padding:5px 6px}table{font-size:11px}td{padding:10px 8px}}
+</style></head><body>
+<header><div><strong>TAMILAN CAREERS</strong><small>Next-generation job discovery</small></div><span style="font-size:10px;color:#a9bed2;letter-spacing:1px">UI CONCEPT 02</span></header>
+<main>
+<a class="back" href="/">← Back to Home</a>
+<div class="intro"><h1>Orbit Interface — Table Design Demo</h1><p>முந்தைய Mobile Screen வடிவம் அல்ல. இந்த Demo-வில் அட்டவணைக்கு மேலே Orbit / Digital Launch Panel மிதக்கும். ஒவ்வொரு Job வகைக்கும் தனி நிற அடையாளமும், தனித்துவமான Row Highlight-உம் இருக்கும்.</p></div>
+
+<section class="zone">
+<div class="zone-head"><div><h2>Government Jobs Today</h2><p>அரசு வேலைவாய்ப்பு அறிவிப்புகள்</p></div><span class="zone-code">01 / GOVT</span></div>
+<div class="orbit-banner"><i class="orbit-dot one"></i><i class="orbit-dot two"></i><div class="launch-core"><div class="core-symbol">GOV</div><div class="core-text"><b>Government Opportunity Network</b><small>Official notifications · Eligibility · Exam dates</small></div><span class="live-chip">PUBLIC</span></div></div>
+<div class="table-frame"><div class="table-scroll"><table><thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead><tbody>
+<tr><td class="job-cell"><span class="job-title">Junior Assistant</span><span class="job-company">Tamil Nadu Government</span></td><td><span class="fact"><b>450</b> Vacancies</span><span class="fact"><b>10th / 12th / Degree</b></span><span class="fact"><b>30 Dec 2026</b> Last date</span><div class="more" id="a1">Recruitment Authority: Tamil Nadu Government Department<br>Age Limit: As specified in the official notification and applicable category rules.<br>Selection: Written Examination and Certificate Verification.<br>How to Apply: Submit the online application through the official recruitment portal.</div><button class="expand" onclick="toggle(this,'a1')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View ↗</a></td></tr>
+<tr><td class="job-cell"><span class="job-title">Technical Assistant</span><span class="job-company">Central Government</span></td><td><span class="fact"><b>120</b> Vacancies</span><span class="fact"><b>Diploma</b></span><span class="fact"><b>05 Jan 2027</b> Last date</span><div class="more" id="a2">Recruitment Authority: Central Government Institution<br>Selection: Written Test / Skill Test as notified.<br>Application: Complete the official form and upload supporting documents.</div><button class="expand" onclick="toggle(this,'a2')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View ↗</a></td></tr>
+</tbody></table></div><div class="frame-foot"><span>GOVERNMENT DIRECTORY</span><span>Illustrative demo records only</span></div></div>
+</section>
+
+<section class="zone india">
+<div class="zone-head"><div><h2>Indian Private Jobs</h2><p>இந்திய நிறுவனங்களின் தனியார் வேலைவாய்ப்புகள்</p></div><span class="zone-code">02 / INDIA</span></div>
+<div class="orbit-banner"><i class="orbit-dot one"></i><i class="orbit-dot two"></i><div class="launch-core"><div class="core-symbol">IN</div><div class="core-text"><b>India Corporate Career Grid</b><small>Employer · Work mode · Location · Salary</small></div><span class="live-chip">INDIA</span></div></div>
+<div class="table-frame"><div class="table-scroll"><table><thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead><tbody>
+<tr><td class="job-cell"><span class="job-title">Customer Support Executive</span><span class="job-company">Demo Technologies Pvt Ltd</span></td><td><span class="fact"><b>Chennai</b></span><span class="fact"><b>Any Degree</b></span><span class="fact"><b>Hybrid</b> Work</span><div class="more" id="b1">Employment: Full Time<br>Experience: 0–2 years<br>Skills: Communication and customer support.<br>Salary: Refer to the employer's verified listing.<br>Apply: Use the company's verified application link.</div><button class="expand" onclick="toggle(this,'b1')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View ↗</a></td></tr>
+<tr><td class="job-cell"><span class="job-title">Junior Software Developer</span><span class="job-company">Demo Digital Services</span></td><td><span class="fact"><b>Bengaluru</b></span><span class="fact"><b>B.E / B.Tech</b></span><span class="fact"><b>On-site</b></span><div class="more" id="b2">Employment: Full Time<br>Experience: Entry Level<br>Skills: Programming fundamentals and project experience.<br>Apply: Use the verified employer link.</div><button class="expand" onclick="toggle(this,'b2')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View ↗</a></td></tr>
+</tbody></table></div><div class="frame-foot"><span>INDIA PRIVATE DIRECTORY</span><span>Illustrative demo records only</span></div></div>
+</section>
+
+<section class="zone world">
+<div class="zone-head"><div><h2>International Private Jobs</h2><p>உலக நாடுகளில் உள்ள தனியார் வேலைவாய்ப்புகள்</p></div><span class="zone-code">03 / GLOBAL</span></div>
+<div class="orbit-banner"><i class="orbit-dot one"></i><i class="orbit-dot two"></i><div class="launch-core"><div class="core-symbol">GLB</div><div class="core-text"><b>Global Talent Orbit</b><small>Country · Visa sponsorship · Work permit</small></div><span class="live-chip">WORLD</span></div></div>
+<div class="table-frame"><div class="table-scroll"><table><thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead><tbody>
+<tr><td class="job-cell"><span class="job-title">Warehouse Associate</span><span class="job-company">Demo Global Logistics</span></td><td><span class="fact"><b>UAE</b></span><span class="fact"><b>10th / 12th</b></span><span class="fact"><b>Visa:</b> Verify</span><div class="more" id="c1">Location: United Arab Emirates<br>Employment: Full Time<br>Visa Sponsorship: Confirm directly from the actual employer and official records.<br>Before applying: Verify employer, recruitment agent, visa and work permit. Do not pay unverified agents.</div><button class="expand" onclick="toggle(this,'c1')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View ↗</a></td></tr>
+<tr><td class="job-cell"><span class="job-title">Care Assistant</span><span class="job-company">Demo Care Group</span></td><td><span class="fact"><b>United Kingdom</b></span><span class="fact"><b>Relevant training</b></span><span class="fact"><b>Sponsorship:</b> Check</span><div class="more" id="c2">Employment: Full Time<br>Qualification: Depends on the employer and current role requirements.<br>Visa Sponsorship: Verify the employer's sponsor status and role eligibility through official sources.</div><button class="expand" onclick="toggle(this,'c2')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View ↗</a></td></tr>
+</tbody></table></div><div class="frame-foot"><span>GLOBAL PRIVATE DIRECTORY</span><span>Illustrative demo records only</span></div></div>
+</section>
+<p style="font-size:11px;color:#64748b">குறிப்பு: இவை வடிவமைப்பைக் காட்டுவதற்கான மாதிரி பதிவுகள் மட்டுமே; உண்மையான வேலை அறிவிப்புகள் அல்ல. இந்த Preview எந்த Live Job பக்கத்தையும் மாற்றாது.</p>
+</main>
+<script>function toggle(btn,id){const el=document.getElementById(id);const open=el.classList.toggle('open');btn.textContent=open?'Collapse':'Expand';btn.setAttribute('aria-expanded',String(open));}</script>
+</body></html>
