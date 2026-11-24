@@ -7,7 +7,7 @@
 </style></head><body>
 <header class="top"><div class="brand">TAMILAN CAREERS · தனிப்பட்ட நிர்வாகம்</div><div><a href="super-admin.html">டாஷ்போர்டு</a>　<a href="super-admin-eligibility-rules.html">Eligibility Rules</a>　<a href="super-admin-exam-library.html">Preparation Library</a>　<span id="adminEmail" class="muted"></span>　<button id="logout">வெளியேறு</button></div></header>
 <main class="wrap"><h1>தேர்வு மற்றும் தயாரிப்பு மையம்</h1><p class="muted">Manage admission and entrance notifications, official exam resources, syllabus, previous papers, admit cards, answer keys and results. அரசு வேலைவாய்ப்புகள் content is managed manually; no AI assistant is used here.</p><div id="status" class="status">சூப்பர் அட்மின் அணுகல் சரிபார்க்கப்படுகிறது...</div>
-<div class="tabs"><button id="tabAdmissions" class="active">Admissions & Entrance Exams</button><button id="tabResources">Government Exam Resources</button></div>
+<div class="tabs"><button id="tabAdmissions" class="active">Admissions & Entrance Exams</button><button id="tabResources">Government Exam Resources</button><button id="tabUpdates">Government Exam Updates · 12 Month Tracker</button></div>
 <section id="admissionsPanel" class="panel">
 <h2>Admission / Entrance Notifications</h2>
 <form id="admissionForm"><div class="grid">
@@ -37,6 +37,26 @@
 <div><label>நிலை</label><select id="rநிலை"><option value="draft">வரைவு</option><option value="published">வெளியிடுed</option><option value="archived">Archived</option></select></div>
 </div><label>விளக்கம்</label><textarea id="rவிளக்கம்"></textarea><div class="actions" style="margin-top:12px"><button type="submit">சேர் Resource</button><button type="reset" class="small">Clear</button></div></form>
 <div class="tablewrap"><table><thead><tr><th>Resource</th><th>Government Job</th><th>வகை / Year</th><th>Official</th><th>நிலை</th><th>செயல்கள்</th></tr></thead><tbody id="resourceRows"><tr><td colspan="6">ஏற்றப்படுகிறது...</td></tr></tbody></table></div><div class="row"><span id="rPage" class="muted">பக்கம் 1</span><div class="actions"><button id="rPrev" class="small">முந்தையது</button><button id="rஅடுத்தது" class="small">அடுத்தது</button></div></div>
+</section>
+<section id="updatesPanel" class="panel" hidden>
+<h2>Government Exam Updates · Results · Hall Tickets · Answer Keys · 12-Month Calendar</h2>
+<p class="muted">Only official-source records marked verified and published are visible publicly. Keep result, exam schedule, admit card, answer key and recruitment notices as separate update types. Never duplicate an existing notification as a new vacancy.</p>
+<form id="updateForm"><div class="grid">
+<div><label>Exam Name *</label><input id="uExam" required maxlength="240"></div>
+<div><label>Recruitment / Exam Authority *</label><input id="uAuthority" required maxlength="200"></div>
+<div><label>Update Type *</label><select id="uType"><option value="exam_schedule">Exam Schedule</option><option value="notification">Notification</option><option value="result">Result</option><option value="admit_card">Admit Card / Hall Ticket</option><option value="answer_key">Answer Key</option><option value="cutoff">Cut-off</option><option value="interview">Interview</option><option value="certificate_verification">Certificate Verification</option><option value="other">Other</option></select></div>
+<div><label>Update Title *</label><input id="uTitle" required maxlength="300"></div>
+<div><label>Notification Number</label><input id="uRef"></div>
+<div><label>Published Date</label><input id="uPublished" type="date"></div>
+<div><label>Exam Date</label><input id="uDate" type="date"></div>
+<div><label>Exam Year *</label><input id="uYear" type="number" min="1950" max="2100" value="2027" required></div>
+<div><label>Official URL *</label><input id="uUrl" type="url" placeholder="https://" required></div>
+<div><label>Official Source Name *</label><input id="uSource" required></div>
+<div><label>Verification</label><select id="uVerify"><option value="pending">Pending</option><option value="verified">Verified against official notice</option></select></div>
+<div><label>Publication Status</label><select id="uStatus"><option value="draft">Draft</option><option value="published">Publish</option></select></div>
+</div><label>Update Details *</label><textarea id="uDesc" required></textarea><div class="actions" style="margin-top:12px"><button type="submit">Save Government Exam Update</button><button type="reset" class="small">Clear</button></div></form>
+<div class="tablewrap"><table><thead><tr><th>Exam / Update</th><th>Type / Year</th><th>Published / Exam Date</th><th>Verification</th><th>Status</th><th>Actions</th></tr></thead><tbody id="updateRows"><tr><td colspan="6">Loading...</td></tr></tbody></table></div>
+<div class="row"><span id="uPage" class="muted">Page 1</span><div class="actions"><button id="uPrev" class="small">Previous</button><button id="uNext" class="small">Next</button></div></div>
 </section>
 </main><script>
 (()=>{
