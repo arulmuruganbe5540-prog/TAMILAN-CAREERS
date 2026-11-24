@@ -32,6 +32,7 @@ a{color:var(--cyan)}button{background:var(--blue);color:white;border:0;border-ra
 <div id="status" class="status">Super Admin அனுமதி சரிபார்க்கப்படுகிறது...</div>
 <section class="grid" id="cards"><div class="card">தரவு ஏற்றப்படுகிறது...</div></section>
 <section class="panel"><h2>வேலைவாய்ப்பு மற்றும் விண்ணப்ப நிலை</h2><div class="tablewrap"><table><thead><tr><th>பிரிவு</th><th>மொத்த பதிவுகள்</th><th>வெளியிடப்பட்டவை</th><th>விண்ணப்பங்கள்</th></tr></thead><tbody id="jobRows"><tr><td colspan="4">ஏற்றப்படுகிறது...</td></tr></tbody></table></div></section>
+<section class="panel"><h2>கடந்த 30 நாட்கள் — மக்கள் பயன்பாட்டு Analytics</h2><div class="grid" id="analyticsCards"><div class="card">Analytics தரவு ஏற்றப்படுகிறது...</div></div><h3>அதிகம் பார்க்கப்பட்ட பக்கங்கள்</h3><div class="tablewrap"><table><thead><tr><th>பக்கம்</th><th>பார்வைகள்</th></tr></thead><tbody id="topPages"><tr><td colspan="2">தரவு ஏற்றப்படுகிறது...</td></tr></tbody></table></div><p class="muted" id="analyticsNote">புதிய Analytics சேகரிப்பு இப்போது தொடங்குகிறது. பழைய பார்வைத் தரவு பின்னோக்கி கிடைக்காது.</p></section>
 <section class="panel"><h2>ஆய்வில் கிடைத்த உண்மைகள்</h2><div class="notes" id="findings"><div class="note">தரவு ஏற்றப்படுகிறது...</div></div></section>
 <section class="panel"><h2>மாணவர்கள் அதிகம் பயன்படுத்துவது எது என்பதை அறிய வேண்டிய அடுத்த கட்டம்</h2>
 <p class="muted">தற்போதைய Database-ல் Page View / Visitor Analytics அட்டவணை இல்லை. ஆகவே எந்தப் பக்கம் அதிகம் பார்க்கப்படுகிறது, எந்த வேலை அதிகம் திறக்கப்படுகிறது, எந்தத் தேடல் அதிகம் செய்யப்படுகிறது, எந்த Apply பொத்தானில் இருந்து விண்ணப்பம் முடிகிறது என்பதற்கான வரலாற்றுத் தரவு இல்லை.</p>
@@ -89,6 +90,22 @@ a{color:var(--cyan)}button{background:var(--blue);color:white;border:0;border-ra
   const appTotal=jobData.reduce((a,x)=>a+(x.applications||0),0);
   const gov=jobData[0],priv=jobData[1],intl=jobData[2];
   const approvedReviews=await count('government_notice_reviews','status','approved');
+  const since=new Date(Date.now()-30*24*60*60*1000).toISOString();
+  const {data:events,error:analyticsError}=await sb.from('page_analytics').select('session_id,page_path,event_type,entity_type,entity_id,created_at').gte('created_at',since).order('created_at',{ascending:false}).limit(5000);
+  if(analyticsError){
+   $('analyticsCards').innerHTML='<div class="note">Analytics தரவைப் பெற முடியவில்லை: '+analyticsError.message+'</div>';
+   $('topPages').innerHTML='<tr><td colspan="2">Analytics அனுமதி அல்லது தரவு பிழை</td></tr>';
+  }else{
+   const rows=events||[],sessions=new Set(rows.map(x=>x.session_id)).size;
+   const views=rows.filter(x=>x.event_type==='page_view'||x.event_type==='job_view').length;
+   const applies=rows.filter(x=>x.event_type==='apply_click').length;
+   const searches=rows.filter(x=>x.event_type==='search').length;
+   const groups={};rows.filter(x=>x.event_type==='page_view'||x.event_type==='job_view').forEach(x=>{groups[x.page_path]=(groups[x.page_path]||0)+1});
+   const top=Object.entries(groups).sort((a,b)=>b[1]-a[1]).slice(0,10);
+   $('analyticsCards').innerHTML=[['அமர்வுகள்',sessions],['பக்க / வேலை பார்வைகள்',views],['Apply கிளிக்குகள்',applies],['தேடல் முயற்சிகள்',searches]].map(x=>'<div class="card">'+x[0]+'<strong>'+show(x[1])+'</strong><small>கடந்த 30 நாட்கள்</small></div>').join('');
+   $('topPages').innerHTML=top.length?top.map(x=>'<tr><td>'+x[0].replace(/[<>&"]/g,'')+'</td><td>'+show(x[1])+'</td></tr>').join(''):'<tr><td colspan="2">இன்னும் பார்வைத் தரவு இல்லை. தளப் பார்வைகள் வந்த பிறகு இங்கே தோன்றும்.</td></tr>';
+   $('analyticsNote').textContent='அதிகபட்சம் 5,000 சமீபத்திய நிகழ்வுகள் கணக்கிடப்பட்டுள்ளன. Unique sessions என்பது browser tab session அடிப்படையில்; தனிப்பட்ட மனிதர்களின் எண்ணிக்கை அல்ல.';
+  }
   const cards=[
    ...values.slice(0,2),
    {label:'வெளியிடப்பட்ட அரசு வேலைகள்',value:gov.published},
