@@ -149,15 +149,10 @@ async function loadVerificationRequests(){
 
 async function loadVerificationDocumentList(){
  if(!activeVerificationRequest||!currentCompany)return;
- const prefix=currentCompany.id+'/'+activeVerificationRequest.id;
- const {data:folders,error}=await sb.storage.from('company-verification').list(prefix,{limit:100,sortBy:{column:'name',order:'asc'}});
+ const prefix=currentCompany.id+'/'+user.id+'/'+activeVerificationRequest.id;
+ const {data:files,error}=await sb.storage.from('company-verification').list(prefix,{limit:100,sortBy:{column:'name',order:'asc'}});
  if(error){$('uploadedVerificationDocuments').textContent='Could not load uploaded document list.';return}
- const rows=[];
- for(const folder of (folders||[]).filter(x=>x.id===null)){
-  const {data:files,error:fileError}=await sb.storage.from('company-verification').list(prefix+'/'+folder.name,{limit:100});
-  if(fileError)continue;
-  for(const file of (files||[]).filter(x=>x.name))rows.push(file.name);
- }
+ const rows=(files||[]).filter(x=>x.name).map(x=>x.name);
  $('uploadedVerificationDocuments').innerHTML=rows.map(name=>'<div class="item">'+esc(name)+' · Uploaded</div>').join('')||'No documents uploaded yet.';
 }
 $('uploadVerificationDocuments').addEventListener('click',async()=>{
@@ -169,8 +164,8 @@ $('uploadVerificationDocuments').addEventListener('click',async()=>{
  for(const x of selected){if(!allowed.includes(x.file.type)||x.file.size>10*1024*1024){show('verificationDocumentStatus','Only PDF, JPG, PNG or WEBP files up to 10 MB are allowed.',true);return}}
  const btn=$('uploadVerificationDocuments');btn.disabled=true;
  for(const x of selected){
-  const ext=x.file.name.split('.').pop().toLowerCase();const docId=crypto.randomUUID();const safeName=x.type+'-'+Date.now()+'-'+crypto.randomUUID().replaceAll('-','').slice(0,8)+'.'+ext;
-  const path=currentCompany.id+'/'+activeVerificationRequest.id+'/'+docId+'/'+safeName;
+  const ext=x.file.name.split('.').pop().toLowerCase();const safeName=x.type+'-'+Date.now()+'-'+crypto.randomUUID().replaceAll('-','').slice(0,8)+'.'+ext;
+  const path=currentCompany.id+'/'+user.id+'/'+activeVerificationRequest.id+'/'+safeName;
   const {error}=await sb.storage.from('company-verification').upload(path,x.file,{cacheControl:'3600',contentType:x.file.type,upsert:false});
   if(error){show('verificationDocumentStatus','Upload failed for '+x.type+': '+error.message,true);btn.disabled=false;return}
   $(x.id).value='';
