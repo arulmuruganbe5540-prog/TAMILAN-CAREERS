@@ -58,6 +58,7 @@ a{ text-underline-offset:3px }
 <div class="actions"><button type="button" id="uploadVerificationDocuments">Upload selected documents</button></div>
 <div id="uploadedVerificationDocuments" class="meta"></div>
 </div>
+<div class="item"><h3>Verification Request History</h3><p class="muted">Latest 10 requests for this company. Each market is reviewed separately.</p><div id="verificationHistory" class="meta">Loading verification history…</div></div>
 </section>
 <section id="moreInfoPanel" class="panel hidden"><h2>Additional Information Requested</h2><p id="adminNote" class="notice"></p><form id="moreInfoForm"><label for="companyResponse">Your response *</label><textarea id="companyResponse" required minlength="10" maxlength="2000"></textarea><button type="submit" id="sendResponse" style="margin-top:10px">Send additional information</button></form></section>
 <div id="verifiedArea" class="hidden">
@@ -142,6 +143,7 @@ async function loadVerificationRequests(){
  if(!currentCompany)return;
  const {data,error}=await sb.from('company_verification_requests').select('*').eq('company_id',currentCompany.id).in('market_scope',['indian_private','international']).order('created_at',{ascending:false}).limit(10);
  if(error){show('verificationMsg','Could not load verification status.',true);return}
+ const history=data||[];$('verificationHistory').innerHTML=history.length?history.map(x=>'<div class="item"><b>'+esc(x.market_scope==='indian_private'?'Indian Private Jobs':'International Jobs')+'</b><p class="meta">Status: '+esc(String(x.status||'unknown').replaceAll('_',' '))+' · Submitted: '+(x.created_at?new Date(x.created_at).toLocaleString('en-IN'):'—')+'</p>'+(x.admin_notes?'<p class="meta">Admin note: '+esc(x.admin_notes)+'</p>':'')+(x.company_response?'<p class="meta">Your response: '+esc(x.company_response)+'</p>':'')+'</div>').join(''):'No verification requests submitted yet.';
  const open=(data||[]).filter(x=>['pending','under_review','more_information'].includes(x.status));activeVerificationRequest=open[0]||null;$('verificationDocumentsPanel').classList.toggle('hidden',!activeVerificationRequest);if(activeVerificationRequest){$('verificationDocumentStatus').textContent='Active request: '+(activeVerificationRequest.market_scope==='indian_private'?'Indian Private Jobs':'International Jobs')+' · '+activeVerificationRequest.status+' · Upload supporting files below.';await loadVerificationDocumentList()}$('verificationPanel').classList.remove('hidden');const latestMore=open.find(x=>x.status==='more_information');if(latestMore){moreInfoRequest=latestMore;$('moreInfoPanel').classList.remove('hidden');$('adminNote').textContent=(latestMore.market_scope==='indian_private'?'Indian Private Jobs':'International Jobs')+': '+(latestMore.admin_notes||'Additional information is required.');}else{$('moreInfoPanel').classList.add('hidden');moreInfoRequest=null;}const anyVerified=currentCompany.private_jobs_verification_status==='verified'||currentCompany.international_jobs_verification_status==='verified';$('verifiedArea').classList.toggle('hidden',!anyVerified);if(anyVerified)await loadCompanyJobs();
 }
 
