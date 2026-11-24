@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101d3a">
+<title>Jobs Table Design Preview | TAMILAN CAREERS</title>
+<style>
+:root{--navy:#101d3a;--ink:#17243b;--muted:#64748b;--line:#dce4ef;--blue:#176b9e;--cyan:#54c8ff}
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:var(--ink);font:15px/1.5 Arial,sans-serif}
+header{background:linear-gradient(115deg,#101d3a,#173e68);color:#fff;padding:18px max(14px,calc((100% - 1160px)/2));border-bottom:3px solid var(--cyan)}
+header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#d6e5f6;font-size:12px}
+main{max-width:1160px;margin:auto;padding:20px 14px 48px}.back{display:inline-block;color:#075e9b;font-size:13px;font-weight:700;margin-bottom:16px}
+.lead h2{margin:0 0 6px;color:var(--navy);font-size:22px}.lead p{margin:0 0 20px;color:var(--muted);font-size:13px}
+.category{margin:24px 0 34px;scroll-margin-top:12px}.category-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}.category-head h2{font-size:19px;margin:0;color:var(--navy)}.category-head .tag{font-size:10px;font-weight:800;letter-spacing:.7px;padding:5px 8px;border-radius:30px;background:#e3f2ff;color:#075b91}
+.category.private .tag{background:#e5f8f0;color:#087443}.category.global .tag{background:#f2eaff;color:#7041a6}
+.intro{font-size:12px;color:var(--muted);margin:0 0 15px}
+/* Decorative floating mobile-screen preview, positioned above the table */
+.stage{position:relative;min-height:118px;margin:0 0 12px;padding:8px 10px 0;overflow:hidden}
+.stage:before,.stage:after{content:"";position:absolute;border-radius:50%;background:currentColor;opacity:.12;filter:blur(.2px)}
+.stage:before{width:9px;height:9px;left:9%;top:20px;box-shadow:40px 36px 0 currentColor,105px 8px 0 currentColor,210px 52px 0 currentColor,calc(100% - 180px) 8px 0 currentColor,calc(100% - 95px) 48px 0 currentColor}
+.stage:after{width:5px;height:5px;left:23%;top:72px;box-shadow:75px -52px 0 currentColor,180px -4px 0 currentColor,calc(100% - 260px) -30px 0 currentColor}
+.screen-card{position:relative;z-index:1;width:min(390px,88%);min-height:98px;margin:0 auto;display:flex;align-items:center;gap:13px;padding:13px 16px;background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.9);border-radius:16px;box-shadow:0 12px 28px rgba(16,29,58,.16),0 2px 7px rgba(16,29,58,.08);transform:perspective(700px) rotateX(5deg);backdrop-filter:blur(8px)}
+.screen-card:before{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);width:34px;height:4px;border-radius:8px;background:#d4deea}
+.screen-icon{width:48px;height:48px;flex:0 0 48px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#176b9e,#54c8ff);color:white;font-size:21px;font-weight:800;box-shadow:0 5px 12px rgba(23,107,158,.24)}
+.private .screen-icon{background:linear-gradient(145deg,#087443,#43c69a)}.global .screen-icon{background:linear-gradient(145deg,#7041a6,#c084fc)}
+.screen-copy{min-width:0;flex:1}.screen-copy strong{display:block;color:#173554;font-size:14px}.screen-copy small{display:block;color:#64748b;font-size:11px;margin-top:3px}.screen-status{font-size:9px;font-weight:800;letter-spacing:.5px;padding:5px 7px;border-radius:20px;background:#e6f5ff;color:#075b91;white-space:nowrap}
+.private .screen-status{background:#e5f8f0;color:#087443}.global .screen-status{background:#f2eaff;color:#7041a6}
+.table-shell{border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden;box-shadow:0 5px 16px rgba(16,29,58,.055)}
+.table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;min-width:640px;border-collapse:collapse;font-size:12.5px;line-height:1.45}
+th{background:#eaf0f8;color:#183252;text-align:left;padding:11px 10px;font-size:12px;white-space:nowrap;border-bottom:1px solid #cbd7e6}
+td{padding:11px 10px;vertical-align:top;border-bottom:1px solid #e7edf4}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
+.job-name{font-weight:800;color:#173554}.job-sub{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}
+.detail-line{display:block;margin:0 0 3px;color:#34445b}.expand-btn{border:0;padding:0;margin-top:4px;background:none;color:#075e9b;text-decoration:underline;text-underline-offset:2px;font:700 11px Arial;cursor:pointer}
+.expand-btn:focus-visible{outline:2px solid #087eaf;outline-offset:3px}.full{display:none;margin-top:7px;padding-top:7px;border-top:1px dashed #cbd7e6;color:#34445b}.full.open{display:block}
+.view{color:#075e9b;font-weight:800;white-space:nowrap}.section-foot{font-size:11px;color:var(--muted);padding:10px 12px;background:#fbfcfe;border-top:1px solid #edf1f6}
+.gov .category-head .tag{background:#e3f2ff;color:#075b91}.private .table-shell{border-top:3px solid #18a477}.global .table-shell{border-top:3px solid #9460c8}
+@media(max-width:600px){main{padding:15px 10px 35px}.lead h2{font-size:19px}.category-head h2{font-size:17px}.stage{min-height:112px;padding-top:7px}.screen-card{width:min(350px,94%);min-height:91px;padding:12px 13px;gap:10px}.screen-icon{width:42px;height:42px;flex-basis:42px}.screen-copy strong{font-size:13px}table{font-size:11.5px}th,td{padding:9px 8px}}
+</style></head>
+<body>
+<header><h1>TAMILAN CAREERS</h1><p>Jobs · Careers · Opportunities</p></header>
+<main>
+<a class="back" href="/">← Back to TAMILAN CAREERS Home</a>
+<div class="lead"><h2>Three Job Tables — Design Preview</h2><p>இது தனி Preview பக்கம். உங்கள் உண்மையான Government / Private / International Job பக்கங்களில் எந்த மாற்றமும் செய்யப்படவில்லை. ஒவ்வொரு பகுதியிலும் மேலே மொபைல்-ஸ்கிரீன் போல மிதக்கும் தனித்துவமான Header Card, கீழே Expand வசதியுள்ள Table இருக்கும்.</p></div>
+
+<section class="category gov">
+<div class="category-head"><h2>Government Jobs Today</h2><span class="tag">GOVERNMENT</span></div>
+<p class="intro">அரசு வேலைவாய்ப்புகளுக்கான நீல நிற தனித்துவ அடையாளம்.</p>
+<div class="stage"><div class="screen-card"><div class="screen-icon">G</div><div class="screen-copy"><strong>Government Job Alerts</strong><small>Verified notifications · Exam updates · Apply dates</small></div><span class="screen-status">LATEST</span></div></div>
+<div class="table-shell"><div class="table-scroll"><table><thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead><tbody>
+<tr><td><span class="job-name">Junior Assistant</span><span class="job-sub">Tamil Nadu Government</span></td><td><span class="detail-line"><b>Vacancies:</b> 450</span><span class="detail-line"><b>Qualification:</b> 10th / 12th / Degree</span><span class="detail-line"><b>Last Date:</b> 30-12-2026</span><div class="full" id="gov1"><b>Full details:</b><br>Recruitment Authority: Tamil Nadu Government Department<br>Age Limit: As per official notification and applicable category relaxations.<br>Selection: Written examination and certificate verification.<br>Apply: Use the official recruitment portal and submit before the closing date.</div><button class="expand-btn" onclick="expandRow(this,'gov1')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View</a></td></tr>
+<tr><td><span class="job-name">Technical Assistant</span><span class="job-sub">Central Government</span></td><td><span class="detail-line"><b>Vacancies:</b> 120</span><span class="detail-line"><b>Qualification:</b> Relevant Diploma</span><span class="detail-line"><b>Last Date:</b> 05-01-2027</span><div class="full" id="gov2"><b>Full details:</b><br>Recruitment Authority: Central Government Institution<br>Selection: Written / Skill Test as specified in notification.<br>Apply: Complete the official online application with required documents.</div><button class="expand-btn" onclick="expandRow(this,'gov2')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View</a></td></tr>
+</tbody></table></div><div class="section-foot">Demo data only · Mobile-ல் table-ஐ தேவையானால் பக்கவாட்டில் நகர்த்திப் பார்க்கலாம்.</div></div>
+</section>
+
+<section class="category private">
+<div class="category-head"><h2>Indian Private Jobs</h2><span class="tag">INDIA PRIVATE</span></div>
+<p class="intro">இந்திய நிறுவன வேலைகளுக்கு பச்சை / teal நிற அடையாளம்; ஒவ்வொரு நிறுவனப் பதிவும் தெளிவாகத் தனித்து தெரியும்.</p>
+<div class="stage"><div class="screen-card"><div class="screen-icon">IN</div><div class="screen-copy"><strong>India Private Careers</strong><small>Company openings · Location · Work mode</small></div><span class="screen-status">INDIA</span></div></div>
+<div class="table-shell"><div class="table-scroll"><table><thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead><tbody>
+<tr><td><span class="job-name">Customer Support Executive</span><span class="job-sub">Demo Technologies Pvt Ltd</span></td><td><span class="detail-line"><b>Location:</b> Chennai</span><span class="detail-line"><b>Qualification:</b> Any Degree</span><span class="detail-line"><b>Work Mode:</b> Hybrid</span><div class="full" id="ind1"><b>Full details:</b><br>Employment: Full Time<br>Experience: 0–2 years<br>Salary: As stated by the employer in the actual listing.<br>Skills: Communication and customer support.<br>Apply: Review the employer profile and apply through the verified company link.</div><button class="expand-btn" onclick="expandRow(this,'ind1')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View</a></td></tr>
+<tr><td><span class="job-name">Junior Software Developer</span><span class="job-sub">Demo Digital Services</span></td><td><span class="detail-line"><b>Location:</b> Bengaluru</span><span class="detail-line"><b>Qualification:</b> B.E / B.Tech / MCA</span><span class="detail-line"><b>Work Mode:</b> On-site</span><div class="full" id="ind2"><b>Full details:</b><br>Employment: Full Time<br>Experience: Entry Level<br>Skills: Programming fundamentals and project knowledge.<br>Apply: Use the employer's verified application link.</div><button class="expand-btn" onclick="expandRow(this,'ind2')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View</a></td></tr>
+</tbody></table></div><div class="section-foot">Demo data only · Company names and vacancies are illustrative.</div></div>
+</section>
+
+<section class="category global">
+<div class="category-head"><h2>International Private Jobs</h2><span class="tag">GLOBAL PRIVATE</span></div>
+<p class="intro">வெளிநாட்டு வேலைகளுக்கு violet நிற அடையாளம்; Country / Visa / Sponsorship விவரங்கள் முன்னிலைப்படுத்தப்படும்.</p>
+<div class="stage"><div class="screen-card"><div class="screen-icon">✦</div><div class="screen-copy"><strong>Global Career Openings</strong><small>Country · Visa sponsorship · Work permit</small></div><span class="screen-status">GLOBAL</span></div></div>
+<div class="table-shell"><div class="table-scroll"><table><thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead><tbody>
+<tr><td><span class="job-name">Warehouse Associate</span><span class="job-sub">Demo Global Logistics</span></td><td><span class="detail-line"><b>Country:</b> UAE</span><span class="detail-line"><b>Qualification:</b> 10th / 12th Pass</span><span class="detail-line"><b>Visa:</b> Check employer terms</span><div class="full" id="gl1"><b>Full details:</b><br>Location: United Arab Emirates<br>Employment: Full Time<br>Visa Sponsorship: Must be confirmed from the actual employer listing.<br>Requirements: Relevant experience and valid travel documents, as applicable.<br>Safety: Verify employer, recruitment agent, visa and work permit before paying any fee.</div><button class="expand-btn" onclick="expandRow(this,'gl1')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View</a></td></tr>
+<tr><td><span class="job-name">Care Assistant</span><span class="job-sub">Demo Care Group</span></td><td><span class="detail-line"><b>Country:</b> United Kingdom</span><span class="detail-line"><b>Qualification:</b> Relevant training</span><span class="detail-line"><b>Visa:</b> Verify sponsorship</span><div class="full" id="gl2"><b>Full details:</b><br>Location: United Kingdom<br>Employment: Full Time<br>Qualification: Depends on the employer and applicable care-sector rules.<br>Visa Sponsorship: Confirm the employer's current sponsor status and role eligibility through official sources.</div><button class="expand-btn" onclick="expandRow(this,'gl2')" aria-expanded="false">Expand</button></td><td><a class="view" href="#" onclick="return false">View</a></td></tr>
+</tbody></table></div><div class="section-foot">Demo data only · Country and visa details are illustrative, not live vacancies.</div></div>
+</section>
+<p class="intro">குறிப்பு: இது வடிவமைப்பு Preview மட்டுமே. உண்மையான தரவுகள், search/filter, pagination, View links, existing database integration ஆகியவை ஒப்புதல் கிடைத்த பிறகே தற்போதைய ஒவ்வொரு பக்கத்திலும் பாதுகாப்பாக இணைக்கப்படும்.</p>
+</main>
+<script>
+function expandRow(btn,id){const box=document.getElementById(id);const open=box.classList.toggle('open');btn.setAttribute('aria-expanded',String(open));btn.textContent=open?'Collapse':'Expand';}
+</script></body></html>
