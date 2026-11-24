@@ -110,6 +110,10 @@ async function init(){
  if(error||!user){location.replace('super-admin-login.html');return;}
  const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(roleError||!roles||roles.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return;}
+ const {data:factors,error:factorError}=await sb.auth.mfa.listFactors();if(factorError){$('status').textContent='MFA நிலையைச் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழையவும்.';return;}
+ const hasVerifiedTotp=(factors.totp||[]).some(f=>f.status==='verified');
+ if(!hasVerifiedTotp){location.replace('super-admin-security.html');return;}
+ const {data:aal,error:aalError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(aalError||aal.currentLevel!=='aal2'){location.replace('super-admin-login.html');return;}
  $('adminEmail').textContent=user.email||'';
  $('status').textContent='சூப்பர் அட்மின் அணுகல் உறுதிசெய்யப்பட்டது. டாஷ்போர்டு அணுகல் வழங்கப்பட்டது.';
  const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount'],['super_admin_source_directory','sourceCount'],['government_job_resources','resourceCount'],['exam_eligibility_rules','eligibilityCount'],['exam_preparation_library','libraryCount']];
