@@ -205,11 +205,12 @@ function renderQueue(){
 }
 async function openRecord(id){
  const r=records.find(x=>x.id===id);if(!r)return;
- editingId=isPublished(r)?null:r.id;const p=r.payload||{};fillForm(p,p.job_kind||"private");$("officialChecked").checked=true;$("saveBtn").disabled=isPublished(r);$("saveBtn").textContent=isPublished(r)?"Already Published":"Update Review Draft";window.scrollTo({top:0,behavior:"smooth"});note("Reviewing: "+r.title+" · Status: "+r.status+(r.review_note?" · Note: "+r.review_note:""));
+ editingId=isPublished(r)?null:r.id;const p=r.payload||{};fillForm(p,p.job_kind||"private");$("officialChecked").checked=false;$("saveBtn").disabled=isPublished(r);$("saveBtn").textContent=isPublished(r)?"Already Published":"Update Review Draft";window.scrollTo({top:0,behavior:"smooth"});note("Reviewing: "+r.title+" · Status: "+r.status+(r.review_note?" · Note: "+r.review_note:""));
  $("importNote").classList.remove("hidden");$("importNote").textContent="Original source: "+(p.official_url||"not recorded")+". Open and compare the source before making a decision.";
 }
 async function publishRecord(id){
  const r=records.find(x=>x.id===id);if(!r||isPublished(r))return;
+ if(!$("officialChecked").checked){note("Open the original official page and confirm the details, deadline and application link before publishing.",true);return}
  if(!confirm("Publish this single "+kindLabel(r.payload)+" job to the public website after your final check?"))return;
  if(r.status==="pending_review"){
   const a=await sb.rpc("tc_admin_approve_job_post_review",{p_review_id:id});
