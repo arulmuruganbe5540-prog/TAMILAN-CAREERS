@@ -115,7 +115,7 @@ $('analyzeCandidates').addEventListener('click',async()=>{
  const button=$('analyzeCandidates'),box=$('scanResult');button.disabled=true;const old=button.textContent;button.textContent='Analyzing…';
  box.style.display='block';box.className='status';box.textContent='Analyzing pending external job candidates…';
  try{
-  const {data,error}=await sb.functions.invoke('analyze-external-job-candidates',{body:{limit:12}});
+  const {data,error}=await sb.functions.invoke('analyze-external-job-candidates',{body:{limit:12,force_ai:true}});
   if(error)throw error;if(!data?.ok)throw new Error(data?.error||'Analysis did not complete');
   const aiCount=(data.results||[]).filter(x=>x.ai_review_status==='completed').length;box.className='status';box.textContent='Analysis complete: '+data.analyzed+' checked; AI-reviewed: '+aiCount+'; '+data.ready_for_admin_review+' structured records ready for Admin Review; '+data.needs_human_review+' need more details; '+data.expired_candidates+' may be expired; '+data.failed+' failed. Remaining: '+data.remaining+'. Published: '+data.published+'. '+(aiCount?'Gemini AI review completed.':'Gemini AI key is not configured yet; structured analysis only.');
   await load();
