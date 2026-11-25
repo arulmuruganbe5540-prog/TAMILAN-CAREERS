@@ -73,6 +73,7 @@
 <div class="tabs" id="queueTabs"><button class="active" data-queue="pending_review">Pending Review</button><button data-queue="approved">Approved / Ready to Publish</button><button data-queue="published">Published</button><button data-queue="rejected">Rejected</button></div>
 <div class="tablewrap"><table><thead><tr><th>Job / Employer</th><th>Category</th><th>Status</th><th>Added</th><th>Action</th></tr></thead><tbody id="queueRows"><tr><td colspan="5">Loading review queue…</td></tr></tbody></table></div>
 <p class="hint">Each job is opened and reviewed individually. No bulk publishing. Published jobs are sent to the matching Government, Private or International jobs table.</p>
+<p class="hint">Security note: the existing approval and publish database functions require Super Admin MFA (AAL2). If your account has no verified authenticator factor, approval will be blocked until the security policy is resolved.</p>
 </section>
 <div class="foot">Security: the import endpoint requires a valid Supabase session and Super Admin role. The page never exposes a service-role key. Publishing uses the existing Super Admin approval and publish RPCs.</div>
 </main>
