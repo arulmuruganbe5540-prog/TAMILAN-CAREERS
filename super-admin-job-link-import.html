@@ -69,7 +69,7 @@
 </form>
 </section>
 <section class="panel">
-<h2>3. Individual Review & Publishing Queue</h2>
+<h2>4. Individual Review & Publishing Queue</h2>
 <div class="tabs" id="queueTabs"><button class="active" data-queue="pending_review">Pending Review</button><button data-queue="approved">Approved / Ready to Publish</button><button data-queue="published">Published</button><button data-queue="rejected">Rejected</button></div>
 <div class="tablewrap"><table><thead><tr><th>Job / Employer</th><th>Category</th><th>Status</th><th>Added</th><th>Action</th></tr></thead><tbody id="queueRows"><tr><td colspan="5">Loading review queue…</td></tr></tbody></table></div>
 <p class="hint">Each job is opened and reviewed individually. No bulk publishing. Published jobs are sent to the matching Government, Private or International jobs table.</p>
@@ -81,13 +81,15 @@
 (()=>{
 const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co",SUPABASE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=id=>document.getElementById(id);
-let user=null,market="government",queue="pending_review",records=[],editingId=null,categories=[],countries=[];
+let user=null,market="government",queue="pending_review",records=[],editingId=null,categories=[],countries=[],leads=[],leadQueue="pending";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function note(msg,bad=false){$("status").textContent=msg;$("status").className="status"+(bad?" error":"")}
 function value(id){return $(id).value.trim()}
 function set(id,v){$(id).value=v??""}
 function getMarket(){return market}
-function setMarket(m){market=m;document.querySelectorAll("[data-market]").forEach(b=>b.classList.toggle("active",b.dataset.market===m));$("country").disabled=m!=="international";if(m!=="international")$("country").value="India";else $("country").value="";$("governmentScope").disabled=m!=="government";$("jobSector").disabled=m!=="international";$("salaryCurrency").value=m==="private"?"INR":m==="government"?"INR":"USD";}
+function setMarket(m){market=m;document.querySelectorAll("[data-lead-queue]").forEach(b=>b.addEventListener("click",()=>{leadQueue=b.dataset.leadQueue;document.querySelectorAll("[data-lead-queue]").forEach(x=>x.classList.toggle("active",x===b));renderLeads()}));
+$("leadRows").addEventListener("click",async e=>{const v=e.target.closest("[data-lead-verify]");if(v){await reviewLead(v.dataset.leadVerify,"verified");return}const r=e.target.closest("[data-lead-reject]");if(r){await reviewLead(r.dataset.leadReject,"rejected");return}const i=e.target.closest("[data-lead-import]");if(i)importLead(i.dataset.leadImport)});
+document.querySelectorAll("[data-market]").forEach(b=>b.classList.toggle("active",b.dataset.market===m));$("country").disabled=m!=="international";if(m!=="international")$("country").value="India";else $("country").value="";$("governmentScope").disabled=m!=="government";$("jobSector").disabled=m!=="international";$("salaryCurrency").value=m==="private"?"INR":m==="government"?"INR":"USD";}
 function jobKind(){return market==="government"?"government":market==="private"?"private":"foreign"}
 function payloadFromForm(){return {
  job_kind:jobKind(),title:value("jobTitle"),company:value("company"),authority:market==="government"?value("company"):"",department:market==="government"?value("company"):"",
@@ -109,7 +111,7 @@ async function init(){
  $("category").innerHTML='<option value="">Select category</option>'+categories.map(x=>'<option>'+esc(x.category_name)+'</option>').join("");
  $("country").innerHTML='<option value="">Select country</option>'+countries.map(x=>'<option>'+esc(x.country_name)+'</option>').join("");
  $("salaryCurrency").innerHTML=(curs.data||[]).map(x=>'<option>'+esc(x.currency_code)+'</option>').join("");
- setMarket("government");await loadQueue();
+ setMarket("government");await loadQueue();await loadLeads();
 }
 async function importLink(){
  const url=value("sourceUrl");if(!url){$("sourceUrl").focus();return}
@@ -141,6 +143,43 @@ async function saveDraft(e){
  $("saveBtn").disabled=false;
  if(result.error){note("Could not save review item: "+result.error.message,true);return}
  note("Saved to Pending Review. This job is not public.");clearForm();await loadQueue();
+}
+async function loadLeads(){
+ const {data,error}=await sb.from("external_job_candidates").select("id,source_id,title,official_url,country,region,source_type,discovery_context,verification,status,discovered_at,rejection_reason").in("status",["pending","verified"]).order("discovered_at",{ascending:false}).limit(200);
+ if(error){$("leadRows").innerHTML='<tr><td colspan="4">'+esc(error.message)+'</td></tr>';return}
+ leads=data||[];renderLeads();
+}
+function leadMarket(r){return /foreign|international/i.test(r.source_type||"")||(!/india/i.test(r.country||"")&&!!r.country)?"international":"private"}
+function renderLeads(){
+ const rows=leads.filter(r=>r.status===leadQueue);
+ $("leadCount").textContent=leadQueue==="pending"?rows.length+" pending leads · "+leads.filter(r=>r.status==="verified").length+" verified":"Showing "+rows.length+" verified leads";
+ $("leadRows").innerHTML=rows.length?rows.map(r=>{
+  const marketName=leadMarket(r)==="international"?"International":"Indian Private";
+  const v=r.verification||{};
+  const checks=[["source_domain_matched","Official source domain matches"],["original_notice_opened","Original job notice opened"],["dates_verified","Job dates checked"],["eligibility_verified","Eligibility checked"],["application_link_verified","Apply link checked"],["duplicate_checked","Duplicate check completed"]];
+  const checklist=checks.map(([k,label])=>'<label class="check"><input type="checkbox" data-lead-check="'+esc(r.id)+'" data-check-key="'+k+'" '+(v[k]===true?'checked':'')+' '+(r.status!=="pending"?'disabled':'')+'><span>'+label+'</span></label>').join("");
+  return '<tr><td><b>'+esc(r.title)+'</b><small>'+esc(r.source_type)+' · '+esc(r.source_id)+'</small><details><summary>Review source & verification</summary><p>'+esc(r.discovery_context||"No additional discovery context.")+'</p><p><a href="'+esc(r.official_url)+'" target="_blank" rel="noopener noreferrer">Open original job source ↗</a></p>'+checklist+'</details></td><td>'+marketName+'<small>'+esc(r.country||"")+' '+esc(r.region||"")+'</small></td><td>'+new Date(r.discovered_at).toLocaleDateString("en-IN")+'</td><td><div class="actions">'+(r.status==="pending"?'<button class="good" data-lead-verify="'+esc(r.id)+'">Verify</button><button class="danger" data-lead-reject="'+esc(r.id)+'">Reject</button>':'<span class="tag">Verified</span><button class="secondary" data-lead-import="'+esc(r.id)+'">Import this link</button>')+'</div></td></tr>';
+ }).join(""):'<tr><td colspan="4">No '+leadQueue+' leads found.</td></tr>';
+}
+async function reviewLead(id,decision){
+ const r=leads.find(x=>x.id===id);if(!r)return;
+ let reason="",verification={};
+ if(decision==="verified"){
+  document.querySelectorAll('[data-lead-check="'+id+'"]').forEach(el=>verification[el.dataset.checkKey]=el.checked);
+  if(Object.keys(verification).length!==6||Object.values(verification).some(v=>v!==true)){note("Complete all six verification checks for this lead.",true);return}
+ }else{
+  reason=prompt("Why should this discovered lead be rejected? (at least 10 characters)");
+  if(!reason||reason.trim().length<10)return;
+ }
+ const {data,error}=await sb.rpc("tc_review_external_job_candidate",{p_candidate_id:id,p_decision:decision,p_reason:reason,p_verification:verification});
+ if(error){note("Lead review failed: "+error.message,true);return}
+ note(decision==="verified"?"Lead verified. Import its link and complete the job details before publishing.":"Lead rejected and retained in review history.");
+ await loadLeads();
+}
+function importLead(id){
+ const r=leads.find(x=>x.id===id);if(!r)return;
+ setMarket(leadMarket(r));set("sourceUrl",r.official_url);$("sourceUrl").focus();window.scrollTo({top:0,behavior:"smooth"});
+ note("Lead link loaded. Select Import Job Details to extract the job information.");
 }
 function isPublished(r){return !!(r.published_job_id||r.published_private_job_id||r.published_government_job_id||r.published_international_job_id)}
 function kindLabel(p){return p?.job_kind==="government"?"Government":p?.job_kind==="foreign"?"International":"Indian Private"}
