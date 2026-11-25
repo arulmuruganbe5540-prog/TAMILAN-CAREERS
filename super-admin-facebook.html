@@ -36,11 +36,8 @@
   if(error||!u){location.replace('super-admin-login.html');return false}
   const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',u.id).eq('role','super_admin').limit(1);
   if(roleError||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return false}
-  const {data:factors,error:factorError}=await sb.auth.mfa.listFactors();
-  if(factorError){$('overall').textContent='Unable to verify MFA status. Please sign in again.';return false}
-  if(!(factors.totp||[]).some(f=>f.status==='verified')){location.replace('super-admin-security.html');return false}
-  const {data:aal,error:aalError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
-  if(aalError||aal.currentLevel!=='aal2'){location.replace('super-admin-login.html');return false}
+  // Match the main Super Admin access policy: require a valid signed-in session
+  // and the server-verified super_admin role; do not force TOTP when account MFA is disabled.
   user=u;$('email').textContent=u.email||'';$('overall').textContent='Super Admin access verified.';return true;
  }
  async function refresh(){
