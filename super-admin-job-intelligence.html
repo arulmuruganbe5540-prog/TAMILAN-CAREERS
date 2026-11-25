@@ -73,15 +73,16 @@ async function secureSession(){
 async function count(table,filters=[]){let q=sb.from(table).select('id',{count:'exact',head:true});for(const f of filters)q=q[f[0]](...f[1]);const {count,error}=await q;if(error)throw error;return count||0}
 async function load(){
  try{
-  const [gs,es,ec,ep,gr,gp]=await Promise.all([
+  const [gs,es,ec,ep,waiting,gr,gp]=await Promise.all([
    count('government_notice_sources',[['eq',['enabled',true]]]),
    count('external_job_sources',[['eq',['enabled',true]]]),
    count('external_job_candidates'),
    count('external_job_candidates',[['eq',['status','pending']]]),
+   count('external_job_candidates',[['eq',['status','pending']],['not',['verification','cs','{"analysis":{}}']]]),
    count('government_notice_reviews'),
    count('government_notice_reviews',[['eq',['status','pending']]])
   ]);
-  $('govSources').textContent=gs;$('companySources').textContent=es;$('externalCandidates').textContent=ec;$('externalPending').textContent=ep+' pending verification';
+  $('govSources').textContent=gs;$('companySources').textContent=es;$('externalCandidates').textContent=ec;$('externalPending').textContent=ep+' pending verification · '+waiting+' awaiting analysis';
   $('govCandidates').textContent=gr;$('govPending').textContent=gp+' pending review';
   $('govActiveTag').textContent=gs+' enabled sources';$('externalActiveTag').textContent=es+' enabled sources';
   const {data:sources,error:sourceError}=await sb.from('external_job_sources').select('source_name,monitor_mode,last_status,last_checked_at,enabled').order('source_name').limit(12);
@@ -116,7 +117,7 @@ $('analyzeCandidates').addEventListener('click',async()=>{
  try{
   const {data,error}=await sb.functions.invoke('analyze-external-job-candidates',{body:{limit:12}});
   if(error)throw error;if(!data?.ok)throw new Error(data?.error||'Analysis did not complete');
-  box.className='status';box.textContent='Analysis complete: '+data.analyzed+' checked; '+data.ready_for_admin_review+' structured records ready for Admin Review; '+data.needs_human_review+' need more details; '+data.expired_candidates+' may be expired; '+data.failed+' failed. Published: '+data.published+'.';
+  box.className='status';box.textContent='Analysis complete: '+data.analyzed+' checked; '+data.ready_for_admin_review+' structured records ready for Admin Review; '+data.needs_human_review+' need more details; '+data.expired_candidates+' may be expired; '+data.failed+' failed. Remaining analysis: '+data.remaining+'. Published: '+data.published+'.';
   await load();
  }catch(e){box.className='status error';box.textContent='Analysis failed: '+(e.message||String(e))+'. No jobs were published.'}
  finally{button.disabled=false;button.textContent=old}
