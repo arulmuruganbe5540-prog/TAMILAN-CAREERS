@@ -98,8 +98,8 @@ extra='<div class="section-title">Related Qualifications</div><div class="box-gr
 list=jobs.filter(j=>String(j.job_title||'').toLowerCase().includes(r.toLowerCase())||r.toLowerCase().includes(String(j.job_title||'').toLowerCase()));
 if(intl&&c)list=list.filter(j=>String(j.country_name||'').toLowerCase()===c.toLowerCase());
 }else return;
-content.innerHTML=back+'<h2>'+heading+'</h2>'+(tiles?'<div class="box-grid role-grid">'+tiles+'</div>':'')+extra+'<div class="section-title">Matching Jobs</div><div class="job-table-wrap"><table class="job-table"><thead><tr><th>JOB TITLE</th><th>QUALIFICATION</th><th>COUNTRY</th><th>SALARY</th></tr></thead><tbody id="subRows"></tbody></table></div><div class="job-pager" id="subPager"></div>';
-renderTable(list,document.getElementById('subRows'),document.getElementById('subPager'));
+content.innerHTML=back+'<h2>'+heading+'</h2>'+(tiles?'<div class="box-grid role-grid">'+tiles+'</div>':'')+extra+(view==='category'?'':'<div class="section-title">Matching Jobs</div><div class="job-table-wrap"><table class="job-table"><thead><tr><th>JOB TITLE</th><th>QUALIFICATION</th><th>COUNTRY</th><th>SALARY</th></tr></thead><tbody id="subRows"></tbody></table></div><div class="job-pager" id="subPager"></div>');
+if(view!=='category')renderTable(list,document.getElementById('subRows'),document.getElementById('subPager'));
 }
 renderSubpage();
 })();
