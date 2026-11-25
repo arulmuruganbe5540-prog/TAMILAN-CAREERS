@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
+<title>Link-to-Job Import | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#294866;--cyan:#65d7ff;--muted:#a8bed2;--blue:#087fbd;--green:#147a55;--red:#9d3844}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px Arial,sans-serif}.top{padding:15px 20px;background:#0d2036;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{color:var(--cyan);font-weight:900;letter-spacing:1px}.wrap{max-width:1250px;margin:auto;padding:20px}.muted{color:var(--muted);line-height:1.5}a{color:var(--cyan)}button,input,select,textarea{font:inherit}button{background:var(--blue);color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#294866}.danger{background:#913d49}.good{background:var(--green)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:16px 0}.status{padding:11px;border-radius:8px;background:#183b55;margin:12px 0}.error{background:#55313a}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tabs button{background:#183451;border:1px solid var(--line)}.tabs button.active{background:#087fbd;border-color:var(--cyan)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:12px;color:#c8d8e8;font-weight:700}input,select,textarea{width:100%;padding:11px;border:1px solid #42617e;border-radius:8px;background:#08192c;color:#fff;min-width:0}textarea{min-height:105px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row input{flex:1;min-width:220px}.check{display:flex;align-items:center;gap:8px;margin:7px 0}.check input{width:auto}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:9px}table{border-collapse:collapse;width:100%;min-width:760px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#0d2036;color:var(--cyan)}td small{display:block;color:var(--muted);margin-top:4px}.tag{border:1px solid #42617e;border-radius:20px;padding:3px 8px;font-size:11px}.hidden{display:none!important}.hint{font-size:12px;color:var(--muted)}.notice{padding:10px;border:1px solid var(--line);background:#0b1d31;border-radius:8px;margin:10px 0}.actions button{white-space:nowrap}.foot{font-size:12px;color:var(--muted);margin:20px 0}@media(max-width:650px){.wrap{padding:12px}.panel{padding:12px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{padding:12px}}
+</style></head><body>
+<header class="top"><div><div class="brand">TAMILAN CAREERS · SUPER ADMIN</div><div class="muted">Link-to-Job Import & Approval Workspace</div></div><div class="row"><a href="super-admin.html">← Dashboard</a><span id="adminEmail" class="muted"></span><button id="logout" class="secondary">Logout</button></div></header>
+<main class="wrap">
+<h1>Paste a Job Link → Build Job Details</h1>
+<p class="muted">Separate import and review workflow for Government, Indian Private and International jobs. Imported details remain private until you inspect and publish them.</p>
+<div id="status" class="status">Checking Super Admin access…</div>
+<section class="panel">
+<h2>1. Choose Job Category</h2>
+<div class="tabs" id="marketTabs">
+<button type="button" data-market="government" class="active">🏛 Government Jobs</button>
+<button type="button" data-market="private">🏢 Indian Private Jobs</button>
+<button type="button" data-market="international">🌍 International Jobs</button>
+</div>
+<div class="field full"><label for="sourceUrl">Official job / vacancy page URL</label><div class="row"><input id="sourceUrl" type="url" placeholder="https://official-company-or-government-site/job-details" autocomplete="url"><button id="importBtn">Import Job Details</button></div><div class="hint">Use the individual job page, not only a company homepage. This importer reads public Schema.org JobPosting data and page metadata. PDF-only links need manual field entry.</div></div>
+<div id="importNote" class="notice hidden"></div>
+</section>
+<section class="panel">
+<h2>2. Check and Edit Extracted Details</h2>
+<p class="muted">All fields are editable. Missing values must be filled from the original official page. Never guess salary, vacancies, dates, eligibility or visa details.</p>
+<form id="jobForm">
+<div class="grid">
+<div class="field"><label for="jobTitle">Job Title *</label><input id="jobTitle" required maxlength="180"></div>
+<div class="field"><label for="company">Company / Department / Authority *</label><input id="company" required maxlength="200"></div>
+<div class="field"><label for="country">Country *</label><select id="country" required></select></div>
+<div class="field"><label for="location">Job Location *</label><input id="location" required maxlength="300"></div>
+<div class="field"><label for="category">Job Category *</label><select id="category"><option value="">Select category</option></select></div>
+<div class="field"><label for="type">Employment Type *</label><select id="type"><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option></select></div>
+<div class="field"><label for="workplace">Workplace Type</label><select id="workplace"><option value="onsite">On-site</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option></select></div>
+<div class="field"><label for="openings">Vacancies / Openings</label><input id="openings" type="number" min="1" step="1" placeholder="Not stated"></div>
+<div class="field"><label for="salaryMin">Salary Minimum</label><input id="salaryMin" type="number" min="0" step="any"></div>
+<div class="field"><label for="salaryMax">Salary Maximum</label><input id="salaryMax" type="number" min="0" step="any"></div>
+<div class="field"><label for="salaryCurrency">Salary Currency</label><select id="salaryCurrency"></select></div>
+<div class="field"><label for="salaryPeriod">Salary Period</label><select id="salaryPeriod"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="hourly">Hourly</option><option value="daily">Daily</option></select></div>
+<div class="field"><label for="deadline">Application Deadline</label><input id="deadline" type="date"></div>
+<div class="field"><label for="education">Education / Qualification</label><input id="education" maxlength="1500"></div>
+<div class="field"><label for="experience">Experience Requirement</label><input id="experience" maxlength="500"></div>
+<div class="field full"><label for="skills">Required Skills</label><textarea id="skills" maxlength="2000"></textarea></div>
+<div class="field full"><label for="description">Full Job Description *</label><textarea id="description" required maxlength="8000"></textarea></div>
+<div class="field"><label for="officialUrl">Official Source / Employer URL *</label><input id="officialUrl" type="url" required></div>
+<div class="field"><label for="applyUrl">Apply URL</label><input id="applyUrl" type="url"></div>
+<div class="field"><label for="pdfUrl">Official Notification PDF URL</label><input id="pdfUrl" type="url"></div>
+<div class="field"><label for="notificationNumber">Notification / Requisition Number</label><input id="notificationNumber"></div>
+<div class="field"><label for="notificationDate">Notification Date</label><input id="notificationDate" type="date"></div>
+<div class="field"><label for="applicationStart">Application Start Date</label><input id="applicationStart" type="date"></div>
+<div class="field"><label for="ageLimit">Age Limit</label><input id="ageLimit"></div>
+<div class="field"><label for="ageRelaxation">Age Relaxation</label><input id="ageRelaxation"></div>
+<div class="field"><label for="applicationFee">Application Fee</label><input id="applicationFee"></div>
+<div class="field"><label for="selectionProcess">Selection Process</label><input id="selectionProcess"></div>
+<div class="field"><label for="examDate">Exam Date (if applicable)</label><input id="examDate" type="date"></div>
+<div class="field"><label for="governmentScope">Government Scope</label><select id="governmentScope"><option value="central">Central Government</option><option value="tamil-nadu">Tamil Nadu Government</option><option value="national">National Government (outside India)</option></select></div>
+<div class="field"><label for="jobSector">International Job Sector</label><select id="jobSector"><option value="private">Private Sector</option><option value="government">Government Sector</option></select></div>
+<div class="field"><label for="visaType">Visa Type</label><input id="visaType"></div>
+<div class="field"><label for="workPermit">Work Permit</label><input id="workPermit"></div>
+<div class="field"><label for="languageRequirements">Language Requirements</label><input id="languageRequirements"></div>
+<div class="field full"><label for="visaNotes">Visa / Work Permit Notes</label><textarea id="visaNotes"></textarea></div>
+</div>
+<div class="check"><input id="visaSponsorship" type="checkbox"><label for="visaSponsorship">Visa Sponsorship Available (only if confirmed by employer)</label></div>
+<div class="check"><input id="relocationSupport" type="checkbox"><label for="relocationSupport">Relocation Support Available (only if confirmed)</label></div>
+<div class="check"><input id="officialChecked" type="checkbox"><label for="officialChecked">I opened the original official page and checked the extracted details, deadline and application link.</label></div>
+<div class="actions"><button type="submit" id="saveBtn">Save to Pending Review</button><button type="button" id="clearBtn" class="secondary">Clear Form</button></div>
+</form>
+</section>
+<section class="panel">
+<h2>3. Individual Review & Publishing Queue</h2>
+<div class="tabs" id="queueTabs"><button class="active" data-queue="pending_review">Pending Review</button><button data-queue="approved">Approved / Ready to Publish</button><button data-queue="published">Published</button><button data-queue="rejected">Rejected</button></div>
+<div class="tablewrap"><table><thead><tr><th>Job / Employer</th><th>Category</th><th>Status</th><th>Added</th><th>Action</th></tr></thead><tbody id="queueRows"><tr><td colspan="5">Loading review queue…</td></tr></tbody></table></div>
+<p class="hint">Each job is opened and reviewed individually. No bulk publishing. Published jobs are sent to the matching Government, Private or International jobs table.</p>
+</section>
+<div class="foot">Security: the import endpoint requires a valid Supabase session and Super Admin role. The page never exposes a service-role key. Publishing uses the existing Super Admin approval and publish RPCs.</div>
+</main>
+<script>
+(()=>{
+const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co",SUPABASE_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=id=>document.getElementById(id);
+let user=null,market="government",queue="pending_review",records=[],editingId=null,categories=[],countries=[];
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function note(msg,bad=false){$("status").textContent=msg;$("status").className="status"+(bad?" error":"")}
+function value(id){return $(id).value.trim()}
+function set(id,v){$(id).value=v??""}
+function getMarket(){return market}
+function setMarket(m){market=m;document.querySelectorAll("[data-market]").forEach(b=>b.classList.toggle("active",b.dataset.market===m));$("country").disabled=m!=="international";if(m!=="international")$("country").value="India";$("governmentScope").disabled=m!=="government";$("jobSector").disabled=m!=="international";$("salaryCurrency").value=m==="private"?"INR":m==="government"?"INR":"USD";}
+function jobKind(){return market==="government"?"government":market==="private"?"private":"foreign"}
+function payloadFromForm(){return {
+ job_kind:jobKind(),title:value("jobTitle"),company:value("company"),authority:market==="government"?value("company"):"",department:market==="government"?value("company"):"",
+ country_name:market==="government"||market==="private"?"India":value("country"),location:value("location"),category:value("category"),
+ type:value("type"),workplace:value("workplace"),openings:value("openings"),salaryMin:value("salaryMin"),salaryMax:value("salaryMax"),salaryCurrency:value("salaryCurrency"),salaryPeriod:value("salaryPeriod"),deadline:value("deadline"),
+ education:value("education"),skills:value("skills"),experience:value("experience"),description:value("description"),official_url:value("officialUrl"),officialWebsiteUrl:value("officialUrl"),application_url:value("applyUrl"),applicationUrl:value("applyUrl"),notification_pdf_url:value("pdfUrl"),officialNotificationUrl:value("pdfUrl"),
+ notification_number:value("notificationNumber"),notification_date:value("notificationDate"),application_start_date:value("applicationStart"),age_limit:value("ageLimit"),age_relaxation:value("ageRelaxation"),application_fee:value("applicationFee"),selection_process:value("selectionProcess"),exam_date:value("examDate"),
+ governmentScope:value("governmentScope"),job_sector:value("jobSector"),visa_type:value("visaType"),work_permit:value("workPermit"),language_requirements:value("languageRequirements"),visa_notes:value("visaNotes"),visa_sponsorship_available:$("visaSponsorship").checked,relocation_support:$("relocationSupport").checked,
+ how_to_apply:"Apply through the official link provided.",additional_info:"Imported from official job source; manually reviewed by TAMILAN CAREERS Super Admin."
+}}
+function fillForm(p,m){setMarket(m==="foreign"?"international":m||"private");set("jobTitle",p.title);set("company",p.company||p.authority);set("country",p.country_name||"India");set("location",p.location);set("category",p.category);set("type",p.type||"Full Time");set("workplace",p.workplace||"onsite");set("openings",p.openings);set("salaryMin",p.salaryMin);set("salaryMax",p.salaryMax);set("salaryCurrency",p.salaryCurrency||"INR");set("salaryPeriod",p.salaryPeriod||"monthly");set("deadline",p.deadline);set("education",p.education);set("experience",p.experience);set("skills",p.skills);set("description",p.description);set("officialUrl",p.official_url||p.officialWebsiteUrl);set("applyUrl",p.application_url||p.applicationUrl);set("pdfUrl",p.notification_pdf_url||p.officialNotificationUrl);set("notificationNumber",p.notification_number);set("notificationDate",p.notification_date);set("applicationStart",p.application_start_date);set("ageLimit",p.age_limit);set("ageRelaxation",p.age_relaxation);set("applicationFee",p.application_fee);set("selectionProcess",p.selection_process);set("examDate",p.exam_date);set("governmentScope",p.governmentScope||"central");set("jobSector",p.job_sector||"private");set("visaType",p.visa_type);set("workPermit",p.work_permit);set("languageRequirements",p.language_requirements);set("visaNotes",p.visa_notes);$("visaSponsorship").checked=!!p.visa_sponsorship_available;$("relocationSupport").checked=!!p.relocation_support}
+function clearForm(){editingId=null;$("jobForm").reset();$("officialChecked").checked=false;setMarket(market);$("saveBtn").textContent="Save to Pending Review"}
+async function init(){
+ const {data:{user:u},error}=await sb.auth.getUser();if(error||!u){location.replace("super-admin-login.html");return}
+ const {data:r,error:e}=await sb.from("user_roles").select("role").eq("user_id",u.id).eq("role","super_admin").limit(1);if(e||!r?.length){await sb.auth.signOut();location.replace("super-admin-login.html");return}
+ user=u;$("adminEmail").textContent=u.email||"";note("Super Admin access verified.");
+ const [cats,ctys,curs]=await Promise.all([sb.from("job_categories").select("category_name").eq("is_active",true).order("category_name"),sb.from("countries").select("country_name").eq("is_active",true).order("country_name"),sb.from("currencies").select("currency_code").eq("is_active",true).order("currency_code")]);
+ categories=cats.data||[];countries=ctys.data||[];
+ $("category").innerHTML='<option value="">Select category</option>'+categories.map(x=>'<option>'+esc(x.category_name)+'</option>').join("");
+ $("country").innerHTML=countries.map(x=>'<option>'+esc(x.country_name)+'</option>').join("");
+ $("salaryCurrency").innerHTML=(curs.data||[]).map(x=>'<option>'+esc(x.currency_code)+'</option>').join("");
+ setMarket("government");await loadQueue();
+}
+async function importLink(){
+ const url=value("sourceUrl");if(!url){$("sourceUrl").focus();return}
+ $("importBtn").disabled=true;$("importBtn").textContent="Reading source…";$("importNote").classList.remove("hidden");
+ $("importNote").textContent="Opening the public job page and looking for structured JobPosting details…";
+ const {data,error}=await sb.functions.invoke("import-job-link-details",{body:{market,url}});
+ $("importBtn").disabled=false;$("importBtn").textContent="Import Job Details";
+ if(error||!data?.ok){$("importNote").textContent="Import failed: "+(data?.error||error?.message||"Unknown error");note("Could not import this URL. You can still enter details manually.",true);return}
+ fillForm(data.fields||{},jobKind());
+ if(market==="government"){set("country","India");}
+ if(market==="private"){set("country","India");set("salaryCurrency","INR");}
+ if(market==="international"&&data.fields?.country_name)set("country",data.fields.country_name);
+ $("officialChecked").checked=false;
+ $("importNote").textContent=data.note+" Missing structured fields: "+((data.missing||[]).join(", ")||"none detected")+". Please compare with the original page before saving.";
+ note("Link imported into the editable form. Nothing has been published.");
+}
+async function saveDraft(e){
+ e.preventDefault();
+ if(!$("officialChecked").checked){note("Open the official page and confirm your checks before saving this job for review.",true);return}
+ const p=payloadFromForm();
+ if(!p.title||!p.description||!p.company||!p.location||!p.official_url){note("Complete Job Title, Description, Company, Location and Official URL.",true);return}
+ if(market!=="government"&&!p.category){note("Choose an active job category before saving.",true);return}
+ if(market==="international"&&(!p.country_name||p.country_name==="India")){note("International Jobs must be located outside India.",true);return}
+ if(market==="private"&&p.salaryCurrency!=="INR"){note("Indian Private Jobs must use INR.",true);return}
+ $("saveBtn").disabled=true;
+ let result;
+ if(editingId){result=await sb.from("admin_job_post_reviews").update({title:p.title,company_name:p.company,status:"pending_review",payload:p,updated_at:new Date().toISOString()}).eq("id",editingId).select("id").single()}
+ else{result=await sb.from("admin_job_post_reviews").insert({created_by:user.id,title:p.title,company_name:p.company,status:"pending_review",payload:p}).select("id").single()}
+ $("saveBtn").disabled=false;
+ if(result.error){note("Could not save review item: "+result.error.message,true);return}
+ note("Saved to Pending Review. This job is not public.");clearForm();await loadQueue();
+}
+function isPublished(r){return !!(r.published_job_id||r.published_private_job_id||r.published_government_job_id||r.published_international_job_id)}
+function kindLabel(p){return p?.job_kind==="government"?"Government":p?.job_kind==="foreign"?"International":"Indian Private"}
+async function loadQueue(){
+ const {data,error}=await sb.from("admin_job_post_reviews").select("id,title,company_name,status,payload,created_at,review_note,published_job_id,published_private_job_id,published_government_job_id,published_international_job_id").order("created_at",{ascending:false}).limit(150);
+ if(error){$("queueRows").innerHTML='<tr><td colspan="5">'+esc(error.message)+'</td></tr>';return}
+ records=data||[];renderQueue();
+}
+function renderQueue(){
+ const rows=records.filter(r=>queue==="published"?isPublished(r):queue==="approved"?r.status==="approved"&&!isPublished(r):r.status===queue);
+ $("queueRows").innerHTML=rows.length?rows.map(r=>'<tr><td><b>'+esc(r.title)+'</b><small>'+esc(r.company_name||"")+'</small></td><td>'+kindLabel(r.payload)+'</td><td><span class="tag">'+esc(isPublished(r)?"published":r.status)+'</span></td><td>'+new Date(r.created_at).toLocaleDateString("en-IN")+'</td><td><div class="actions"><button class="secondary" data-open="'+r.id+'">Open / Review</button></div></td></tr>').join(""):'<tr><td colspan="5">No records in this queue.</td></tr>';
+}
+async function openRecord(id){
+ const r=records.find(x=>x.id===id);if(!r)return;
+ editingId=r.id;const p=r.payload||{};fillForm(p,p.job_kind||"private");$("officialChecked").checked=true;$("saveBtn").textContent="Update Review Draft";window.scrollTo({top:0,behavior:"smooth"});note("Reviewing: "+r.title+" · Status: "+r.status+(r.review_note?" · Note: "+r.review_note:""));
+ $("importNote").classList.remove("hidden");$("importNote").textContent="Original source: "+(p.official_url||"not recorded")+". Open and compare the source before making a decision.";
+}
+async function publishRecord(id){
+ const r=records.find(x=>x.id===id);if(!r||isPublished(r))return;
+ if(!confirm("Publish this single "+kindLabel(r.payload)+" job to the public website after your final check?"))return;
+ if(r.status==="pending_review"){
+  const a=await sb.rpc("tc_admin_approve_job_post_review",{p_review_id:id});
+  if(a.error){note("Approval failed: "+a.error.message,true);return}
+ }
+ const p=await sb.rpc("tc_admin_publish_job",{p_review_id:id});
+ if(p.error){note("Approved, but publishing did not complete: "+p.error.message+". It remains in Approved / Ready to Publish for retry.",true);await loadQueue();return}
+ note("Published successfully. Job ID: "+p.data);await loadQueue();
+}
+async function rejectRecord(id){
+ const reason=prompt("Enter the reason for rejecting this job (at least 5 characters):");if(!reason||reason.trim().length<5)return;
+ const {error}=await sb.rpc("tc_admin_reject_job_post_review",{p_review_id:id,p_review_note:reason.trim()});
+ if(error){note("Reject failed: "+error.message,true);return}
+ note("Job rejected and retained in the review history.");await loadQueue();
+}
+document.querySelectorAll("[data-market]").forEach(b=>b.addEventListener("click",()=>setMarket(b.dataset.market)));
+document.querySelectorAll("[data-queue]").forEach(b=>b.addEventListener("click",()=>{queue=b.dataset.queue;document.querySelectorAll("[data-queue]").forEach(x=>x.classList.toggle("active",x===b));renderQueue()}));
+$("importBtn").addEventListener("click",importLink);$("jobForm").addEventListener("submit",saveDraft);$("clearBtn").addEventListener("click",clearForm);
+$("queueRows").addEventListener("click",async e=>{const b=e.target.closest("button[data-open]");if(!b)return;const r=records.find(x=>x.id===b.dataset.open);if(!r)return;openRecord(r.id);if(!isPublished(r)){const action=document.createElement("div");action.className="actions";action.innerHTML='<button class="good" data-publish="'+r.id+'">Approve & Publish This Job</button><button class="danger" data-reject="'+r.id+'">Reject This Job</button>';const old=document.getElementById("reviewActions");if(old)old.remove();action.id="reviewActions";$("queueRows").closest(".panel").appendChild(action)}});
+document.addEventListener("click",async e=>{const p=e.target.closest("[data-publish]");if(p){await publishRecord(p.dataset.publish);p.remove()}const r=e.target.closest("[data-reject]");if(r){await rejectRecord(r.dataset.reject);r.remove()}});
+$("logout").addEventListener("click",async()=>{await sb.auth.signOut();location.replace("super-admin-login.html")});
+init();
+})();
+</script></body></html>
