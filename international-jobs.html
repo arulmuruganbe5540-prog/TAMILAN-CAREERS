@@ -20,7 +20,7 @@ h2{font-size:22px;margin:8px 0;color:#102944}.intro,.muted{color:var(--muted);fo
 .box-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .tile{display:flex;align-items:center;justify-content:center;text-align:center;min-height:62px;padding:8px 5px;border-radius:11px;background:var(--tile);color:#fff;text-decoration:none;font-size:11px;font-weight:800;line-height:1.25;box-shadow:0 4px 10px #142b4612;border:1px solid #ffffff30;overflow-wrap:anywhere;transition:transform .15s,filter .15s}
 .tile:hover{transform:translateY(-2px);filter:brightness(1.06)}
-.qual-grid .tile{min-height:48px}.role-grid .tile{min-height:65px}
+.qual-grid .tile{min-height:48px}.role-grid .tile{min-height:65px}.study-grid .tile{min-height:43px}
 .job-table-wrap{background:#fff;border:1px solid #dce5ef;border-radius:13px;overflow:hidden;box-shadow:0 7px 20px #152d4810;margin-top:10px}
 .job-table{width:100%;border-collapse:collapse;font-size:12px}.job-table th{background:#183958;color:#fff;text-align:left;padding:11px 9px;font-size:10px;letter-spacing:.4px}
 .job-table td{padding:11px 9px;border-bottom:1px solid #e9eef4;vertical-align:middle}.job-table tr:last-child td{border-bottom:0}
@@ -31,7 +31,7 @@ h2{font-size:22px;margin:8px 0;color:#102944}.intro,.muted{color:var(--muted);fo
 .notice{background:var(--soft);border:1px solid color-mix(in srgb,var(--accent),white 72%);border-left:4px solid var(--accent);padding:11px;border-radius:9px;color:#28435d;font-size:12px;margin:12px 0}
 footer{background:#102944;padding:18px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}footer a{color:#fff;font-size:12px}
 .ad-placement{margin:18px 0}
-@media(max-width:620px){header h1{font-size:19px}main{padding:0 10px 28px}.box-grid{gap:5px}.tile{font-size:9px;min-height:55px;padding:6px 3px;border-radius:8px}.qual-grid .tile{min-height:42px}.role-grid .tile{min-height:62px}.job-table{font-size:10px}.job-table th,.job-table td{padding:9px 6px}.portal-banner{padding:17px}.info-grid{gap:7px}.info-box{padding:9px}}
+@media(max-width:620px){header h1{font-size:19px}main{padding:0 10px 28px}.box-grid{gap:5px}.tile{font-size:9px;min-height:55px;padding:6px 3px;border-radius:8px}.qual-grid .tile{min-height:42px}.role-grid .tile{min-height:62px}.study-grid .tile{min-height:43px}.job-table{font-size:10px}.job-table th,.job-table td{padding:9px 6px}.portal-banner{padding:17px}.info-grid{gap:7px}.info-box{padding:9px}}
 </style></head><body>
 <header><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>International Careers · Global Job Updates</p></header>
 <main><div class="crumb"><a href="index.html">Home</a> / International Jobs</div>
@@ -52,11 +52,15 @@ const kind='international',intl=true,PAGE_SIZE=10,params=new URLSearchParams(loc
 const rowsRoot=document.getElementById('latestRows'),status=document.getElementById('status');
 const qualifications=intl?['10th','12th','ITI','Diploma','Degree','B.E / B.Tech','Nursing','B.Sc','MBA','Postgraduate']:['8th','10th','12th','ITI','Diploma','Degree','B.E / B.Tech','B.Sc','B.Com','MBA'];
 const roles={"Software & IT":["Software Developer","Web Developer","App Developer","Data Analyst","AI / ML Engineer","Cyber Security","UI / UX Designer","Cloud Engineer","Software Tester","Database Administrator"],"Banking":["Bank Officer","Accountant","Cashier","Loan Executive","Finance Analyst"],"Manufacturing":["Machine Operator","Production Supervisor","Quality Inspector","Maintenance Technician"],"Healthcare":["Staff Nurse","Medical Assistant","Lab Technician","Pharmacist"],"Sales":["Sales Executive","Marketing Executive","Business Development","Telecaller"],"Logistics":["Warehouse Assistant","Logistics Executive","Delivery Coordinator"],"Education":["Teacher","Tutor","Academic Coordinator"],"Hotel & Tourism":["Front Office Executive","Chef","Hotel Manager"],"Engineering":["Junior Engineer","Site Engineer","Design Engineer"],"Other Jobs":["Office Assistant","Data Entry Operator","Receptionist"],"UAE":["Software Developer","Registered Nurse","Hotel Manager","Accountant","Electrician","Chef","Care Assistant","Civil Engineer","Driver","Warehouse Assistant"],"Saudi Arabia":["Registered Nurse","Mechanical Technician","Electrician","Civil Engineer","Hotel Staff"],"Qatar":["Hotel Manager","Accountant","Construction Worker","Driver","Chef"],"Kuwait":["Nurse","Technician","Office Assistant","Heavy Driver"],"Oman":["Electrician","Welder","Sales Executive","Mechanic"],"Singapore":["Software Developer","Data Analyst","Accountant","Logistics Executive"],"Malaysia":["Production Operator","Technician","Customer Support"],"UK":["Care Assistant","Nurse","Software Engineer","Chef"],"USA":["Software Engineer","Data Analyst","Registered Nurse"],"Canada":["Caregiver","Truck Driver","Engineer"],"Australia":["Aged Care Worker","Nurse","Electrician"],"Germany":["Mechanical Engineer","Software Developer","Skilled Technician"],"Japan":["Care Worker","Factory Operator","Engineer"],"Europe":["Engineer","Hospitality Staff","Healthcare Assistant"],"Other Countries":["Skilled Worker","Technician","Professional Roles"]};
+const studyBranches={
+'ITI':['Electrician','Fitter','Welder','Turner','Machinist','COPA','Diesel Mechanic','Wireman','Plumber','Electronics Mechanic','Mechanic Motor Vehicle','Refrigeration & AC','Instrument Mechanic','Draughtsman Civil','Mechanic Electric Vehicle'],
+'Diploma':['Mechanical','Civil','Electrical & Electronics','Electronics & Communication','Computer Engineering','Information Technology','Automobile','Mechatronics','Chemical','Textile Technology','Production Engineering','Medical Laboratory Technology','Architecture Assistantship']
+};
 const categories=["Software & IT","Healthcare","Engineering","Construction","Hospitality & Tourism","Accounting & Finance","Manufacturing","Logistics","Sales & Business","Other Roles"],countries=["UAE","Saudi Arabia","Qatar","Kuwait","Oman","Singapore","Malaysia","UK","USA","Canada","Australia","Germany","Japan","Europe","Other Countries"];
 if(intl)Object.assign(roles,{"Construction":["Civil Engineer","Construction Worker","Electrician","Welder","Site Supervisor"],"Hospitality & Tourism":["Hotel Manager","Chef","Front Office Executive","Housekeeping Supervisor"],"Accounting & Finance":["Accountant","Finance Analyst","Auditor","Payroll Executive"],"Sales & Business":["Sales Executive","Business Development Executive","Marketing Manager"],"Other Roles":["Driver","Warehouse Assistant","Care Assistant","Skilled Technician"]});
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>v?new Date(v).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'Not specified';
-const qualificationsHTML=qualifications.map((q,i)=>'<a class="tile" style="--tile:'+['#315b9b','#16816d','#b66a35','#7950a8','#2879a8'][i%5]+'" href="?view=qualification&qualification='+encodeURIComponent(q)+'">'+esc(q)+'</a>').join('');
+const qualificationsHTML=qualifications.map((q,i)=>'<a class="tile" style="--tile:'+['#315b9b','#16816d','#b66a35','#7950a8','#2879a8'][i%5]+'" href="?view='+(q==='ITI'||q==='Diploma'?'study':'qualification')+'&qualification='+encodeURIComponent(q)+'">'+esc(q)+'</a>').join('');
 document.getElementById('qualificationBoxes').innerHTML=qualificationsHTML;
 let jobs=[];
 const {data,error}=await db.from(intl?'international_jobs':'private_jobs').select('id,job_title,employer_name,description,location,country_name,job_sector,category_id,employment_type,education_level,qualification_tags,required_skills,experience_requirement,salary_min,salary_max,salary_currency,application_deadline,application_url,official_website_url,visa_type,work_permit,visa_sponsorship_available,language_requirements').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
@@ -86,7 +90,15 @@ const view=params.get('view');if(!view)return;
 const content=document.getElementById('pageContent');
 const back='<p><a class="back-link" href="'+kind+'-jobs.html">← Back to '+(intl?'International':'Private')+' Jobs</a></p>';
 let heading='',tiles='',list=jobs,extra='';
-if(view==='qualification'){
+if(view==='study'){
+const q=params.get('qualification')||'';heading=esc(q)+' Trades & Branches';const branchList=studyBranches[q]||[];
+tiles=branchList.map((r,i)=>'<a class="tile" style="--tile:'+['#315b9b','#16816d','#b66a35','#7950a8','#2879a8'][i%5]+'" href="?view=trade&qualification='+encodeURIComponent(q)+'&trade='+encodeURIComponent(r)+'">'+esc(r)+'</a>').join('');
+extra='<div class="notice">Select your '+esc(q)+' trade or branch to view matching vacancies.</div>';
+}else if(view==='trade'){
+const q=params.get('qualification')||'',t=params.get('trade')||'';heading=esc(t)+' · Matching Jobs';
+extra='<div class="notice">'+esc(q)+' · '+esc(t)+'</div>';
+const term=t.toLowerCase();list=jobs.filter(j=>{const tags=Array.isArray(j.qualification_tags)?j.qualification_tags:[];const skills=Array.isArray(j.required_skills)?j.required_skills:[];const hay=[j.education_level,j.job_title,j.description,...tags,...skills].join(' ').toLowerCase();return hay.includes(term);});
+}else if(view==='qualification'){
 const q=params.get('qualification')||'';heading=esc(q)+' Qualification Jobs';list=jobs.filter(j=>qualificationMatches(j,q));
 }else if(view==='category'){
 const c=params.get('category')||'';heading=esc(c)+' · Job Roles';const roleList=roles[c]||roles['Other Jobs']||[];
@@ -98,8 +110,8 @@ extra='<div class="section-title">Related Qualifications</div><div class="box-gr
 list=jobs.filter(j=>String(j.job_title||'').toLowerCase().includes(r.toLowerCase())||r.toLowerCase().includes(String(j.job_title||'').toLowerCase()));
 if(intl&&c)list=list.filter(j=>String(j.country_name||'').toLowerCase()===c.toLowerCase());
 }else return;
-content.innerHTML=back+'<h2>'+heading+'</h2>'+(tiles?'<div class="box-grid role-grid">'+tiles+'</div>':'')+extra+(view==='category'?'':'<div class="section-title">Matching Jobs</div><div class="job-table-wrap"><table class="job-table"><thead><tr><th>JOB TITLE</th><th>QUALIFICATION</th><th>COUNTRY</th><th>SALARY</th></tr></thead><tbody id="subRows"></tbody></table></div><div class="job-pager" id="subPager"></div>');
-if(view!=='category')renderTable(list,document.getElementById('subRows'),document.getElementById('subPager'));
+content.innerHTML=back+'<h2>'+heading+'</h2>'+(tiles?'<div class="box-grid '+(view==='study'?'study-grid':'role-grid')+'">'+tiles+'</div>':'')+extra+(view==='category'||view==='study'?'':'<div class="section-title">Matching Jobs</div><div class="job-table-wrap"><table class="job-table"><thead><tr><th>JOB TITLE</th><th>QUALIFICATION</th><th>COUNTRY</th><th>SALARY</th></tr></thead><tbody id="subRows"></tbody></table></div><div class="job-pager" id="subPager"></div>');
+if(view!=='category'&&view!=='study')renderTable(list,document.getElementById('subRows'),document.getElementById('subPager'));
 }
 renderSubpage();
 })();
