@@ -53,6 +53,7 @@ main{width:min(1200px,100%);margin:0 auto;padding:20px 16px 40px}
 .section-nav a{color:#155d8b;font-size:13px;font-weight:700;text-decoration:underline;padding:4px 2px}
  .fresh-jobs{background:#f7fbff;border:1px solid #d7e7f5;border-radius:12px;padding:16px;margin:18px auto;max-width:1200px}.fresh-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fresh-card{background:#fff;border:1px solid #dce4ef;border-radius:9px;padding:14px;min-width:0}.fresh-card h3{font-size:16px;line-height:1.4;margin:0 0 7px}.fresh-meta{color:#65738b;font-size:13px;margin:5px 0}.fresh-badge{display:inline-block;border-radius:30px;padding:4px 9px;font-size:11px;font-weight:800;white-space:nowrap}.fresh-badge.just-now{background:#d9efff;color:#075b91}.fresh-badge.new{background:#fff0d6;color:#935000}.fresh-open{display:inline-block;margin-top:7px;color:#075e9b;font-weight:700;text-decoration:none}@media(max-width:600px){.fresh-jobs{margin:12px;padding:13px}.fresh-grid{grid-template-columns:1fr}.fresh-card{padding:12px}}
 .table-section{padding:22px 0;border-bottom:1px solid var(--line);scroll-margin-top:76px}
+.latest-jobs-section h2{display:flex;align-items:center;gap:10px}.latest-label{display:inline-flex;align-items:center;border-radius:4px;padding:4px 9px;background:linear-gradient(120deg,#0c4777,#1689a8);color:#fff;font-size:10px;font-weight:800;letter-spacing:1px;line-height:1.2;box-shadow:0 2px 7px rgba(16,29,58,.18)}
 .table-section h2{font-size:20px;margin:0 0 7px;color:var(--navy)}
 .table-section h3{font-size:16px;margin:18px 0 6px;color:var(--navy)}
 .table-section p{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 12px}
@@ -243,11 +244,9 @@ link.classList.add('is-selected');
 <a href="#latest-jobs">Latest Jobs</a><a href="central-government-jobs.html">Central Government</a><a href="state-government-jobs.html">All State Governments</a><a href="#qualification-jobs">Qualification-wise Jobs</a><a href="#answer-keys">Answer Key</a><a href="#results">Results</a><a href="#exam-dates">Exam Date</a><a href="#admit-cards">Admit Card</a>
 </div>
 
-<section class="fresh-jobs" id="fresh-jobs"><h2>JUST NOW – Latest 5 Jobs</h2><p class="fresh-meta">The newest five jobs published in the last 10 hours appear here. Badges update automatically.</p><div class="fresh-grid" id="fresh-jobs-list"><p class="fresh-meta">Loading recent jobs…</p></div></section>
-
-<section class="table-section" id="latest-jobs">
-<h2>Latest Government Jobs</h2><p>Recently published government job notifications from the website. This table refreshes automatically every 5 minutes and displays up to 10 records per page.</p>
-<div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latest-body"><tr><td colspan="6" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="latest-pager"></div><div class="updated" id="latest-updated"></div>
+<section class="table-section latest-jobs-section" id="latest-jobs">
+<h2>Latest Government Jobs <span class="latest-label">LATEST</span></h2>
+<div class="table-scroll"><table><thead><tr><th>Job Details</th><th>State</th><th>Qualification</th><th>Vacancies</th><th>Last Date</th><th>Details</th></tr></thead><tbody id="latest-body"><tr><td colspan="6" class="empty-cell">Loading published jobs…</td></tr></tbody></table></div><div class="pager" id="latest-pager"></div>
 </section>
 
 <!-- Ad placement 1: after the complete Latest Government Jobs table and pagination -->
@@ -314,7 +313,7 @@ sb.from('site_settings').select('site_name,headline,subtitle,primary_color').eq(
   if(data.primary_color&&/^#[0-9a-f]{6}$/i.test(data.primary_color)){const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',data.primary_color);}
  }
 });
-const PAGE_SIZE=10;let jobs=[],resources=[],pages={};
+const PAGE_SIZE=10,LATEST_PAGE_SIZE=5;let jobs=[],resources=[],pages={};
 const $=id=>document.getElementById(id);
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?'—':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
@@ -322,7 +321,8 @@ const safeUrl=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.pr
 const jobUrl=j=>'government-job-details.html?id='+encodeURIComponent(j.id);
 function tags(j){let a=Array.isArray(j.qualification_tags)?j.qualification_tags:[];if(j.education_level)a=a.concat(String(j.education_level).split(/[,;|]/));return a.map(x=>String(x).trim().toLowerCase()).filter(Boolean);}
 function jobRows(id,rows){
-const page=pages[id]||1,total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE)),start=(page-1)*PAGE_SIZE,shown=rows.slice(start,start+PAGE_SIZE);
+const pageSize=id==='latest'?LATEST_PAGE_SIZE:PAGE_SIZE;
+const page=pages[id]||1,total=Math.max(1,Math.ceil(rows.length/pageSize)),start=(page-1)*pageSize,shown=rows.slice(start,start+pageSize);
 const body=$(id+'-body');if(!body)return;
 if(!rows.length){body.innerHTML='<tr><td colspan="6" class="empty-cell">No published records available yet.</td></tr>';}
 else body.innerHTML=shown.map(j=>'<tr><td><strong>'+esc(j.job_title||'—')+'</strong><small class="table-sub">'+esc(j.department_name||j.employer_name||j.recruitment_authority||'—')+'</small></td><td>'+esc(String(j.government_category||j.government_scope||'').toLowerCase()==='central government'?'Central Government':(j.state_name||j.location||'—'))+'</td><td>'+esc(j.education_level||((Array.isArray(j.qualification_tags)&&j.qualification_tags.join(', '))||'—'))+'</td><td>'+esc(j.vacancies==null?'—':j.vacancies)+'</td><td>'+date(j.application_deadline)+'</td><td><a href="'+jobUrl(j)+'">View</a></td></tr>').join('');
@@ -342,14 +342,7 @@ const select=$('home-state-select');
 if(!select)return;
 select.addEventListener('change',()=>{if(select.value)location.href='state-jobs.html?state='+encodeURIComponent(select.value)});
 }
-function renderFreshJobs(){
-const host=$('fresh-jobs-list');if(!host)return;const now=Date.now();const recent=jobs.map(j=>{const raw=j.published_at||j.created_at;const t=raw?new Date(raw).getTime():NaN;return {j,t,h:(now-t)/3600000};}).filter(x=>Number.isFinite(x.t)&&x.h>=0&&x.h<=10).sort((a,b)=>b.t-a.t).slice(0,5);
-if(!recent.length){host.innerHTML='<p class="fresh-meta">No jobs were published in the last 10 hours.</p>';return;}
-host.innerHTML=recent.map(({j,h})=>{const badge=h<=5?'<span class="fresh-badge just-now">JUST NOW</span>':'<span class="fresh-badge new">NEW</span>';const place=j.state_name||j.location||j.government_category||'India';const qualification=j.education_level||((Array.isArray(j.qualification_tags)&&j.qualification_tags.join(', '))||'See details');return '<article class="fresh-card"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'+badge+'<span class="fresh-meta">'+(h<1?Math.max(1,Math.floor(h*60))+' min ago':Math.floor(h)+' hrs ago')+'</span></div><h3>'+esc(j.job_title||'Government Job')+'</h3><p class="fresh-meta">'+esc(j.department_name||j.employer_name||j.recruitment_authority||'Government Department')+'</p><p class="fresh-meta">'+esc(place)+' · '+esc(qualification)+'</p><p class="fresh-meta">Vacancies: '+esc(j.vacancies==null?'—':j.vacancies)+' · Last Date: '+date(j.application_deadline)+'</p><a class="fresh-open" href="'+jobUrl(j)+'">View Job Details →</a></article>';}).join('');
-}
-
 function renderAll(){
-renderFreshJobs();
 jobRows('latest',jobs);
 jobRows('central',jobs.filter(j=>String(j.government_category||j.government_scope||'').toLowerCase()==='central government'));
 jobRows('tn',jobs.filter(j=>{const c=String(j.government_category||'').toLowerCase();return c==='state government'||c==='tamil nadu government';}));
