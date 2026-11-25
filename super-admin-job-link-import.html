@@ -95,9 +95,12 @@ function note(msg,bad=false){$("status").textContent=msg;$("status").className="
 function value(id){return $(id).value.trim()}
 function set(id,v){$(id).value=v??""}
 function getMarket(){return market}
-function setMarket(m){market=m;document.querySelectorAll("[data-lead-queue]").forEach(b=>b.addEventListener("click",()=>{leadQueue=b.dataset.leadQueue;document.querySelectorAll("[data-lead-queue]").forEach(x=>x.classList.toggle("active",x===b));renderLeads()}));
-$("leadRows").addEventListener("click",async e=>{const v=e.target.closest("[data-lead-verify]");if(v){await reviewLead(v.dataset.leadVerify,"verified");return}const r=e.target.closest("[data-lead-reject]");if(r){await reviewLead(r.dataset.leadReject,"rejected");return}const i=e.target.closest("[data-lead-import]");if(i)importLead(i.dataset.leadImport)});
-document.querySelectorAll("[data-market]").forEach(b=>b.classList.toggle("active",b.dataset.market===m));$("country").disabled=m!=="international";if(m!=="international")$("country").value="India";else $("country").value="";$("governmentScope").disabled=m!=="government";$("jobSector").disabled=m!=="international";$("salaryCurrency").value=m==="private"?"INR":m==="government"?"INR":"USD";}
+function setMarket(m){market=m;
+document.querySelectorAll("[data-market]").forEach(b=>b.classList.toggle("active",b.dataset.market===m));
+$("country").disabled=m!=="international";if(m!=="international")$("country").value="India";else $("country").value="";
+$("governmentScope").disabled=m!=="government";$("jobSector").disabled=m!=="international";
+$("salaryCurrency").value=m==="private"?"INR":m==="government"?"INR":"USD";
+}
 function jobKind(){return market==="government"?"government":market==="private"?"private":"foreign"}
 function payloadFromForm(){return {
  job_kind:jobKind(),title:value("jobTitle"),company:value("company"),authority:market==="government"?value("company"):"",department:market==="government"?value("company"):"",
@@ -225,6 +228,8 @@ async function rejectRecord(id){
 document.querySelectorAll("[data-market]").forEach(b=>b.addEventListener("click",()=>setMarket(b.dataset.market)));
 document.querySelectorAll("[data-queue]").forEach(b=>b.addEventListener("click",()=>{queue=b.dataset.queue;document.querySelectorAll("[data-queue]").forEach(x=>x.classList.toggle("active",x===b));renderQueue()}));
 $("importBtn").addEventListener("click",importLink);$("jobForm").addEventListener("submit",saveDraft);$("clearBtn").addEventListener("click",clearForm);
+document.querySelectorAll("[data-lead-queue]").forEach(b=>b.addEventListener("click",()=>{leadQueue=b.dataset.leadQueue;document.querySelectorAll("[data-lead-queue]").forEach(x=>x.classList.toggle("active",x===b));renderLeads()}));
+$("leadRows").addEventListener("click",async e=>{const v=e.target.closest("[data-lead-verify]");if(v){await reviewLead(v.dataset.leadVerify,"verified");return}const r=e.target.closest("[data-lead-reject]");if(r){await reviewLead(r.dataset.leadReject,"rejected");return}const i=e.target.closest("[data-lead-import]");if(i)importLead(i.dataset.leadImport)});
 $("queueRows").addEventListener("click",async e=>{const b=e.target.closest("button[data-open]");if(!b)return;const r=records.find(x=>x.id===b.dataset.open);if(!r)return;openRecord(r.id);if(!isPublished(r)){const action=document.createElement("div");action.className="actions";action.innerHTML='<button class="good" data-publish="'+r.id+'">Approve & Publish This Job</button><button class="danger" data-reject="'+r.id+'">Reject This Job</button>';const old=document.getElementById("reviewActions");if(old)old.remove();action.id="reviewActions";$("queueRows").closest(".panel").appendChild(action)}});
 document.addEventListener("click",async e=>{const p=e.target.closest("[data-publish]");if(p){await publishRecord(p.dataset.publish);p.remove()}const r=e.target.closest("[data-reject]");if(r){await rejectRecord(r.dataset.reject);r.remove()}});
 $("logout").addEventListener("click",async()=>{await sb.auth.signOut();location.replace("super-admin-login.html")});
