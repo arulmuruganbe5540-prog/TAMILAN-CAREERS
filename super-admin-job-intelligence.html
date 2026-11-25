@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
+<title>Job Intelligence Center | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#07130f;--panel:#0d2119;--panel2:#102a20;--line:#1e4936;--green:#43d69a;--mint:#a4f3ce;--muted:#9bb8aa;--text:#effaf4;--amber:#f5c56b;--red:#ff8989}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#123b2b 0,transparent 36%),var(--bg);color:var(--text);font:14px Inter,system-ui,Arial,sans-serif}
+a{color:var(--mint);text-decoration:none}a:hover{text-decoration:underline}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px max(18px,calc((100% - 1380px)/2));background:#081911eF;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;backdrop-filter:blur(14px)}
+.brand{font-weight:850;letter-spacing:1.4px;color:var(--mint)}.wrap{max-width:1380px;margin:auto;padding:26px 18px 60px}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--green);font-weight:800}.hero{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin:14px 0 24px}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.05;margin:8px 0}.sub{color:var(--muted);line-height:1.6;max-width:720px}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#10291f;border-radius:999px;padding:7px 11px;color:var(--mint);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card,.panel{background:linear-gradient(145deg,#10271e,#0b1b14);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 12px 30px #0002}.metric-label{color:var(--muted);font-size:12px}.metric{font-size:34px;font-weight:800;letter-spacing:-1px;margin:9px 0 3px}.metric-foot{font-size:11px;color:var(--muted)}.icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#17432f;color:var(--mint);font-size:17px;margin-bottom:14px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.section-head h2{font-size:17px;margin:0}.actions{display:flex;gap:9px;flex-wrap:wrap}button,.btn{border:1px solid #286647;background:#164a33;color:#eafff3;padding:10px 14px;border-radius:10px;font-weight:750;cursor:pointer;font:inherit}button:hover,.btn:hover{background:#1b6242}button.secondary,.btn.secondary{background:#10281e;border-color:var(--line);color:var(--mint)}button:disabled{opacity:.45;cursor:wait}.status{border:1px solid var(--line);background:#0d261b;padding:12px 14px;border-radius:12px;margin:15px 0;color:var(--mint);line-height:1.5}.status.error{border-color:#754141;background:#321b1b;color:#ffc0c0}.status.warn{border-color:#6c572a;background:#2d2616;color:#ffe0a0}
+.scanner-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.scanner{padding:18px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#112d21,#0b1c14)}.scanner h3{margin:0 0 7px;font-size:16px}.scanner p{margin:0 0 15px;color:var(--muted);line-height:1.5;font-size:13px}.scanner .meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:#173b2a;border:1px solid #28573f;color:var(--mint)}.tag.manual{background:#332a17;border-color:#66512a;color:#ffdc91}
+.panel{margin-top:16px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:650px}th,td{text-align:left;padding:11px 10px;border-bottom:1px solid #1a3b2c;vertical-align:top}th{color:var(--mint);font-size:11px;text-transform:uppercase;letter-spacing:.8px}td{font-size:13px}td small{display:block;color:var(--muted);margin-top:4px}.empty{color:var(--muted);padding:18px 8px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.footer-note{color:var(--muted);font-size:11px;line-height:1.6;margin:20px 2px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
+@media(max-width:560px){.wrap{padding:18px 12px 42px}.grid{gap:8px}.card{padding:13px}.metric{font-size:28px}.scanner-grid{grid-template-columns:1fr}.top{padding:13px}.hero{margin-top:10px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">TAMILAN CAREERS <span style="color:#6d9d83">/</span> INTELLIGENCE</div><div class="actions"><a class="btn secondary" href="super-admin.html">Admin Dashboard</a><a class="btn secondary" href="super-admin-job-source-inbox.html">Review Inbox</a><button id="logout" class="secondary">Sign out</button></div></header>
+<main class="wrap">
+<div class="hero"><div><div class="eyebrow">PRIVATE ADMIN WORKSPACE · SOURCE DISCOVERY</div><h1>Job Intelligence Center</h1><div class="sub">Discover jobs from registered official sources, compare candidates, inspect source health and send every finding through verification before publication.</div></div><div class="pill"><span>●</span> <span id="connection">Checking secure admin session…</span></div></div>
+<div id="notice" class="status">Verifying Super Admin access…</div>
+<section class="grid">
+<div class="card"><div class="icon">⌂</div><div class="metric-label">Government sources</div><div class="metric" id="govSources">—</div><div class="metric-foot">Registered official authorities</div></div>
+<div class="card"><div class="icon">▦</div><div class="metric-label">Company & global sources</div><div class="metric" id="companySources">—</div><div class="metric-foot">Registered employer career pages</div></div>
+<div class="card"><div class="icon">⌕</div><div class="metric-label">Discovered external links</div><div class="metric" id="externalCandidates">—</div><div class="metric-foot" id="externalPending">Loading pending review count…</div></div>
+<div class="card"><div class="icon">✓</div><div class="metric-label">Government review queue</div><div class="metric" id="govCandidates">—</div><div class="metric-foot" id="govPending">Loading pending review count…</div></div>
+</section>
+<section class="panel">
+<div class="section-head"><div><h2>Scanner Operations</h2><div class="metric-foot">Run discovery on demand. Scanning only adds private review candidates; it never publishes a job.</div></div><button id="refresh" class="secondary">↻ Refresh data</button></div>
+<div class="scanner-grid">
+<div class="scanner"><div class="eyebrow">01 / GOVERNMENT</div><h3>Official Notice Scanner</h3><p>Checks registered central and state recruitment sources, records discovered notices, checks duplicates and stores candidates for human review.</p><div class="meta"><span class="tag" id="govActiveTag">65 registered sources</span><span class="tag">Scheduled every 2 hours</span></div><button id="scanGov">Run Government Scan</button></div>
+<div class="scanner"><div class="eyebrow">02 / COMPANY & GLOBAL</div><h3>Company Career Scanner</h3><p>Checks eligible public career pages for specific job links. India and international discoveries remain in separate review folders.</p><div class="meta"><span class="tag" id="externalActiveTag">19 registered sources</span><span class="tag">Scheduled every 6 hours</span></div><button id="scanExternal">Run Company & Global Scan</button></div>
+</div>
+<div id="scanResult" class="status" style="display:none"></div>
+</section>
+<div class="two">
+<section class="panel"><div class="section-head"><h2>Source Health</h2><a href="super-admin-source-directory.html">Manage sources →</a></div><div class="table-wrap"><table><thead><tr><th>Source</th><th>Mode</th><th>Last result</th></tr></thead><tbody id="sourceRows"><tr><td colspan="3" class="empty">Loading sources…</td></tr></tbody></table></div></section>
+<section class="panel"><div class="section-head"><h2>Latest discoveries</h2><a href="super-admin-job-source-inbox.html">Open review inbox →</a></div><div class="table-wrap"><table><thead><tr><th>Job / Notice</th><th>Market</th><th>Status</th></tr></thead><tbody id="candidateRows"><tr><td colspan="3" class="empty">Loading discoveries…</td></tr></tbody></table></div></section>
+</div>
+<p class="footer-note">Safety: this dashboard does not auto-publish. A discovered link is not a verified vacancy. Open the original employer or authority notice, confirm the job is current, validate eligibility and application details, then complete the existing Super Admin review workflow. Dynamic or restricted sites remain manual unless an official API, RSS feed or permitted integration is available.</p>
+</main>
+<script>
+(()=>{
+const SUPABASE_URL='https://qkmljuuusfjowexvybvy.supabase.co';
+const SUPABASE_KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function message(text,type=''){const el=$('notice');el.textContent=text;el.className='status '+type}
+async function secureSession(){
+ const {data:{session},error}=await sb.auth.getSession();
+ if(error||!session){location.replace('super-admin-login.html');return false}
+ const {data:{user},error:userError}=await sb.auth.getUser();
+ if(userError||!user){location.replace('super-admin-login.html');return false}
+ const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
+ if(roleError||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return false}
+ const {data:assurance,error:assuranceError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+ if(assuranceError||assurance.currentLevel!=='aal2'){location.replace('super-admin-login.html');return false}
+ $('connection').textContent='Secure Super Admin session verified';
+ message('Access verified. Scanner controls are connected to the existing Supabase project.');
+ return true;
+}
+async function count(table,filters=[]){let q=sb.from(table).select('id',{count:'exact',head:true});for(const f of filters)q=q[f[0]](...f[1]);const {count,error}=await q;if(error)throw error;return count||0}
+async function load(){
+ try{
+  const [gs,es,ec,ep,gr,gp]=await Promise.all([
+   count('government_notice_sources',[['eq',['enabled',true]]]),
+   count('external_job_sources',[['eq',['enabled',true]]]),
+   count('external_job_candidates'),
+   count('external_job_candidates',[['eq',['status','pending']]]),
+   count('government_notice_reviews'),
+   count('government_notice_reviews',[['eq',['status','pending']]])
+  ]);
+  $('govSources').textContent=gs;$('companySources').textContent=es;$('externalCandidates').textContent=ec;$('externalPending').textContent=ep+' pending verification';
+  $('govCandidates').textContent=gr;$('govPending').textContent=gp+' pending review';
+  $('govActiveTag').textContent=gs+' enabled sources';$('externalActiveTag').textContent=es+' enabled sources';
+  const {data:sources,error:sourceError}=await sb.from('external_job_sources').select('source_name,monitor_mode,last_status,last_checked_at,enabled').order('source_name').limit(12);
+  if(sourceError)throw sourceError;
+  $('sourceRows').innerHTML=(sources||[]).map(s=>'<tr><td><b>'+esc(s.source_name)+'</b><small>'+esc(s.enabled?'Enabled':'Disabled')+'</small></td><td><span class="tag '+(s.monitor_mode==='manual'?'manual':'')+'">'+esc(s.monitor_mode)+'</span></td><td>'+esc(s.last_status||'Not scanned')+'<small>'+esc(s.last_checked_at?new Date(s.last_checked_at).toLocaleString():'No scan yet')+'</small></td></tr>').join('')||'<tr><td colspan="3" class="empty">No sources registered.</td></tr>';
+  const [external,government]=await Promise.all([
+   sb.from('external_job_candidates').select('title,source_type,status,discovered_at').order('discovered_at',{ascending:false}).limit(7),
+   sb.from('government_notice_reviews').select('title,status,created_at').order('created_at',{ascending:false}).limit(7)
+  ]);
+  if(external.error)throw external.error;if(government.error)throw government.error;
+  const rows=[...(external.data||[]).map(x=>({title:x.title,market:x.source_type.includes('india')?'India private':'International',status:x.status,at:x.discovered_at})),...(government.data||[]).map(x=>({title:x.title,market:'Government',status:x.status,at:x.created_at}))].sort((a,b)=>new Date(b.at)-new Date(a.at)).slice(0,10);
+  $('candidateRows').innerHTML=rows.map(x=>'<tr><td><b>'+esc(x.title)+'</b><small>'+esc(new Date(x.at).toLocaleString())+'</small></td><td>'+esc(x.market)+'</td><td><span class="tag">'+esc(x.status)+'</span></td></tr>').join('')||'<tr><td colspan="3" class="empty">No discoveries yet.</td></tr>';
+ }catch(e){message('Could not load scanner data: '+(e.message||e),'error')}
+}
+async function runScan(slug,button,label){
+ button.disabled=true;const old=button.textContent;button.textContent='Scanning…';
+ const box=$('scanResult');box.style.display='block';box.className='status';box.textContent=label+' is running. Please wait…';
+ try{
+  const {data,error}=await sb.functions.invoke(slug,{body:{}});
+  if(error)throw error;
+  if(!data?.ok)throw new Error(data?.error||'Scanner returned an unsuccessful response');
+  box.className='status';box.textContent=label+' complete. Sources checked: '+(data.scanned_sources??data.checked_sources??0)+'. Failed: '+(data.failed_sources??0)+'. New review candidates: '+(data.queued_new_candidates??data.new_review_items??0)+'. Published: '+(data.published??0)+'.';
+  await load();
+ }catch(e){box.className='status error';box.textContent='Scan did not complete: '+(e.message||String(e))+'. Existing records were not published.'}
+ finally{button.disabled=false;button.textContent=old}
+}
+$('scanGov').addEventListener('click',()=>runScan('scan-government-notice-sources',$('scanGov'),'Government scan'));
+$('scanExternal').addEventListener('click',()=>runScan('scan-external-job-sources',$('scanExternal'),'Company and global scan'));
+$('refresh').addEventListener('click',load);
+$('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});
+secureSession().then(ok=>{if(ok)load()});
+})();
+</script>
+</body></html>
