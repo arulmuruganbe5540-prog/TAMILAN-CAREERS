@@ -22,8 +22,16 @@
 <div class="field full"><label for="sourceUrl">Official job / vacancy page URL</label><div class="row"><input id="sourceUrl" type="url" placeholder="https://official-company-or-government-site/job-details" autocomplete="url"><button id="importBtn">Import Job Details</button></div><div class="hint">Use the individual job page, not only a company homepage. This importer reads public Schema.org JobPosting data and page metadata. PDF-only links need manual field entry.</div></div>
 <div id="importNote" class="notice hidden"></div>
 </section>
+<section class="panel" id="discoveredLeads">
+<h2>2. Auto-Discovered Job Leads</h2>
+<p class="muted">Company career pages are scanned on schedule. Open each original link, verify it individually, then import it into the matching job form. Discovery is not publication.</p>
+<div class="tabs"><button type="button" class="active" data-lead-queue="pending">Pending Leads</button><button type="button" data-lead-queue="verified">Verified Leads</button></div>
+<div class="hint" id="leadCount">Loading discovered leads…</div>
+<div class="tablewrap"><table><thead><tr><th>Discovered job / source</th><th>Market</th><th>Found</th><th>Review</th></tr></thead><tbody id="leadRows"><tr><td colspan="4">Loading…</td></tr></tbody></table></div>
+<p class="hint">Verification requires all six checks: official source domain, original notice opened, dates, eligibility, application link and duplicate check. Verified leads still need full job details and a separate Publish review.</p>
+</section>
 <section class="panel">
-<h2>2. Check and Edit Extracted Details</h2>
+<h2>3. Check and Edit Extracted Details</h2>
 <p class="muted">All fields are editable. Missing values must be filled from the original official page. Never guess salary, vacancies, dates, eligibility or visa details.</p>
 <form id="jobForm">
 <div class="grid">
