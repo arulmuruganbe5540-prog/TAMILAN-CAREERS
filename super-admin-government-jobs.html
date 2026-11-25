@@ -173,7 +173,7 @@ async function saveநிலை(id,button){
  const {error}=await sb.from('government_jobs').update({status:next,updated_at:new Date().toISOString()}).eq('id',id);
  button.disabled=false;
  if(error){note('Unable to update status: '+error.message,true);return;}
- note('Job status updated successfully.');const {data:fbSettings}=await sb.from('social_publish_settings').select('auto_publish_enabled').eq('singleton',true).maybeSingle();if(fbSettings?.auto_publish_enabled){const {error:fbError}=await sb.functions.invoke('facebook-page-publisher',{body:{}});if(fbError)note('Website job published; Facebook delivery needs attention: '+fbError.message,true);}await loadStats();await loadRows();
+ note('Job status updated successfully.');// Facebook integration is paused by project direction. Website publishing remains independent.await loadStats();await loadRows();
 }
 async function loadRows(){
  $('rows').innerHTML='<tr><td colspan="6" class="empty">ஏற்றப்படுகிறது...</td></tr>';
