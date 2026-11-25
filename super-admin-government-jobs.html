@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
-<title>அரசு வேலைவாய்ப்புகள் Admin | TAMILAN CAREERS</title>
+<title>Government Jobs Admin | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--blue:#087fbd}
@@ -142,7 +142,6 @@ async function authorize(){
  if(error||!user){location.replace('super-admin-login.html');return false;}
  const {data,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(roleError||!data||data.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return false;}
- const {data:factors,error:factorError}=await sb.auth.mfa.listFactors();if(factorError){note('MFA நிலையைச் சரிபார்க்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.',true);return false;}const hasVerifiedTotp=(factors.totp||[]).some(f=>f.status==='verified');if(hasVerifiedTotp){const {data:assurance,error:assuranceError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(assuranceError||assurance.currentLevel!=='aal2'){location.replace('super-admin-login.html');return false;}}
  $('adminEmail').textContent=user.email||'';note('Super Admin access verified.');return true;
 }
 async function loadStats(){
