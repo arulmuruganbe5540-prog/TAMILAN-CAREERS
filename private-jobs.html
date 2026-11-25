@@ -1,127 +1,107 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101d3a">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="stylesheet" href="site-theme.css?v=1">
-<style>
-*{box-sizing:border-box}body{margin:0;color:#17243b;background:#f5f7fb;font:16px/1.65 Arial,sans-serif}
-header{background:#101d3a;color:#fff;padding:18px max(16px,calc((100% - 1100px)/2))}
-header a{color:#fff;text-decoration:none}header h1{margin:0;font-size:23px}header p{margin:5px 0 0;color:#d6e5f6;font-size:13px}
-main{max-width:1100px;margin:22px auto;padding:0 16px 40px}.crumb{font-size:13px;margin-bottom:14px}.crumb a{color:#075e9b}
-h2{color:#101d3a;font-size:22px;margin:10px 0}.intro{color:#53627a}
-.status{padding:13px;background:#eef6ff;border-left:4px solid #176b9e;margin:16px 0;color:#234967}
-.list{display:grid;gap:12px}.job{background:#fff;border:1px solid #dce4ef;border-radius:8px;padding:16px}
-.job h3{margin:0 0 5px;color:#12345a;font-size:18px}.job-title{color:#12345a;text-decoration:underline;text-underline-offset:3px}.meta{color:#53627a;font-size:13px;margin:4px 0}
-.desc{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;color:#34445b}
-.actions{display:flex;gap:10px;flex-wrap:wrap}.actions a{display:inline-block;padding:9px 13px;border-radius:5px;background:#176b9e;color:white;text-decoration:none;font-weight:700;font-size:13px}
-.actions a.secondary{background:#eaf0f8;color:#17466c}
-footer{background:#101d3a;padding:18px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}footer a{color:white;font-size:13px}
-@media(max-width:600px){main{padding:0 12px 30px}.job{padding:13px}header h1{font-size:20px}}
-.job-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px;margin:8px 0 14px}.job-filters select{width:100%;padding:11px;border:1px solid #b8c6d8;border-radius:6px;background:white;color:#17243b;font:inherit}
-/* ORBIT DIGITAL JOB TABLE */
-.orbit-banner{position:relative;min-height:142px;margin:18px 0 14px;overflow:hidden;border-radius:15px;background:radial-gradient(ellipse at 50% 130%,var(--orbit-glow),transparent 58%),linear-gradient(112deg,#0b1b30,#132e4b 60%,#0a1b30);border:1px solid #203b59;display:flex;align-items:center;justify-content:center;padding:18px}
-.orbit-banner:before,.orbit-banner:after{content:"";position:absolute;border:1px solid color-mix(in srgb,var(--orbit-accent),transparent 58%);border-radius:50%;width:310px;height:115px;transform:rotate(-13deg);left:50%;top:50%;translate:-50% -50%;box-shadow:0 0 25px var(--orbit-glow)}
-.orbit-banner:after{width:430px;height:150px;transform:rotate(14deg);opacity:.55}
-.orbit-core{position:relative;z-index:2;display:flex;align-items:center;gap:13px;padding:12px 19px;border:1px solid color-mix(in srgb,var(--orbit-accent),white 38%);border-radius:12px;background:rgba(5,18,33,.88);box-shadow:0 0 28px var(--orbit-glow);min-width:min(390px,95%)}
-.orbit-symbol{width:46px;height:46px;display:grid;place-items:center;border-radius:13px;background:var(--orbit-accent);color:#fff;font-size:15px;font-weight:900}
-.orbit-copy{flex:1;min-width:0}.orbit-copy b{display:block;color:#fff;font-size:14px}.orbit-copy small{display:block;color:#b6c8da;font-size:10px;margin-top:4px}
-.orbit-state{background:var(--orbit-accent);color:#fff;border-radius:4px;padding:6px 8px;font-size:9px;font-weight:800;letter-spacing:.8px}
-.orbit-table-wrap{border:1px solid #dce5ef;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 7px 20px rgba(15,35,60,.06)}
-.orbit-table-wrap:before{content:"";display:block;height:4px;background:linear-gradient(90deg,var(--orbit-accent),color-mix(in srgb,var(--orbit-accent),white 60%),var(--orbit-accent))}
-.orbit-scroll{overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch}
-.orbit-table{width:100%;min-width:640px;border-collapse:collapse;background:#fff;font-size:13px;line-height:1.45}
-.orbit-table th{background:#f4f7fc!important;color:#243b57!important;padding:11px 10px;border-bottom:1px solid #dce5ef!important;text-align:left;font-size:11px;letter-spacing:.35px;white-space:nowrap}
-.orbit-table td{padding:12px 10px;border-bottom:1px solid #edf1f6!important;vertical-align:top}
-.orbit-table tbody tr:last-child td{border-bottom:0!important}
-.orbit-table tbody tr:hover{background:var(--orbit-soft)!important}
-.orbit-job{border-left:3px solid var(--orbit-accent);padding-left:9px}
-.orbit-job strong{display:block;color:#18334f}.orbit-sub{display:block;margin-top:4px;color:#64748b;font-size:10px}
-.orbit-fact{display:inline-block;margin:0 5px 4px 0;padding:3px 6px;border-radius:4px;background:#f0f4f8;color:#344b65;font-size:10px}
-.orbit-more{display:none;margin:7px 0 0;padding:8px 9px;border-left:2px solid var(--orbit-accent);background:#f8fafc;color:#40536a;font-size:11px;line-height:1.55;white-space:normal}
-.orbit-more.open{display:block}.orbit-expand{display:inline-block;border:0!important;padding:0!important;margin-top:5px;background:none!important;color:var(--orbit-accent)!important;box-shadow:none!important;text-decoration:underline;text-underline-offset:2px;font-weight:800;font-size:11px;cursor:pointer}
-.orbit-link{display:inline-block;margin:2px 7px 3px 0;color:var(--orbit-accent)!important;font-size:11px;font-weight:800;text-decoration:underline}
-.orbit-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:9px 12px;background:#fbfcfe;color:#64748b;font-size:10px}
-@media(max-width:600px){.orbit-banner{min-height:130px;padding:12px}.orbit-core{min-width:0;width:96%;padding:10px 12px;gap:9px}.orbit-symbol{width:40px;height:40px}.orbit-copy b{font-size:12px}.orbit-banner:before{width:260px}.orbit-banner:after{width:340px}.orbit-table{min-width:600px;font-size:12px}.orbit-table th,.orbit-table td{padding:9px 8px}}
-
-/* PREMIUM JOB ROW CARDS — shared visual treatment, data and workflows unchanged */
-.orbit-banner{min-height:156px!important;border-radius:18px!important;box-shadow:0 12px 28px rgba(16,35,65,.13)!important}
-.orbit-core{border-radius:15px!important;box-shadow:0 8px 24px var(--orbit-glow)!important}
-.orbit-table-wrap{overflow:visible!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
-.orbit-table-wrap:before{height:5px!important;border-radius:8px!important;margin-bottom:5px;background:linear-gradient(90deg,var(--orbit-accent),#d7e8ff,var(--orbit-accent))!important}
-.orbit-scroll{overflow-x:auto!important;padding:0 2px 8px!important}
-.orbit-table{border-collapse:separate!important;border-spacing:0 15px!important;min-width:660px!important;background:transparent!important}
-.orbit-table thead th{background:linear-gradient(110deg,#172d4c,#294d78)!important;color:#fff!important;border:0!important;padding:13px 12px!important;font-size:11px!important;letter-spacing:.65px!important}
-.orbit-table thead th:first-child{border-radius:10px 0 0 10px}
-.orbit-table thead th:last-child{border-radius:0 10px 10px 0}
-.orbit-table tbody tr{filter:drop-shadow(0 6px 10px rgba(20,40,70,.09));transition:filter .18s ease,transform .18s ease}
-.orbit-table tbody tr:hover{filter:drop-shadow(0 10px 14px rgba(20,40,70,.15));transform:translateY(-1px)}
-.orbit-table tbody td{background:#fff!important;border-top:1px solid color-mix(in srgb,var(--orbit-accent),white 72%)!important;border-bottom:1px solid color-mix(in srgb,var(--orbit-accent),white 72%)!important;padding:15px 12px!important;vertical-align:middle!important}
-.orbit-table tbody td:first-child{border-left:1px solid color-mix(in srgb,var(--orbit-accent),white 58%)!important;border-radius:13px 0 0 13px;background:linear-gradient(135deg,color-mix(in srgb,var(--orbit-accent),white 94%),#fff)!important}
-.orbit-table tbody td:last-child{border-right:1px solid color-mix(in srgb,var(--orbit-accent),white 58%)!important;border-radius:0 13px 13px 0;background:linear-gradient(135deg,#fff,color-mix(in srgb,var(--orbit-accent),white 96%))!important}
-.orbit-job{border-left:4px solid var(--orbit-accent)!important;padding:5px 0 5px 11px!important}
-.orbit-job strong{font-size:14px!important;line-height:1.45!important;color:#172d49!important}
-.orbit-sub{font-size:11px!important;line-height:1.45!important}
-.orbit-fact{margin:3px 5px 4px 0!important;padding:6px 9px!important;border:1px solid color-mix(in srgb,var(--orbit-accent),white 78%)!important;border-radius:7px!important;background:color-mix(in srgb,var(--orbit-accent),white 94%)!important;color:#29405d!important;font-size:10px!important;line-height:1.4!important}
-.orbit-fact b{color:var(--orbit-accent)!important}
-.orbit-expand{margin:5px 5px 0 0!important;padding:6px 10px!important;border:1px solid color-mix(in srgb,var(--orbit-accent),white 55%)!important;border-radius:7px!important;background:#fff!important;color:var(--orbit-accent)!important;font-size:10px!important;text-decoration:none!important}
-.orbit-link{display:inline-block!important;margin:3px 0 5px!important;padding:7px 9px!important;border:1px solid color-mix(in srgb,var(--orbit-accent),white 72%)!important;border-radius:7px!important;background:color-mix(in srgb,var(--orbit-accent),white 94%)!important;color:var(--orbit-accent)!important;text-decoration:none!important;font-size:10px!important}
-.orbit-link:hover,.orbit-expand:hover{filter:brightness(.96);box-shadow:0 3px 8px rgba(20,40,70,.1)}
-.orbit-more{border-radius:8px!important;border-left-width:3px!important;margin-top:9px!important;padding:11px!important}
-.orbit-foot{border:1px solid #e1e8f1;border-radius:10px;background:#fff!important;box-shadow:0 4px 12px rgba(20,40,70,.05);font-weight:700;letter-spacing:.35px}
-.status{border:1px solid color-mix(in srgb,var(--orbit-accent,#2563eb),white 65%)!important;border-left:5px solid var(--orbit-accent,#2563eb)!important;border-radius:11px!important;background:linear-gradient(100deg,#fff,color-mix(in srgb,var(--orbit-accent,#2563eb),white 94%))!important;box-shadow:0 5px 14px rgba(20,40,70,.06);font-weight:700}
-@media(max-width:600px){.orbit-banner{min-height:136px!important;border-radius:14px!important}.orbit-table{min-width:620px!important;border-spacing:0 12px!important}.orbit-table tbody td{padding:12px 9px!important}.orbit-job strong{font-size:12px!important}.orbit-fact{font-size:9px!important;padding:5px 7px!important}.orbit-link{font-size:9px!important;padding:7px 8px!important}.orbit-table thead th{padding:11px 9px!important}}
-</style>
-<meta name="robots" content="index,follow,max-image-preview:large">
-<title>Private Jobs | TAMILAN CAREERS</title>
-<meta name="description" content="Browse published private-sector job vacancies on TAMILAN CAREERS. Verify employer details and apply through official channels.">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102944"><meta name="robots" content="index,follow,max-image-preview:large">
+<title>Private Jobs | TAMILAN CAREERS</title><meta name="description" content="Indian private-sector careers by qualification, category and job role.">
 <link rel="canonical" href="https://tamilancareers.in/private-jobs.html">
 <meta property="og:title" content="Private Jobs | TAMILAN CAREERS"><meta property="og:url" content="https://tamilancareers.in/private-jobs.html">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418"
-     crossorigin="anonymous"></script>
-<link rel="stylesheet" href="ads-layout.css?v=1">
-</head><body><header><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>Private Sector Careers · Verified Job Updates</p></header>
-<main><div class="crumb"><a href="index.html">Home</a> / Private Jobs</div><h2>Private Jobs</h2>
-<p class="intro">Published private-sector vacancies are loaded directly from the independent Private Jobs database. Check employer details and the official application link before applying.</p>
-<label for="jobSearch"><b>Search jobs</b></label><input id="jobSearch" type="search" placeholder="Search by job title, employer or location" style="width:100%;padding:12px;border:1px solid #b8c6d8;border-radius:6px;margin:8px 0 12px;font:inherit">
-<div class="job-filters"><select id="employmentFilter"><option value="">All Employment Types</option><option value="full_time">Full Time</option><option value="part_time">Part Time</option><option value="contract">Contract</option><option value="temporary">Temporary</option><option value="internship">Internship</option><option value="freelance">Freelance</option></select><select id="educationFilter"><option value="">All Qualifications</option><option>8th Pass</option><option>10th Pass</option><option>12th Pass</option><option>ITI</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Any Qualification</option></select><select id="workplaceFilter"><option value="">All Workplace Types</option><option value="onsite">On-site</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option></select></div><div id="status" class="status" role="status" aria-live="polite">Loading published private jobs…</div><div class="orbit-banner" style="--orbit-accent:#07966c;--orbit-soft:#e4f8ef;--orbit-glow:rgba(7,150,108,.22)"><div class="orbit-core"><div class="orbit-symbol">IN</div><div class="orbit-copy"><b>India Corporate Career Grid</b><small>Employer · Work mode · Location · Salary</small></div><span class="orbit-state">INDIA</span></div></div><div class="orbit-table-wrap" style="--orbit-accent:#07966c;--orbit-soft:#e4f8ef"><div class="orbit-scroll"><table class="orbit-table"><thead><tr><th>Job Name</th><th>Details</th><th>Link</th></tr></thead><tbody id="jobs" aria-live="polite"><tr><td colspan="3">Loading published jobs…</td></tr></tbody></table></div><div class="orbit-foot"><span>INDIA PRIVATE DIRECTORY</span><span>Published job records</span></div></div><nav id="pager" aria-label="Job list pages" style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0"></nav>
-<p class="meta">Only published vacancies are shown. TAMILAN CAREERS does not guarantee recruitment. Never pay an unverified person or share OTPs, passwords or banking credentials.</p><!-- Responsive ad location: after all page content, tables and pagination -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="site-theme.css?v=1"><link rel="stylesheet" href="ads-layout.css?v=1">
+<style>
+:root{--accent:#16816d;--soft:#e4f8ef;--ink:#142b46;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:var(--ink);font:15px/1.55 Arial,sans-serif}
+header{background:#102944;color:#fff;padding:18px max(14px,calc((100% - 1120px)/2))}
+header a{color:#fff;text-decoration:none}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#d6e5f5;font-size:12px}
+main{max-width:1120px;margin:18px auto;padding:0 14px 38px}.crumb{font-size:12px;margin-bottom:12px}.crumb a{color:var(--accent)}
+h2{font-size:22px;margin:8px 0;color:#102944}.intro,.muted{color:var(--muted);font-size:13px}
+.portal-banner{border-radius:17px;padding:22px;margin:14px 0;background:linear-gradient(115deg,#102944,#1d4569);color:#fff;box-shadow:0 9px 24px #10294420}
+.portal-banner small{display:block;color:#d5e5f4;font-size:10px;letter-spacing:1.2px;font-weight:700}.portal-banner h2{color:#fff;margin:4px 0}.portal-banner p{margin:0;color:#dce9f5;font-size:12px}
+.section-title{font-size:15px;font-weight:800;margin:18px 0 9px;color:#193957}
+.box-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.tile{display:flex;align-items:center;justify-content:center;text-align:center;min-height:62px;padding:8px 5px;border-radius:11px;background:var(--tile);color:#fff;text-decoration:none;font-size:11px;font-weight:800;line-height:1.25;box-shadow:0 4px 10px #142b4612;border:1px solid #ffffff30;overflow-wrap:anywhere;transition:transform .15s,filter .15s}
+.tile:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.qual-grid .tile{min-height:48px}.role-grid .tile{min-height:65px}
+.job-table-wrap{background:#fff;border:1px solid #dce5ef;border-radius:13px;overflow:hidden;box-shadow:0 7px 20px #152d4810;margin-top:10px}
+.job-table{width:100%;border-collapse:collapse;font-size:12px}.job-table th{background:#183958;color:#fff;text-align:left;padding:11px 9px;font-size:10px;letter-spacing:.4px}
+.job-table td{padding:11px 9px;border-bottom:1px solid #e9eef4;vertical-align:middle}.job-table tr:last-child td{border-bottom:0}
+.job-table a{color:var(--accent);font-weight:800;text-decoration:none}.job-table a:hover{text-decoration:underline}
+.job-pager{display:flex;justify-content:center;align-items:center;gap:12px;margin:14px 0}.job-pager button,.back-link{border:0;border-radius:8px;background:var(--accent);color:white;padding:9px 13px;font-weight:700;text-decoration:none;font-size:12px}
+.job-pager button:disabled{opacity:.4}.empty-state{padding:18px;background:#fff;border:1px dashed #cbd5e1;border-radius:12px;color:#64748b;text-align:center;font-size:13px}
+.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.info-box{background:#fff;border:1px solid #dce5ef;border-radius:11px;padding:12px;min-width:0}.info-box b{display:block;font-size:12px;color:var(--accent);margin-bottom:3px}.info-box span{font-size:12px;color:#52647a}
+.notice{background:var(--soft);border:1px solid color-mix(in srgb,var(--accent),white 72%);border-left:4px solid var(--accent);padding:11px;border-radius:9px;color:#28435d;font-size:12px;margin:12px 0}
+footer{background:#102944;padding:18px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}footer a{color:#fff;font-size:12px}
+.ad-placement{margin:18px 0}
+@media(max-width:620px){header h1{font-size:19px}main{padding:0 10px 28px}.box-grid{gap:5px}.tile{font-size:9px;min-height:55px;padding:6px 3px;border-radius:8px}.qual-grid .tile{min-height:42px}.role-grid .tile{min-height:62px}.job-table{font-size:10px}.job-table th,.job-table td{padding:9px 6px}.portal-banner{padding:17px}.info-grid{gap:7px}.info-box{padding:9px}}
+</style></head><body>
+<header><a href="index.html"><h1>TAMILAN CAREERS</h1></a><p>Private Sector Careers · Verified Job Updates</p></header>
+<main><div class="crumb"><a href="index.html">Home</a> / Private Jobs</div>
+<section class="portal-banner"><small>INDIA PRIVATE CAREER DIRECTORY</small><h2>Private Jobs</h2><p>Indian private-sector careers by qualification, category and job role.</p></section>
+<div id="pageContent"><div class="notice" id="status">Loading published private jobs…</div>
+<section><div class="section-title">Qualifications</div><div class="box-grid qual-grid" id="qualificationBoxes"></div></section>
+<section><div class="section-title">Job Categories</div><div class="box-grid" id="categoryBoxes"><a class="tile" style="--tile:#16816d" href="?view=category&category=Software%20%26%20IT">Software & IT</a><a class="tile" style="--tile:#315b9b" href="?view=category&category=Banking">Banking</a><a class="tile" style="--tile:#b66a35" href="?view=category&category=Manufacturing">Manufacturing</a><a class="tile" style="--tile:#7950a8" href="?view=category&category=Healthcare">Healthcare</a><a class="tile" style="--tile:#2879a8" href="?view=category&category=Sales">Sales</a><a class="tile" style="--tile:#16816d" href="?view=category&category=Logistics">Logistics</a><a class="tile" style="--tile:#315b9b" href="?view=category&category=Education">Education</a><a class="tile" style="--tile:#b66a35" href="?view=category&category=Hotel%20%26%20Tourism">Hotel & Tourism</a><a class="tile" style="--tile:#7950a8" href="?view=category&category=Engineering">Engineering</a><a class="tile" style="--tile:#2879a8" href="?view=category&category=Other%20Jobs">Other Jobs</a></div></section>
+
+<section><div class="section-title">Latest Jobs</div><div class="job-table-wrap"><table class="job-table"><thead><tr><th>JOB TITLE</th><th>QUALIFICATION</th><th>LOCATION</th></tr></thead><tbody id="latestRows"><tr><td colspan="3">Loading published jobs…</td></tr></tbody></table></div><div class="job-pager" id="latestPager"></div></section>
+</div>
 <div class="ad-placement" id="ad-private-jobs" data-ad-placement="private-jobs" aria-label="Advertisement"></div>
-</main>
-<footer><a href="index.html">Home</a><a href="about-us.html">About Us</a><a href="contact-us.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="disclaimer.html">Disclaimer</a></footer>
+<p class="muted">Only published private-sector vacancies are shown. Verify employer details and official application links before applying. TAMILAN CAREERS does not guarantee recruitment.</p>
+</main><footer><a href="index.html">Home</a><a href="about-us.html">About Us</a><a href="contact-us.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="disclaimer.html">Disclaimer</a></footer>
 <script>
 (async()=>{
-const URL='https://qkmljuuusfjowexvybvy.supabase.co',KEY='sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2';
-const db=supabase.createClient(URL,KEY),status=document.getElementById('status'),root=document.getElementById('jobs'),pager=document.getElementById('pager'),search=document.getElementById('jobSearch');
-const PAGE_SIZE=10;let rows=[],page=1;const employment=document.getElementById('employmentFilter'),education=document.getElementById('educationFilter'),workplace=document.getElementById('workplaceFilter');
+const db=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');
+const kind='private',intl=false,PAGE_SIZE=10,params=new URLSearchParams(location.search);
+const rowsRoot=document.getElementById('latestRows'),status=document.getElementById('status');
+const qualifications=intl?['10th','12th','ITI','Diploma','Degree','B.E / B.Tech','Nursing','B.Sc','MBA','Postgraduate']:['8th','10th','12th','ITI','Diploma','Degree','B.E / B.Tech','B.Sc','B.Com','MBA'];
+const roles={"Software & IT":["Software Developer","Web Developer","App Developer","Data Analyst","AI / ML Engineer","Cyber Security","UI / UX Designer","Cloud Engineer","Software Tester","Database Administrator"],"Banking":["Bank Officer","Accountant","Cashier","Loan Executive","Finance Analyst"],"Manufacturing":["Machine Operator","Production Supervisor","Quality Inspector","Maintenance Technician"],"Healthcare":["Staff Nurse","Medical Assistant","Lab Technician","Pharmacist"],"Sales":["Sales Executive","Marketing Executive","Business Development","Telecaller"],"Logistics":["Warehouse Assistant","Logistics Executive","Delivery Coordinator"],"Education":["Teacher","Tutor","Academic Coordinator"],"Hotel & Tourism":["Front Office Executive","Chef","Hotel Manager"],"Engineering":["Junior Engineer","Site Engineer","Design Engineer"],"Other Jobs":["Office Assistant","Data Entry Operator","Receptionist"],"UAE":["Software Developer","Registered Nurse","Hotel Manager","Accountant","Electrician","Chef","Care Assistant","Civil Engineer","Driver","Warehouse Assistant"],"Saudi Arabia":["Registered Nurse","Mechanical Technician","Electrician","Civil Engineer","Hotel Staff"],"Qatar":["Hotel Manager","Accountant","Construction Worker","Driver","Chef"],"Kuwait":["Nurse","Technician","Office Assistant","Heavy Driver"],"Oman":["Electrician","Welder","Sales Executive","Mechanic"],"Singapore":["Software Developer","Data Analyst","Accountant","Logistics Executive"],"Malaysia":["Production Operator","Technician","Customer Support"],"UK":["Care Assistant","Nurse","Software Engineer","Chef"],"USA":["Software Engineer","Data Analyst","Registered Nurse"],"Canada":["Caregiver","Truck Driver","Engineer"],"Australia":["Aged Care Worker","Nurse","Electrician"],"Germany":["Mechanical Engineer","Software Developer","Skilled Technician"],"Japan":["Care Worker","Factory Operator","Engineer"],"Europe":["Engineer","Hospitality Staff","Healthcare Assistant"],"Other Countries":["Skilled Worker","Technician","Professional Roles"]};
+const categories=["Software & IT","Banking","Manufacturing","Healthcare","Sales","Logistics","Education","Hotel & Tourism","Engineering","Other Jobs"],countries=["UAE","Saudi Arabia","Qatar","Kuwait","Oman","Singapore","Malaysia","UK","USA","Canada","Australia","Germany","Japan","Europe","Other Countries"];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeUrl=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
 const date=v=>v?new Date(v).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'Not specified';
-const {data,error}=await db.from('private_jobs').select('id,job_title,employer_name,description,location,employment_type,education_level,workplace_type,qualification_tags,age_limit,age_relaxation,experience_min,experience_max,experience_requirement,salary_min,salary_max,salary_currency,application_deadline,application_url,official_website_url').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
-if(error){status.textContent='Unable to load private jobs right now. Please try again later.';root.innerHTML='<tr><td colspan="3" class="empty">'+"Unable to load private jobs right now. Please try again later."+'</td></tr>';return}
-rows=data||[];
-function render(){
- const term=search.value.trim().toLowerCase();
- const filtered=rows.filter(j=>[j.job_title,j.employer_name,j.location,j.education_level,j.required_skills,j.experience_requirement,...(Array.isArray(j.qualification_tags)?j.qualification_tags:[])].some(v=>String(v||'').toLowerCase().includes(term))&&(!employment.value||j.employment_type===employment.value)&&(!education.value||String(j.education_level||'').toLowerCase().includes(education.value.toLowerCase())||(Array.isArray(j.qualification_tags)&&j.qualification_tags.some(q=>String(q).toLowerCase().includes(education.value.toLowerCase()))))&&(!workplace.value||j.workplace_type===workplace.value));
- const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));if(page>pages)page=pages;
- const shown=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
- status.textContent=filtered.length?filtered.length+' published private job(s) · Showing '+(filtered.length?((page-1)*PAGE_SIZE+1):0)+'–'+Math.min(page*PAGE_SIZE,filtered.length):'No private jobs match your search.';
- root.innerHTML=shown.map((j,index)=>{
- const apply=safeUrl(j.application_url),site=safeUrl(j.official_website_url);
- const salary=j.salary_min!=null||j.salary_max!=null?[j.salary_currency||'',j.salary_min??'—','–',j.salary_max??'—'].join(' '):'Not specified';
- const quals=Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):'';
- const exp=j.experience_requirement||(j.experience_min!=null||j.experience_max!=null?((j.experience_min??'—')+'–'+(j.experience_max??'—')+' years'):'Not specified');
- const more='orbit-private-'+j.id;
- const details='<span class="orbit-fact"><b>Employer:</b> '+esc(j.employer_name||'Not specified')+'</span><span class="orbit-fact"><b>Location:</b> '+esc(j.location||'Not specified')+'</span><span class="orbit-fact"><b>Qualification:</b> '+esc(j.education_level||quals||'Not specified')+'</span><div class="orbit-more" id="'+esc(more)+'"><b>Education:</b> '+esc(j.education_level||'Not specified')+'<br><b>Qualification:</b> '+esc(quals||'Not specified')+'<br><b>Experience:</b> '+esc(exp)+'<br><b>Age:</b> '+esc(j.age_limit||'Not specified')+'<br><b>Employment:</b> '+esc(j.employment_type||'Not specified')+'<br><b>Workplace:</b> '+esc(j.workplace_type||'Not specified')+'<br><b>Salary:</b> '+esc(salary)+'<br><b>Last date:</b> '+esc(date(j.application_deadline))+'<br><b>Skills:</b> '+esc(j.required_skills||'Not specified')+'<br><b>Description:</b> '+esc(j.description||'Not specified')+'</div><button type="button" class="orbit-expand" aria-expanded="false" onclick="toggleOrbitDetails(this,'+JSON.stringify(more)+')">Expand</button>';
- return '<tr><td><div class="orbit-job"><strong>'+esc(j.job_title||'Untitled job')+'</strong><span class="orbit-sub">'+esc(j.employer_name||'Private employer')+'</span></div></td><td>'+details+'</td><td><a class="orbit-link" href="private-job-details.html?id='+encodeURIComponent(j.id)+'">View details ↗</a><br><a class="orbit-link" href="apply-private-job.html?id='+encodeURIComponent(j.id)+'">Apply here ↗</a>'+(apply?'<br><a class="orbit-link" href="'+esc(apply)+'" target="_blank" rel="noopener noreferrer">Official apply ↗</a>':'')+(site?'<br><a class="orbit-link" href="'+esc(site)+'" target="_blank" rel="noopener noreferrer">Employer site ↗</a>':'')+'</td></tr>';
- }).join('');
- pager.innerHTML='';
- if(filtered.length>PAGE_SIZE){
- const prev=document.createElement('button');prev.type='button';prev.textContent='Previous';prev.disabled=page===1;prev.onclick=()=>{page--;render()};pager.append(prev);
- const label=document.createElement('span');label.textContent='Page '+page+' of '+pages;pager.append(label);
- const next=document.createElement('button');next.type='button';next.textContent='Next';next.disabled=page===pages;next.onclick=()=>{page++;render()};pager.append(next);
- }
+const qualificationsHTML=qualifications.map((q,i)=>'<a class="tile" style="--tile:'+['#315b9b','#16816d','#b66a35','#7950a8','#2879a8'][i%5]+'" href="?view=qualification&qualification='+encodeURIComponent(q)+'">'+esc(q)+'</a>').join('');
+document.getElementById('qualificationBoxes').innerHTML=qualificationsHTML;
+let jobs=[];
+const {data,error}=await db.from(intl?'international_jobs':'private_jobs').select('id,job_title,employer_name,description,location,category_id,employment_type,education_level,qualification_tags,required_skills,experience_requirement,salary_min,salary_max,salary_currency,application_deadline,application_url,official_website_url,workplace_type').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
+if(error){status.textContent='Unable to load published jobs right now. Please try again later.';rowsRoot.innerHTML='<tr><td colspan="3">Jobs could not be loaded.</td></tr>';return}
+jobs=data||[];
+function qualificationMatches(j,q){const values=Array.isArray(j.qualification_tags)?j.qualification_tags:[];return String(j.education_level||'').toLowerCase().includes(q.toLowerCase())||values.some(x=>String(x).toLowerCase().includes(q.toLowerCase()))}
+function jobRow(j){
+const quals=(Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level)||'Not specified';
+return '<tr><td><a href="private-job-details.html?id='+encodeURIComponent(j.id)+'">'+esc(j.job_title)+'</a><div class="muted">'+esc(j.employer_name||'Employer')+'</div></td><td>'+esc(quals)+'</td><td>'+esc(j.location||'Not specified')+'</td></tr>';
 }
-if(!rows.length){status.textContent='No private vacancies are currently published.';root.innerHTML='<tr><td colspan="3" class="empty">'+"No private vacancies are currently published."+'</td></tr>';return}
-search.addEventListener('input',()=>{page=1;render()});[employment,education,workplace].forEach(el=>el.addEventListener('change',()=>{page=1;render()}));render();
-})();</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>(()=>{try{const sb=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');let sid=sessionStorage.getItem('tc_analytics_session');if(!sid){sid=crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();sessionStorage.setItem('tc_analytics_session',sid)}const path=location.pathname.replace(/\/$/,'')||'/';const host=(()=>{try{return document.referrer?new URL(document.referrer).hostname:null}catch(e){return null}})();const send=(event_type,entity_type=null,entity_id=null)=>sb.from('page_analytics').insert({session_id:sid,page_path:path,event_type,entity_type,entity_id:entity_id?String(entity_id).slice(0,120):null,referrer_host:host}).then(()=>{}).catch(()=>{});const jt=path.includes('international')?'international_job':path.includes('private')?'private_job':'government_job';send(path.includes('job-details')?'job_view':'page_view',path.includes('job-details')?jt:'page',null);document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const h=a.getAttribute('href')||'';if(/apply|application/i.test(h)||/apply|விண்ணப்ப/i.test(a.textContent||''))send('apply_click',jt,path.split('/').pop());else if(/^https?:/i.test(h)){try{if(new URL(h).hostname!==location.hostname)send('outbound_click','other',new URL(h).hostname)}catch(err){}}},{passive:true});document.addEventListener('submit',e=>{if(e.target.querySelector('input[type=search],input[name*=search i],input[placeholder*=search i]'))send('search','page',null)},true)}catch(e){}})();</script><script>function toggleOrbitDetails(button,id){const panel=document.getElementById(id);if(!panel)return;const open=panel.classList.toggle("open");button.textContent=open?"Collapse":"Expand";button.setAttribute("aria-expanded",String(open));}</script></body></html>
+function renderTable(list,tbody,pager){
+let page=1;
+function draw(){
+const total=Math.max(1,Math.ceil(list.length/PAGE_SIZE)),shown=list.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+tbody.innerHTML=shown.length?shown.map(jobRow).join(''):'<tr><td colspan="3">No published jobs match this selection yet.</td></tr>';
+pager.innerHTML='';
+if(list.length>PAGE_SIZE){const prev=document.createElement('button');prev.textContent='Previous';prev.disabled=page===1;prev.onclick=()=>{page--;draw()};const label=document.createElement('span');label.textContent='Page '+page+' of '+total;const next=document.createElement('button');next.textContent='Next';next.disabled=page===total;next.onclick=()=>{page++;draw()};pager.append(prev,label,next)}
+}
+draw();
+}
+renderTable(jobs,rowsRoot,document.getElementById('latestPager'));
+if(!jobs.length)status.textContent='No '+(intl?'international':'private')+' vacancies are currently published. Job listings will appear here after Admin approval and publication.';
+else status.textContent=jobs.length+' published '+(intl?'international':'private')+' job(s) available.';
+function renderSubpage(){
+const view=params.get('view');if(!view)return;
+const content=document.getElementById('pageContent');
+const back='<p><a class="back-link" href="'+kind+'-jobs.html">← Back to '+(intl?'International':'Private')+' Jobs</a></p>';
+let heading='',tiles='',list=jobs,extra='';
+if(view==='qualification'){
+const q=params.get('qualification')||'';heading=esc(q)+' Qualification Jobs';list=jobs.filter(j=>qualificationMatches(j,q));
+}else if(view==='category'){
+const c=params.get('category')||'';heading=esc(c)+' · Job Roles';const roleList=roles[c]||roles['Other Jobs']||[];
+tiles=roleList.map((r,i)=>'<a class="tile" style="--tile:'+['#315b9b','#16816d','#b66a35','#7950a8','#2879a8'][i%5]+'" href="?view=role&role='+encodeURIComponent(r)+'&category='+encodeURIComponent(c)+'">'+esc(r)+'</a>').join('');
+if(intl){extra='<div class="notice">Country selected: '+esc(c)+'. Select a role to see matching overseas vacancies.</div>';}
+}else if(view==='role'){
+const r=params.get('role')||'',c=params.get('category')||'';heading=esc(r)+' · Matching Jobs';
+extra='<div class="section-title">Related Qualifications</div><div class="box-grid qual-grid">'+qualifications.map((q,i)=>'<a class="tile" style="--tile:'+['#315b9b','#16816d','#b66a35','#7950a8','#2879a8'][i%5]+'" href="?view=qualification&qualification='+encodeURIComponent(q)+'">'+esc(q)+'</a>').join('')+'</div><div class="section-title">Related Skills & Courses</div><div class="info-grid"><div class="info-box"><b>Required Skills</b><span>Skills listed by the employer for this role</span></div><div class="info-box"><b>Related Courses</b><span>Education and training related to this role</span></div></div>';
+list=jobs.filter(j=>String(j.job_title||'').toLowerCase().includes(r.toLowerCase())||r.toLowerCase().includes(String(j.job_title||'').toLowerCase()));
+if(intl&&c)list=list.filter(j=>String(j.country_name||'').toLowerCase()===c.toLowerCase());
+}else return;
+content.innerHTML=back+'<h2>'+heading+'</h2>'+(tiles?'<div class="box-grid role-grid">'+tiles+'</div>':'')+extra+'<div class="section-title">Matching Jobs</div><div class="job-table-wrap"><table class="job-table"><thead><tr><th>JOB TITLE</th><th>QUALIFICATION</th><th>LOCATION</th></tr></thead><tbody id="subRows"></tbody></table></div><div class="job-pager" id="subPager"></div>';
+renderTable(list,document.getElementById('subRows'),document.getElementById('subPager'));
+}
+renderSubpage();
+})();
+</script>
+<script>
+(()=>{try{const sb=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');let sid=sessionStorage.getItem('tc_analytics_session');if(!sid){sid=crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();sessionStorage.setItem('tc_analytics_session',sid)}const path=location.pathname.replace(/\/$/,'')||'/';const send=(event_type,entity_type='page',entity_id=null)=>sb.from('page_analytics').insert({session_id:sid,page_path:path,event_type,entity_type,entity_id,referrer_host:document.referrer?new URL(document.referrer).hostname:null}).then(()=>{}).catch(()=>{});send('page_view');}catch(e){}})();
+</script></body></html>
