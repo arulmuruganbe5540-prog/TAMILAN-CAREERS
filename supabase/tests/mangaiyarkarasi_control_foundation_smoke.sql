@@ -57,7 +57,18 @@ begin
   if not has_function_privilege('service_role', 'public.mangai_record_proposal_decision(uuid,text,uuid,text,text)', 'execute') then
     raise exception 'service_role cannot execute the transactional proposal decision RPC';
   end if;
-end $$;
+
+  if (has_function_privilege('anon', 'public.mangai_set_module_enabled(text,boolean,uuid,text)', 'execute')
+     or has_function_privilege('authenticated', 'public.mangai_set_module_enabled(text,boolean,uuid,text)', 'execute')
+     or not has_function_privilege('service_role', 'public.mangai_set_module_enabled(text,boolean,uuid,text)', 'execute')) then
+    raise exception 'Module control RPC grants are incorrect';
+  end if;
+  if (has_function_privilege('anon', 'public.mangai_create_change_proposal(text,text,text,text,jsonb,jsonb,jsonb,text,uuid,text)', 'execute')
+     or has_function_privilege('authenticated', 'public.mangai_create_change_proposal(text,text,text,text,jsonb,jsonb,jsonb,text,uuid,text)', 'execute')
+     or not has_function_privilege('service_role', 'public.mangai_create_change_proposal(text,text,text,text,jsonb,jsonb,jsonb,text,uuid,text)', 'execute')) then
+    raise exception 'Proposal creation RPC grants are incorrect';
+  end if;
+end $;
 
 -- Human-readable evidence after the assertions pass.
 select table_name
