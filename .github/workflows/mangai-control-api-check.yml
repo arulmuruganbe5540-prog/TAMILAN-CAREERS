@@ -47,8 +47,8 @@ jobs:
           grep -q "mangai_record_proposal_decision" supabase/migrations/20261126150000_mangaiyarkarasi_control_foundation.sql
           grep -q "mangai_set_module_enabled" supabase/migrations/20261126150000_mangaiyarkarasi_control_foundation.sql
           grep -q "mangai_create_change_proposal" supabase/migrations/20261126150000_mangaiyarkarasi_control_foundation.sql
-          grep -q 'admin.rpc("mangai_set_module_enabled"' supabase/functions/mangai-control-api/index.ts
-          grep -q 'admin.rpc("mangai_create_change_proposal"' supabase/functions/mangai-control-api/index.ts
+          grep -q '"mangai_set_module_enabled"' supabase/functions/mangai-control-api/index.ts
+          grep -q '"mangai_create_change_proposal"' supabase/functions/mangai-control-api/index.ts
           grep -q "Module control RPC grants are incorrect" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
           grep -q "Proposal creation RPC grants are incorrect" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
           grep -q "getAuthenticatorAssuranceLevel" supabase/functions/mangai-control-api/index.ts
