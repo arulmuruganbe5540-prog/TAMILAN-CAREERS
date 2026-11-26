@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Private SEO Intelligence Center | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--green:#43c98b;--amber:#f3bd59}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 0%,#123758 0,transparent 36%),var(--bg);color:#eff7ff;font:14px Arial,sans-serif}
+.top{padding:15px 20px;background:#0b1d32;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--cyan);letter-spacing:.4px}.wrap{max-width:1180px;margin:auto;padding:22px}
+a{color:var(--cyan);text-decoration:none}.muted{color:var(--muted);line-height:1.55}.hero{border:1px solid #28608a;border-radius:17px;padding:22px;background:linear-gradient(125deg,#123b5b,#10243d 68%,#163b38)}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:13px;margin:16px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0}.card h2{font-size:16px;margin:0 0 10px}.metric{font-size:27px;font-weight:800;color:var(--cyan);margin:8px 0}
+.status{padding:12px;border-radius:9px;background:#173954;margin-top:14px}.good{color:var(--green)}.warn{color:var(--amber)}
+button{background:#087fbd;color:#fff;border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}
+.section{margin:25px 0 10px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:680px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--cyan);font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tag{font-size:12px;padding:5px 8px;border-radius:20px;background:#173c55;border:1px solid #2c5975}
+.small{font-size:12px}.hide{display:none}.foot{margin:25px 0;color:var(--muted);font-size:12px}
+</style></head><body>
+<header class="top"><div class="brand">TAMILAN CAREERS · PRIVATE SEO INTELLIGENCE</div><div><a href="super-admin.html">Admin Dashboard</a>　<span id="email" class="muted"></span>　<button id="logout">Sign out</button></div></header>
+<main class="wrap">
+<section class="hero"><h1>SEO Intelligence Control Center</h1><p class="muted">Private administrator workspace. Keyword generation runs in the database background when job records are published or updated. Nothing in this control center is displayed on public job pages.</p><div id="status" class="status">Verifying administrator access…</div></section>
+<section class="grid">
+<article class="card"><h2>Generated SEO Profiles</h2><div class="metric" id="profiles">—</div><p class="muted small">Private SEO records generated from job information.</p></article>
+<article class="card"><h2>Government Jobs</h2><div class="metric" id="gov">—</div><p class="muted small">Generated profile count.</p></article>
+<article class="card"><h2>Private Jobs</h2><div class="metric" id="private">—</div><p class="muted small">Generated profile count.</p></article>
+<article class="card"><h2>International Jobs</h2><div class="metric" id="intl">—</div><p class="muted small">Generated profile count.</p></article>
+</section>
+<h2 class="section">Background data connections</h2>
+<section class="grid">
+<article class="card"><h2>Job-field keyword engine</h2><div class="good">ACTIVE</div><p class="muted small">Builds relevant phrases from title, qualification, location, skills and employer/department fields.</p></article>
+<article class="card"><h2>Google Search Console</h2><div class="warn">NOT CONNECTED</div><p class="muted small">Real query impressions, clicks and position data are not being imported yet.</p></article>
+<article class="card"><h2>Google Trends</h2><div class="warn">NOT CONNECTED</div><p class="muted small">No live trend score is claimed or fabricated. A supported data connection is still required.</p></article>
+<article class="card"><h2>Keyword volume provider</h2><div class="warn">NOT CONNECTED</div><p class="muted small">Search-volume estimates require a configured external provider and secret key.</p></article>
+</section>
+<h2 class="section">Latest generated profiles</h2><section class="card"><div class="tablewrap"><table><thead><tr><th>Job / Type</th><th>SEO title</th><th>Generated phrases</th><th>Updated</th></tr></thead><tbody id="rows"><tr><td colspan="4" class="muted">Loading private SEO records…</td></tr></tbody></table></div></section>
+<h2 class="section">Recent engine activity</h2><section class="card"><div class="tablewrap"><table><thead><tr><th>Time</th><th>Job source</th><th>Result</th><th>Keyword count</th><th>Source status</th></tr></thead><tbody id="runs"><tr><td colspan="5" class="muted">Loading activity…</td></tr></tbody></table></div></section>
+<div class="foot">Private admin data only. Public users cannot read SEO profile, keyword metric or engine activity tables. Google ranking and indexing are not guaranteed by keyword generation.</div>
+</main>
+<script>
+(()=>{const sb=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const nice=s=>({government_jobs:'Government',private_jobs:'Private',international_jobs:'International',jobs:'Company'}[s]||s||'—');
+async function init(){const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return}
+const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);if(re||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}
+const {data:factors,error:fe}=await sb.auth.mfa.listFactors();if(fe){$('status').textContent='Could not verify MFA state. Please sign in again.';return}
+if((factors.totp||[]).some(f=>f.status==='verified')){const {data:aal,error:ae}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||aal.currentLevel!=='aal2'){location.replace('super-admin-login.html');return}}
+$('email').textContent=user.email||'';$('status').innerHTML='<span class="good">Administrator verified.</span> Background SEO engine is active for new or updated published jobs.';
+const {data:p,error:pe}=await sb.from('seo_job_profiles').select('source_table,job_id,job_title,seo_title,keywords,updated_at,is_public').order('updated_at',{ascending:false}).limit(30);
+if(pe){$('status').textContent='Admin verified, but SEO profile access failed: '+pe.message;return}
+const all=p||[];$('profiles').textContent=String(all.length);$('gov').textContent=String(all.filter(x=>x.source_table==='government_jobs').length);$('private').textContent=String(all.filter(x=>x.source_table==='private_jobs'||x.source_table==='jobs').length);$('intl').textContent=String(all.filter(x=>x.source_table==='international_jobs').length);
+$('rows').innerHTML=all.length?all.map(x=>'<tr><td><b>'+esc(x.job_title)+'</b><div class="muted small">'+esc(nice(x.source_table))+'</div></td><td>'+esc(x.seo_title)+'</td><td><div class="tags">'+(x.keywords||[]).slice(0,14).map(k=>'<span class="tag">'+esc(k)+'</span>').join('')+'</div><div class="muted small">'+(x.keywords||[]).length+' phrases</div></td><td>'+esc(new Date(x.updated_at).toLocaleString())+'</td></tr>').join(''):'<tr><td colspan="4" class="muted">No generated profiles found yet.</td></tr>';
+const {data:logs,error:le}=await sb.from('seo_engine_runs').select('source_table,job_id,status,keywords_generated,trend_source_status,message,created_at').order('created_at',{ascending:false}).limit(20);
+$('runs').innerHTML=le?'<tr><td colspan="5" class="warn">Activity log unavailable: '+esc(le.message)+'</td></tr>':(logs||[]).map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td>'+esc(nice(x.source_table))+'</td><td>'+esc(x.status)+'</td><td>'+esc(x.keywords_generated)+'</td><td class="small">'+esc(JSON.stringify(x.trend_source_status||{}))+'</td></tr>').join('')||'<tr><td colspan="5" class="muted">No activity logged yet.</td></tr>';
+}
+$('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});init();
+})();
+</script></body></html>
