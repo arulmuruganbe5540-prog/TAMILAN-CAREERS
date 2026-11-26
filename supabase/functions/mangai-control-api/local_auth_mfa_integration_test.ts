@@ -52,7 +52,11 @@ async function totp(secret: string): Promise<string> {
   return String(binary % 1_000_000).padStart(6, "0");
 }
 
-async function invoke(accessToken: string, method: "GET" | "POST", body?: unknown) {
+async function invoke(
+  accessToken: string,
+  method: "GET" | "POST",
+  body?: unknown,
+) {
   return await fetch(
     method === "GET" ? `${functionUrl}?action=modules` : functionUrl,
     {
@@ -72,7 +76,9 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
   const { data: signedIn, error: signInError } = await publicClient.auth
     .signInWithPassword({ email: ownerEmail, password: ownerPassword });
   if (signInError || !signedIn.session) {
-    throw new Error(`Owner sign-in failed: ${signInError?.message ?? "no session"}`);
+    throw new Error(
+      `Owner sign-in failed: ${signInError?.message ?? "no session"}`,
+    );
   }
 
   const ownerAal1Token = signedIn.session.access_token;
@@ -91,13 +97,19 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
   const { data: enrolled, error: enrollError } = await publicClient.auth.mfa
     .enroll({ factorType: "totp", friendlyName: "CI local test factor" });
   if (enrollError || !enrolled?.totp?.secret) {
-    throw new Error(`TOTP enrollment failed: ${enrollError?.message ?? "missing secret"}`);
+    throw new Error(
+      `TOTP enrollment failed: ${enrollError?.message ?? "missing secret"}`,
+    );
   }
 
   const { data: challenge, error: challengeError } = await publicClient.auth
     .mfa.challenge({ factorId: enrolled.id });
   if (challengeError || !challenge?.id) {
-    throw new Error(`TOTP challenge failed: ${challengeError?.message ?? "missing challenge"}`);
+    throw new Error(
+      `TOTP challenge failed: ${
+        challengeError?.message ?? "missing challenge"
+      }`,
+    );
   }
 
   const code = await totp(enrolled.totp.secret);
@@ -106,21 +118,29 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
     challengeId: challenge.id,
     code,
   });
-  if (verifyError) throw new Error(`TOTP verify failed: ${verifyError.message}`);
+  if (verifyError) {
+    throw new Error(`TOTP verify failed: ${verifyError.message}`);
+  }
 
   const { data: aal2, error: aal2Error } = await publicClient.auth.mfa
     .getAuthenticatorAssuranceLevel();
   if (aal2Error) throw new Error(`AAL2 lookup failed: ${aal2Error.message}`);
   assertEquals(aal2.currentLevel, "aal2");
   const { data: verifiedSession } = await publicClient.auth.getSession();
-  if (!verifiedSession.session) throw new Error("AAL2 session was not retained");
+  if (!verifiedSession.session) {
+    throw new Error("AAL2 session was not retained");
+  }
 
-  const allowedWrite = await invoke(verifiedSession.session.access_token, "POST", {
+  const allowedWrite = await invoke(
+    verifiedSession.session.access_token,
+    "POST",
+    {
       action: "create_proposal",
       title: "Local AAL2 integration test proposal",
       description: "Disposable CI-only proposal.",
       risk_level: "low",
-    });
+    },
+  );
   assertEquals(allowedWrite.status, 201);
   const created = await allowedWrite.json();
   if (!created?.proposal?.id) throw new Error("AAL2 proposal was not created");
@@ -149,7 +169,9 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
       email_confirm: true,
     });
   if (createError || !nonOwner.user) {
-    throw new Error(`Non-owner fixture creation failed: ${createError?.message ?? "no user"}`);
+    throw new Error(
+      `Non-owner fixture creation failed: ${createError?.message ?? "no user"}`,
+    );
   }
   const nonOwnerClient = createClient(supabaseUrl, anonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -160,7 +182,11 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
       password: "LocalOnly-NonOwner-Password-2026!",
     });
   if (nonOwnerSignInError || !nonOwnerSession.session) {
-    throw new Error(`Non-owner sign-in failed: ${nonOwnerSignInError?.message ?? "no session"}`);
+    throw new Error(
+      `Non-owner sign-in failed: ${
+        nonOwnerSignInError?.message ?? "no session"
+      }`,
+    );
   }
   const nonOwnerResponse = await invoke(
     nonOwnerSession.session.access_token,
@@ -169,6 +195,9 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
   assertEquals(nonOwnerResponse.status, 403);
 
   await adminClient.auth.admin.deleteUser(nonOwner.user.id);
-  await adminClient.from("mangai_change_proposals").delete().eq("id", created.proposal.id);
+  await adminClient.from("mangai_change_proposals").delete().eq(
+    "id",
+    created.proposal.id,
+  );
   await publicClient.auth.mfa.unenroll({ factorId: enrolled.id });
 });
