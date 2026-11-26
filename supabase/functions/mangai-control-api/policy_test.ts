@@ -68,10 +68,22 @@ Deno.test("write assurance requires AAL2 and a successful assurance lookup", () 
 });
 
 Deno.test("security governance cannot be paused or resumed", () => {
-  assertEquals(isProtectedModuleControl("pause_module", "security_governance"), true);
-  assertEquals(isProtectedModuleControl("resume_module", "security_governance"), true);
-  assertEquals(isProtectedModuleControl("pause_module", "government_jobs"), false);
-  assertEquals(isProtectedModuleControl("create_proposal", "security_governance"), false);
+  assertEquals(
+    isProtectedModuleControl("pause_module", "security_governance"),
+    true,
+  );
+  assertEquals(
+    isProtectedModuleControl("resume_module", "security_governance"),
+    true,
+  );
+  assertEquals(
+    isProtectedModuleControl("pause_module", "government_jobs"),
+    false,
+  );
+  assertEquals(
+    isProtectedModuleControl("create_proposal", "security_governance"),
+    false,
+  );
 });
 
 Deno.test("production deployment actions remain explicitly disabled", () => {
