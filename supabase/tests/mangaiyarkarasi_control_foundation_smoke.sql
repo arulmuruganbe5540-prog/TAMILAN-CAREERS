@@ -48,6 +48,15 @@ begin
   if not has_table_privilege('service_role', 'public.mangai_audit_events', 'insert') then
     raise exception 'service_role cannot append audit events';
   end if;
+
+  if has_function_privilege('anon', 'public.mangai_record_proposal_decision(uuid,text,uuid,text,text)', 'execute')
+     or has_function_privilege('authenticated', 'public.mangai_record_proposal_decision(uuid,text,uuid,text,text)', 'execute') then
+    raise exception 'Untrusted roles can execute the proposal decision RPC';
+  end if;
+
+  if not has_function_privilege('service_role', 'public.mangai_record_proposal_decision(uuid,text,uuid,text,text)', 'execute') then
+    raise exception 'service_role cannot execute the transactional proposal decision RPC';
+  end if;
 end $$;
 
 -- Human-readable evidence after the assertions pass.
