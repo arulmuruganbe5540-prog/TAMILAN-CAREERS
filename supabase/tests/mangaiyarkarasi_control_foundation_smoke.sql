@@ -68,7 +68,7 @@ begin
      or not has_function_privilege('service_role', 'public.mangai_create_change_proposal(text,text,text,text,jsonb,jsonb,jsonb,text,uuid,text)', 'execute')) then
     raise exception 'Proposal creation RPC grants are incorrect';
   end if;
-end $;
+end $$;
 
 -- Human-readable evidence after the assertions pass.
 select table_name
