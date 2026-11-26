@@ -149,6 +149,11 @@ jobs:
             code="$(curl -sS -o /dev/null -w '%{http_code}' -H "apikey: $SUPABASE_ANON_KEY" -H "Origin: https://tamilancareers.in" "$MANGAI_FUNCTION_URL" || true)"
             if [ "$code" != "000" ]; then
               echo "Local Edge Function gateway responded with HTTP $code"
+              if [ "$code" = "502" ] || [ "$code" = "503" ]; then
+                cat "$RUNNER_TEMP/mangai-edge-runtime.log"
+                echo "Edge Function runtime is not healthy"
+                exit 1
+              fi
               exit 0
             fi
             sleep 2
