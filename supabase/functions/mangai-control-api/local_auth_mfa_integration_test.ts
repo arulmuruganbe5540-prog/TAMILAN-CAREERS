@@ -186,7 +186,9 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
       risk_level: "low",
     },
   );
-  assertEquals(allowedWrite.status, 201);
+  if (allowedWrite.status !== 201) {
+    throw new Error(`AAL2 proposal request failed (${allowedWrite.status}): ${await allowedWrite.text()}`);
+  }
   const created = await allowedWrite.json();
   if (!created?.proposal?.id) throw new Error("AAL2 proposal was not created");
 
