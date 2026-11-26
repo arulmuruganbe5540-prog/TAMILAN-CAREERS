@@ -22,3 +22,8 @@ The test suite uses only Node.js built-ins; it adds no package dependencies and 
 ## Important limitation
 
 These are static source regression checks. They do not sign in, submit forms, query Supabase, verify RLS, upload resumes, test email delivery, or run an Android/desktop browser. Those require an isolated test database and browser-level test environment. A passing workflow must not be described as proof that live authentication or posting works.
+
+
+## Latest workflow result — 2026-11-26
+- The static regression suite passed in GitHub Actions: 8 test groups, 0 failures.
+- The suite remains source-level only. It does not prove runtime authentication, Supabase RLS, posting, application upload, email delivery, or browser behavior.
