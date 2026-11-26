@@ -67,3 +67,11 @@ A proposal may be allowed for isolated testing without authorizing production de
 - **Passed:** Mangaiyarkarasi Control API Checks: Deno format, lint, type-check and static SQL/RPC/MFA guard assertions.
 - **Not run:** PostgreSQL migration/smoke SQL, Edge Function runtime authorization, real AAL2 MFA session tests, live form submissions, Android/desktop browser checks, backups/restore and scheduled monitoring.
 - CI links: [Website Regression Checks](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions) · [Control API Checks](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions).
+
+
+## Gate 1A — Ephemeral PostgreSQL integration result (2026-11-26)
+- **Passed:** Migration applies to a disposable PostgreSQL 16 instance with a minimal public.user_roles fixture and the expected anon, authenticated, and service_role roles.
+- **Passed:** SQL smoke assertions for exactly one Owner binding, Mangai table count, RLS coverage, denied anon/authenticated access, append-only audit permissions, and restricted RPC execution.
+- **Passed:** Transaction tests for module pause/resume, proposal creation and proposal decisions. An injected audit insert failure rolled back each associated state change; the healthy decision path committed proposal status, approval and audit together.
+- **Passed:** Deno format, lint and type-check; website static regression suite also passed in CI.
+- **Scope limitation:** The PostgreSQL 16 job is an ephemeral test container, not a hosted Supabase database. It does not prove Supabase Auth JWT/AAL2, hosted Data API exposure, Edge Function runtime, storage, browser forms or Android behavior. Those gates remain open.
