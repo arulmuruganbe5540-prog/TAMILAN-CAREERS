@@ -122,8 +122,23 @@ try {
     assert.match(await page.locator("body").innerText(), expected, path + " should identify its market");
   }
 
+  await load("tests/browser/admin-language-fixture.html");
+  await page.locator(".tc-admin-language").waitFor({ state: "visible" });
+  assert.equal(await page.locator("html").getAttribute("lang"), "ta", "admin language should default to Tamil");
+  assert.equal(await page.locator("h1").innerText(), "செயல்பாட்டு பதிவுகள்", "Tamil interface should remain readable");
+  await page.locator('.tc-admin-language button[data-lang="en"]').click();
+  assert.equal(await page.locator("html").getAttribute("lang"), "en", "English language switch should update the document language");
+  assert.equal(await page.locator("h1").innerText(), "Activity Logs", "English switch should translate Tamil labels");
+  assert.equal(await page.locator("input").getAttribute("placeholder"), "Search", "English switch should translate input placeholders");
+  assert.match(await page.locator("main p").innerText(), /Audit events are automatically captured/, "English switch should translate mixed-language help text");
+  await page.locator('.tc-admin-language button[data-lang="ta"]').click();
+  assert.equal(await page.locator("h1").innerText(), "செயல்பாட்டு பதிவுகள்", "Tamil switch should restore the original Tamil labels");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.locator(".tc-admin-language").waitFor({ state: "visible" });
+  assert.equal(await page.locator("html").getAttribute("lang"), "ta", "selected language should persist across page reloads");
+
   await context.close();
-  console.log("Browser smoke checks passed: 10 page loads, mobile viewport declarations, student/employer auth tabs, password mismatch validation, password visibility, protected account/application guards, and market labels.");
+  console.log("Browser smoke checks passed: 10 page loads, mobile viewport declarations, student/employer auth tabs, password mismatch validation, password visibility, protected account/application guards, market labels, and Tamil / English admin language switching with persistent preference.");
 } finally {
   if (browser) await browser.close();
   await new Promise((resolve) => server.close(resolve));
