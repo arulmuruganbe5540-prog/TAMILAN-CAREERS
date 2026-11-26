@@ -9,7 +9,7 @@ function testJwt(aal: "aal1" | "aal2"): string {
     sub: OWNER_ID,
     aal,
     exp: Math.floor(Date.now() / 1000) + 3600,
-  })).replace(/=/g, "").replace(/\\+/g, "-").replace(/\\//g, "_");
+  })).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
   return `header.${payload}.signature`;
 }
 
