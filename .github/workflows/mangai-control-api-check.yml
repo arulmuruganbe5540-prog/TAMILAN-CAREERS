@@ -37,7 +37,7 @@ jobs:
       - name: Lint
         run: deno lint supabase/functions/mangai-control-api/index.ts
       - name: Type-check control API
-        run: deno check supabase/functions/mangai-control-api/index.ts
+        run: deno check --config supabase/functions/mangai-control-api/deno.json supabase/functions/mangai-control-api/index.ts
       - name: Verify database smoke test contains fail-fast security assertions
         run: |
           grep -q "Expected exactly one Master Owner binding" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
