@@ -119,12 +119,15 @@ jobs:
         run: |
           set -euo pipefail
           cd "$TEST_ROOT"
-          supabase start --exclude storage,realtime,studio,mail,analytics,pooler
+          supabase start --exclude imgproxy,logflare,mailpit,postgres-meta,realtime,storage-api,studio,supavisor,vector
           supabase db reset
-          supabase status --output-format json > "$RUNNER_TEMP/mangai-supabase-status.json"
-          API_URL="$(jq -r '.env.API_URL' "$RUNNER_TEMP/mangai-supabase-status.json")"
-          ANON_KEY="$(jq -r '.env.ANON_KEY' "$RUNNER_TEMP/mangai-supabase-status.json")"
-          SERVICE_ROLE_KEY="$(jq -r '.env.SERVICE_ROLE_KEY' "$RUNNER_TEMP/mangai-supabase-status.json")"
+          supabase status --env --output-format text > "$RUNNER_TEMP/mangai-supabase-status.env"
+          set -a
+          source "$RUNNER_TEMP/mangai-supabase-status.env"
+          set +a
+          API_URL="$API_URL"
+          ANON_KEY="$ANON_KEY"
+          SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY"
           test -n "$API_URL" && test "$API_URL" != "null"
           test -n "$ANON_KEY" && test "$ANON_KEY" != "null"
           test -n "$SERVICE_ROLE_KEY" && test "$SERVICE_ROLE_KEY" != "null"
