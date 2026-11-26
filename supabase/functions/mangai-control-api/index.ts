@@ -39,6 +39,31 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/**
+ * Read the AAL claim only after Auth.getUser() has validated this exact token.
+ * This function does not treat an unvalidated or malformed JWT as trusted.
+ */
+function readValidatedJwtAal(
+  accessToken: string,
+  expectedUserId: string,
+): string | null {
+  try {
+    const parts = accessToken.split(".");
+    if (parts.length !== 3 || !parts[1]) return null;
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(
+      atob(base64.padEnd(Math.ceil(base64.length / 4) * 4, "=")),
+    );
+    if (
+      !isObject(payload) || payload.sub !== expectedUserId ||
+      typeof payload.aal !== "string"
+    ) return null;
+    return payload.aal;
+  } catch {
+    return null;
+  }
+}
+
 export type ControlApiDependencies = {
   createClient: typeof createClient;
   getEnv: (name: string) => string | undefined;
@@ -214,22 +239,12 @@ export function createControlApiHandler(deps: ControlApiDependencies) {
 
     // All write actions require an active MFA-protected session (AAL2).
     // Read-only GET requests remain available to the authenticated Owner.
-    // Verify the exact bearer JWT cryptographically, then read its signed AAL claim.
-    // getAuthenticatorAssuranceLevel() relies on client session storage, which is
-    // intentionally disabled for this stateless per-request Edge Function client.
+    // getUser() above validates this exact bearer JWT with Supabase Auth.
+    // Only after that validation, read its signed AAL claim from the same token.
+    // This avoids relying on session storage in the stateless Edge Function client.
     const accessToken = authorization.slice("Bearer ".length);
-    const { data: claimsData, error: claimsError } = await userClient.auth
-      .getClaims(accessToken);
-    const tokenClaims = claimsData?.claims;
-    const verifiedAal2 = !claimsError &&
-      tokenClaims?.sub === user.id &&
-      tokenClaims?.aal === "aal2";
-    if (
-      !hasWriteAssurance(
-        verifiedAal2 ? "aal2" : "aal1",
-        Boolean(claimsError) || !tokenClaims || tokenClaims.sub !== user.id,
-      )
-    ) {
+    const assuranceLevel = readValidatedJwtAal(accessToken, user.id);
+    if (!hasWriteAssurance(assuranceLevel, assuranceLevel === null)) {
       return json(
         {
           error:
