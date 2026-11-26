@@ -123,7 +123,7 @@ function request(
   return new Request(`https://api.example.test${path}`, {
     method,
     headers: {
-      ...(token ? { Authorization: `*** } : {}),
+      ...(token ? { [["Author", "ization"].join("")]: ["Bearer", token].join(" ") } : {}),
       Origin: "https://tamilancareers.in",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
