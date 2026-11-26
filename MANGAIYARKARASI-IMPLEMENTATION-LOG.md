@@ -57,3 +57,11 @@
 - Added a link to the new page in the existing Super Admin control section.
 - UI source was statically inspected for English document language, auth checks, API path, absence of service-role credentials and absence of mutation actions. No browser/mobile runtime test has been run.
 - This is still a review-branch preview: no live site, database, auth configuration or Edge Function was changed.
+
+
+## 2026-11-26 — Phase 1G (website regression guard)
+- Mapped the existing student and employer authentication pages, separate private/international job listing and application pages, and company profile/verification/posting portal before adding tests.
+- Added dependency-free Node.js regression tests for required English/mobile page shells, separate login/register forms, private/international table routing, isolated application tables, independent company verification gates, read-only Owner Control preview, public-page isolation and local-link resolution.
+- Added a GitHub Actions workflow to run the regression suite on relevant pull-request and development-branch changes.
+- Added test coverage documentation. These are static source checks only; they do not simulate sign-in, submit forms, query Supabase, validate RLS, or replace Android/browser runtime tests.
+- Existing website pages and production systems were not modified. All additions remain in the open draft PR; workflow execution must be checked before marking the suite as passing.
