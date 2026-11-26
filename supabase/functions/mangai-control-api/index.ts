@@ -214,12 +214,20 @@ export function createControlApiHandler(deps: ControlApiDependencies) {
 
     // All write actions require an active MFA-protected session (AAL2).
     // Read-only GET requests remain available to the authenticated Owner.
-    const { data: assuranceData, error: assuranceError } = await userClient.auth
-      .mfa.getAuthenticatorAssuranceLevel();
+    // Verify the exact bearer JWT cryptographically, then read its signed AAL claim.
+    // getAuthenticatorAssuranceLevel() relies on client session storage, which is
+    // intentionally disabled for this stateless per-request Edge Function client.
+    const accessToken = authorization.slice("Bearer ".length);
+    const { data: claimsData, error: claimsError } = await userClient.auth
+      .getClaims(accessToken);
+    const tokenClaims = claimsData?.claims;
+    const verifiedAal2 = !claimsError &&
+      tokenClaims?.sub === user.id &&
+      tokenClaims?.aal === "aal2";
     if (
       !hasWriteAssurance(
-        assuranceData?.currentLevel,
-        Boolean(assuranceError),
+        verifiedAal2 ? "aal2" : "aal1",
+        Boolean(claimsError) || !tokenClaims || tokenClaims.sub !== user.id,
       )
     ) {
       return json(
