@@ -32,11 +32,8 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Format handler test and inspect formatter output
-        run: |
-          deno fmt supabase/functions/mangai-control-api/handler_test.ts
-          cat supabase/functions/mangai-control-api/handler_test.ts
-          deno fmt --check supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
+      - name: Format check
+        run: deno fmt --check supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
       - name: Lint
         run: deno lint supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
       - name: Type-check control API
