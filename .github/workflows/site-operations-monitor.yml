@@ -1,0 +1,63 @@
+name: TAMILAN CAREERS 24x7 Website Monitor
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: tamilan-careers-site-operations-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check critical public pages
+        id: health
+        continue-on-error: true
+        env:
+          SITE_BASE_URL: https://tamilancareers.in
+        run: node scripts/site-health-check.mjs
+
+      - name: Open or update a monitoring incident
+        if: steps.health.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          issue="$(gh issue list --state open --search '"[AUTO MONITOR] Website health alert" in:title' --json number --jq '.[0].number // empty')"
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body-file monitor-report.md
+          else
+            gh issue create --title "[AUTO MONITOR] Website health alert" --body-file monitor-report.md
+          fi
+
+      - name: Close the monitoring incident after a healthy check
+        if: steps.health.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          issue="$(gh issue list --state open --search '"[AUTO MONITOR] Website health alert" in:title' --json number --jq '.[0].number // empty')"
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "Automated monitor is healthy again at $(date -u +'%Y-%m-%d %H:%M UTC'). The incident is being closed; review the run history for evidence."
+            gh issue close "$issue"
+          fi
+
+      - name: Fail the workflow when the site is unhealthy
+        if: steps.health.outcome == 'failure'
+        run: exit 1
