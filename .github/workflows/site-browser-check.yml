@@ -1,0 +1,35 @@
+name: Website Browser Smoke Checks
+
+on:
+  pull_request:
+    paths:
+      - "*.html"
+      - "tests/browser/**"
+      - ".github/workflows/site-browser-check.yml"
+  push:
+    branches:
+      - "mangaiyarkarasi/**"
+    paths:
+      - "*.html"
+      - "tests/browser/**"
+      - ".github/workflows/site-browser-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install isolated browser test dependency
+        run: npm install --no-save --no-package-lock playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run mobile browser smoke checks
+        run: node tests/browser/site-smoke.mjs

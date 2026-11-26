@@ -1,0 +1,31 @@
+name: Website Regression Checks
+
+on:
+  pull_request:
+    paths:
+      - "*.html"
+      - "tests/regression/**"
+      - ".github/workflows/site-regression-check.yml"
+  push:
+    branches:
+      - "mangaiyarkarasi/**"
+    paths:
+      - "*.html"
+      - "tests/regression/**"
+      - ".github/workflows/site-regression-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  static-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run website regression tests
+        run: node --test tests/regression/site-regression.test.mjs
