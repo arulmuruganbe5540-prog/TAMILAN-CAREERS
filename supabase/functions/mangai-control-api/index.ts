@@ -138,6 +138,13 @@ Deno.serve(async (req: Request) => {
   try { body = await req.json(); } catch { return json({ error: "Invalid JSON body" }, 400, origin); }
   if (!isObject(body) || typeof body.action !== "string") return json({ error: "Action is required" }, 400, origin);
 
+  // All write actions require an active MFA-protected session (AAL2).
+  // Read-only GET requests remain available to the authenticated Owner.
+  const { data: assuranceData, error: assuranceError } = await userClient.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assuranceError || assuranceData?.currentLevel !== "aal2") {
+    return json({ error: "Multi-factor authentication is required for control changes. Complete MFA verification and try again." }, 403, origin);
+  }
+
   try {
     if (body.action === "pause_module" || body.action === "resume_module") {
       if (typeof body.module_key !== "string" || !/^[a-z0-9_]{2,60}$/.test(body.module_key)) {
