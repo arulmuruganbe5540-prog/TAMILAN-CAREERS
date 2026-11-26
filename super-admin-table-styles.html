@@ -37,7 +37,7 @@ tbody tr:hover td{background:var(--table-hover,#263d59)}
 <header class="top"><div><div class="brand">TAMILAN CAREERS · MANGAIYARKARASI</div><div class="muted">Table & Header Style Studio · 100 presets</div></div><div class="toolbar"><span id="email" class="muted"></span><button id="lang">தமிழ்</button><button id="logout">Logout</button></div></header>
 <main class="wrap">
 <section class="panel">
-<div class="meta"><div><h1 id="heading" style="margin:0 0 6px">Table Style Studio</h1><div class="muted" id="intro">Choose a design, preview it instantly, and save your preferred style on this device.</div></div><div class="toolbar"><span class="pill" id="count">100 styles</span><button class="primary" id="save">Save selection</button></div></div>
+<div class="meta"><div><h1 id="heading" style="margin:0 0 6px">Table Style Studio</h1><div class="muted" id="intro">Choose a design, preview it instantly, and sync your preferred style to your Admin account.</div></div><div class="toolbar"><span class="pill" id="count">100 styles</span><button class="primary" id="save">Save selection</button></div></div>
 <div class="toolbar"><label for="filter" id="filterLabel">Style family</label><select id="filter"><option value="all">All 100 styles</option><option value="grass">Grass & Nature</option><option value="ocean">Ocean & Blue</option><option value="royal">Royal & Gold</option><option value="modern">Modern & Neutral</option><option value="vivid">Vivid & Bright</option></select><span class="muted" id="selected">Selected: Style 01</span></div>
 <div class="grid" id="styles" aria-label="Available table styles"></div>
 </section>
@@ -49,7 +49,7 @@ tbody tr:hover td{background:var(--table-hover,#263d59)}
 <tr><td>Office Assistant</td><td>Administration</td><td>12th</td><td><span class="pill">Open</span></td></tr>
 <tr><td>Field Worker</td><td>Public Works</td><td>10th</td><td><span class="pill">Closing soon</span></td></tr>
 </tbody></table></div>
-<p class="muted" id="notice">Saving stores your selected preset in this browser. Supported Super Admin tables use it automatically on the next page load.</p>
+<p class="muted" id="notice">Your selected preset is saved to your Admin account and follows your login across devices. This preference does not control access or permissions.</p>
 </section>
 </main>
 <script>
@@ -88,15 +88,17 @@ tbody tr:hover td{background:var(--table-hover,#263d59)}
   $('count').textContent=host.children.length+' styles';
  }
  $('filter').addEventListener('change',render);
- $('save').addEventListener('click',()=>{localStorage.setItem('mangai_table_style',String(selected));$('notice').textContent=lang==='en'?'Saved on this device. Supported Super Admin tables will use this style on the next page load.':'இந்த சாதனத்தில் சேமிக்கப்பட்டது. மற்ற Admin பக்கங்களில் இன்னும் பயன்படுத்தப்படவில்லை.'});
- $('lang').addEventListener('click',()=>{lang=lang==='en'?'ta':'en';$('lang').textContent=lang==='en'?'தமிழ்':'English';$('heading').textContent=lang==='en'?'Table Style Studio':'அட்டவணை வடிவமைப்பு மையம்';$('intro').textContent=lang==='en'?'Choose a design, preview it instantly, and save your preferred style on this device.':'வடிவத்தைத் தேர்ந்தெடுத்து உடனே முன்னோட்டம் பார்த்து இந்தச் சாதனத்தில் சேமிக்கலாம்.';$('previewTitle').textContent=lang==='en'?'Live preview':'நேரடி முன்னோட்டம்';$('previewSub').textContent=lang==='en'?'The sample table updates when you select a style.':'வடிவத்தைத் தேர்ந்தெடுக்கும்போது மாதிரி அட்டவணை மாறும்.';$('filterLabel').textContent=lang==='en'?'Style family':'வடிவ வகை';$('save').textContent=lang==='en'?'Save selection':'தேர்வைச் சேமி';$('notice').textContent=lang==='en'?'Saving stores your selected preset in this browser. Supported Super Admin tables use it automatically on the next page load.':'தேர்வு இந்த உலாவியில் சேமிக்கப்படும். அடுத்த முறை திறக்கும்போது ஆதரவு உள்ள Super Admin அட்டவணைகளிலும் பயன்படுத்தப்படும்.';apply(selected)});
+ $('save').addEventListener('click',async()=>{const button=$('save');button.disabled=true;const previous=button.textContent;button.textContent=lang==='en'?'Saving...':'சேமிக்கிறது...';try{const {data:{user},error:userError}=await sb.auth.getUser();if(userError||!user)throw userError||new Error('Admin session expired');const metadata={...(user.user_metadata||{}),mangai_table_style:selected};const {data,error}=await sb.auth.updateUser({data:metadata});if(error)throw error;const saved=Number(data.user?.user_metadata?.mangai_table_style);if(!Number.isInteger(saved)||saved<0||saved>99)throw new Error('Saved preference could not be verified');localStorage.setItem('mangai_table_style',String(saved));selected=saved;$('notice').textContent=lang==='en'?'Saved to your Admin account. This style will follow your login on other devices.':'உங்கள் Admin கணக்கில் சேமிக்கப்பட்டது. மற்ற சாதனங்களிலும் இதே கணக்கில் உள்நுழைந்தால் இந்த வடிவம் கிடைக்கும்.';}catch(error){$('notice').textContent=(lang==='en'?'Could not sync to your account: ':'கணக்கில் ஒத்திசைக்க முடியவில்லை: ')+(error?.message||'Unknown error');}finally{button.disabled=false;button.textContent=previous;}});
+ $('lang').addEventListener('click',()=>{lang=lang==='en'?'ta':'en';$('lang').textContent=lang==='en'?'தமிழ்':'English';$('heading').textContent=lang==='en'?'Table Style Studio':'அட்டவணை வடிவமைப்பு மையம்';$('intro').textContent=lang==='en'?'Choose a design, preview it instantly, and save your preferred style on this device.':'வடிவத்தைத் தேர்ந்தெடுத்து உடனே முன்னோட்டம் பார்த்து இந்தச் சாதனத்தில் சேமிக்கலாம்.';$('previewTitle').textContent=lang==='en'?'Live preview':'நேரடி முன்னோட்டம்';$('previewSub').textContent=lang==='en'?'The sample table updates when you select a style.':'வடிவத்தைத் தேர்ந்தெடுக்கும்போது மாதிரி அட்டவணை மாறும்.';$('filterLabel').textContent=lang==='en'?'Style family':'வடிவ வகை';$('save').textContent=lang==='en'?'Save selection':'தேர்வைச் சேமி';$('notice').textContent=lang==='en'?'Saving stores your selected preset in this browser. Supported Super Admin tables use it automatically on the next page load.':'தேர்வு உங்கள் Admin கணக்கில் சேமிக்கப்படும். இது அனுமதி அல்லது பாதுகாப்பு உரிமைகளை மாற்றாது.';apply(selected)});
  $('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});
  async function init(){const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return}
  const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
  if(roleError||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}
+ const cloudStyle=Number(user.user_metadata?.mangai_table_style);
+ if(Number.isInteger(cloudStyle)&&cloudStyle>=0&&cloudStyle<100){selected=cloudStyle;try{localStorage.setItem('mangai_table_style',String(cloudStyle));}catch(_){}}
+ else {const localStyle=Number(localStorage.getItem('mangai_table_style'));if(Number.isInteger(localStyle)&&localStyle>=0&&localStyle<100)selected=localStyle;}
  $('email').textContent=user.email||'';render();apply(selected);
- }
- init();
+ } init();
 })();
 </script>
 </body></html>
