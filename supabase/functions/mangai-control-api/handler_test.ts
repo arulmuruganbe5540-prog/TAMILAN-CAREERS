@@ -24,13 +24,19 @@ function makeHandler(options: MockOptions = {}) {
     if (key === "anon-test-key") {
       return {
         auth: {
-          getUser: () => settings.validSession
-            ? { data: { user: { id: OWNER_ID, email: "owner@example.test" } }, error: null }
-            : { data: { user: null }, error: { message: "Invalid token" } },
+          getUser: () =>
+            settings.validSession
+              ? {
+                data: { user: { id: OWNER_ID, email: "owner@example.test" } },
+                error: null,
+              }
+              : { data: { user: null }, error: { message: "Invalid token" } },
           mfa: {
             getAuthenticatorAssuranceLevel: () => ({
               data: { currentLevel: settings.assurance },
-              error: settings.assuranceError ? { message: "MFA lookup failed" } : null,
+              error: settings.assuranceError
+                ? { message: "MFA lookup failed" }
+                : null,
             }),
           },
         },
@@ -43,9 +49,13 @@ function makeHandler(options: MockOptions = {}) {
       order: (...args: unknown[]) => MockQuery;
       limit: (...args: unknown[]) => MockQuery;
       in: (...args: unknown[]) => MockQuery;
-      maybeSingle: () => Promise<{ data: Record<string, string> | null; error: null }>;
+      maybeSingle: () => Promise<
+        { data: Record<string, string> | null; error: null }
+      >;
       then: (
-        resolve: (value: { data: unknown[]; error: null; count: number }) => unknown,
+        resolve: (
+          value: { data: unknown[]; error: null; count: number },
+        ) => unknown,
         reject?: (reason: unknown) => unknown,
       ) => Promise<unknown>;
     };
@@ -59,15 +69,24 @@ function makeHandler(options: MockOptions = {}) {
       maybeSingle: () => {
         const table = currentTable;
         if (table === "user_roles") {
-          return Promise.resolve({ data: settings.isOwner ? { user_id: OWNER_ID } : null, error: null });
+          return Promise.resolve({
+            data: settings.isOwner ? { user_id: OWNER_ID } : null,
+            error: null,
+          });
         }
         if (table === "mangai_owner_config") {
-          return Promise.resolve({ data: { owner_user_id: OWNER_ID }, error: null });
+          return Promise.resolve({
+            data: { owner_user_id: OWNER_ID },
+            error: null,
+          });
         }
         return Promise.resolve({ data: null, error: null });
       },
       then: (resolve, reject) =>
-        Promise.resolve({ data: [], error: null, count: 0 }).then(resolve, reject),
+        Promise.resolve({ data: [], error: null, count: 0 }).then(
+          resolve,
+          reject,
+        ),
     };
     return {
       from: (table: string) => {
@@ -83,22 +102,28 @@ function makeHandler(options: MockOptions = {}) {
 
   const handler = createControlApiHandler({
     createClient: fakeCreateClient,
-    getEnv: (name) => ({
-      SUPABASE_URL: "https://supabase.example.test",
-      SUPABASE_ANON_KEY: "anon-test-key",
-      SUPABASE_SERVICE_ROLE_KEY: "service-test-key",
-    })[name],
+    getEnv: (name) =>
+      ({
+        SUPABASE_URL: "https://supabase.example.test",
+        SUPABASE_ANON_KEY: "anon-test-key",
+        SUPABASE_SERVICE_ROLE_KEY: "service-test-key",
+      })[name],
     randomUUID: () => "request-test-id",
   });
 
   return { handler, calls };
 }
 
-function request(method: string, path = "/", body?: unknown, token = "valid-test-token") {
+function request(
+  method: string,
+  path = "/",
+  body?: unknown,
+  token = "valid-test-token",
+) {
   return new Request(`https://api.example.test${path}`, {
     method,
     headers: {
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token ? { Authorization: `*** } : {}),
       Origin: "https://tamilancareers.in",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
@@ -172,7 +197,10 @@ Deno.test("HTTP handler rejects unapproved origins and unsupported methods", asy
   const { handler } = makeHandler();
   const blockedOrigin = new Request("https://api.example.test/", {
     method: "GET",
-    headers: { Authorization: "Bearer valid-test-token", Origin: "https://attacker.example" },
+    headers: {
+      Authorization: "Bearer valid-test-token",
+      Origin: "https://attacker.example",
+    },
   });
   assertEquals((await handler(blockedOrigin)).status, 403);
   assertEquals((await handler(request("DELETE"))).status, 405);
