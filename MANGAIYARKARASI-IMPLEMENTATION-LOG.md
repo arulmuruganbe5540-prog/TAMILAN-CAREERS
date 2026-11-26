@@ -46,3 +46,14 @@
 - Routed the Edge Function mutation handlers through those RPCs; an audit insert failure now rolls back the associated mutation rather than leaving an unaudited partial change.
 - Expanded SQL smoke assertions for the new RPC execute grants and expanded CI static guards.
 - These changes are committed to the review branch only. The SQL has not been executed against PostgreSQL, the Edge Function has not been deployed, and runtime behavior is not yet verified.
+
+
+## 2026-11-26 — Phase 1F (read-only Owner UI integration)
+- Added `mangai-control-center.html`, an English-only, responsive, Owner-session-gated Control Center page.
+- The page uses the existing public Supabase key plus the signed-in user's access token; it never embeds or requests the service-role key.
+- It checks the signed-in user and existing `super_admin` role, then reads overview, module registry, change proposals and alerts through the `mangai-control-api` Edge Function.
+- The page uses DOM `textContent` for returned database values and provides an explicit unavailable state when the Edge Function or migration is not installed.
+- No write controls are exposed. Production deployment remains disabled.
+- Added a link to the new page in the existing Super Admin control section.
+- UI source was statically inspected for English document language, auth checks, API path, absence of service-role credentials and absence of mutation actions. No browser/mobile runtime test has been run.
+- This is still a review-branch preview: no live site, database, auth configuration or Edge Function was changed.
