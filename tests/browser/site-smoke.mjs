@@ -131,6 +131,7 @@ try {
 
   await load("tests/browser/admin-language-fixture.html");
   await page.locator(".tc-admin-language").waitFor({ state: "visible" });
+  assert.equal(await page.locator(".language-toggle, [data-lang-choice], [data-ui-lang]").count(), 0, "legacy language controls should be removed in favor of one shared switch");
   assert.equal(await page.locator("html").getAttribute("lang"), "ta", "admin language should default to Tamil");
   assert.equal(await page.locator("h1").innerText(), "செயல்பாட்டு பதிவுகள்", "Tamil interface should remain readable");
   await page.locator('.tc-admin-language button[data-lang="en"]').click();
