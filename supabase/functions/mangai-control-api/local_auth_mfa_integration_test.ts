@@ -83,7 +83,9 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
     { password: ownerPassword, email_confirm: true },
   );
   if (passwordError) {
-    throw new Error(`Owner fixture password setup failed: ${passwordError.message}`);
+    throw new Error(
+      `Owner fixture password setup failed: ${passwordError.message}`,
+    );
   }
 
   const { data: signedIn, error: signInError } = await publicClient.auth
