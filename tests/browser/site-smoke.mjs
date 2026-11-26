@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { extname, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
@@ -21,6 +21,13 @@ const server = createServer(async (req, res) => {
     res.end("Not found");
   }
 });
+
+const adminPages = (await readdir(root)).filter((name) => name.startsWith("super-admin") && name.endsWith(".html"));
+assert.ok(adminPages.length >= 20, "Super Admin page inventory should be present");
+for (const name of adminPages) {
+  const html = await readFile(resolve(root, name), "utf8");
+  assert.match(html, /admin-language\\.js|data-lang-choice|data-ui-lang/, name + " should expose Tamil and English language support");
+}
 
 const supabaseStub = `
 window.supabase = {
@@ -138,7 +145,7 @@ try {
   assert.equal(await page.locator("html").getAttribute("lang"), "ta", "selected language should persist across page reloads");
 
   await context.close();
-  console.log("Browser smoke checks passed: 10 page loads, mobile viewport declarations, student/employer auth tabs, password mismatch validation, password visibility, protected account/application guards, market labels, and Tamil / English admin language switching with persistent preference.");
+  console.log("Browser smoke checks passed: 10 page loads, mobile viewport declarations, student/employer auth tabs, password mismatch validation, password visibility, protected account/application guards, market labels, and Tamil / English admin language switching with persistent preference across the Super Admin page inventory.");
 } finally {
   if (browser) await browser.close();
   await new Promise((resolve) => server.close(resolve));
