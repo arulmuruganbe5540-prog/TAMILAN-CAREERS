@@ -219,7 +219,7 @@ returns jsonb
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   v_status text;
   v_new_status text;
@@ -268,7 +268,7 @@ begin
 
   return jsonb_build_object('id', p_proposal_id, 'status', v_new_status);
 end;
-$;
+$$;
 
 revoke all on function public.mangai_record_proposal_decision(uuid, text, uuid, text, text)
   from public, anon, authenticated;
@@ -317,3 +317,58 @@ comment on table public.mangai_monitoring_checks is 'Evidence-backed health-chec
 comment on table public.mangai_control_alerts is 'Operational alert queue.';
 comment on table public.mangai_search_console_metrics is 'Imported Google Search Console query/page metrics; not fabricated search-volume estimates.';
 comment on table public.mangai_audit_events is 'Append-only audit stream for Owner, automation and integrations.';
+
+
+-- Atomically pause or resume a module and append its audit event.
+create or replace function public.mangai_set_module_enabled(
+  p_module_key text, p_enabled boolean, p_owner_user_id uuid, p_request_id text default null
+)
+returns jsonb language plpgsql security definer set search_path = ''
+as $$
+declare v_enabled boolean;
+begin
+  if p_module_key is null or p_module_key !~ '^[a-z0-9_]{2,60}$' or p_enabled is null then raise exception 'Invalid module control request'; end if;
+  if p_module_key = 'security_governance' then raise exception 'Security governance cannot be paused or resumed by automation'; end if;
+  if not exists (select 1 from public.mangai_owner_config where singleton = true and owner_user_id = p_owner_user_id)
+     or not exists (select 1 from public.user_roles where user_id = p_owner_user_id and role = 'super_admin') then raise exception 'Master Owner permission required'; end if;
+  update public.mangai_control_modules set enabled = p_enabled, updated_at = now()
+   where module_key = p_module_key returning enabled into v_enabled;
+  if not found then raise exception 'Module not found'; end if;
+  insert into public.mangai_audit_events(actor_type, actor_id, event_type, module_key, target_type, target_id, request_id, outcome, details)
+  values ('owner', p_owner_user_id, case when p_enabled then 'resume_module' else 'pause_module' end,
+    p_module_key, 'module', p_module_key, p_request_id, 'succeeded', jsonb_build_object('enabled', v_enabled));
+  return jsonb_build_object('module_key', p_module_key, 'enabled', v_enabled);
+end;
+$$;
+revoke all on function public.mangai_set_module_enabled(text, boolean, uuid, text) from public, anon, authenticated;
+grant execute on function public.mangai_set_module_enabled(text, boolean, uuid, text) to service_role;
+
+-- Atomically create a proposal and its audit event.
+create or replace function public.mangai_create_change_proposal(
+  p_module_key text, p_title text, p_description text, p_risk_level text,
+  p_change_payload jsonb, p_test_plan jsonb, p_rollback_plan jsonb,
+  p_expected_impact text, p_owner_user_id uuid, p_request_id text default null
+)
+returns jsonb language plpgsql security definer set search_path = ''
+as $$
+declare v_proposal public.mangai_change_proposals%rowtype;
+begin
+  if p_title is null or length(btrim(p_title)) < 4 or length(p_title) > 180 then raise exception 'Proposal title must be 4–180 characters'; end if;
+  if p_risk_level is null or p_risk_level not in ('low', 'medium', 'high', 'critical') then raise exception 'Invalid proposal risk level'; end if;
+  if p_module_key is not null and not exists (select 1 from public.mangai_control_modules where module_key = p_module_key) then raise exception 'Unknown module key'; end if;
+  if not exists (select 1 from public.mangai_owner_config where singleton = true and owner_user_id = p_owner_user_id)
+     or not exists (select 1 from public.user_roles where user_id = p_owner_user_id and role = 'super_admin') then raise exception 'Master Owner permission required'; end if;
+  insert into public.mangai_change_proposals(module_key, title, description, risk_level, status, change_payload, test_plan, rollback_plan, expected_impact, created_by)
+  values (p_module_key, btrim(p_title), left(coalesce(p_description, ''), 5000), p_risk_level, 'proposed',
+    coalesce(p_change_payload, '{}'::jsonb),
+    case when jsonb_typeof(p_test_plan) = 'array' then p_test_plan else '[]'::jsonb end,
+    coalesce(p_rollback_plan, '{}'::jsonb), left(coalesce(p_expected_impact, ''), 2000), p_owner_user_id)
+  returning * into v_proposal;
+  insert into public.mangai_audit_events(actor_type, actor_id, event_type, target_type, target_id, request_id, outcome, details)
+  values ('owner', p_owner_user_id, 'proposal_created', 'proposal', v_proposal.id::text, p_request_id, 'succeeded',
+    jsonb_build_object('title', v_proposal.title, 'risk_level', v_proposal.risk_level, 'module_key', v_proposal.module_key));
+  return jsonb_build_object('id', v_proposal.id, 'title', v_proposal.title, 'status', v_proposal.status, 'risk_level', v_proposal.risk_level);
+end;
+$$;
+revoke all on function public.mangai_create_change_proposal(text, text, text, text, jsonb, jsonb, jsonb, text, uuid, text) from public, anon, authenticated;
+grant execute on function public.mangai_create_change_proposal(text, text, text, text, jsonb, jsonb, jsonb, text, uuid, text) to service_role;
