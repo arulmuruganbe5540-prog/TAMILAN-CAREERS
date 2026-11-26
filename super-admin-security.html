@@ -15,7 +15,20 @@ button{background:linear-gradient(110deg,#b9944b,#e0c77f);color:#10131a;border:1
 .secret{background:#080d15;color:#b8dcff}
 .item{border-color:#34302a}
 @media(max-width:600px){.top{padding:15px}.top-actions{gap:9px}.admin-name{font-size:20px}}
-</style></head><body><header class="top"><div><div class="brand">TAMILAN CAREERS · SIGNATURE 360°</div><div class="admin-name">Mangaiyarkarasi</div></div><div class="top-actions"><a href="super-admin.html">Dashboard</a><span id="email" class="muted"></span><button id="logout">Sign out</button><div class="language-toggle" role="group" aria-label="Language"><button type="button" data-ui-lang="ta">தமிழ்</button><button type="button" data-ui-lang="en">English</button></div></div></header>
+</style>
+<style id="mangai-grass-admin-header">
+.top{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 15% 115%,rgba(196,239,137,.78),transparent 42%),radial-gradient(ellipse at 86% 120%,rgba(73,166,76,.76),transparent 48%),linear-gradient(180deg,#b9e8a5 0%,#69b75a 40%,#286f40 74%,#123d2c 100%);border-bottom:2px solid #d8b96e;box-shadow:0 10px 30px #0008;padding:17px 22px}
+.top:before{content:"";position:absolute;inset:48% 0 0;z-index:-1;opacity:.48;background:repeating-linear-gradient(102deg,transparent 0 9px,rgba(220,250,174,.24) 10px 11px,transparent 12px 19px),linear-gradient(180deg,transparent,rgba(5,48,28,.58));pointer-events:none}
+.top .brand{color:#fff5ce;font-weight:900;letter-spacing:1.8px;text-shadow:0 2px 5px #173d20}
+.top a{color:#fff8dc;text-shadow:0 1px 3px #173d20;font-weight:700}
+.top .muted{color:#f0ffe9;text-shadow:0 1px 3px #173d20}
+.top button{background:linear-gradient(110deg,#b9944b,#e0c77f);color:#10131a;border:1px solid #f0d99b;border-radius:9px}
+.top .language-toggle{background:rgba(10,48,31,.45);border-color:rgba(255,240,190,.65)}
+.top .language-toggle button{background:transparent;color:#fff5ce;text-shadow:none}
+.top .language-toggle button.active{background:#248bff;color:#fff}
+@media(max-width:600px){.top{padding:15px}.top:after{display:none}}
+</style>
+</head><body><header class="top"><div><div class="brand">TAMILAN CAREERS · SIGNATURE 360°</div><div class="admin-name">Mangaiyarkarasi</div></div><div class="top-actions"><a href="super-admin.html">Dashboard</a><span id="email" class="muted"></span><button id="logout">Sign out</button><div class="language-toggle" role="group" aria-label="Language"><button type="button" data-ui-lang="ta">தமிழ்</button><button type="button" data-ui-lang="en">English</button></div></div></header>
 <main class="wrap"><h1>Security & Access Control</h1><p class="muted">Protect your Super Admin account with TOTP multi-factor authentication (MFA). Scan the QR code using Google Authenticator, Microsoft Authenticator, or another compatible authenticator app.</p><div id="status" class="status">Verifying access…</div>
 <section class="panel"><h2>Authenticator MFA</h2><div class="item"><span>MFA Status</span><b id="mfaStatus" class="warn">Checking…</b></div><div class="item"><span>Current Session Assurance</span><b id="aal">—</b></div><div id="factorList" class="muted">Loading MFA factors…</div><div class="field"><button id="enrollBtn">Set Up Authenticator MFA</button><button id="refreshMfa" class="secondary">Refresh Status</button></div><div id="enrollBox" hidden><p>1. Scan the QR code with your authenticator app. 2. Enter the 6-digit code shown in the app.</p><img id="qr" class="qr" alt="Authenticator QR code"><p class="muted">If you cannot scan the QR code, enter this secret key manually:</p><div id="secret" class="secret"></div><div class="field"><input id="totpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6-digit code"><button id="verifyBtn">Verify and Enable MFA</button></div></div><div id="mfaMessage" class="status" hidden></div></section>
 <section class="panel"><h2>Current Session</h2><div class="item"><span>Authenticated account</span><b id="account">—</b></div><div class="item"><span>Super Admin role</span><b id="role">Checking...</b></div><div class="item"><span>Session expiry</span><b id="expiry">—</b></div></section>
