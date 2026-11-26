@@ -33,3 +33,10 @@ These are static source regression checks. They do not sign in, submit forms, qu
 - Website static regression suite: passed (8 test groups).
 - Mangaiyarkarasi Deno checks: format, lint and type-check passed.
 - Database CI now applies the migration and runs the SQL smoke plus transactional rollback tests against an ephemeral PostgreSQL 16 service. This is not a live Supabase project test.
+
+
+## Browser smoke coverage — 2026-11-26
+- Playwright/Chromium CI opens 10 pages with a mobile-sized viewport.
+- Checks Student and Employer sign-in/register tab behavior, password mismatch validation, show/hide password controls, unauthenticated Company Portal and application guards, and market-specific page labels.
+- Supabase is mocked and external requests are blocked. This is a front-end smoke test, not a live backend or end-to-end authentication test.
+- Result: passed on commit `630ba4f34f7f3e2bb47af64516bb643a903d25fe`.
