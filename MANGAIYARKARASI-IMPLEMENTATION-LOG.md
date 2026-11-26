@@ -72,3 +72,11 @@
 - The Mangaiyarkarasi Control API workflow passed Deno format, lint, type-check and all static SQL/RPC/MFA guard assertions on commit `990a6ec17e4d05369fd3c37731925238178cbd1d`.
 - CI fixes: applied Deno formatting, moved the Supabase JS dependency into the function-local Deno import map, removed an unused variable, passed the function-local Deno config explicitly to type-check, and aligned static guards with formatted RPC calls.
 - CI success does not execute the SQL migration or run live database/MFA/browser tests. No Supabase migration was applied, no Edge Function deployed, and no production website/auth/secrets/schedules were changed.
+
+
+## 2026-11-26 — Phase 1I (ephemeral PostgreSQL integration verification)
+- Fixed the smoke-test DO block closing delimiter, then added a dependency-free PostgreSQL 16 CI integration job using a disposable GitHub Actions service container. No Supabase project or paid database branch is used.
+- The job creates minimal Supabase-compatible roles and one Owner fixture, applies the additive migration, runs RLS/grant/append-only smoke assertions, and tests all three transaction-backed RPCs.
+- Injected audit-insert failures and verified module state, proposal creation, proposal decision, approval history and audit rows roll back together. The successful decision path also commits the expected status and approval row.
+- Latest CI run for commit 905036fdbc7baaf0aa4b81dee1e6e3b59998dc1e: PostgreSQL integration job PASSED; Deno format/lint/type-check and static security guards PASSED.
+- This verifies the migration against vanilla PostgreSQL 16 with a minimal compatibility fixture, not against the hosted Supabase project. Live Auth JWT/AAL2, Supabase RLS/Data API behavior, Edge Function deployment and browser/mobile flows remain untested. No production system was changed.
