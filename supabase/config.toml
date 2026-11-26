@@ -2,3 +2,7 @@ project_id = "qkmljuuusfjowexvybvy"
 
 [functions.mangai-control-api]
 verify_jwt = true
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
