@@ -1,0 +1,74 @@
+name: TAMILAN CAREERS 20-Day Evolution Audit Reminder
+
+on:
+  schedule:
+    - cron: "15 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: tamilan-careers-20-day-evolution-audit
+  cancel-in-progress: false
+
+jobs:
+  create-audit-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create a review task when 20 days have elapsed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest="$(gh issue list --state all --search '"[20-DAY AUDIT]" in:title' --json createdAt --jq 'sort_by(.createdAt) | last | .createdAt // empty')"
+          now_epoch="$(date -u +%s)"
+          if [ -n "$latest" ]; then
+            latest_epoch="$(date -u -d "$latest" +%s)"
+            age_days="$(( (now_epoch - latest_epoch) / 86400 ))"
+          else
+            age_days=20
+          fi
+
+          if [ "$age_days" -lt 20 ]; then
+            echo "Last 20-day audit was $age_days days ago; no new issue is due."
+            exit 0
+          fi
+
+          today="$(date -u +%Y-%m-%d)"
+          cat > audit-issue.md <<EOF
+          # Scheduled 20-day evolution review
+
+          Generated: $today (UTC)
+
+          This is a review task, not permission to change the live website. Record evidence and prepare proposals only. The Owner must explicitly approve any production change.
+
+          ## Review checklist
+          - [ ] Website availability, HTTPS, certificate and critical page response history
+          - [ ] Android/mobile and desktop navigation, forms and accessibility
+          - [ ] Student/employer login, registration and application flows (test environment only)
+          - [ ] Government, Indian Private and International job separation and duplicate/expiry controls
+          - [ ] Supabase health, Edge Function failures, Cron history, RLS and security advisor findings
+          - [ ] Search Console data freshness, sitemap, canonical URLs and structured data
+          - [ ] SEO opportunities supported by real query/page metrics (do not invent volume or ranking)
+          - [ ] Performance, broken links, storage/database usage and cost limits
+          - [ ] Backup inventory and restore-test evidence
+          - [ ] Existing design and feature regression review
+
+          ## Proposal requirements
+          For each proposed improvement include current state, evidence, expected impact, risk, dependencies, test plan, rollback plan and cost. Keep each proposal in Pending until the Owner allows development. Allowed means testing only, not production deployment.
+
+          ## Safety gates
+          - Do not edit production database, Auth, RLS, secrets or live design from this audit.
+          - Do not downgrade or replace working features.
+          - Do not mark any check successful without a verifiable run or screenshot/log.
+          - Preserve separate Government, Private and International job data.
+          EOF
+
+          gh issue create --title "[20-DAY AUDIT] Evolution review - $today" --body-file audit-issue.md
