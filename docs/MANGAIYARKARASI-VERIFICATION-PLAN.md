@@ -106,3 +106,10 @@ A proposal may be allowed for isolated testing without authorizing production de
 - **Passed:** Control API workflow run `45853706305` — Deno format check, lint, TypeScript check, all 16 Deno tests (7 pure policy groups + 9 HTTP request-flow groups), and ephemeral PostgreSQL migration/RLS/transaction checks.
 - **Passed:** Browser smoke run `45853705787`; static website regression run `45853705848`.
 - **Limitations:** HTTP tests use mocked Supabase clients. They verify the actual handler's request routing and policy gates, but do not validate hosted JWT verification, a real enrolled MFA factor, Supabase Edge Runtime behavior, deployed function secrets, or live RPC grants. No hosted project or production data was touched.
+
+## Gate 3 — Disposable local Supabase Auth + TOTP integration (added 2026-11-26)
+- A dedicated GitHub Actions job creates a temporary workspace under the runner's temporary directory. It copies only the control migration and function, then adds a test-only fixture migration that creates a disposable `user_roles` table and one local Owner identity.
+- The job starts a local Supabase stack with Auth, Postgres, API gateway and Edge Runtime; applies the migrations only to that local stack; serves the function through the local Edge Runtime; and runs `local_auth_mfa_integration_test.ts`.
+- The test signs in against local Supabase Auth, verifies AAL1 read access and write denial, enrolls a real TOTP factor, completes challenge/verify, verifies AAL2, then sends the AAL2 request through the local Edge Function and its actual database RPC. It also checks invalid JWT, non-owner, protected security-governance and disabled deployment paths.
+- No hosted project reference is linked, no hosted secrets are read, and the workflow contains no remote migration, deploy, or production command. The temporary Supabase stack is stopped after the job.
+- This gate validates the Supabase Auth/Edge Runtime behavior in a disposable local stack. It is not a test against the user's hosted project, production secrets, or the user's enrolled account MFA.
