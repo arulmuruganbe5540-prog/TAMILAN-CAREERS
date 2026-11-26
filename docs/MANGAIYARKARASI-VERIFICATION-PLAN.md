@@ -35,10 +35,14 @@ Status: repository-level preparation only. No database-backed or live-site test 
 - Until this gate passes, do not deploy the API or expose mutation controls.
 
 ## Gate 4 — Admin UI and regression
+- Added the English-only read-only Owner workspace at `mangai-control-center.html`; it requests overview, modules, proposals and alerts from the Edge Function using the signed-in user's access token.
+- The existing Super Admin home links to this page. The new page has no mutation controls and does not contain a service-role credential.
+- Verify the new page redirects signed-out users, rejects users without the existing Super Admin role, displays an unavailable state when the Edge Function is absent, and loads the four read-only views when deployed in an isolated test environment.
+- Verify returned database text is rendered as text, not interpreted as HTML.
 - Read-only views first; no browser-side service-role credentials.
 - Verify all controls are owner-gated by the Edge Function.
-- Test mobile layout on Android and desktop layout.
-- Regression-test existing login, registration, government/private/international job forms, employer verification, apply links, and public pages.
+- Test mobile layout on Android and desktop layout, including refresh and sign-out.
+- Regression-test existing login, registration, government/private/international job forms, employer verification, apply links, and public pages. Confirm the new read-only workspace does not change these flows.
 - Confirm internal scanner/automation details never appear on public pages.
 
 ## Gate 5 — Scheduling and operations
