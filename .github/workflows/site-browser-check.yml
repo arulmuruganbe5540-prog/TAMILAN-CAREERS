@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "*.html"
+      - "admin-language.js"
       - "tests/browser/**"
       - ".github/workflows/site-browser-check.yml"
   push:
