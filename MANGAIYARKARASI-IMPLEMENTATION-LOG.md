@@ -25,6 +25,12 @@
 - Extended the SQL smoke assertions and CI guards for the restricted RPC.
 - GitHub Actions run details were not returned for the latest commits, so CI is not marked as passed. The migration and RPC have not been executed against a database.
 
+## 2026-11-26 — Phase 1D (MFA write gate)
+- Added a server-side Supabase Authenticator Assurance Level check to the Edge Function. Every POST/write action now requires the current session to be AAL2; read-only GET operations remain Owner-authenticated.
+- Updated deployment notes and CI static guards to require the AAL2 check.
+- This is source-level implementation only. It still needs runtime verification with an enrolled MFA factor in an isolated Supabase environment; the function remains undeployed.
+- GitHub Actions run details were not returned for the latest commit, so CI is not marked as passed.
+
 ## Next phases (without a paid Supabase branch)
 1. Continue repository-only development: API validation, safer transactional decisions, automated static/security checks and admin UI integration source.
 2. Add isolated test fixtures and documented manual test commands that do not require production credentials.
