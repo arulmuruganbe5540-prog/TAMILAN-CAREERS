@@ -76,16 +76,34 @@ async function invoke(
 }
 
 Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", async () => {
-  // Set the disposable fixture password through GoTrue Admin API so the test
-  // does not depend on Auth internal password-hash implementation details.
-  const { error: passwordError } = await adminClient.auth.admin.updateUserById(
-    "11111111-1111-4111-8111-111111111111",
-    { password: ownerPassword, email_confirm: true },
-  );
-  if (passwordError) {
+  // Create the disposable Owner through GoTrue itself. Direct SQL inserts into
+  // auth.users are not guaranteed to be visible to the Auth admin API.
+  const { data: ownerCreated, error: ownerCreateError } = await adminClient.auth
+    .admin.createUser({
+      email: ownerEmail,
+      password: ownerPassword,
+      email_confirm: true,
+    });
+  if (ownerCreateError || !ownerCreated.user) {
     throw new Error(
-      `Owner fixture password setup failed: ${passwordError.message}`,
+      `Owner fixture creation failed: ${ownerCreateError?.message ?? "no user"}`,
     );
+  }
+
+  // Rebind only this disposable local test database to the Auth-created user.
+  const fixtureId = "11111111-1111-4111-8111-111111111111";
+  const { error: roleUpdateError } = await adminClient.from("user_roles")
+    .update({ user_id: ownerCreated.user.id })
+    .eq("user_id", fixtureId)
+    .eq("role", "super_admin");
+  if (roleUpdateError) {
+    throw new Error(`Owner role fixture update failed: ${roleUpdateError.message}`);
+  }
+  const { error: ownerUpdateError } = await adminClient.from("mangai_owner_config")
+    .update({ owner_user_id: ownerCreated.user.id })
+    .eq("singleton", true);
+  if (ownerUpdateError) {
+    throw new Error(`Owner binding fixture update failed: ${ownerUpdateError.message}`);
   }
 
   const { data: signedIn, error: signInError } = await publicClient.auth
