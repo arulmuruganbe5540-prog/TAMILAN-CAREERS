@@ -55,6 +55,7 @@ Deno.serve(async (req: Request) => {
   const user = userData?.user;
   if (userError || !user) return json({ error: "Session is invalid or expired" }, 401, origin);
 
+  const ownerId = user.id;
   const admin = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -76,7 +77,7 @@ Deno.serve(async (req: Request) => {
   async function writeAudit(eventType: string, targetType: string | null, targetId: string | null, details: Record<string, unknown>, outcome = "succeeded") {
     const { error } = await admin.from("mangai_audit_events").insert({
       actor_type: "owner",
-      actor_id: user.id,
+      actor_id: ownerId,
       event_type: eventType,
       target_type: targetType,
       target_id: targetId,
