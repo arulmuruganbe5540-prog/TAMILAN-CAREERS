@@ -86,7 +86,9 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
     });
   if (ownerCreateError || !ownerCreated.user) {
     throw new Error(
-      `Owner fixture creation failed: ${ownerCreateError?.message ?? "no user"}`,
+      `Owner fixture creation failed: ${
+        ownerCreateError?.message ?? "no user"
+      }`,
     );
   }
 
@@ -97,13 +99,18 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
     .eq("user_id", fixtureId)
     .eq("role", "super_admin");
   if (roleUpdateError) {
-    throw new Error(`Owner role fixture update failed: ${roleUpdateError.message}`);
+    throw new Error(
+      `Owner role fixture update failed: ${roleUpdateError.message}`,
+    );
   }
-  const { error: ownerUpdateError } = await adminClient.from("mangai_owner_config")
+  const { error: ownerUpdateError } = await adminClient
+    .from("mangai_owner_config")
     .update({ owner_user_id: ownerCreated.user.id })
     .eq("singleton", true);
   if (ownerUpdateError) {
-    throw new Error(`Owner binding fixture update failed: ${ownerUpdateError.message}`);
+    throw new Error(
+      `Owner binding fixture update failed: ${ownerUpdateError.message}`,
+    );
   }
 
   const { data: signedIn, error: signInError } = await publicClient.auth
