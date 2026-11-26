@@ -99,3 +99,5 @@
 - No Supabase migration or Edge Function deployment was performed; all changes remain in the review branch.
 
 - Follow-up CI diagnosis: formatting and lint passed after the import-map adjustment; type-check then exposed a missing `200` member in the Owner-gate result union. Expanded the union to include the successful status. The corrected commit is awaiting a fresh CI result.
+
+- Final verification for this iteration: Control API CI run `45852240516` passed (Deno format/lint/type-check, 7 authorization policy tests, ephemeral PostgreSQL migration/RLS/transaction tests). Browser smoke `45852240533` and website regression `45852240539` also passed. This remains CI-only verification; hosted Supabase Auth/MFA and deployed Edge Function runtime were not exercised.
