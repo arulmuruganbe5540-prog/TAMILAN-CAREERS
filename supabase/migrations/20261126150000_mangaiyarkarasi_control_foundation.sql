@@ -205,6 +205,76 @@ values
   ('performance_cost', 'Performance and Cost Controller', 'operations', 'Performance, provider usage and budget threshold monitoring.', 'automatic_safe', 'read_only', false)
 on conflict (module_key) do nothing;
 
+
+-- Atomically record a proposal decision, owner approval and audit event.
+-- Callable only by the trusted Edge Function service role after JWT verification.
+create or replace function public.mangai_record_proposal_decision(
+  p_proposal_id uuid,
+  p_decision text,
+  p_owner_user_id uuid,
+  p_rationale text default '',
+  p_request_id text default null
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  v_status text;
+  v_new_status text;
+  v_risk text;
+begin
+  if p_decision not in ('allow_testing', 'reject', 'keep_existing') then
+    raise exception 'Decision is not allowed';
+  end if;
+
+  if not exists (
+    select 1 from public.mangai_owner_config
+    where singleton = true and owner_user_id = p_owner_user_id
+  ) or not exists (
+    select 1 from public.user_roles
+    where user_id = p_owner_user_id and role = 'super_admin'
+  ) then
+    raise exception 'Master Owner permission required';
+  end if;
+
+  v_new_status := case p_decision
+    when 'allow_testing' then 'allowed_for_testing'
+    when 'reject' then 'rejected'
+    when 'keep_existing' then 'kept_existing'
+  end;
+
+  update public.mangai_change_proposals
+     set status = v_new_status, updated_at = now()
+   where id = p_proposal_id and status = 'proposed'
+   returning risk_level into v_risk;
+
+  if not found then
+    raise exception 'Proposal not found or already decided';
+  end if;
+
+  insert into public.mangai_owner_approvals
+    (proposal_id, decision, owner_user_id, rationale)
+  values
+    (p_proposal_id, p_decision, p_owner_user_id, left(coalesce(p_rationale, ''), 2000));
+
+  insert into public.mangai_audit_events
+    (actor_type, actor_id, event_type, target_type, target_id, request_id, outcome, details)
+  values
+    ('owner', p_owner_user_id, 'proposal_' || p_decision, 'proposal',
+     p_proposal_id::text, p_request_id, 'succeeded',
+     jsonb_build_object('previous_status', 'proposed', 'new_status', v_new_status, 'risk_level', v_risk));
+
+  return jsonb_build_object('id', p_proposal_id, 'status', v_new_status);
+end;
+$;
+
+revoke all on function public.mangai_record_proposal_decision(uuid, text, uuid, text, text)
+  from public, anon, authenticated;
+grant execute on function public.mangai_record_proposal_decision(uuid, text, uuid, text, text)
+  to service_role;
+
 -- These control records are private to trusted server-side code.
 -- No anon/authenticated API access; Edge Functions use server-side service credentials only.
 alter table public.mangai_owner_config enable row level security;
