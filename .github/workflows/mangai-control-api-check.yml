@@ -62,6 +62,118 @@ jobs:
           grep -q "createControlApiHandler" supabase/functions/mangai-control-api/index.ts
           grep -q "Owner with AAL2 can submit an allow-listed proposal request" supabase/functions/mangai-control-api/handler_test.ts
 
+
+  local-supabase-auth-mfa-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Supabase CLI v3
+        uses: supabase/setup-cli@v2
+        with:
+          version: 3.0.0
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Build a disposable local Supabase project
+        shell: bash
+        run: |
+          set -euo pipefail
+          TEST_ROOT="$RUNNER_TEMP/mangai-local-supabase"
+          mkdir -p "$TEST_ROOT/supabase/migrations" "$TEST_ROOT/supabase/functions"
+          cp supabase/config.toml "$TEST_ROOT/supabase/config.toml"
+          cp supabase/migrations/20261126150000_mangaiyarkarasi_control_foundation.sql "$TEST_ROOT/supabase/migrations/"
+          cp -R supabase/functions/mangai-control-api "$TEST_ROOT/supabase/functions/"
+          cat > "$TEST_ROOT/supabase/migrations/20261126145900_local_auth_owner_fixture.sql" <<'SQL'
+          create table public.user_roles (
+            user_id uuid not null,
+            role text not null,
+            created_at timestamptz not null default now(),
+            primary key (user_id, role)
+          );
+
+          insert into auth.users (
+            id, aud, role, email, encrypted_password, email_confirmed_at,
+            raw_app_meta_data, raw_user_meta_data, created_at, updated_at
+          ) values (
+            '11111111-1111-4111-8111-111111111111',
+            'authenticated',
+            'authenticated',
+            'mangai-owner@example.test',
+            extensions.crypt('LocalOnly-Owner-Password-2026!', extensions.gen_salt('bf')),
+            now(),
+            '{"provider":"email","providers":["email"]}'::jsonb,
+            '{}'::jsonb,
+            now(),
+            now()
+          );
+
+          insert into public.user_roles(user_id, role)
+          values ('11111111-1111-4111-8111-111111111111', 'super_admin');
+          SQL
+          echo "TEST_ROOT=$TEST_ROOT" >> "$GITHUB_ENV"
+      - name: Start isolated local Supabase stack
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$TEST_ROOT"
+          supabase start --exclude storage-api,imgproxy,realtime,studio,logflare,vector,supavisor,postgres-meta
+          supabase db reset
+          supabase status --output-format json > "$RUNNER_TEMP/mangai-supabase-status.json"
+          API_URL="$(jq -r '.env.API_URL' "$RUNNER_TEMP/mangai-supabase-status.json")"
+          ANON_KEY="$(jq -r '.env.ANON_KEY' "$RUNNER_TEMP/mangai-supabase-status.json")"
+          SERVICE_ROLE_KEY="$(jq -r '.env.SERVICE_ROLE_KEY' "$RUNNER_TEMP/mangai-supabase-status.json")"
+          test -n "$API_URL" && test "$API_URL" != "null"
+          test -n "$ANON_KEY" && test "$ANON_KEY" != "null"
+          test -n "$SERVICE_ROLE_KEY" && test "$SERVICE_ROLE_KEY" != "null"
+          cat > "$TEST_ROOT/supabase/functions/.env" <<EOF
+          SUPABASE_URL=$API_URL
+          SUPABASE_ANON_KEY=$ANON_KEY
+          SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY
+          EOF
+          {
+            echo "MANGAI_SUPABASE_URL=$API_URL"
+            echo "MANGAI_ANON_KEY=$ANON_KEY"
+            echo "MANGAI_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
+            echo "MANGAI_FUNCTION_URL=$API_URL/functions/v1/mangai-control-api"
+          } >> "$GITHUB_ENV"
+      - name: Serve the Edge Function in Supabase Edge Runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$TEST_ROOT"
+          nohup supabase functions serve mangai-control-api --env-file "$TEST_ROOT/supabase/functions/.env" > "$RUNNER_TEMP/mangai-edge-runtime.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/mangai-edge-runtime.pid"
+          for attempt in $(seq 1 60); do
+            code="$(curl -sS -o /dev/null -w '%{http_code}' -H "apikey: $MANGAI_ANON_KEY" -H "Origin: https://tamilancareers.in" "$MANGAI_FUNCTION_URL" || true)"
+            if [ "$code" != "000" ]; then
+              echo "Local Edge Function gateway responded with HTTP $code"
+              exit 0
+            fi
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/mangai-edge-runtime.log"
+          echo "Local Edge Function did not become ready"
+          exit 1
+      - name: Exercise real local Auth, TOTP MFA and Edge Function request path
+        run: |
+          deno test --allow-env --allow-net --allow-read --config "$TEST_ROOT/supabase/functions/mangai-control-api/deno.json" "$TEST_ROOT/supabase/functions/mangai-control-api/local_auth_mfa_integration_test.ts"
+        env:
+          SUPABASE_URL: ${{ env.MANGAI_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ env.MANGAI_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ env.MANGAI_SERVICE_ROLE_KEY }}
+          MANGAI_FUNCTION_URL: ${{ env.MANGAI_FUNCTION_URL }}
+      - name: Stop disposable local Supabase stack
+        if: always()
+        shell: bash
+        run: |
+          if [ -n "${TEST_ROOT:-}" ] && [ -f "$TEST_ROOT/supabase/config.toml" ]; then
+            cd "$TEST_ROOT"
+            supabase stop --no-backup || true
+          fi
+
   postgres-integration:
     runs-on: ubuntu-latest
     services:
