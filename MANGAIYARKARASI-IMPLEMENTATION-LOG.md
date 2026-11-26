@@ -101,3 +101,11 @@
 - Follow-up CI diagnosis: formatting and lint passed after the import-map adjustment; type-check then exposed a missing `200` member in the Owner-gate result union. Expanded the union to include the successful status. The corrected commit is awaiting a fresh CI result.
 
 - Final verification for this iteration: Control API CI run `45852240516` passed (Deno format/lint/type-check, 7 authorization policy tests, ephemeral PostgreSQL migration/RLS/transaction tests). Browser smoke `45852240533` and website regression `45852240539` also passed. This remains CI-only verification; hosted Supabase Auth/MFA and deployed Edge Function runtime were not exercised.
+
+## 2026-11-26 — Isolated HTTP request-flow tests
+- Refactored the Mangai control Edge Function into an injectable handler factory while preserving the production `Deno.serve` entrypoint.
+- Added mocked-client HTTP tests for bearer/session validation, Master Owner role binding, AAL1 read vs write behavior, AAL2 allow-listed writes, protected security-governance controls, disabled production deployment, CORS origin rejection, and unsupported methods.
+- **Passed on workflow run `45853697380`:** Deno format, lint, type-check, 16 Deno tests (0 failed), and ephemeral PostgreSQL migration/RLS/transaction checks.
+- **Passed:** Browser smoke `45853692846` and website static regression `45853692787`.
+- The request-flow harness uses mock Supabase clients; hosted JWT/AAL2, real Edge Runtime, production secrets and live database remain unverified. No migration or function deployment was performed.
+- PR #7 remains a draft and unmerged; all work is still isolated on the review branch.
