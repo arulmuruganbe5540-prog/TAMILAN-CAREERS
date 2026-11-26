@@ -28,3 +28,9 @@ Use Supabase Function Secrets; never put the service-role key in a browser, stat
 
 ## Important
 Deploy only after the migration is installed and smoke checks pass on an isolated Supabase development branch. Test invalid JWT, non-owner, missing owner binding, CORS, AAL1/AAL2 sessions, each allowed action, concurrent proposal decisions and injected audit failures before UI integration.
+
+
+## Read-only UI preview
+- `mangai-control-center.html` is an English-only Owner workspace that reads overview, modules, proposals and alerts from this function.
+- It contains no mutation controls and uses only the signed-in user's access token plus the public anon/publishable key.
+- Until this Edge Function is deployed and the migration is installed in an isolated test project, the page must show its API-unavailable state; it is not a live dashboard yet.
