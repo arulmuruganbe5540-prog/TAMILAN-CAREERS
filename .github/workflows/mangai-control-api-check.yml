@@ -42,3 +42,5 @@ jobs:
           grep -q "Expected exactly one Master Owner binding" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
           grep -q "RLS is not enabled on every Mangai control table" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
           grep -q "Audit events are not append-only" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
+          grep -q "Untrusted roles can execute the proposal decision RPC" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
+          grep -q "mangai_record_proposal_decision" supabase/migrations/20261126150000_mangaiyarkarasi_control_foundation.sql
