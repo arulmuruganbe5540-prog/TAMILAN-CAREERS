@@ -18,6 +18,13 @@
 - Added a staged verification plan covering database, API authorization, audit atomicity, MFA, mobile regression, monitoring, backup and release gates.
 - No Supabase development branch was created and no recurring compute charge was incurred. No production system was changed.
 
+## 2026-11-26 — Phase 1C (transaction safety)
+- Added a server-side PostgreSQL transaction function for proposal decisions. Proposal status, Owner approval history and immutable audit event are now committed together or rolled back together.
+- The transaction function independently verifies the single Owner binding and existing Super Admin role, and its execute permission is restricted to service_role.
+- Updated the Edge Function to call the transactional RPC rather than performing separate proposal, approval and audit writes.
+- Extended the SQL smoke assertions and CI guards for the restricted RPC.
+- GitHub Actions run details were not returned for the latest commits, so CI is not marked as passed. The migration and RPC have not been executed against a database.
+
 ## Next phases (without a paid Supabase branch)
 1. Continue repository-only development: API validation, safer transactional decisions, automated static/security checks and admin UI integration source.
 2. Add isolated test fixtures and documented manual test commands that do not require production credentials.
