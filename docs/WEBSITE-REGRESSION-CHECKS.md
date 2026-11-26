@@ -27,3 +27,9 @@ These are static source regression checks. They do not sign in, submit forms, qu
 ## Latest workflow result — 2026-11-26
 - The static regression suite passed in GitHub Actions: 8 test groups, 0 failures.
 - The suite remains source-level only. It does not prove runtime authentication, Supabase RLS, posting, application upload, email delivery, or browser behavior.
+
+
+## CI coverage status — 2026-11-26
+- Website static regression suite: passed (8 test groups).
+- Mangaiyarkarasi Deno checks: format, lint and type-check passed.
+- Database CI now applies the migration and runs the SQL smoke plus transactional rollback tests against an ephemeral PostgreSQL 16 service. This is not a live Supabase project test.
