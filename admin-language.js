@@ -46,6 +46,7 @@
  const style=document.createElement('style');
  style.textContent='.tc-admin-language{display:inline-flex;align-items:center;gap:4px;padding:4px;border:1px solid #42617e;border-radius:999px;background:#091a2c;margin:8px 0;z-index:20}.tc-admin-language button{border:0;border-radius:999px;padding:7px 12px;background:transparent;color:#d7e8f8;font-weight:800;font-size:12px;cursor:pointer}.tc-admin-language button.active{background:#38bdf8;color:#06182a}@media(max-width:600px){.tc-admin-language{margin:8px 0}.tc-admin-language button{padding:8px 11px}}';
  document.head.appendChild(style);
+ document.querySelectorAll('.language-toggle,[data-lang-choice]').forEach(el=>el.remove());
  const control=document.createElement('div');control.className='tc-admin-language';control.setAttribute('role','group');control.setAttribute('aria-label','Language');
  [['ta','தமிழ்'],['en','English']].forEach(([lang,label])=>{const button=document.createElement('button');button.type='button';button.dataset.lang=lang;button.textContent=label;button.addEventListener('click',()=>setLanguage(lang));control.appendChild(button)});
  const header=document.querySelector('header,.top,.header');
