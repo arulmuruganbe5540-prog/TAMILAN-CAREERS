@@ -53,3 +53,10 @@ Status: repository-level preparation only. No database-backed or live-site test 
 
 ## Release rule
 A proposal may be allowed for isolated testing without authorizing production deployment. Production release requires passing all applicable gates, a verified backup/rollback path, and a separate explicit Owner approval. No live changes are made by this repository-only phase.
+
+
+## Gate 4A — Automated static regression suite
+- Added `tests/regression/site-regression.test.mjs`, runnable with Node.js 22 using `node --test tests/regression/site-regression.test.mjs`.
+- Added `.github/workflows/site-regression-check.yml` to run it for relevant PR/development-branch changes.
+- Coverage includes English/mobile page shells, student/employer login and registration forms, private/international listing separation, distinct application tables, company-market verification gates, Owner Control read-only boundary, public-page isolation and local file links.
+- A passing static suite is not proof of runtime authentication, database authorization, resume upload, email delivery, or Android browser behavior. Those remain separate release gates.
