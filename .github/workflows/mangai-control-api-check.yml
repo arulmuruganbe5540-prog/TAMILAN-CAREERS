@@ -5,6 +5,8 @@ on:
     paths:
       - "supabase/functions/mangai-control-api/**"
       - "supabase/migrations/*mangaiyarkarasi*"
+      - "supabase/tests/mangaiyarkarasi*"
+      - "supabase/config.toml"
       - ".github/workflows/mangai-control-api-check.yml"
   push:
     branches:
@@ -12,6 +14,9 @@ on:
     paths:
       - "supabase/functions/mangai-control-api/**"
       - "supabase/migrations/*mangaiyarkarasi*"
+      - "supabase/tests/mangaiyarkarasi*"
+      - "supabase/config.toml"
+      - ".github/workflows/mangai-control-api-check.yml"
 
 permissions:
   contents: read
@@ -26,5 +31,14 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      - name: Format check
+        run: deno fmt --check supabase/functions/mangai-control-api/index.ts
+      - name: Lint
+        run: deno lint supabase/functions/mangai-control-api/index.ts
       - name: Type-check control API
         run: deno check supabase/functions/mangai-control-api/index.ts
+      - name: Verify database smoke test contains fail-fast security assertions
+        run: |
+          grep -q "Expected exactly one Master Owner binding" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
+          grep -q "RLS is not enabled on every Mangai control table" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
+          grep -q "Audit events are not append-only" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
