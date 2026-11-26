@@ -225,7 +225,7 @@ declare
   v_new_status text;
   v_risk text;
 begin
-  if p_decision not in ('allow_testing', 'reject', 'keep_existing') then
+  if p_decision is null or p_decision not in ('allow_testing', 'reject', 'keep_existing') then
     raise exception 'Decision is not allowed';
   end if;
 
