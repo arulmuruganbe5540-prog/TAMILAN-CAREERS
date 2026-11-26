@@ -137,29 +137,29 @@ Deno.serve(async (req: Request) => {
 
     const [modules, openProposals, openAlerts, recentRuns, recentChecks] =
       await Promise.all([
-      admin.from("mangai_control_modules").select("module_key", {
-        count: "exact",
-        head: true,
-      }),
-      admin.from("mangai_change_proposals").select("id", {
-        count: "exact",
-        head: true,
-      }).in("status", [
-        "proposed",
-        "allowed_for_testing",
-        "testing",
-        "ready_to_deploy",
-      ]),
-      admin.from("mangai_control_alerts").select("id", {
-        count: "exact",
-        head: true,
-      }).eq("status", "open"),
-      admin.from("mangai_automation_runs").select(
-        "id,module_key,run_type,status,started_at,finished_at",
-      ).order("created_at", { ascending: false }).limit(10),
-      admin.from("mangai_monitoring_checks").select(
-        "id,module_key,check_type,target,status,checked_at",
-      ).order("checked_at", { ascending: false }).limit(12),
+        admin.from("mangai_control_modules").select("module_key", {
+          count: "exact",
+          head: true,
+        }),
+        admin.from("mangai_change_proposals").select("id", {
+          count: "exact",
+          head: true,
+        }).in("status", [
+          "proposed",
+          "allowed_for_testing",
+          "testing",
+          "ready_to_deploy",
+        ]),
+        admin.from("mangai_control_alerts").select("id", {
+          count: "exact",
+          head: true,
+        }).eq("status", "open"),
+        admin.from("mangai_automation_runs").select(
+          "id,module_key,run_type,status,started_at,finished_at",
+        ).order("created_at", { ascending: false }).limit(10),
+        admin.from("mangai_monitoring_checks").select(
+          "id,module_key,check_type,target,status,checked_at",
+        ).order("checked_at", { ascending: false }).limit(12),
     ]);
     if (
       [modules, openProposals, openAlerts, recentRuns, recentChecks].some((x) =>
