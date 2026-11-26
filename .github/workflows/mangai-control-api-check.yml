@@ -32,10 +32,18 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Format check
-        run: deno fmt --check supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
+      - name: Format and expose formatted source for review
+        run: |
+          deno fmt supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
+          echo "=== FORMATTED INDEX START ==="
+          cat supabase/functions/mangai-control-api/index.ts
+          echo "=== FORMATTED INDEX END ==="
+          echo "=== FORMATTED HANDLER TEST START ==="
+          cat supabase/functions/mangai-control-api/handler_test.ts
+          echo "=== FORMATTED HANDLER TEST END ==="
+          deno fmt --check supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
       - name: Lint
-        run: deno lint supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts
+        run: deno lint supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
       - name: Type-check control API
         run: deno check --config supabase/functions/mangai-control-api/deno.json supabase/functions/mangai-control-api/index.ts
       - name: Run authorization policy unit tests
