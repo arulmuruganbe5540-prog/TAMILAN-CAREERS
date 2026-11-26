@@ -2,8 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import {
   authorizeMasterOwner,
   hasWriteAssurance,
-  isProtectedModuleControl,
   isProductionReleaseAction,
+  isProtectedModuleControl,
 } from "./policy.ts";
 
 const allowedOrigins = new Set([
