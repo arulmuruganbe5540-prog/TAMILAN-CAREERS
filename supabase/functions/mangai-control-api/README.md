@@ -17,12 +17,14 @@ Use Supabase Function Secrets; never put the service-role key in a browser, stat
 - CORS allow-list is restricted to the production domain and GitHub Pages origin.
 - Does not expose any service key or Google credential.
 - Provides allow-listed read operations and limited module/proposal decisions.
-- Proposal decisions use a database transaction that writes the proposal status, Owner approval and immutable audit event together; a failed transaction rolls all three back.
-- The transactional proposal RPC is executable only by the server-side service role and independently re-checks the single Owner binding and Super Admin role.
+- Proposal decisions use a database transaction that writes proposal status, Owner approval and immutable audit event together; a failed transaction rolls all three back.
+- Module pause/resume and proposal creation also use transaction-backed RPCs that append their audit event in the same transaction.
+- All three RPCs are executable only by the server-side service role and independently re-check the single Owner binding and Super Admin role.
+- The Edge Function requires AAL2 MFA for every POST/write action; read-only GET actions remain authenticated Owner-only.
 - Does not offer a production deploy action.
 - Does not let automation edit owner identity, role assignments, RLS, MFA, secrets or security policy.
-- MFA assurance is not yet enforced by this first API version. Do not expose mutation actions in the admin UI or deploy this function until the chosen MFA policy is implemented and tested.
+- MFA assurance is implemented as a server-side AAL2 check for write actions. It has not yet been runtime-tested with enrolled MFA; do not deploy or expose mutation controls until isolated runtime tests pass.
 - Security governance module cannot be paused from this API.
 
 ## Important
-Deploy only after the migration is installed and smoke checks pass on an isolated Supabase development branch. Test invalid JWT, non-owner, missing owner binding, CORS, each allowed action, duplicate requests and audit failures before UI integration.
+Deploy only after the migration is installed and smoke checks pass on an isolated Supabase development branch. Test invalid JWT, non-owner, missing owner binding, CORS, AAL1/AAL2 sessions, each allowed action, concurrent proposal decisions and injected audit failures before UI integration.
