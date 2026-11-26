@@ -80,3 +80,12 @@
 - Injected audit-insert failures and verified module state, proposal creation, proposal decision, approval history and audit rows roll back together. The successful decision path also commits the expected status and approval row.
 - Latest CI run for commit 905036fdbc7baaf0aa4b81dee1e6e3b59998dc1e: PostgreSQL integration job PASSED; Deno format/lint/type-check and static security guards PASSED.
 - This verifies the migration against vanilla PostgreSQL 16 with a minimal compatibility fixture, not against the hosted Supabase project. Live Auth JWT/AAL2, Supabase RLS/Data API behavior, Edge Function deployment and browser/mobile flows remain untested. No production system was changed.
+
+
+## 2026-11-26 — Phase 1J (mobile browser smoke coverage)
+- Added `tests/browser/site-smoke.mjs` and `.github/workflows/site-browser-check.yml` using Playwright + Chromium in GitHub Actions. The test uses a local static server and a mocked Supabase client; it does not contact or mutate the hosted Supabase project.
+- **Passed on commit `630ba4f34f7f3e2bb47af64516bb643a903d25fe`:** 10 page loads; mobile viewport declarations; Student and Employer login/register tab switching; password mismatch validation before submission; password visibility controls; sign-in guards on Company Portal and both application forms; Government/Private/International page identity labels.
+- Browser run: https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions/runs/45850823649
+- Control API Deno checks and ephemeral PostgreSQL migration/RLS/transaction tests also passed on the same commit.
+- **Not tested:** real Supabase Auth, email confirmation, actual login/register, MFA/AAL2 session enforcement, live database RLS, real job submission/application, file upload, desktop physical device, or Android phone. Browser test mocks the Supabase client and must not be represented as an end-to-end backend test.
+- No production website, Supabase project, secrets, schedules or live database were changed. PR #7 remains open and draft.
