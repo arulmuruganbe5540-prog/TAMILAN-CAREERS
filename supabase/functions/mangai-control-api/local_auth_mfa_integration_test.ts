@@ -31,9 +31,12 @@ function decodeBase32(input: string): Uint8Array {
 }
 
 async function totp(secret: string): Promise<string> {
+  const decodedSecret = decodeBase32(secret);
+  const keyBuffer = new ArrayBuffer(decodedSecret.byteLength);
+  new Uint8Array(keyBuffer).set(decodedSecret);
   const key = await crypto.subtle.importKey(
     "raw",
-    decodeBase32(secret),
+    keyBuffer,
     { name: "HMAC", hash: "SHA-1" },
     false,
     ["sign"],
@@ -83,6 +86,9 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
 
   const ownerAal1Token = signedIn.session.access_token;
   const aal1 = await publicClient.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (aal1.error || !aal1.data) {
+    throw new Error(`AAL1 lookup failed: ${aal1.error?.message ?? "missing data"}`);
+  }
   assertEquals(aal1.data.currentLevel, "aal1");
 
   const readResponse = await invoke(ownerAal1Token, "GET");
