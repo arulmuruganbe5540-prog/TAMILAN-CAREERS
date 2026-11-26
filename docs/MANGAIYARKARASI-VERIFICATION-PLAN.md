@@ -82,3 +82,10 @@ A proposal may be allowed for isolated testing without authorizing production de
 - The browser suite stubs the Supabase client and blocks external network resources. It validates HTML/DOM and front-end interactions only; it does not test real authentication, email delivery, MFA/AAL2, database policies, job posting, applications, or uploads.
 - CI result: https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions/runs/45850823649
 - **Still required:** authenticated hosted Supabase test account/session, enrolled MFA for AAL1/AAL2 cases, test-only records, and a real Android browser session. No production test account or production data was used.
+
+
+## Gate 2B — Executable authorization-policy unit tests
+- Extracted the pure Master Owner, AAL2, protected-module and production-release decisions into `supabase/functions/mangai-control-api/policy.ts`; the Edge Function calls these same policy functions.
+- Added `policy_test.ts` with Deno tests for invalid identity (401), non-owner and mismatched Owner binding (403), failed registry lookup (503), exact Owner success, AAL1/missing/error AAL2 rejection, AAL2 acceptance, security-governance pause/resume denial, and production-release action blocking.
+- CI now runs Deno format, lint, type-check and the policy unit tests for these files.
+- **Scope:** These are executable unit tests of the exact pure policy functions used by the handler. They do not simulate Supabase Auth JWT validation, a real MFA factor, HTTP/CORS behavior, hosted Supabase RPC permissions or Edge Runtime deployment. Those remain separate runtime gates.
