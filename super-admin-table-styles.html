@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Table Style Studio | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="mangai-admin-theme.css">
+<style>
+:root{color-scheme:dark;--bg:#080d16;--panel:#111b2a;--line:#304158;--gold:#e0c47b;--muted:#aab8c9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f3f6fa;font:14px Arial,sans-serif}
+.top{padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#10243d}
+.brand{font-weight:900;color:#fff4ce}.wrap{max-width:1200px;margin:auto;padding:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:17px;margin:14px 0}
+.muted{color:var(--muted);line-height:1.5}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button,select{border:1px solid #52657b;border-radius:9px;padding:10px 13px;background:#17263a;color:#fff;font-weight:700}
+button.primary{background:#d8b96e;color:#111827;border-color:#f2d995}
+button:focus-visible,select:focus-visible{outline:2px solid #8ed7ff;outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:9px;margin-top:14px}
+.style{min-height:76px;text-align:left;cursor:pointer;background:#0c1522;border:1px solid #34475e;border-radius:10px;padding:10px}
+.style[aria-pressed=true]{border:2px solid var(--gold);box-shadow:0 0 0 2px #d8b96e33}
+.swatches{display:flex;gap:4px;margin-bottom:8px}.swatches i{width:22px;height:9px;border-radius:4px;display:block}
+.style small{display:block;color:var(--muted);margin-top:4px}
+.preview{overflow-x:auto;border:1px solid var(--line);border-radius:12px;padding:12px;background:#0b1421}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:510px}
+th,td{padding:12px 13px;text-align:left;border-bottom:1px solid var(--table-line,#304158)}
+th{background:var(--table-head,#21334a);color:var(--table-text,#fff);font-weight:800}
+td{background:var(--table-cell,#111d2d);color:#e9eff7}
+tbody tr:nth-child(even) td{background:var(--table-alt,#172438)}
+tbody tr:hover td{background:var(--table-hover,#263d59)}
+.pill{display:inline-block;border-radius:99px;padding:4px 8px;background:var(--table-accent,#315f55);color:white;font-size:11px}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+@media(max-width:600px){.wrap{padding:12px}.panel{padding:13px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.style{min-height:72px}}
+</style>
+</head>
+<body>
+<header class="top"><div><div class="brand">TAMILAN CAREERS · MANGAIYARKARASI</div><div class="muted">Table & Header Style Studio · 100 presets</div></div><div class="toolbar"><span id="email" class="muted"></span><button id="lang">தமிழ்</button><button id="logout">Logout</button></div></header>
+<main class="wrap">
+<section class="panel">
+<div class="meta"><div><h1 id="heading" style="margin:0 0 6px">Table Style Studio</h1><div class="muted" id="intro">Choose a design, preview it instantly, and save your preferred style on this device.</div></div><div class="toolbar"><span class="pill" id="count">100 styles</span><button class="primary" id="save">Save selection</button></div></div>
+<div class="toolbar"><label for="filter" id="filterLabel">Style family</label><select id="filter"><option value="all">All 100 styles</option><option value="grass">Grass & Nature</option><option value="ocean">Ocean & Blue</option><option value="royal">Royal & Gold</option><option value="modern">Modern & Neutral</option><option value="vivid">Vivid & Bright</option></select><span class="muted" id="selected">Selected: Style 01</span></div>
+<div class="grid" id="styles" aria-label="Available table styles"></div>
+</section>
+<section class="panel">
+<div class="meta"><div><h2 id="previewTitle" style="margin:0 0 5px">Live preview</h2><div class="muted" id="previewSub">The sample table updates when you select a style.</div></div><span class="pill" id="previewName">Style 01</span></div>
+<div class="preview" id="preview"><table><thead><tr><th>Job title</th><th>Department</th><th>Qualification</th><th>Status</th></tr></thead><tbody>
+<tr><td>Junior Assistant</td><td>Public Service</td><td>Degree</td><td><span class="pill">Open</span></td></tr>
+<tr><td>Technical Officer</td><td>Engineering</td><td>Diploma</td><td><span class="pill">Review</span></td></tr>
+<tr><td>Office Assistant</td><td>Administration</td><td>12th</td><td><span class="pill">Open</span></td></tr>
+<tr><td>Field Worker</td><td>Public Works</td><td>10th</td><td><span class="pill">Closing soon</span></td></tr>
+</tbody></table></div>
+<p class="muted" id="notice">Saving stores your selected preset in this browser only. Applying it across every Admin page will be a separate integration step.</p>
+</section>
+</main>
+<script>
+(()=> {
+ const sb=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');
+ const $=id=>document.getElementById(id);
+ const families=[
+  {key:'grass',name:'Grass & Nature',colors:['#174b35','#286f40','#4b9a63','#a7d88c','#e0f0c9']},
+  {key:'ocean',name:'Ocean & Blue',colors:['#102e50','#145b87','#218cba','#70c6df','#d8f4ff']},
+  {key:'royal',name:'Royal & Gold',colors:['#30213f','#563b6c','#94704c','#d8b96e','#f4e2b5']},
+  {key:'modern',name:'Modern & Neutral',colors:['#26313c','#465563','#71808c','#aab4bc','#e5e9ec']},
+  {key:'vivid',name:'Vivid & Bright',colors:['#51204b','#8c2860','#c64b62','#ee9666','#ffe0a8']}
+ ];
+ const variants=['Classic','Soft','Compact','Bordered','Minimal','Striped','Rounded','Contrast','Elegant','Bold'];
+ let selected=Number(localStorage.getItem('mangai_table_style')||0);
+ let lang='en';
+ function palette(index){const f=families[Math.floor(index/20)],v=index%10,c=f.colors;return {f,v,c,head:v===7?c[0]:v===9?c[1]:c[1],cell:v===1?'#f2f7f2':'#101d2b',alt:v===5?'#172b3d':'#172638',line:v===3?c[2]:'#34465a',accent:c[2]};}
+ function apply(index){
+  selected=index;const p=palette(index),root=$('preview');
+  root.style.setProperty('--table-head',p.head);root.style.setProperty('--table-cell',p.cell);root.style.setProperty('--table-alt',p.alt);root.style.setProperty('--table-line',p.line);root.style.setProperty('--table-hover',p.c[0]);root.style.setProperty('--table-accent',p.accent);
+  root.querySelectorAll('th').forEach(x=>{x.style.color='#fff';x.style.borderBottom='2px solid '+p.c[3]});
+  root.querySelectorAll('td').forEach(x=>x.style.color='#edf3fa');
+  $('selected').textContent=(lang==='en'?'Selected: ':'தேர்வு: ')+'Style '+String(index+1).padStart(2,'0')+' · '+p.f.name+' / '+variants[p.v];
+  $('previewName').textContent='Style '+String(index+1).padStart(2,'0');
+  $('styles').querySelectorAll('.style').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.index)===index?'true':'false'));
+ }
+ function render(){
+  const filter=$('filter').value;const host=$('styles');host.innerHTML='';
+  for(let i=0;i<100;i++){const p=palette(i);if(filter!=='all'&&p.f.key!==filter)continue;
+   const b=document.createElement('button');b.type='button';b.className='style';b.dataset.index=i;b.setAttribute('aria-pressed',i===selected?'true':'false');
+   const sw=document.createElement('span');sw.className='swatches';p.c.forEach(color=>{const s=document.createElement('i');s.style.background=color;sw.append(s)});
+   const strong=document.createElement('strong');strong.textContent='Style '+String(i+1).padStart(2,'0');
+   const small=document.createElement('small');small.textContent=p.f.name+' · '+variants[p.v];
+   b.append(sw,strong,small);b.addEventListener('click',()=>apply(i));host.append(b);
+  }
+  $('count').textContent=host.children.length+' styles';
+ }
+ $('filter').addEventListener('change',render);
+ $('save').addEventListener('click',()=>{localStorage.setItem('mangai_table_style',String(selected));$('notice').textContent=lang==='en'?'Saved on this device. This does not yet change the other Admin pages.':'இந்த சாதனத்தில் சேமிக்கப்பட்டது. மற்ற Admin பக்கங்களில் இன்னும் பயன்படுத்தப்படவில்லை.'});
+ $('lang').addEventListener('click',()=>{lang=lang==='en'?'ta':'en';$('lang').textContent=lang==='en'?'தமிழ்':'English';$('heading').textContent=lang==='en'?'Table Style Studio':'அட்டவணை வடிவமைப்பு மையம்';$('intro').textContent=lang==='en'?'Choose a design, preview it instantly, and save your preferred style on this device.':'வடிவத்தைத் தேர்ந்தெடுத்து உடனே முன்னோட்டம் பார்த்து இந்தச் சாதனத்தில் சேமிக்கலாம்.';$('previewTitle').textContent=lang==='en'?'Live preview':'நேரடி முன்னோட்டம்';$('previewSub').textContent=lang==='en'?'The sample table updates when you select a style.':'வடிவத்தைத் தேர்ந்தெடுக்கும்போது மாதிரி அட்டவணை மாறும்.';$('filterLabel').textContent=lang==='en'?'Style family':'வடிவ வகை';$('save').textContent=lang==='en'?'Save selection':'தேர்வைச் சேமி';$('notice').textContent=lang==='en'?'Saving stores your selected preset in this browser only. Applying it across every Admin page will be a separate integration step.':'தேர்வு இந்த உலாவியில் மட்டும் சேமிக்கப்படும். எல்லா Admin பக்கங்களிலும் இணைப்பது தனி கட்டமாகும்.';apply(selected)});
+ $('logout').addEventListener('click',async()=>{await sb.auth.signOut();location.replace('super-admin-login.html')});
+ async function init(){const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return}
+ const {data:roles,error:roleError}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
+ if(roleError||!roles?.length){await sb.auth.signOut();location.replace('super-admin-login.html');return}
+ $('email').textContent=user.email||'';render();apply(selected);
+ }
+ init();
+})();
+</script>
+</body></html>
