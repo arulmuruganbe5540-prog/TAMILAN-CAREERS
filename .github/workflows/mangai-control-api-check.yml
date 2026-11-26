@@ -33,13 +33,13 @@ jobs:
         with:
           deno-version: v2.x
       - name: Format check
-        run: deno fmt --check supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts
+        run: deno fmt --check supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
       - name: Lint
         run: deno lint supabase/functions/mangai-control-api/index.ts supabase/functions/mangai-control-api/policy.ts supabase/functions/mangai-control-api/policy_test.ts
       - name: Type-check control API
         run: deno check --config supabase/functions/mangai-control-api/deno.json supabase/functions/mangai-control-api/index.ts
       - name: Run authorization policy unit tests
-        run: deno test --config supabase/functions/mangai-control-api/deno.json supabase/functions/mangai-control-api/policy_test.ts
+        run: deno test --config supabase/functions/mangai-control-api/deno.json supabase/functions/mangai-control-api/policy_test.ts supabase/functions/mangai-control-api/handler_test.ts
       - name: Verify database smoke test contains fail-fast security assertions
         run: |
           grep -q "Expected exactly one Master Owner binding" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
@@ -59,6 +59,8 @@ jobs:
           grep -q "isProtectedModuleControl" supabase/functions/mangai-control-api/index.ts
           grep -q "isProductionReleaseAction" supabase/functions/mangai-control-api/index.ts
           grep -q "hasWriteAssurance" supabase/functions/mangai-control-api/policy_test.ts
+          grep -q "createControlApiHandler" supabase/functions/mangai-control-api/index.ts
+          grep -q "Owner with AAL2 can submit an allow-listed proposal request" supabase/functions/mangai-control-api/handler_test.ts
 
   postgres-integration:
     runs-on: ubuntu-latest
