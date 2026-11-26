@@ -4,7 +4,7 @@ import {
   isProductionReleaseAction,
   isProtectedModuleControl,
 } from "./policy.ts";
-import { assertEquals } from "jsr:@std/assert@1";
+import { assertEquals } from "@std/assert";
 
 const owner = {
   userId: "owner-1",
