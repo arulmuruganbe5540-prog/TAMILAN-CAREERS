@@ -17,6 +17,8 @@ Use Supabase Function Secrets; never put the service-role key in a browser, stat
 - CORS allow-list is restricted to the production domain and GitHub Pages origin.
 - Does not expose any service key or Google credential.
 - Provides allow-listed read operations and limited module/proposal decisions.
+- Proposal decisions use a database transaction that writes the proposal status, Owner approval and immutable audit event together; a failed transaction rolls all three back.
+- The transactional proposal RPC is executable only by the server-side service role and independently re-checks the single Owner binding and Super Admin role.
 - Does not offer a production deploy action.
 - Does not let automation edit owner identity, role assignments, RLS, MFA, secrets or security policy.
 - MFA assurance is not yet enforced by this first API version. Do not expose mutation actions in the admin UI or deploy this function until the chosen MFA policy is implemented and tested.
