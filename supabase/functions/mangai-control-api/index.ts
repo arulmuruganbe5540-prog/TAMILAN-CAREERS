@@ -1,4 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
+import {
+  authorizeMasterOwner,
+  hasWriteAssurance,
+  isProtectedModuleControl,
+  isProductionReleaseAction,
+} from "./policy.ts";
 
 const allowedOrigins = new Set([
   "https://tamilancareers.in",
@@ -68,10 +74,6 @@ Deno.serve(async (req: Request) => {
   });
   const { data: userData, error: userError } = await userClient.auth.getUser();
   const user = userData?.user;
-  if (userError || !user) {
-    return json({ error: "Session is invalid or expired" }, 401, origin);
-  }
-
   const admin = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -90,15 +92,16 @@ Deno.serve(async (req: Request) => {
       true,
     ).maybeSingle(),
   ]);
-  if (roleError || ownerError) {
-    return json(
-      { error: "Control registry is not installed or could not be checked" },
-      503,
-      origin,
-    );
-  }
-  if (!roleRow || !ownerRow || ownerRow.owner_user_id !== user.id) {
-    return json({ error: "Master Owner permission required" }, 403, origin);
+  const ownerGate = authorizeMasterOwner({
+    userId: user?.id ?? null,
+    hasValidUser: !userError && Boolean(user),
+    roleLookupFailed: Boolean(roleError),
+    ownerLookupFailed: Boolean(ownerError),
+    hasSuperAdminRole: Boolean(roleRow),
+    ownerUserId: ownerRow?.owner_user_id ?? null,
+  });
+  if (!ownerGate.allowed) {
+    return json({ error: ownerGate.error }, ownerGate.status, origin);
   }
 
   const requestId = req.headers.get("x-request-id") || crypto.randomUUID();
@@ -198,7 +201,12 @@ Deno.serve(async (req: Request) => {
   // Read-only GET requests remain available to the authenticated Owner.
   const { data: assuranceData, error: assuranceError } = await userClient.auth
     .mfa.getAuthenticatorAssuranceLevel();
-  if (assuranceError || assuranceData?.currentLevel !== "aal2") {
+  if (
+    !hasWriteAssurance(
+      assuranceData?.currentLevel,
+      Boolean(assuranceError),
+    )
+  ) {
     return json(
       {
         error:
@@ -215,7 +223,7 @@ Deno.serve(async (req: Request) => {
         typeof body.module_key !== "string" ||
         !/^[a-z0-9_]{2,60}$/.test(body.module_key)
       ) return json({ error: "Valid module_key is required" }, 400, origin);
-      if (body.module_key === "security_governance") {
+      if (isProtectedModuleControl(body.action, body.module_key)) {
         return json(
           {
             error:
@@ -332,7 +340,7 @@ Deno.serve(async (req: Request) => {
       return json({ ok: true, proposal: updated }, 200, origin);
     }
 
-    if (body.action === "approve_production" || body.action === "deploy") {
+    if (isProductionReleaseAction(body.action)) {
       return json(
         {
           error:
