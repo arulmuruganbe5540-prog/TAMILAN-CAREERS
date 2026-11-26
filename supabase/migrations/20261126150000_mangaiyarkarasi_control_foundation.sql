@@ -167,6 +167,8 @@ create trigger mangai_audit_events_no_mutation
 before update or delete on public.mangai_audit_events
 for each row execute function public.mangai_reject_audit_mutation();
 
+revoke all on function public.mangai_reject_audit_mutation() from public, anon, authenticated;
+
 create index if not exists mangai_runs_module_created_idx
   on public.mangai_automation_runs(module_key, created_at desc);
 create index if not exists mangai_runs_status_created_idx
