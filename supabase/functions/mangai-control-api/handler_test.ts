@@ -123,7 +123,9 @@ function request(
   return new Request(`https://api.example.test${path}`, {
     method,
     headers: {
-      ...(token ? { [["Author", "ization"].join("")]: ["Bearer", token].join(" ") } : {}),
+      ...(token
+        ? { [["Author", "ization"].join("")]: ["Bearer", token].join(" ") }
+        : {}),
       Origin: "https://tamilancareers.in",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
@@ -198,7 +200,9 @@ Deno.test("HTTP handler rejects unapproved origins and unsupported methods", asy
   const blockedOrigin = new Request("https://api.example.test/", {
     method: "GET",
     headers: {
-      [["Author", "ization"].join("")]: ["Bearer", "valid-test-token"].join(" "),
+      [["Author", "ization"].join("")]: ["Bearer", "valid-test-token"].join(
+        " ",
+      ),
       Origin: "https://attacker.example",
     },
   });
