@@ -38,3 +38,11 @@
 4. Do not deploy or expose mutation controls until the MFA, audit atomicity and database permission gates in docs/MANGAIYARKARASI-VERIFICATION-PLAN.md pass.
 5. Add Search Console ingestion, scheduled monitoring, alert delivery and the 20-day review runner only after credentials, schedules and cost limits are approved.
 6. Complete full website regression, permission, restore and Android mobile checks before proposing any production release.
+
+
+## 2026-11-26 — Phase 1E (atomic mutation paths)
+- Repaired the PostgreSQL function dollar-quoting delimiter in the proposal-decision RPC source.
+- Added transaction-backed RPCs for module pause/resume and proposal creation. Each RPC independently checks the single Master Owner binding and Super Admin role, rejects security-governance changes, and writes its immutable audit event in the same database transaction as the state change.
+- Routed the Edge Function mutation handlers through those RPCs; an audit insert failure now rolls back the associated mutation rather than leaving an unaudited partial change.
+- Expanded SQL smoke assertions for the new RPC execute grants and expanded CI static guards.
+- These changes are committed to the review branch only. The SQL has not been executed against PostgreSQL, the Edge Function has not been deployed, and runtime behavior is not yet verified.
