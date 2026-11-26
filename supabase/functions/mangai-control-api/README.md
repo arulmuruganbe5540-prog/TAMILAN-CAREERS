@@ -19,6 +19,7 @@ Use Supabase Function Secrets; never put the service-role key in a browser, stat
 - Provides allow-listed read operations and limited module/proposal decisions.
 - Does not offer a production deploy action.
 - Does not let automation edit owner identity, role assignments, RLS, MFA, secrets or security policy.
+- MFA assurance is not yet enforced by this first API version. Do not expose mutation actions in the admin UI or deploy this function until the chosen MFA policy is implemented and tested.
 - Security governance module cannot be paused from this API.
 
 ## Important
