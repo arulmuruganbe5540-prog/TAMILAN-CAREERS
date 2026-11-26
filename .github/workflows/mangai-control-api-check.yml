@@ -53,7 +53,7 @@ jobs:
           grep -q '"mangai_create_change_proposal"' supabase/functions/mangai-control-api/index.ts
           grep -q "Module control RPC grants are incorrect" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
           grep -q "Proposal creation RPC grants are incorrect" supabase/tests/mangaiyarkarasi_control_foundation_smoke.sql
-          grep -q "getClaims" supabase/functions/mangai-control-api/index.ts
+          grep -q "readValidatedJwtAal" supabase/functions/mangai-control-api/index.ts
           grep -q "hasWriteAssurance" supabase/functions/mangai-control-api/index.ts
           grep -q "authorizeMasterOwner" supabase/functions/mangai-control-api/index.ts
           grep -q "isProtectedModuleControl" supabase/functions/mangai-control-api/index.ts
