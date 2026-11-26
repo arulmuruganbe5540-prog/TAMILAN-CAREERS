@@ -89,3 +89,11 @@
 - Control API Deno checks and ephemeral PostgreSQL migration/RLS/transaction tests also passed on the same commit.
 - **Not tested:** real Supabase Auth, email confirmation, actual login/register, MFA/AAL2 session enforcement, live database RLS, real job submission/application, file upload, desktop physical device, or Android phone. Browser test mocks the Supabase client and must not be represented as an end-to-end backend test.
 - No production website, Supabase project, secrets, schedules or live database were changed. PR #7 remains open and draft.
+
+
+## 2026-11-26 — Executable authorization policy coverage
+- Added a shared pure-policy module for Master Owner identity/role matching, fail-closed registry errors, AAL2 write assurance, protected security-governance controls, and disabled production release actions.
+- Wired the Edge Function to call the same policy helpers covered by unit tests; invalid JWTs still fail fast with HTTP 401 before privileged registry queries.
+- Added seven Deno unit-test groups covering the policy decisions and wired format, lint, type-check, and test commands into the Control API workflow.
+- The first CI attempt confirmed the ephemeral PostgreSQL integration and browser smoke jobs passed, while Deno format check failed on import/assert formatting. Formatting was corrected and the workflow YAML was split into separate type-check and test steps. A fresh CI result for the corrected commit has not yet been confirmed; do not treat these new unit tests as passed until that run is observed.
+- No Supabase migration or Edge Function deployment was performed; all changes remain in the review branch.
