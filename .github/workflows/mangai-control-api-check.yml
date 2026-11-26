@@ -119,7 +119,7 @@ jobs:
         run: |
           set -euo pipefail
           cd "$TEST_ROOT"
-          supabase start --exclude storage-api,imgproxy,realtime,studio,logflare,vector,supavisor,postgres-meta
+          supabase start --exclude storage,realtime,studio,mail,analytics,pooler
           supabase db reset
           supabase status --output-format json > "$RUNNER_TEMP/mangai-supabase-status.json"
           API_URL="$(jq -r '.env.API_URL' "$RUNNER_TEMP/mangai-supabase-status.json")"
@@ -134,9 +134,9 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY
           EOF
           {
-            echo "MANGAI_SUPABASE_URL=$API_URL"
-            echo "MANGAI_ANON_KEY=$ANON_KEY"
-            echo "MANGAI_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
+            echo "SUPABASE_URL=$API_URL"
+            echo "SUPABASE_ANON_KEY=$ANON_KEY"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
             echo "MANGAI_FUNCTION_URL=$API_URL/functions/v1/mangai-control-api"
           } >> "$GITHUB_ENV"
       - name: Serve the Edge Function in Supabase Edge Runtime
@@ -160,11 +160,6 @@ jobs:
       - name: Exercise real local Auth, TOTP MFA and Edge Function request path
         run: |
           deno test --allow-env --allow-net --allow-read --config "$TEST_ROOT/supabase/functions/mangai-control-api/deno.json" "$TEST_ROOT/supabase/functions/mangai-control-api/local_auth_mfa_integration_test.ts"
-        env:
-          SUPABASE_URL: ${{ env.MANGAI_SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ env.MANGAI_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ env.MANGAI_SERVICE_ROLE_KEY }}
-          MANGAI_FUNCTION_URL: ${{ env.MANGAI_FUNCTION_URL }}
       - name: Stop disposable local Supabase stack
         if: always()
         shell: bash
