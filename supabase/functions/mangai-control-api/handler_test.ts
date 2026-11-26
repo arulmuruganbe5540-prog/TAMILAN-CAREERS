@@ -37,7 +37,21 @@ function makeHandler(options: MockOptions = {}) {
       };
     }
 
-    const query = {
+    type MockQuery = {
+      select: (...args: unknown[]) => MockQuery;
+      eq: (...args: unknown[]) => MockQuery;
+      order: (...args: unknown[]) => MockQuery;
+      limit: (...args: unknown[]) => MockQuery;
+      in: (...args: unknown[]) => MockQuery;
+      maybeSingle: () => Promise<{ data: Record<string, string> | null; error: null }>;
+      then: (
+        resolve: (value: { data: unknown[]; error: null; count: number }) => unknown,
+        reject?: (reason: unknown) => unknown,
+      ) => Promise<unknown>;
+    };
+    let currentTable = "";
+    let query: MockQuery;
+    query = {
       select: (..._args: unknown[]) => query,
       eq: (..._args: unknown[]) => query,
       order: (..._args: unknown[]) => query,
@@ -53,10 +67,9 @@ function makeHandler(options: MockOptions = {}) {
         }
         return { data: null, error: null };
       },
-      then: (resolve: (value: unknown) => unknown, reject?: (reason: unknown) => unknown) =>
+      then: (resolve, reject) =>
         Promise.resolve({ data: [], error: null, count: 0 }).then(resolve, reject),
     };
-    let currentTable = "";
     return {
       from: (table: string) => {
         currentTable = table;
