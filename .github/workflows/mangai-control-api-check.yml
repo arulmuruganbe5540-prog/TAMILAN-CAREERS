@@ -1,0 +1,30 @@
+name: Mangaiyarkarasi Control API Checks
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/mangai-control-api/**"
+      - "supabase/migrations/*mangaiyarkarasi*"
+      - ".github/workflows/mangai-control-api-check.yml"
+  push:
+    branches:
+      - "mangaiyarkarasi/**"
+    paths:
+      - "supabase/functions/mangai-control-api/**"
+      - "supabase/migrations/*mangaiyarkarasi*"
+
+permissions:
+  contents: read
+
+jobs:
+  deno-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check control API
+        run: deno check supabase/functions/mangai-control-api/index.ts
