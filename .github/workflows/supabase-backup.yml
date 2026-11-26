@@ -54,7 +54,7 @@ jobs:
           set -euo pipefail
           openssl enc -aes-256-cbc -pbkdf2 -salt -iter 200000 \
             -in secure-backup.tar.gz \
-            -out tamilan-careers-db-backup.tar.gz.enc \
+            -out tamilan-careers-db-backup.tar.gz.gpg \
             -pass env:BACKUP_ENCRYPTION_KEY
           sha256sum tamilan-careers-db-backup.tar.gz.enc > tamilan-careers-db-backup.sha256
           rm -rf secure-backup secure-backup.tar.gz
