@@ -89,3 +89,12 @@ A proposal may be allowed for isolated testing without authorizing production de
 - Added `policy_test.ts` with Deno tests for invalid identity (401), non-owner and mismatched Owner binding (403), failed registry lookup (503), exact Owner success, AAL1/missing/error AAL2 rejection, AAL2 acceptance, security-governance pause/resume denial, and production-release action blocking.
 - CI now runs Deno format, lint, type-check and the policy unit tests for these files.
 - **Scope:** These are executable unit tests of the exact pure policy functions used by the handler. They do not simulate Supabase Auth JWT validation, a real MFA factor, HTTP/CORS behavior, hosted Supabase RPC permissions or Edge Runtime deployment. Those remain separate runtime gates.
+
+
+### Authorization policy CI result — 2026-11-26
+- Latest confirmed Control API workflow run: `45852240516` — **success**.
+- Deno format, lint and TypeScript check passed.
+- Seven policy unit tests passed: **7 passed, 0 failed**.
+- Ephemeral PostgreSQL integration passed: migration application, RLS/grants/append-only smoke assertions, transactional RPC success, and audit-failure rollback.
+- Browser smoke workflow run `45852240533` — **success**; static regression workflow run `45852240539` — **success**.
+- These results validate the branch code in CI, not a deployed Supabase Edge Function or live hosted Auth/MFA session.
