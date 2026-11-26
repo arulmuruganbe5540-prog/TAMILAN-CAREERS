@@ -12,10 +12,16 @@
 - Added PR #7 as a draft for review; no merge or production release has occurred.
 - No Supabase migration has been applied. No Supabase development database branch has been created. No production database, live page, secret, schedule or auth policy has been changed.
 
-## Next phases
-1. Create a Supabase development branch only after Owner accepts the displayed branch compute cost.
-2. Apply this additive migration to that development branch and run smoke checks.
-3. Build an authenticated Edge Function that verifies the signed-in user, checks the single Owner binding and MFA policy, and performs only allow-listed actions.
-4. Integrate the admin UI with that Edge Function; never expose service-role or Google credentials to the browser.
-5. Add Search Console ingestion, monitoring schedules, alert delivery, 20-day audit runner and test/deployment pipeline.
-6. Complete regression, permission, restore and mobile checks before proposing a production release.
+## 2026-11-26 — Phase 1B (repository-only hardening)
+- Strengthened the read-only SQL smoke script with fail-fast assertions for single-owner binding, RLS coverage, denied public access and append-only audit permissions.
+- Clarified in the Edge Function deployment notes that MFA assurance is not yet enforced; the function must not be deployed or exposed with mutation controls until server-side MFA enforcement is implemented and tested.
+- Added a staged verification plan covering database, API authorization, audit atomicity, MFA, mobile regression, monitoring, backup and release gates.
+- No Supabase development branch was created and no recurring compute charge was incurred. No production system was changed.
+
+## Next phases (without a paid Supabase branch)
+1. Continue repository-only development: API validation, safer transactional decisions, automated static/security checks and admin UI integration source.
+2. Add isolated test fixtures and documented manual test commands that do not require production credentials.
+3. When a real database-backed test is required, ask before creating any paid Supabase development environment; alternatively use a separately approved local/test Postgres environment.
+4. Do not deploy or expose mutation controls until the MFA, audit atomicity and database permission gates in docs/MANGAIYARKARASI-VERIFICATION-PLAN.md pass.
+5. Add Search Console ingestion, scheduled monitoring, alert delivery and the 20-day review runner only after credentials, schedules and cost limits are approved.
+6. Complete full website regression, permission, restore and Android mobile checks before proposing any production release.
