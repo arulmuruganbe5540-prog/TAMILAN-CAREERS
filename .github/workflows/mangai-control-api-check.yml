@@ -147,19 +147,15 @@ jobs:
           echo $! > "$RUNNER_TEMP/mangai-edge-runtime.pid"
           for attempt in $(seq 1 60); do
             code="$(curl -sS -o /dev/null -w '%{http_code}' -H "apikey: $SUPABASE_ANON_KEY" -H "Origin: https://tamilancareers.in" "$MANGAI_FUNCTION_URL" || true)"
-            if [ "$code" != "000" ]; then
+            if [ "$code" != "000" ] && [ "$code" != "502" ] && [ "$code" != "503" ]; then
               echo "Local Edge Function gateway responded with HTTP $code"
-              if [ "$code" = "502" ] || [ "$code" = "503" ]; then
-                cat "$RUNNER_TEMP/mangai-edge-runtime.log"
-                echo "Edge Function runtime is not healthy"
-                exit 1
-              fi
               exit 0
             fi
+            echo "Waiting for Edge Function runtime (attempt $attempt/60, HTTP $code)"
             sleep 2
           done
           cat "$RUNNER_TEMP/mangai-edge-runtime.log"
-          echo "Local Edge Function did not become ready"
+          echo "Local Edge Function runtime did not become ready"
           exit 1
       - name: Exercise real local Auth, TOTP MFA and Edge Function request path
         run: |
