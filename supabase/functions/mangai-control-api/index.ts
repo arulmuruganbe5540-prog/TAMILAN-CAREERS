@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "@supabase/supabase-js";
 
 const allowedOrigins = new Set([
   "https://tamilancareers.in",
@@ -72,7 +72,6 @@ Deno.serve(async (req: Request) => {
     return json({ error: "Session is invalid or expired" }, 401, origin);
   }
 
-  const ownerId = user.id;
   const admin = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
