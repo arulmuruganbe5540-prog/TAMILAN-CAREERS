@@ -97,3 +97,5 @@
 - Added seven Deno unit-test groups covering the policy decisions and wired format, lint, type-check, and test commands into the Control API workflow.
 - The first CI attempt confirmed the ephemeral PostgreSQL integration and browser smoke jobs passed, while Deno format check failed on import/assert formatting. Formatting was corrected and the workflow YAML was split into separate type-check and test steps. A fresh CI result for the corrected commit has not yet been confirmed; do not treat these new unit tests as passed until that run is observed.
 - No Supabase migration or Edge Function deployment was performed; all changes remain in the review branch.
+
+- Follow-up CI diagnosis: formatting and lint passed after the import-map adjustment; type-check then exposed a missing `200` member in the Owner-gate result union. Expanded the union to include the successful status. The corrected commit is awaiting a fresh CI result.
