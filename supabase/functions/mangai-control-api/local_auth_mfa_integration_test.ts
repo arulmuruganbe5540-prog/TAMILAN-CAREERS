@@ -7,7 +7,6 @@ const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const functionUrl = Deno.env.get("MANGAI_FUNCTION_URL")!;
 const ownerEmail = "mangai-owner@example.test";
 const ownerPassword = "LocalOnly-Owner-Password-2026!";
-const ownerId = "11111111-1111-4111-8111-111111111111";
 
 const publicClient = createClient(supabaseUrl, anonKey, {
   auth: { persistSession: false, autoRefreshToken: false },
