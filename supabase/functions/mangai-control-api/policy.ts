@@ -9,7 +9,7 @@ export type OwnerGateInput = {
 
 export type OwnerGateResult = {
   allowed: boolean;
-  status: 401 | 403 | 503;
+  status: 200 | 401 | 403 | 503;
   error: string;
 };
 
