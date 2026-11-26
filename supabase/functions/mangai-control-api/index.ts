@@ -98,91 +98,222 @@ Deno.serve(async (req: Request) => {
     if (action !== "overview") return json({ error: "Unknown read action" }, 400, origin);
 
     const [modules, openProposals, openAlerts, recentRuns, recentChecks] = await Promise.all([
-      admin.from("mangai_control_modules").select("module_key", { count: "exact", head: true }),
-      admin.from("mangai_change_proposals").select("id", { count: "exact", head: true }).in("status", ["proposed", "allowed_for_testing", "testing", "ready_to_deploy"]),
-      admin.from("mangai_control_alerts").select("id", { count: "exact", head: true }).eq("status", "open"),
-      admin.from("mangai_automation_runs").select("id,module_key,run_type,status,started_at,finished_at").order("created_at", { ascending: false }).limit(10),
-      admin.from("mangai_monitoring_checks").select("id,module_key,check_type,target,status,checked_at").order("checked_at", { ascending: false }).limit(12),
+      admin.from("mangai_control_modules").select("module_key", {
+        count: "exact",
+        head: true,
+      }),
+      admin.from("mangai_change_proposals").select("id", {
+        count: "exact",
+        head: true,
+      }).in("status", [
+        "proposed",
+        "allowed_for_testing",
+        "testing",
+        "ready_to_deploy",
+      ]),
+      admin.from("mangai_control_alerts").select("id", {
+        count: "exact",
+        head: true,
+      }).eq("status", "open"),
+      admin.from("mangai_automation_runs").select(
+        "id,module_key,run_type,status,started_at,finished_at",
+      ).order("created_at", { ascending: false }).limit(10),
+      admin.from("mangai_monitoring_checks").select(
+        "id,module_key,check_type,target,status,checked_at",
+      ).order("checked_at", { ascending: false }).limit(12),
     ]);
-    if ([modules, openProposals, openAlerts, recentRuns, recentChecks].some(x => x.error)) {
+    if (
+      [modules, openProposals, openAlerts, recentRuns, recentChecks].some((x) =>
+        x.error
+      )
+    ) {
       return json({ error: "Unable to load control overview" }, 500, origin);
     }
-    return json({
-      owner: { id: user.id, email: user.email },
-      counts: {
-        modules: modules.count || 0,
-        pendingProposals: openProposals.count || 0,
-        openAlerts: openAlerts.count || 0,
+    return json(
+      {
+        owner: { id: user.id, email: user.email },
+        counts: {
+          modules: modules.count || 0,
+          pendingProposals: openProposals.count || 0,
+          openAlerts: openAlerts.count || 0,
+        },
+        recentRuns: recentRuns.data || [],
+        recentChecks: recentChecks.data || [],
+        productionDeploymentEnabled: false,
       },
-      recentRuns: recentRuns.data || [],
-      recentChecks: recentChecks.data || [],
-      productionDeploymentEnabled: false,
-    }, 200, origin);
+      200,
+      origin,
+    );
   }
 
   let body: unknown;
-  try { body = await req.json(); } catch { return json({ error: "Invalid JSON body" }, 400, origin); }
-  if (!isObject(body) || typeof body.action !== "string") return json({ error: "Action is required" }, 400, origin);
+  try {
+    body = await req.json();
+  } catch {
+    return json({ error: "Invalid JSON body" }, 400, origin);
+  }
+  if (!isObject(body) || typeof body.action !== "string") {
+    return json({ error: "Action is required" }, 400, origin);
+  }
 
   // All write actions require an active MFA-protected session (AAL2).
   // Read-only GET requests remain available to the authenticated Owner.
-  const { data: assuranceData, error: assuranceError } = await userClient.auth.mfa.getAuthenticatorAssuranceLevel();
+  const { data: assuranceData, error: assuranceError } = await userClient.auth
+    .mfa.getAuthenticatorAssuranceLevel();
   if (assuranceError || assuranceData?.currentLevel !== "aal2") {
-    return json({ error: "Multi-factor authentication is required for control changes. Complete MFA verification and try again." }, 403, origin);
+    return json(
+      {
+        error:
+          "Multi-factor authentication is required for control changes. Complete MFA verification and try again.",
+      },
+      403,
+      origin,
+    );
   }
 
   try {
     if (body.action === "pause_module" || body.action === "resume_module") {
-      if (typeof body.module_key !== "string" || !/^[a-z0-9_]{2,60}$/.test(body.module_key)) return json({ error: "Valid module_key is required" }, 400, origin);
-      if (body.module_key === "security_governance") return json({ error: "Security governance cannot be paused or resumed from automation controls" }, 403, origin);
+      if (
+        typeof body.module_key !== "string" ||
+        !/^[a-z0-9_]{2,60}$/.test(body.module_key)
+      ) return json({ error: "Valid module_key is required" }, 400, origin);
+      if (body.module_key === "security_governance") {
+        return json(
+          {
+            error:
+              "Security governance cannot be paused or resumed from automation controls",
+          },
+          403,
+          origin,
+        );
+      }
       const { data, error } = await admin.rpc("mangai_set_module_enabled", {
-        p_module_key: body.module_key, p_enabled: body.action === "resume_module", p_owner_user_id: user.id, p_request_id: requestId,
+        p_module_key: body.module_key,
+        p_enabled: body.action === "resume_module",
+        p_owner_user_id: user.id,
+        p_request_id: requestId,
       });
-      if (error || !data) return json({ error: "Module change and audit were not committed." }, 409, origin);
+      if (error || !data) {
+        return json(
+          { error: "Module change and audit were not committed." },
+          409,
+          origin,
+        );
+      }
       return json({ ok: true, module: data }, 200, origin);
     }
 
     if (body.action === "create_proposal") {
-      if (typeof body.title !== "string" || body.title.trim().length < 4 || body.title.length > 180) return json({ error: "Proposal title must be 4–180 characters" }, 400, origin);
-      const risk = ["low", "medium", "high", "critical"].includes(String(body.risk_level)) ? String(body.risk_level) : "medium";
-      const { data, error } = await admin.rpc("mangai_create_change_proposal", {
-        p_module_key: typeof body.module_key === "string" ? body.module_key : null,
-        p_title: body.title.trim(), p_description: typeof body.description === "string" ? body.description.slice(0, 5000) : "",
-        p_risk_level: risk, p_change_payload: isObject(body.change_payload) ? body.change_payload : {},
-        p_test_plan: Array.isArray(body.test_plan) ? body.test_plan : [], p_rollback_plan: isObject(body.rollback_plan) ? body.rollback_plan : {},
-        p_expected_impact: typeof body.expected_impact === "string" ? body.expected_impact.slice(0, 2000) : "",
-        p_owner_user_id: user.id, p_request_id: requestId,
-      });
-      if (error || !data) return json({ error: "Proposal creation and audit were not committed." }, 409, origin);
+      if (
+        typeof body.title !== "string" || body.title.trim().length < 4 ||
+        body.title.length > 180
+      ) {
+        return json(
+          { error: "Proposal title must be 4–180 characters" },
+          400,
+          origin,
+        );
+      }
+      const risk =
+        ["low", "medium", "high", "critical"].includes(String(body.risk_level))
+          ? String(body.risk_level)
+          : "medium";
+      const { data, error } = await admin.rpc(
+        "mangai_create_change_proposal",
+        {
+          p_module_key: typeof body.module_key === "string"
+            ? body.module_key
+            : null,
+          p_title: body.title.trim(),
+          p_description: typeof body.description === "string"
+            ? body.description.slice(0, 5000)
+            : "",
+          p_risk_level: risk,
+          p_change_payload: isObject(body.change_payload)
+            ? body.change_payload
+            : {},
+          p_test_plan: Array.isArray(body.test_plan) ? body.test_plan : [],
+          p_rollback_plan: isObject(body.rollback_plan)
+            ? body.rollback_plan
+            : {},
+          p_expected_impact: typeof body.expected_impact === "string"
+            ? body.expected_impact.slice(0, 2000)
+            : "",
+          p_owner_user_id: user.id,
+          p_request_id: requestId,
+        },
+      );
+      if (error || !data) {
+        return json(
+          { error: "Proposal creation and audit were not committed." },
+          409,
+          origin,
+        );
+      }
       return json({ ok: true, proposal: data }, 201, origin);
     }
 
-    if (["allow_testing", "reject_proposal", "keep_existing"].includes(body.action)) {
-      if (typeof body.proposal_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.proposal_id)) {
+    if (
+      ["allow_testing", "reject_proposal", "keep_existing"].includes(
+        body.action,
+      )
+    ) {
+      if (
+        typeof body.proposal_id !== "string" ||
+        !/^[0-9a-f-]{36}$/i.test(body.proposal_id)
+      ) {
         return json({ error: "Valid proposal_id is required" }, 400, origin);
       }
       const decision = body.action === "allow_testing"
         ? "allow_testing"
-        : body.action === "reject_proposal" ? "reject" : "keep_existing";
-      const { data: updated, error: decisionError } = await admin.rpc("mangai_record_proposal_decision", {
-        p_proposal_id: body.proposal_id,
-        p_decision: decision,
-        p_owner_user_id: user.id,
-        p_rationale: typeof body.rationale === "string" ? body.rationale.slice(0, 2000) : "",
-        p_request_id: requestId,
-      });
+        : body.action === "reject_proposal"
+        ? "reject"
+        : "keep_existing";
+      const { data: updated, error: decisionError } = await admin.rpc(
+        "mangai_record_proposal_decision",
+        {
+          p_proposal_id: body.proposal_id,
+          p_decision: decision,
+          p_owner_user_id: user.id,
+          p_rationale: typeof body.rationale === "string"
+            ? body.rationale.slice(0, 2000)
+            : "",
+          p_request_id: requestId,
+        },
+      );
       if (decisionError || !updated) {
-        return json({ error: "Proposal decision was not recorded. It may already have a decision or the database migration is not installed." }, 409, origin);
+        return json(
+          {
+            error:
+              "Proposal decision was not recorded. It may already have a decision or the database migration is not installed.",
+          },
+          409,
+          origin,
+        );
       }
       return json({ ok: true, proposal: updated }, 200, origin);
     }
 
     if (body.action === "approve_production" || body.action === "deploy") {
-      return json({ error: "Production deployment is deliberately disabled in this foundation phase. It requires staging tests, backup verification and a separate release approval workflow." }, 409, origin);
+      return json(
+        {
+          error:
+            "Production deployment is deliberately disabled in this foundation phase. It requires staging tests, backup verification and a separate release approval workflow.",
+        },
+        409,
+        origin,
+      );
     }
 
     return json({ error: "Action is not allow-listed" }, 400, origin);
   } catch (_error) {
-    return json({ error: "Action failed safely. Check the server-side audit and function logs." }, 500, origin);
+    return json(
+      {
+        error:
+          "Action failed safely. Check the server-side audit and function logs.",
+      },
+      500,
+      origin,
+    );
   }
 });
