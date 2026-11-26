@@ -105,7 +105,7 @@
 ## 2026-11-26 — Isolated HTTP request-flow tests
 - Refactored the Mangai control Edge Function into an injectable handler factory while preserving the production `Deno.serve` entrypoint.
 - Added mocked-client HTTP tests for bearer/session validation, Master Owner role binding, AAL1 read vs write behavior, AAL2 allow-listed writes, protected security-governance controls, disabled production deployment, CORS origin rejection, and unsupported methods.
-- **Passed on workflow run `45853697380`:** Deno format, lint, type-check, 16 Deno tests (0 failed), and ephemeral PostgreSQL migration/RLS/transaction checks.
-- **Passed:** Browser smoke `45853692846` and website static regression `45853692787`.
+- **Passed on workflow run `45853706305`:** Deno format, lint, type-check, 16 Deno tests (0 failed), and ephemeral PostgreSQL migration/RLS/transaction checks.
+- **Passed:** Browser smoke `45853705787` and website static regression `45853705848`.
 - The request-flow harness uses mock Supabase clients; hosted JWT/AAL2, real Edge Runtime, production secrets and live database remain unverified. No migration or function deployment was performed.
 - PR #7 remains a draft and unmerged; all work is still isolated on the review branch.
