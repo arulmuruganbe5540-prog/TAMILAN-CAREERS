@@ -108,13 +108,14 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
   });
   if (verifyError) throw new Error(`TOTP verify failed: ${verifyError.message}`);
 
-  const { data: aal2 } = await publicClient.auth.mfa
+  const { data: aal2, error: aal2Error } = await publicClient.auth.mfa
     .getAuthenticatorAssuranceLevel();
+  if (aal2Error) throw new Error(`AAL2 lookup failed: ${aal2Error.message}`);
   assertEquals(aal2.currentLevel, "aal2");
+  const { data: verifiedSession } = await publicClient.auth.getSession();
+  if (!verifiedSession.session) throw new Error("AAL2 session was not retained");
 
-  const allowedWrite = await invoke(aal2.currentLevel === "aal2"
-    ? (await publicClient.auth.getSession()).data.session!.access_token
-    : ownerAal1Token, "POST", {
+  const allowedWrite = await invoke(verifiedSession.session.access_token, "POST", {
       action: "create_proposal",
       title: "Local AAL2 integration test proposal",
       description: "Disposable CI-only proposal.",
@@ -125,7 +126,7 @@ Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", as
   if (!created?.proposal?.id) throw new Error("AAL2 proposal was not created");
 
   const protectedWrite = await invoke(
-    (await publicClient.auth.getSession()).data.session!.access_token,
+    verifiedSession.session.access_token,
     "POST",
     { action: "pause_module", module_key: "security_governance" },
   );
