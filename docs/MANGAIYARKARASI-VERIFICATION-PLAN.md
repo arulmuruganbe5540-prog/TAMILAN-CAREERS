@@ -27,8 +27,8 @@ Status: repository-level preparation only. No database-backed or live-site test 
 - Test concurrent decisions on the same proposal; only one decision may succeed.
 
 ## Gate 3 — MFA and session policy
-- Select and document the required Supabase MFA assurance level.
-- Enforce that assurance level server-side for every mutation, not merely by hiding buttons.
+- Required level is AAL2. The Edge Function now checks `auth.mfa.getAuthenticatorAssuranceLevel()` server-side for every POST/write action; read-only GET requests do not mutate state.
+- Runtime-test the AAL2 check with an enrolled MFA factor, an AAL1 session, a session without MFA, and an expired session. Confirm AAL1 and missing-MFA writes return 403 and do not mutate data.
 - Test session expiry and step-up authentication.
 - Until this gate passes, do not deploy the API or expose mutation controls.
 
