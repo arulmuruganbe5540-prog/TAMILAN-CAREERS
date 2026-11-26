@@ -74,20 +74,6 @@ Deno.serve(async (req: Request) => {
 
   const requestId = req.headers.get("x-request-id") || crypto.randomUUID();
 
-  async function writeAudit(eventType: string, targetType: string | null, targetId: string | null, details: Record<string, unknown>, outcome = "succeeded") {
-    const { error } = await admin.from("mangai_audit_events").insert({
-      actor_type: "owner",
-      actor_id: ownerId,
-      event_type: eventType,
-      target_type: targetType,
-      target_id: targetId,
-      request_id: requestId,
-      outcome,
-      details,
-    });
-    if (error) throw new Error("Audit write failed");
-  }
-
   if (req.method === "GET") {
     const action = new URL(req.url).searchParams.get("action") || "overview";
     if (action === "modules") {
@@ -147,42 +133,27 @@ Deno.serve(async (req: Request) => {
 
   try {
     if (body.action === "pause_module" || body.action === "resume_module") {
-      if (typeof body.module_key !== "string" || !/^[a-z0-9_]{2,60}$/.test(body.module_key)) {
-        return json({ error: "Valid module_key is required" }, 400, origin);
-      }
-      if (body.module_key === "security_governance") {
-        return json({ error: "Security governance cannot be paused from automation controls" }, 403, origin);
-      }
-      const enabled = body.action === "resume_module";
-      const { data, error } = await admin.from("mangai_control_modules")
-        .update({ enabled, updated_at: new Date().toISOString() })
-        .eq("module_key", body.module_key)
-        .select("module_key,enabled")
-        .maybeSingle();
-      if (error || !data) return json({ error: "Module not found or update failed" }, 404, origin);
-      await writeAudit(body.action, "module", body.module_key, { enabled });
+      if (typeof body.module_key !== "string" || !/^[a-z0-9_]{2,60}$/.test(body.module_key)) return json({ error: "Valid module_key is required" }, 400, origin);
+      if (body.module_key === "security_governance") return json({ error: "Security governance cannot be paused or resumed from automation controls" }, 403, origin);
+      const { data, error } = await admin.rpc("mangai_set_module_enabled", {
+        p_module_key: body.module_key, p_enabled: body.action === "resume_module", p_owner_user_id: user.id, p_request_id: requestId,
+      });
+      if (error || !data) return json({ error: "Module change and audit were not committed." }, 409, origin);
       return json({ ok: true, module: data }, 200, origin);
     }
 
     if (body.action === "create_proposal") {
-      if (typeof body.title !== "string" || body.title.trim().length < 4 || body.title.length > 180) {
-        return json({ error: "Proposal title must be 4–180 characters" }, 400, origin);
-      }
+      if (typeof body.title !== "string" || body.title.trim().length < 4 || body.title.length > 180) return json({ error: "Proposal title must be 4–180 characters" }, 400, origin);
       const risk = ["low", "medium", "high", "critical"].includes(String(body.risk_level)) ? String(body.risk_level) : "medium";
-      const { data, error } = await admin.from("mangai_change_proposals").insert({
-        module_key: typeof body.module_key === "string" ? body.module_key : null,
-        title: body.title.trim(),
-        description: typeof body.description === "string" ? body.description.slice(0, 5000) : "",
-        risk_level: risk,
-        status: "proposed",
-        change_payload: isObject(body.change_payload) ? body.change_payload : {},
-        test_plan: Array.isArray(body.test_plan) ? body.test_plan : [],
-        rollback_plan: isObject(body.rollback_plan) ? body.rollback_plan : {},
-        expected_impact: typeof body.expected_impact === "string" ? body.expected_impact.slice(0, 2000) : "",
-        created_by: user.id,
-      }).select("id,title,status,risk_level").single();
-      if (error || !data) return json({ error: "Unable to create proposal" }, 500, origin);
-      await writeAudit("proposal_created", "proposal", data.id, { title: data.title, risk_level: risk });
+      const { data, error } = await admin.rpc("mangai_create_change_proposal", {
+        p_module_key: typeof body.module_key === "string" ? body.module_key : null,
+        p_title: body.title.trim(), p_description: typeof body.description === "string" ? body.description.slice(0, 5000) : "",
+        p_risk_level: risk, p_change_payload: isObject(body.change_payload) ? body.change_payload : {},
+        p_test_plan: Array.isArray(body.test_plan) ? body.test_plan : [], p_rollback_plan: isObject(body.rollback_plan) ? body.rollback_plan : {},
+        p_expected_impact: typeof body.expected_impact === "string" ? body.expected_impact.slice(0, 2000) : "",
+        p_owner_user_id: user.id, p_request_id: requestId,
+      });
+      if (error || !data) return json({ error: "Proposal creation and audit were not committed." }, 409, origin);
       return json({ ok: true, proposal: data }, 201, origin);
     }
 
