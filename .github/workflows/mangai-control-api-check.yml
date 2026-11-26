@@ -62,7 +62,6 @@ jobs:
           grep -q "createControlApiHandler" supabase/functions/mangai-control-api/index.ts
           grep -q "Owner with AAL2 can submit an allow-listed proposal request" supabase/functions/mangai-control-api/handler_test.ts
 
-
   local-supabase-auth-mfa-integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -121,13 +120,10 @@ jobs:
           cd "$TEST_ROOT"
           supabase start --exclude imgproxy,logflare,mailpit,postgres-meta,realtime,storage-api,studio,supavisor,vector
           supabase db reset
-          supabase status --env --output-format text > "$RUNNER_TEMP/mangai-supabase-status.env"
+          supabase status -o env > "$RUNNER_TEMP/mangai-supabase-status.env"
           set -a
           source "$RUNNER_TEMP/mangai-supabase-status.env"
           set +a
-          API_URL="$API_URL"
-          ANON_KEY="$ANON_KEY"
-          SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY"
           test -n "$API_URL" && test "$API_URL" != "null"
           test -n "$ANON_KEY" && test "$ANON_KEY" != "null"
           test -n "$SERVICE_ROLE_KEY" && test "$SERVICE_ROLE_KEY" != "null"
@@ -150,7 +146,7 @@ jobs:
           nohup supabase functions serve mangai-control-api --env-file "$TEST_ROOT/supabase/functions/.env" > "$RUNNER_TEMP/mangai-edge-runtime.log" 2>&1 &
           echo $! > "$RUNNER_TEMP/mangai-edge-runtime.pid"
           for attempt in $(seq 1 60); do
-            code="$(curl -sS -o /dev/null -w '%{http_code}' -H "apikey: $MANGAI_ANON_KEY" -H "Origin: https://tamilancareers.in" "$MANGAI_FUNCTION_URL" || true)"
+            code="$(curl -sS -o /dev/null -w '%{http_code}' -H "apikey: $SUPABASE_ANON_KEY" -H "Origin: https://tamilancareers.in" "$MANGAI_FUNCTION_URL" || true)"
             if [ "$code" != "000" ]; then
               echo "Local Edge Function gateway responded with HTTP $code"
               exit 0
