@@ -1,0 +1,18 @@
+/* Mangaiyarkarasi shared Admin Commander theme — visual-only layer */
+:root{--mangai-grass-1:#b9e8a5;--mangai-grass-2:#69b75a;--mangai-grass-3:#286f40;--mangai-grass-4:#123d2c;--mangai-gold:#d8b96e}
+header.top,.top{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 18% 110%,rgba(190,235,126,.78),transparent 42%),radial-gradient(ellipse at 82% 120%,rgba(72,166,72,.78),transparent 48%),linear-gradient(180deg,var(--mangai-grass-1) 0%,var(--mangai-grass-2) 40%,var(--mangai-grass-3) 74%,var(--mangai-grass-4) 100%)!important;border-bottom:2px solid var(--mangai-gold)!important;box-shadow:0 8px 28px #0008}
+header.top:before,.top:before{content:"";position:absolute;inset:48% 0 0;z-index:-1;opacity:.48;pointer-events:none;background:repeating-linear-gradient(102deg,transparent 0 9px,rgba(210,245,160,.22) 10px 11px,transparent 12px 19px),linear-gradient(180deg,transparent,rgba(5,48,28,.58))}
+header.top .brand,.top .brand{color:#fff6cf!important;text-shadow:0 2px 5px #173d20;font-weight:900;letter-spacing:.8px}
+header.top a,.top a{color:#efffe7}
+header.top .muted,.top .muted{color:#f0ffe9}
+header.top button,.top button{box-shadow:0 2px 8px #123d2c66}
+.card,.panel,.stat,.workspace,.tablewrap,dialog{box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.card,.panel,.stat{border-radius:14px}
+table{border-collapse:separate;border-spacing:0}
+th{letter-spacing:.2px}
+th:first-child{border-top-left-radius:8px}
+th:last-child{border-top-right-radius:8px}
+button,a.link,.link{transition:filter .15s ease,transform .15s ease}
+button:hover,a.link:hover,.link:hover{filter:brightness(1.1)}
+:focus-visible{outline:2px solid #8ed7ff;outline-offset:2px}
+@media(max-width:600px){header.top,.top{padding:13px 14px!important;gap:9px}.wrap{padding:14px!important}.card,.panel{padding:13px}}
