@@ -1,6 +1,6 @@
 # Mangaiyarkarasi — verification plan
 
-Status: repository-level preparation only. No database-backed or live-site test has been run because no paid Supabase development branch was created.
+Status: repository-level preparation only. No database-backed or live-site test has been run because no paid Supabase development branch was created. Module pause/resume, proposal creation and proposal decisions are implemented through transaction-backed RPC source, but remain unexecuted until an isolated test database is available.
 
 ## Gate 1 — Database migration (isolated development project only)
 - Confirm there is exactly one existing `user_roles.role = 'super_admin'` row. The migration must fail closed if the count is zero or greater than one.
@@ -22,8 +22,10 @@ Status: repository-level preparation only. No database-backed or live-site test 
 - Security governance pause attempt: 403.
 - Production deploy/approve action: rejected (409).
 - Invalid JSON, malformed IDs, oversized text fields and unknown module IDs: rejected safely.
-- Each accepted mutation must have a corresponding immutable audit record.
-- Inject audit-write failure and verify no partial state change is left behind; if the implementation cannot guarantee this atomically, disable that mutation until it is made transactional.
+- Module pause/resume, proposal creation and proposal decisions now use transaction-backed PostgreSQL RPCs. Each RPC verifies the Owner binding and Super Admin role and writes its audit event in the same transaction.
+- Verify the new RPC signatures and grants with the smoke test; inject audit-write failures for all three RPCs and confirm each business mutation rolls back.
+- Test concurrent decisions on the same proposal; only one decision may succeed.
+- Confirm the Edge Function has no direct write path for these transactional actions.
 - Test concurrent decisions on the same proposal; only one decision may succeed.
 
 ## Gate 3 — MFA and session policy
