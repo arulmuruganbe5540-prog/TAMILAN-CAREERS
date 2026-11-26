@@ -50,14 +50,14 @@ Deno.serve(async (req: Request) => {
   const userClient = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: authorization } },
     auth: { persistSession: false, autoRefreshToken: false },
-  }, 200, origin);
+  });
   const { data: userData, error: userError } = await userClient.auth.getUser();
   const user = userData?.user;
   if (userError || !user) return json({ error: "Session is invalid or expired" }, 401, origin);
 
   const admin = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
-  }, 200, origin);
+  });
 
   // The automation agent is never an identity. Only the existing, single Owner is accepted.
   const [{ data: roleRow, error: roleError }, { data: ownerRow, error: ownerError }] = await Promise.all([
@@ -83,7 +83,7 @@ Deno.serve(async (req: Request) => {
       request_id: requestId,
       outcome,
       details,
-    }, 200, origin);
+    });
     if (error) throw new Error("Audit write failed");
   }
 
@@ -152,7 +152,7 @@ Deno.serve(async (req: Request) => {
         .select("module_key,enabled")
         .maybeSingle();
       if (error || !data) return json({ error: "Module not found or update failed" }, 404, origin);
-      await writeAudit(body.action, "module", body.module_key, { enabled }, 200, origin);
+      await writeAudit(body.action, "module", body.module_key, { enabled });
       return json({ ok: true, module: data }, 200, origin);
     }
 
@@ -174,7 +174,7 @@ Deno.serve(async (req: Request) => {
         created_by: user.id,
       }).select("id,title,status,risk_level").single();
       if (error || !data) return json({ error: "Unable to create proposal" }, 500, origin);
-      await writeAudit("proposal_created", "proposal", data.id, { title: data.title, risk_level: risk }, 200, origin);
+      await writeAudit("proposal_created", "proposal", data.id, { title: data.title, risk_level: risk });
       return json({ ok: true, proposal: data }, 201, origin);
     }
 
@@ -202,9 +202,9 @@ Deno.serve(async (req: Request) => {
         decision: choice.decision,
         owner_user_id: user.id,
         rationale: typeof body.rationale === "string" ? body.rationale.slice(0, 2000) : "",
-      }, 200, origin);
+      });
       if (approvalError) return json({ error: "Decision saved but approval history write failed; contact administrator" }, 500, origin);
-      await writeAudit("proposal_" + choice.decision, "proposal", body.proposal_id, { previous_status: proposal.status, new_status: choice.status, risk_level: proposal.risk_level }, 200, origin);
+      await writeAudit("proposal_" + choice.decision, "proposal", body.proposal_id, { previous_status: proposal.status, new_status: choice.status, risk_level: proposal.risk_level });
       return json({ ok: true, proposal: updated }, 200, origin);
     }
 
@@ -216,4 +216,4 @@ Deno.serve(async (req: Request) => {
   } catch (_error) {
     return json({ error: "Action failed safely. Check the server-side audit and function logs." }, 500, origin);
   }
-}, 200, origin);
+});
