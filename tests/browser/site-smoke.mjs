@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { extname, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
@@ -21,6 +21,13 @@ const server = createServer(async (req, res) => {
     res.end("Not found");
   }
 });
+
+const adminPages = (await readdir(root)).filter((name) => name.startsWith("super-admin") && name.endsWith(".html"));
+assert.ok(adminPages.length >= 20, "Super Admin page inventory should be present");
+for (const name of adminPages) {
+  const html = await readFile(resolve(root, name), "utf8");
+  assert.match(html, /admin-language[.]js|data-lang-choice|data-ui-lang/, name + " should expose Tamil and English language support");
+}
 
 const supabaseStub = `
 window.supabase = {
@@ -122,8 +129,24 @@ try {
     assert.match(await page.locator("body").innerText(), expected, path + " should identify its market");
   }
 
+  await load("tests/browser/admin-language-fixture.html");
+  await page.locator(".tc-admin-language").waitFor({ state: "visible" });
+  assert.equal(await page.locator(".language-toggle, [data-lang-choice], [data-ui-lang]").count(), 0, "legacy language controls should be removed in favor of one shared switch");
+  assert.equal(await page.locator("html").getAttribute("lang"), "ta", "admin language should default to Tamil");
+  assert.equal(await page.locator("h1").innerText(), "செயல்பாட்டு பதிவுகள்", "Tamil interface should remain readable");
+  await page.locator('.tc-admin-language button[data-lang="en"]').click();
+  assert.equal(await page.locator("html").getAttribute("lang"), "en", "English language switch should update the document language");
+  assert.equal(await page.locator("h1").innerText(), "Activity Logs", "English switch should translate Tamil labels");
+  assert.equal(await page.locator("input").getAttribute("placeholder"), "Search", "English switch should translate input placeholders");
+  assert.match(await page.locator("main p").innerText(), /Audit events are automatically captured/, "English switch should translate mixed-language help text");
+  await page.locator('.tc-admin-language button[data-lang="ta"]').click();
+  assert.equal(await page.locator("h1").innerText(), "செயல்பாட்டு பதிவுகள்", "Tamil switch should restore the original Tamil labels");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.locator(".tc-admin-language").waitFor({ state: "visible" });
+  assert.equal(await page.locator("html").getAttribute("lang"), "ta", "selected language should persist across page reloads");
+
   await context.close();
-  console.log("Browser smoke checks passed: 10 page loads, mobile viewport declarations, student/employer auth tabs, password mismatch validation, password visibility, protected account/application guards, and market labels.");
+  console.log("Browser smoke checks passed: 10 page loads, mobile viewport declarations, student/employer auth tabs, password mismatch validation, password visibility, protected account/application guards, market labels, and Tamil / English admin language switching with persistent preference across the Super Admin page inventory.");
 } finally {
   if (browser) await browser.close();
   await new Promise((resolve) => server.close(resolve));

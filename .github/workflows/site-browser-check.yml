@@ -4,13 +4,16 @@ on:
   pull_request:
     paths:
       - "*.html"
+      - "admin-language.js"
       - "tests/browser/**"
       - ".github/workflows/site-browser-check.yml"
   push:
     branches:
       - "mangaiyarkarasi/**"
+      - "mangai-english-admin-ui"
     paths:
       - "*.html"
+      - "admin-language.js"
       - "tests/browser/**"
       - ".github/workflows/site-browser-check.yml"
 
