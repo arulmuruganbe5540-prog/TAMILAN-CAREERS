@@ -160,7 +160,7 @@ Deno.serve(async (req: Request) => {
         admin.from("mangai_monitoring_checks").select(
           "id,module_key,check_type,target,status,checked_at",
         ).order("checked_at", { ascending: false }).limit(12),
-    ]);
+      ]);
     if (
       [modules, openProposals, openAlerts, recentRuns, recentChecks].some((x) =>
         x.error
