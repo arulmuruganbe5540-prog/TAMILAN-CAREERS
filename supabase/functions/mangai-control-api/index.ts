@@ -39,7 +39,15 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-Deno.serve(async (req: Request) => {
+export type ControlApiDependencies = {
+  createClient: typeof createClient;
+  getEnv: (name: string) => string | undefined;
+  randomUUID: () => string;
+};
+
+/** Build the HTTP handler with injectable dependencies for isolated request-flow tests. */
+export function createControlApiHandler(deps: ControlApiDependencies) {
+  return async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     const preflightOrigin = req.headers.get("origin");
     if (preflightOrigin && !allowedOrigins.has(preflightOrigin)) {
@@ -56,9 +64,9 @@ Deno.serve(async (req: Request) => {
     return json({ error: "Method not allowed" }, 405, origin);
   }
 
-  const supabaseUrl = Deno.env.get("SUPABASE_URL");
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const supabaseUrl = deps.getEnv("SUPABASE_URL");
+  const anonKey = deps.getEnv("SUPABASE_ANON_KEY");
+  const serviceRoleKey = deps.getEnv("SUPABASE_SERVICE_ROLE_KEY");
   if (!supabaseUrl || !anonKey || !serviceRoleKey) {
     return json({ error: "Server configuration is incomplete" }, 503, origin);
   }
@@ -68,7 +76,7 @@ Deno.serve(async (req: Request) => {
     return json({ error: "Login required" }, 401, origin);
   }
 
-  const userClient = createClient(supabaseUrl, anonKey, {
+  const userClient = deps.createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: authorization } },
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -77,7 +85,7 @@ Deno.serve(async (req: Request) => {
   if (userError || !user) {
     return json({ error: "Session is invalid or expired" }, 401, origin);
   }
-  const admin = createClient(supabaseUrl, serviceRoleKey, {
+  const admin = deps.createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
@@ -107,7 +115,7 @@ Deno.serve(async (req: Request) => {
     return json({ error: ownerGate.error }, ownerGate.status, origin);
   }
 
-  const requestId = req.headers.get("x-request-id") || crypto.randomUUID();
+  const requestId = req.headers.get("x-request-id") || deps.randomUUID();
 
   if (req.method === "GET") {
     const action = new URL(req.url).searchParams.get("action") || "overview";
@@ -365,4 +373,13 @@ Deno.serve(async (req: Request) => {
       origin,
     );
   }
-});
+  };
+}
+
+if (import.meta.main) {
+  Deno.serve(createControlApiHandler({
+    createClient,
+    getEnv: (name) => Deno.env.get(name),
+    randomUUID: () => crypto.randomUUID(),
+  }));
+}
