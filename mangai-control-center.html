@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="googlebot" content="noindex,nofollow,noarchive">
+<title>Mangaiyarkarasi Master Control | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#080b12;--panel:#121925;--line:#343a49;--gold:#e2c47b;--muted:#a8b2c3;--blue:#66baff;--green:#74d6a0;--red:#ff8d8d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% -15%,#1b3554 0,transparent 35%),var(--bg);color:#f4f2eb;font:15px Arial,sans-serif}
+header{padding:22px clamp(16px,4vw,42px);border-bottom:1px solid #645338;background:linear-gradient(115deg,#0d111a,#172234);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:800}.name{font-size:clamp(22px,4vw,30px);font-weight:800;margin-top:7px}.email{font-size:12px;color:var(--muted);margin-top:5px}
+main{max-width:1250px;margin:auto;padding:22px clamp(14px,3vw,28px) 50px}.head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;flex-wrap:wrap}.eyebrow{font-size:10px;letter-spacing:2px;color:var(--gold);font-weight:800}h1{font-size:clamp(22px,3vw,29px);margin:8px 0}h2{font-size:18px;margin:0 0 14px;color:#f2dfb0}p{color:var(--muted);line-height:1.55}
+button{border:1px solid #e5c980;border-radius:9px;background:linear-gradient(110deg,#b9944b,#e0c77f);color:#10141c;padding:11px 16px;font-weight:800;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}.status{padding:14px 16px;margin:18px 0;border:1px solid #3c4c61;border-radius:12px;background:#111d2d;color:#d8e9fb;line-height:1.5}.status.good{border-color:#32694f;color:#a6efc3}.status.warn{border-color:#78613b;color:#f2d99b}.status.bad{border-color:#794646;color:#ffc0c0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0 24px}.metric,.panel{border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#151d2a,#0f151f);padding:17px;min-width:0}.metric small{color:var(--muted);display:block}.metric strong{display:block;font-size:28px;color:var(--gold);margin-top:8px}
+.columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.panel{margin-bottom:14px}.list{display:grid;gap:9px}.item{padding:12px;border:1px solid #303a4b;border-radius:10px;background:#0c131e}.item strong{display:block;overflow-wrap:anywhere}.meta{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}.pill{display:inline-block;padding:4px 8px;border-radius:99px;border:1px solid #4b5362;color:#d4dbea;font-size:11px;margin-top:8px}.empty{padding:16px;border:1px dashed #3d4656;border-radius:10px;color:var(--muted);font-size:13px}
+.foot{font-size:12px;color:#8995a6;margin-top:20px;line-height:1.6}.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.back{color:#c5d8ed;text-decoration:none;font-size:13px}.back:hover{color:white}
+@media(max-width:760px){.columns{grid-template-columns:1fr}header{padding:17px}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+ <div><div class="brand">TAMILAN CAREERS · PRIVATE OWNER WORKSPACE</div><div class="name">Mangaiyarkarasi Master Control</div><div id="ownerEmail" class="email">Verifying owner session…</div></div>
+ <div class="top-actions"><a class="back" href="super-admin.html">← Super Admin Home</a><button id="logout" type="button">Sign out</button></div>
+</header>
+<main>
+ <div class="head"><div><div class="eyebrow">360° CONTROL WORKSPACE</div><h1>System Command Overview</h1><p>Owner-only, read-only integration view for control modules, proposed changes and system alerts. This page does not publish jobs or deploy code.</p></div><button id="refresh" type="button" disabled>Refresh status</button></div>
+ <div id="connection" class="status">Checking authenticated session and control API…</div>
+ <section class="grid" aria-label="Control summary">
+  <div class="metric"><small>Registered Modules</small><strong id="moduleCount">—</strong></div>
+  <div class="metric"><small>Open Proposals</small><strong id="proposalCount">—</strong></div>
+  <div class="metric"><small>Open Alerts</small><strong id="alertCount">—</strong></div>
+  <div class="metric"><small>Production Deployment</small><strong id="deployState" style="font-size:16px">Disabled</strong></div>
+ </section>
+ <div class="columns">
+  <section class="panel"><h2>Control Modules</h2><div id="modules" class="list"><div class="empty">Waiting for API connection.</div></div></section>
+  <section class="panel"><h2>Change Proposals</h2><div id="proposals" class="list"><div class="empty">Waiting for API connection.</div></div></section>
+ </div>
+ <section class="panel"><h2>System Alerts</h2><div id="alerts" class="list"><div class="empty">Waiting for API connection.</div></div></section>
+ <div class="foot">Security boundary: browser code uses only the public Supabase key and the signed-in user's access token. The service-role key remains server-side. Write controls are intentionally not exposed in this preview. The API and database connection must be deployed and independently verified before this page can display live records.</div>
+</main>
+<script>
+(()=>{
+ const SUPABASE_URL="https://qkmljuuusfjowexvybvy.supabase.co";
+ const SUPABASE_ANON_KEY="sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2";
+ const API_URL=SUPABASE_URL+"/functions/v1/mangai-control-api";
+ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+ const $=id=>document.getElementById(id);
+ const setStatus=(message,kind="warn")=>{$("connection").textContent=message;$("connection").className="status "+kind;};
+ const clear=(id)=>{$(id).replaceChildren();};
+ const addEmpty=(id,message)=>{const el=document.createElement("div");el.className="empty";el.textContent=message;$(id).replaceChildren(el);};
+ const addItem=(parent,title,meta,badge)=>{
+  const item=document.createElement("article");item.className="item";
+  const strong=document.createElement("strong");strong.textContent=title||"Untitled";item.append(strong);
+  if(meta){const m=document.createElement("div");m.className="meta";m.textContent=meta;item.append(m);}
+  if(badge){const b=document.createElement("span");b.className="pill";b.textContent=badge;item.append(b);}
+  parent.append(item);
+ };
+ async function apiGet(action,token){
+  const response=await fetch(API_URL+"?action="+encodeURIComponent(action),{method:"GET",headers:{Authorization:"Bearer "+token,apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
+  let payload={};try{payload=await response.json();}catch(_e){}
+  if(!response.ok)throw new Error(payload.error||("Control API returned HTTP "+response.status));
+  return payload;
+ }
+ async function load(){
+  $("refresh").disabled=true;setStatus("Verifying the signed-in Owner and connecting to the private Control API…");
+  try{
+   const {data:{user},error}=await sb.auth.getUser();
+   if(error||!user){location.replace("super-admin-login.html");return;}
+   const {data:roles,error:roleError}=await sb.from("user_roles").select("role").eq("user_id",user.id).eq("role","super_admin").limit(1);
+   if(roleError||!roles||roles.length!==1){setStatus("Super Admin role could not be verified. Access denied.", "bad");await sb.auth.signOut();return;}
+   $("ownerEmail").textContent=user.email||"Authenticated Owner";
+   const {data:{session}}=await sb.auth.getSession();
+   if(!session?.access_token){location.replace("super-admin-login.html");return;}
+   const [overview,modules,proposals,alerts]=await Promise.all([
+    apiGet("overview",session.access_token),apiGet("modules",session.access_token),
+    apiGet("proposals",session.access_token),apiGet("alerts",session.access_token)
+   ]);
+   $("moduleCount").textContent=String(overview.counts?.modules??modules.modules?.length??0);
+   $("proposalCount").textContent=String(overview.counts?.pendingProposals??0);
+   $("alertCount").textContent=String(overview.counts?.openAlerts??0);
+   $("deployState").textContent=overview.productionDeploymentEnabled===true?"Enabled":"Disabled";
+   clear("modules");
+   (modules.modules||[]).forEach(m=>addItem($("modules"),m.display_name||m.module_key,[m.category||"Uncategorised",m.description||""].filter(Boolean).join(" · "),m.enabled?"Enabled":"Paused"));
+   if(!(modules.modules||[]).length)addEmpty("modules","No control modules have been registered.");
+   clear("proposals");
+   (proposals.proposals||[]).forEach(p=>addItem($("proposals"),p.title,[p.module_key||"General",p.risk_level||"Risk not set",p.created_at?new Date(p.created_at).toLocaleString():""].filter(Boolean).join(" · "),p.status||"Unknown status"));
+   if(!(proposals.proposals||[]).length)addEmpty("proposals","No change proposals are recorded.");
+   clear("alerts");
+   (alerts.alerts||[]).forEach(a=>addItem($("alerts"),a.title,a.message||a.created_at||"",[a.severity||"Notice",a.status||"Unknown"].join(" · ")));
+   if(!(alerts.alerts||[]).length)addEmpty("alerts","No system alerts are recorded.");
+   setStatus("Authenticated Owner verified. Control API data loaded successfully. Read-only mode is active.", "good");
+  }catch(error){
+   $("moduleCount").textContent="—";$("proposalCount").textContent="—";$("alertCount").textContent="—";$("deployState").textContent="Disabled";
+   addEmpty("modules","Live module data unavailable.");addEmpty("proposals","Live proposal data unavailable.");addEmpty("alerts","Live alert data unavailable.");
+   setStatus("Control API is not connected or the database migration is not installed. No live data is being shown. Details: "+(error?.message||"Unknown connection error"),"warn");
+  }finally{$("refresh").disabled=false;}
+ }
+ $("refresh").addEventListener("click",load);
+ $("logout").addEventListener("click",async()=>{await sb.auth.signOut();location.replace("super-admin-login.html");});
+ load();
+})();
+</script>
+</body></html>
