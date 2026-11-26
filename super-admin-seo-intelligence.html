@@ -43,9 +43,14 @@ const {data:roles,error:re}=await sb.from('user_roles').select('role').eq('user_
 const {data:factors,error:fe}=await sb.auth.mfa.listFactors();if(fe){$('status').textContent='Could not verify MFA state. Please sign in again.';return}
 if((factors.totp||[]).some(f=>f.status==='verified')){const {data:aal,error:ae}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(ae||aal.currentLevel!=='aal2'){location.replace('super-admin-login.html');return}}
 $('email').textContent=user.email||'';$('status').innerHTML='<span class="good">Administrator verified.</span> Background SEO engine is active for new or updated published jobs.';
-const {data:p,error:pe}=await sb.from('seo_job_profiles').select('source_table,job_id,job_title,seo_title,keywords,updated_at,is_public').order('updated_at',{ascending:false}).limit(30);
-if(pe){$('status').textContent='Admin verified, but SEO profile access failed: '+pe.message;return}
-const all=p||[];$('profiles').textContent=String(all.length);$('gov').textContent=String(all.filter(x=>x.source_table==='government_jobs').length);$('private').textContent=String(all.filter(x=>x.source_table==='private_jobs'||x.source_table==='jobs').length);$('intl').textContent=String(all.filter(x=>x.source_table==='international_jobs').length);
+const [profileQuery,govCount,privateCount,intlCount]=await Promise.all([
+sb.from('seo_job_profiles').select('source_table,job_id,job_title,seo_title,keywords,updated_at').order('updated_at',{ascending:false}).limit(30),
+sb.from('seo_job_profiles').select('id',{count:'exact',head:true}).eq('source_table','government_jobs'),
+sb.from('seo_job_profiles').select('id',{count:'exact',head:true}).in('source_table',['private_jobs','jobs']),
+sb.from('seo_job_profiles').select('id',{count:'exact',head:true}).eq('source_table','international_jobs')
+]);
+if(profileQuery.error||govCount.error||privateCount.error||intlCount.error){$('status').textContent='Admin verified, but SEO profile access failed.';return}
+const all=profileQuery.data||[];$('profiles').textContent=String((govCount.count||0)+(privateCount.count||0)+(intlCount.count||0));$('gov').textContent=String(govCount.count||0);$('private').textContent=String(privateCount.count||0);$('intl').textContent=String(intlCount.count||0);
 $('rows').innerHTML=all.length?all.map(x=>'<tr><td><b>'+esc(x.job_title)+'</b><div class="muted small">'+esc(nice(x.source_table))+'</div></td><td>'+esc(x.seo_title)+'</td><td><div class="tags">'+(x.keywords||[]).slice(0,14).map(k=>'<span class="tag">'+esc(k)+'</span>').join('')+'</div><div class="muted small">'+(x.keywords||[]).length+' phrases</div></td><td>'+esc(new Date(x.updated_at).toLocaleString())+'</td></tr>').join(''):'<tr><td colspan="4" class="muted">No generated profiles found yet.</td></tr>';
 const {data:logs,error:le}=await sb.from('seo_engine_runs').select('source_table,job_id,status,keywords_generated,trend_source_status,message,created_at').order('created_at',{ascending:false}).limit(20);
 $('runs').innerHTML=le?'<tr><td colspan="5" class="warn">Activity log unavailable: '+esc(le.message)+'</td></tr>':(logs||[]).map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td>'+esc(nice(x.source_table))+'</td><td>'+esc(x.status)+'</td><td>'+esc(x.keywords_generated)+'</td><td class="small">'+esc(JSON.stringify(x.trend_source_status||{}))+'</td></tr>').join('')||'<tr><td colspan="5" class="muted">No activity logged yet.</td></tr>';
