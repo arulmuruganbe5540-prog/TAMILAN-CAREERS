@@ -65,3 +65,10 @@
 - Added a GitHub Actions workflow to run the regression suite on relevant pull-request and development-branch changes.
 - Added test coverage documentation. These are static source checks only; they do not simulate sign-in, submit forms, query Supabase, validate RLS, or replace Android/browser runtime tests.
 - Existing website pages and production systems were not modified. All additions remain in the open draft PR; workflow execution must be checked before marking the suite as passing.
+
+
+## 2026-11-26 — Phase 1H (CI verification)
+- The website static regression workflow passed: 8 test groups passed, 0 failed (Node.js 22). This verifies repository structure and static contracts only, not runtime sign-in or Supabase behavior.
+- The Mangaiyarkarasi Control API workflow passed Deno format, lint, type-check and all static SQL/RPC/MFA guard assertions on commit `990a6ec17e4d05369fd3c37731925238178cbd1d`.
+- CI fixes: applied Deno formatting, moved the Supabase JS dependency into the function-local Deno import map, removed an unused variable, passed the function-local Deno config explicitly to type-check, and aligned static guards with formatted RPC calls.
+- CI success does not execute the SQL migration or run live database/MFA/browser tests. No Supabase migration was applied, no Edge Function deployed, and no production website/auth/secrets/schedules were changed.
