@@ -7,6 +7,9 @@
 - Confirmed existing Edge Functions include government/external job scanners, external candidate analysis and google-indexing-notify.
 - Confirmed one current user_roles row has role=super_admin; the control migration will bind the Owner to the existing single Super Admin at migration time and fail closed if the count is not exactly one.
 - Added the initial isolated control-registry migration file and read-only smoke-check SQL.
+- Added the Owner-gated control API source, JWT verification configuration and allow-listed actions; production deployment action is deliberately disabled.
+- Added a GitHub Actions Deno type-check workflow. The first check exposed a strict TypeScript closure-narrowing issue; it was fixed and the latest Deno check completed successfully.
+- Added PR #7 as a draft for review; no merge or production release has occurred.
 - No Supabase migration has been applied. No Supabase development database branch has been created. No production database, live page, secret, schedule or auth policy has been changed.
 
 ## Next phases
