@@ -1,0 +1,70 @@
+name: Secure Supabase Database Backup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tamilan-careers-supabase-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Validate required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SUPABASE_DB_URL" || { echo "Missing SUPABASE_DB_URL repository secret"; exit 1; }
+          test -n "$BACKUP_ENCRYPTION_KEY" || { echo "Missing BACKUP_ENCRYPTION_KEY repository secret"; exit 1; }
+          if [ "${#BACKUP_ENCRYPTION_KEY}" -lt 32 ]; then
+            echo "BACKUP_ENCRYPTION_KEY must be at least 32 characters."
+            exit 1
+          fi
+
+      - name: Set up Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Dump database roles, schema, and data
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p secure-backup
+          supabase db dump --remote="$SUPABASE_DB_URL" -f secure-backup/roles.sql --role-only
+          supabase db dump --remote="$SUPABASE_DB_URL" -f secure-backup/schema.sql
+          supabase db dump --remote="$SUPABASE_DB_URL" -f secure-backup/data.sql --data-only --use-copy \
+            -x "storage.buckets_vectors" -x "storage.vector_indexes"
+          tar -czf secure-backup.tar.gz secure-backup
+
+      - name: Encrypt backup before artifact upload
+        shell: bash
+        run: |
+          set -euo pipefail
+          openssl enc -aes-256-cbc -pbkdf2 -salt -iter 200000 \
+            -in secure-backup.tar.gz \
+            -out tamilan-careers-db-backup.tar.gz.enc \
+            -pass env:BACKUP_ENCRYPTION_KEY
+          sha256sum tamilan-careers-db-backup.tar.gz.enc > tamilan-careers-db-backup.sha256
+          rm -rf secure-backup secure-backup.tar.gz
+
+      - name: Upload encrypted backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tamilan-careers-encrypted-db-backup
+          path: |
+            tamilan-careers-db-backup.tar.gz.enc
+            tamilan-careers-db-backup.sha256
+          retention-days: 7
+          if-no-files-found: error
