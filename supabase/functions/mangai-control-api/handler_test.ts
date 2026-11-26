@@ -20,15 +20,15 @@ function makeHandler(options: MockOptions = {}) {
     assuranceError: options.assuranceError ?? false,
   };
 
-  const fakeCreateClient = ((url: string, key: string) => {
+  const fakeCreateClient = ((_url: string, key: string) => {
     if (key === "anon-test-key") {
       return {
         auth: {
-          getUser: async () => settings.validSession
+          getUser: () => settings.validSession
             ? { data: { user: { id: OWNER_ID, email: "owner@example.test" } }, error: null }
             : { data: { user: null }, error: { message: "Invalid token" } },
           mfa: {
-            getAuthenticatorAssuranceLevel: async () => ({
+            getAuthenticatorAssuranceLevel: () => ({
               data: { currentLevel: settings.assurance },
               error: settings.assuranceError ? { message: "MFA lookup failed" } : null,
             }),
@@ -50,22 +50,21 @@ function makeHandler(options: MockOptions = {}) {
       ) => Promise<unknown>;
     };
     let currentTable = "";
-    let query: MockQuery;
-    query = {
+    const query: MockQuery = {
       select: (..._args: unknown[]) => query,
       eq: (..._args: unknown[]) => query,
       order: (..._args: unknown[]) => query,
       limit: (..._args: unknown[]) => query,
       in: (..._args: unknown[]) => query,
-      maybeSingle: async () => {
+      maybeSingle: () => {
         const table = currentTable;
         if (table === "user_roles") {
-          return { data: settings.isOwner ? { user_id: OWNER_ID } : null, error: null };
+          return Promise.resolve({ data: settings.isOwner ? { user_id: OWNER_ID } : null, error: null });
         }
         if (table === "mangai_owner_config") {
-          return { data: { owner_user_id: OWNER_ID }, error: null };
+          return Promise.resolve({ data: { owner_user_id: OWNER_ID }, error: null });
         }
-        return { data: null, error: null };
+        return Promise.resolve({ data: null, error: null });
       },
       then: (resolve, reject) =>
         Promise.resolve({ data: [], error: null, count: 0 }).then(resolve, reject),
@@ -75,9 +74,9 @@ function makeHandler(options: MockOptions = {}) {
         currentTable = table;
         return query;
       },
-      rpc: async (name: string, _args: Record<string, unknown>) => {
+      rpc: (name: string, _args: Record<string, unknown>) => {
         calls.push(name);
-        return { data: { id: "proposal-test" }, error: null };
+        return Promise.resolve({ data: { id: "proposal-test" }, error: null });
       },
     };
   }) as unknown as typeof createClient;
