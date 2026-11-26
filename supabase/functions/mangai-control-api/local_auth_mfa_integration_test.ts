@@ -76,6 +76,16 @@ async function invoke(
 }
 
 Deno.test("real local Supabase Auth + Edge Function enforces Owner and AAL2", async () => {
+  // Set the disposable fixture password through GoTrue Admin API so the test
+  // does not depend on Auth internal password-hash implementation details.
+  const { error: passwordError } = await adminClient.auth.admin.updateUserById(
+    "11111111-1111-4111-8111-111111111111",
+    { password: ownerPassword, email_confirm: true },
+  );
+  if (passwordError) {
+    throw new Error(`Owner fixture password setup failed: ${passwordError.message}`);
+  }
+
   const { data: signedIn, error: signInError } = await publicClient.auth
     .signInWithPassword({ email: ownerEmail, password: ownerPassword });
   if (signInError || !signedIn.session) {
