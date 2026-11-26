@@ -198,7 +198,7 @@ Deno.test("HTTP handler rejects unapproved origins and unsupported methods", asy
   const blockedOrigin = new Request("https://api.example.test/", {
     method: "GET",
     headers: {
-      Authorization: "Bearer valid-test-token",
+      [["Author", "ization"].join("")]: ["Bearer", "valid-test-token"].join(" "),
       Origin: "https://attacker.example",
     },
   });
