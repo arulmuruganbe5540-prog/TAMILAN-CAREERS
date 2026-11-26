@@ -78,7 +78,9 @@ test("company verification and posting gates are separate for Indian private and
   }
   includes(portal, /private_jobs_verification_status\s*!==\s*['"]verified['"]/, "Private posting must require private-market verification");
   includes(portal, /international_jobs_verification_status\s*!==\s*['"]verified['"]/, "International posting must require international-market verification");
-  includes(portal, /sb\.from\(['"]private_jobs['"]\)\.insert/, "Private posting must use private_jobs");
+  includes(portal, /sb\.from\(['"]job_posting_drafts['"]\)\.insert/, "Private job posting must first enter the review draft queue");
+  includes(portal, /tc_submit_company_job_draft_for_review/, "Private job draft must be sent through the review RPC");
+  includes(portal, /countryName:\s*['"]India['"]/, "Private job draft must be marked for India");
   includes(portal, /sb\.from\(['"]international_jobs['"]\)\.insert/, "International posting must use international_jobs");
   includes(portal, /company_verification_requests/, "Company verification history must be checked");
 });
