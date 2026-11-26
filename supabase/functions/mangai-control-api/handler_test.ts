@@ -172,7 +172,7 @@ Deno.test("Owner write request is rejected when session assurance is only AAL1",
   const response = await handler(request("POST", "/", {
     action: "create_proposal",
     title: "Test proposal",
-  }));
+  }, testJwt("aal1")));
   assertEquals(response.status, 403);
   assertEquals(calls.length, 0);
 });
