@@ -26,7 +26,7 @@ const adminPages = (await readdir(root)).filter((name) => name.startsWith("super
 assert.ok(adminPages.length >= 20, "Super Admin page inventory should be present");
 for (const name of adminPages) {
   const html = await readFile(resolve(root, name), "utf8");
-  assert.match(html, /admin-language\\.js|data-lang-choice|data-ui-lang/, name + " should expose Tamil and English language support");
+  assert.match(html, /admin-language[.]js|data-lang-choice|data-ui-lang/, name + " should expose Tamil and English language support");
 }
 
 const supabaseStub = `
