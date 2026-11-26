@@ -183,29 +183,19 @@ Deno.serve(async (req: Request) => {
       if (typeof body.proposal_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.proposal_id)) {
         return json({ error: "Valid proposal_id is required" }, 400, origin);
       }
-      const mapping = {
-        allow_testing: { status: "allowed_for_testing", decision: "allow_testing" },
-        reject_proposal: { status: "rejected", decision: "reject" },
-        keep_existing: { status: "kept_existing", decision: "keep_existing" },
-      } as const;
-      const choice = mapping[body.action as keyof typeof mapping];
-      const { data: proposal, error: proposalError } = await admin.from("mangai_change_proposals")
-        .select("id,status,risk_level").eq("id", body.proposal_id).maybeSingle();
-      if (proposalError || !proposal) return json({ error: "Proposal not found" }, 404, origin);
-      if (proposal.status !== "proposed") return json({ error: "Only proposed changes can receive this decision" }, 409, origin);
-      const { data: updated, error: updateError } = await admin.from("mangai_change_proposals")
-        .update({ status: choice.status, updated_at: new Date().toISOString() })
-        .eq("id", body.proposal_id).eq("status", "proposed")
-        .select("id,status").maybeSingle();
-      if (updateError || !updated) return json({ error: "Proposal decision could not be saved" }, 409, origin);
-      const { error: approvalError } = await admin.from("mangai_owner_approvals").insert({
-        proposal_id: body.proposal_id,
-        decision: choice.decision,
-        owner_user_id: user.id,
-        rationale: typeof body.rationale === "string" ? body.rationale.slice(0, 2000) : "",
+      const decision = body.action === "allow_testing"
+        ? "allow_testing"
+        : body.action === "reject_proposal" ? "reject" : "keep_existing";
+      const { data: updated, error: decisionError } = await admin.rpc("mangai_record_proposal_decision", {
+        p_proposal_id: body.proposal_id,
+        p_decision: decision,
+        p_owner_user_id: user.id,
+        p_rationale: typeof body.rationale === "string" ? body.rationale.slice(0, 2000) : "",
+        p_request_id: requestId,
       });
-      if (approvalError) return json({ error: "Decision saved but approval history write failed; contact administrator" }, 500, origin);
-      await writeAudit("proposal_" + choice.decision, "proposal", body.proposal_id, { previous_status: proposal.status, new_status: choice.status, risk_level: proposal.risk_level });
+      if (decisionError || !updated) {
+        return json({ error: "Proposal decision was not recorded. It may already have a decision or the database migration is not installed." }, 409, origin);
+      }
       return json({ ok: true, proposal: updated }, 200, origin);
     }
 
