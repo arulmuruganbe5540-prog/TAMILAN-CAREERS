@@ -60,3 +60,10 @@ A proposal may be allowed for isolated testing without authorizing production de
 - Added `.github/workflows/site-regression-check.yml` to run it for relevant PR/development-branch changes.
 - Coverage includes English/mobile page shells, student/employer login and registration forms, private/international listing separation, distinct application tables, company-market verification gates, Owner Control read-only boundary, public-page isolation and local file links.
 - A passing static suite is not proof of runtime authentication, database authorization, resume upload, email delivery, or Android browser behavior. Those remain separate release gates.
+
+
+## Latest repository CI result — 2026-11-26
+- **Passed:** Website Regression Checks (Node.js 22, 8 test groups; static-only coverage).
+- **Passed:** Mangaiyarkarasi Control API Checks: Deno format, lint, type-check and static SQL/RPC/MFA guard assertions.
+- **Not run:** PostgreSQL migration/smoke SQL, Edge Function runtime authorization, real AAL2 MFA session tests, live form submissions, Android/desktop browser checks, backups/restore and scheduled monitoring.
+- CI links: [Website Regression Checks](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions) · [Control API Checks](https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions).
