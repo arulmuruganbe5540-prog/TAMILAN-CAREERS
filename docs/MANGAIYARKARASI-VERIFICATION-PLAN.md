@@ -103,6 +103,6 @@ A proposal may be allowed for isolated testing without authorizing production de
 ## Gate 2C — Isolated HTTP request-flow verification (2026-11-26)
 - Refactored the Edge Function entrypoint into an injectable `createControlApiHandler` factory. Production still starts through `Deno.serve`; tests inject mock Supabase clients and environment values without connecting to hosted Supabase.
 - Added HTTP-level tests for missing bearer token (401), invalid/expired session (401), authenticated non-owner (403), Owner read-only access at AAL1, Owner write denial at AAL1 (403), Owner allow-listed proposal write at AAL2 (201), security-governance pause denial (403), production deploy disabled (409), disallowed origin (403), and unsupported method (405).
-- **Passed:** Control API workflow run `45853697380` — Deno format check, lint, TypeScript check, all 16 Deno tests (7 pure policy groups + 9 HTTP request-flow groups), and ephemeral PostgreSQL migration/RLS/transaction checks.
-- **Passed:** Browser smoke run `45853692846`; static website regression run `45853692787`.
+- **Passed:** Control API workflow run `45853706305` — Deno format check, lint, TypeScript check, all 16 Deno tests (7 pure policy groups + 9 HTTP request-flow groups), and ephemeral PostgreSQL migration/RLS/transaction checks.
+- **Passed:** Browser smoke run `45853705787`; static website regression run `45853705848`.
 - **Limitations:** HTTP tests use mocked Supabase clients. They verify the actual handler's request routing and policy gates, but do not validate hosted JWT verification, a real enrolled MFA factor, Supabase Edge Runtime behavior, deployed function secrets, or live RPC grants. No hosted project or production data was touched.
