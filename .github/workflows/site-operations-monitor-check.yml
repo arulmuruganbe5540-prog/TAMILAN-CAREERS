@@ -1,0 +1,31 @@
+name: Operations Monitor Unit Tests
+
+on:
+  pull_request:
+    paths:
+      - "scripts/site-health-check.mjs"
+      - "tests/monitor/**"
+      - ".github/workflows/site-operations-monitor-check.yml"
+  push:
+    branches:
+      - "autonomous-ops-monitoring"
+    paths:
+      - "scripts/site-health-check.mjs"
+      - "tests/monitor/**"
+      - ".github/workflows/site-operations-monitor-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  monitor-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run monitor unit tests
+        run: node --test tests/monitor/site-health-check.test.mjs
