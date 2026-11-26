@@ -8,8 +8,11 @@ const allowedOrigins = new Set([
 
 function corsHeaders(origin: string | null) {
   return {
-    "Access-Control-Allow-Origin": origin && allowedOrigins.has(origin) ? origin : "https://tamilancareers.in",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-request-id",
+    "Access-Control-Allow-Origin": origin && allowedOrigins.has(origin)
+      ? origin
+      : "https://tamilancareers.in",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-request-id",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Vary": "Origin",
   };
@@ -18,7 +21,11 @@ function corsHeaders(origin: string | null) {
 function json(data: unknown, status = 200, origin: string | null = null) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { ...corsHeaders(origin), "Content-Type": "application/json", "Cache-Control": "no-store" },
+    headers: {
+      ...corsHeaders(origin),
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    },
   });
 }
 
@@ -29,13 +36,19 @@ function isObject(value: unknown): value is Record<string, unknown> {
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     const preflightOrigin = req.headers.get("origin");
-    if (preflightOrigin && !allowedOrigins.has(preflightOrigin)) return new Response("Origin not allowed", { status: 403 });
+    if (preflightOrigin && !allowedOrigins.has(preflightOrigin)) {
+      return new Response("Origin not allowed", { status: 403 });
+    }
     return new Response("ok", { headers: corsHeaders(preflightOrigin) });
   }
 
   const origin = req.headers.get("origin");
-  if (origin && !allowedOrigins.has(origin)) return json({ error: "Origin not allowed" }, 403, origin);
-  if (!["GET", "POST"].includes(req.method)) return json({ error: "Method not allowed" }, 405, origin);
+  if (origin && !allowedOrigins.has(origin)) {
+    return json({ error: "Origin not allowed" }, 403, origin);
+  }
+  if (!["GET", "POST"].includes(req.method)) {
+    return json({ error: "Method not allowed" }, 405, origin);
+  }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
@@ -45,7 +58,9 @@ Deno.serve(async (req: Request) => {
   }
 
   const authorization = req.headers.get("authorization") || "";
-  if (!authorization.startsWith("Bearer ")) return json({ error: "Login required" }, 401, origin);
+  if (!authorization.startsWith("Bearer ")) {
+    return json({ error: "Login required" }, 401, origin);
+  }
 
   const userClient = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: authorization } },
@@ -53,7 +68,9 @@ Deno.serve(async (req: Request) => {
   });
   const { data: userData, error: userError } = await userClient.auth.getUser();
   const user = userData?.user;
-  if (userError || !user) return json({ error: "Session is invalid or expired" }, 401, origin);
+  if (userError || !user) {
+    return json({ error: "Session is invalid or expired" }, 401, origin);
+  }
 
   const ownerId = user.id;
   const admin = createClient(supabaseUrl, serviceRoleKey, {
@@ -61,12 +78,25 @@ Deno.serve(async (req: Request) => {
   });
 
   // The automation agent is never an identity. Only the existing, single Owner is accepted.
-  const [{ data: roleRow, error: roleError }, { data: ownerRow, error: ownerError }] = await Promise.all([
-    admin.from("user_roles").select("user_id").eq("user_id", user.id).eq("role", "super_admin").maybeSingle(),
-    admin.from("mangai_owner_config").select("owner_user_id").eq("singleton", true).maybeSingle(),
+  const [
+    { data: roleRow, error: roleError },
+    { data: ownerRow, error: ownerError },
+  ] = await Promise.all([
+    admin.from("user_roles").select("user_id").eq("user_id", user.id).eq(
+      "role",
+      "super_admin",
+    ).maybeSingle(),
+    admin.from("mangai_owner_config").select("owner_user_id").eq(
+      "singleton",
+      true,
+    ).maybeSingle(),
   ]);
   if (roleError || ownerError) {
-    return json({ error: "Control registry is not installed or could not be checked" }, 503, origin);
+    return json(
+      { error: "Control registry is not installed or could not be checked" },
+      503,
+      origin,
+    );
   }
   if (!roleRow || !ownerRow || ownerRow.owner_user_id !== user.id) {
     return json({ error: "Master Owner permission required" }, 403, origin);
@@ -77,15 +107,21 @@ Deno.serve(async (req: Request) => {
   if (req.method === "GET") {
     const action = new URL(req.url).searchParams.get("action") || "overview";
     if (action === "modules") {
-      const { data, error } = await admin.from("mangai_control_modules").select("*").order("category").order("module_key");
+      const { data, error } = await admin.from("mangai_control_modules").select(
+        "*",
+      ).order("category").order("module_key");
       if (error) return json({ error: "Unable to load modules" }, 500, origin);
       return json({ modules: data || [] }, 200, origin);
     }
     if (action === "proposals") {
       const { data, error } = await admin.from("mangai_change_proposals")
-        .select("id,module_key,title,description,risk_level,status,expected_impact,created_at,updated_at")
+        .select(
+          "id,module_key,title,description,risk_level,status,expected_impact,created_at,updated_at",
+        )
         .order("created_at", { ascending: false }).limit(100);
-      if (error) return json({ error: "Unable to load proposals" }, 500, origin);
+      if (error) {
+        return json({ error: "Unable to load proposals" }, 500, origin);
+      }
       return json({ proposals: data || [] }, 200, origin);
     }
     if (action === "alerts") {
@@ -95,9 +131,12 @@ Deno.serve(async (req: Request) => {
       if (error) return json({ error: "Unable to load alerts" }, 500, origin);
       return json({ alerts: data || [] }, 200, origin);
     }
-    if (action !== "overview") return json({ error: "Unknown read action" }, 400, origin);
+    if (action !== "overview") {
+      return json({ error: "Unknown read action" }, 400, origin);
+    }
 
-    const [modules, openProposals, openAlerts, recentRuns, recentChecks] = await Promise.all([
+    const [modules, openProposals, openAlerts, recentRuns, recentChecks] =
+      await Promise.all([
       admin.from("mangai_control_modules").select("module_key", {
         count: "exact",
         head: true,
