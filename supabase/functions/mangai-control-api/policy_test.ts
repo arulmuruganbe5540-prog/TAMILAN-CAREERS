@@ -1,8 +1,8 @@
 import {
   authorizeMasterOwner,
   hasWriteAssurance,
-  isProtectedModuleControl,
   isProductionReleaseAction,
+  isProtectedModuleControl,
 } from "./policy.ts";
 import { assertEquals } from "jsr:@std/assert@1";
 
