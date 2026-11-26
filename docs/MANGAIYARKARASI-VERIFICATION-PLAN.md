@@ -75,3 +75,10 @@ A proposal may be allowed for isolated testing without authorizing production de
 - **Passed:** Transaction tests for module pause/resume, proposal creation and proposal decisions. An injected audit insert failure rolled back each associated state change; the healthy decision path committed proposal status, approval and audit together.
 - **Passed:** Deno format, lint and type-check; website static regression suite also passed in CI.
 - **Scope limitation:** The PostgreSQL 16 job is an ephemeral test container, not a hosted Supabase database. It does not prove Supabase Auth JWT/AAL2, hosted Data API exposure, Edge Function runtime, storage, browser forms or Android behavior. Those gates remain open.
+
+
+## Gate 2A — Isolated mobile browser smoke result (2026-11-26)
+- **Passed:** Playwright/Chromium browser smoke suite on the PR branch. It opened 10 key pages and verified mobile viewport metadata, Student/Employer auth tab switching, password mismatch validation, password visibility toggles, unauthenticated Company Portal and application guards, and Government/Private/International page labels.
+- The browser suite stubs the Supabase client and blocks external network resources. It validates HTML/DOM and front-end interactions only; it does not test real authentication, email delivery, MFA/AAL2, database policies, job posting, applications, or uploads.
+- CI result: https://github.com/arulmuruganbe5540-prog/TAMILAN-CAREERS/actions/runs/45850823649
+- **Still required:** authenticated hosted Supabase test account/session, enrolled MFA for AAL1/AAL2 cases, test-only records, and a real Android browser session. No production test account or production data was used.
