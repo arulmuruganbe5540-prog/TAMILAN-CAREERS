@@ -1,4 +1,5 @@
 name: Mangaiyarkarasi Control API Checks
+# Keep this workflow scoped to control API, migration, and security-test changes.
 
 on:
   pull_request:
