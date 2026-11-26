@@ -4,6 +4,15 @@ import { createControlApiHandler } from "./index.ts";
 
 const OWNER_ID = "11111111-1111-4111-8111-111111111111";
 
+function testJwt(aal: "aal1" | "aal2"): string {
+  const payload = btoa(JSON.stringify({
+    sub: OWNER_ID,
+    aal,
+    exp: Math.floor(Date.now() / 1000) + 3600,
+  })).replace(/=/g, "").replace(/\\+/g, "-").replace(/\\//g, "_");
+  return `header.${payload}.signature`;
+}
+
 type MockOptions = {
   validSession?: boolean;
   isOwner?: boolean;
