@@ -127,7 +127,7 @@ function request(
   method: string,
   path = "/",
   body?: unknown,
-  token = "valid-test-token",
+  token = testJwt("aal2"),
 ) {
   return new Request(`https://api.example.test${path}`, {
     method,
