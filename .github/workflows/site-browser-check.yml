@@ -13,6 +13,7 @@ on:
       - "mangai-english-admin-ui"
     paths:
       - "*.html"
+      - "admin-language.js"
       - "tests/browser/**"
       - ".github/workflows/site-browser-check.yml"
 
