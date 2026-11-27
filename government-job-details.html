@@ -21,7 +21,7 @@
 <meta property="og:description" content="Official government recruitment details, eligibility, vacancies and application dates.">
 <meta property="og:url" content="https://tamilancareers.in/government-job-details.html">
 <link rel="canonical" href="https://tamilancareers.in/government-job-details.html">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="tamil-regional-content.js?v=1"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#14213d;font:15px Arial,Helvetica,sans-serif}.top{background:#101d3a;color:#fff;padding:18px max(16px,calc((100% - 1000px)/2))}.top h1{margin:0;font-size:22px}.top p{margin:6px 0 0;color:#d6e5f6;font-size:13px}.wrap{width:min(1000px,100%);margin:24px auto;padding:0 16px}.back{display:inline-block;margin-bottom:16px;color:#075e9b;font-weight:700}.title{font-size:24px;margin:0 0 8px}.muted{color:#65738b;line-height:1.55}.details{width:100%;border-collapse:collapse;background:#fff;margin:18px 0;min-width:0}.details th,.details td{border:1px solid #dce4ef;padding:12px;text-align:left;vertical-align:top;line-height:1.5}.details th{width:30%;background:#eaf0f8}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.actions a{display:inline-block;background:#176b9e;color:#fff;padding:11px 16px;border-radius:4px;text-decoration:none;font-weight:700}.actions a.secondary{background:#087443}.notice{padding:14px 0;color:#65738b;border-top:1px solid #dce4ef;font-size:13px}
 @media(max-width:600px){.details th{width:38%}.title{font-size:21px}}
@@ -171,15 +171,28 @@ async function load(){
 if(!id){document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');host.innerHTML='<h2 class="title">Job not found</h2><p class="muted">A valid job notification was not selected. Return to the Home Page and choose a published job.</p>';return;}
 const {data,error}=await sb.from('government_jobs').select('*').eq('id',id).eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).maybeSingle();
 if(error||!data){document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');host.innerHTML='<h2 class="title">Job details unavailable</h2><p class="muted">This notification may no longer be published, or the link may be invalid.</p>';return;}
-const j=data;setJobSeo(j);const qual=Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level;
+let j=data;
+const tamilMode=window.TCTamil&&window.TCTamil.isTamilNaduGovernment(j);
+if(tamilMode){
+ const trs=await window.TCTamil.loadApprovedTranslations(sb,'government_job_translations',[j.id]);
+ const t=trs[j.id]||{};
+ ['job_title','department_name','employer_name','location','education_level','description','age_limit','age_relaxation','application_fee','selection_process','how_to_apply','additional_info','experience_requirement','recruitment_authority','government_category','job_type_label'].forEach(k=>{if(typeof t[k]==='string'&&t[k].trim())j[k]=t[k]});
+ document.documentElement.lang='ta';
+ document.title=(t.job_title||j.job_title)+' | தமிழ்நாடு அரசு வேலைவாய்ப்புகள் | TAMILAN CAREERS';
+ const heading=document.querySelector('header p');if(heading)heading.textContent='அரசு வேலைவாய்ப்பு விவரங்கள்';
+}
+setJobSeo(j);
+const qual=Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level;
+const labelsTa={'Department':'துறை','Recruitment Authority':'ஆட்சேர்ப்பு நிறுவனம்','Government Category':'அரசுப் பிரிவு','State / Union Territory':'மாநிலம் / யூனியன் பிரதேசம்','Job Post':'பணியின் பெயர்','Job Type':'பணி வகை','Notification Number':'அறிவிப்பு எண்','Qualification':'கல்வித் தகுதி','Vacancies':'காலிப்பணியிடங்கள்','Age Limit':'வயது வரம்பு','Age Relaxation':'வயது தளர்வு','Experience':'அனுபவம்','Application Fee':'விண்ணப்பக் கட்டணம்','Location':'பணியிடம்','Salary':'சம்பளம்','Notification Date':'அறிவிப்பு தேதி','Application Start Date':'விண்ணப்பம் தொடங்கும் தேதி','Last Date to Apply':'விண்ணப்பிக்க கடைசி தேதி','Exam Date':'தேர்வு தேதி','Selection Process':'தேர்வு முறை','How to Apply':'விண்ணப்பிக்கும் முறை','Additional Information':'கூடுதல் தகவல்கள்','Job Description':'பணி விவரம்'};
+const label=k=>tamilMode?(labelsTa[k]||k):k;
 const fields=[
-['Department',j.department_name||j.employer_name],['Recruitment Authority',j.recruitment_authority],['Government Category',j.government_category],['State / Union Territory',j.state_name],
-['Job Post',j.job_title],['Job Type',j.job_type_label||j.employment_type],['Notification Number',j.notification_number],
-['Qualification',qual],['Vacancies',j.vacancies],['Age Limit',j.age_limit],['Age Relaxation',j.age_relaxation],
-['Experience',j.experience_requirement],['Application Fee',j.application_fee],['Location',j.location],
-['Salary',j.salary_min||j.salary_max?String(j.salary_min||'')+(j.salary_min&&j.salary_max?' - ':'')+String(j.salary_max||'')+' '+(j.salary_currency||'INR')+' / '+(j.salary_period||''):'—'],
-['Notification Date',fmt(j.notification_date)],['Application Start Date',fmt(j.application_start_date)],['Last Date to Apply',fmt(j.application_deadline)],['Exam Date',fmt(j.exam_date)],
-['Selection Process',j.selection_process],['How to Apply',j.how_to_apply],['Additional Information',j.additional_info],['Job Description',j.description]
+[label('Department') ,j.department_name||j.employer_name],[label('Recruitment Authority') ,j.recruitment_authority],[label('Government Category') ,j.government_category],[label('State / Union Territory') ,j.state_name],
+[label('Job Post') ,j.job_title],[label('Job Type') ,j.job_type_label||j.employment_type],[label('Notification Number') ,j.notification_number],
+[label('Qualification') ,qual],[label('Vacancies') ,j.vacancies],[label('Age Limit') ,j.age_limit],[label('Age Relaxation') ,j.age_relaxation],
+[label('Experience') ,j.experience_requirement],[label('Application Fee') ,j.application_fee],[label('Location') ,j.location],
+[label('Salary') ,j.salary_min||j.salary_max?String(j.salary_min||'')+(j.salary_min&&j.salary_max?' - ':'')+String(j.salary_max||'')+' '+(j.salary_currency||'INR')+' / '+(j.salary_period||''):'—'],
+[label('Notification Date') ,fmt(j.notification_date)],[label('Application Start Date') ,fmt(j.application_start_date)],[label('Last Date to Apply') ,fmt(j.application_deadline)],[label('Exam Date') ,fmt(j.exam_date)],
+[label('Selection Process') ,j.selection_process],[label('How to Apply') ,j.how_to_apply],[label('Additional Information') ,j.additional_info],[label('Job Description') ,j.description]
 ];
 const notification=url(j.official_notification_url),apply=url(j.application_url,true),official=url(j.official_website_url),jobImage=url(j.job_image_url);
 const prep=j.exam_preparation&&typeof j.exam_preparation==='object'?j.exam_preparation:{};
