@@ -81,11 +81,12 @@ return '<tr><td><a href="private-job-details.html?id='+encodeURIComponent(j.id)+
 }
 function renderTable(list,tbody,pager){
 let page=1;
+const tamilList=list.length>0&&list.every(j=>window.TCTamil&&window.TCTamil.isTamilNaduPrivate(j));
 function draw(){
 const total=Math.max(1,Math.ceil(list.length/PAGE_SIZE)),shown=list.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
-tbody.innerHTML=shown.length?shown.map(jobRow).join(''):'<tr><td colspan="3">No published jobs match this selection yet.</td></tr>';
+tbody.innerHTML=shown.length?shown.map(jobRow).join(''):'<tr><td colspan="3">'+(tamilList?'இந்தத் தேர்வுக்கு பொருந்தும் வேலைவாய்ப்புகள் இல்லை.':'No published jobs match this selection yet.')+'</td></tr>';
 pager.innerHTML='';
-if(list.length>PAGE_SIZE){const prev=document.createElement('button');prev.textContent='Previous';prev.disabled=page===1;prev.onclick=()=>{page--;draw()};const label=document.createElement('span');label.textContent='Page '+page+' of '+total;const next=document.createElement('button');next.textContent='Next';next.disabled=page===total;next.onclick=()=>{page++;draw()};pager.append(prev,label,next)}
+if(list.length>PAGE_SIZE){const prev=document.createElement('button');prev.textContent=tamilList?'முந்தையது':'Previous';prev.disabled=page===1;prev.onclick=()=>{page--;draw()};const label=document.createElement('span');label.textContent=tamilList?'பக்கம் '+page+' / '+total:'Page '+page+' of '+total;const next=document.createElement('button');next.textContent=tamilList?'அடுத்தது':'Next';next.disabled=page===total;next.onclick=()=>{page++;draw()};pager.append(prev,label,next)}
 }
 draw();
 }
@@ -95,7 +96,7 @@ else status.textContent=allRowsTamilNadu?jobs.length+' தனியார் வ
 function renderSubpage(){
 const view=params.get('view');if(!view)return;
 const content=document.getElementById('pageContent');
-const back='<p><a class="back-link" href="'+kind+'-jobs.html">← Back to '+(intl?'International':'Private')+' Jobs</a></p>';
+const back='<p><a class="back-link" href="'+kind+'-jobs.html">'+(allRowsTamilNadu?'← தனியார் வேலைவாய்ப்புகளுக்குத் திரும்பு':'← Back to '+(intl?'International':'Private')+' Jobs')+'</a></p>';
 let heading='',tiles='',list=jobs,extra='';
 if(view==='study'){
 const q=params.get('qualification')||'';heading=esc(q)+' Trades & Branches';const branchList=studyBranches[q]||[];
@@ -117,8 +118,10 @@ extra='<div class="section-title">Related Qualifications</div><div class="box-gr
 list=jobs.filter(j=>String(j.job_title||'').toLowerCase().includes(r.toLowerCase())||r.toLowerCase().includes(String(j.job_title||'').toLowerCase()));
 if(intl&&c)list=list.filter(j=>String(j.country_name||'').toLowerCase()===c.toLowerCase());
 }else return;
+if(allRowsTamilNadu){heading=heading.replace(' Trades & Branches',' தொழிற்பிரிவுகள் மற்றும் துறைகள்').replace(' · Matching Jobs',' · பொருந்தும் வேலைவாய்ப்புகள்').replace(' Qualification Jobs',' கல்வித் தகுதி வேலைவாய்ப்புகள்').replace(' · Job Roles',' · பணிப் பிரிவுகள்');if(extra)extra=extra.replace('Select your ','உங்கள் ').replace(' trade or branch to view matching vacancies.',' தொழில் அல்லது பிரிவைத் தேர்ந்தெடுத்து பொருந்தும் வேலைவாய்ப்புகளைப் பார்க்கவும்.').replace('Required Skills','தேவையான திறன்கள்').replace('Related Courses','தொடர்புடைய படிப்புகள்').replace('Skills listed by the employer for this role','இந்தப் பணிக்காக நிறுவனம் குறிப்பிட்ட திறன்கள்').replace('Education and training related to this role','இந்தப் பணிக்குத் தொடர்புடைய கல்வி மற்றும் பயிற்சி').replace('Matching Jobs','பொருந்தும் வேலைவாய்ப்புகள்');}
 content.innerHTML=back+'<h2>'+heading+'</h2>'+(tiles?'<div class="box-grid '+(view==='study'?'study-grid':'role-grid')+'">'+tiles+'</div>':'')+extra+(view==='category'||view==='study'?'':'<div class="section-title">Matching Jobs</div><div class="job-table-wrap"><table class="job-table"><thead><tr><th>JOB TITLE</th><th>QUALIFICATION</th><th>LOCATION</th></tr></thead><tbody id="subRows"></tbody></table></div><div class="job-pager" id="subPager"></div>');
 if(view!=='category'&&view!=='study')renderTable(list,document.getElementById('subRows'),document.getElementById('subPager'));
+if(allRowsTamilNadu){content.querySelectorAll('.job-table thead th').forEach((el,i)=>el.textContent=['பணியின் பெயர்','கல்வித் தகுதி','பணியிடம்'][i]||el.textContent);content.querySelectorAll('.section-title').forEach(el=>{if(el.textContent==='Matching Jobs')el.textContent='பொருந்தும் வேலைவாய்ப்புகள்';if(el.textContent==='Related Qualifications')el.textContent='தொடர்புடைய கல்வித் தகுதிகள்';if(el.textContent==='Related Skills & Courses')el.textContent='தொடர்புடைய திறன்கள் மற்றும் படிப்புகள்';});}
 }
 renderSubpage();
 })();
