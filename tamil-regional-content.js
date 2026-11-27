@@ -69,7 +69,7 @@ const labels={
 'Check the official recruitment website':'அதிகாரப்பூர்வ ஆட்சேர்ப்பு இணையதளத்தைப் பார்க்கவும்',
 'Important: Read the official notification carefully and confirm eligibility, dates and application instructions on the recruiting authority website before applying.':'முக்கியம்: விண்ணப்பிக்கும் முன் அதிகாரப்பூர்வ அறிவிப்பைப் படித்து, தகுதி, தேதிகள் மற்றும் விண்ணப்ப வழிமுறைகளை ஆட்சேர்ப்பு நிறுவனத்தின் இணையதளத்தில் உறுதிப்படுத்தவும்.'
 };
-function isTamilNaduGovernment(job){const state=String(job?.state_name||'').trim().toLowerCase();const scope=String(job?.government_scope||'').trim().toLowerCase();return ['tamil nadu','tamilnadu','tn'].includes(state)&&(!scope||scope.includes('state'))}
+function isTamilNaduGovernment(job){const state=String(job?.state_name||'').trim().toLowerCase();const scope=String(job?.government_scope||'').trim().toLowerCase();return ['tamil nadu','tamilnadu','tn'].includes(state)&&['state','state government'].includes(scope)}
 function isTamilNaduPrivate(job){const value=String(job?.location||'').toLowerCase();return tamilNaduPlaces.some(p=>value.includes(p))}
 async function loadApprovedTranslations(client,table,ids){
  const unique=[...new Set((ids||[]).filter(Boolean))];if(!unique.length)return {};
