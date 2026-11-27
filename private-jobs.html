@@ -124,6 +124,7 @@ if(view!=='category'&&view!=='study')renderTable(list,document.getElementById('s
 if(allRowsTamilNadu){content.querySelectorAll('.job-table thead th').forEach((el,i)=>el.textContent=['பணியின் பெயர்','கல்வித் தகுதி','பணியிடம்'][i]||el.textContent);content.querySelectorAll('.section-title').forEach(el=>{if(el.textContent==='Matching Jobs')el.textContent='பொருந்தும் வேலைவாய்ப்புகள்';if(el.textContent==='Related Qualifications')el.textContent='தொடர்புடைய கல்வித் தகுதிகள்';if(el.textContent==='Related Skills & Courses')el.textContent='தொடர்புடைய திறன்கள் மற்றும் படிப்புகள்';});}
 }
 renderSubpage();
+if(allRowsTamilNadu&&window.TCTamil){window.TCTamil.localizeStatic(document.body);}
 })();
 </script>
 <script>
