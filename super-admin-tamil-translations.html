@@ -63,7 +63,7 @@ async function load(){
  if(kind==='government')q=q.eq('state_name','Tamil Nadu');
  const {data,error}=await q;
  if(error){setStatus('Could not load jobs: '+error.message,true);return}
- rows=(data||[]).filter(j=>kind==='government'||tnCities.some(city=>String(j.location||'').toLowerCase().includes(city)));
+ rows=(data||[]).filter(j=>kind==='government'?['state','state government'].includes(String(j.government_scope||'').trim().toLowerCase()):tnCities.some(city=>String(j.location||'').toLowerCase().includes(city)));
  const trTable=kind==='government'?'government_job_translations':'private_job_translations';
  const ids=rows.map(j=>j.id);
  if(ids.length){const {data:trs,error:trError}=await db.from(trTable).select('*').in('job_id',ids);if(trError){setStatus('Translation records could not be loaded: '+trError.message,true);return}translations=trs||[]}else translations=[];
@@ -85,7 +85,9 @@ function parseEditor(){try{return JSON.parse($('translation').value)}catch(e){th
 async function persist(state){
  if(!selected)return;
  let content;try{content=parseEditor()}catch(e){setStatus(e.message,true);return}
+ if(state==='approved'&&existing?.translation_status!=='pending_review'){setStatus('Only translations submitted for review can be approved. Save the draft, then send it for review first.',true);return}
  if(state==='approved'&&(!String(content.job_title||'').trim()||!String(content.description||'').trim())){setStatus('Tamil Job Title and Tamil Description are required before approval.',true);return}
+ if(state==='approved'&&!window.confirm('Approve this Tamil translation? Approved text may become visible on the public website.'))return
  const table=kind==='government'?'government_job_translations':'private_job_translations';
  const existing=currentTranslation(selected);
  const payload={job_id:selected.id,language_code:'ta',translated_content:content,source_snapshot:sourceFields(selected),translation_status:state,translation_method:'admin',reviewed_by:state==='approved'?user.id:null,reviewed_at:state==='approved'?new Date().toISOString():null,updated_at:new Date().toISOString()};

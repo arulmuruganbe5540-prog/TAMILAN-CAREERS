@@ -40,6 +40,8 @@ create index if not exists private_job_translations_status_idx
 alter table public.government_job_translations enable row level security;
 alter table public.private_job_translations enable row level security;
 
+revoke all privileges on table public.government_job_translations from public, anon, authenticated, service_role;
+revoke all privileges on table public.private_job_translations from public, anon, authenticated, service_role;
 grant select on public.government_job_translations to anon, authenticated;
 grant select, insert, update, delete on public.government_job_translations to authenticated;
 grant select on public.private_job_translations to anon, authenticated;
