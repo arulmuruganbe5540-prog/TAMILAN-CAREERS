@@ -25,7 +25,7 @@
 (async()=>{const db=supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2'),id=new URLSearchParams(location.search).get('id'),status=document.getElementById('status'),host=document.getElementById('job');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const url=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
-const date=v=>v?new Date(v).toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}):'Not specified';
+const date=v=>v?new Date(v).toLocaleDateString(document.documentElement.lang==='ta'?'ta-IN':'en-IN',{day:'2-digit',month:'long',year:'numeric'}):'Not specified';
 
 
 function sharePanel(title){const pageUrl=encodeURIComponent(location.href),shareText=encodeURIComponent(title+' | TAMILAN CAREERS');return '<section class="share-panel"><h2>'+(tamilMode?'இந்த வேலைவாய்ப்பைப் பகிரவும்':'Share This Job')+'</h2><div class="share-actions"><a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u='+pageUrl+'">Facebook</a><a class="wa" target="_blank" rel="noopener noreferrer" href="https://api.whatsapp.com/send?text='+shareText+'%20'+pageUrl+'">WhatsApp</a><button type="button" class="instagram" data-native-share>Instagram</button><a class="wa" target="_blank" rel="noopener noreferrer" href="https://api.whatsapp.com/send?text='+shareText+'%20'+pageUrl+'">WhatsApp Group</a><button type="button" class="copy" data-copy-link>Copy Link</button></div></section>';}
