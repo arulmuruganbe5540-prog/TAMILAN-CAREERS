@@ -58,7 +58,7 @@ const labels={
 'This job is unavailable or no longer accepting applications.':'இந்த வேலைவாய்ப்பு கிடைக்கவில்லை அல்லது விண்ணப்பங்கள் ஏற்கப்படவில்லை.',
 'Application submitted successfully. You can track its status in your Job Seeker Dashboard.':'விண்ணப்பம் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது. வேலைதேடுபவர் டாஷ்போர்டில் அதன் நிலையைப் பார்க்கலாம்.',
 'You have already applied for this job.':'இந்த வேலைக்கு ஏற்கெனவே விண்ணப்பித்துள்ளீர்கள்.',
-'Please sign in or register':'உள்நுழையவும் அல்லது பதிவு செய்யவும்',,
+'Please sign in or register':'உள்நுழையவும் அல்லது பதிவு செய்யவும்',
 'Apply Online':'இணையவழியில் விண்ணப்பிக்கவும்','Open the official application portal':'அதிகாரப்பூர்வ விண்ணப்ப இணையதளத்தைத் திறக்கவும்',
 'View Official Notification PDF':'அதிகாரப்பூர்வ அறிவிப்பு PDF-ஐப் பார்க்கவும்',
 'Official Website':'அதிகாரப்பூர்வ இணையதளம்','Previous':'முந்தையது','Next':'அடுத்தது',
