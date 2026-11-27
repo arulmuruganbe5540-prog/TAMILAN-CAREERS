@@ -138,16 +138,18 @@ function sharePanel(title){const pageUrl=encodeURIComponent(location.href),share
 function wireShare(){const native=host.querySelector('[data-native-share]'),copy=host.querySelector('[data-copy-link]');native?.addEventListener('click',async()=>{try{if(navigator.share)await navigator.share({title:document.title,text:document.title,url:location.href});else if(navigator.clipboard){await navigator.clipboard.writeText(location.href);native.textContent='Link Copied';}}catch(e){}});copy?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);copy.textContent='Copied';}catch(e){copy.textContent='Copy the page URL from your browser';}});}
 
 function messagePanel(){
- return '<section class="prep-section" id="postMessages"><h2>Comments</h2><p class="muted">Only signed-in users can post. Your account email is shown beside your message.</p><div id="postMessageNotice" class="notice" role="status" aria-live="polite"></div><div id="postMessageList"></div><div id="postMessageAuth"></div><form id="postMessageForm" hidden><label for="postMessageText">Write a comment</label><textarea id="postMessageText" maxlength="2000" required style="width:100%;min-height:90px;padding:10px;border:1px solid #b9c7d8;border-radius:5px"></textarea><button type="submit" id="postMessageBtn" style="margin-top:10px">Post Comment</button></form></section>';
+ return '<section class="prep-section" id="postMessages"><h2>Comments</h2><p class="muted">Only signed-in users can post. Your display name is shown with your comment. Email addresses are kept private.</p><div id="postMessageNotice" class="notice" role="status" aria-live="polite"></div><div id="postMessageList"></div><div id="postMessageAuth"></div><form id="postMessageForm" hidden><label for="postMessageText">Write a comment</label><textarea id="postMessageText" maxlength="2000" required style="width:100%;min-height:90px;padding:10px;border:1px solid #b9c7d8;border-radius:5px"></textarea><button type="submit" id="postMessageBtn" style="margin-top:10px">Post Comment</button></form></section>';
 }
 async function loadMessages(table,jobId){
  const list=document.getElementById('postMessageList'),notice=document.getElementById('postMessageNotice'),authBox=document.getElementById('postMessageAuth'),form=document.getElementById('postMessageForm');
+ const {data:authData,error:authError}=await sb.auth.getUser(),user=authData?.user;
+ let displayName=user?.user_metadata?.full_name||user?.user_metadata?.name||'Member';
+ if(user){const {data:roles}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);if(roles?.length)displayName='Mangaiyarkarasi';}
  const {data,error}=await sb.from(table).select('id,sender_email,message,created_at').eq('job_id',jobId).eq('status','visible').order('created_at',{ascending:true}).limit(100);
  if(error){notice.textContent='Messages could not be loaded right now.';return}
- list.innerHTML=(data||[]).length?(data||[]).map(m=>'<article style="padding:12px 0;border-bottom:1px solid #e1e8f0"><b>'+esc(m.sender_email)+'</b><small style="display:block;color:#65738b">'+fmt(m.created_at)+'</small><p style="white-space:pre-wrap;margin:6px 0">'+esc(m.message)+'</p></article>').join():'<p class="muted">No comments yet.</p>';
- const {data:authData,error:authError}=await sb.auth.getUser(),user=authData?.user;
+ list.innerHTML=(data||[]).length?(data||[]).map(m=>'<article style="padding:12px 0;border-bottom:1px solid #e1e8f0"><b>'+esc(user?.email===m.sender_email?displayName:'Community Member')+'</b><small style="display:block;color:#65738b">'+fmt(m.created_at)+'</small><p style="white-space:pre-wrap;margin:6px 0">'+esc(m.message)+'</p></article>').join():'<p class="muted">No comments yet.</p>';
  if(authError||!user||!user.email){authBox.innerHTML='<p class="muted">Please <a href="auth.html?redirect='+encodeURIComponent(location.pathname+location.search)+'">sign in or register</a> to post a message. Visitors who are not logged in cannot post.</p>';return}
- authBox.textContent='Posting as '+user.email;form.hidden=false;
+ authBox.textContent='Posting as '+displayName+'. Your email is private.';form.hidden=false;
  form.addEventListener('submit',async e=>{
   e.preventDefault();const message=document.getElementById('postMessageText').value.trim(),btn=document.getElementById('postMessageBtn');
   if(!message){notice.textContent='Enter a message before posting.';return}
