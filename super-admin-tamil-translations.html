@@ -75,8 +75,12 @@ function deadlineLabel(job){
  const date=new Date(raw);if(Number.isNaN(date.getTime()))return 'Check deadline';
  const deadlineDay=date.toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
  const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
- if(deadlineDay<today)return 'Deadline passed';
- if(deadlineDay===today)return 'Deadline today';
+ const hasTime=typeof raw==='string'&&(/[T ]\\d{2}:\\d{2}/.test(raw));
+ if(deadlineDay<today||(hasTime&&date.getTime()<Date.now()))return 'Deadline passed';
+ if(deadlineDay===today){
+  if(hasTime)return 'Deadline today · '+date.toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'});
+  return 'Deadline today';
+ }
  return 'Deadline '+date.toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'});
 }
 function renderList(){
