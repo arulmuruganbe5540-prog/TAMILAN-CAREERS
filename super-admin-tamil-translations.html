@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Tamil Content Review | TAMILAN CAREERS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--green:#16816d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px/1.55 Arial,sans-serif}
+header{padding:16px 20px;background:#0d2036;border-bottom:1px solid var(--line)}header a{color:var(--cyan);text-decoration:none}
+main{max-width:1450px;margin:auto;padding:22px}.status{padding:12px;border-radius:9px;background:#183b55;margin:14px 0}.error{background:#512a32}
+.layout{display:grid;grid-template-columns:minmax(280px,390px) minmax(0,1fr);gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;min-width:0}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.toolbar input,.toolbar select,textarea,input{background:#08192c;color:white;border:1px solid #3b5a79;border-radius:7px;padding:10px;font:inherit}
+.toolbar input{flex:1;min-width:130px}.records{display:grid;gap:8px;max-height:72vh;overflow:auto}
+.record{width:100%;text-align:left;background:#0a1b30;color:white;border:1px solid #294765;border-radius:9px;padding:12px;cursor:pointer}
+.record.active{border-color:var(--cyan);background:#12324c}.record small{display:block;color:var(--muted);margin-top:4px}
+h1{margin:0;font-size:24px}h2{font-size:18px;margin:0 0 8px}h3{font-size:14px;color:var(--cyan);margin:16px 0 6px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#08192c;border:1px solid var(--line);padding:12px;border-radius:8px;max-height:260px;overflow:auto}
+textarea{width:100%;min-height:340px;resize:vertical;font:13px/1.55 ui-monospace,monospace}
+button{background:#087fbd;color:white;border:0;border-radius:7px;padding:10px 14px;font-weight:700;cursor:pointer}button.secondary{background:#244362}button.approve{background:var(--green)}button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.hint{color:var(--muted);font-size:12px}.badge{display:inline-block;border-radius:20px;background:#244362;padding:3px 8px;font-size:11px;margin-left:5px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.records{max-height:320px}main{padding:14px}textarea{min-height:260px}}
+</style></head>
+<body>
+<header><a href="super-admin-dashboard.html">← Super Admin</a>　<span style="color:var(--cyan);font-weight:800">TAMILAN CAREERS · TAMIL CONTENT REVIEW</span></header>
+<main>
+<h1>Tamil Nadu Job Translation Review</h1>
+<p class="hint">Original English source records are read-only here. Tamil text is stored separately. Only approved Tamil content can be shown publicly.</p>
+<div id="status" class="status">Checking Super Admin access…</div>
+<div class="layout">
+<section class="panel">
+<h2>Jobs to review <span id="count" class="badge">0</span></h2>
+<div class="toolbar"><input id="search" placeholder="Search title, department or location"><select id="kind"><option value="government">Tamil Nadu Government</option><option value="private">Tamil Nadu Private</option></select></div>
+<div id="records" class="records"></div>
+</section>
+<section class="panel">
+<h2 id="editorTitle">Select a job</h2>
+<p class="hint">Translate the text values in the JSON editor into clear Tamil. Keep dates, numbers, official names and URLs accurate. Do not guess missing facts.</p>
+<h3>Original English source (read-only)</h3><pre id="source">No job selected.</pre>
+<h3>Tamil content (editable)</h3>
+<textarea id="translation" spellcheck="false" placeholder='{"job_title":"...","description":"...","how_to_apply":"..."}'></textarea>
+<p class="hint">Required for approval: job_title and description. Recommended keys: department_name, location, education_level, age_limit, application_fee, selection_process, how_to_apply, additional_info, employer_name, employment_type, required_skills, experience_requirement.</p>
+<div class="actions"><button id="save" class="secondary" disabled>Save Draft</button><button id="submit" disabled>Send for Review</button><button id="approve" class="approve" disabled>Approve Tamil Content</button></div>
+</section></div></main>
+<script>
+(async()=>{
+const db=window.supabase.createClient('https://qkmljuuusfjowexvybvy.supabase.co','sb_publishable_Wi6gltM_xFm1m4Dlgq727Q_83Rn58y2');
+const $=id=>document.getElementById(id), status=$('status');
+const tnCities=['tamil nadu','chennai','salem','namakkal','coimbatore','madurai','erode','vellore','tiruppur','thanjavur','tirunelveli','kanchipuram','cuddalore','dindigul','karur','krishnagiri','dharmapuri','villupuram','kallakurichi','perambalur','ariyalur','sivaganga','virudhunagar','thoothukudi','tenkasi','nilgiris','ooty','ranipet','chengalpattu','tiruvallur','mayiladuthurai','nagapattinam','pudukkottai','ramanathapuram','tiruchirappalli','trichy'];
+let kind='government', rows=[], translations=[], selected=null, user=null;
+const setStatus=(msg,error=false)=>{status.textContent=msg;status.className='status'+(error?' error':'')};
+const {data:auth,error:authError}=await db.auth.getUser();user=auth?.user;
+if(authError||!user){setStatus('Please sign in with your Super Admin account, then reopen this page.',true);return}
+const {data:roleRows,error:roleError}=await db.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
+if(roleError||!roleRows?.length){setStatus('Access denied. Super Admin permission is required.',true);return}
+setStatus('Access verified. Loading Tamil Nadu job records…');
+async function load(){
+ kind=$('kind').value;
+ const table=kind==='government'?'government_jobs':'private_jobs';
+ let q=db.from(table).select('*').order('created_at',{ascending:false}).limit(1000);
+ if(kind==='government')q=q.eq('state_name','Tamil Nadu');
+ const {data,error}=await q;
+ if(error){setStatus('Could not load jobs: '+error.message,true);return}
+ rows=(data||[]).filter(j=>kind==='government'||tnCities.some(city=>String(j.location||'').toLowerCase().includes(city)));
+ const trTable=kind==='government'?'government_job_translations':'private_job_translations';
+ const ids=rows.map(j=>j.id);
+ if(ids.length){const {data:trs,error:trError}=await db.from(trTable).select('*').in('job_id',ids);if(trError){setStatus('Translation records could not be loaded: '+trError.message,true);return}translations=trs||[]}else translations=[];
+ renderList();setStatus(rows.length+' Tamil Nadu '+(kind==='government'?'government':'private')+' job record(s) found. Existing English source data has not been changed.');
+}
+function currentTranslation(job){return translations.find(t=>t.job_id===job.id)||null}
+function renderList(){
+ const term=$('search').value.trim().toLowerCase();
+ const filtered=rows.filter(j=>[j.job_title,j.department_name,j.employer_name,j.location].join(' ').toLowerCase().includes(term));
+ $('count').textContent=filtered.length;
+ $('records').innerHTML=filtered.map(j=>{const tr=currentTranslation(j),state=tr?.translation_status||'not started';return '<button class="record '+(selected?.id===j.id?'active':'')+'" data-id="'+j.id+'">'+esc(j.job_title)+'<small>'+esc(j.department_name||j.employer_name||j.location||'')+' · '+esc(state)+'</small></button>'}).join('')||'<p class="hint">No matching Tamil Nadu jobs found in this table.</p>';
+ $('records').querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.id)));
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function sourceFields(j){const keys=['job_title','department_name','employer_name','location','education_level','description','vacancies','salary_min','salary_max','salary_currency','salary_period','age_limit','age_relaxation','application_fee','selection_process','application_start_date','application_deadline','exam_date','how_to_apply','additional_info','required_skills','experience_requirement','employment_type','workplace_type','application_url','official_website_url','official_notification_url'];const out={};keys.forEach(k=>{if(j[k]!==undefined&&j[k]!==null&&j[k]!=='')out[k]=j[k]});return out}
+function template(j){const s=sourceFields(j),out={};['job_title','department_name','employer_name','location','education_level','description','age_limit','age_relaxation','application_fee','selection_process','how_to_apply','additional_info','required_skills','experience_requirement','employment_type','workplace_type'].forEach(k=>{if(s[k])out[k]=''});return out}
+function choose(id){selected=rows.find(j=>j.id===id);if(!selected)return;const tr=currentTranslation(selected);$('editorTitle').textContent=selected.job_title;$('source').textContent=JSON.stringify(sourceFields(selected),null,2);$('translation').value=JSON.stringify(tr?.translated_content||template(selected),null,2);['save','submit','approve'].forEach(x=>$(x).disabled=false);renderList()}
+function parseEditor(){try{return JSON.parse($('translation').value)}catch(e){throw new Error('JSON format is invalid. Please correct it before saving.')}}
+async function persist(state){
+ if(!selected)return;
+ let content;try{content=parseEditor()}catch(e){setStatus(e.message,true);return}
+ if(state==='approved'&&(!String(content.job_title||'').trim()||!String(content.description||'').trim())){setStatus('Tamil Job Title and Tamil Description are required before approval.',true);return}
+ const table=kind==='government'?'government_job_translations':'private_job_translations';
+ const existing=currentTranslation(selected);
+ const payload={job_id:selected.id,language_code:'ta',translated_content:content,source_snapshot:sourceFields(selected),translation_status:state,translation_method:'admin',reviewed_by:state==='approved'?user.id:null,reviewed_at:state==='approved'?new Date().toISOString():null,updated_at:new Date().toISOString()};
+ const {data,error}=await db.from(table).upsert(payload,{onConflict:'job_id,language_code'}).select('*').single();
+ if(error){setStatus('Save failed: '+error.message,true);return}
+ translations=translations.filter(t=>t.job_id!==selected.id);translations.push(data);renderList();
+ setStatus(state==='approved'?'Tamil content approved. It is now eligible for public display once the public pages are connected to approved translations.':state==='pending_review'?'Tamil content submitted for review.':'Tamil draft saved.');
+}
+$('save').onclick=()=>persist('draft');$('submit').onclick=()=>persist('pending_review');$('approve').onclick=()=>persist('approved');
+$('search').addEventListener('input',renderList);$('kind').addEventListener('change',()=>{selected=null;$('source').textContent='No job selected.';$('translation').value='';['save','submit','approve'].forEach(x=>$(x).disabled=true);load()});
+await load();
+})();
+</script></body></html>
