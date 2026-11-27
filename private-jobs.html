@@ -4,7 +4,7 @@
 <title>Private Jobs | TAMILAN CAREERS</title><meta name="description" content="Indian private-sector careers by qualification, category and job role.">
 <link rel="canonical" href="https://tamilancareers.in/private-jobs.html">
 <meta property="og:title" content="Private Jobs | TAMILAN CAREERS"><meta property="og:url" content="https://tamilancareers.in/private-jobs.html">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="tamil-regional-content.js?v=1"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="site-theme.css?v=1"><link rel="stylesheet" href="ads-layout.css?v=1">
 <style>
@@ -65,10 +65,17 @@ let jobs=[];
 const {data,error}=await db.from(intl?'international_jobs':'private_jobs').select('id,job_title,employer_name,description,location,category_id,employment_type,education_level,qualification_tags,required_skills,experience_requirement,salary_min,salary_max,salary_currency,application_deadline,application_url,official_website_url,workplace_type').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
 if(error){status.textContent='Unable to load published jobs right now. Please try again later.';rowsRoot.innerHTML='<tr><td colspan="3">Jobs could not be loaded.</td></tr>';return}
 jobs=data||[];
+let tamilPrivateTranslations={};
+const tamilPrivateRows=jobs.filter(j=>window.TCTamil&&window.TCTamil.isTamilNaduPrivate(j));
+if(tamilPrivateRows.length&&window.TCTamil){
+ tamilPrivateTranslations=await window.TCTamil.loadApprovedTranslations(db,'private_job_translations',tamilPrivateRows.map(j=>j.id));
+}
 function qualificationMatches(j,q){const values=Array.isArray(j.qualification_tags)?j.qualification_tags:[];return String(j.education_level||'').toLowerCase().includes(q.toLowerCase())||values.some(x=>String(x).toLowerCase().includes(q.toLowerCase()))}
 function jobRow(j){
+const tamil=window.TCTamil&&window.TCTamil.isTamilNaduPrivate(j);
+const tv=(key,fallback)=>tamil?window.TCTamil.value(tamilPrivateTranslations,j.id,key,fallback):fallback;
 const quals=(Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level)||'Not specified';
-return '<tr><td><a href="private-job-details.html?id='+encodeURIComponent(j.id)+'">'+esc(j.job_title)+'</a><div class="muted">'+esc(j.employer_name||'Employer')+'</div></td><td>'+esc(quals)+'</td><td>'+esc(j.location||'Not specified')+'</td></tr>';
+return '<tr><td><a href="private-job-details.html?id='+encodeURIComponent(j.id)+'">'+esc(tv('job_title',j.job_title))+'</a><div class="muted">'+esc(tv('employer_name',j.employer_name||'Employer'))+'</div></td><td>'+esc(tv('education_level',quals))+'</td><td>'+esc(tv('location',j.location||'Not specified'))+'</td></tr>';
 }
 function renderTable(list,tbody,pager){
 let page=1;
