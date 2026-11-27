@@ -119,7 +119,7 @@ function matchesQualification(job,q){
  });
  const education=String(job.education_level||'').toLowerCase();
  const educationMatch=keys.some(key=>education.includes(key));
- if(q==='Degree' && (education.includes('postgraduate')||education.includes('post graduate')||education.includes('master degree')||education.includes('masters degree')) && !/(bachelor|graduation|graduate|b\.?e\.?|b\.?tech|b\.?sc|b\.?com|bba|bca|mbbs|llb)/i.test(education)) return tagMatch;
+ if(q==='Degree' && (education.includes('postgraduate')||education.includes('post graduate')||education.includes('master degree')||education.includes('masters degree')) && !['bachelor','graduation','graduate','b.e','b.e.','b.tech','b.sc','b.com','bba','bca','mbbs','llb'].some(term=>education.includes(term))) return tagMatch;
  return tagMatch||educationMatch;
 }
 function orgName(job){
