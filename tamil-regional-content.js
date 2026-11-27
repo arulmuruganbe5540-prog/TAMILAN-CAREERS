@@ -48,8 +48,7 @@ const labels={
 'Message was posted.':'கருத்து பதிவிடப்பட்டது.',
 'Link Copied':'இணைப்பு நகலெடுக்கப்பட்டது',
 'Copied':'நகலெடுக்கப்பட்டது',
-'Employer website ↗':'நிறுவனத்தின் இணையதளம் ↗'
-
+'Employer website ↗':'நிறுவனத்தின் இணையதளம் ↗',
 'TAMILAN CAREERS — Indian Private Job Application':'TAMILAN CAREERS — இந்தியத் தனியார் வேலைவாய்ப்பு விண்ணப்பம்',
 'India-based private sector application':'இந்தியத் தனியார் துறை வேலைவாய்ப்பு விண்ணப்பம்',
 'Dashboard':'டாஷ்போர்டு','Sign in required':'உள்நுழைவு அவசியம்',
