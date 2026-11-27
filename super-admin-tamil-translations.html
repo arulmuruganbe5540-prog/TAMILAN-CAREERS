@@ -70,11 +70,20 @@ async function load(){
  renderList();setStatus(rows.length+' Tamil Nadu '+(kind==='government'?'government':'private')+' job record(s) found. Existing English source data has not been changed.');
 }
 function currentTranslation(job){return translations.find(t=>t.job_id===job.id)||null}
+function deadlineLabel(job){
+ const raw=job.application_deadline;if(!raw)return 'Deadline not recorded';
+ const date=new Date(raw);if(Number.isNaN(date.getTime()))return 'Check deadline';
+ const deadlineDay=date.toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+ const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+ if(deadlineDay<today)return 'Deadline passed';
+ if(deadlineDay===today)return 'Deadline today';
+ return 'Deadline '+date.toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'});
+}
 function renderList(){
  const term=$('search').value.trim().toLowerCase();
  const filtered=rows.filter(j=>[j.job_title,j.department_name,j.employer_name,j.location].join(' ').toLowerCase().includes(term));
  $('count').textContent=filtered.length;
- $('records').innerHTML=filtered.map(j=>{const tr=currentTranslation(j),state=tr?.translation_status||'not started';return '<button class="record '+(selected?.id===j.id?'active':'')+'" data-id="'+j.id+'">'+esc(j.job_title)+'<small>'+esc(j.department_name||j.employer_name||j.location||'')+' · '+esc(state)+'</small></button>'}).join('')||'<p class="hint">No matching Tamil Nadu jobs found in this table.</p>';
+ $('records').innerHTML=filtered.map(j=>{const tr=currentTranslation(j),state=tr?.translation_status||'not started';return '<button class="record '+(selected?.id===j.id?'active':'')+'" data-id="'+j.id+'">'+esc(j.job_title)+'<small>'+esc(j.department_name||j.employer_name||j.location||'')+' · '+esc(state)+' · '+esc(deadlineLabel(j))+'</small></button>'}).join('')||'<p class="hint">No matching Tamil Nadu jobs found in this table.</p>';
  $('records').querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.id)));
 }
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
