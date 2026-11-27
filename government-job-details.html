@@ -69,6 +69,7 @@ body{font-size:16.5px;line-height:1.65;-webkit-text-size-adjust:100%;text-render
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5514219463771418"
      crossorigin="anonymous"></script>
 <link rel="stylesheet" href="site-theme.css?v=1">
+<link rel="stylesheet" href="ads-layout.css?v=1">
 </head>
 <body>
 <header class="top"><h1>TAMILAN CAREERS</h1><p>Government Job Notification Details</p></header>
@@ -84,13 +85,37 @@ function setJobSeo(j){
  const title=(j.job_title||'Government Job').replace(/\s+/g,' ').trim();
  const employer=j.department_name||j.employer_name||j.recruitment_authority||'Government Recruitment';
  const plain=String(j.description||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
- const desc=(plain||title+' – official vacancy details, eligibility, application dates and apply link on TAMILAN CAREERS.').slice(0,300);
+ const desc=(plain||title+' – official vacancy details, eligibility, application dates and apply link on TAMILAN CAREERS.').slice(0,160);
  const canonical='https://tamilancareers.in/government-job-details.html?id='+encodeURIComponent(j.id);
- document.title=title+' | TAMILAN CAREERS';setMeta('description',desc);setMeta('og:title',document.title,'property');setMeta('og:description',desc,'property');setMeta('og:url',canonical,'property');
+ document.title=title+' | TAMILAN CAREERS';setMeta('description',desc);setMeta('og:title',document.title,'property');setMeta('og:description',desc,'property');setMeta('og:url',canonical,'property');setMeta('twitter:card','summary','name');setMeta('twitter:title',document.title,'name');setMeta('twitter:description',desc,'name');
  let link=document.querySelector('link[rel=canonical]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical;
- // Do not emit JobPosting structured data until each record has a verified
- // position title, full HTML description, accurate work location and dates.
- // This avoids sending incomplete or misleading markup to Google.
+ // Emit JobPosting only when required fields are present and match visible content.
+ const datePosted=j.notification_date?new Date(j.notification_date):null;
+ const validThrough=j.application_deadline?new Date(j.application_deadline):null;
+ const locationText=String(j.location||'').trim();
+ const region=String(j.state_name||'').trim();
+ if(title&&plain.length>=80&&employer&&datePosted&&!isNaN(datePosted)&&locationText&&region){
+   const visibleDescription=[
+     '<p>'+esc(title)+'</p>',
+     '<p>'+esc(employer)+'</p>',
+     '<p>'+esc(plain)+'</p>',
+     '<p>Qualification: '+esc(Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):(j.education_level||'Not specified'))+'</p>',
+     '<p>Vacancies: '+esc(j.vacancies==null?'Not specified':j.vacancies)+'</p>',
+     '<p>Application deadline: '+esc(j.application_deadline||'Not specified')+'</p>'
+   ].join('');
+   const posting={
+     '@context':'https://schema.org',
+     '@type':'JobPosting',
+     title,
+     description:visibleDescription,
+     datePosted:datePosted.toISOString().slice(0,10),
+     hiringOrganization:{'@type':'Organization',name:employer},
+     jobLocation:{'@type':'Place',address:{'@type':'PostalAddress',addressLocality:locationText,addressRegion:region,addressCountry:'IN'}}
+   };
+   if(validThrough&&!isNaN(validThrough))posting.validThrough=validThrough.toISOString();
+   if(j.notification_number)posting.identifier={'@type':'PropertyValue',name:employer,value:String(j.notification_number)};
+   const schema=document.createElement('script');schema.type='application/ld+json';schema.textContent=JSON.stringify(posting);document.head.appendChild(schema);
+ }
 
 }
 
