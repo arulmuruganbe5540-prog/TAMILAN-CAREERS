@@ -8,7 +8,7 @@
 </style> <link rel="stylesheet" href="mangai-admin-theme.css">
 <script src="mangai-table-style.js" defer></script>
 </head><body>
-<header class="top"><div><div class="brand">TAMILAN CAREERS · தனிப்பட்ட நிர்வாகம்</div><div class="muted">தனியார் வேலைவாய்ப்புகள் Administration</div></div><div><a href="super-admin.html">← டாஷ்போர்டு</a><span id="adminமின்னஞ்சல்" class="muted"></span>　<button id="logout" class="secondary">வெளியேறு</button></div><style>
+<header class="top"><div><div class="brand">TAMILAN CAREERS · தனிப்பட்ட நிர்வாகம்</div><div class="muted">தனியார் வேலைவாய்ப்புகள் Administration</div></div><div><a href="super-admin.html">← டாஷ்போர்டு</a><span class="muted">Mangaiyarkarasi</span>　<button id="logout" class="secondary">வெளியேறு</button></div><style>
 .lang-switch{display:inline-flex;align-items:center;gap:3px;padding:4px;border:1px solid #42617e;border-radius:999px;background:#091a2c;margin-left:10px;vertical-align:middle}
 .lang-switch button{border:0;border-radius:999px;padding:7px 12px;background:transparent;color:#d7e8f8;font-weight:800;font-size:12px;cursor:pointer}
 .lang-switch button.active{background:#38bdf8;color:#06182a}
@@ -123,9 +123,7 @@ function note(msg,bad=false){$('notice').textContent=msg;$('notice').className='
 function fmt(v){if(!v)return '—';const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
 async function authorize(){const {data:{user},error}=await sb.auth.getUser();if(error||!user){location.replace('super-admin-login.html');return false;}
  const {data,error:e}=await sb.from('user_roles').select('role').eq('user_id',user.id).eq('role','super_admin').limit(1);
- if(e||!data||data.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return false;}
- 
- $('adminமின்னஞ்சல்').textContent=user.email||'';note('Super Admin access verified.');return true;}
+ if(e||!data||data.length!==1){await sb.auth.signOut();location.replace('super-admin-login.html');return false;}note('Super Admin access verified.');return true;}
 async function countFor(id,status){let q=sb.from('private_jobs').select('id',{count:'exact',head:true});if(status)q=q.eq('status',status);const {count,error}=await q;$(id).textContent=error?'—':String(count??0);}
 async function loadStats(){await Promise.all([countFor('totalCount',null),countFor('publishedCount','published'),countFor('pendingCount','pending_review'),countFor('draftCount','draft')]);}
 function render(rows){currentRows=rows;if(!rows.length){$('rows').innerHTML='<tr><td colspan="6" class="empty">No records match this search.</td></tr>';return;}

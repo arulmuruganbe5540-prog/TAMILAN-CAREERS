@@ -28,7 +28,7 @@ button{background:linear-gradient(110deg,#b9944b,#e0c77f);color:#10131a;border:1
 @media(max-width:600px){.top{padding:17px}.wrap{padding:15px}.workspace{padding:14px}.top:after{display:none}}
 </style><script src="mangai-table-style.js" defer></script>
 </head><body>
-<header class="top"><div><div class="brand">TAMILAN CAREERS · SUPER ADMIN</div><div class="admin-name">Mangaiyarkarasi</div><span id="adminEmail" class="admin-email"></span></div><div><button id="logout">Logout</button><div class="lang-switch" role="group" aria-label="Language"><button type="button" data-lang-choice="ta">தமிழ்</button><button type="button" data-lang-choice="en">English</button></div></div><style>
+<header class="top"><div><div class="brand">TAMILAN CAREERS · SUPER ADMIN</div><div class="admin-name">Mangaiyarkarasi</div><span class="admin-email">Mangaiyarkarasi</span></div><div><button id="logout">Logout</button><div class="lang-switch" role="group" aria-label="Language"><button type="button" data-lang-choice="ta">தமிழ்</button><button type="button" data-lang-choice="en">English</button></div></div><style>
 .lang-switch{display:inline-flex;align-items:center;gap:3px;padding:4px;border:1px solid #42617e;border-radius:999px;background:#091a2c;margin-left:10px;vertical-align:middle}
 .lang-switch button{border:0;border-radius:999px;padding:7px 12px;background:transparent;color:#d7e8f8;font-weight:800;font-size:12px;cursor:pointer}
 .lang-switch button.active{background:#38bdf8;color:#06182a}
@@ -102,7 +102,6 @@ async function init(){
  const {data:factors,error:factorError}=await sb.auth.mfa.listFactors();if(factorError){$('status').textContent='MFA நிலையைச் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழையவும்.';return;}
  const hasVerifiedTotp=(factors.totp||[]).some(f=>f.status==='verified');
  if(hasVerifiedTotp){const {data:aal,error:aalError}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();if(aalError||aal.currentLevel!=='aal2'){location.replace('super-admin-login.html');return;}}
- $('adminEmail').textContent=user.email||'';
  $('status').textContent='சூப்பர் அட்மின் அணுகல் உறுதிசெய்யப்பட்டது. டாஷ்போர்டு அணுகல் வழங்கப்பட்டது.';
  const stats=[['government_jobs','govCount'],['private_jobs','privateCount'],['international_jobs','intlCount'],['profiles','profileCount'],['super_admin_source_directory','sourceCount'],['government_job_resources','resourceCount'],['exam_eligibility_rules','eligibilityCount'],['exam_preparation_library','libraryCount']];
  for(const [table,id] of stats){try{const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});$(id).textContent=error?'—':String(count??0);}catch(e){$(id).textContent='—';}}
