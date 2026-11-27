@@ -165,12 +165,18 @@ allRows=data||[];
 let tamilTranslations={};
 if(state==='Tamil Nadu'&&window.TCTamil){
  tamilTranslations=await window.TCTamil.loadApprovedTranslations(sb,'government_job_translations',allRows.map(job=>job.id));
+ allRows=allRows.map(job=>{const t=tamilTranslations[job.id]||{};return {...job,job_category:typeof t.job_category==='string'&&t.job_category.trim()?t.job_category:job.job_category};});
  document.documentElement.lang='ta';
  document.title='தமிழ்நாடு அரசு வேலைவாய்ப்புகள் | TAMILAN CAREERS';
  $('pageTitle').textContent='தமிழ்நாடு அரசு வேலைவாய்ப்புகள்';
  $('crumbState').textContent='தமிழ்நாடு';
  $('pageIntro').textContent='தமிழ்நாடு அரசு வேலைவாய்ப்பு அறிவிப்புகள் மற்றும் கல்வித் தகுதி அடிப்படையிலான காலிப்பணியிடங்களைப் பார்க்கவும்.';
  $('qualificationHeading').textContent='கல்வித் தகுதியைத் தேர்ந்தெடுக்கவும்';
+ document.querySelector('header p').textContent='தமிழ்நாடு அரசு வேலைவாய்ப்பு அறிவிப்புகள்';
+ document.querySelector('.crumb').innerHTML='<a href="index.html">முகப்பு</a> / <a href="state-government-jobs.html">அனைத்து மாநிலங்கள் மற்றும் யூனியன் பிரதேசங்கள்</a> / <span id="crumbState">தமிழ்நாடு</span>';
+ document.querySelector('.back').textContent='← அனைத்து மாநிலங்கள் மற்றும் யூனியன் பிரதேசங்களுக்குத் திரும்பு';
+ document.querySelectorAll('.section h3')[1].textContent='அரசு வேலைவாய்ப்பு அறிவிப்புகள்';
+ document.querySelectorAll('.section h3')[2].textContent='அரசு ஆட்சேர்ப்புத் துறைகள் மற்றும் நிறுவனங்கள்';
  const qLabels={'':'அனைத்தும்','8th Pass':'8ஆம் வகுப்பு','10th Pass':'10ஆம் வகுப்பு','12th Pass':'12ஆம் வகுப்பு','ITI':'ஐ.டி.ஐ','Diploma':'டிப்ளமோ','Degree':'பட்டப்படிப்பு','Postgraduate':'முதுநிலை'};
  document.querySelectorAll('#qualificationTags [data-q]').forEach(a=>a.textContent=qLabels[a.dataset.q]||a.dataset.q);
  document.querySelectorAll('.stats .stat span').forEach((el,i)=>el.textContent=['வெளியிடப்பட்ட வேலை அறிவிப்புகள்','ஆட்சேர்ப்புத் துறைகள் / நிறுவனங்கள்','வேலைப் பிரிவுகள்'][i]||el.textContent);
