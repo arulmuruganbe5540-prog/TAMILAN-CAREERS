@@ -39,6 +39,11 @@ button{background:#087fbd;color:white;border:0;border-radius:7px;padding:10px 14
 <h2 id="editorTitle">Select a job</h2>
 <p class="hint">Translate the text values in the JSON editor into clear Tamil. Keep dates, numbers, official names and URLs accurate. Do not guess missing facts.</p>
 <h3>Original English source (read-only)</h3><pre id="source">No job selected.</pre>
+<h3>Official source verification</h3>
+<div class="toolbar"><select id="sourceCheckStatus"><option value="not_checked">Not checked</option><option value="verified">Verified against official notice/PDF</option><option value="incomplete">Incomplete – follow-up needed</option></select><input id="sourceCheckUrl" placeholder="Official notification / PDF URL"></div>
+<textarea id="sourceCheckNotes" rows="3" style="min-height:90px" placeholder="Record the verified facts and any items still unclear"></textarea>
+<label class="hint" style="display:block;margin-top:8px"><input id="sourceChecked" type="checkbox" style="width:auto"> I opened the official source and checked the key facts (vacancies, eligibility, pay and deadline)</label>
+<p class="hint">Only mark Verified after checking the primary government / institution notice. Approval is blocked until this check is complete.</p>
 <h3>Tamil content (editable)</h3>
 <textarea id="translation" spellcheck="false" placeholder='{"job_title":"...","description":"...","how_to_apply":"..."}'></textarea>
 <p class="hint">Required for approval: job_title and description. Recommended keys: department_name, location, education_level, age_limit, application_fee, selection_process, how_to_apply, additional_info, employer_name, employment_type, required_skills, experience_requirement.</p>
@@ -93,7 +98,7 @@ function renderList(){
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function sourceFields(j){const keys=['job_title','department_name','employer_name','location','job_category','education_level','qualification_tags','description','vacancies','salary_min','salary_max','salary_currency','salary_period','age_limit','age_relaxation','application_fee','selection_process','application_start_date','application_deadline','exam_date','how_to_apply','additional_info','required_skills','experience_requirement','employment_type','workplace_type','application_url','official_website_url','official_notification_url'];const out={};keys.forEach(k=>{if(j[k]!==undefined&&j[k]!==null&&j[k]!=='')out[k]=j[k]});return out}
 function template(j){const s=sourceFields(j),out={};['job_title','department_name','employer_name','location','job_category','education_level','qualification_tags','description','age_limit','age_relaxation','application_fee','selection_process','how_to_apply','additional_info','required_skills','experience_requirement','employment_type','workplace_type'].forEach(k=>{if(s[k])out[k]=''});return out}
-function choose(id){selected=rows.find(j=>j.id===id);if(!selected)return;const tr=currentTranslation(selected);$('editorTitle').textContent=selected.job_title;$('source').textContent=JSON.stringify(sourceFields(selected),null,2);$('translation').value=JSON.stringify(tr?.translated_content||template(selected),null,2);['save','submit','approve'].forEach(x=>$(x).disabled=false);renderList()}
+function choose(id){selected=rows.find(j=>j.id===id);if(!selected)return;const tr=currentTranslation(selected);const check=tr?.source_snapshot?._official_source_check||{};$('editorTitle').textContent=selected.job_title;$('source').textContent=JSON.stringify(sourceFields(selected),null,2);$('translation').value=JSON.stringify(tr?.translated_content||template(selected),null,2);$('sourceCheckStatus').value=check.status||'not_checked';$('sourceCheckUrl').value=check.verified_url||'';$('sourceCheckNotes').value=check.notes||'';$('sourceChecked').checked=check.status==='verified';['save','submit','approve'].forEach(x=>$(x).disabled=false);renderList()}
 function parseEditor(){try{return JSON.parse($('translation').value)}catch(e){throw new Error('JSON format is invalid. Please correct it before saving.')}}
 async function persist(state){
  if(!selected)return;
@@ -101,9 +106,13 @@ async function persist(state){
  let content;try{content=parseEditor()}catch(e){setStatus(e.message,true);return}
  if(state==='approved'&&existing?.translation_status!=='pending_review'){setStatus('Only translations submitted for review can be approved. Save the draft, then send it for review first.',true);return}
  if(state==='approved'&&(!String(content.job_title||'').trim()||!String(content.description||'').trim())){setStatus('Tamil Job Title and Tamil Description are required before approval.',true);return}
+ const checkStatus=$('sourceCheckStatus').value,checkUrl=$('sourceCheckUrl').value.trim(),checkNotes=$('sourceCheckNotes').value.trim(),checked=$('sourceChecked').checked;
+ if(checkStatus==='verified'&&(!checkUrl||!checkNotes||!checked)){setStatus('To mark Verified, enter the official source URL and verification notes, then confirm that you checked the original notice/PDF.',true);return}
+ if(state==='approved'&&(checkStatus!=='verified'||!checkUrl||!checkNotes||!checked)){setStatus('Approval blocked: verify the official notice/PDF and confirm the source check first.',true);return}
  if(state==='approved'&&!window.confirm('Approve this Tamil translation? Approved text may become visible on the public website.'))return
  const table=kind==='government'?'government_job_translations':'private_job_translations';
- const payload={job_id:selected.id,language_code:'ta',translated_content:content,source_snapshot:sourceFields(selected),translation_status:state,translation_method:'admin',reviewed_by:state==='approved'?user.id:null,reviewed_at:state==='approved'?new Date().toISOString():null,updated_at:new Date().toISOString()};
+ const snapshot={...(existing?.source_snapshot||sourceFields(selected)),_official_source_check:{status:checkStatus,verified_at:checkStatus==='verified'?new Date().toISOString():null,verified_url:checkUrl,notes:checkNotes}};
+ const payload={job_id:selected.id,language_code:'ta',translated_content:content,source_snapshot:snapshot,translation_status:state,translation_method:checkStatus==='verified'?'official_source_checked_manual':'admin',reviewed_by:state==='approved'?user.id:null,reviewed_at:state==='approved'?new Date().toISOString():null,updated_at:new Date().toISOString()};
  const {data,error}=await db.from(table).upsert(payload,{onConflict:'job_id,language_code'}).select('*').single();
  if(error){setStatus('Save failed: '+error.message,true);return}
  translations=translations.filter(t=>t.job_id!==selected.id);translations.push(data);renderList();
