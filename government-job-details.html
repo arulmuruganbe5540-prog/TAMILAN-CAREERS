@@ -120,7 +120,7 @@ function setJobSeo(j){
 }
 
 const esc=v=>String(v==null||v===''?'—':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});};
+const fmt=v=>{if(!v)return '—';const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleDateString(document.documentElement.lang==='ta'?'ta-IN':'en-IN',{day:'2-digit',month:'long',year:'numeric'});};
 const url=(v,allowMailto=false)=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)||(allowMailto&&u.protocol==='mailto:')?u.href:'';}catch(e){return '';}};
 const params=new URLSearchParams(location.search),id=params.get('id');
 function row(label,value){return '<tr><th>'+esc(label)+'</th><td>'+esc(value)+'</td></tr>';}
