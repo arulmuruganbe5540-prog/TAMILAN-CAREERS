@@ -67,6 +67,8 @@ if(error){status.textContent='Unable to load published jobs right now. Please tr
 jobs=data||[];
 let tamilPrivateTranslations={};
 const tamilPrivateRows=jobs.filter(j=>window.TCTamil&&window.TCTamil.isTamilNaduPrivate(j));
+const allRowsTamilNadu=jobs.length>0&&tamilPrivateRows.length===jobs.length;
+if(allRowsTamilNadu){document.documentElement.lang='ta';document.title='தமிழ்நாடு தனியார் வேலைவாய்ப்புகள் | TAMILAN CAREERS';document.querySelector('header p').textContent='சரிபார்க்கப்பட்ட தனியார் வேலைவாய்ப்பு தகவல்கள்';document.querySelector('.crumb').innerHTML='<a href="index.html">முகப்பு</a> / தமிழ்நாடு தனியார் வேலைவாய்ப்புகள்';document.querySelector('.portal-banner small').textContent='இந்தியத் தனியார் வேலைவாய்ப்பு பட்டியல்';document.querySelector('.portal-banner h2').textContent='தனியார் வேலைவாய்ப்புகள்';document.querySelector('.portal-banner p').textContent='கல்வித் தகுதி, பிரிவு மற்றும் பணிவகை அடிப்படையிலான தமிழ்நாடு தனியார் வேலைவாய்ப்புகள்.';document.querySelectorAll('.section-title').forEach((el,i)=>el.textContent=['கல்வித் தகுதிகள்','வேலைப் பிரிவுகள்','சமீபத்திய வேலைவாய்ப்புகள்'][i]||el.textContent);document.querySelectorAll('.job-table thead th').forEach((el,i)=>el.textContent=['பணியின் பெயர்','கல்வித் தகுதி','பணியிடம்'][i]||el.textContent);const footerMap={'Home':'முகப்பு','About Us':'எங்களைப் பற்றி','Contact Us':'தொடர்பு','Privacy Policy':'தனியுரிமைக் கொள்கை','Disclaimer':'பொறுப்புத் துறப்பு'};document.querySelectorAll('footer a').forEach(a=>{if(footerMap[a.textContent.trim()])a.textContent=footerMap[a.textContent.trim()]});const note=document.querySelector('main>.muted');if(note)note.textContent='வெளியிடப்பட்ட தனியார் வேலைவாய்ப்புகள் மட்டுமே இங்கு காட்டப்படும். விண்ணப்பிக்கும் முன் நிறுவன விவரங்களையும் அதிகாரப்பூர்வ விண்ணப்ப இணைப்பையும் சரிபார்க்கவும். வேலை நியமனத்திற்கு TAMILAN CAREERS உத்தரவாதம் அளிக்காது.';}
 if(tamilPrivateRows.length&&window.TCTamil){
  tamilPrivateTranslations=await window.TCTamil.loadApprovedTranslations(db,'private_job_translations',tamilPrivateRows.map(j=>j.id));
 }
@@ -89,7 +91,7 @@ draw();
 }
 renderTable(jobs,rowsRoot,document.getElementById('latestPager'));
 if(!jobs.length)status.textContent='No '+(intl?'international':'private')+' vacancies are currently published. Job listings will appear here after Admin approval and publication.';
-else status.textContent=jobs.length+' published '+(intl?'international':'private')+' job(s) available.';
+else status.textContent=allRowsTamilNadu?jobs.length+' தனியார் வேலைவாய்ப்புகள் வெளியிடப்பட்டுள்ளன.':jobs.length+' published '+(intl?'international':'private')+' job(s) available.';
 function renderSubpage(){
 const view=params.get('view');if(!view)return;
 const content=document.getElementById('pageContent');
