@@ -52,7 +52,7 @@ let tamilContent={};
 if(tamilMode){
  const tr=await window.TCTamil.loadApprovedTranslations(db,'private_job_translations',[j.id]);
  tamilContent=tr[j.id]||{};
- ['job_title','employer_name','location','education_level','description','age_limit','age_relaxation','experience_requirement','required_skills','how_to_apply','additional_info','employment_type','workplace_type'].forEach(k=>{if(typeof tamilContent[k]==='string'&&tamilContent[k].trim())j[k]=tamilContent[k]});
+ ['job_title','employer_name','location','education_level','qualification_tags','description','age_limit','age_relaxation','experience_requirement','required_skills','how_to_apply','additional_info','employment_type','workplace_type'].forEach(k=>{if(Array.isArray(tamilContent[k]))j[k]=tamilContent[k];else if(typeof tamilContent[k]==='string'&&tamilContent[k].trim())j[k]=tamilContent[k]});
  document.documentElement.lang='ta';
  document.querySelector('header p').textContent='சரிபார்க்கப்பட்ட தனியார் வேலைவாய்ப்பு விவரங்கள்';
  document.querySelector('.crumb').innerHTML='<a href="index.html">முகப்பு</a> / <a href="private-jobs.html">தனியார் வேலைவாய்ப்புகள்</a> / வேலை விவரங்கள்';
