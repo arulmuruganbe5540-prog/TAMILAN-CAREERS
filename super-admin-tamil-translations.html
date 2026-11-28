@@ -49,6 +49,11 @@ button{background:#087fbd;color:white;border:0;border-radius:7px;padding:10px 14
 <textarea id="translation" spellcheck="false" placeholder='{"job_title":"...","description":"...","how_to_apply":"..."}'></textarea>
 <p class="hint">Required for approval: job_title and description. Recommended keys: department_name, location, education_level, age_limit, application_fee, selection_process, how_to_apply, additional_info, employer_name, employment_type, required_skills, experience_requirement.</p>
 <div class="actions"><button id="save" class="secondary" disabled>Save Draft</button><button id="submit" disabled>Send for Review</button><button id="approve" class="approve" disabled>Approve Tamil Content</button></div>
+<h3>Translation Audit History · Read Only</h3>
+<p class="hint">View previous drafts, review submissions, approvals and source-check changes for the selected job. Audit entries cannot be edited or deleted here.</p>
+<div class="actions"><button id="loadAudit" class="secondary" disabled>Load Audit History</button></div>
+<div id="auditStatus" class="hint">Select a job to view its audit history.</div>
+<div id="auditRecords" class="records" style="max-height:360px;margin-top:10px"></div>
 </section></div></main>
 <script>
 (async()=>{
@@ -98,7 +103,22 @@ function renderList(){
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function sourceFields(j){const keys=[ 'job_title','department_name','employer_name','location','job_category','notification_number','education_level','qualification_tags','description','vacancies','salary_min','salary_max','salary_currency','salary_period','age_limit','age_relaxation','application_fee','selection_process','application_start_date','application_deadline','exam_date','how_to_apply','additional_info','required_skills','experience_requirement','employment_type','workplace_type','application_url','official_website_url','official_notification_url'];const out={};keys.forEach(k=>{if(j[k]!==undefined&&j[k]!==null&&j[k]!=='')out[k]=j[k]});return out}
 function template(j){const s=sourceFields(j),out={};['job_title','department_name','employer_name','location','job_category','notification_number','education_level','qualification_tags','description','age_limit','age_relaxation','application_fee','selection_process','how_to_apply','additional_info','required_skills','experience_requirement','employment_type','workplace_type'].forEach(k=>{if(s[k])out[k]=''});return out}
-function choose(id){selected=rows.find(j=>j.id===id);if(!selected)return;const tr=currentTranslation(selected);const check=tr?.source_snapshot?._official_source_check||{};$('editorTitle').textContent=selected.job_title;$('source').textContent=JSON.stringify(sourceFields(selected),null,2);$('translation').value=JSON.stringify(tr?.translated_content||template(selected),null,2);$('sourceCheckStatus').value=check.status||'not_checked';$('sourceCheckUrl').value=check.verified_url||check.official_source_url||'';$('sourceCheckNotes').value=check.notes||'';$('sourceChecked').checked=check.status==='verified'&&(!!check.verified_at||!!check.checked_at||check.admin_confirmed_original_source_opened===true);['save','submit','approve'].forEach(x=>$(x).disabled=false);renderList()}
+function choose(id){selected=rows.find(j=>j.id===id);if(!selected)return;const tr=currentTranslation(selected);const check=tr?.source_snapshot?._official_source_check||{};$('editorTitle').textContent=selected.job_title;$('source').textContent=JSON.stringify(sourceFields(selected),null,2);$('translation').value=JSON.stringify(tr?.translated_content||template(selected),null,2);$('sourceCheckStatus').value=check.status||'not_checked';$('sourceCheckUrl').value=check.verified_url||check.official_source_url||'';$('sourceCheckNotes').value=check.notes||'';$('sourceChecked').checked=check.status==='verified'&&(!!check.verified_at||!!check.checked_at||check.admin_confirmed_original_source_opened===true);['save','submit','approve','loadAudit'].forEach(x=>$(x).disabled=false);$('auditStatus').textContent='Press Load Audit History to inspect saved events.';$('auditRecords').innerHTML='';renderList()}
+async function loadAudit(){
+ if(!selected)return;
+ $('auditStatus').textContent='Loading audit history…';
+ $('auditRecords').innerHTML='';
+ const table=kind==='government'?'government_job_translations':'private_job_translations';
+ const {data,error}=await db.rpc('tc_admin_list_translation_audit',{p_table:table,p_job_id:selected.id,p_limit:100});
+ if(error){$('auditStatus').textContent='Audit history could not be loaded: '+error.message;return}
+ const items=data||[];
+ $('auditStatus').textContent=items.length+' audit event(s) found for this job.';
+ $('auditRecords').innerHTML=items.map(item=>{
+  const when=item.recorded_at?new Date(item.recorded_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}):'Time not recorded';
+  const actor=item.actor_id||'System / unavailable';
+  return '<article class="record"><strong>'+esc(item.action)+' · '+esc(item.new_status)+'</strong><small>'+esc(when)+' · Actor: '+esc(actor)+(item.old_status?' · Previous: '+esc(item.old_status):' · Initial record')+'</small><details style="margin-top:8px"><summary>View saved source and Tamil content</summary><h3>Original source snapshot</h3><pre>'+esc(JSON.stringify(item.source_snapshot,null,2))+'</pre><h3>Tamil content at this event</h3><pre>'+esc(JSON.stringify(item.translated_content,null,2))+'</pre></details></article>';
+ }).join('')||'<p class="hint">No audit events recorded yet. History begins after the audit migration is installed.</p>';
+}
 function parseEditor(){let value;try{value=JSON.parse($('translation').value)}catch(e){throw new Error('JSON format is invalid. Please correct it before saving.')}if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Tamil content must be a JSON object with named fields.');return value}
 async function persist(state){
  if(!selected)return;
@@ -118,8 +138,8 @@ async function persist(state){
  translations=translations.filter(t=>t.job_id!==selected.id);translations.push(data);renderList();
  setStatus(state==='approved'?'Tamil content approved. It is now eligible for public display once the public pages are connected to approved translations.':state==='pending_review'?'Tamil content submitted for review.':'Tamil draft saved.');
 }
-$('save').onclick=()=>persist('draft');$('submit').onclick=()=>persist('pending_review');$('approve').onclick=()=>persist('approved');
-$('search').addEventListener('input',renderList);$('kind').addEventListener('change',()=>{selected=null;$('source').textContent='No job selected.';$('translation').value='';['save','submit','approve'].forEach(x=>$(x).disabled=true);load()});
+$('save').onclick=()=>persist('draft');$('submit').onclick=()=>persist('pending_review');$('approve').onclick=()=>persist('approved');$('loadAudit').onclick=loadAudit;
+$('search').addEventListener('input',renderList);$('kind').addEventListener('change',()=>{selected=null;$('source').textContent='No job selected.';$('translation').value='';['save','submit','approve','loadAudit'].forEach(x=>$(x).disabled=true);$('auditStatus').textContent='Select a job to view its audit history.';$('auditRecords').innerHTML='';load()});
 await load();
 })();
 </script></body></html>
