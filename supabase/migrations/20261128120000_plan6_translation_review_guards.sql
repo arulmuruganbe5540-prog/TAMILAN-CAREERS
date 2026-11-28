@@ -178,3 +178,55 @@ drop trigger if exists private_translation_audit_log on public.private_job_trans
 create trigger private_translation_audit_log
 after insert or update on public.private_job_translations
 for each row execute function private.record_tamil_translation_audit();
+
+
+-- Super Admin-only read endpoint for the append-only translation audit log.
+-- This public RPC is intentionally SECURITY DEFINER because the audit table is
+-- in the non-exposed private schema; the function enforces the Super Admin role.
+create or replace function public.tc_admin_list_translation_audit(
+  p_table text default null,
+  p_job_id uuid default null,
+  p_limit integer default 100
+)
+returns table (
+  id bigint,
+  translation_table text,
+  translation_id uuid,
+  job_id uuid,
+  action text,
+  actor_id uuid,
+  old_status text,
+  new_status text,
+  source_snapshot jsonb,
+  translated_content jsonb,
+  recorded_at timestamptz
+)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if auth.uid() is null or not private.is_super_admin() then
+    raise exception 'Super Admin permission is required to view translation audit history.'
+      using errcode = '42501';
+  end if;
+
+  if p_table is not null
+     and p_table not in ('government_job_translations','private_job_translations') then
+    raise exception 'Invalid translation table filter.';
+  end if;
+
+  return query
+  select a.id,a.translation_table,a.translation_id,a.job_id,a.action,a.actor_id,
+         a.old_status,a.new_status,a.source_snapshot,a.translated_content,a.recorded_at
+  from private.translation_review_audit a
+  where (p_table is null or a.translation_table = p_table)
+    and (p_job_id is null or a.job_id = p_job_id)
+  order by a.recorded_at desc, a.id desc
+  limit greatest(1,least(coalesce(p_limit,100),500));
+end;
+$$;
+
+revoke all on function public.tc_admin_list_translation_audit(text,uuid,integer) from public, anon;
+grant execute on function public.tc_admin_list_translation_audit(text,uuid,integer) to authenticated;
