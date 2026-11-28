@@ -176,7 +176,7 @@ const tamilMode=window.TCTamil&&window.TCTamil.isTamilNaduGovernment(j);
 if(tamilMode){
  const trs=await window.TCTamil.loadApprovedTranslations(sb,'government_job_translations',[j.id]);
  const t=trs[j.id]||{};
- ['job_title','department_name','employer_name','location','job_category','education_level','qualification_tags','description','age_limit','age_relaxation','application_fee','selection_process','how_to_apply','additional_info','experience_requirement','recruitment_authority','government_category','job_type_label'].forEach(k=>{if(Array.isArray(t[k]))j[k]=t[k];else if(typeof t[k]==='string'&&t[k].trim())j[k]=t[k]});
+ const tamilFields=['job_title','department_name','employer_name','location','job_category','education_level','qualification_tags','description','age_limit','age_relaxation','application_fee','selection_process','how_to_apply','additional_info','experience_requirement','recruitment_authority','government_category','job_type_label'];const missingTamil='தமிழ் மொழிபெயர்ப்பு சரிபார்ப்பில் உள்ளது';tamilFields.forEach(k=>{if(Array.isArray(t[k])&&t[k].length)j[k]=t[k];else if(typeof t[k]==='string'&&t[k].trim())j[k]=t[k];else if(k==='qualification_tags')j[k]=[missingTamil];else j[k]=missingTamil});
  if(String(j.government_category||'').trim().toLowerCase()==='state government')j.government_category='தமிழ்நாடு அரசு';
  document.documentElement.lang='ta';
  document.title=(t.job_title||j.job_title)+' | தமிழ்நாடு அரசு வேலைவாய்ப்புகள் | TAMILAN CAREERS';
