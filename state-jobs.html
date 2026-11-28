@@ -130,13 +130,14 @@ function render(){
  const tamilMode=state==='Tamil Nadu';
  const tv=(job,key,fallback)=>tamilMode&&window.TCTamil?window.TCTamil.value(tamilTranslations,job.id,key,fallback):fallback;
  const rows=allRows.filter(job=>matchesQualification(job,selectedQ));
+ const qDisplay=tamilMode?({'8th Pass':'8ஆம் வகுப்பு','10th Pass':'10ஆம் வகுப்பு','12th Pass':'12ஆம் வகுப்பு','ITI':'ஐ.டி.ஐ','Diploma':'டிப்ளமோ','Degree':'பட்டப்படிப்பு','Postgraduate':'முதுநிலை'}[selectedQ]||selectedQ):selectedQ;
  const total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));
  if(page>total)page=total;
  const shown=rows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
  $('jobCount').textContent=allRows.length;
  $('authorityCount').textContent=new Set(allRows.map(orgName)).size;
  $('categoryCount').textContent=new Set(allRows.map(job=>String(job.job_category||'Other Government Jobs').trim())).size;
- $('tableHeading').textContent=tamilMode?(selectedQ?'தமிழ்நாடு – '+selectedQ+' அரசு வேலைவாய்ப்புகள்':'தமிழ்நாடு அரசு வேலைவாய்ப்பு அறிவிப்புகள்'):(selectedQ?state+' – '+selectedQ+' Government Jobs':state+' Government Job Notifications');
+ $('tableHeading').textContent=tamilMode?(selectedQ?'தமிழ்நாடு – '+qDisplay+' அரசு வேலைவாய்ப்புகள்':'தமிழ்நாடு அரசு வேலைவாய்ப்பு அறிவிப்புகள்'):(selectedQ?state+' – '+selectedQ+' Government Jobs':state+' Government Job Notifications');
  $('tableIntro').textContent=tamilMode?rows.length+' வேலைவாய்ப்புகள். ஒரு பக்கத்திற்கு அதிகபட்சம் 10 பதிவுகள்.':'Showing '+rows.length+' published '+(selectedQ?selectedQ+' ':'')+'job record(s) for '+state+'. Maximum 10 records per page.';
  $('latestRows').innerHTML=shown.length?shown.map(job=>'<tr><td><strong>'+esc(tv(job,'job_title',job.job_title||'—'))+'</strong><small class="table-sub">'+esc(orgName(job))+'</small></td><td>'+esc(tamilMode?'தமிழ்நாடு':state)+'</td><td>'+esc(tv(job,'education_level',job.education_level||(Array.isArray(job.qualification_tags)?job.qualification_tags.map(tag=>String(tag).split('::').pop()).join(', '):'—')) )+'</td><td>'+esc(job.vacancies==null?'—':job.vacancies)+'</td><td>'+date(job.application_deadline)+'</td><td><a href="government-job-details.html?id='+encodeURIComponent(job.id)+'">'+(tamilMode?'விவரங்கள்':'View')+'</a></td></tr>').join(''):'<tr><td colspan="6" class="empty">'+(tamilMode?'தற்போது வெளியிடப்பட்ட வேலைவாய்ப்புகள் இல்லை.':'No published '+esc(selectedQ||'')+' government jobs are currently listed for '+esc(state)+'.')+'</td></tr>';
  $('pager').innerHTML='<button type="button" '+(page<=1?'disabled':'')+' id="prev">'+(tamilMode?'முந்தையது':'Previous')+'</button><span>'+(tamilMode?'பக்கம் ':'Page ')+page+' '+(tamilMode?' / ':'of ')+total+' · '+rows.length+' '+(tamilMode?'பதிவுகள்':'records')+'</span><button type="button" '+(page>=total?'disabled':'')+' id="next">'+(tamilMode?'அடுத்தது':'Next')+'</button>';
