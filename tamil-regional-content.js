@@ -169,7 +169,7 @@ function isTamilNaduPrivate(job){
  if(location.includes('tamil nadu')||location.includes('tamilnadu'))return true;
  const isIndia=country==='india'||location==='india'||location.endsWith(', india')||location.endsWith(' india');
  if(!isIndia)return false;
- const firstLocation=location.split(/[ ,|]+/)[0].trim().replace(/\\s+(district|city)$/,'');
+ const firstLocation=location.split(/[ ,|]+/)[0].trim();
  return tamilNaduPlaces.includes(firstLocation);
 }
 async function loadApprovedTranslations(client,table,ids){
