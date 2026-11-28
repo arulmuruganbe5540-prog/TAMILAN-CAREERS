@@ -51,6 +51,11 @@ begin
   end if;
 
   if tg_op = 'UPDATE' then
+    if new.job_id is distinct from old.job_id
+       or new.language_code is distinct from old.language_code then
+      raise exception 'A translation record cannot be reassigned to another job or language.';
+    end if;
+
     if (old.source_snapshot - '_official_source_check')
        is distinct from
        (new.source_snapshot - '_official_source_check') then
@@ -62,6 +67,11 @@ begin
        and old.translated_content is distinct from new.translated_content then
       raise exception 'An approved Tamil translation must be returned to review before its content can be edited.';
     end if;
+  end if;
+
+  if new.translation_status <> 'approved'
+     and (new.reviewed_by is not null or new.reviewed_at is not null) then
+    raise exception 'Review identity and timestamp may only be set on approved translations.';
   end if;
 
   if new.translation_status in ('pending_review', 'approved')
@@ -112,3 +122,59 @@ drop trigger if exists private_translation_review_guard on public.private_job_tr
 create trigger private_translation_review_guard
 before insert or update on public.private_job_translations
 for each row execute function private.enforce_tamil_translation_review();
+
+
+-- Append-only audit history: preserve every translation draft, review, approval,
+-- source-verification change and later correction with the authenticated actor.
+create table if not exists private.translation_review_audit (
+  id bigint generated always as identity primary key,
+  translation_table text not null check (translation_table in ('government_job_translations','private_job_translations')),
+  translation_id uuid not null,
+  job_id uuid not null,
+  action text not null check (action in ('INSERT','UPDATE')),
+  actor_id uuid,
+  old_status text,
+  new_status text not null,
+  source_snapshot jsonb not null,
+  translated_content jsonb not null,
+  recorded_at timestamptz not null default pg_catalog.now()
+);
+
+revoke all on table private.translation_review_audit from public, anon, authenticated;
+
+create or replace function private.record_tamil_translation_audit()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  insert into private.translation_review_audit (
+    translation_table, translation_id, job_id, action, actor_id,
+    old_status, new_status, source_snapshot, translated_content
+  ) values (
+    tg_table_name,
+    new.id,
+    new.job_id,
+    tg_op,
+    auth.uid(),
+    case when tg_op = 'UPDATE' then old.translation_status else null end,
+    new.translation_status,
+    new.source_snapshot,
+    new.translated_content
+  );
+  return new;
+end;
+$$;
+
+revoke all on function private.record_tamil_translation_audit() from public, anon, authenticated;
+
+drop trigger if exists government_translation_audit_log on public.government_job_translations;
+create trigger government_translation_audit_log
+after insert or update on public.government_job_translations
+for each row execute function private.record_tamil_translation_audit();
+
+drop trigger if exists private_translation_audit_log on public.private_job_translations;
+create trigger private_translation_audit_log
+after insert or update on public.private_job_translations
+for each row execute function private.record_tamil_translation_audit();
