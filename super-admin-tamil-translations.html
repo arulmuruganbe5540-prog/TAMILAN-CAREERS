@@ -5,6 +5,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>Tamil Content Review | TAMILAN CAREERS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="tamil-regional-content.js?v=1"></script>
 <style>
 :root{color-scheme:dark;--bg:#071426;--panel:#10243d;--line:#244362;--cyan:#65d7ff;--muted:#a8bed2;--green:#16816d}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eff7ff;font:14px/1.55 Arial,sans-serif}
@@ -68,7 +69,7 @@ async function load(){
  if(kind==='government')q=q.eq('state_name','Tamil Nadu');
  const {data,error}=await q;
  if(error){setStatus('Could not load jobs: '+error.message,true);return}
- rows=(data||[]).filter(j=>kind==='government'?['state','state government'].includes(String(j.government_scope||'').trim().toLowerCase()):tnCities.some(city=>String(j.location||'').toLowerCase().includes(city)));
+ rows=(data||[]).filter(j=>kind==='government'?['state','state government'].includes(String(j.government_scope||'').trim().toLowerCase()):window.TCTamil&&window.TCTamil.isTamilNaduPrivate(j));
  const trTable=kind==='government'?'government_job_translations':'private_job_translations';
  const ids=rows.map(j=>j.id);
  if(ids.length){const {data:trs,error:trError}=await db.from(trTable).select('*').in('job_id',ids);if(trError){setStatus('Translation records could not be loaded: '+trError.message,true);return}translations=trs||[]}else translations=[];
