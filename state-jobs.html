@@ -108,6 +108,7 @@ $('crumbState').textContent=state;
 $('pageIntro').textContent='Browse published '+state+' Government job notifications. Select a qualification to filter this state’s jobs only.';
 let selectedQ=qualifications.includes(params.get('qualification'))?params.get('qualification'):'';
 let allRows=[],page=1;
+function isStateGovernmentJob(job){const scope=String(job.government_scope||'').trim().toLowerCase().replace(/[ _-]+/g,' ');if(scope==='state'||scope==='state government')return true;if(scope)return false;const category=String(job.government_category||'').trim().toLowerCase().replace(/[ _-]+/g,' ');return category.includes('state government')||category==='tamil nadu government (legacy)'}
 function matchesQualification(job,q){
  if(!q)return true;
  const tags=Array.isArray(job.qualification_tags)?job.qualification_tags:[];
@@ -129,7 +130,7 @@ function orgName(job){
 function render(){
  const tamilMode=state==='Tamil Nadu';
  const tv=(job,key,fallback)=>tamilMode&&window.TCTamil?window.TCTamil.value(tamilTranslations,job.id,key,fallback):fallback;
- const rows=allRows.filter(job=>matchesQualification(job,selectedQ));
+ const rows=allRows.filter(job=>isStateGovernmentJob(job)&&matchesQualification(job,selectedQ));
  const qDisplay=tamilMode?({'8th Pass':'8ஆம் வகுப்பு','10th Pass':'10ஆம் வகுப்பு','12th Pass':'12ஆம் வகுப்பு','ITI':'ஐ.டி.ஐ','Diploma':'டிப்ளமோ','Degree':'பட்டப்படிப்பு','Postgraduate':'முதுநிலை'}[selectedQ]||selectedQ):selectedQ;
  const total=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));
  if(page>total)page=total;
@@ -155,7 +156,7 @@ document.querySelectorAll('.qtag').forEach(link=>link.addEventListener('click',e
  params.set('qualification',selectedQ);if(!selectedQ)params.delete('qualification');updateStateSeo();
  render();
 }));
-const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).or('government_scope.eq.state,government_scope.eq.State,government_scope.eq.State Government,government_category.in.(State Government,Tamil Nadu Government,Tamil Nadu Government (Legacy))').eq('state_name',state).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
+const {data,error}=await sb.from('government_jobs').select('*').eq('status','published').or('application_deadline.is.null,application_deadline.gte.'+new Date().toISOString()).eq('state_name',state).order('published_at',{ascending:false,nullsFirst:false}).limit(1000);
 if(error){
  $('latestRows').innerHTML='<tr><td colspan="6" class="empty">Unable to load published jobs. Please try again later.</td></tr>';
  $('authorityCards').innerHTML='<div class="empty">Department information could not be loaded.</div>';
