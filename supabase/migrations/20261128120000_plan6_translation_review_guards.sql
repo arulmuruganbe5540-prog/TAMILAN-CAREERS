@@ -24,6 +24,14 @@ begin
     end if;
   end if;
 
+  if new.translation_status in ('pending_review', 'approved')
+     and (
+       pg_catalog.btrim(coalesce(new.translated_content ->> 'job_title', '')) = ''
+       or pg_catalog.btrim(coalesce(new.translated_content ->> 'description', '')) = ''
+     ) then
+    raise exception 'Tamil job title and description are required before review submission.';
+  end if;
+
   if new.translation_status = 'approved' then
     if tg_op <> 'UPDATE' then
       raise exception 'A translation must be submitted for review before approval.';
@@ -41,11 +49,6 @@ begin
        or coalesce(v_check ->> 'admin_confirmed_original_source_opened', 'false') <> 'true'
        or coalesce(v_check ->> 'verified_at', '') = '' then
       raise exception 'Official source verification and explicit confirmation are required before approval.';
-    end if;
-
-    if pg_catalog.btrim(coalesce(new.translated_content ->> 'job_title', '')) = ''
-       or pg_catalog.btrim(coalesce(new.translated_content ->> 'description', '')) = '' then
-      raise exception 'Tamil job title and description are required before approval.';
     end if;
 
     if new.reviewed_by is distinct from auth.uid() or new.reviewed_at is null then
