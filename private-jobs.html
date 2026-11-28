@@ -75,7 +75,7 @@ if(tamilPrivateRows.length&&window.TCTamil){
 function qualificationMatches(j,q){const values=Array.isArray(j.qualification_tags)?j.qualification_tags:[];return String(j.education_level||'').toLowerCase().includes(q.toLowerCase())||values.some(x=>String(x).toLowerCase().includes(q.toLowerCase()))}
 function jobRow(j){
 const tamil=window.TCTamil&&window.TCTamil.isTamilNaduPrivate(j);
-const tv=(key,fallback)=>tamil?window.TCTamil.value(tamilPrivateTranslations,j.id,key,fallback):fallback;
+const tv=(key,fallback)=>{if(!tamil)return fallback;const translated=window.TCTamil.value(tamilPrivateTranslations,j.id,key,'');return translated||'தமிழ் மொழிபெயர்ப்பு மதிப்பாய்வில் உள்ளது'};
 const quals=(Array.isArray(j.qualification_tags)?j.qualification_tags.join(', '):j.education_level)||'Not specified';
 return '<tr><td><a href="private-job-details.html?id='+encodeURIComponent(j.id)+'">'+esc(tv('job_title',j.job_title))+'</a><div class="muted">'+esc(tv('employer_name',j.employer_name||'Employer'))+'</div></td><td>'+esc(tv('education_level',quals))+'</td><td>'+esc(tv('location',j.location||'Not specified'))+'</td></tr>';
 }
