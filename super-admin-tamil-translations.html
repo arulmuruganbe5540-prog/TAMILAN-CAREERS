@@ -111,7 +111,7 @@ async function persist(state){
  if(state==='approved'&&(checkStatus!=='verified'||!checkUrl||!checkNotes||!checked)){setStatus('Approval blocked: verify the official notice/PDF and confirm the source check first.',true);return}
  if(state==='approved'&&!window.confirm('Approve this Tamil translation? Approved text may become visible on the public website.'))return
  const table=kind==='government'?'government_job_translations':'private_job_translations';
- const snapshot={...(existing?.source_snapshot||sourceFields(selected)),_official_source_check:{status:checkStatus,verified_at:checkStatus==='verified'?new Date().toISOString():null,verified_url:checkUrl,notes:checkNotes}};
+ const snapshot={...(existing?.source_snapshot||sourceFields(selected)),_official_source_check:{status:checkStatus,verified_at:checkStatus==='verified'?new Date().toISOString():null,verified_url:checkUrl,notes:checkNotes,admin_confirmed_original_source_opened:checked}};
  const payload={job_id:selected.id,language_code:'ta',translated_content:content,source_snapshot:snapshot,translation_status:state,translation_method:checkStatus==='verified'?'official_source_checked_manual':'admin',reviewed_by:state==='approved'?user.id:null,reviewed_at:state==='approved'?new Date().toISOString():null,updated_at:new Date().toISOString()};
  const {data,error}=await db.from(table).upsert(payload,{onConflict:'job_id,language_code'}).select('*').single();
  if(error){setStatus('Save failed: '+error.message,true);return}
