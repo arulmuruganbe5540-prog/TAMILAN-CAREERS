@@ -5,7 +5,7 @@
 tamilMode=window.TCTamil&&window.TCTamil.isTamilNaduPrivate(job);
 if(tamilMode){
  const tr=await window.TCTamil.loadApprovedTranslations(db,'private_job_translations',[job.id]),t=tr[job.id]||{};
- ['job_title','employer_name','location','education_level','description','how_to_apply'].forEach(k=>{if(typeof t[k]==='string'&&t[k].trim())job[k]=t[k]});
+ ['job_title','employer_name','location','education_level','description','how_to_apply'].forEach(k=>{if(typeof t[k]==='string'&&t[k].trim())job[k]=t[k];else job[k]='தமிழ் மொழிபெயர்ப்பு மதிப்பாய்வில் உள்ளது'});
  document.documentElement.lang='ta';document.title='தமிழ்நாடு தனியார் வேலைவாய்ப்பு விண்ணப்பம் | TAMILAN CAREERS';
  window.TCTamil.localizeStatic(document.body);
 }
