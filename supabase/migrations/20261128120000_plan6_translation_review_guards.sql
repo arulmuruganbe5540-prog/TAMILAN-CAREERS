@@ -44,6 +44,7 @@ begin
     v_check := new.source_snapshot -> '_official_source_check';
 
     if coalesce(v_check ->> 'status', '') <> 'verified'
+       or pg_catalog.btrim(coalesce(v_check ->> 'verified_url', '')) !~* '^https://[^[:space:]]+'
        or pg_catalog.btrim(coalesce(v_check ->> 'verified_url', '')) = ''
        or pg_catalog.btrim(coalesce(v_check ->> 'notes', '')) = ''
        or coalesce(v_check ->> 'admin_confirmed_original_source_opened', 'false') <> 'true'
