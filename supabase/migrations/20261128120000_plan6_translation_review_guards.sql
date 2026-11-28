@@ -11,6 +11,12 @@ declare
   v_check jsonb;
   v_is_tamil_nadu boolean := false;
 begin
+  -- Translation rows are retained as the source of review history; deactivate or correct
+  -- them through a new review instead of deleting the record and orphaning its audit trail.
+  if tg_op = 'DELETE' then
+    raise exception 'Translation records cannot be deleted; preserve the audit trail.';
+  end if;
+
   -- Enforce the Plan 6 regional boundary in the database as well as the admin UI.
   if tg_table_name = 'government_job_translations' then
     select exists (
@@ -115,12 +121,12 @@ revoke all on function private.enforce_tamil_translation_review() from public, a
 
 drop trigger if exists government_translation_review_guard on public.government_job_translations;
 create trigger government_translation_review_guard
-before insert or update on public.government_job_translations
+before insert or update or delete on public.government_job_translations
 for each row execute function private.enforce_tamil_translation_review();
 
 drop trigger if exists private_translation_review_guard on public.private_job_translations;
 create trigger private_translation_review_guard
-before insert or update on public.private_job_translations
+before insert or update or delete on public.private_job_translations
 for each row execute function private.enforce_tamil_translation_review();
 
 
